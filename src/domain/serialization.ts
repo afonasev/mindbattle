@@ -85,6 +85,13 @@ function validPhase(value: unknown, config: MatchConfig): boolean {
       value.candidates.length === 3 &&
       new Set(value.candidates).size === 3;
   }
+  if (value.kind === "topic-confirmation") {
+    return typeof value.topicId === "string" &&
+      value.topicId.length > 0 &&
+      finite(value.remainingMs) &&
+      value.remainingMs >= 0 &&
+      value.remainingMs <= 3_000;
+  }
   if (value.kind === "bonus-veto") {
     if (!(stringArray(value.candidates) &&
       value.candidates.length === config.teams.length + 1 &&

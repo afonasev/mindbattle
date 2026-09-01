@@ -47,6 +47,7 @@ export interface TopicSelection {
 export interface QuestionSelectionRequest {
   readonly topicId: TopicId | null;
   readonly difficulty: Difficulty;
+  readonly starterOnly?: boolean;
   readonly excludedQuestionIds: readonly QuestionId[];
   readonly allowRecycleWhenExhausted?: boolean;
   readonly random: RandomState;
@@ -95,6 +96,12 @@ export interface NormalTopicPhase {
   readonly kind: "normal-topic";
   readonly chooser: TeamId;
   readonly candidates: readonly [TopicId, TopicId, TopicId];
+}
+
+export interface TopicConfirmationPhase {
+  readonly kind: "topic-confirmation";
+  readonly topicId: TopicId;
+  readonly remainingMs: number;
 }
 
 export interface BonusVetoPhase {
@@ -146,6 +153,7 @@ export interface FinishedPhase {
 
 export type MatchPhase =
   | NormalTopicPhase
+  | TopicConfirmationPhase
   | BonusVetoPhase
   | AnsweringPhase
   | RevealPhase

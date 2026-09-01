@@ -29,6 +29,9 @@ async function chooseCurrentTopic(page: Page) {
   const state = await storedState(page);
   if (state.phase.kind === "normal-topic") {
     await page.keyboard.press(state.phase.chooser === "green" ? "a" : "ArrowLeft");
+    await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
+    await waitForInputGate(page);
+    await page.keyboard.press("w");
     await expect(page.locator(".question-stage")).toBeVisible();
     return;
   }
@@ -87,6 +90,49 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await page.evaluate(() => localStorage.clear());
   await page.reload();
+});
+
+test("confirms a normal topic for three seconds or a new press before the question", async ({ page }, testInfo) => {
+  await page.getByRole("button", { name: "9", exact: true }).click();
+  await page.getByRole("button", { name: "Начать игру" }).click();
+  await waitForInputGate(page);
+  const before = await storedState(page);
+  expect(before.phase.kind).toBe("normal-topic");
+  if (before.phase.kind !== "normal-topic") return;
+  await page.keyboard.press(before.phase.chooser === "green" ? "a" : "ArrowLeft");
+  await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
+  await expect(page.locator(".question-stage")).toHaveCount(0);
+  const confirmation = await storedState(page);
+  expect(confirmation.phase).toMatchObject({
+    kind: "topic-confirmation",
+    topicId: before.phase.candidates[0]
+  });
+  await captureSettled(page, testInfo.outputPath("topic-confirmation.png"));
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toBeVisible();
+  const paused = await storedState(page);
+  await page.waitForTimeout(300);
+  const stillPaused = await storedState(page);
+  expect(stillPaused.phase.remainingMs).toBe(paused.phase.remainingMs);
+  await page.getByRole("button", { name: "Продолжить" }).click();
+  await waitForInputGate(page);
+  await page.waitForTimeout(3_100);
+  await expect(page.locator(".question-stage")).toBeVisible();
+  const answering = await storedState(page);
+  expect(answering.phase.kind).toBe("answering");
+  if (answering.phase.kind === "answering") expect(answering.phase.baseRemainingMs).toBeGreaterThan(9_800);
+
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Выйти в меню" }).click();
+  await page.getByRole("button", { name: "Начать игру" }).click();
+  await waitForInputGate(page);
+  const second = await storedState(page);
+  if (second.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
+  await page.keyboard.press(second.phase.chooser === "green" ? "a" : "ArrowLeft");
+  await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
+  await waitForInputGate(page);
+  await page.keyboard.press("w");
+  await expect(page.locator(".question-stage")).toBeVisible();
 });
 
 test("menu defaults, offline startup and responsive shell", async ({ context, page }, testInfo) => {
@@ -290,7 +336,10 @@ test("supports N+1 public bonus veto for three and four assigned teams", async (
 
     for (let round = 0; round < 2; round += 1) {
       await page.locator(".topic-cards--three button").first().click();
+      await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
       await waitForInputGate(page);
+      await pressVirtualPad(page, 0, 0);
+      await expect(page.locator(".question-stage")).toBeVisible();
       const state = await storedState(page);
       const correct = state.phase.round.correctPosition as Position;
       await answer(page, "green", correct);

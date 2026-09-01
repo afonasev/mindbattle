@@ -136,6 +136,26 @@ export function TopicSelection({
   );
 }
 
+export function TopicConfirmation({
+  view,
+  titleById
+}: {
+  readonly view: PublicMatchView;
+  readonly titleById: Readonly<Record<string, string>>;
+}) {
+  return (
+    <section className="topic-confirmation-stage" aria-live="polite" aria-labelledby="confirmation-title">
+      <div className="stage-label">Тема выбрана</div>
+      <h2 id="confirmation-title">{titleById[view.topicId ?? ""] ?? view.topicId}</h2>
+      <strong className="topic-confirmation-countdown">
+        {Math.ceil((view.confirmationRemainingMs ?? 0) / 1_000)}
+      </strong>
+      <p>Вопрос начнётся через 3 секунды</p>
+      <span className="control-help">Отпустите кнопки, затем нажмите любую назначенную клавишу</span>
+    </section>
+  );
+}
+
 export function BonusVeto({
   state,
   titleById

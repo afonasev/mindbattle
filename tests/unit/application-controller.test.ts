@@ -122,10 +122,29 @@ function chooseFirstTopic(controller: GameController): MatchState {
     }
   ]);
   if (!next) throw new Error("Expected active match");
-  return next;
+  if (next.phase.kind !== "topic-confirmation") throw new Error("Expected topic confirmation");
+  const answering = controller.dispatch([{ type: "continue", teamId: "green" }]);
+  if (!answering) throw new Error("Expected active match");
+  return answering;
 }
 
 describe("GameController", () => {
+  it("persists the chosen topic before the question is created", () => {
+    const storage = new MemoryStorage();
+    const controller = makeController(storage);
+    const initial = controller.start(CONFIG);
+    if (initial.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
+    const confirmation = controller.dispatch([{
+      type: "choose-topic",
+      teamId: initial.phase.chooser,
+      topicId: initial.phase.candidates[0]
+    }]);
+    expect(confirmation?.phase.kind).toBe("topic-confirmation");
+    expect(controller.questionHistory.serial).toBe(0);
+    expect((loadPersistedData(storage, makeCatalog().revision).lastMatch?.state as MatchState).phase.kind).toBe(
+      "topic-confirmation"
+    );
+  });
   it("starts and restarts with injected clock and fresh seeds while replacing one snapshot", () => {
     const storage = new MemoryStorage();
     const clock = new FakeClock();
@@ -171,7 +190,7 @@ describe("GameController", () => {
     const persisted = loadPersistedData(storage, makeCatalog().revision);
     expect(persisted.history.serial).toBe(1);
     expect((persisted.lastMatch?.state as MatchState).phase.kind).toBe("answering");
-    expect(storage.writes).toBe(writesBefore + 1);
+    expect(storage.writes).toBe(writesBefore + 2);
   });
 
   it("restores an in-progress match paused at a fresh monotonic anchor", () => {
@@ -207,6 +226,39 @@ describe("GameController", () => {
       restoredController.state?.phase.kind === "answering" &&
         restoredController.state.phase.baseRemainingMs
     ).toBe(9_000);
+  });
+
+  it("restores topic confirmation paused with its remaining countdown", () => {
+    const storage = new MemoryStorage();
+    const firstClock = new FakeClock();
+    const first = makeController(storage, firstClock);
+    const initial = first.start(CONFIG);
+    if (initial.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
+    first.dispatch([{
+      type: "choose-topic",
+      teamId: initial.phase.chooser,
+      topicId: initial.phase.candidates[0]
+    }]);
+    firstClock.advance(1_000);
+    first.tick();
+    expect(first.state?.phase.kind === "topic-confirmation" && first.state.phase.remainingMs).toBe(2_000);
+
+    const restoreClock = new FakeClock();
+    restoreClock.value = 80_000;
+    const restoredController = makeController(storage, restoreClock, new FakeSeeds(["unused"]));
+    const restored = restoredController.restoreLastMatch();
+    expect(restored?.phase.kind === "topic-confirmation" && restored.phase.remainingMs).toBe(2_000);
+    expect(restored?.pause?.reasons).toContainEqual({ kind: "restored-snapshot" });
+    restoreClock.advance(20_000);
+    restoredController.tick();
+    expect(
+      restoredController.state?.phase.kind === "topic-confirmation" &&
+        restoredController.state.phase.remainingMs
+    ).toBe(2_000);
+    restoredController.dispatch([{ type: "resume" }]);
+    restoreClock.advance(2_000);
+    restoredController.tick();
+    expect(restoredController.state?.phase.kind).toBe("answering");
   });
 
   it("restores a completed result without adding a pause", () => {

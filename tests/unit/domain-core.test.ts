@@ -85,13 +85,14 @@ function frame(
 
 function startQuestion(state: MatchState, context: DomainContext): MatchState {
   if (state.phase.kind === "normal-topic") {
-    return frame(state, context, [
+    const confirmation = frame(state, context, [
       {
         type: "choose-topic",
         teamId: state.phase.chooser,
         topicId: state.phase.candidates[0]
       }
     ]);
+    return frame(confirmation, context, [{ type: "continue", teamId: "green" }]);
   }
   if (state.phase.kind === "bonus-veto") {
     return frame(
@@ -181,6 +182,66 @@ describe("classic-v1 and seeded PRNG", () => {
 });
 
 describe("topic phases", () => {
+  it("holds a chosen normal topic for three seconds before creating its question", () => {
+    const context = makeContext();
+    const initial = createMatch(TWO_TEAMS, "topic-confirmation", 0, context);
+    if (initial.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
+    const confirmation = frame(initial, context, [{
+      type: "choose-topic",
+      teamId: initial.phase.chooser,
+      topicId: initial.phase.candidates[0]
+    }]);
+    expect(confirmation.phase).toEqual({
+      kind: "topic-confirmation",
+      topicId: initial.phase.candidates[0],
+      remainingMs: 3_000
+    });
+    expect(confirmation.usedQuestionIds).toEqual([]);
+    const waiting = frame(confirmation, context, [], 2_999);
+    expect(waiting.phase.kind).toBe("topic-confirmation");
+    const answering = frame(waiting, context, [], 1);
+    expect(answering.phase.kind).toBe("answering");
+    expect(answering.phase.kind === "answering" && answering.phase.baseRemainingMs).toBe(10_000);
+  });
+
+  it("allows a new continue press to start the question without accepting an answer in that frame", () => {
+    const context = makeContext();
+    const initial = createMatch(TWO_TEAMS, "topic-manual", 0, context);
+    if (initial.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
+    const confirmation = frame(initial, context, [{
+      type: "choose-topic",
+      teamId: initial.phase.chooser,
+      topicId: initial.phase.candidates[0]
+    }]);
+    const answering = frame(confirmation, context, [
+      { type: "continue", teamId: "green" },
+      { type: "answer", teamId: "green", position: "up" }
+    ]);
+    expect(answering.phase.kind).toBe("answering");
+    expect(answering.phase.kind === "answering" && answering.phase.round.attempts[0]).toMatchObject({
+      status: "open",
+      answer: null
+    });
+  });
+
+  it("freezes topic confirmation while paused", () => {
+    const context = makeContext();
+    const initial = createMatch(TWO_TEAMS, "topic-pause", 0, context);
+    if (initial.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
+    const confirmation = frame(initial, context, [{
+      type: "choose-topic",
+      teamId: initial.phase.chooser,
+      topicId: initial.phase.candidates[0]
+    }]);
+    const paused = frame(confirmation, context, [{ type: "pause", reason: { kind: "manual" } }], 1_000);
+    expect(paused.phase.kind === "topic-confirmation" && paused.phase.remainingMs).toBe(2_000);
+    const stillPaused = frame(paused, context, [], 20_000);
+    expect(stillPaused.phase.kind === "topic-confirmation" && stillPaused.phase.remainingMs).toBe(2_000);
+    const resumed = frame(stillPaused, context, [{ type: "resume" }]);
+    const answering = frame(resumed, context, [], 2_000);
+    expect(answering.phase.kind).toBe("answering");
+  });
+
   it("uses a seeded cyclic chooser and rejects another team", () => {
     const context = makeContext();
     const first = createMatch(TWO_TEAMS, "chooser-seed", 0, context);
@@ -409,6 +470,21 @@ describe("reveal, stages and sudden death", () => {
 });
 
 describe("public selectors and serialization", () => {
+  it("round-trips a topic confirmation and rejects an invalid remaining time", () => {
+    const context = makeContext();
+    const initial = createMatch(TWO_TEAMS, "confirmation-snapshot", 0, context);
+    if (initial.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
+    const confirmation = frame(initial, context, [{
+      type: "choose-topic",
+      teamId: initial.phase.chooser,
+      topicId: initial.phase.candidates[0]
+    }]);
+    expect(deserializeMatch(serializeMatch(confirmation), context.catalogRevision)).toEqual(confirmation);
+    const damaged = JSON.parse(serializeMatch(confirmation));
+    damaged.phase.remainingMs = 3_001;
+    expect(deserializeMatch(JSON.stringify(damaged), context.catalogRevision)).toBeNull();
+  });
+
   it("exposes only answer registration before reveal and full choices after it", () => {
     const context = makeContext();
     let state = startQuestion(createMatch(TWO_TEAMS, "hidden", 0, context), context);

@@ -140,6 +140,7 @@ function startQuestion(
   const selection = context.selectQuestion({
     topicId,
     difficulty,
+    starterOnly: mode === "main" && stageFor(state.config, state.mainQuestionIndex) === 0,
     excludedQuestionIds: state.usedQuestionIds,
     allowRecycleWhenExhausted: mode === "tie-break",
     random: state.random
@@ -342,12 +343,26 @@ function settleRound(state: MatchState): MatchState {
   };
 }
 
-function advanceClock(state: MatchState, atMs: number): MatchState {
-  if (state.pause || state.phase.kind !== "answering") {
+const TOPIC_CONFIRMATION_MS = 3_000;
+
+function advanceClock(state: MatchState, atMs: number, context: DomainContext): MatchState {
+  if (state.pause) {
     return { ...state, lastFrameAtMs: atMs };
   }
   const elapsed = atMs - state.lastFrameAtMs;
   if (elapsed <= 0) return { ...state, lastFrameAtMs: atMs };
+  if (state.phase.kind === "topic-confirmation") {
+    const remainingMs = Math.max(0, state.phase.remainingMs - elapsed);
+    const prepared = {
+      ...state,
+      lastFrameAtMs: atMs,
+      phase: { ...state.phase, remainingMs }
+    };
+    return remainingMs === 0
+      ? startQuestion(prepared, context, state.phase.topicId, "main")
+      : prepared;
+  }
+  if (state.phase.kind !== "answering") return { ...state, lastFrameAtMs: atMs };
   const baseSpent = Math.min(state.phase.baseRemainingMs, elapsed);
   const baseRemainingMs = state.phase.baseRemainingMs - baseSpent;
   const reserveElapsed = elapsed - baseSpent;
@@ -388,8 +403,7 @@ function addPauseReason(state: MatchState, reason: PauseReason): MatchState {
 
 function applyNormalTopic(
   state: MatchState,
-  command: Extract<DomainCommand, { type: "choose-topic" }>,
-  context: DomainContext
+  command: Extract<DomainCommand, { type: "choose-topic" }>
 ): MatchState {
   if (
     state.phase.kind !== "normal-topic" ||
@@ -403,7 +417,10 @@ function applyNormalTopic(
     selectedTopicIds: [...state.selectedTopicIds, command.topicId],
     normalChoiceOrdinal: state.normalChoiceOrdinal + 1
   };
-  return startQuestion(selected, context, command.topicId, "main");
+  return {
+    ...selected,
+    phase: { kind: "topic-confirmation", topicId: command.topicId, remainingMs: TOPIC_CONFIRMATION_MS }
+  };
 }
 
 function applyBonusCommand(
@@ -462,6 +479,9 @@ function applyAnswer(state: MatchState, teamId: TeamId, position: AnswerPosition
 
 function applyContinue(state: MatchState, teamId: TeamId, context: DomainContext): MatchState {
   if (!activeTeam(state, teamId)) return state;
+  if (state.phase.kind === "topic-confirmation") {
+    return startQuestion(state, context, state.phase.topicId, "main");
+  }
   if (state.phase.kind === "standings") {
     if (state.phase.completedStage === 3 && state.phase.tieBreakContenders) {
       return startTieBreak(state, context, state.phase.tieBreakContenders);
@@ -520,14 +540,16 @@ function processCommands(
       continue;
     }
     if (next.phase.kind === "normal-topic" && command.type === "choose-topic") {
-      const changed = applyNormalTopic(next, command, context);
+      const changed = applyNormalTopic(next, command);
       if (changed !== next) return changed;
     } else if (next.phase.kind === "bonus-veto") {
       const previousKind = next.phase.kind;
       next = applyBonusCommand(next, command, context);
       if (previousKind !== next.phase.kind) return next;
     } else if (
-      (next.phase.kind === "reveal" || next.phase.kind === "standings") &&
+      (next.phase.kind === "topic-confirmation" ||
+        next.phase.kind === "reveal" ||
+        next.phase.kind === "standings") &&
       command.type === "continue"
     ) {
       const changed = applyContinue(next, command.teamId, context);
@@ -545,7 +567,7 @@ export function reduceFrame(
   if (!Number.isFinite(frame.atMs) || frame.atMs < state.lastFrameAtMs) return state;
   if (!Number.isSafeInteger(frame.sequence) || frame.sequence < 0) return state;
   const wasAnswering = state.phase.kind === "answering";
-  const advanced = advanceClock(state, frame.atMs);
+  const advanced = advanceClock(state, frame.atMs, context);
   if (wasAnswering && advanced.phase.kind === "reveal") return advanced;
   return processCommands(advanced, frame.commands, context);
 }

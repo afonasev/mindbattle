@@ -27,6 +27,7 @@ import {
   Standings,
   TEAM_META,
   TeamCards,
+  TopicConfirmation,
   TopicSelection
 } from "./gameUi";
 
@@ -265,7 +266,11 @@ export function App() {
   }, [controller, dispatch, match, semanticToDomain, settings.assignments]);
 
   useEffect(() => {
-    if (!match || match.pause || match.phase.kind !== "answering") return;
+    if (
+      !match ||
+      match.pause ||
+      (match.phase.kind !== "answering" && match.phase.kind !== "topic-confirmation")
+    ) return;
     const timer = window.setInterval(() => {
       controller.tick();
       sync();
@@ -366,6 +371,9 @@ export function App() {
               dispatch([{ type: "choose-topic", teamId: view.chooser!, topicId }])
             }
           />
+        )}
+        {view.phase === "topic-confirmation" && (
+          <TopicConfirmation view={view} titleById={titleById} />
         )}
         {view.phase === "bonus-veto" && <BonusVeto state={match} titleById={titleById} />}
         {(view.phase === "answering" || view.phase === "reveal") && (

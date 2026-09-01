@@ -43,6 +43,8 @@ export interface PublicMatchView {
   readonly question?: PublicQuestion;
   readonly chooser?: TeamId;
   readonly topicCandidates?: readonly string[];
+  readonly topicId?: string;
+  readonly confirmationRemainingMs?: number;
   readonly vetoes?: Readonly<Partial<Record<TeamId, string>>>;
   readonly standings?: readonly StandingRow[];
   readonly winnerId?: TeamId;
@@ -139,6 +141,13 @@ export function selectPublicView(state: MatchState, context: DomainContext): Pub
       ...base,
       chooser: state.phase.chooser,
       topicCandidates: state.phase.candidates
+    };
+  }
+  if (state.phase.kind === "topic-confirmation") {
+    return {
+      ...base,
+      topicId: state.phase.topicId,
+      confirmationRemainingMs: state.phase.remainingMs
     };
   }
   if (state.phase.kind === "bonus-veto") {
