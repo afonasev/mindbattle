@@ -248,6 +248,29 @@ describe("keyboard routing", () => {
     );
     expect(continued.actions).toEqual([{ type: "continue", teamId: "green" }]);
   });
+
+  it("maps three shared difficulty ratings and ignores down", () => {
+    const expected = [
+      ["KeyA", "easy"],
+      ["KeyW", "medium"],
+      ["KeyD", "hard"]
+    ] as const;
+    for (const [code, difficulty] of expected) {
+      const result = handleKeyboardInput(
+        createInputRouterState(),
+        { type: "keydown", code },
+        keyboardAssignments,
+        "difficulty-feedback"
+      );
+      expect(result.actions).toEqual([{ type: "difficulty-rating", teamId: "green", difficulty }]);
+    }
+    expect(handleKeyboardInput(
+      createInputRouterState(),
+      { type: "keydown", code: "KeyS" },
+      keyboardAssignments,
+      "difficulty-feedback"
+    ).actions).toEqual([]);
+  });
 });
 
 describe("gamepad polling and lifecycle", () => {
@@ -327,6 +350,12 @@ describe("gamepad polling and lifecycle", () => {
       "continue",
     );
     expect(pressedAgain.actions).toEqual([{ type: "continue", teamId: "green" }]);
+  });
+
+  it("maps positional gamepad buttons to a shared difficulty rating", () => {
+    let state = pollBaseline(createInputRouterState(), assignments, [pad(0), pad(1)]);
+    const result = handleGamepadPoll(state, [pad(0, [2]), pad(1)], assignments, "difficulty-feedback");
+    expect(result.actions).toEqual([{ type: "difficulty-rating", teamId: "green", difficulty: "easy" }]);
   });
 
   it("pauses once when an assigned gamepad disconnects", () => {

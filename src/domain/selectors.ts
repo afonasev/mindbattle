@@ -33,6 +33,10 @@ export interface PublicQuestion {
   readonly prompt: string;
   readonly options: Readonly<Record<AnswerPosition, string>>;
   readonly explanation?: readonly string[];
+  readonly source?: {
+    readonly title: string;
+    readonly url: string;
+  };
   readonly correctPosition?: AnswerPosition;
 }
 
@@ -48,6 +52,12 @@ export interface PublicMatchView {
   readonly vetoes?: Readonly<Partial<Record<TeamId, string>>>;
   readonly standings?: readonly StandingRow[];
   readonly winnerId?: TeamId;
+  readonly feedback?: {
+    readonly eventId: string;
+    readonly questionId: string;
+    readonly assignedDifficulty: "easy" | "medium" | "hard";
+    readonly selectedDifficulty: "easy" | "medium" | "hard" | null;
+  };
 }
 
 function attemptFlags(state: MatchState): Readonly<Record<TeamId, boolean>> {
@@ -86,7 +96,11 @@ export function selectStandings(state: MatchState): readonly StandingRow[] {
 }
 
 function selectQuestion(state: MatchState, context: DomainContext): PublicQuestion | undefined {
-  if (state.phase.kind !== "answering" && state.phase.kind !== "reveal") return undefined;
+  if (
+    state.phase.kind !== "answering" &&
+    state.phase.kind !== "reveal" &&
+    state.phase.kind !== "difficulty-feedback"
+  ) return undefined;
   const round = state.phase.round;
   const question = context.getQuestion(round.questionId);
   if (!question) throw new Error(`Question ${round.questionId} is absent from catalog revision`);
@@ -99,13 +113,14 @@ function selectQuestion(state: MatchState, context: DomainContext): PublicQuesti
       return [position, text];
     })
   ) as Readonly<Record<AnswerPosition, string>>;
-  if (state.phase.kind === "reveal") {
+  if (state.phase.kind === "reveal" || state.phase.kind === "difficulty-feedback") {
     return {
       id: question.id,
       topicId: question.topicId,
       prompt: question.prompt,
       options,
       explanation: question.explanation,
+      source: question.source,
       correctPosition: round.correctPosition
     };
   }
@@ -115,7 +130,7 @@ function selectQuestion(state: MatchState, context: DomainContext): PublicQuesti
 export function selectPublicView(state: MatchState, context: DomainContext): PublicMatchView {
   const flags = attemptFlags(state);
   const resolutionByTeam =
-    state.phase.kind === "reveal"
+    state.phase.kind === "reveal" || state.phase.kind === "difficulty-feedback"
       ? new Map(state.phase.resolutions.map((resolution) => [resolution.teamId, resolution]))
       : new Map<TeamId, TeamResolution>();
   const teams = state.teams.map((team): PublicTeamCard => {
@@ -159,6 +174,17 @@ export function selectPublicView(state: MatchState, context: DomainContext): Pub
   }
   if (state.phase.kind === "answering" || state.phase.kind === "reveal") {
     return { ...base, question: selectQuestion(state, context) };
+  }
+  if (state.phase.kind === "difficulty-feedback") {
+    return {
+      ...base,
+      feedback: {
+        eventId: state.phase.eventId,
+        questionId: state.phase.round.questionId,
+        assignedDifficulty: state.phase.round.difficulty,
+        selectedDifficulty: state.phase.selectedDifficulty
+      }
+    };
   }
   if (state.phase.kind === "standings") {
     return { ...base, standings: selectStandings(state) };

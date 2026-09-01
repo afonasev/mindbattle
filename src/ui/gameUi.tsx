@@ -259,9 +259,64 @@ export function QuestionBoard({
         <aside className="explanation">
           <strong>Почему так?</strong>
           <p>{question.explanation?.join(" ")}</p>
+          {question.source && (
+            <a href={question.source.url} target="_blank" rel="noopener noreferrer">
+              Источник: {question.source.title} ↗
+            </a>
+          )}
           <span>Отпустите кнопки, затем нажмите любую назначенную клавишу</span>
         </aside>
       )}
+    </section>
+  );
+}
+
+export function DifficultyFeedbackScreen({
+  selected,
+  status,
+  error,
+  assignments
+}: {
+  readonly selected: "easy" | "medium" | "hard" | null;
+  readonly status: "idle" | "pending" | "error";
+  readonly error: string | null;
+  readonly assignments: readonly TeamControlAssignment[];
+}) {
+  const choices = [
+    { difficulty: "easy", label: "Легко", direction: "left" },
+    { difficulty: "medium", label: "Средне", direction: "up" },
+    { difficulty: "hard", label: "Сложно", direction: "right" }
+  ] as const;
+  return (
+    <section className="difficulty-feedback-stage" aria-labelledby="difficulty-feedback-title">
+      <div className="stage-label">Общая оценка</div>
+      <h2 id="difficulty-feedback-title">Насколько сложным был этот вопрос?</h2>
+      <p>Обсудите вместе. Один выбор от всей компании может отправить любой контроллер.</p>
+      <div className="difficulty-feedback-options" role="group" aria-label="Варианты сложности">
+        {choices.map((choice) => (
+          <article
+            key={choice.difficulty}
+            className={selected === choice.difficulty ? "difficulty-feedback-option difficulty-feedback-option--selected" : "difficulty-feedback-option"}
+          >
+            <span className="feedback-control-glyphs" aria-label={`Клавиши: ${choice.label}`}>
+              {assignments.map((assignment) => (
+                <kbd key={assignment.teamId}>{controlGlyph(assignment, choice.direction)}</kbd>
+              ))}
+            </span>
+            <strong>{choice.label}</strong>
+          </article>
+        ))}
+      </div>
+      <p
+        className={status === "error" ? "feedback-status feedback-status--error" : "feedback-status"}
+        aria-live="polite"
+      >
+        {status === "pending"
+          ? "Сохраняем оценку на сервере…"
+          : status === "error"
+            ? `${error ?? "Не удалось сохранить оценку"}. Нажмите выбранное направление ещё раз.`
+            : "D-pad / WASD / стрелки · ↓ не используется"}
+      </p>
     </section>
   );
 }

@@ -11,7 +11,7 @@ describe("integrated topic packages", () => {
         ids.add(question.id);
       }
     }
-    expect(ids.size).toBe(catalog.topics.length * 30);
+    expect(ids.size).toBe(catalog.topics.length * 50);
     if (catalog.topics.length === 30) {
       expect(validateCatalog(catalog)).toBe(catalog);
     }

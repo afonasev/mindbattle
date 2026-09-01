@@ -16,6 +16,7 @@ import { CatalogDomainContext } from "../../src/application/contentContext";
 import type { ContentCatalog, TopicPack } from "../../src/content/types";
 import { EMPTY_QUESTION_HISTORY, seedRandom } from "../../src/content";
 import type { MatchConfig, MatchState } from "../../src/domain/types";
+import type { DifficultyFeedbackEvent, DifficultyFeedbackSink } from "../../src/feedback";
 
 class MemoryStorage implements StorageLike {
   value: string | null = null;
@@ -66,6 +67,16 @@ class FakeSeeds implements GameSeedSource {
   }
 }
 
+class FakeFeedback implements DifficultyFeedbackSink {
+  readonly events: DifficultyFeedbackEvent[] = [];
+  fail = false;
+
+  async submit(event: DifficultyFeedbackEvent): Promise<void> {
+    this.events.push(event);
+    if (this.fail) throw new Error("disk unavailable");
+  }
+}
+
 const CONFIG: MatchConfig = {
   profile: "classic-v1",
   questionCount: 9,
@@ -106,9 +117,10 @@ function makeCatalog(): ContentCatalog {
 function makeController(
   storage: MemoryStorage,
   clock = new FakeClock(),
-  seeds = new FakeSeeds(["seed-a", "seed-b"])
+  seeds = new FakeSeeds(["seed-a", "seed-b"]),
+  feedback?: DifficultyFeedbackSink
 ): GameController {
-  return new GameController({ catalog: makeCatalog(), storage, clock, seeds });
+  return new GameController({ catalog: makeCatalog(), storage, clock, seeds, feedback });
 }
 
 function chooseFirstTopic(controller: GameController): MatchState {
@@ -129,6 +141,29 @@ function chooseFirstTopic(controller: GameController): MatchState {
 }
 
 describe("GameController", () => {
+  it("persists one rating before advancing and retries the same event after failure", async () => {
+    const storage = new MemoryStorage();
+    const feedback = new FakeFeedback();
+    feedback.fail = true;
+    const controller = makeController(storage, new FakeClock(), new FakeSeeds(["feedback-seed"]), feedback);
+    controller.start(CONFIG);
+    let state = chooseFirstTopic(controller);
+    if (state.phase.kind !== "answering") throw new Error("Expected answering");
+    const position = state.phase.round.correctPosition;
+    controller.dispatch(CONFIG.teams.map((teamId) => ({ type: "answer" as const, teamId, position })));
+    controller.dispatch([{ type: "continue", teamId: "green" }]);
+    expect(controller.state?.phase.kind).toBe("difficulty-feedback");
+    expect(await controller.rateDifficulty("blue", "hard")).toBe(false);
+    expect(controller.difficultyFeedbackStatus).toBe("error");
+    const failedEventId = feedback.events[0].eventId;
+    expect(feedback.events[0].matchId).toBe("match-v1:feedback-seed");
+    expect(controller.state?.phase.kind === "difficulty-feedback" && controller.state.phase.selectedDifficulty).toBe("hard");
+    feedback.fail = false;
+    expect(await controller.rateDifficulty("green", "easy")).toBe(true);
+    expect(feedback.events[1].eventId).toBe(failedEventId);
+    expect(controller.state?.phase.kind).toBe("normal-topic");
+  });
+
   it("persists the chosen topic before the question is created", () => {
     const storage = new MemoryStorage();
     const controller = makeController(storage);

@@ -11,6 +11,7 @@ import {
   type SemanticInputAction
 } from "../adapters";
 import { GameController } from "../application";
+import { HttpDifficultyFeedbackSink } from "../feedback";
 import { assertFullCatalog, catalog, TOPIC_TITLE_BY_ID } from "../content";
 import {
   selectStandings,
@@ -22,6 +23,7 @@ import {
 import { DEFAULT_MENU_SETTINGS, MenuScreen, type MenuSettings } from "./MenuScreen";
 import {
   BonusVeto,
+  DifficultyFeedbackScreen,
   PauseOverlay,
   QuestionBoard,
   Standings,
@@ -65,7 +67,8 @@ export function App() {
           now: () => performance.now(),
           wallTime: () => new Date().toISOString()
         },
-        seeds: { nextSeed }
+        seeds: { nextSeed },
+        feedback: new HttpDifficultyFeedbackSink()
       }),
     []
   );
@@ -78,7 +81,10 @@ export function App() {
   const phaseRef = useRef<string | null>(null);
   const audioRef = useRef(new AudioController(createWebAudioSink(), preferences));
 
-  const sync = useCallback(() => setMatch(controller.state), [controller]);
+  const sync = useCallback(
+    () => setMatch(controller.state ? { ...controller.state } : null),
+    [controller]
+  );
   const dispatch = useCallback(
     (commands: readonly DomainCommand[]) => {
       controller.dispatch(commands);
@@ -161,6 +167,13 @@ export function App() {
       if (action.type === "continue") {
         return [{ type: "continue", teamId: action.teamId as TeamId }];
       }
+      if (action.type === "difficulty-rating") {
+        void controller
+          .rateDifficulty(action.teamId as TeamId, action.difficulty)
+          .finally(sync);
+        queueMicrotask(sync);
+        return [];
+      }
       if (action.type === "pause") {
         return [{
           type: "pause",
@@ -187,7 +200,7 @@ export function App() {
       }
       return [];
     });
-  }, []);
+  }, [controller, sync]);
 
   useEffect(() => {
     if (!match) return;
@@ -198,6 +211,8 @@ export function App() {
           ? "normal-topic"
         : match.phase.kind === "bonus-veto"
           ? "bonus-veto"
+          : match.phase.kind === "difficulty-feedback"
+            ? "difficulty-feedback"
           : "continue";
     const keyboard = (event: KeyboardEvent) => {
       const result = handleKeyboardInput(
@@ -211,9 +226,9 @@ export function App() {
         mode
       );
       inputRef.current = result.state;
+      if (result.actions.length > 0) event.preventDefault();
       const commands = semanticToDomain(result.actions);
       if (commands.length > 0) {
-        event.preventDefault();
         dispatch(commands);
       }
     };
@@ -245,6 +260,8 @@ export function App() {
             ? "normal-topic"
           : current.phase.kind === "bonus-veto"
             ? "bonus-veto"
+            : current.phase.kind === "difficulty-feedback"
+              ? "difficulty-feedback"
             : "continue";
       const disconnected = current.pause?.reasons.find(
         (reason) => reason.kind === "controller-disconnected"
@@ -376,6 +393,14 @@ export function App() {
           <TopicConfirmation view={view} titleById={titleById} />
         )}
         {view.phase === "bonus-veto" && <BonusVeto state={match} titleById={titleById} />}
+        {view.phase === "difficulty-feedback" && (
+          <DifficultyFeedbackScreen
+            selected={match.phase.kind === "difficulty-feedback" ? match.phase.selectedDifficulty : null}
+            status={controller.difficultyFeedbackStatus}
+            error={controller.difficultyFeedbackError}
+            assignments={settings.assignments}
+          />
+        )}
         {(view.phase === "answering" || view.phase === "reveal") && (
           <QuestionBoard
             state={match}
@@ -415,7 +440,7 @@ export function App() {
           </section>
         )}
 
-        {view.phase !== "standings" && view.phase !== "finished" && (
+        {view.phase !== "standings" && view.phase !== "finished" && view.phase !== "difficulty-feedback" && (
           <TeamCards view={view} activeTeamIds={match.config.teams} />
         )}
         <footer>ESC · пауза</footer>

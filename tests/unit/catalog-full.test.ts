@@ -9,10 +9,10 @@ import {
 } from "../../src/content";
 
 describe("full production question catalog", () => {
-  it("contains 30 approved topics, 900 questions and reviews of the current bytes", () => {
+  it("contains 30 approved topics, 1500 questions and reviews of the current bytes", () => {
     const catalog = assertFullCatalog();
     expect(catalog.topics).toHaveLength(30);
-    expect(catalog.topics.flatMap(({ questions }) => questions)).toHaveLength(900);
+    expect(catalog.topics.flatMap(({ questions }) => questions)).toHaveLength(1500);
 
     for (const [topicId] of TOPIC_DEFINITIONS) {
       const path = fileURLToPath(

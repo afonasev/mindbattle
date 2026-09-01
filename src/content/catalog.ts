@@ -19,7 +19,7 @@ export function buildCatalog(topics: readonly TopicPack[]): ContentCatalog {
       (definitionOrder.get(right.id as never) ?? Number.MAX_SAFE_INTEGER)
   );
   return {
-    revision: "mindbattle-questions-2026-09-01-r1",
+    revision: "mindbattle-questions-2026-09-01-r2",
     topics: ordered
   };
 }

@@ -29,14 +29,21 @@ export function validateTopicPack(topic: TopicPack): readonly string[] {
 
   if (!ID.test(topic.id)) issues.push(`${at("")}: некорректный topic id`);
   if (!topic.title.trim()) issues.push(`${at("")}: пустое название темы`);
-  if (topic.questions.length !== 30) {
-    issues.push(`${at("")}: ожидалось 30 вопросов, получено ${topic.questions.length}`);
+  if (topic.questions.length !== 50) {
+    issues.push(`${at("")}: ожидалось 50 вопросов, получено ${topic.questions.length}`);
   }
 
   const ids = new Set<string>();
+  const expectedByDifficulty: Readonly<Record<Difficulty, number>> = {
+    easy: 20,
+    medium: 10,
+    hard: 20
+  };
   for (const difficulty of difficulties) {
     const count = topic.questions.filter((question) => question.difficulty === difficulty).length;
-    if (count !== 10) issues.push(`${at("")}: ${difficulty} должно быть 10, получено ${count}`);
+    if (count !== expectedByDifficulty[difficulty]) {
+      issues.push(`${at("")}: ${difficulty} должно быть ${expectedByDifficulty[difficulty]}, получено ${count}`);
+    }
   }
 
   for (const question of topic.questions) {
@@ -110,8 +117,8 @@ export function validateCatalog(
     if (!topic) issues.push(`catalog: отсутствует тема ${id}`);
     else if (topic.title !== title) issues.push(`${id}: ожидалось название «${title}»`);
   }
-  if (questionIds.size !== 900) {
-    issues.push(`catalog: ожидалось 900 уникальных вопросов, получено ${questionIds.size}`);
+  if (questionIds.size !== 1500) {
+    issues.push(`catalog: ожидалось 1500 уникальных вопросов, получено ${questionIds.size}`);
   }
   if (reviews !== undefined) {
     if (reviews.length !== TOPIC_DEFINITIONS.length) {
@@ -135,7 +142,7 @@ export function validateCatalog(
       } else if (
         review.status !== "approved" ||
         !/^[a-f0-9]{64}$/.test(review.contentSha256) ||
-        review.checkedQuestions !== 30 ||
+        review.checkedQuestions !== 50 ||
         review.criticalFindingsOpen !== 0 ||
         !ISO_DATE.test(review.reviewedAt)
       ) {

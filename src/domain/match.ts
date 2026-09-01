@@ -140,7 +140,6 @@ function startQuestion(
   const selection = context.selectQuestion({
     topicId,
     difficulty,
-    starterOnly: mode === "main" && stageFor(state.config, state.mainQuestionIndex) === 0,
     excludedQuestionIds: state.usedQuestionIds,
     allowRecycleWhenExhausted: mode === "tie-break",
     random: state.random
@@ -208,16 +207,19 @@ export function createMatch(
   config: MatchConfig,
   seed: string,
   atMs: number,
-  context: DomainContext
+  context: DomainContext,
+  matchId = `match-v1:${seed}`
 ): MatchState {
   validateMatchConfig(config);
   if (!Number.isFinite(atMs)) throw new RangeError("atMs must be finite");
+  if (!matchId) throw new RangeError("matchId must not be empty");
   const initialRandom = seedRandom(seed);
   const [firstChooserOffset, random] = nextInt(initialRandom, config.teams.length);
   const reserveMs = reserveFor(config.questionCount);
   const initial: MatchState = {
     schemaVersion: 1,
     catalogRevision: context.catalogRevision,
+    matchId,
     seed,
     random,
     config: { ...config, teams: [...config.teams] },
@@ -492,6 +494,46 @@ function applyContinue(state: MatchState, teamId: TeamId, context: DomainContext
     );
   }
   if (state.phase.kind !== "reveal") return state;
+  const sequence =
+    state.phase.round.mode === "tie-break"
+      ? `tie-break-${state.tieBreak?.questionNumber ?? 1}`
+      : `main-${state.mainQuestionIndex + 1}`;
+  return {
+    ...state,
+    phase: {
+      kind: "difficulty-feedback",
+      round: state.phase.round,
+      resolutions: state.phase.resolutions,
+      continuation: state.phase.continuation,
+      eventId: `feedback-v1:${state.matchId}:${sequence}:${state.phase.round.questionId}`,
+      selectedDifficulty: null
+    }
+  };
+}
+
+function applyFeedbackSelection(
+  state: MatchState,
+  teamId: TeamId,
+  difficulty: "easy" | "medium" | "hard"
+): MatchState {
+  if (
+    state.phase.kind !== "difficulty-feedback" ||
+    state.phase.selectedDifficulty !== null ||
+    !activeTeam(state, teamId)
+  ) return state;
+  return { ...state, phase: { ...state.phase, selectedDifficulty: difficulty } };
+}
+
+function applyFeedbackConfirmation(
+  state: MatchState,
+  eventId: string,
+  context: DomainContext
+): MatchState {
+  if (
+    state.phase.kind !== "difficulty-feedback" ||
+    state.phase.selectedDifficulty === null ||
+    state.phase.eventId !== eventId
+  ) return state;
   const continuation = state.phase.continuation;
   if (continuation.kind === "finished") {
     return { ...state, phase: { kind: "finished", winnerId: continuation.winnerId } };
@@ -553,6 +595,12 @@ function processCommands(
       command.type === "continue"
     ) {
       const changed = applyContinue(next, command.teamId, context);
+      if (changed !== next) return changed;
+    } else if (command.type === "rate-difficulty") {
+      const changed = applyFeedbackSelection(next, command.teamId, command.difficulty);
+      if (changed !== next) return changed;
+    } else if (command.type === "confirm-difficulty-feedback") {
+      const changed = applyFeedbackConfirmation(next, command.eventId, context);
       if (changed !== next) return changed;
     }
   }

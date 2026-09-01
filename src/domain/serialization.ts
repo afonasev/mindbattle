@@ -116,11 +116,18 @@ function validPhase(value: unknown, config: MatchConfig): boolean {
   if (value.kind === "answering") {
     return validRound(value.round, config) && finite(value.baseRemainingMs) && value.baseRemainingMs >= 0;
   }
-  if (value.kind === "reveal") {
+  if (value.kind === "reveal" || value.kind === "difficulty-feedback") {
     if (!(validRound(value.round, config) &&
       Array.isArray(value.resolutions) &&
       value.resolutions.length === config.teams.length &&
       validContinuation(value.continuation, config))) return false;
+    if (
+      value.kind === "difficulty-feedback" &&
+      (typeof value.eventId !== "string" ||
+        value.eventId.length === 0 ||
+        (value.selectedDifficulty !== null &&
+          !["easy", "medium", "hard"].includes(String(value.selectedDifficulty))))
+    ) return false;
     const resolvedTeams = new Set<string>();
     for (const resolution of value.resolutions) {
       if (
@@ -189,6 +196,8 @@ export function deserializeMatch(
   if (
     value.schemaVersion !== 1 ||
     value.catalogRevision !== expectedCatalogRevision ||
+    typeof value.matchId !== "string" ||
+    value.matchId.length === 0 ||
     typeof value.seed !== "string" ||
     !record(value.random) ||
     !finite(value.random.value) ||

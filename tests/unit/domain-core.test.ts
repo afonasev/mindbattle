@@ -41,7 +41,8 @@ function makeContext(topicCount = 40): DomainContext {
           { id: "d", text: "Четвёртый" }
         ],
         correctAnswerId: "a",
-        explanation: ["Верный ответ подтверждён.", "Это тестовая справка."]
+        explanation: ["Верный ответ подтверждён.", "Это тестовая справка."],
+        source: { title: "Тестовый источник", url: "https://example.com/question" }
       }))
     )
   );
@@ -121,7 +122,13 @@ function answerAllCorrect(state: MatchState, context: DomainContext): MatchState
 }
 
 function continueByGreen(state: MatchState, context: DomainContext): MatchState {
-  return frame(state, context, [{ type: "continue", teamId: "green" }]);
+  let next = frame(state, context, [{ type: "continue", teamId: "green" }]);
+  if (next.phase.kind === "difficulty-feedback") {
+    next = frame(next, context, [{ type: "rate-difficulty", teamId: "green", difficulty: "easy" }]);
+    if (next.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback phase");
+    next = frame(next, context, [{ type: "confirm-difficulty-feedback", eventId: next.phase.eventId }]);
+  }
+  return next;
 }
 
 describe("classic-v1 and seeded PRNG", () => {
@@ -358,6 +365,27 @@ describe("answer clock, reserve and atomic frames", () => {
 });
 
 describe("reveal, stages and sudden death", () => {
+  it("collects one difficulty rating and waits for the matching acknowledgement", () => {
+    const context = makeContext();
+    let state = startQuestion(createMatch(TWO_TEAMS, "feedback", 0, context), context);
+    state = answerAllCorrect(state, context);
+    expect(state.phase.kind).toBe("reveal");
+    state = frame(state, context, [{ type: "continue", teamId: "green" }]);
+    expect(state.phase.kind).toBe("difficulty-feedback");
+    if (state.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback");
+    const eventId = state.phase.eventId;
+    state = frame(state, context, [
+      { type: "rate-difficulty", teamId: "blue", difficulty: "hard" },
+      { type: "rate-difficulty", teamId: "green", difficulty: "easy" }
+    ]);
+    expect(state.phase.kind === "difficulty-feedback" && state.phase.selectedDifficulty).toBe("hard");
+    expect(deserializeMatch(serializeMatch(state), context.catalogRevision)?.phase).toEqual(state.phase);
+    state = frame(state, context, [{ type: "confirm-difficulty-feedback", eventId: "wrong" }]);
+    expect(state.phase.kind).toBe("difficulty-feedback");
+    state = frame(state, context, [{ type: "confirm-difficulty-feedback", eventId }]);
+    expect(state.phase.kind).toBe("normal-topic");
+  });
+
   it("scores correct, wrong and no-answer exactly once", () => {
     const context = makeContext();
     let state = startQuestion(createMatch(TWO_TEAMS, "score", 0, context), context);
@@ -495,12 +523,17 @@ describe("public selectors and serialization", () => {
     expect(green).not.toHaveProperty("answerPosition");
     expect(hidden.question).not.toHaveProperty("correctPosition");
     expect(hidden.question).not.toHaveProperty("explanation");
+    expect(hidden.question).not.toHaveProperty("source");
 
     state = frame(state, context, [{ type: "answer", teamId: "blue", position: "right" }]);
     const revealed = selectPublicView(state, context);
     expect(revealed.teams.find(({ id }) => id === "green")?.answerPosition).toBe("left");
     expect(revealed.question).toHaveProperty("correctPosition");
     expect(revealed.question?.explanation).toHaveLength(2);
+    expect(revealed.question?.source).toEqual({
+      title: "Тестовый источник",
+      url: "https://example.com/question"
+    });
   });
 
   it("round-trips JSON and rejects corrupt or incompatible snapshots", () => {
@@ -510,6 +543,9 @@ describe("public selectors and serialization", () => {
     expect(deserializeMatch(serialized, context.catalogRevision)).toEqual(state);
     expect(deserializeMatch(serialized, "other-revision")).toBeNull();
     expect(deserializeMatch("not-json", context.catalogRevision)).toBeNull();
+    const missingMatchId = JSON.parse(serialized);
+    delete missingMatchId.matchId;
+    expect(deserializeMatch(JSON.stringify(missingMatchId), context.catalogRevision)).toBeNull();
   });
 
   it("uses competition ranking for equal scores", () => {

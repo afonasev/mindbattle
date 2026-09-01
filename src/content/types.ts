@@ -34,6 +34,6 @@ export interface ReviewEntry {
   readonly status: "approved";
   readonly contentSha256: string;
   readonly reviewedAt: string;
-  readonly checkedQuestions: 30;
+  readonly checkedQuestions: 50;
   readonly criticalFindingsOpen: 0;
 }

@@ -84,7 +84,7 @@ export function assignmentsAreCompleteAndUnique(
   );
 }
 
-export type InputMode = "answer" | "normal-topic" | "bonus-veto" | "continue";
+export type InputMode = "answer" | "normal-topic" | "bonus-veto" | "difficulty-feedback" | "continue";
 
 export type SemanticInputAction =
   | { readonly type: "answer"; readonly teamId: TeamId; readonly direction: CardinalDirection }
@@ -97,6 +97,11 @@ export type SemanticInputAction =
   | { readonly type: "bonus-confirm"; readonly teamId: TeamId }
   | { readonly type: "bonus-cancel"; readonly teamId: TeamId }
   | { readonly type: "continue"; readonly teamId: TeamId }
+  | {
+      readonly type: "difficulty-rating";
+      readonly teamId: TeamId;
+      readonly difficulty: "easy" | "medium" | "hard";
+    }
   | { readonly type: "pause"; readonly reason: "escape" | "blur" }
   | {
       readonly type: "pause";
@@ -190,6 +195,17 @@ function actionForDirection(
     return direction === "west" || direction === "north" || direction === "east"
       ? { type: "topic-select", teamId, direction }
       : undefined;
+  }
+  if (mode === "difficulty-feedback") {
+    const difficulty =
+      direction === "west"
+        ? "easy"
+        : direction === "north"
+          ? "medium"
+          : direction === "east"
+            ? "hard"
+            : null;
+    return difficulty ? { type: "difficulty-rating", teamId, difficulty } : undefined;
   }
   switch (direction) {
     case "west":
@@ -323,6 +339,18 @@ function semanticGamepadAction(
     return direction === "west" || direction === "north" || direction === "east"
       ? { type: "topic-select", teamId, direction }
       : undefined;
+  }
+  if (mode === "difficulty-feedback") {
+    const direction = answerDirectionForGamepadButton(buttonIndex);
+    const difficulty =
+      direction === "west"
+        ? "easy"
+        : direction === "north"
+          ? "medium"
+          : direction === "east"
+            ? "hard"
+            : null;
+    return difficulty ? { type: "difficulty-rating", teamId, difficulty } : undefined;
   }
 
   const action = bonusActionForGamepadButton(buttonIndex);

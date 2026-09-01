@@ -10,7 +10,7 @@ import {
   type StorageLike
 } from "../adapters/storage";
 import type { TeamControlAssignment } from "../adapters/input";
-import { EMPTY_QUESTION_HISTORY, type ContentCatalog } from "../content";
+import { EMPTY_QUESTION_HISTORY, migrateQuestionHistory, type ContentCatalog } from "../content";
 import { createMatch, reduceFrame } from "../domain/match";
 import { selectPublicView, type PublicMatchView } from "../domain/selectors";
 import { deserializeMatch } from "../domain/serialization";
@@ -21,6 +21,11 @@ import type {
   MatchState,
   PauseReason
 } from "../domain/types";
+import type {
+  DifficultyFeedbackEvent,
+  DifficultyFeedbackSink,
+  FeedbackSubmissionStatus
+} from "../feedback";
 import { CatalogDomainContext } from "./contentContext";
 
 export interface GameControllerClock {
@@ -37,6 +42,7 @@ export interface GameControllerDependencies {
   readonly storage: StorageLike;
   readonly clock: GameControllerClock;
   readonly seeds: GameSeedSource;
+  readonly feedback?: DifficultyFeedbackSink;
 }
 
 export type SavedMatchStatus = "in-progress" | "completed" | null;
@@ -73,21 +79,26 @@ export class GameController {
   private readonly storage: StorageLike;
   private readonly clock: GameControllerClock;
   private readonly seeds: GameSeedSource;
+  private readonly feedback?: DifficultyFeedbackSink;
   private context: CatalogDomainContext;
   private persisted: PersistedData<MatchState>;
   private restorableState: MatchState | null;
   private currentState: MatchState | null = null;
   private sequence = 0;
   private saveSucceeded = true;
+  private feedbackStatus: FeedbackSubmissionStatus = "idle";
+  private feedbackError: string | null = null;
 
   constructor(dependencies: GameControllerDependencies) {
     this.catalog = dependencies.catalog;
     this.storage = dependencies.storage;
     this.clock = dependencies.clock;
     this.seeds = dependencies.seeds;
+    this.feedback = dependencies.feedback;
     this.persisted = loadPersistedData(
       this.storage,
-      this.catalog.revision
+      this.catalog.revision,
+      (history) => migrateQuestionHistory(this.catalog.topics, history)
     ) as PersistedData<MatchState>;
     this.context = new CatalogDomainContext(this.catalog, this.persisted.history);
     this.restorableState = validSavedState(this.persisted.lastMatch, this.catalog.revision);
@@ -126,13 +137,23 @@ export class GameController {
     return this.persisted.lastMatch.status;
   }
 
+  get difficultyFeedbackStatus(): FeedbackSubmissionStatus {
+    return this.feedbackStatus;
+  }
+
+  get difficultyFeedbackError(): string | null {
+    return this.feedbackError;
+  }
+
   start(config: MatchConfig): MatchState {
     this.context = new CatalogDomainContext(this.catalog, this.persisted.history);
+    const seed = this.seeds.nextSeed();
     this.currentState = createMatch(
       config,
-      this.seeds.nextSeed(),
+      seed,
       this.clock.now(),
-      this.context
+      this.context,
+      `match-v1:${seed}`
     );
     this.sequence = 0;
     this.restorableState = this.currentState;
@@ -180,6 +201,49 @@ export class GameController {
       this.persistCurrent();
     }
     return this.currentState;
+  }
+
+  async rateDifficulty(
+    teamId: MatchState["config"]["teams"][number],
+    perceivedDifficulty: DifficultyFeedbackEvent["perceivedDifficulty"]
+  ): Promise<boolean> {
+    if (!this.currentState || !this.feedback || this.feedbackStatus === "pending") return false;
+    if (
+      this.currentState.phase.kind === "difficulty-feedback" &&
+      this.currentState.phase.selectedDifficulty === null
+    ) {
+      this.dispatch([{ type: "rate-difficulty", teamId, difficulty: perceivedDifficulty }]);
+    }
+    if (
+      !this.currentState ||
+      this.currentState.phase.kind !== "difficulty-feedback" ||
+      this.currentState.phase.selectedDifficulty === null
+    ) return false;
+
+    const phase = this.currentState.phase;
+    const selectedDifficulty = phase.selectedDifficulty;
+    if (selectedDifficulty === null) return false;
+    const event: DifficultyFeedbackEvent = {
+      schemaVersion: 1,
+      eventId: phase.eventId,
+      matchId: this.currentState.matchId,
+      catalogRevision: this.currentState.catalogRevision,
+      questionId: phase.round.questionId,
+      assignedDifficulty: phase.round.difficulty,
+      perceivedDifficulty: selectedDifficulty
+    };
+    this.feedbackStatus = "pending";
+    this.feedbackError = null;
+    try {
+      await this.feedback.submit(event);
+      this.feedbackStatus = "idle";
+      this.dispatch([{ type: "confirm-difficulty-feedback", eventId: phase.eventId }]);
+      return true;
+    } catch (error) {
+      this.feedbackStatus = "error";
+      this.feedbackError = error instanceof Error ? error.message : "Не удалось сохранить оценку";
+      return false;
+    }
   }
 
   resetQuestionHistory(): void {

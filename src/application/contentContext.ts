@@ -36,7 +36,11 @@ function toDomainQuestion(topic: TopicPack, questionId: string): QuestionDefinit
     explanation: question.explanation
       .split(/(?<=[.!?])\s+/u)
       .map((sentence) => sentence.trim())
-      .filter(Boolean)
+      .filter(Boolean),
+    source: {
+      title: question.source.title,
+      url: question.source.url
+    }
   };
 }
 

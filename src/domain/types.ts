@@ -29,6 +29,10 @@ export interface QuestionDefinition {
   readonly answers: readonly [AnswerDefinition, AnswerDefinition, AnswerDefinition, AnswerDefinition];
   readonly correctAnswerId: AnswerId;
   readonly explanation: readonly string[];
+  readonly source: {
+    readonly title: string;
+    readonly url: string;
+  };
 }
 
 export interface TopicSelectionRequest {
@@ -47,7 +51,6 @@ export interface TopicSelection {
 export interface QuestionSelectionRequest {
   readonly topicId: TopicId | null;
   readonly difficulty: Difficulty;
-  readonly starterOnly?: boolean;
   readonly excludedQuestionIds: readonly QuestionId[];
   readonly allowRecycleWhenExhausted?: boolean;
   readonly random: RandomState;
@@ -140,6 +143,15 @@ export interface RevealPhase {
   readonly continuation: RevealContinuation;
 }
 
+export interface DifficultyFeedbackPhase {
+  readonly kind: "difficulty-feedback";
+  readonly round: RoundState;
+  readonly resolutions: readonly TeamResolution[];
+  readonly continuation: RevealContinuation;
+  readonly eventId: string;
+  readonly selectedDifficulty: Difficulty | null;
+}
+
 export interface StandingsPhase {
   readonly kind: "standings";
   readonly completedStage: 1 | 2 | 3;
@@ -157,6 +169,7 @@ export type MatchPhase =
   | BonusVetoPhase
   | AnsweringPhase
   | RevealPhase
+  | DifficultyFeedbackPhase
   | StandingsPhase
   | FinishedPhase;
 
@@ -179,6 +192,7 @@ export interface TieBreakState {
 export interface MatchState {
   readonly schemaVersion: 1;
   readonly catalogRevision: string;
+  readonly matchId: string;
   readonly seed: string;
   readonly random: RandomState;
   readonly config: MatchConfig;
@@ -202,6 +216,8 @@ export type DomainCommand =
   | { readonly type: "clear-veto"; readonly teamId: TeamId }
   | { readonly type: "answer"; readonly teamId: TeamId; readonly position: AnswerPosition }
   | { readonly type: "continue"; readonly teamId: TeamId }
+  | { readonly type: "rate-difficulty"; readonly teamId: TeamId; readonly difficulty: Difficulty }
+  | { readonly type: "confirm-difficulty-feedback"; readonly eventId: string }
   | { readonly type: "pause"; readonly reason: PauseReason }
   | { readonly type: "resume" };
 

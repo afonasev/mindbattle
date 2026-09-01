@@ -171,7 +171,8 @@ function decodeControls(value: unknown): readonly TeamControlAssignment[] | null
 
 export function decodePersistedData(
   source: string | null,
-  catalogRevision: string
+  catalogRevision: string,
+  migrateHistory?: (history: QuestionHistory) => QuestionHistory
 ): PersistedData {
   if (!source) return emptyPersistedData(catalogRevision);
   try {
@@ -190,11 +191,12 @@ export function decodePersistedData(
     ) {
       return emptyPersistedData(catalogRevision);
     }
+    const sameCatalog = parsed.catalogRevision === catalogRevision;
     return {
       version: 1,
       catalogRevision,
-      history,
-      lastMatch: parsed.catalogRevision === catalogRevision ? lastMatch : null,
+      history: sameCatalog ? history : (migrateHistory?.(history) ?? history),
+      lastMatch: sameCatalog ? lastMatch : null,
       preferences,
       controls
     };
@@ -205,9 +207,10 @@ export function decodePersistedData(
 
 export function loadPersistedData(
   storage: StorageLike,
-  catalogRevision: string
+  catalogRevision: string,
+  migrateHistory?: (history: QuestionHistory) => QuestionHistory
 ): PersistedData {
-  return decodePersistedData(storage.getItem(STORAGE_KEY), catalogRevision);
+  return decodePersistedData(storage.getItem(STORAGE_KEY), catalogRevision, migrateHistory);
 }
 
 export function savePersistedData(storage: StorageLike, data: PersistedData): boolean {

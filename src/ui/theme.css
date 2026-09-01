@@ -603,6 +603,61 @@ footer {
   font-size: clamp(0.76rem, 1vw, 0.9rem);
 }
 
+.difficulty-feedback-stage {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(0.8rem, 2vw, 1.5rem);
+  width: min(100%, 1080px);
+  margin: auto;
+  text-align: center;
+  animation: stage-enter 240ms ease-out both;
+}
+
+.difficulty-feedback-stage > h2 {
+  max-width: 24ch;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1.08;
+}
+
+.difficulty-feedback-stage > p {
+  max-width: 64ch;
+  margin: 0;
+  color: #aebbd1;
+}
+
+.difficulty-feedback-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.7rem, 1.5vw, 1.2rem);
+  width: 100%;
+}
+
+.difficulty-feedback-option {
+  display: grid;
+  min-height: clamp(8rem, 18vh, 12rem);
+  place-items: center;
+  align-content: center;
+  gap: 0.7rem;
+  border: 1px solid rgba(128, 158, 209, 0.38);
+  border-radius: 1.2rem;
+  background: linear-gradient(150deg, rgba(22, 43, 76, 0.95), rgba(8, 18, 35, 0.96));
+}
+
+.difficulty-feedback-option strong { font-size: clamp(1.5rem, 3vw, 2.8rem); }
+.feedback-control-glyphs { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.45rem; }
+.feedback-control-glyphs kbd {
+  min-width: 2.1rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid rgba(143, 181, 255, 0.45);
+  border-radius: 0.45rem;
+  color: #8fb5ff;
+  font: 800 1rem/1 inherit;
+}
+.difficulty-feedback-option--selected { border-color: #4de09a; box-shadow: 0 0 32px rgba(77, 224, 154, 0.22); }
+.feedback-status--error { color: #ff8d9a !important; }
+
 .question-stage {
   display: grid;
   grid-template-rows: auto auto 1fr auto;
@@ -761,6 +816,22 @@ footer {
   display: inline;
   margin: 0 0.4rem;
   line-height: 1.4;
+}
+
+.explanation a {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0.35rem auto 0;
+  overflow-wrap: anywhere;
+  color: #9fc0ff;
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.explanation a:hover,
+.explanation a:focus-visible {
+  color: #dce8ff;
 }
 
 .explanation > span {

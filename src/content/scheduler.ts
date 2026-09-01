@@ -27,6 +27,50 @@ export const EMPTY_QUESTION_HISTORY: QuestionHistory = {
   bags: {}
 };
 
+export function migrateQuestionHistory(
+  topics: readonly TopicPack[],
+  history: QuestionHistory
+): QuestionHistory {
+  const shownCount: Record<string, number> = {};
+  const lastShownSerial: Record<string, number> = {};
+  for (const bag of Object.values(history.bags)) {
+    for (const [id, count] of Object.entries(bag.shownCount)) {
+      shownCount[id] = Math.max(shownCount[id] ?? 0, count);
+    }
+    for (const [id, serial] of Object.entries(bag.lastShownSerial)) {
+      lastShownSerial[id] = Math.max(lastShownSerial[id] ?? 0, serial);
+    }
+  }
+
+  const bags: Record<string, BagHistory> = {};
+  for (const topic of topics) {
+    for (const difficulty of ["easy", "medium", "hard"] as const) {
+      const ids = topic.questions
+        .filter((question) => question.difficulty === difficulty)
+        .map((question) => question.id);
+      const counts = Object.fromEntries(ids.filter((id) => shownCount[id]).map((id) => [id, shownCount[id]]));
+      const serials = Object.fromEntries(ids.filter((id) => lastShownSerial[id]).map((id) => [id, lastShownSerial[id]]));
+      if (Object.keys(counts).length === 0) continue;
+      const lastShownId = ids.reduce<string | null>(
+        (latest, id) =>
+          latest === null || (lastShownSerial[id] ?? 0) > (lastShownSerial[latest] ?? 0)
+            ? id
+            : latest,
+        null
+      );
+      bags[`${topic.id}:${difficulty}`] = {
+        cycle: 0,
+        remaining: [],
+        previousOrder: [],
+        lastShownId,
+        shownCount: counts,
+        lastShownSerial: serials
+      };
+    }
+  }
+  return { version: 1, serial: history.serial, bags };
+}
+
 function sameOrder(left: readonly string[], right: readonly string[]): boolean {
   return left.length === right.length && left.every((value, index) => value === right[index]);
 }

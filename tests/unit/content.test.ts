@@ -5,11 +5,13 @@ import {
   TOPIC_DEFINITIONS,
   chooseTopicCandidates,
   drawQuestion,
+  migrateQuestionHistory,
   seedRandom,
   validateCatalog,
   validateTopicPack,
   type Difficulty,
   type QuestionHistory,
+  type ReviewEntry,
   type TopicPack
 } from "../../src/content";
 
@@ -21,7 +23,7 @@ function makeTopic(index: number): TopicPack {
     id,
     title: `Тема ${index}`,
     questions: difficulties.flatMap((difficulty) =>
-      Array.from({ length: 10 }, (_, questionIndex) => ({
+      Array.from({ length: difficulty === "medium" ? 10 : 20 }, (_, questionIndex) => ({
         id: `${id}-${difficulty}-${questionIndex}`,
         difficulty,
         prompt: `Какой ответ верен для вопроса ${questionIndex}?`,
@@ -39,7 +41,7 @@ function makeTopic(index: number): TopicPack {
 }
 
 describe("content validation", () => {
-  it("accepts the exact 30 × 30 catalog", () => {
+  it("accepts the exact 30 × 50 catalog", () => {
     const catalog = {
       revision: "test-r1",
       topics: TOPIC_DEFINITIONS.map(([id, title], index) => {
@@ -57,6 +59,21 @@ describe("content validation", () => {
       })
     };
     expect(validateCatalog(catalog)).toBe(catalog);
+    const reviews: readonly ReviewEntry[] = catalog.topics.map((topic) => ({
+      topicId: topic.id,
+      author: "author",
+      reviewer: "independent-reviewer",
+      status: "approved",
+      contentSha256: "a".repeat(64),
+      reviewedAt: "2026-09-01",
+      checkedQuestions: 50,
+      criticalFindingsOpen: 0
+    }));
+    expect(validateCatalog(catalog, reviews)).toBe(catalog);
+    const incomplete = reviews.map((review, index) =>
+      index === 0 ? { ...review, checkedQuestions: 49 } : review
+    ) as unknown as readonly ReviewEntry[];
+    expect(() => validateCatalog(catalog, incomplete)).toThrow(/review не завершено/);
   });
 
   it("reports a path for invalid answers and quotas", () => {
@@ -69,7 +86,7 @@ describe("content validation", () => {
       }))
     };
     const issues = validateTopicPack(broken);
-    expect(issues.some((issue) => issue.includes("ожидалось 30"))).toBe(true);
+    expect(issues.some((issue) => issue.includes("ожидалось 50"))).toBe(true);
     expect(issues.some((issue) => issue.includes("ответы должны различаться"))).toBe(true);
     expect(() => validateCatalog({ revision: "x", topics: [broken] })).toThrow(
       CatalogValidationError
@@ -101,18 +118,51 @@ describe("content validation", () => {
 });
 
 describe("question shuffle bags", () => {
+  it("moves compact history with a question when its difficulty changes", () => {
+    const topic = makeTopic(0);
+    const movedId = topic.questions.find((question) => question.difficulty === "easy")!.id;
+    const migratedTopic = {
+      ...topic,
+      questions: topic.questions.map((question) =>
+        question.id === movedId ? { ...question, difficulty: "medium" as const } : question
+      )
+    };
+    const history: QuestionHistory = {
+      version: 1,
+      serial: 7,
+      bags: {
+        "topic-0:easy": {
+          cycle: 0,
+          remaining: [],
+          previousOrder: [movedId],
+          lastShownId: movedId,
+          shownCount: { [movedId]: 2 },
+          lastShownSerial: { [movedId]: 7 }
+        }
+      }
+    };
+    const migrated = migrateQuestionHistory([migratedTopic], history);
+    expect(migrated.bags["topic-0:medium"]).toMatchObject({
+      remaining: [],
+      previousOrder: [],
+      lastShownId: movedId,
+      shownCount: { [movedId]: 2 }
+    });
+    expect(migrated.bags["topic-0:easy"]).toBeUndefined();
+  });
+
   it("draws a complete unique cycle and changes the next cycle boundary", () => {
     const topic = makeTopic(0);
     let history: QuestionHistory = EMPTY_QUESTION_HISTORY;
     let random = seedRandom("match-a");
     const firstCycle: string[] = [];
-    for (let index = 0; index < 10; index += 1) {
+    for (let index = 0; index < 20; index += 1) {
       const draw = drawQuestion(topic, "easy", history, random);
       firstCycle.push(draw.questionId);
       history = draw.history;
       random = draw.random;
     }
-    expect(new Set(firstCycle).size).toBe(10);
+    expect(new Set(firstCycle).size).toBe(20);
     const next = drawQuestion(topic, "easy", history, random);
     expect(next.questionId).not.toBe(firstCycle.at(-1));
     const nextOrder = next.history.bags["topic-0:easy"].previousOrder;
