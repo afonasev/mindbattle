@@ -15,14 +15,14 @@ export const GAMEPAD_BUTTON = {
 
 export interface GamepadGlyphSet {
   readonly answer: Readonly<Record<CardinalDirection, string>>;
-  readonly bonus: Readonly<Record<"up" | "down" | "confirm" | "cancel", string>>;
+  readonly bonus: Readonly<Record<"moveLeft" | "moveRight" | "confirm" | "cancel", string>>;
 }
 
 const DPAD_GLYPHS = {
-  up: "D-pad ↑",
-  down: "D-pad ↓",
-  confirm: "D-pad →",
-  cancel: "D-pad ←",
+  moveLeft: "D-pad ←",
+  moveRight: "D-pad →",
+  confirm: "D-pad ↓",
+  cancel: "D-pad ↑",
 } as const;
 
 export const GAMEPAD_GLYPHS: Readonly<Record<GamepadProfile, GamepadGlyphSet>> = {
@@ -80,19 +80,19 @@ export function answerDirectionForGamepadButton(
   }
 }
 
-export type BonusGamepadAction = "move-up" | "move-down" | "confirm" | "cancel";
+export type BonusGamepadAction = "move-left" | "move-right" | "confirm" | "cancel";
 
 export function bonusActionForGamepadButton(
   buttonIndex: number,
 ): BonusGamepadAction | undefined {
   switch (buttonIndex) {
-    case GAMEPAD_BUTTON.dpadNorth:
-      return "move-up";
-    case GAMEPAD_BUTTON.dpadSouth:
-      return "move-down";
-    case GAMEPAD_BUTTON.dpadEast:
-      return "confirm";
     case GAMEPAD_BUTTON.dpadWest:
+      return "move-left";
+    case GAMEPAD_BUTTON.dpadEast:
+      return "move-right";
+    case GAMEPAD_BUTTON.dpadSouth:
+      return "confirm";
+    case GAMEPAD_BUTTON.dpadNorth:
       return "cancel";
     default:
       return undefined;

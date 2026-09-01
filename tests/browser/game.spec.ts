@@ -35,8 +35,18 @@ async function chooseCurrentTopic(page: Page) {
   expect(state.phase.kind).toBe("bonus-veto");
   await expect(page.locator(".topic-veto")).toHaveCount(state.config.teams.length + 1);
   await page.keyboard.press("d");
-  await page.keyboard.press("ArrowDown");
+  let vetoState = await storedState(page);
+  expect(vetoState.phase.cursors.green).toBe(1);
+  await page.keyboard.press("a");
+  vetoState = await storedState(page);
+  expect(vetoState.phase.cursors.green).toBe(0);
+  await page.keyboard.press("s");
+  vetoState = await storedState(page);
+  expect(vetoState.phase.vetoes.green).toBe(vetoState.phase.candidates[0]);
   await page.keyboard.press("ArrowRight");
+  vetoState = await storedState(page);
+  expect(vetoState.phase.cursors.blue).toBe(1);
+  await page.keyboard.press("ArrowDown");
   await expect(page.locator(".question-stage")).toBeVisible();
 }
 
@@ -154,6 +164,14 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
   for (let round = 0; round < 9; round += 1) {
     if (round === 2) {
       await expect(page.locator(".bonus-stage")).toBeVisible();
+      await expect(page.locator(".bonus-stage .control-help")).toHaveText(
+        "←/→ курсор · ↓ запретить или заменить · ↑ снять запрет · D-pad / WASD / стрелки"
+      );
+      const bonusFits = await page.locator(".bonus-stage").evaluate((stage) => ({
+        pageFits: document.documentElement.scrollWidth <= innerWidth,
+        stageFits: stage.scrollWidth <= stage.clientWidth
+      }));
+      expect(bonusFits).toEqual({ pageFits: true, stageFits: true });
       await captureSettled(page, testInfo.outputPath("bonus-veto.png"));
     }
     await chooseCurrentTopic(page);
@@ -287,16 +305,26 @@ test("supports N+1 public bonus veto for three and four assigned teams", async (
 
     await expect(page.locator(".topic-veto")).toHaveCount(teamCount + 1);
     await page.keyboard.press("d");
-    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("a");
+    let vetoState = await storedState(page);
+    expect(vetoState.phase.cursors.green).toBe(0);
+    await page.keyboard.press("s");
     await page.keyboard.press("ArrowRight");
-    await pressVirtualPad(page, 0, 13);
-    await pressVirtualPad(page, 0, 13);
+    vetoState = await storedState(page);
+    expect(vetoState.phase.cursors.blue).toBe(1);
+    await page.keyboard.press("ArrowDown");
     await pressVirtualPad(page, 0, 15);
+    await pressVirtualPad(page, 0, 15);
+    vetoState = await storedState(page);
+    expect(vetoState.phase.cursors.yellow).toBe(2);
+    await pressVirtualPad(page, 0, 13);
     if (teamCount === 4) {
-      await pressVirtualPad(page, 1, 13);
-      await pressVirtualPad(page, 1, 13);
-      await pressVirtualPad(page, 1, 13);
       await pressVirtualPad(page, 1, 15);
+      await pressVirtualPad(page, 1, 15);
+      await pressVirtualPad(page, 1, 15);
+      vetoState = await storedState(page);
+      expect(vetoState.phase.cursors.red).toBe(3);
+      await pressVirtualPad(page, 1, 13);
     }
     await expect(page.locator(".question-stage")).toBeVisible();
   }

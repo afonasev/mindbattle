@@ -192,13 +192,13 @@ function actionForDirection(
       : undefined;
   }
   switch (direction) {
-    case "north":
-      return { type: "bonus-move", teamId, delta: -1 };
-    case "south":
-      return { type: "bonus-move", teamId, delta: 1 };
-    case "east":
-      return { type: "bonus-confirm", teamId };
     case "west":
+      return { type: "bonus-move", teamId, delta: -1 };
+    case "east":
+      return { type: "bonus-move", teamId, delta: 1 };
+    case "south":
+      return { type: "bonus-confirm", teamId };
+    case "north":
       return { type: "bonus-cancel", teamId };
   }
 }
@@ -327,9 +327,9 @@ function semanticGamepadAction(
 
   const action = bonusActionForGamepadButton(buttonIndex);
   switch (action) {
-    case "move-up":
+    case "move-left":
       return { type: "bonus-move", teamId, delta: -1 };
-    case "move-down":
+    case "move-right":
       return { type: "bonus-move", teamId, delta: 1 };
     case "confirm":
       return { type: "bonus-confirm", teamId };

@@ -15,6 +15,7 @@ import {
 } from "./input";
 import {
   answerDirectionForGamepadButton,
+  bonusActionForGamepadButton,
   detectGamepadProfile,
   GAMEPAD_GLYPHS,
 } from "./gamepadProfiles";
@@ -100,6 +101,20 @@ describe("control assignments and glyph profiles", () => {
       south: "▼",
       west: "◀",
     });
+    for (const profile of ["xbox", "playstation", "nintendo", "universal"] as const) {
+      expect(GAMEPAD_GLYPHS[profile].bonus).toEqual({
+        moveLeft: "D-pad ←",
+        moveRight: "D-pad →",
+        confirm: "D-pad ↓",
+        cancel: "D-pad ↑",
+      });
+    }
+    expect([14, 15, 13, 12].map(bonusActionForGamepadButton)).toEqual([
+      "move-left",
+      "move-right",
+      "confirm",
+      "cancel",
+    ]);
   });
 });
 
@@ -153,10 +168,14 @@ describe("keyboard routing", () => {
   it("maps bonus navigation to move, confirm and cancel", () => {
     let state = createInputRouterState();
     const expected = [
-      ["KeyW", { type: "bonus-move", teamId: "green", delta: -1 }],
-      ["KeyS", { type: "bonus-move", teamId: "green", delta: 1 }],
-      ["KeyD", { type: "bonus-confirm", teamId: "green" }],
-      ["KeyA", { type: "bonus-cancel", teamId: "green" }],
+      ["KeyA", { type: "bonus-move", teamId: "green", delta: -1 }],
+      ["KeyD", { type: "bonus-move", teamId: "green", delta: 1 }],
+      ["KeyS", { type: "bonus-confirm", teamId: "green" }],
+      ["KeyW", { type: "bonus-cancel", teamId: "green" }],
+      ["ArrowLeft", { type: "bonus-move", teamId: "blue", delta: -1 }],
+      ["ArrowRight", { type: "bonus-move", teamId: "blue", delta: 1 }],
+      ["ArrowDown", { type: "bonus-confirm", teamId: "blue" }],
+      ["ArrowUp", { type: "bonus-cancel", teamId: "blue" }],
     ] as const;
     for (const [code, action] of expected) {
       const pressed = handleKeyboardInput(
@@ -239,12 +258,35 @@ describe("gamepad polling and lifecycle", () => {
 
   it("emits only rising edges and routes D-pad bonus actions", () => {
     let state = pollBaseline(createInputRouterState(), assignments, [pad(0), pad(1)]);
-    const pressed = handleGamepadPoll(state, [pad(0, [15]), pad(1)], assignments, "bonus-veto");
-    expect(pressed.actions).toEqual([{ type: "bonus-confirm", teamId: "green" }]);
-    state = pressed.state;
-    expect(
-      handleGamepadPoll(state, [pad(0, [15]), pad(1)], assignments, "bonus-veto").actions,
-    ).toEqual([]);
+    const expected = [
+      [14, { type: "bonus-move", teamId: "green", delta: -1 }],
+      [15, { type: "bonus-move", teamId: "green", delta: 1 }],
+      [13, { type: "bonus-confirm", teamId: "green" }],
+      [12, { type: "bonus-cancel", teamId: "green" }],
+    ] as const;
+    for (const [buttonIndex, action] of expected) {
+      const pressed = handleGamepadPoll(
+        state,
+        [pad(0, [buttonIndex]), pad(1)],
+        assignments,
+        "bonus-veto",
+      );
+      expect(pressed.actions).toEqual([action]);
+      expect(
+        handleGamepadPoll(
+          pressed.state,
+          [pad(0, [buttonIndex]), pad(1)],
+          assignments,
+          "bonus-veto",
+        ).actions,
+      ).toEqual([]);
+      state = handleGamepadPoll(
+        pressed.state,
+        [pad(0), pad(1)],
+        assignments,
+        "bonus-veto",
+      ).state;
+    }
   });
 
   it("uses face-west, face-north and face-east for direct normal topics", () => {

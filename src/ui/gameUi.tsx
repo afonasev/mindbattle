@@ -169,7 +169,7 @@ export function BonusVeto({
           );
         })}
       </div>
-      <p className="control-help">↑/↓ курсор · → запретить или заменить · ← снять запрет · D-pad / WASD / стрелки</p>
+      <p className="control-help">←/→ курсор · ↓ запретить или заменить · ↑ снять запрет · D-pad / WASD / стрелки</p>
     </section>
   );
 }
