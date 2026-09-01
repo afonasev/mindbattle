@@ -427,8 +427,7 @@ function applyNormalTopic(
 
 function applyBonusCommand(
   state: MatchState,
-  command: DomainCommand,
-  context: DomainContext
+  command: DomainCommand
 ): MatchState {
   if (state.phase.kind !== "bonus-veto" || !("teamId" in command) || !activeTeam(state, command.teamId)) {
     return state;
@@ -455,12 +454,15 @@ function applyBonusCommand(
   if (vetoed.every((topicId): topicId is string => topicId !== undefined) && new Set(vetoed).size === state.config.teams.length) {
     const remaining = phase.candidates.filter((topicId) => !vetoed.includes(topicId));
     if (remaining.length !== 1) throw new Error("Distinct bonus vetoes must leave exactly one topic");
-    const selected = {
+    return {
       ...state,
-      phase,
-      selectedTopicIds: [...state.selectedTopicIds, remaining[0]]
+      selectedTopicIds: [...state.selectedTopicIds, remaining[0]],
+      phase: {
+        kind: "topic-confirmation",
+        topicId: remaining[0],
+        remainingMs: TOPIC_CONFIRMATION_MS
+      }
     };
-    return startQuestion(selected, context, remaining[0], "main");
   }
   return { ...state, phase };
 }
@@ -586,7 +588,7 @@ function processCommands(
       if (changed !== next) return changed;
     } else if (next.phase.kind === "bonus-veto") {
       const previousKind = next.phase.kind;
-      next = applyBonusCommand(next, command, context);
+      next = applyBonusCommand(next, command);
       if (previousKind !== next.phase.kind) return next;
     } else if (
       (next.phase.kind === "topic-confirmation" ||

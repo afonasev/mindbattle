@@ -1,3 +1,4 @@
+import { isBonusQuestion } from "./classic";
 import type {
   AnswerPosition,
   DomainContext,
@@ -49,6 +50,7 @@ export interface PublicMatchView {
   readonly topicCandidates?: readonly string[];
   readonly topicId?: string;
   readonly confirmationRemainingMs?: number;
+  readonly confirmationBonus?: boolean;
   readonly vetoes?: Readonly<Partial<Record<TeamId, string>>>;
   readonly standings?: readonly StandingRow[];
   readonly winnerId?: TeamId;
@@ -162,7 +164,8 @@ export function selectPublicView(state: MatchState, context: DomainContext): Pub
     return {
       ...base,
       topicId: state.phase.topicId,
-      confirmationRemainingMs: state.phase.remainingMs
+      confirmationRemainingMs: state.phase.remainingMs,
+      confirmationBonus: isBonusQuestion(state.config, state.mainQuestionIndex)
     };
   }
   if (state.phase.kind === "bonus-veto") {

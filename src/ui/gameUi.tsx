@@ -143,14 +143,17 @@ export function TopicConfirmation({
   readonly view: PublicMatchView;
   readonly titleById: Readonly<Record<string, string>>;
 }) {
+  const bonus = view.confirmationBonus === true;
   return (
     <section className="topic-confirmation-stage" aria-live="polite" aria-labelledby="confirmation-title">
-      <div className="stage-label">Тема выбрана</div>
+      <div className={bonus ? "stage-label stage-label--bonus" : "stage-label"}>
+        {bonus ? "Бонусный вопрос · x2" : "Тема выбрана"}
+      </div>
       <h2 id="confirmation-title">{titleById[view.topicId ?? ""] ?? view.topicId}</h2>
       <strong className="topic-confirmation-countdown">
         {Math.ceil((view.confirmationRemainingMs ?? 0) / 1_000)}
       </strong>
-      <p>Вопрос начнётся через 3 секунды</p>
+      <p>{bonus ? "Бонусный вопрос начнётся через 3 секунды" : "Вопрос начнётся через 3 секунды"}</p>
       <span className="control-help">Отпустите кнопки, затем нажмите любую назначенную клавишу</span>
     </section>
   );

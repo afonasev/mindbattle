@@ -25,7 +25,18 @@ async function captureSettled(page: Page, path: string) {
   await page.screenshot({ path, fullPage: true });
 }
 
-async function chooseCurrentTopic(page: Page) {
+async function muteAudio(page: Page) {
+  const preferences = page.locator(".preferences-panel");
+  await preferences.locator("summary").click();
+  const muted = page.getByLabel("Без звука");
+  if (!(await muted.isChecked())) await muted.check();
+  await preferences.locator("summary").click();
+}
+
+async function chooseCurrentTopic(
+  page: Page,
+  inspectBonusConfirmation?: () => Promise<void>
+) {
   const state = await storedState(page);
   if (state.phase.kind === "normal-topic") {
     await page.keyboard.press(state.phase.chooser === "green" ? "a" : "ArrowLeft");
@@ -49,8 +60,26 @@ async function chooseCurrentTopic(page: Page) {
   await page.keyboard.press("ArrowRight");
   vetoState = await storedState(page);
   expect(vetoState.phase.cursors.blue).toBe(1);
-  await page.keyboard.press("ArrowDown");
+  await page.keyboard.down("ArrowDown");
+  await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
+  await expect(page.locator(".topic-confirmation-stage .stage-label")).toHaveText(
+    "Бонусный вопрос · x2"
+  );
+  await expect(page.getByText("Бонусный вопрос начнётся через 3 секунды")).toBeVisible();
+  await page.waitForTimeout(120);
+  const held = await storedState(page);
+  expect(held.phase.kind).toBe("topic-confirmation");
+  if (inspectBonusConfirmation) await inspectBonusConfirmation();
+  await page.keyboard.up("ArrowDown");
+  await waitForInputGate(page);
+  await page.keyboard.press("w");
   await expect(page.locator(".question-stage")).toBeVisible();
+  const answering = await storedState(page);
+  expect(answering.phase.kind).toBe("answering");
+  expect(answering.phase.baseRemainingMs).toBeGreaterThan(9_800);
+  const stageLength = answering.config.questionCount / 3;
+  const basePoints = [100, 200, 300][Math.floor(answering.mainQuestionIndex / stageLength)];
+  expect(answering.phase.round.points).toBe(basePoints * 2);
 }
 
 async function answer(page: Page, team: Team, position: Position) {
@@ -99,6 +128,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await page.evaluate(() => localStorage.clear());
   await page.reload();
+  await muteAudio(page);
 });
 
 test("confirms a normal topic for three seconds or a new press before the question", async ({ page }, testInfo) => {
@@ -250,7 +280,12 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
       expect(bonusFits).toEqual({ pageFits: true, stageFits: true });
       await captureSettled(page, testInfo.outputPath("bonus-veto.png"));
     }
-    await chooseCurrentTopic(page);
+    await chooseCurrentTopic(
+      page,
+      round === 2
+        ? () => captureSettled(page, testInfo.outputPath("bonus-topic-confirmation.png"))
+        : undefined
+    );
     await waitForInputGate(page);
 
     if (round === 0) {
@@ -369,6 +404,7 @@ test("supports N+1 public bonus veto for three and four assigned teams", async (
   for (const teamCount of [3, 4] as const) {
     await page.evaluate(() => localStorage.clear());
     await page.reload();
+    await muteAudio(page);
     await page.getByRole("button", { name: String(teamCount), exact: true }).click();
     await expect(page.getByRole("button", { name: "Начать игру" })).toBeDisabled();
     await page.getByLabel("Контроллер команды Жёлтая").selectOption("gamepad:0");
@@ -419,6 +455,12 @@ test("supports N+1 public bonus veto for three and four assigned teams", async (
       expect(vetoState.phase.cursors.red).toBe(3);
       await pressVirtualPad(page, 1, 13);
     }
+    await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
+    await expect(page.locator(".topic-confirmation-stage .stage-label")).toHaveText(
+      "Бонусный вопрос · x2"
+    );
+    await waitForInputGate(page);
+    await page.keyboard.press("w");
     await expect(page.locator(".question-stage")).toBeVisible();
   }
 });

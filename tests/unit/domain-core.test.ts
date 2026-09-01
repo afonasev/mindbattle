@@ -96,7 +96,7 @@ function startQuestion(state: MatchState, context: DomainContext): MatchState {
     return frame(confirmation, context, [{ type: "continue", teamId: "green" }]);
   }
   if (state.phase.kind === "bonus-veto") {
-    return frame(
+    const confirmation = frame(
       state,
       context,
       state.config.teams.map((teamId, index) => ({
@@ -105,6 +105,10 @@ function startQuestion(state: MatchState, context: DomainContext): MatchState {
         topicId: state.phase.kind === "bonus-veto" ? state.phase.candidates[index] : ""
       }))
     );
+    if (confirmation.phase.kind !== "topic-confirmation") {
+      throw new Error("Expected bonus topic confirmation");
+    }
+    return frame(confirmation, context, [{ type: "continue", teamId: "green" }]);
   }
   throw new Error(`Expected a topic phase, received ${state.phase.kind}`);
 }
@@ -204,6 +208,7 @@ describe("topic phases", () => {
       remainingMs: 3_000
     });
     expect(confirmation.usedQuestionIds).toEqual([]);
+    expect(selectPublicView(confirmation, context).confirmationBonus).toBe(false);
     const waiting = frame(confirmation, context, [], 2_999);
     expect(waiting.phase.kind).toBe("topic-confirmation");
     const answering = frame(waiting, context, [], 1);
@@ -270,7 +275,7 @@ describe("topic phases", () => {
     if (state.phase.kind === "normal-topic") expect(state.phase.chooser).toBe(other);
   });
 
-  it("allows overlapping and replaced vetoes, then selects the sole remainder", () => {
+  it("holds the sole bonus remainder for confirmation before starting with full time", () => {
     const context = makeContext();
     let state = createMatch(TWO_TEAMS, "bonus-seed", 0, context);
     for (let questionIndex = 0; questionIndex < 2; questionIndex += 1) {
@@ -289,11 +294,45 @@ describe("topic phases", () => {
     expect(state.phase.kind).toBe("bonus-veto");
     if (state.phase.kind !== "bonus-veto") return;
     expect(state.phase.vetoes).toEqual({ green: first, blue: first });
+    const randomBeforeConfirmation = state.random;
+    const usedBeforeConfirmation = state.usedQuestionIds;
     state = frame(state, context, [{ type: "set-veto", teamId: "blue", topicId: second }]);
-    expect(state.phase.kind).toBe("answering");
-    if (state.phase.kind === "answering") {
-      expect(state.phase.round.points).toBe(200);
-      expect([first, second]).not.toContain(state.phase.round.topicId);
+    expect(state.phase.kind).toBe("topic-confirmation");
+    if (state.phase.kind !== "topic-confirmation") return;
+    expect(state.phase.remainingMs).toBe(3_000);
+    expect([first, second]).not.toContain(state.phase.topicId);
+    expect(state.random).toEqual(randomBeforeConfirmation);
+    expect(state.usedQuestionIds).toEqual(usedBeforeConfirmation);
+    expect(selectPublicView(state, context)).toMatchObject({
+      topicId: state.phase.topicId,
+      confirmationRemainingMs: 3_000,
+      confirmationBonus: true
+    });
+    expect(deserializeMatch(serializeMatch(state), context.catalogRevision)).toEqual(state);
+
+    const manual = frame(state, context, [
+      { type: "continue", teamId: "green" },
+      { type: "answer", teamId: "green", position: "up" }
+    ]);
+    expect(manual.phase.kind).toBe("answering");
+    if (manual.phase.kind === "answering") {
+      expect(manual.phase.baseRemainingMs).toBe(10_000);
+      expect(manual.phase.round.points).toBe(200);
+      expect(manual.phase.round.topicId).toBe(state.phase.topicId);
+      expect(manual.phase.round.attempts[0]).toMatchObject({ status: "open", answer: null });
+    }
+
+    const paused = frame(state, context, [{ type: "pause", reason: { kind: "manual" } }], 1_000);
+    expect(paused.phase.kind === "topic-confirmation" && paused.phase.remainingMs).toBe(2_000);
+    const stillPaused = frame(paused, context, [], 20_000);
+    expect(stillPaused.phase.kind === "topic-confirmation" && stillPaused.phase.remainingMs).toBe(2_000);
+    const resumed = frame(stillPaused, context, [{ type: "resume" }]);
+    const automatic = frame(resumed, context, [], 2_000);
+    expect(automatic.phase.kind).toBe("answering");
+    if (automatic.phase.kind === "answering") {
+      expect(automatic.phase.baseRemainingMs).toBe(10_000);
+      expect(automatic.phase.round.points).toBe(200);
+      expect(automatic.phase.round.topicId).toBe(state.phase.topicId);
     }
   });
 });
