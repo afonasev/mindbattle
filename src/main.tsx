@@ -4,6 +4,13 @@ import "@fontsource-variable/onest/wght.css";
 import { App } from "./ui/App";
 import "./ui/theme.css";
 
+const appIcon = document.getElementById("app-icon");
+if (appIcon instanceof HTMLLinkElement) {
+  appIcon.href = import.meta.env.DEV
+    ? "/icons/mindbattle-dev.png"
+    : "/icons/mindbattle.png";
+}
+
 const root = document.getElementById("root");
 
 if (!root) {
