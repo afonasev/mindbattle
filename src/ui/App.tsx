@@ -146,14 +146,11 @@ export function App() {
           position: toPosition[action.direction] as AnswerPosition
         }];
       }
-      if (action.type === "topic-select") {
-        const current = controller.view;
-        if (current?.phase !== "normal-topic" || current.chooser !== action.teamId) return [];
-        const index = action.direction === "west" ? 0 : action.direction === "north" ? 1 : 2;
-        const topicId = current.topicCandidates?.[index];
-        return topicId
-          ? [{ type: "choose-topic", teamId: action.teamId as TeamId, topicId }]
-          : [];
+      if (action.type === "topic-move") {
+        return [{ type: "move-topic", teamId: action.teamId as TeamId, delta: action.delta }];
+      }
+      if (action.type === "topic-confirm") {
+        return [{ type: "confirm-topic", teamId: action.teamId as TeamId }];
       }
       if (action.type === "bonus-move") {
         return [{ type: "move-veto", teamId: action.teamId as TeamId, delta: action.delta }];
@@ -383,10 +380,6 @@ export function App() {
           <TopicSelection
             view={view}
             titleById={titleById}
-            assignment={settings.assignments.find(({ teamId }) => teamId === view.chooser)}
-            choose={(topicId) =>
-              dispatch([{ type: "choose-topic", teamId: view.chooser!, topicId }])
-            }
           />
         )}
         {view.phase === "topic-confirmation" && (

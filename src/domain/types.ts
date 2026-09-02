@@ -99,6 +99,7 @@ export interface NormalTopicPhase {
   readonly kind: "normal-topic";
   readonly chooser: TeamId;
   readonly candidates: readonly [TopicId, TopicId, TopicId];
+  readonly cursor: number;
 }
 
 export interface TopicConfirmationPhase {
@@ -210,7 +211,8 @@ export interface MatchState {
 }
 
 export type DomainCommand =
-  | { readonly type: "choose-topic"; readonly teamId: TeamId; readonly topicId: TopicId }
+  | { readonly type: "move-topic"; readonly teamId: TeamId; readonly delta: -1 | 1 }
+  | { readonly type: "confirm-topic"; readonly teamId: TeamId }
   | { readonly type: "move-veto"; readonly teamId: TeamId; readonly delta: -1 | 1 }
   | { readonly type: "set-veto"; readonly teamId: TeamId; readonly topicId?: TopicId }
   | { readonly type: "clear-veto"; readonly teamId: TeamId }

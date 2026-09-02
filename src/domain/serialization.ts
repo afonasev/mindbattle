@@ -83,7 +83,12 @@ function validPhase(value: unknown, config: MatchConfig): boolean {
     return config.teams.includes(value.chooser as TeamId) &&
       stringArray(value.candidates) &&
       value.candidates.length === 3 &&
-      new Set(value.candidates).size === 3;
+      new Set(value.candidates).size === 3 &&
+      (value.cursor === undefined ||
+        (finite(value.cursor) &&
+          Number.isSafeInteger(value.cursor) &&
+          value.cursor >= 0 &&
+          value.cursor < value.candidates.length));
   }
   if (value.kind === "topic-confirmation") {
     return typeof value.topicId === "string" &&
@@ -242,6 +247,10 @@ export function deserializeMatch(
     !finite(value.lastFrameAtMs)
   ) {
     return null;
+  }
+  const phase = value.phase;
+  if (record(phase) && phase.kind === "normal-topic" && phase.cursor === undefined) {
+    value.phase = { ...phase, cursor: 0 };
   }
   return value as unknown as MatchState;
 }

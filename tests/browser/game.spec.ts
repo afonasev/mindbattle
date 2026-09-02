@@ -39,7 +39,11 @@ async function chooseCurrentTopic(
 ) {
   const state = await storedState(page);
   if (state.phase.kind === "normal-topic") {
-    await page.keyboard.press(state.phase.chooser === "green" ? "a" : "ArrowLeft");
+    const chooser = state.phase.chooser as Team;
+    await page.keyboard.press(keys[chooser].right);
+    const moved = await storedState(page);
+    expect(moved.phase).toMatchObject({ kind: "normal-topic", cursor: 1 });
+    await page.keyboard.press(keys[chooser].down);
     await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
     await waitForInputGate(page);
     await page.keyboard.press("w");
@@ -132,20 +136,38 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("confirms a normal topic for three seconds or a new press before the question", async ({ page }, testInfo) => {
+  const consoleErrors: string[] = [];
+  page.on("pageerror", (error) => consoleErrors.push(error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") consoleErrors.push(message.text());
+  });
   await page.getByRole("button", { name: "9", exact: true }).click();
   await page.getByRole("button", { name: "Начать игру" }).click();
   await waitForInputGate(page);
   const before = await storedState(page);
   expect(before.phase.kind).toBe("normal-topic");
   if (before.phase.kind !== "normal-topic") return;
-  await page.keyboard.press(before.phase.chooser === "green" ? "a" : "ArrowLeft");
+  const chooser = before.phase.chooser as Team;
+  const other = chooser === "green" ? "blue" : "green";
+  await page.keyboard.press(keys[other].right);
+  expect((await storedState(page)).phase).toMatchObject({ kind: "normal-topic", cursor: 0 });
+  await page.keyboard.press(keys[chooser].right);
+  const moved = await storedState(page);
+  expect(moved.phase).toMatchObject({ kind: "normal-topic", cursor: 1 });
+  await expect(page.locator(".topic-choice--current")).toHaveCount(1);
+  await captureSettled(page, testInfo.outputPath("normal-topic-selection.png"));
+  await expect(page.locator(".topic-confirmation-stage")).toHaveCount(0);
+  await page.keyboard.down(keys[chooser].down);
   await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
   await expect(page.locator(".question-stage")).toHaveCount(0);
   const confirmation = await storedState(page);
   expect(confirmation.phase).toMatchObject({
     kind: "topic-confirmation",
-    topicId: before.phase.candidates[0]
+    topicId: before.phase.candidates[1]
   });
+  await page.waitForTimeout(120);
+  expect((await storedState(page)).phase.kind).toBe("topic-confirmation");
+  await page.keyboard.up(keys[chooser].down);
   await captureSettled(page, testInfo.outputPath("topic-confirmation.png"));
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toBeVisible();
@@ -167,11 +189,13 @@ test("confirms a normal topic for three seconds or a new press before the questi
   await waitForInputGate(page);
   const second = await storedState(page);
   if (second.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
-  await page.keyboard.press(second.phase.chooser === "green" ? "a" : "ArrowLeft");
+  const secondChooser = second.phase.chooser as Team;
+  await page.keyboard.press(keys[secondChooser].down);
   await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
   await waitForInputGate(page);
   await page.keyboard.press("w");
   await expect(page.locator(".question-stage")).toBeVisible();
+  expect(consoleErrors).toEqual([]);
 });
 
 test("menu defaults, offline startup and responsive shell", async ({ context, page }, testInfo) => {

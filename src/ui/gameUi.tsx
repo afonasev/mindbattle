@@ -106,14 +106,10 @@ export function TeamCards({
 
 export function TopicSelection({
   view,
-  titleById,
-  assignment,
-  choose
+  titleById
 }: {
   readonly view: PublicMatchView;
   readonly titleById: Readonly<Record<string, string>>;
-  readonly assignment: TeamControlAssignment | undefined;
-  readonly choose: (topicId: string) => void;
 }) {
   return (
     <section className="topic-stage" aria-labelledby="topic-title">
@@ -123,15 +119,13 @@ export function TopicSelection({
       </h2>
       <div className="topic-cards topic-cards--three">
         {view.topicCandidates?.map((topicId, index) => (
-          <button key={topicId} type="button" onClick={() => choose(topicId)}>
-            <span className="topic-key">
-              {controlGlyph(assignment, (["left", "up", "right"] as const)[index])}
-            </span>
+          <div className={index === view.topicCursor ? "topic-choice topic-choice--current" : "topic-choice"} key={topicId}>
+            {index === view.topicCursor && <span className="cursor-markers" aria-label="Курсор выбирающей команды"><TeamDiamond teamId={view.chooser!} /></span>}
             {titleById[topicId] ?? topicId}
-          </button>
+          </div>
         ))}
       </div>
-      <p className="control-help">A / W / D · ← / ↑ / → · левая / верхняя / правая кнопка</p>
+      <p className="control-help">←/→ курсор · ↓ выбрать · D-pad / WASD / стрелки</p>
     </section>
   );
 }

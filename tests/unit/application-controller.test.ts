@@ -128,9 +128,8 @@ function chooseFirstTopic(controller: GameController): MatchState {
   if (!state || state.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
   const next = controller.dispatch([
     {
-      type: "choose-topic",
-      teamId: state.phase.chooser,
-      topicId: state.phase.candidates[0]
+      type: "confirm-topic",
+      teamId: state.phase.chooser
     }
   ]);
   if (!next) throw new Error("Expected active match");
@@ -170,9 +169,8 @@ describe("GameController", () => {
     const initial = controller.start(CONFIG);
     if (initial.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
     const confirmation = controller.dispatch([{
-      type: "choose-topic",
-      teamId: initial.phase.chooser,
-      topicId: initial.phase.candidates[0]
+      type: "confirm-topic",
+      teamId: initial.phase.chooser
     }]);
     expect(confirmation?.phase.kind).toBe("topic-confirmation");
     expect(controller.questionHistory.serial).toBe(0);
@@ -270,9 +268,8 @@ describe("GameController", () => {
     const initial = first.start(CONFIG);
     if (initial.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
     first.dispatch([{
-      type: "choose-topic",
-      teamId: initial.phase.chooser,
-      topicId: initial.phase.candidates[0]
+      type: "confirm-topic",
+      teamId: initial.phase.chooser
     }]);
     firstClock.advance(1_000);
     first.tick();

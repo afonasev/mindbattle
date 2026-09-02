@@ -194,11 +194,11 @@ describe("keyboard routing", () => {
     }
   });
 
-  it("selects three normal topics directly with west, north and east", () => {
-    for (const [code, direction] of [
-      ["KeyA", "west"],
-      ["KeyW", "north"],
-      ["KeyD", "east"],
+  it("moves and confirms normal topics with the same directions as bonus veto", () => {
+    for (const [code, action] of [
+      ["KeyA", { type: "topic-move", teamId: "green", delta: -1 }],
+      ["KeyD", { type: "topic-move", teamId: "green", delta: 1 }],
+      ["KeyS", { type: "topic-confirm", teamId: "green" }],
     ] as const) {
       const result = handleKeyboardInput(
         createInputRouterState(),
@@ -206,12 +206,12 @@ describe("keyboard routing", () => {
         keyboardAssignments,
         "normal-topic",
       );
-      expect(result.actions).toEqual([{ type: "topic-select", teamId: "green", direction }]);
+      expect(result.actions).toEqual([action]);
     }
     expect(
       handleKeyboardInput(
         createInputRouterState(),
-        { type: "keydown", code: "KeyS" },
+        { type: "keydown", code: "KeyW" },
         keyboardAssignments,
         "normal-topic",
       ).actions,
@@ -312,22 +312,23 @@ describe("gamepad polling and lifecycle", () => {
     }
   });
 
-  it("uses face-west, face-north and face-east for direct normal topics", () => {
+  it("uses D-pad west/east to move and D-pad south to confirm normal topics", () => {
     let state = pollBaseline(createInputRouterState(), assignments, [pad(0), pad(1)]);
-    const west = handleGamepadPoll(state, [pad(0, [2]), pad(1)], assignments, "normal-topic");
+    const west = handleGamepadPoll(state, [pad(0, [14]), pad(1)], assignments, "normal-topic");
     expect(west.actions).toEqual([
-      { type: "topic-select", teamId: "green", direction: "west" }
+      { type: "topic-move", teamId: "green", delta: -1 }
     ]);
     state = handleGamepadPoll(west.state, [pad(0), pad(1)], assignments, "normal-topic").state;
-    const north = handleGamepadPoll(state, [pad(0, [3]), pad(1)], assignments, "normal-topic");
-    expect(north.actions).toEqual([
-      { type: "topic-select", teamId: "green", direction: "north" }
-    ]);
+    const north = handleGamepadPoll(state, [pad(0, [12]), pad(1)], assignments, "normal-topic");
+    expect(north.actions).toEqual([]);
     state = handleGamepadPoll(north.state, [pad(0), pad(1)], assignments, "normal-topic").state;
-    const east = handleGamepadPoll(state, [pad(0, [1]), pad(1)], assignments, "normal-topic");
+    const east = handleGamepadPoll(state, [pad(0, [15]), pad(1)], assignments, "normal-topic");
     expect(east.actions).toEqual([
-      { type: "topic-select", teamId: "green", direction: "east" }
+      { type: "topic-move", teamId: "green", delta: 1 }
     ]);
+    state = handleGamepadPoll(east.state, [pad(0), pad(1)], assignments, "normal-topic").state;
+    const south = handleGamepadPoll(state, [pad(0, [13]), pad(1)], assignments, "normal-topic");
+    expect(south.actions).toEqual([{ type: "topic-confirm", teamId: "green" }]);
   });
 
   it("does not pass a held button through a neutral gate", () => {

@@ -48,6 +48,7 @@ export interface PublicMatchView {
   readonly question?: PublicQuestion;
   readonly chooser?: TeamId;
   readonly topicCandidates?: readonly string[];
+  readonly topicCursor?: number;
   readonly topicId?: string;
   readonly confirmationRemainingMs?: number;
   readonly confirmationBonus?: boolean;
@@ -157,7 +158,8 @@ export function selectPublicView(state: MatchState, context: DomainContext): Pub
     return {
       ...base,
       chooser: state.phase.chooser,
-      topicCandidates: state.phase.candidates
+      topicCandidates: state.phase.candidates,
+      topicCursor: state.phase.cursor
     };
   }
   if (state.phase.kind === "topic-confirmation") {

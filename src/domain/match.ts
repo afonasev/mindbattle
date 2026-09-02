@@ -96,7 +96,8 @@ function prepareMainSelection(state: MatchState, context: DomainContext): MatchS
     phase: {
       kind: "normal-topic",
       chooser: state.config.teams[chooserIndex],
-      candidates: asTriple(selection.topicIds)
+      candidates: asTriple(selection.topicIds),
+      cursor: 0
     }
   };
 }
@@ -241,7 +242,8 @@ export function createMatch(
     phase: {
       kind: "normal-topic",
       chooser: config.teams[0],
-      candidates: ["", "", ""]
+      candidates: ["", "", ""],
+      cursor: 0
     },
     pause: null,
     lastFrameAtMs: atMs
@@ -403,25 +405,24 @@ function addPauseReason(state: MatchState, reason: PauseReason): MatchState {
   return { ...state, pause: { reasons: [...reasons, reason] } };
 }
 
-function applyNormalTopic(
-  state: MatchState,
-  command: Extract<DomainCommand, { type: "choose-topic" }>
-): MatchState {
-  if (
-    state.phase.kind !== "normal-topic" ||
-    command.teamId !== state.phase.chooser ||
-    !state.phase.candidates.includes(command.topicId)
-  ) {
+function applyNormalTopic(state: MatchState, command: DomainCommand): MatchState {
+  if (state.phase.kind !== "normal-topic" || !("teamId" in command) || command.teamId !== state.phase.chooser) {
     return state;
   }
+  if (command.type === "move-topic") {
+    const cursor = (state.phase.cursor + command.delta + state.phase.candidates.length) % state.phase.candidates.length;
+    return { ...state, phase: { ...state.phase, cursor } };
+  }
+  if (command.type !== "confirm-topic") return state;
+  const topicId = state.phase.candidates[state.phase.cursor];
   const selected = {
     ...state,
-    selectedTopicIds: [...state.selectedTopicIds, command.topicId],
+    selectedTopicIds: [...state.selectedTopicIds, topicId],
     normalChoiceOrdinal: state.normalChoiceOrdinal + 1
   };
   return {
     ...selected,
-    phase: { kind: "topic-confirmation", topicId: command.topicId, remainingMs: TOPIC_CONFIRMATION_MS }
+    phase: { kind: "topic-confirmation", topicId, remainingMs: TOPIC_CONFIRMATION_MS }
   };
 }
 
@@ -583,7 +584,7 @@ function processCommands(
       next = applyAnswer(next, command.teamId, command.position);
       continue;
     }
-    if (next.phase.kind === "normal-topic" && command.type === "choose-topic") {
+    if (next.phase.kind === "normal-topic" && (command.type === "move-topic" || command.type === "confirm-topic")) {
       const changed = applyNormalTopic(next, command);
       if (changed !== next) return changed;
     } else if (next.phase.kind === "bonus-veto") {

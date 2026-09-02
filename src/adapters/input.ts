@@ -88,11 +88,8 @@ export type InputMode = "answer" | "normal-topic" | "bonus-veto" | "difficulty-f
 
 export type SemanticInputAction =
   | { readonly type: "answer"; readonly teamId: TeamId; readonly direction: CardinalDirection }
-  | {
-      readonly type: "topic-select";
-      readonly teamId: TeamId;
-      readonly direction: "west" | "north" | "east";
-    }
+  | { readonly type: "topic-move"; readonly teamId: TeamId; readonly delta: -1 | 1 }
+  | { readonly type: "topic-confirm"; readonly teamId: TeamId }
   | { readonly type: "bonus-move"; readonly teamId: TeamId; readonly delta: -1 | 1 }
   | { readonly type: "bonus-confirm"; readonly teamId: TeamId }
   | { readonly type: "bonus-cancel"; readonly teamId: TeamId }
@@ -192,9 +189,9 @@ function actionForDirection(
     return { type: "continue", teamId };
   }
   if (mode === "normal-topic") {
-    return direction === "west" || direction === "north" || direction === "east"
-      ? { type: "topic-select", teamId, direction }
-      : undefined;
+    if (direction === "west") return { type: "topic-move", teamId, delta: -1 };
+    if (direction === "east") return { type: "topic-move", teamId, delta: 1 };
+    return direction === "south" ? { type: "topic-confirm", teamId } : undefined;
   }
   if (mode === "difficulty-feedback") {
     const difficulty =
@@ -335,10 +332,10 @@ function semanticGamepadAction(
   }
 
   if (mode === "normal-topic") {
-    const direction = answerDirectionForGamepadButton(buttonIndex);
-    return direction === "west" || direction === "north" || direction === "east"
-      ? { type: "topic-select", teamId, direction }
-      : undefined;
+    const action = bonusActionForGamepadButton(buttonIndex);
+    if (action === "move-left") return { type: "topic-move", teamId, delta: -1 };
+    if (action === "move-right") return { type: "topic-move", teamId, delta: 1 };
+    return action === "confirm" ? { type: "topic-confirm", teamId } : undefined;
   }
   if (mode === "difficulty-feedback") {
     const direction = answerDirectionForGamepadButton(buttonIndex);

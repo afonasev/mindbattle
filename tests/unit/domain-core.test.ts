@@ -88,9 +88,8 @@ function startQuestion(state: MatchState, context: DomainContext): MatchState {
   if (state.phase.kind === "normal-topic") {
     const confirmation = frame(state, context, [
       {
-        type: "choose-topic",
-        teamId: state.phase.chooser,
-        topicId: state.phase.candidates[0]
+        type: "confirm-topic",
+        teamId: state.phase.chooser
       }
     ]);
     return frame(confirmation, context, [{ type: "continue", teamId: "green" }]);
@@ -193,14 +192,37 @@ describe("classic-v1 and seeded PRNG", () => {
 });
 
 describe("topic phases", () => {
+  it("moves an authoritative normal-topic cursor before confirming its current topic", () => {
+    const context = makeContext();
+    const initial = createMatch(TWO_TEAMS, "normal-cursor", 0, context);
+    if (initial.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
+    const chooser = initial.phase.chooser;
+    const other = TWO_TEAMS.teams.find((teamId) => teamId !== chooser) as TeamId;
+    const moved = frame(initial, context, [{ type: "move-topic", teamId: chooser, delta: 1 }]);
+    expect(moved.phase.kind === "normal-topic" && moved.phase.cursor).toBe(1);
+    expect(moved.random).toEqual(initial.random);
+    expect(moved.selectedTopicIds).toEqual(initial.selectedTopicIds);
+    expect(moved.teams).toEqual(initial.teams);
+    expect(moved.shownTopicCounts).toEqual(initial.shownTopicCounts);
+    expect(selectPublicView(moved, context).topicCursor).toBe(1);
+
+    const ignoredOther = frame(moved, context, [{ type: "confirm-topic", teamId: other }]);
+    expect(ignoredOther).toEqual(moved);
+
+    const confirmation = frame(moved, context, [{ type: "confirm-topic", teamId: chooser }]);
+    expect(confirmation.phase).toMatchObject({
+      kind: "topic-confirmation",
+      topicId: initial.phase.candidates[1]
+    });
+  });
+
   it("holds a chosen normal topic for three seconds before creating its question", () => {
     const context = makeContext();
     const initial = createMatch(TWO_TEAMS, "topic-confirmation", 0, context);
     if (initial.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
     const confirmation = frame(initial, context, [{
-      type: "choose-topic",
-      teamId: initial.phase.chooser,
-      topicId: initial.phase.candidates[0]
+      type: "confirm-topic",
+      teamId: initial.phase.chooser
     }]);
     expect(confirmation.phase).toEqual({
       kind: "topic-confirmation",
@@ -221,9 +243,8 @@ describe("topic phases", () => {
     const initial = createMatch(TWO_TEAMS, "topic-manual", 0, context);
     if (initial.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
     const confirmation = frame(initial, context, [{
-      type: "choose-topic",
-      teamId: initial.phase.chooser,
-      topicId: initial.phase.candidates[0]
+      type: "confirm-topic",
+      teamId: initial.phase.chooser
     }]);
     const answering = frame(confirmation, context, [
       { type: "continue", teamId: "green" },
@@ -241,9 +262,8 @@ describe("topic phases", () => {
     const initial = createMatch(TWO_TEAMS, "topic-pause", 0, context);
     if (initial.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
     const confirmation = frame(initial, context, [{
-      type: "choose-topic",
-      teamId: initial.phase.chooser,
-      topicId: initial.phase.candidates[0]
+      type: "confirm-topic",
+      teamId: initial.phase.chooser
     }]);
     const paused = frame(confirmation, context, [{ type: "pause", reason: { kind: "manual" } }], 1_000);
     expect(paused.phase.kind === "topic-confirmation" && paused.phase.remainingMs).toBe(2_000);
@@ -264,7 +284,7 @@ describe("topic phases", () => {
     const chooser = first.phase.chooser;
     const other = TWO_TEAMS.teams.find((teamId) => teamId !== chooser) as TeamId;
     const rejected = frame(first, context, [
-      { type: "choose-topic", teamId: other, topicId: first.phase.candidates[0] }
+      { type: "move-topic", teamId: other, delta: 1 }
     ]);
     expect(rejected.phase).toEqual(first.phase);
 
@@ -542,9 +562,8 @@ describe("public selectors and serialization", () => {
     const initial = createMatch(TWO_TEAMS, "confirmation-snapshot", 0, context);
     if (initial.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
     const confirmation = frame(initial, context, [{
-      type: "choose-topic",
-      teamId: initial.phase.chooser,
-      topicId: initial.phase.candidates[0]
+      type: "confirm-topic",
+      teamId: initial.phase.chooser
     }]);
     expect(deserializeMatch(serializeMatch(confirmation), context.catalogRevision)).toEqual(confirmation);
     const damaged = JSON.parse(serializeMatch(confirmation));
