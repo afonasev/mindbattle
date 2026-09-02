@@ -402,6 +402,9 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
   await expect(page.getByRole("button", { name: "Начать заново" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Выйти в меню" })).toBeVisible();
   await captureSettled(page, testInfo.outputPath("winner.png"));
+  await page.getByRole("button", { name: "Выйти в меню" }).click();
+  await expect(page.getByRole("button", { name: "Последние результаты" })).toHaveCount(0);
+  await captureSettled(page, testInfo.outputPath("completed-menu.png"));
 });
 
 test("supports N+1 public bonus veto for three and four assigned teams", async ({ page }, testInfo) => {

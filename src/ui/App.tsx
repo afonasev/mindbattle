@@ -325,11 +325,7 @@ export function App() {
           gamepads={gamepads}
           start={start}
           restoreLabel={
-            controller.savedMatchStatus === "completed"
-              ? "Последние результаты"
-              : controller.savedMatchStatus === "in-progress"
-                ? "Продолжить партию"
-                : null
+            controller.savedMatchStatus === "in-progress" ? "Продолжить партию" : null
           }
           restore={() => {
             const restored = controller.restoreLastMatch();
