@@ -6,11 +6,23 @@ export interface QuestionSource {
   readonly verifiedAt: string;
 }
 
+export interface QuestionAnswer {
+  readonly text: string;
+  readonly note: string;
+}
+
+export type QuestionAnswerInput = string | QuestionAnswer;
+
 export interface Question {
   readonly id: string;
   readonly difficulty: Difficulty;
   readonly prompt: string;
-  readonly answers: readonly [string, string, string, string];
+  readonly answers: readonly [
+    QuestionAnswerInput,
+    QuestionAnswerInput,
+    QuestionAnswerInput,
+    QuestionAnswerInput
+  ];
   readonly correctIndex: 0 | 1 | 2 | 3;
   readonly explanation: string;
   readonly source: QuestionSource;
@@ -34,6 +46,6 @@ export interface ReviewEntry {
   readonly status: "approved";
   readonly contentSha256: string;
   readonly reviewedAt: string;
-  readonly checkedQuestions: 50;
+  readonly checkedQuestions: number;
   readonly criticalFindingsOpen: 0;
 }

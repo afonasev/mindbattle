@@ -23,12 +23,17 @@ function makeTopic(index: number): TopicPack {
     id,
     title: `Тема ${index}`,
     questions: difficulties.flatMap((difficulty) =>
-      Array.from({ length: difficulty === "medium" ? 10 : 20 }, (_, questionIndex) => ({
+      Array.from({ length: difficulty === "hard" ? 20 : 40 }, (_, questionIndex) => ({
         id: `${id}-${difficulty}-${questionIndex}`,
         difficulty,
         prompt: `Какой ответ верен для вопроса ${questionIndex}?`,
-        answers: ["Первый", "Второй", "Третий", "Четвёртый"] as const,
-        correctIndex: 0 as const,
+        answers: [
+          { text: "Первый", note: "Первый тестовый вариант с самостоятельной краткой справкой." },
+          { text: "Второй", note: "Второй тестовый вариант с самостоятельной краткой справкой." },
+          { text: "Третий", note: "Третий тестовый вариант с самостоятельной краткой справкой." },
+          { text: "Четвёртый", note: "Четвёртый тестовый вариант с самостоятельной краткой справкой." }
+        ] as const,
+        correctIndex: (questionIndex % 4) as 0 | 1 | 2 | 3,
         explanation: "Первый ответ является правильным по условию. Это пояснение даёт краткую проверяемую справку.",
         source: {
           title: "Проверяемый источник",
@@ -41,7 +46,7 @@ function makeTopic(index: number): TopicPack {
 }
 
 describe("content validation", () => {
-  it("accepts the exact 30 × 50 catalog", () => {
+  it("accepts the exact manifest catalog", () => {
     const catalog = {
       revision: "test-r1",
       topics: TOPIC_DEFINITIONS.map(([id, title], index) => {
@@ -66,12 +71,12 @@ describe("content validation", () => {
       status: "approved",
       contentSha256: "a".repeat(64),
       reviewedAt: "2026-09-01",
-      checkedQuestions: 50,
+      checkedQuestions: 100,
       criticalFindingsOpen: 0
     }));
     expect(validateCatalog(catalog, reviews)).toBe(catalog);
     const incomplete = reviews.map((review, index) =>
-      index === 0 ? { ...review, checkedQuestions: 49 } : review
+      index === 0 ? { ...review, checkedQuestions: 99 } : review
     ) as unknown as readonly ReviewEntry[];
     expect(() => validateCatalog(catalog, incomplete)).toThrow(/review не завершено/);
   });
@@ -82,11 +87,16 @@ describe("content validation", () => {
       ...topic,
       questions: topic.questions.slice(0, 1).map((question) => ({
         ...question,
-        answers: ["Один", "Один", "Три", "Четыре"] as const
+        answers: [
+          { text: "Один", note: "Первая самостоятельная тестовая справка для варианта." },
+          { text: "Один", note: "Вторая самостоятельная тестовая справка для варианта." },
+          { text: "Три", note: "Третья самостоятельная тестовая справка для варианта." },
+          { text: "Четыре", note: "Четвёртая самостоятельная тестовая справка для варианта." }
+        ] as const
       }))
     };
     const issues = validateTopicPack(broken);
-    expect(issues.some((issue) => issue.includes("ожидалось 50"))).toBe(true);
+    expect(issues.some((issue) => issue.includes("ожидался допустимый размер"))).toBe(true);
     expect(issues.some((issue) => issue.includes("ответы должны различаться"))).toBe(true);
     expect(() => validateCatalog({ revision: "x", topics: [broken] })).toThrow(
       CatalogValidationError

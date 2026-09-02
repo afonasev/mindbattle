@@ -81,6 +81,45 @@ describe("versioned persistence", () => {
     expect(decoded.history.serial).toBe(7);
   });
 
+  it("uses the catalog migration callback when a revision changes", () => {
+    const data = {
+      ...emptyPersistedData("mindbattle-questions-2026-09-01-r2"),
+      history: {
+        version: 1 as const,
+        serial: 9,
+        bags: {
+          "history-russia:hard": {
+            cycle: 1,
+            remaining: ["history-russia-rurik-first-prince"],
+            previousOrder: ["history-russia-rurik-first-prince"],
+            lastShownId: "history-russia-rurik-first-prince",
+            shownCount: { "history-russia-rurik-first-prince": 2 },
+            lastShownSerial: { "history-russia-rurik-first-prince": 8 }
+          }
+        }
+      },
+      lastMatch: {
+        status: "in-progress" as const,
+        savedAt: "2026-09-01",
+        state: { phase: "answering" }
+      }
+    };
+    const migratedHistory = { version: 1 as const, serial: 9, bags: {} };
+    const decoded = decodePersistedData(
+      JSON.stringify(data),
+      "mindbattle-questions-2026-09-02-r3",
+      (history) => {
+        expect(history.serial).toBe(9);
+        return migratedHistory;
+      }
+    );
+    expect(decoded).toMatchObject({
+      catalogRevision: "mindbattle-questions-2026-09-02-r3",
+      history: migratedHistory,
+      lastMatch: null
+    });
+  });
+
   it("resets only question history", () => {
     const data = replaceLastMatch(emptyPersistedData("r1"), {
       status: "completed",

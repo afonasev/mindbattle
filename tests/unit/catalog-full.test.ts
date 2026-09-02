@@ -7,12 +7,15 @@ import {
   assertFullCatalog,
   contentReviews
 } from "../../src/content";
+import taxonomyManifest from "../../src/content/taxonomy-manifest.json";
 
 describe("full production question catalog", () => {
-  it("contains 30 approved topics, 1500 questions and reviews of the current bytes", () => {
+  it("contains every approved topic, its target question count and a review of the current bytes", () => {
     const catalog = assertFullCatalog();
-    expect(catalog.topics).toHaveLength(30);
-    expect(catalog.topics.flatMap(({ questions }) => questions)).toHaveLength(1500);
+    expect(catalog.topics).toHaveLength(taxonomyManifest.topics.length);
+    expect(catalog.topics.flatMap(({ questions }) => questions)).toHaveLength(
+      taxonomyManifest.topics.reduce((total, topic) => total + topic.targetSize, 0)
+    );
 
     for (const [topicId] of TOPIC_DEFINITIONS) {
       const path = fileURLToPath(

@@ -17,14 +17,15 @@ import type {
 function toDomainQuestion(topic: TopicPack, questionId: string): QuestionDefinition {
   const question = topic.questions.find((candidate) => candidate.id === questionId);
   if (!question) throw new Error(`Вопрос ${questionId} отсутствует в теме ${topic.id}`);
-  const answers = question.answers.map((text, index) => ({
+  const answers = question.answers.map((answer, index) => ({
     id: `answer-${index}`,
-    text
+    text: typeof answer === "string" ? answer : answer.text,
+    note: typeof answer === "string" ? "" : answer.note
   })) as [
-    { id: string; text: string },
-    { id: string; text: string },
-    { id: string; text: string },
-    { id: string; text: string }
+    { id: string; text: string; note: string },
+    { id: string; text: string; note: string },
+    { id: string; text: string; note: string },
+    { id: string; text: string; note: string }
   ];
   return {
     id: question.id,

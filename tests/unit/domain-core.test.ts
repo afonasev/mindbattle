@@ -35,10 +35,10 @@ function makeContext(topicCount = 40): DomainContext {
         difficulty,
         prompt: `Вопрос ${topicId} ${difficulty} ${index}`,
         answers: [
-          { id: "a", text: "Верный" },
-          { id: "b", text: "Второй" },
-          { id: "c", text: "Третий" },
-          { id: "d", text: "Четвёртый" }
+          { id: "a", text: "Верный", note: "Справка о верном варианте." },
+          { id: "b", text: "Второй", note: "Справка о втором варианте." },
+          { id: "c", text: "Третий", note: "Справка о третьем варианте." },
+          { id: "d", text: "Четвёртый", note: "Справка о четвёртом варианте." }
         ],
         correctAnswerId: "a",
         explanation: ["Верный ответ подтверждён.", "Это тестовая справка."],
@@ -592,6 +592,46 @@ describe("public selectors and serialization", () => {
       title: "Тестовый источник",
       url: "https://example.com/question"
     });
+  });
+
+  it("reveals notes only for unique selected distractors in stable screen order", () => {
+    const context = makeContext();
+    const config: MatchConfig = { ...TWO_TEAMS, teams: ["green", "blue", "yellow", "red"] };
+    const answering = startQuestion(createMatch(config, "wrong-answer-notes", 0, context), context);
+    if (answering.phase.kind !== "answering") throw new Error("Expected answering phase");
+    const round = answering.phase.round;
+    const positions = ["up", "right", "down", "left"] as const;
+    const wrong = positions.filter((position) => position !== round.correctPosition);
+    const reveal = (answers: readonly (typeof positions[number] | null)[]): MatchState => ({
+      ...answering,
+      phase: {
+        kind: "reveal",
+        round,
+        continuation: { kind: "next-main" },
+        resolutions: config.teams.map((teamId, index) => ({
+          teamId,
+          answer: answers[index],
+          result:
+            answers[index] === null
+              ? "no-answer"
+              : answers[index] === round.correctPosition
+                ? "correct"
+                : "wrong"
+        }))
+      }
+    });
+
+    expect(selectPublicView(reveal([round.correctPosition, null, null, null]), context).question?.wrongAnswerNotes).toEqual([]);
+    const one = selectPublicView(reveal([wrong[2], wrong[2], null, round.correctPosition]), context).question?.wrongAnswerNotes;
+    expect(one).toHaveLength(1);
+    expect(one?.[0].position).toBe(wrong[2]);
+
+    const two = selectPublicView(reveal([wrong[2], wrong[0], wrong[2], null]), context).question?.wrongAnswerNotes;
+    expect(two?.map(({ position }) => position)).toEqual(positions.filter((position) => [wrong[0], wrong[2]].includes(position)));
+
+    const three = selectPublicView(reveal([wrong[2], wrong[0], wrong[1], null]), context).question?.wrongAnswerNotes;
+    expect(three?.map(({ position }) => position)).toEqual(positions.filter((position) => wrong.includes(position)));
+    expect(three?.every(({ note }) => note.startsWith("Справка о"))).toBe(true);
   });
 
   it("round-trips JSON and rejects corrupt or incompatible snapshots", () => {

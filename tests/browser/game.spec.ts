@@ -407,6 +407,80 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
   await captureSettled(page, testInfo.outputPath("completed-menu.png"));
 });
 
+test("renders zero through three selected wrong-answer notes without overflow", async ({ page }, testInfo) => {
+  await page.getByRole("button", { name: "9", exact: true }).click();
+  await page.getByRole("button", { name: "Начать игру" }).click();
+  await waitForInputGate(page);
+  await chooseCurrentTopic(page);
+  const answering = await storedState(page);
+  if (answering.phase.kind !== "answering") throw new Error("Expected answering phase");
+  const correct = answering.phase.round.correctPosition as Position;
+  await answer(page, "green", correct);
+  await answer(page, "blue", correct);
+  await expect(page.locator(".question-stage--reveal")).toBeVisible();
+  const revealSnapshot = await page.evaluate(() => {
+    const source = localStorage.getItem("mindbattle:data:v1");
+    if (!source) throw new Error("No persisted match");
+    return JSON.parse(source);
+  });
+
+  for (const wrongCount of [0, 1, 2, 3]) {
+    await page.evaluate(({ snapshot, wrongCount: count }) => {
+      const data = structuredClone(snapshot);
+      const state = data.lastMatch.state;
+      const teamIds = ["green", "blue", "yellow", "red"];
+      const positions = ["up", "right", "down", "left"];
+      const correctPosition = state.phase.round.correctPosition;
+      const wrongPositions = positions.filter((position) => position !== correctPosition);
+      const teamTemplate = state.teams[0];
+      state.config.teams = teamIds;
+      state.teams = teamIds.map((id, index) =>
+        state.teams[index] ?? { ...teamTemplate, id, score: 0, correct: 0, incorrect: 0, noAnswer: 0 }
+      );
+      state.phase.round.attempts = teamIds.map((teamId, index) => ({
+        teamId,
+        status: "answered",
+        answer: index < count ? wrongPositions[index] : correctPosition
+      }));
+      state.phase.resolutions = teamIds.map((teamId, index) => ({
+        teamId,
+        answer: index < count ? wrongPositions[index] : correctPosition,
+        result: index < count ? "wrong" : "correct"
+      }));
+      if (count === 3) {
+        data.preferences = {
+          ...data.preferences,
+          muted: true,
+          textSize: "large",
+          highContrast: true,
+          reducedMotion: true
+        };
+      }
+      localStorage.setItem("mindbattle:data:v1", JSON.stringify(data));
+    }, { snapshot: revealSnapshot, wrongCount });
+    await page.reload();
+    await page.getByRole("button", { name: "Продолжить партию" }).click();
+    await page.getByRole("button", { name: "Продолжить" }).click();
+    await expect(page.locator(".question-stage--reveal")).toBeVisible();
+    await expect(page.locator(".wrong-answer-notes article")).toHaveCount(wrongCount);
+    const metrics = await page.locator(".question-stage--reveal").evaluate((stage) => ({
+      pageWidthFits: document.documentElement.scrollWidth <= innerWidth,
+      pageHeightFits: document.documentElement.scrollHeight <= innerHeight,
+      stageWidthFits: stage.scrollWidth <= stage.clientWidth,
+      stageHeightFits: stage.scrollHeight <= stage.clientHeight
+    }));
+    expect(metrics).toEqual({
+      pageWidthFits: true,
+      pageHeightFits: true,
+      stageWidthFits: true,
+      stageHeightFits: true
+    });
+    if (wrongCount === 3) {
+      await captureSettled(page, testInfo.outputPath("reveal-three-wrong-notes.png"));
+    }
+  }
+});
+
 test("supports N+1 public bonus veto for three and four assigned teams", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "chromium-1280", "One viewport is enough for virtual-pad coverage");
   await page.addInitScript(() => {

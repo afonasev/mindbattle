@@ -19,6 +19,7 @@ export interface MatchConfig {
 export interface AnswerDefinition {
   readonly id: AnswerId;
   readonly text: string;
+  readonly note: string;
 }
 
 export interface QuestionDefinition {

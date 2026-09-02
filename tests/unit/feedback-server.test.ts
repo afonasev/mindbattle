@@ -74,6 +74,20 @@ describe("difficulty feedback server store", () => {
     expect(restarted.summary()).toMatchObject({ total: 5, corruptedLines: 1 });
   });
 
+  it("preserves events from an older catalog revision without treating them as corrupt", async () => {
+    const directory = await mkdtemp(join(tmpdir(), "mindbattle-feedback-"));
+    const filePath = join(directory, "feedback.ndjson");
+    await writeFile(filePath, `${JSON.stringify({
+      ...event,
+      catalogRevision: "catalog-r1",
+      recordedAt: "2026-09-01T00:00:00.000Z"
+    })}\n`, "utf8");
+    const store = await createFeedbackStore({ filePath, questions, catalogRevision: revision });
+    expect(store.summary()).toMatchObject({ total: 0, historicalLines: 1, corruptedLines: 0 });
+    expect(await store.append(event)).toEqual({ status: "created" });
+    expect((await readFile(filePath, "utf8")).trim().split("\n")).toHaveLength(2);
+  });
+
   it("fails fast when the configured path cannot be created", async () => {
     const directory = await mkdtemp(join(tmpdir(), "mindbattle-feedback-"));
     const blocker = join(directory, "not-a-directory");

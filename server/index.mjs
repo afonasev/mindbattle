@@ -10,7 +10,7 @@ const dev = process.argv.includes("--dev");
 const host = process.env.MINDBATTLE_HOST ?? "127.0.0.1";
 const port = Number(process.env.MINDBATTLE_PORT ?? 4173);
 const dataPath = resolve(projectRoot, process.env.MINDBATTLE_FEEDBACK_PATH ?? "data/difficulty-feedback.ndjson");
-const catalogRevision = "mindbattle-questions-2026-09-01-r2";
+const catalogRevision = "mindbattle-questions-2026-09-02-r3";
 
 async function loadQuestions() {
   const dir = join(projectRoot, "src/content/topics");

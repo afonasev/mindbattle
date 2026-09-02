@@ -4,6 +4,22 @@ import { dirname } from "node:path";
 const LEVELS = ["easy", "medium", "hard"];
 const levelIndex = new Map(LEVELS.map((level, index) => [level, index]));
 
+function isHistoricalFeedbackEvent(value, catalogRevision) {
+  return value &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    value.schemaVersion === 1 &&
+    typeof value.eventId === "string" && value.eventId.length > 0 &&
+    typeof value.matchId === "string" && value.matchId.length > 0 &&
+    typeof value.questionId === "string" && value.questionId.length > 0 &&
+    typeof value.catalogRevision === "string" &&
+    value.catalogRevision.length > 0 &&
+    value.catalogRevision !== catalogRevision &&
+    LEVELS.includes(value.assignedDifficulty) &&
+    LEVELS.includes(value.perceivedDifficulty) &&
+    typeof value.recordedAt === "string";
+}
+
 function canonicalEvent(event) {
   return JSON.stringify({
     schemaVersion: event.schemaVersion,
@@ -66,10 +82,15 @@ export async function createFeedbackStore({ filePath, questions, catalogRevision
   }
   const events = new Map();
   let corruptedLines = 0;
+  let historicalLines = 0;
   for (const line of source.split("\n")) {
     if (!line.trim()) continue;
     try {
       const stored = JSON.parse(line);
+      if (isHistoricalFeedbackEvent(stored, catalogRevision)) {
+        historicalLines += 1;
+        continue;
+      }
       const error = validateFeedbackEvent(stored, questions, catalogRevision);
       if (error || typeof stored.recordedAt !== "string") corruptedLines += 1;
       else events.set(stored.eventId, stored);
@@ -122,6 +143,7 @@ export async function createFeedbackStore({ filePath, questions, catalogRevision
       schemaVersion: 1,
       total: events.size,
       corruptedLines,
+      historicalLines,
       byQuestion: Object.fromEntries(Object.entries(byQuestion).map(([id, value]) => [id, withRates(value)])),
       byAssignedDifficulty: Object.fromEntries(Object.entries(byAssignedDifficulty).map(([id, value]) => [id, withRates(value)]))
     };

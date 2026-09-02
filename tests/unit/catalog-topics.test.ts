@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { catalog, validateCatalog, validateTopicPack } from "../../src/content";
+import taxonomyManifest from "../../src/content/taxonomy-manifest.json";
 
 describe("integrated topic packages", () => {
   it("keeps every present package valid and globally unique", () => {
@@ -11,8 +12,8 @@ describe("integrated topic packages", () => {
         ids.add(question.id);
       }
     }
-    expect(ids.size).toBe(catalog.topics.length * 50);
-    if (catalog.topics.length === 30) {
+    expect(ids.size).toBe(catalog.topics.reduce((total, topic) => total + topic.questions.length, 0));
+    if (catalog.topics.length === taxonomyManifest.topics.length) {
       expect(validateCatalog(catalog)).toBe(catalog);
     }
   });
