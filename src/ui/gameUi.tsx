@@ -66,18 +66,29 @@ export function DeviceGlyphs({
 }
 
 export function TeamCards({
+  state,
   view,
   activeTeamIds
 }: {
+  readonly state: MatchState;
   readonly view: PublicMatchView;
   readonly activeTeamIds: readonly TeamId[];
 }) {
+  const answering = state.phase.kind === "answering";
+  const baseRemainingMs = answering ? state.phase.baseRemainingMs : 0;
+  const attemptsByTeam = answering
+    ? new Map(state.phase.round.attempts.map((attempt) => [attempt.teamId, attempt]))
+    : new Map();
   return (
     <ul className="game-team-strip" aria-label="Состояние команд">
       {view.teams
         .filter((team) => activeTeamIds.includes(team.id))
-        .map((team) => (
-          <li
+        .map((team) => {
+          const awaitingAnswer = attemptsByTeam.get(team.id)?.status === "open";
+          const timerMs = baseRemainingMs > 0 ? baseRemainingMs : team.reserveMs;
+          const spendingReserve = baseRemainingMs === 0;
+          return (
+            <li
             key={team.id}
             className={[
               "game-team-card",
@@ -88,18 +99,30 @@ export function TeamCards({
             <TeamDiamond teamId={team.id} />
             <span className="team-card-name">{TEAM_META[team.id].label}</span>
             <strong>{team.score}</strong>
-            <span className="team-reserve">Запас {Math.ceil(team.reserveMs / 1000)} c</span>
-            <span className="answer-state" aria-label={team.hasAnswered ? "Ответ принят" : "Нет ответа"}>
-              {team.result === "correct"
-                ? "✓"
-                : team.result && team.result !== "spectator"
-                  ? "×"
-                  : team.hasAnswered
+            {answering && awaitingAnswer ? (
+              <span
+                className={spendingReserve ? "team-question-timer team-question-timer--reserve" : "team-question-timer"}
+                aria-label={spendingReserve ? "Расходуется запас времени" : "Остаток базового времени"}
+              >
+                {Math.ceil(timerMs / 1000)}
+              </span>
+            ) : (
+              <>
+                <span className="team-reserve">Запас {Math.ceil(team.reserveMs / 1000)} c</span>
+                <span className="answer-state" aria-label={team.hasAnswered ? "Ответ принят" : "Нет ответа"}>
+                  {team.result === "correct"
                     ? "✓"
-                    : "·"}
-            </span>
+                    : team.result && team.result !== "spectator"
+                      ? "×"
+                      : team.hasAnswered
+                        ? "✓"
+                        : "·"}
+                </span>
+              </>
+            )}
           </li>
-        ))}
+          );
+        })}
     </ul>
   );
 }
@@ -215,7 +238,6 @@ export function QuestionBoard({
       .filter((team) => team.answerPosition)
       .map((team) => [team.id, team.answerPosition] as const)
   );
-  const baseRemainingMs = state.phase.kind === "answering" ? state.phase.baseRemainingMs : 0;
   return (
     <section className={reveal ? "question-stage question-stage--reveal" : "question-stage"}>
       <header className="question-header">
@@ -225,9 +247,6 @@ export function QuestionBoard({
             ? `Финал ${state.tieBreak?.questionNumber ?? 1}`
             : `Вопрос ${state.mainQuestionIndex + 1} / ${state.config.questionCount}`}
         </strong>
-        <span className={baseRemainingMs <= 5_000 && !reveal ? "timer timer--danger" : "timer"}>
-          {reveal ? "Ответ" : Math.ceil(baseRemainingMs / 1000)}
-        </span>
       </header>
       <h2>{question.prompt}</h2>
       <div className="answer-cross">
