@@ -1,6 +1,6 @@
-import type { Difficulty } from "../domain/types";
+import type { DiagnosticFlag, Difficulty, PerceivedDifficulty, SimilarityPreference } from "../domain/types";
 
-export interface DifficultyFeedbackEvent {
+export interface DifficultyFeedbackEventV1 {
   readonly schemaVersion: 1;
   readonly eventId: string;
   readonly matchId: string;
@@ -10,9 +10,27 @@ export interface DifficultyFeedbackEvent {
   readonly perceivedDifficulty: Difficulty;
 }
 
-export interface StoredDifficultyFeedbackEvent extends DifficultyFeedbackEvent {
-  readonly recordedAt: string;
+export interface AnonymousFeedbackResponse {
+  readonly perceivedDifficulty: PerceivedDifficulty;
+  readonly similarityPreference: SimilarityPreference;
+  readonly diagnosticFlags: readonly DiagnosticFlag[];
 }
+
+export interface DifficultyFeedbackEventV2 {
+  readonly schemaVersion: 2;
+  readonly eventId: string;
+  readonly matchId: string;
+  readonly catalogRevision: string;
+  readonly questionId: string;
+  readonly assignedDifficulty: Difficulty;
+  readonly responses: readonly AnonymousFeedbackResponse[];
+}
+
+export type DifficultyFeedbackEvent = DifficultyFeedbackEventV1 | DifficultyFeedbackEventV2;
+
+export type StoredDifficultyFeedbackEvent = DifficultyFeedbackEvent & {
+  readonly recordedAt: string;
+};
 
 export interface DifficultyFeedbackSink {
   submit(event: DifficultyFeedbackEvent): Promise<void>;

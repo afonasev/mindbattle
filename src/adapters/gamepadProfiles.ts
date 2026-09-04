@@ -21,7 +21,7 @@ export interface GamepadGlyphSet {
 const DPAD_GLYPHS = {
   moveLeft: "D-pad ←",
   moveRight: "D-pad →",
-  confirm: "D-pad ↓",
+  confirm: "A",
   cancel: "D-pad ↑",
 } as const;
 
@@ -90,7 +90,7 @@ export function bonusActionForGamepadButton(
       return "move-left";
     case GAMEPAD_BUTTON.dpadEast:
       return "move-right";
-    case GAMEPAD_BUTTON.dpadSouth:
+    case GAMEPAD_BUTTON.south:
       return "confirm";
     case GAMEPAD_BUTTON.dpadNorth:
       return "cancel";

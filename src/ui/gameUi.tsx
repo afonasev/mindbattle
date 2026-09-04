@@ -1,5 +1,5 @@
 import type { TeamControlAssignment } from "../adapters";
-import { GAMEPAD_GLYPHS, KEYBOARD_GLYPHS } from "../adapters";
+import { GAMEPAD_GLYPHS, KEYBOARD_CONFIRM_GLYPHS, KEYBOARD_GLYPHS } from "../adapters";
 import type {
   AnswerPosition,
   MatchState,
@@ -65,6 +65,21 @@ export function DeviceGlyphs({
   );
 }
 
+export function ConfirmGlyphs({ assignments }: { readonly assignments: readonly TeamControlAssignment[] }) {
+  return (
+    <span className="device-glyphs" aria-label="Кнопки подтверждения">
+      {assignments.map((assignment) => (
+        <kbd key={assignment.teamId}>
+          <span className={`glyph-team-mini team-color--${assignment.teamId}`} aria-hidden="true"><span>{TEAM_META[assignment.teamId as TeamId].letter}</span></span>
+          {assignment.source.kind === "keyboard"
+            ? KEYBOARD_CONFIRM_GLYPHS[assignment.source.layout]
+            : GAMEPAD_GLYPHS[assignment.source.profile].answer.south}
+        </kbd>
+      ))}
+    </span>
+  );
+}
+
 export function TeamCards({
   view,
   activeTeamIds
@@ -106,10 +121,12 @@ export function TeamCards({
 
 export function TopicSelection({
   view,
-  titleById
+  titleById,
+  assignments
 }: {
   readonly view: PublicMatchView;
   readonly titleById: Readonly<Record<string, string>>;
+  readonly assignments: readonly TeamControlAssignment[];
 }) {
   return (
     <section className="topic-stage" aria-labelledby="topic-title">
@@ -125,7 +142,7 @@ export function TopicSelection({
           </div>
         ))}
       </div>
-      <p className="control-help">←/→ курсор · ↓ выбрать · D-pad / WASD / стрелки</p>
+      <p className="control-help">←/→ курсор · подтвердить <ConfirmGlyphs assignments={assignments} /></p>
     </section>
   );
 }
@@ -137,42 +154,44 @@ export function TopicConfirmation({
   readonly view: PublicMatchView;
   readonly titleById: Readonly<Record<string, string>>;
 }) {
-  const bonus = view.confirmationBonus === true;
+  const presentation = view.confirmationPresentation ?? (view.confirmationBonus ? "bonus" : "normal");
+  const bonus = presentation === "bonus";
+  const final = presentation === "final";
   return (
     <section className="topic-confirmation-stage" aria-live="polite" aria-labelledby="confirmation-title">
       <div className={bonus ? "stage-label stage-label--bonus" : "stage-label"}>
-        {bonus ? "Бонусный вопрос · x2" : "Тема выбрана"}
+        {bonus ? "Бонусный вопрос · x2" : final ? "Финальная тема" : "Тема выбрана"}
       </div>
       <h2 id="confirmation-title">{titleById[view.topicId ?? ""] ?? view.topicId}</h2>
       <strong className="topic-confirmation-countdown">
         {Math.ceil((view.confirmationRemainingMs ?? 0) / 1_000)}
       </strong>
-      <p>{bonus ? "Бонусный вопрос начнётся через 3 секунды" : "Вопрос начнётся через 3 секунды"}</p>
-      <span className="control-help">Отпустите кнопки, затем нажмите любую назначенную клавишу</span>
+      <span className="control-help">Нажмите любую клавишу</span>
     </section>
   );
 }
 
 export function BonusVeto({
   state,
-  titleById
+  titleById,
+  assignments
 }: {
   readonly state: MatchState;
   readonly titleById: Readonly<Record<string, string>>;
+  readonly assignments: readonly TeamControlAssignment[];
 }) {
-  if (state.phase.kind !== "bonus-veto") return null;
+  const phase = state.phase;
+  if (phase.kind !== "bonus-veto" && phase.kind !== "final-veto") return null;
+  const final = phase.kind === "final-veto";
+  const participants = final ? state.tieBreak?.contenders ?? [] : state.config.teams;
   return (
-    <section className="topic-stage bonus-stage" aria-labelledby="bonus-title">
-      <div className="stage-label stage-label--bonus">Бонусный вопрос · x2</div>
+    <section className={final ? "topic-stage final-veto-stage" : "topic-stage bonus-stage"} aria-labelledby="bonus-title">
+      <div className={final ? "stage-label" : "stage-label stage-label--bonus"}>{final ? "Финальная тема" : "Бонусный вопрос · x2"}</div>
       <h2 id="bonus-title">Запретите по одной разной теме</h2>
       <div className="topic-cards topic-cards--bonus">
-        {state.phase.candidates.map((topicId, index) => {
-          const vetoes = state.config.teams.filter(
-            (teamId) => state.phase.kind === "bonus-veto" && state.phase.vetoes[teamId] === topicId
-          );
-          const cursors = state.config.teams.filter(
-            (teamId) => state.phase.kind === "bonus-veto" && state.phase.cursors[teamId] === index
-          );
+        {phase.candidates.map((topicId, index) => {
+          const vetoes = participants.filter((teamId) => phase.vetoes[teamId] === topicId);
+          const cursors = participants.filter((teamId) => phase.cursors[teamId] === index);
           return (
             <div className={vetoes.length ? "topic-veto topic-veto--selected" : "topic-veto"} key={topicId}>
               <span>{titleById[topicId] ?? topicId}</span>
@@ -186,7 +205,7 @@ export function BonusVeto({
           );
         })}
       </div>
-      <p className="control-help">←/→ курсор · ↓ запретить или заменить · ↑ снять запрет · D-pad / WASD / стрелки</p>
+      <p className="control-help">←/→ курсор · подтвердить запрет <ConfirmGlyphs assignments={assignments} /> · ↑ снять запрет</p>
     </section>
   );
 }
@@ -261,7 +280,7 @@ export function QuestionBoard({
               Источник: {question.source.title} ↗
             </a>
           )}
-          <span>Отпустите кнопки, затем нажмите любую назначенную клавишу</span>
+          <span>Нажмите любую клавишу</span>
         </aside>
       )}
     </section>
@@ -269,50 +288,69 @@ export function QuestionBoard({
 }
 
 export function DifficultyFeedbackScreen({
-  selected,
+  feedback,
   status,
   error,
   assignments
 }: {
-  readonly selected: "easy" | "medium" | "hard" | null;
+  readonly feedback: NonNullable<PublicMatchView["feedback"]>;
   readonly status: "idle" | "pending" | "error";
   readonly error: string | null;
   readonly assignments: readonly TeamControlAssignment[];
 }) {
-  const choices = [
-    { difficulty: "easy", label: "Легко", direction: "left" },
-    { difficulty: "medium", label: "Средне", direction: "up" },
-    { difficulty: "hard", label: "Сложно", direction: "right" }
+  const feedbackItems = [
+    ["like", "Да"], ["abstain", "Не уверен"], ["dislike", "Нет"],
+    ["unfamiliar-topic", "Тема нам почти не знакома"],
+    ["unclear-wording", "Непонятная формулировка"],
+    ["suspected-error", "Вопрос содержит ошибку"],
+    ["ambiguous-answer", "Неоднозначный ответ"],
+    ["too-niche-or-uninteresting", "Слишком узко или неинтересно"],
+    ["weak-answer-options", "Неправильные ответы слишком очевидные"], ["done", "Готово"]
   ] as const;
+  const responses = Object.entries(feedback.responses) as readonly [TeamId, NonNullable<PublicMatchView["feedback"]>["responses"][TeamId]][];
+  const renderItem = ([tag, label]: readonly [string, string], index: number) => {
+    const markers = responses.filter(([, response]) => response.similarityPreference === tag || response.diagnosticFlags.includes(tag as never));
+    const cursors = responses.filter(([, response]) => !response.completed && response.tagCursor === index);
+    return <article key={tag} className={cursors.length > 0 ? "feedback-tag feedback-tag--cursor" : "feedback-tag"} role="listitem">
+      <strong>{label}</strong>
+      <span className="feedback-tag-state">
+        {markers.length > 0 && <span className="feedback-tag-markers" aria-label="Команды, выбравшие этот пункт">{markers.map(([teamId]) => <TeamDiamond key={teamId} teamId={teamId} />)}</span>}
+        {cursors.length > 0 && <span className="feedback-cursors" aria-label="Команды, чей курсор находится на этом пункте">{cursors.map(([teamId]) => <TeamDiamond key={teamId} teamId={teamId} />)}</span>}
+      </span>
+    </article>;
+  };
   return (
     <section className="difficulty-feedback-stage" aria-labelledby="difficulty-feedback-title">
-      <div className="stage-label">Общая оценка</div>
-      <h2 id="difficulty-feedback-title">Насколько сложным был этот вопрос?</h2>
-      <p>Обсудите вместе. Один выбор от всей компании может отправить любой контроллер.</p>
-      <div className="difficulty-feedback-options" role="group" aria-label="Варианты сложности">
-        {choices.map((choice) => (
-          <article
-            key={choice.difficulty}
-            className={selected === choice.difficulty ? "difficulty-feedback-option difficulty-feedback-option--selected" : "difficulty-feedback-option"}
-          >
-            <span className="feedback-control-glyphs" aria-label={`Клавиши: ${choice.label}`}>
-              {assignments.map((assignment) => (
-                <kbd key={assignment.teamId}>{controlGlyph(assignment, choice.direction)}</kbd>
-              ))}
-            </span>
-            <strong>{choice.label}</strong>
-          </article>
-        ))}
-      </div>
+      <div className="stage-label">Фидбэк о вопросе</div>
+      <h2 id="difficulty-feedback-title">{feedback.stage === "difficulty" ? "Насколько вопрос был сложен для вашей команды?" : "Отметьте впечатление от вопроса"}</h2>
+      {feedback.stage === "difficulty" ? <>
+        <p className="feedback-instruction">Выберите скрытую оценку. Ваша оценка останется скрытой.</p>
+        <div className="difficulty-feedback-options" aria-label="Варианты сложности">
+          <article className="difficulty-feedback-option"><kbd>←</kbd><strong>Тривиальный</strong></article>
+          <article className="difficulty-feedback-option"><kbd>↑</kbd><strong>Лёгкий</strong></article>
+          <article className="difficulty-feedback-option"><kbd>→</kbd><strong>Средний</strong></article>
+          <article className="difficulty-feedback-option"><kbd>↓</kbd><strong>Сложный</strong></article>
+        </div>
+        <div className="feedback-readiness" aria-label="Готовность выбора сложности">
+          {responses.map(([teamId, response]) => <article key={teamId} className="feedback-team-status"><TeamDiamond teamId={teamId} /><strong>{TEAM_META[teamId].label}</strong><span>{response.difficultySelected ? "Сложность выбрана" : "Выбирает…"}</span></article>)}
+        </div>
+      </> : <>
+        <p className="feedback-instruction">Стрелки — курсор <span>·</span> подтвердить <ConfirmGlyphs assignments={assignments} /></p>
+        <div className="feedback-groups">
+          <section className="feedback-group feedback-group--reaction" aria-labelledby="feedback-reaction-title"><h3 id="feedback-reaction-title">Такой вопрос подходит для игры?</h3><p>Выберите один вариант кнопкой подтверждения</p><div className="feedback-reactions" role="list">{feedbackItems.slice(0, 3).map(renderItem)}</div></section>
+          <section className="feedback-group" aria-labelledby="feedback-tags-title"><h3 id="feedback-tags-title">Что можно улучшить?</h3><p>Можно отметить несколько пунктов кнопкой подтверждения</p><div className="feedback-tag-board" role="list">{feedbackItems.slice(3, 9).map((item, index) => renderItem(item, index + 3))}</div></section>
+          <div className="feedback-complete" role="list">{renderItem(feedbackItems[9], 9)}</div>
+        </div>
+      </>}
       <p
         className={status === "error" ? "feedback-status feedback-status--error" : "feedback-status"}
         aria-live="polite"
       >
         {status === "pending"
-          ? "Сохраняем оценку на сервере…"
+          ? "Сохраняем фидбэк на сервере…"
           : status === "error"
-            ? `${error ?? "Не удалось сохранить оценку"}. Нажмите выбранное направление ещё раз.`
-            : "D-pad / WASD / стрелки · ↓ не используется"}
+            ? `${error ?? "Не удалось сохранить фидбэк"}. Нажмите направление ещё раз.`
+            : feedback.stage === "difficulty" ? "Все команды выбирают сложность одновременно" : "Каждая команда завершает анкету на пункте «Готово»"}
       </p>
     </section>
   );

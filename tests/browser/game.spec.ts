@@ -7,6 +7,7 @@ const keys: Record<Team, Record<Position, string>> = {
   green: { up: "w", right: "d", down: "s", left: "a" },
   blue: { up: "ArrowUp", right: "ArrowRight", down: "ArrowDown", left: "ArrowLeft" }
 };
+const confirmKey = (team: Team) => team === "green" ? "Space" : "ShiftRight";
 
 async function storedState(page: Page) {
   return page.evaluate(() => {
@@ -43,47 +44,52 @@ async function chooseCurrentTopic(
     await page.keyboard.press(keys[chooser].right);
     const moved = await storedState(page);
     expect(moved.phase).toMatchObject({ kind: "normal-topic", cursor: 1 });
-    await page.keyboard.press(keys[chooser].down);
+    await page.keyboard.press(confirmKey(chooser));
     await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
     await waitForInputGate(page);
     await page.keyboard.press("w");
     await expect(page.locator(".question-stage")).toBeVisible();
     return;
   }
-  expect(state.phase.kind).toBe("bonus-veto");
-  await expect(page.locator(".topic-veto")).toHaveCount(state.config.teams.length + 1);
+  expect(["bonus-veto", "final-veto"]).toContain(state.phase.kind);
+  const participants = state.phase.kind === "final-veto" ? state.tieBreak.contenders : state.config.teams;
+  await expect(page.locator(".topic-veto")).toHaveCount(participants.length + 1);
   await page.keyboard.press("d");
   let vetoState = await storedState(page);
   expect(vetoState.phase.cursors.green).toBe(1);
   await page.keyboard.press("a");
   vetoState = await storedState(page);
   expect(vetoState.phase.cursors.green).toBe(0);
-  await page.keyboard.press("s");
+  await page.keyboard.press("Space");
   vetoState = await storedState(page);
   expect(vetoState.phase.vetoes.green).toBe(vetoState.phase.candidates[0]);
   await page.keyboard.press("ArrowRight");
   vetoState = await storedState(page);
   expect(vetoState.phase.cursors.blue).toBe(1);
-  await page.keyboard.down("ArrowDown");
+  await page.keyboard.down("ShiftRight");
   await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
   await expect(page.locator(".topic-confirmation-stage .stage-label")).toHaveText(
-    "Бонусный вопрос · x2"
+    state.phase.kind === "final-veto" ? "Финальная тема" : "Бонусный вопрос · x2"
   );
-  await expect(page.getByText("Бонусный вопрос начнётся через 3 секунды")).toBeVisible();
+  await expect(page.locator(".topic-confirmation-stage")).not.toContainText("начнётся через");
   await page.waitForTimeout(120);
   const held = await storedState(page);
   expect(held.phase.kind).toBe("topic-confirmation");
   if (inspectBonusConfirmation) await inspectBonusConfirmation();
-  await page.keyboard.up("ArrowDown");
+  await page.keyboard.up("ShiftRight");
   await waitForInputGate(page);
   await page.keyboard.press("w");
   await expect(page.locator(".question-stage")).toBeVisible();
   const answering = await storedState(page);
   expect(answering.phase.kind).toBe("answering");
   expect(answering.phase.baseRemainingMs).toBeGreaterThan(9_800);
-  const stageLength = answering.config.questionCount / 3;
-  const basePoints = [100, 200, 300][Math.floor(answering.mainQuestionIndex / stageLength)];
-  expect(answering.phase.round.points).toBe(basePoints * 2);
+  if (state.phase.kind === "final-veto") {
+    expect(answering.phase.round).toMatchObject({ mode: "tie-break", difficulty: "hard", points: 0 });
+  } else {
+    const stageLength = answering.config.questionCount / 3;
+    const basePoints = [100, 200, 300][Math.floor(answering.mainQuestionIndex / stageLength)];
+    expect(answering.phase.round.points).toBe(basePoints * 2);
+  }
 }
 
 async function answer(page: Page, team: Team, position: Position) {
@@ -92,10 +98,37 @@ async function answer(page: Page, team: Team, position: Position) {
 
 async function rateDifficulty(page: Page, key = "a") {
   await waitForInputGate(page);
+  await page.keyboard.press("KeyQ");
   await page.keyboard.press("w");
+  await page.waitForTimeout(120);
+  await page.keyboard.press("w");
+  await page.waitForTimeout(120);
+  await page.keyboard.press("ArrowUp");
+  await page.waitForTimeout(120);
+  await page.keyboard.press("ArrowUp");
+  await expect(page.getByRole("heading", { name: "Отметьте впечатление от вопроса" })).toBeVisible();
   await expect(page.locator(".difficulty-feedback-stage")).toBeVisible();
   await waitForInputGate(page);
-  await page.keyboard.press(key);
+  for (const team of ["green", "blue"] as const) {
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      const state = await storedState(page);
+      if (state.phase.kind !== "difficulty-feedback" || state.phase.responses[team].similarityPreference) break;
+      await page.keyboard.press(confirmKey(team));
+      await page.waitForTimeout(120);
+    }
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      const state = await storedState(page);
+      if (state.phase.kind !== "difficulty-feedback" || state.phase.responses[team].tagCursor === 9) break;
+      await page.keyboard.press(team === "green" ? "s" : "ArrowDown");
+      await page.waitForTimeout(120);
+    }
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      const state = await storedState(page);
+      if (state.phase.kind !== "difficulty-feedback" || state.phase.responses[team].completed) break;
+      await page.keyboard.press(confirmKey(team));
+      await page.waitForTimeout(120);
+    }
+  }
   await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
 }
 
@@ -157,7 +190,7 @@ test("confirms a normal topic for three seconds or a new press before the questi
   await expect(page.locator(".topic-choice--current")).toHaveCount(1);
   await captureSettled(page, testInfo.outputPath("normal-topic-selection.png"));
   await expect(page.locator(".topic-confirmation-stage")).toHaveCount(0);
-  await page.keyboard.down(keys[chooser].down);
+  await page.keyboard.down(confirmKey(chooser));
   await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
   await expect(page.locator(".question-stage")).toHaveCount(0);
   const confirmation = await storedState(page);
@@ -167,7 +200,7 @@ test("confirms a normal topic for three seconds or a new press before the questi
   });
   await page.waitForTimeout(120);
   expect((await storedState(page)).phase.kind).toBe("topic-confirmation");
-  await page.keyboard.up(keys[chooser].down);
+  await page.keyboard.up(confirmKey(chooser));
   await captureSettled(page, testInfo.outputPath("topic-confirmation.png"));
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toBeVisible();
@@ -190,7 +223,7 @@ test("confirms a normal topic for three seconds or a new press before the questi
   const second = await storedState(page);
   if (second.phase.kind !== "normal-topic") throw new Error("Expected topic choice");
   const secondChooser = second.phase.chooser as Team;
-  await page.keyboard.press(keys[secondChooser].down);
+  await page.keyboard.press(confirmKey(secondChooser));
   await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
   await waitForInputGate(page);
   await page.keyboard.press("w");
@@ -212,6 +245,7 @@ test("menu defaults, offline startup and responsive shell", async ({ context, pa
   await expect(page.getByRole("button", { name: "15", exact: true })).toHaveClass(/is-selected/);
   await expect(page.getByRole("button", { name: "2", exact: true })).toHaveClass(/is-selected/);
   await expect(page.getByRole("button", { name: "20 c", exact: true })).toHaveClass(/is-selected/);
+  await expect(page.getByLabel("Собирать обратную связь по вопросам")).toBeChecked();
   await expect(page.getByText("90 c", { exact: true })).toBeVisible();
   await expect(
     page.getByLabel("Контроллер команды Зелёная").locator("option:checked")
@@ -236,12 +270,13 @@ test("menu defaults, offline startup and responsive shell", async ({ context, pa
   expect(metrics.scrollHeight).toBeLessThanOrEqual(metrics.innerHeight);
   await captureSettled(page, testInfo.outputPath("menu.png"));
 
-  await page.getByText("Звук и доступность").click();
+  await page.getByText("Настройки").click();
+  await captureSettled(page, testInfo.outputPath("menu-settings.png"));
   await page.getByLabel("Крупный текст").check();
   await page.getByLabel("Высокий контраст").check();
   await page.getByLabel("Без анимации").check();
   await page.reload();
-  await page.getByText("Звук и доступность").click();
+  await page.getByText("Настройки").click();
   await expect(page.getByLabel("Крупный текст")).toBeChecked();
   await expect(page.getByLabel("Высокий контраст")).toBeChecked();
   await expect(page.getByLabel("Без анимации")).toBeChecked();
@@ -253,7 +288,7 @@ test("menu defaults, offline startup and responsive shell", async ({ context, pa
     scrollWidth: document.documentElement.scrollWidth
   }));
   expect(accessibleMetrics.scrollWidth).toBeLessThanOrEqual(accessibleMetrics.innerWidth);
-  await page.getByText("Звук и доступность").click();
+  await page.getByText("Настройки").click();
   await captureSettled(page, testInfo.outputPath("menu-accessible.png"));
 
   await context.setOffline(true);
@@ -269,7 +304,7 @@ test("menu defaults, offline startup and responsive shell", async ({ context, pa
   await expect(page.locator(".question-stage--reveal")).toBeVisible();
   await waitForInputGate(page);
   await page.keyboard.press("w");
-  await expect(page.getByRole("heading", { name: "Насколько сложным был этот вопрос?" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Насколько вопрос был сложен для вашей команды?" })).toBeVisible();
   const feedbackMetrics = await page.locator(".difficulty-feedback-stage").evaluate((stage) => ({
     pageFits: document.documentElement.scrollWidth <= innerWidth,
     stageFits: stage.scrollWidth <= stage.clientWidth,
@@ -279,13 +314,53 @@ test("menu defaults, offline startup and responsive shell", async ({ context, pa
   await captureSettled(page, testInfo.outputPath("difficulty-feedback-accessible.png"));
   await waitForInputGate(page);
   await page.keyboard.press("a");
+  await page.waitForTimeout(120);
+  await page.keyboard.press("ArrowLeft");
+  await waitForInputGate(page);
+  await page.keyboard.press("Space");
+  await page.waitForTimeout(120);
+  await page.keyboard.press("ShiftRight");
+  for (let index = 0; index < 3; index += 1) {
+    await page.keyboard.press("s");
+    await page.waitForTimeout(80);
+    await page.keyboard.press("ArrowDown");
+    await page.waitForTimeout(80);
+  }
+  await page.keyboard.press("Space");
+  await page.waitForTimeout(120);
+  await page.keyboard.press("ShiftRight");
   await expect(page.locator(".feedback-status--error")).toBeVisible();
   await captureSettled(page, testInfo.outputPath("difficulty-feedback-accessible-error.png"));
   expect(errors).toEqual([]);
   expect(externalRequests).toEqual([]);
 });
 
+test("skips question feedback without calling its API when the match setting is disabled", async ({ page }) => {
+  let feedbackRequests = 0;
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname === "/api/difficulty-feedback") feedbackRequests += 1;
+  });
+
+  await page.getByLabel("Собирать обратную связь по вопросам").uncheck();
+  await page.getByRole("button", { name: "9", exact: true }).click();
+  await page.getByRole("button", { name: "Начать игру" }).click();
+  expect((await storedState(page)).config.collectQuestionFeedback).toBe(false);
+  await chooseCurrentTopic(page);
+  const answering = await storedState(page);
+  if (answering.phase.kind !== "answering") throw new Error("Expected answering phase");
+  const correct = answering.phase.round.correctPosition as Position;
+  await answer(page, "green", correct);
+  await answer(page, "blue", correct);
+  await expect(page.locator(".question-stage--reveal")).toBeVisible();
+  await waitForInputGate(page);
+  await page.keyboard.press("w");
+  await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
+  expect((await storedState(page)).phase.kind).toBe("normal-topic");
+  expect(feedbackRequests).toBe(0);
+});
+
 test("plays a complete keyboard match through bonus veto, restore and sudden death", async ({ page }, testInfo) => {
+  test.setTimeout(60_000);
   await page.getByRole("button", { name: "9", exact: true }).click();
   await page.getByRole("button", { name: "10 c", exact: true }).click();
   await page.getByRole("button", { name: "Начать игру" }).click();
@@ -295,7 +370,7 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
     if (round === 2) {
       await expect(page.locator(".bonus-stage")).toBeVisible();
       await expect(page.locator(".bonus-stage .control-help")).toHaveText(
-        "←/→ курсор · ↓ запретить или заменить · ↑ снять запрет · D-pad / WASD / стрелки"
+        "←/→ курсор · подтвердить запрет ЗSpaceСRight Shift · ↑ снять запрет"
       );
       const bonusFits = await page.locator(".bonus-stage").evaluate((stage) => ({
         pageFits: document.documentElement.scrollWidth <= innerWidth,
@@ -361,13 +436,8 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
       await captureSettled(page, testInfo.outputPath("reveal.png"));
     }
     if (round === 0) {
-      await waitForInputGate(page);
-      await page.keyboard.press("w");
-      await expect(page.locator(".difficulty-feedback-stage")).toBeVisible();
+      await rateDifficulty(page);
       await captureSettled(page, testInfo.outputPath("difficulty-feedback.png"));
-      await waitForInputGate(page);
-      await page.keyboard.press("a");
-      await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
     } else {
       await rateDifficulty(page);
     }
@@ -387,6 +457,9 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
   await captureSettled(page, testInfo.outputPath("tie-standings.png"));
   await waitForInputGate(page);
   await page.keyboard.press("w");
+  await expect(page.locator(".final-veto-stage")).toBeVisible();
+  await captureSettled(page, testInfo.outputPath("final-veto.png"));
+  await chooseCurrentTopic(page, () => captureSettled(page, testInfo.outputPath("final-topic-confirmation.png")));
   const tieQuestion = await storedState(page);
   expect(tieQuestion.phase.kind).toBe("answering");
   expect(tieQuestion.phase.round.mode).toBe("tie-break");
@@ -464,11 +537,11 @@ test("supports N+1 public bonus veto for three and four assigned teams", async (
     await page.keyboard.press("a");
     let vetoState = await storedState(page);
     expect(vetoState.phase.cursors.green).toBe(0);
-    await page.keyboard.press("s");
+    await page.keyboard.press("Space");
     await page.keyboard.press("ArrowRight");
     vetoState = await storedState(page);
     expect(vetoState.phase.cursors.blue).toBe(1);
-    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("ShiftRight");
     await pressVirtualPad(page, 0, 15);
     await pressVirtualPad(page, 0, 15);
     vetoState = await storedState(page);

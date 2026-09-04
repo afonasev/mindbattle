@@ -1,4 +1,3 @@
-import { isBonusQuestion } from "./classic";
 import type {
   AnswerPosition,
   DomainContext,
@@ -52,6 +51,7 @@ export interface PublicMatchView {
   readonly topicId?: string;
   readonly confirmationRemainingMs?: number;
   readonly confirmationBonus?: boolean;
+  readonly confirmationPresentation?: "normal" | "bonus" | "final";
   readonly vetoes?: Readonly<Partial<Record<TeamId, string>>>;
   readonly standings?: readonly StandingRow[];
   readonly winnerId?: TeamId;
@@ -59,9 +59,18 @@ export interface PublicMatchView {
     readonly eventId: string;
     readonly questionId: string;
     readonly assignedDifficulty: "easy" | "medium" | "hard";
-    readonly selectedDifficulty: "easy" | "medium" | "hard" | null;
+    readonly stage: "difficulty" | "tags";
+    readonly responses: Readonly<Record<TeamId, {
+      readonly difficultySelected: boolean;
+      readonly similarityPreference: "like" | "abstain" | "dislike" | null;
+      readonly diagnosticFlags: readonly import("./types").DiagnosticFlag[];
+      readonly tagCursor: number;
+      readonly completed: boolean;
+    }>>;
   };
 }
+
+type PublicFeedback = NonNullable<PublicMatchView["feedback"]>;
 
 function attemptFlags(state: MatchState): Readonly<Record<TeamId, boolean>> {
   if (state.phase.kind !== "answering") return {} as Readonly<Record<TeamId, boolean>>;
@@ -167,10 +176,11 @@ export function selectPublicView(state: MatchState, context: DomainContext): Pub
       ...base,
       topicId: state.phase.topicId,
       confirmationRemainingMs: state.phase.remainingMs,
-      confirmationBonus: isBonusQuestion(state.config, state.mainQuestionIndex)
+      confirmationBonus: state.phase.presentation === "bonus",
+      confirmationPresentation: state.phase.presentation
     };
   }
-  if (state.phase.kind === "bonus-veto") {
+  if (state.phase.kind === "bonus-veto" || state.phase.kind === "final-veto") {
     return {
       ...base,
       topicCandidates: state.phase.candidates,
@@ -187,7 +197,14 @@ export function selectPublicView(state: MatchState, context: DomainContext): Pub
         eventId: state.phase.eventId,
         questionId: state.phase.round.questionId,
         assignedDifficulty: state.phase.round.difficulty,
-        selectedDifficulty: state.phase.selectedDifficulty
+        stage: state.phase.stage,
+        responses: Object.fromEntries(Object.entries(state.phase.responses).map(([teamId, response]) => [teamId, {
+          difficultySelected: response.perceivedDifficulty !== null,
+          similarityPreference: response.similarityPreference,
+          diagnosticFlags: response.diagnosticFlags,
+          tagCursor: response.tagCursor,
+          completed: response.completed
+        }])) as PublicFeedback["responses"]
       }
     };
   }

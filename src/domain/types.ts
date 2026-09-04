@@ -2,6 +2,15 @@ import type { RandomState } from "./prng";
 
 export type TeamId = "green" | "blue" | "yellow" | "red";
 export type Difficulty = "easy" | "medium" | "hard";
+export type PerceivedDifficulty = "trivial" | "easy" | "medium" | "hard";
+export type SimilarityPreference = "like" | "abstain" | "dislike";
+export type DiagnosticFlag =
+  | "unfamiliar-topic"
+  | "unclear-wording"
+  | "suspected-error"
+  | "ambiguous-answer"
+  | "too-niche-or-uninteresting"
+  | "weak-answer-options";
 export type AnswerPosition = "up" | "right" | "down" | "left";
 export type TopicId = string;
 export type QuestionId = string;
@@ -14,6 +23,8 @@ export interface MatchConfig {
   readonly questionCount: 9 | 15 | 21;
   readonly answerTimeMs: 10_000 | 20_000 | 30_000;
   readonly teams: readonly TeamId[];
+  /** Omitted only by legacy callers and snapshots; it defaults to true. */
+  readonly collectQuestionFeedback?: boolean;
 }
 
 export interface AnswerDefinition {
@@ -106,10 +117,19 @@ export interface TopicConfirmationPhase {
   readonly kind: "topic-confirmation";
   readonly topicId: TopicId;
   readonly remainingMs: number;
+  readonly mode: "main" | "tie-break";
+  readonly presentation: "normal" | "bonus" | "final";
 }
 
 export interface BonusVetoPhase {
   readonly kind: "bonus-veto";
+  readonly candidates: readonly TopicId[];
+  readonly cursors: Readonly<Partial<Record<TeamId, number>>>;
+  readonly vetoes: Readonly<Partial<Record<TeamId, TopicId>>>;
+}
+
+export interface FinalVetoPhase {
+  readonly kind: "final-veto";
   readonly candidates: readonly TopicId[];
   readonly cursors: Readonly<Partial<Record<TeamId, number>>>;
   readonly vetoes: Readonly<Partial<Record<TeamId, TopicId>>>;
@@ -150,7 +170,17 @@ export interface DifficultyFeedbackPhase {
   readonly resolutions: readonly TeamResolution[];
   readonly continuation: RevealContinuation;
   readonly eventId: string;
-  readonly selectedDifficulty: Difficulty | null;
+  readonly stage: "difficulty" | "tags";
+  readonly responses: Readonly<Record<TeamId, FeedbackResponse>>;
+  readonly selectedDifficulty?: Difficulty | null;
+}
+
+export interface FeedbackResponse {
+  readonly perceivedDifficulty: PerceivedDifficulty | null;
+  readonly similarityPreference: SimilarityPreference | null;
+  readonly diagnosticFlags: readonly DiagnosticFlag[];
+  readonly tagCursor: number;
+  readonly completed: boolean;
 }
 
 export interface StandingsPhase {
@@ -168,6 +198,7 @@ export type MatchPhase =
   | NormalTopicPhase
   | TopicConfirmationPhase
   | BonusVetoPhase
+  | FinalVetoPhase
   | AnsweringPhase
   | RevealPhase
   | DifficultyFeedbackPhase
@@ -191,7 +222,7 @@ export interface TieBreakState {
 }
 
 export interface MatchState {
-  readonly schemaVersion: 1;
+  readonly schemaVersion: 2;
   readonly catalogRevision: string;
   readonly matchId: string;
   readonly seed: string;
@@ -218,6 +249,8 @@ export type DomainCommand =
   | { readonly type: "clear-veto"; readonly teamId: TeamId }
   | { readonly type: "answer"; readonly teamId: TeamId; readonly position: AnswerPosition }
   | { readonly type: "continue"; readonly teamId: TeamId }
+  | { readonly type: "feedback-direction"; readonly teamId: TeamId; readonly direction: "north" | "east" | "south" | "west" }
+  | { readonly type: "feedback-confirm"; readonly teamId: TeamId }
   | { readonly type: "rate-difficulty"; readonly teamId: TeamId; readonly difficulty: Difficulty }
   | { readonly type: "confirm-difficulty-feedback"; readonly eventId: string }
   | { readonly type: "pause"; readonly reason: PauseReason }

@@ -203,47 +203,72 @@ export class GameController {
     return this.currentState;
   }
 
-  async rateDifficulty(
+  async handleFeedbackDirection(
     teamId: MatchState["config"]["teams"][number],
-    perceivedDifficulty: DifficultyFeedbackEvent["perceivedDifficulty"]
+    direction: "north" | "east" | "south" | "west"
   ): Promise<boolean> {
     if (!this.currentState || !this.feedback || this.feedbackStatus === "pending") return false;
-    if (
-      this.currentState.phase.kind === "difficulty-feedback" &&
-      this.currentState.phase.selectedDifficulty === null
-    ) {
-      this.dispatch([{ type: "rate-difficulty", teamId, difficulty: perceivedDifficulty }]);
-    }
+    this.dispatch([{ type: "feedback-direction", teamId, direction }]);
+    return this.submitCompletedFeedback();
+  }
+
+  async handleFeedbackConfirmation(
+    teamId: MatchState["config"]["teams"][number]
+  ): Promise<boolean> {
+    if (!this.currentState || !this.feedback || this.feedbackStatus === "pending") return false;
+    this.dispatch([{ type: "feedback-confirm", teamId }]);
+    return this.submitCompletedFeedback();
+  }
+
+  private async submitCompletedFeedback(): Promise<boolean> {
     if (
       !this.currentState ||
       this.currentState.phase.kind !== "difficulty-feedback" ||
-      this.currentState.phase.selectedDifficulty === null
+      !Object.values(this.currentState.phase.responses).every((response) => response.completed)
     ) return false;
 
+    const feedback = this.feedback;
+    if (!feedback) return false;
     const phase = this.currentState.phase;
-    const selectedDifficulty = phase.selectedDifficulty;
-    if (selectedDifficulty === null) return false;
     const event: DifficultyFeedbackEvent = {
-      schemaVersion: 1,
+      schemaVersion: 2,
       eventId: phase.eventId,
       matchId: this.currentState.matchId,
       catalogRevision: this.currentState.catalogRevision,
       questionId: phase.round.questionId,
       assignedDifficulty: phase.round.difficulty,
-      perceivedDifficulty: selectedDifficulty
+      responses: Object.values(phase.responses).map((response) => ({
+        perceivedDifficulty: response.perceivedDifficulty!,
+        similarityPreference: response.similarityPreference!,
+        diagnosticFlags: [...response.diagnosticFlags]
+      })).sort((left, right) => JSON.stringify(left).localeCompare(JSON.stringify(right)))
     };
     this.feedbackStatus = "pending";
     this.feedbackError = null;
     try {
-      await this.feedback.submit(event);
+      await feedback.submit(event);
       this.feedbackStatus = "idle";
       this.dispatch([{ type: "confirm-difficulty-feedback", eventId: phase.eventId }]);
       return true;
     } catch (error) {
       this.feedbackStatus = "error";
-      this.feedbackError = error instanceof Error ? error.message : "Не удалось сохранить оценку";
+      this.feedbackError = error instanceof Error ? error.message : "Не удалось сохранить фидбэк";
       return false;
     }
+  }
+
+  /** Compatibility path for a v1 snapshot and legacy local callers. */
+  async rateDifficulty(teamId: MatchState["config"]["teams"][number], perceivedDifficulty: "easy" | "medium" | "hard"): Promise<boolean> {
+    if (!this.currentState || !this.feedback || this.feedbackStatus === "pending") return false;
+    this.dispatch([{ type: "rate-difficulty", teamId, difficulty: perceivedDifficulty }]);
+    if (!this.currentState || this.currentState.phase.kind !== "difficulty-feedback" || !this.currentState.phase.selectedDifficulty) return false;
+    const phase = this.currentState.phase;
+    const selectedDifficulty = phase.selectedDifficulty;
+    if (!selectedDifficulty) return false;
+    const event: DifficultyFeedbackEvent = { schemaVersion: 1, eventId: phase.eventId, matchId: this.currentState.matchId, catalogRevision: this.currentState.catalogRevision, questionId: phase.round.questionId, assignedDifficulty: phase.round.difficulty, perceivedDifficulty: selectedDifficulty };
+    this.feedbackStatus = "pending"; this.feedbackError = null;
+    try { await this.feedback.submit(event); this.feedbackStatus = "idle"; this.dispatch([{ type: "confirm-difficulty-feedback", eventId: phase.eventId }]); return true; }
+    catch (error) { this.feedbackStatus = "error"; this.feedbackError = error instanceof Error ? error.message : "Не удалось сохранить фидбэк"; return false; }
   }
 
   resetQuestionHistory(): void {
