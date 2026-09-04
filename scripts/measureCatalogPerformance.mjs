@@ -55,7 +55,7 @@ try {
     }
     const report = {
       schemaVersion: 1,
-      measuredOn: "2026-09-02",
+      measuredOn: new Date().toISOString().slice(0, 10),
       serverReadyMs,
       pageReadyMs,
       chromium: {

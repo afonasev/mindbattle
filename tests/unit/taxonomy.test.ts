@@ -84,12 +84,15 @@ describe("taxonomy manifest", () => {
       packages: 380,
       questions: 9500,
       existingTopicExtensionPackages: 60,
-      newTopicBasePackages: 320
+      newTopicBasePackages: 320,
+      assigned: 0,
+      reviewed: 380
     });
     expect(expansionLedger.packages).toHaveLength(380);
     expect(expansionLedger.packages.every(({ questionCount, author, reviewer }) =>
       questionCount === 25 && author !== reviewer
     )).toBe(true);
+    expect(expansionLedger.packages.every(({ status }) => status === "reviewed")).toBe(true);
     expect(expansionLedger.packages.every(({ quota, correctIndexQuota }) =>
       difficulties.every((difficulty) =>
         correctIndexQuota[difficulty].length === 4 &&

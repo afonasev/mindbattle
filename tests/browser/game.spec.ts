@@ -430,6 +430,13 @@ test("renders zero through three selected wrong-answer notes without overflow", 
       const state = data.lastMatch.state;
       const teamIds = ["green", "blue", "yellow", "red"];
       const positions = ["up", "right", "down", "left"];
+      if (count === 3) {
+        state.phase.round.questionId = "folklore-fairy-tales-leprechaun-ireland";
+        state.phase.round.topicId = "folklore-fairy-tales";
+        state.phase.round.difficulty = "easy";
+        state.phase.round.answerOrder = ["answer-1", "answer-2", "answer-0", "answer-3"];
+        state.phase.round.correctPosition = "right";
+      }
       const correctPosition = state.phase.round.correctPosition;
       const wrongPositions = positions.filter((position) => position !== correctPosition);
       const teamTemplate = state.teams[0];
@@ -463,6 +470,48 @@ test("renders zero through three selected wrong-answer notes without overflow", 
     await page.getByRole("button", { name: "Продолжить" }).click();
     await expect(page.locator(".question-stage--reveal")).toBeVisible();
     await expect(page.locator(".wrong-answer-notes article")).toHaveCount(wrongCount);
+    const answerAlignment = await page.locator(".answer-cross").evaluate((cross) => {
+      const crossRect = cross.getBoundingClientRect();
+      const textOffsets = [...cross.querySelectorAll<HTMLElement>(".answer-option")].map((option) => {
+        const optionRect = option.getBoundingClientRect();
+        const textRect = option.querySelector<HTMLElement>(".answer-text")!.getBoundingClientRect();
+        return Math.abs(
+          (optionRect.left + optionRect.right) / 2 - (textRect.left + textRect.right) / 2
+        );
+      });
+      return {
+        crossCenterOffset: Math.abs((crossRect.left + crossRect.right) / 2 - innerWidth / 2),
+        maximumTextCenterOffset: Math.max(...textOffsets),
+        minimumOptionHeight: Math.min(
+          ...[...cross.querySelectorAll<HTMLElement>(".answer-option")].map(
+            (option) => option.getBoundingClientRect().height
+          )
+        )
+      };
+    });
+    expect(answerAlignment.crossCenterOffset).toBeLessThanOrEqual(1);
+    expect(answerAlignment.maximumTextCenterOffset).toBeLessThanOrEqual(1);
+    expect(answerAlignment.minimumOptionHeight).toBeGreaterThanOrEqual(52);
+    if (wrongCount > 0) {
+      const notesAlignment = await page.locator(".wrong-answer-notes").evaluate((notes) => {
+        const notesRect = notes.getBoundingClientRect();
+        const articleRects = [...notes.querySelectorAll("article")].map((article) =>
+          article.getBoundingClientRect()
+        );
+        const widths = articleRects.map(({ width }) => width);
+        return {
+          leftGap: Math.abs(articleRects[0].left - notesRect.left),
+          rightGap: Math.abs(notesRect.right - articleRects.at(-1)!.right),
+          widthSpread: Math.max(...widths) - Math.min(...widths)
+        };
+      });
+      expect(notesAlignment.leftGap).toBeLessThanOrEqual(1);
+      expect(notesAlignment.rightGap).toBeLessThanOrEqual(1);
+      expect(notesAlignment.widthSpread).toBeLessThanOrEqual(1);
+    }
+    if (wrongCount === 3) {
+      await captureSettled(page, testInfo.outputPath("reveal-three-wrong-notes.png"));
+    }
     const metrics = await page.locator(".question-stage--reveal").evaluate((stage) => ({
       pageWidthFits: document.documentElement.scrollWidth <= innerWidth,
       pageHeightFits: document.documentElement.scrollHeight <= innerHeight,
@@ -475,9 +524,6 @@ test("renders zero through three selected wrong-answer notes without overflow", 
       stageWidthFits: true,
       stageHeightFits: true
     });
-    if (wrongCount === 3) {
-      await captureSettled(page, testInfo.outputPath("reveal-three-wrong-notes.png"));
-    }
   }
 });
 
@@ -517,7 +563,14 @@ test("supports N+1 public bonus veto for three and four assigned teams", async (
     await waitForInputGate(page);
 
     for (let round = 0; round < 2; round += 1) {
-      await page.locator(".topic-cards--three button").first().click();
+      const topicState = await storedState(page);
+      expect(topicState.phase.kind).toBe("normal-topic");
+      const chooser = topicState.phase.chooser as "green" | "blue" | "yellow" | "red";
+      if (chooser === "green" || chooser === "blue") {
+        await page.keyboard.press(keys[chooser].down);
+      } else {
+        await pressVirtualPad(page, chooser === "yellow" ? 0 : 1, 13);
+      }
       await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
       await waitForInputGate(page);
       await pressVirtualPad(page, 0, 0);

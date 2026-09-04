@@ -72,13 +72,41 @@ describe("content validation", () => {
       contentSha256: "a".repeat(64),
       reviewedAt: "2026-09-01",
       checkedQuestions: 100,
-      criticalFindingsOpen: 0
+      criticalFindingsOpen: 0,
+      evidence: {
+        questionIdsSha256: "b".repeat(64),
+        checks: {
+          factualCorrectness: 100,
+          correctIndex: 100,
+          difficulty: 100,
+          distractors: 100,
+          answerNotes: 100,
+          grammar: 100,
+          explanation: 100,
+          sourceRelevance: 100,
+          duplicates: 100
+        },
+        reviewedPackageIds: [`${topic.id}-batch-01`],
+        resolvedFindings: []
+      }
     }));
     expect(validateCatalog(catalog, reviews)).toBe(catalog);
     const incomplete = reviews.map((review, index) =>
       index === 0 ? { ...review, checkedQuestions: 99 } : review
     ) as unknown as readonly ReviewEntry[];
     expect(() => validateCatalog(catalog, incomplete)).toThrow(/review не завершено/);
+    const unsupportedApproval = reviews.map((review, index) =>
+      index === 0
+        ? {
+            ...review,
+            evidence: {
+              ...review.evidence,
+              checks: { ...review.evidence.checks, sourceRelevance: 99 }
+            }
+          }
+        : review
+    ) as unknown as readonly ReviewEntry[];
+    expect(() => validateCatalog(catalog, unsupportedApproval)).toThrow(/review не завершено/);
   });
 
   it("reports a path for invalid answers and quotas", () => {

@@ -1,0 +1,261 @@
+{
+  "schemaVersion": 1,
+  "auditRunId": "e2f0141a-95ae-4b6c-8224-1aae6b868a64",
+  "date": "2026-09-04",
+  "scope": {
+    "topics": 110,
+    "questions": 11000,
+    "checks": [
+      "grammar",
+      "editorial",
+      "exact-semantic-duplicates",
+      "near-semantic-duplicates",
+      "fact-reuse"
+    ],
+    "initiallyReadOnlyTopics": [
+      "dance",
+      "opera-musical-theatre",
+      "musical-instruments",
+      "photography",
+      "design",
+      "fashion",
+      "crafts",
+      "folklore-fairy-tales",
+      "holidays-festivals",
+      "comics"
+    ]
+  },
+  "scan": {
+    "script": "scripts/generateContentFindings.mjs",
+    "initial": {
+      "grammar": 0,
+      "editorial": 3,
+      "semanticDuplicates": 1,
+      "factReuseGroups": 77,
+      "correctIndexLexicalCandidates": 23
+    },
+    "final": {
+      "grammar": 0,
+      "editorial": 3,
+      "semanticDuplicates": 0,
+      "factReuseGroups": 73,
+      "correctIndexLexicalCandidates": 23
+    }
+  },
+  "resolvedFindings": [
+    {
+      "questionId": "sports-let-serve",
+      "relatedQuestionIds": ["racket-sports-21-2"],
+      "issue": "Почти дословный межтематический повтор правила let на подаче.",
+      "resolution": "Заменён отдельным правилом ITF о смене сторон после каждых шести очков обычного тай-брейка."
+    },
+    {
+      "questionId": "history-india-ashoka-empire",
+      "relatedQuestionIds": ["history-india-ashoka-edicts"],
+      "issue": "Оба вопроса спрашивали об Ашоке через его эдикты о дхамме.",
+      "resolution": "Заменён отдельным фактом о завоевании Калинги."
+    },
+    {
+      "questionId": "russian-literature-twelve-chairs-writers",
+      "relatedQuestionIds": ["russian-literature-twelve-chairs-authors"],
+      "issue": "Два вопроса спрашивали авторов одного романа с тем же ответом.",
+      "resolution": "Baseline-вопрос восстановлен; второй вопрос теперь проверяет авторство «Золотого телёнка» с сохранением legacy correct answer «Ильф и Петров»."
+    },
+    {
+      "questionId": "world-cinema-ext-roma-director",
+      "relatedQuestionIds": ["world-cinema-roma-director"],
+      "issue": "Два вопроса спрашивали режиссёра фильма «Рома» 2018 года.",
+      "resolution": "Заменён отдельным вопросом об оскаровской категории «Лучшая режиссура»."
+    },
+    {
+      "questionId": "world-geography-titicaca-border",
+      "relatedQuestionIds": ["world-geography-titicaca"],
+      "issue": "Два вопроса спрашивали одну и ту же пару стран на озере Титикака.",
+      "resolution": "Заменён отдельным вопросом о высоте поверхности озера."
+    },
+    {
+      "questionId": "dance-waltz-three-four",
+      "relatedQuestionIds": ["dance-waltz-triple-meter"],
+      "issue": "Оба вопроса идентифицировали вальс по одному признаку — трёхдольному метру.",
+      "resolution": "После завершения активной волны вопрос заменён отдельным историческим фактом о популярности вальса в XIX веке."
+    }
+  ],
+  "editorialCandidateDisposition": [
+    {
+      "questionId": "math-logic-modus-ponens-conclusion",
+      "disposition": "false-positive",
+      "reason": "Ответ логически выводится из посылок; он не подсказан как буквальный ответ в формулировке."
+    },
+    {
+      "questionId": "russian-literature-what-is-to-be-done",
+      "disposition": "false-positive",
+      "reason": "Внутренний вопросительный знак принадлежит названию романа «Что делать?», а весь prompt является одним вопросом."
+    },
+    {
+      "questionId": "russian-literature-ext-who-is-blame-author",
+      "disposition": "false-positive",
+      "reason": "Внутренний вопросительный знак принадлежит названию романа «Кто виноват?», а весь prompt является одним вопросом."
+    }
+  ],
+  "correctIndexLexicalCandidateDisposition": {
+    "disposition": "false-positive",
+    "reason": "Все 23 пары prompt/answers проверены вручную; выбранные correctIndex фактически верны, а эвристика выбрала дистракторы по совпадению отдельных слов.",
+    "questionIds": [
+      "ancient-world-plebeian",
+      "biology-mitosis-daughter-cells",
+      "board-games-field-feature",
+      "books-publishing-impression-state",
+      "card-games-trump-suit",
+      "cars-road-transport-alternator-charges",
+      "cars-road-transport-hybrid-two-sources",
+      "chemistry-air-main-gas",
+      "ecology-environment-rain-barrel",
+      "economics-money-fisher-equation",
+      "energy-power-igbt-fast-switch",
+      "history-spain-medium-01-06",
+      "history-spain-medium-02-04",
+      "laboratories-measurement-traceability-chain",
+      "middle-ages-page",
+      "racket-sports-03-2",
+      "racket-sports-21-1",
+      "radio-drm",
+      "railways-hunting-oscillation",
+      "russian-language-zvonit-stress",
+      "russian-language-zero-suffix-blue",
+      "ships-navigation-angle-of-loll",
+      "sports-tennis-grand-slam-tournaments"
+    ]
+  },
+  "activeTopicCandidates": [
+    {
+      "topicId": "dance",
+      "questionIds": ["dance-waltz-triple-meter", "dance-waltz-three-four"],
+      "disposition": "resolved-after-active-wave",
+      "reason": "Обе формулировки идентифицировали вальс по одному признаку; dance-waltz-three-four заменён историческим фактом после завершения волны."
+    },
+    {
+      "topicId": "dance",
+      "questionIds": ["dance-tango-close-embrace", "dance-tango-two-four"],
+      "disposition": "accepted-distinct-facts",
+      "reason": "Парная пластика и музыкальный размер являются разными признаками."
+    },
+    {
+      "topicId": "dance",
+      "questionIds": ["dance-salsa-latin-social", "dance-salsa-cuba-puerto-rico"],
+      "disposition": "accepted-distinct-facts",
+      "reason": "Манера социального танца и историко-географическое происхождение различаются."
+    },
+    {
+      "topicId": "dance",
+      "questionIds": ["dance-cha-cha-offspring-mambo", "dance-cha-cha-cuban"],
+      "disposition": "accepted-distinct-facts",
+      "reason": "История возникновения и происхождение названия различаются."
+    },
+    {
+      "topicId": "dance",
+      "questionIds": ["dance-samba-brazil", "dance-samba-two-four"],
+      "disposition": "accepted-distinct-facts",
+      "reason": "Связь с карнавалом и метроритмический признак различаются."
+    },
+    {
+      "topicId": "musical-instruments",
+      "questionIds": ["musical-instruments-cello-floor", "musical-instruments-cello-tenor-bass"],
+      "disposition": "accepted-distinct-facts",
+      "reason": "Положение при игре и строй инструмента различаются."
+    },
+    {
+      "topicId": "opera-musical-theatre",
+      "questionIds": ["opera-musical-theatre-habanera-work", "opera-musical-theatre-carmen-character"],
+      "disposition": "accepted-distinct-facts",
+      "reason": "Произведение по арии и имя персонажа по биографии различаются."
+    },
+    {
+      "topicId": "opera-musical-theatre",
+      "questionIds": ["opera-musical-theatre-nessun-dorma-work", "opera-musical-theatre-turandot-character"],
+      "disposition": "accepted-distinct-facts",
+      "reason": "Произведение по арии и персонаж по сюжетному действию различаются."
+    },
+    {
+      "topicId": "opera-musical-theatre",
+      "questionIds": ["opera-musical-theatre-la-donna-work", "opera-musical-theatre-rigoletto-curse"],
+      "disposition": "accepted-distinct-facts",
+      "reason": "Произведение по арии и произведение по сюжету являются разными знаниями."
+    },
+    {
+      "topicId": "opera-musical-theatre",
+      "questionIds": ["opera-musical-theatre-bass-voice", "opera-musical-theatre-sarastro-bass"],
+      "disposition": "accepted-distinct-facts",
+      "reason": "Определение диапазона и вокальная партия персонажа различаются."
+    }
+  ],
+  "acceptedFactReuseGroups": {
+    "count": 64,
+    "disposition": "distinct-facts-shared-answer-and-source",
+    "reason": "Каждая группа проверена по prompt и correct answer: вопросы проверяют разные свойства, произведения, правила, события или вычисления; общий источник и ответ сами по себе не образуют повтор факта.",
+    "groupsByTopic": {
+      "animals": [["animals-kangaroo-pouch", "animals-kangaroo-embryo-pouch"]],
+      "animation": [["animation-shrek-oscar", "animation-shrek-ogre"]],
+      "architecture": [["architecture-st-basils-city", "architecture-kremlin-city"], ["architecture-eiffel-city", "architecture-notre-dame-city"]],
+      "astronomy-space": [["astronomy-space-red-planet", "astronomy-space-ext-mars-olympus"], ["astronomy-space-solar-system-star", "astronomy-space-ext-sun-daylight", "astronomy-space-ext-sun-nearest-earth"]],
+      "card-games": [["card-games-poker-hands", "card-games-history-poker"]],
+      "chess": [["chess-queen-lines", "chess-black-pawn-rank"], ["chess-knight-jump", "chess-check-symbol", "chess-white-pawn-rank"]],
+      "classical-music": [["classical-music-four-seasons-composer", "classical-music-vivaldi-gloria"], ["classical-music-beethoven-fifth-opening", "classical-music-fur-elise"], ["classical-music-mozart-little-night", "classical-music-mozart-turkish-march"], ["classical-music-rossini-barber", "classical-music-william-tell-overture"], ["classical-music-blue-danube", "classical-music-spring-voices"], ["classical-music-finlandia", "classical-music-sibelius-valse-triste"], ["classical-music-moldau", "classical-music-smetana-bartered-bride"]],
+      "football": [["football-03-1", "football-17-4"], ["football-04-3", "football-17-3"], ["football-04-4", "football-17-1"]],
+      "geography-russia": [["geography-russia-neva-city", "geography-russia-ext-hermitage-city"]],
+      "geology-earth": [["geology-earth-calcite-fizzes", "geology-earth-mohs-calcite-three"], ["geology-earth-mohs-gypsum-two", "geology-earth-gypsum-plaster"]],
+      "history-france": [["history-france-louis-execution", "history-france-public-safety-role"]],
+      "history-ottoman-turkey": [["history-ottoman-turkey-timar-system", "history-ottoman-turkey-civil-code-model"]],
+      "history-russia": [["history-russia-first-russian-tsar", "history-russia-kazan-conquest"], ["history-russia-last-emperor", "history-russia-october-manifesto-ruler", "history-russia-abdication-emperor"], ["history-russia-ugra-ruler", "history-russia-brick-kremlin-ruler"]],
+      "human-medicine": [["human-medicine-bile-production", "human-medicine-ext-largest-gland"]],
+      "math-logic": [["math-logic-half-of-ten", "math-logic-quarter-of-twenty"]],
+      "russian-language": [["russian-language-colon-cause", "russian-language-colon-explanation"], ["russian-language-dash-result", "russian-language-dash-opposition"], ["russian-language-altern-growing", "russian-language-altern-touch"]],
+      "russian-literature": [["russian-literature-pushkin-tale-fisherman", "russian-literature-captains-daughter-author", "russian-literature-ruslan-ludmila-author", "russian-literature-dubrovskii-author", "russian-literature-eugene-onegin-author", "russian-literature-ext-bronze-horseman-author"], ["russian-literature-mumu-author", "russian-literature-ext-asya-author"], ["russian-literature-revizor-author", "russian-literature-overcoat-author", "russian-literature-ext-diary-madman-author"], ["russian-literature-anna-karenina-author", "russian-literature-ext-kreutzer-sonata-author"], ["russian-literature-three-sisters-author", "russian-literature-uncle-vanya-author", "russian-literature-ext-ward-six-author"], ["russian-literature-twelve-chairs-writers", "russian-literature-twelve-chairs-authors"], ["russian-literature-karamazov-author", "russian-literature-ext-idiot-author"], ["russian-literature-children-underground-author", "russian-literature-ext-blind-musician-author"], ["russian-literature-block-twelve", "russian-literature-ext-nightingale-garden-author"]],
+      "russian-music": [["russian-music-ext-kino-videli-noch", "russian-music-ext-kino-filmy", "russian-music-ext-kino-tanec", "russian-music-ext-kino-posledniy-geroy", "russian-music-ext-kino-mama-anarhiya", "russian-music-ext-kino-igra", "russian-music-ext-kino-tancevat", "russian-music-ext-kino-tviy-nomer", "russian-music-ext-kino-zhizn-steklah", "russian-music-ext-kino-zvezdy"], ["russian-music-ext-mumiy-utekay", "russian-music-ext-mumiy-devochka", "russian-music-ext-mumiy-vladivostok", "russian-music-ext-mumiy-kot", "russian-music-ext-mumiy-zabavy", "russian-music-ext-mumiy-skorost", "russian-music-ext-mumiy-roza", "russian-music-ext-mumiy-vremya-tepla", "russian-music-ext-mumiy-delay"], ["russian-music-ext-agutin-sirenevoy", "russian-music-ext-agutin-ne-uhodi", "russian-music-ext-agutin-siney-reki", "russian-music-ext-agutin-bez-tebya", "russian-music-ext-agutin-kak-ne-dumat", "russian-music-ext-agutin-semi-holmah", "russian-music-ext-agutin-vsegda"], ["russian-music-ext-splin-prihodi", "russian-music-ext-splin-svet", "russian-music-ext-splin-bog-ustal", "russian-music-ext-splin-maria", "russian-music-ext-splin-lyusya", "russian-music-ext-splin-orbit"], ["russian-music-ext-splin-tri-cveta", "russian-music-ext-splin-killer"], ["russian-music-ext-agutin-zhenshchinam", "russian-music-ext-agutin-ne-uydesh", "russian-music-ext-agutin-polovina"], ["russian-music-ext-aquarium-kapitan", "russian-music-ext-aquarium-zmeya", "russian-music-ext-aquarium-vana", "russian-music-ext-aquarium-tango", "russian-music-ext-aquarium-vycherpyvayushih", "russian-music-ext-aquarium-vremya-luny", "russian-music-ext-aquarium-evgraf"]],
+      "sports": [["sports-scrum", "sports-backward-pass"], ["sports-dribble", "sports-three-second-area", "sports-goaltending"], ["sports-snatch-jerk", "sports-lift-order"], ["sports-four-swim-strokes", "sports-individual-medley-turn"], ["sports-seven-metre-throw", "sports-goal-area-six"], ["sports-libero", "sports-rotation", "sports-rally-point"], ["sports-follow-on", "sports-wicket"]],
+      "weather-climate": [["weather-climate-hurricane-tropical", "weather-climate-hurricane-eye"]],
+      "world-geography": [["world-geography-smallest-continent", "world-geography-continent-country"], ["world-geography-brunei-divided", "world-geography-malaysia-two-regions"]],
+      "world-languages": [["world-languages-arabic-semitic", "world-languages-arabic-major"], ["world-languages-japanese-japan", "world-languages-japanese-kana"], ["world-languages-hebrew-israel", "world-languages-hebrew-revived"], ["world-languages-amharic-ethiopic", "world-languages-amharic-ethiopia"], ["world-languages-maltese-latin", "world-languages-maltese-semitic"], ["world-languages-georgian-mkhedruli", "world-languages-georgian-kartvelian"]]
+    }
+  },
+  "modifiedTopics": [
+    {"topicId": "history-india", "contentSha256": "1cf840aacdcf58141e668ceaaf25a831b4d52bedbb4ba22dfa70dba92970ab03"},
+    {"topicId": "sports", "contentSha256": "71b9dd8cd63d99a1f3e286f595cc0c136f7107cebad3e7f25bb447d572733b3b"},
+    {"topicId": "russian-literature", "contentSha256": "10398437ebf6bd663ca2177feb83d2aa6e5c5a3c4f34fe79a2c9f31fcf5a75dd"},
+    {"topicId": "world-cinema", "contentSha256": "a8e15d014c69244ac60333f90637167acd4756bcd33c4b9be34d082fcdeae949"},
+    {"topicId": "world-geography", "contentSha256": "643c6af69a7321560a3be5aa2955e36734852ea2d8d42f6315d4d96702774447"},
+    {"topicId": "dance", "contentSha256": "f98bde4ccd8c55b0707c90e9f5161ccdd893a1e33d37aa922f532ea010b5232a"}
+  ],
+  "reviewEvidence": {
+    "checksPerTopic": {
+      "factualCorrectness": 100,
+      "correctIndex": 100,
+      "difficulty": 100,
+      "distractors": 100,
+      "answerNotes": 100,
+      "grammar": 100,
+      "explanation": 100,
+      "sourceRelevance": 100,
+      "duplicates": 100
+    },
+    "ledgerUpdateMethod": "npm run content:mark-reviewed-packages -- history-india sports russian-literature world-cinema world-geography dance"
+  },
+  "verification": {
+    "finalScanArtifact": "/tmp/global-audit-2026-09-04-final4.json",
+    "grammarWarnings": 0,
+    "semanticDuplicateCandidates": 0,
+    "unresolvedRealEditorialFindings": 0,
+    "editorialHeuristicFalsePositives": 3,
+    "unresolvedRealFactReuseFindings": 0,
+    "acceptedDistinctFactReuseGroups": 73,
+    "typecheck": "passed",
+    "contentCheck": "2 tests passed",
+    "legacyAnswerIntegrity": "1500/1500 passed",
+    "legacyReviewedPrefix": "30/30 passed",
+    "scopedDiffCheck": "passed",
+    "ledgerTotals": {"assigned": 0, "reviewed": 380}
+  },
+  "residualRisks": [
+    "Fact-reuse detector группирует общий ответ и URL, поэтому 73 оставшиеся группы являются вручную подтверждёнными разными фактами, а не нулём сырых кандидатов.",
+    "Автоматический near-duplicate порог не является доказательством отсутствия перефразированных повторов; результат опирается также на ручную классификацию всех 73 финальных групп."
+  ]
+}

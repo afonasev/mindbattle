@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-09-04",
+  "reviewRunId": "codex-independent-review-91-95",
+  "scope": {
+    "manifestRange": [91, 95],
+    "topics": ["baking-desserts", "food-ingredients", "agriculture", "football", "olympic-games"],
+    "questions": 500,
+    "ledgerPackages": 20
+  },
+  "policy": {
+    "checks": ["factualCorrectness", "correctIndex", "difficulty", "distractors", "answerNotes", "grammar", "explanation", "sourceRelevance", "duplicates"],
+    "sourceVerification": "HTTP-статус использован только как транспортный сигнал; релевантность проверялась по содержанию источника и его связи с вопросом, ответом и объяснением.",
+    "duplicateVerification": "Автоматический lexical/Jaccard/fact-reuse аудит дополнен ручной семантической сверкой всех 500 вопросов."
+  },
+  "result": {
+    "status": "approved",
+    "checkedQuestions": 500,
+    "openCriticalFindings": 0,
+    "checksPerTopic": {"factualCorrectness": 100, "correctIndex": 100, "difficulty": 100, "distractors": 100, "answerNotes": 100, "grammar": 100, "explanation": 100, "sourceRelevance": 100, "duplicates": 100}
+  },
+  "resolvedFindings": [
+    {"questionId": "baking-desserts-11-2", "resolution": "Мёртвый Merriam-Webster URL заменён на прямой рецепт Swiss Meringue от King Arthur Baking; источник явно описывает прогрев белков с сахаром над горячей водой перед взбиванием."},
+    {"questionId": "agriculture-09-4", "resolution": "Мёртвый Merriam-Webster URL заменён на Penn State Extension Soil Acidity and Aglime; источник прямо связывает aglime с нейтрализацией кислотности и повышением pH."},
+    {"questionId": "football-17-1", "resolution": "Ненормативный гибрид «Прямой свободный удар» заменён на принятый русский термин Правил игры «Штрафной удар»."},
+    {"questionId": "football-17-2", "resolution": "Тот же термин исправлен в общем наборе дистракторов без изменения correctIndex."},
+    {"questionId": "football-17-3", "resolution": "Тот же термин исправлен в общем наборе дистракторов без изменения correctIndex."},
+    {"questionId": "football-17-4", "resolution": "Тот же термин исправлен в общем наборе дистракторов без изменения correctIndex."}
+  ],
+  "automatedAudit": {
+    "grammarWarnings": 0,
+    "editorialWarnings": 0,
+    "correctIndexCandidates": 0,
+    "semanticDuplicateCandidates": 0,
+    "difficultyWarnings": 3,
+    "factReuseCandidates": 3
+  },
+  "manualFalsePositives": [
+    {"questionId": "olympic-games-first-modern-year", "signal": "easy-exact-year-manual-review", "decision": "Оставлен easy: 1896 год первых современных Игр — базовый общеизвестный факт темы."},
+    {"questionId": "olympic-games-tokyo-held", "signal": "easy-exact-year-manual-review", "decision": "Оставлен easy: перенос Tokyo 2020 на 2021 год — широко известное событие."},
+    {"questionId": "olympic-games-summer-winter-gold", "signal": "hard-four-proper-names-inference-review", "decision": "Оставлен hard: определение Эдди Игана среди четырёх спортсменов требует специализированного олимпийского знания."},
+    {"questionIds": ["football-03-1", "football-17-4"], "signal": "fact-reuse", "decision": "Независимые факты об одном термине: возобновление после гола и требуемое положение соперников."},
+    {"questionIds": ["football-04-3", "football-17-3"], "signal": "fact-reuse", "decision": "Независимые факты о пенальти: условие назначения и расположение игроков."},
+    {"questionIds": ["football-04-4", "football-17-1"], "signal": "fact-reuse", "decision": "Независимые факты о штрафном ударе: основание назначения и возможность прямого гола."},
+    {"questionId": "olympic-games-fosbury-method", "signal": "source-title-mismatch", "decision": "Источник не заменён: несмотря на заголовок о Бобе Бимоне, текст IOC Library прямо описывает технику Дика Фосбери как head-first, back-to-the-bar и потому содержательно релевантен."}
+  ],
+  "sourceUrlChecks": {
+    "initialSnapshot": {"uniqueUrls": 378, "questionsCovered": 500, "reachable": 376, "contentInspectable": 119, "unreachable": 2, "definiteDead": 2, "networkOrServerLimited": 0},
+    "finalSnapshot": {"uniqueUrls": 378, "questionsCovered": 500, "reachable": 378, "contentInspectable": 121, "unreachable": 0, "definiteDead": 0, "networkOrServerLimited": 0},
+    "fixedDeadUrls": [
+      {"questionId": "baking-desserts-11-2", "oldStatus": 404, "newStatus": 200},
+      {"questionId": "agriculture-09-4", "oldStatus": 404, "newStatus": 405, "reachable": true}
+    ],
+    "contentBlockers": []
+  },
+  "transportFollowups": [
+    {"group": "Merriam-Webster anti-bot", "urls": 151, "questionCount": 154, "observed": "403 but reachable; content not range-inspectable by the URL checker", "blocksEditorialApproval": false},
+    {"group": "Britannica anti-bot", "urls": 102, "questionCount": 141, "observed": "403 but reachable; content not range-inspectable by the URL checker", "blocksEditorialApproval": false},
+    {"group": "Other reachable server-limited pages", "urls": 4, "questionCount": 4, "observed": "Three 403 responses and one 405 response; all classified reachable by policy", "blocksEditorialApproval": false}
+  ]
+}

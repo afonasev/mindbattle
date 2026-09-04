@@ -1,0 +1,257 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-09-04",
+  "reviewer": "codex-legacy-review-audit-01a06b88",
+  "scope": "Полная независимая вычитка 500 вопросов в пакетах manifest #11–#15; в каждом пакете отдельно проверены 50 baseline-вопросов и 50 добавленных вопросов.",
+  "method": {
+    "factAndCorrectIndex": "Для каждого вопроса сопоставлены формулировка, выбранный correctIndex, справка правильного варианта, объяснение и предметная релевантность указанного источника.",
+    "difficulty": "Каждый уровень проверен по абсолютной рубрике аудитории change; автоматические эвристики использовались только как кандидаты на ручную проверку.",
+    "answersAndNotes": "Для каждого вопроса прочитаны четыре варианта и четыре справки; проверены различимость, правдоподобие, отсутствие грамматической подсказки и соответствие справки своему варианту.",
+    "language": "Формулировка, варианты, справки и объяснение проверены на однозначность, согласование, управление, число, род, вложенные кавычки и естественность русского текста.",
+    "duplicates": "Проверены уникальность questionId, отсутствие повторов вариантов внутри вопроса и содержательных дублей внутри каждого 100-вопросного набора.",
+    "sources": "Для каждого вопроса проверены наличие метаданных и тематическая релевантность title/URL заявленному факту; транспортная доступность URL учитывается отдельно и не подменяет содержательную проверку."
+  },
+  "totals": {
+    "topics": 5,
+    "questionsReviewed": 500,
+    "baselineQuestionsReviewed": 250,
+    "addedQuestionsReviewed": 250,
+    "answerNotesReviewed": 2000,
+    "findingsFixed": 7,
+    "baselineFindingsFixed": 7,
+    "criticalFindingsOpen": 0,
+    "sourceEndpointsRequiringTransportRecheck": 69
+  },
+  "topics": [
+    {
+      "topicId": "russian-music",
+      "manifestPosition": 11,
+      "questionsReviewed": 100,
+      "baselineQuestionsReviewed": 50,
+      "baselineAuditTask": "4.11",
+      "checklist": {
+        "factAndCorrectIndex": 100,
+        "difficulty": 100,
+        "answerNotes": 400,
+        "distractors": 300,
+        "grammar": 100,
+        "explanation": 100,
+        "sourceRelevance": 100,
+        "duplicates": 100
+      },
+      "findings": [],
+      "sourceEndpointFollowups": [
+        "russian-music-pakhmutova-composer",
+        "russian-music-bravo-first-vocalist",
+        "russian-music-zvuki-mu-leader",
+        "russian-music-vysotsky-theatre",
+        "russian-music-kino-leader",
+        "russian-music-magomayev-profession",
+        "russian-music-okudzhava-instrument"
+      ],
+      "criticalFindingsOpen": 0
+    },
+    {
+      "topicId": "world-pop-music",
+      "manifestPosition": 12,
+      "questionsReviewed": 100,
+      "baselineQuestionsReviewed": 50,
+      "baselineAuditTask": "4.12",
+      "checklist": {
+        "factAndCorrectIndex": 100,
+        "difficulty": 100,
+        "answerNotes": 400,
+        "distractors": 300,
+        "grammar": 100,
+        "explanation": 100,
+        "sourceRelevance": 100,
+        "duplicates": 100
+      },
+      "findings": [],
+      "sourceEndpointFollowups": [
+        "world-pop-music-adele-album-21",
+        "world-pop-music-buena-vista-country",
+        "world-pop-music-u2-country"
+      ],
+      "criticalFindingsOpen": 0
+    },
+    {
+      "topicId": "classical-music",
+      "manifestPosition": 13,
+      "questionsReviewed": 100,
+      "baselineQuestionsReviewed": 50,
+      "baselineAuditTask": "4.13",
+      "checklist": {
+        "factAndCorrectIndex": 100,
+        "difficulty": 100,
+        "answerNotes": 400,
+        "distractors": 300,
+        "grammar": 100,
+        "explanation": 100,
+        "sourceRelevance": 100,
+        "duplicates": 100
+      },
+      "findings": [
+        {
+          "questionId": "classical-music-nutcracker-composer",
+          "status": "fixed",
+          "fields": ["answers[0].note"],
+          "reason": "Справка к Прокофьеву описывала рок-музыканта-однофамильца вместо композитора."
+        },
+        {
+          "questionId": "classical-music-chopin-main-instrument",
+          "status": "fixed",
+          "fields": ["answers[1].note"],
+          "reason": "Справка к органу описывала биологический орган вместо музыкального инструмента."
+        },
+        {
+          "questionId": "classical-music-rachmaninoff-paganini-theme",
+          "status": "fixed",
+          "fields": ["answers[0].text", "answers[0].note"],
+          "reason": "Дистрактор ошибочно называл «Кампанеллу» оперой."
+        },
+        {
+          "questionId": "classical-music-borodin-prince-igor",
+          "status": "fixed",
+          "fields": ["answers[2].note"],
+          "reason": "Справка к опере «Садко» описывала одноимённую симфоническую картину."
+        },
+        {
+          "questionId": "classical-music-rossini-barber",
+          "status": "fixed",
+          "fields": ["prompt"],
+          "reason": "Добавлен год премьеры версии Россини, чтобы отличить её от одноимённой оперы Паизиелло."
+        },
+        {
+          "questionId": "classical-music-maestro-conductor",
+          "status": "fixed",
+          "fields": ["answers[2].note"],
+          "reason": "Справка к композитору описывала московское издательство вместо профессии."
+        },
+        {
+          "questionId": "classical-music-maestro-conductor",
+          "status": "fixed",
+          "fields": ["source.title", "source.url", "source.verifiedAt"],
+          "reason": "Недоступный endpoint Britannica после review заменён стабильной словарной статьёй Merriam-Webster, прямо определяющей conductor как руководителя оркестра."
+        }
+      ],
+      "sourceEndpointFollowups": [],
+      "criticalFindingsOpen": 0
+    },
+    {
+      "topicId": "russian-culture",
+      "manifestPosition": 14,
+      "questionsReviewed": 100,
+      "baselineQuestionsReviewed": 50,
+      "baselineAuditTask": "4.14",
+      "checklist": {
+        "factAndCorrectIndex": 100,
+        "difficulty": 100,
+        "answerNotes": 400,
+        "distractors": 300,
+        "grammar": 100,
+        "explanation": 100,
+        "sourceRelevance": 100,
+        "duplicates": 100
+      },
+      "findings": [
+        {
+          "questionId": "russian-culture-troika-horses",
+          "status": "fixed",
+          "fields": ["source.title", "source.url", "source.verifiedAt"],
+          "reason": "Недоступный endpoint Britannica после review заменён доступной предметной страницей о русской тройке; факт о трёх лошадях и correctIndex не менялись."
+        }
+      ],
+      "sourceEndpointFollowups": [
+        "russian-culture-balalaika-shape",
+        "russian-culture-ext-mezen",
+        "russian-culture-ext-bratina",
+        "russian-culture-ext-kosovorotka",
+        "russian-culture-ext-endova",
+        "russian-culture-ext-bogorodsk-toy",
+        "russian-culture-ext-kika",
+        "russian-culture-ext-yelets-lace",
+        "russian-culture-kolobok-shape",
+        "russian-culture-ded-moroz-helper",
+        "russian-culture-karavai",
+        "russian-culture-ext-troitsa",
+        "russian-culture-ext-apple-spas",
+        "russian-culture-ext-nut-spas",
+        "russian-culture-gzhel-colors",
+        "russian-culture-khokhloma-material",
+        "russian-culture-zhostovo-object",
+        "russian-culture-palekh-base",
+        "russian-culture-palekh-previous-craft",
+        "russian-culture-fedoskino-paint-type",
+        "russian-culture-khokhloma-gold-secret",
+        "russian-culture-ext-khorovod",
+        "russian-culture-balalaika-andreev",
+        "russian-culture-koporye-tea-plant",
+        "russian-culture-ext-palm-sunday",
+        "russian-culture-ext-krasnaya-gorka",
+        "russian-culture-ext-letnik",
+        "russian-culture-dymkovo-material",
+        "russian-culture-gusli",
+        "russian-culture-domra",
+        "russian-culture-banya-venik",
+        "russian-culture-black-banya-feature",
+        "russian-culture-maslenitsa-main-food",
+        "russian-culture-maslenitsa-wednesday",
+        "russian-culture-maslenitsa-friday",
+        "russian-culture-maslenitsa-farewell",
+        "russian-culture-lapti",
+        "russian-culture-bast-source",
+        "russian-culture-ivan-tsarevich",
+        "russian-culture-firebird",
+        "russian-culture-ext-dozhinki",
+        "russian-culture-faberge-eggs",
+        "russian-culture-ext-karagod",
+        "russian-culture-ext-radonitsa",
+        "russian-culture-ext-vykup-nevesty",
+        "russian-culture-ext-soroki",
+        "russian-culture-birch-symbol",
+        "russian-culture-ext-chastushka",
+        "russian-culture-kokoshnik-type",
+        "russian-culture-matryoshka-principle",
+        "russian-culture-matryoshka-first-painter",
+        "russian-culture-pavlovo-posad-product",
+        "russian-culture-valenki",
+        "russian-culture-ext-zazhinki",
+        "russian-culture-golden-ring",
+        "russian-culture-izba",
+        "russian-culture-russian-oven",
+        "russian-culture-red-corner"
+      ],
+      "criticalFindingsOpen": 0
+    },
+    {
+      "topicId": "visual-art",
+      "manifestPosition": 15,
+      "questionsReviewed": 100,
+      "baselineQuestionsReviewed": 50,
+      "baselineAuditTask": "4.15",
+      "checklist": {
+        "factAndCorrectIndex": 100,
+        "difficulty": 100,
+        "answerNotes": 400,
+        "distractors": 300,
+        "grammar": 100,
+        "explanation": 100,
+        "sourceRelevance": 100,
+        "duplicates": 100
+      },
+      "findings": [
+        {
+          "questionId": "visual-art-venus-de-milo",
+          "status": "fixed",
+          "fields": ["answers[2].note"],
+          "reason": "Незаконченная справка определяла слово «дискобол», а не античную статую."
+        }
+      ],
+      "sourceEndpointFollowups": [
+        "visual-art-ext-treachery-images-artist"
+      ],
+      "criticalFindingsOpen": 0
+    }
+  ]
+}

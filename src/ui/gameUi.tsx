@@ -262,7 +262,13 @@ export function QuestionBoard({
             </a>
           )}
           {question.wrongAnswerNotes && question.wrongAnswerNotes.length > 0 && (
-            <section className="wrong-answer-notes" aria-label="Справки о выбранных неправильных ответах">
+            <section
+              className="wrong-answer-notes"
+              aria-label="Справки о выбранных неправильных ответах"
+              style={{
+                gridTemplateColumns: `repeat(${question.wrongAnswerNotes.length}, minmax(0, 1fr))`
+              }}
+            >
               <strong>А что означали другие выбранные варианты?</strong>
               {question.wrongAnswerNotes.map((item) => (
                 <article key={item.position}>

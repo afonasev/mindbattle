@@ -308,7 +308,20 @@ export function validateCatalog(
         !/^[a-f0-9]{64}$/.test(review.contentSha256) ||
         review.checkedQuestions !== topic.questions.length ||
         review.criticalFindingsOpen !== 0 ||
-        !ISO_DATE.test(review.reviewedAt)
+        !ISO_DATE.test(review.reviewedAt) ||
+        !/^[a-f0-9]{64}$/.test(review.evidence?.questionIdsSha256 ?? "") ||
+        Object.values(review.evidence?.checks ?? {}).length !== 9 ||
+        Object.values(review.evidence?.checks ?? {}).some(
+          (checked) => checked !== topic.questions.length
+        ) ||
+        !Array.isArray(review.evidence?.reviewedPackageIds) ||
+        review.evidence.reviewedPackageIds.length === 0 ||
+        new Set(review.evidence.reviewedPackageIds).size !== review.evidence.reviewedPackageIds.length ||
+        !Array.isArray(review.evidence?.resolvedFindings) ||
+        review.evidence.resolvedFindings.some(
+          ({ questionId, issue, resolution }) =>
+            !questionId?.trim() || !issue?.trim() || !resolution?.trim()
+        )
       ) {
         issues.push(`${topic.id}: редакторское review не завершено`);
       }
