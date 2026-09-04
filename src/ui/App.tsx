@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  AnsweringAudioMonitor,
   AudioController,
+  createHtmlAudioSourceFactory,
   createInputRouterState,
-  createWebAudioSink,
   disarmUntilNeutral,
   handleGamepadPoll,
   handleKeyboardInput,
   handleWindowBlur,
+  phaseAudioActions,
   type GamepadSnapshot,
   type SemanticInputAction
 } from "../adapters";
@@ -79,7 +81,9 @@ export function App() {
   const [gamepads, setGamepads] = useState<readonly Gamepad[]>([]);
   const inputRef = useRef(createInputRouterState());
   const phaseRef = useRef<string | null>(null);
-  const audioRef = useRef(new AudioController(createWebAudioSink(), preferences));
+  const answeringAudioRef = useRef(new AnsweringAudioMonitor());
+  const lobbyThemePlayedRef = useRef(false);
+  const audioRef = useRef(new AudioController(createHtmlAudioSourceFactory(), preferences));
 
   const sync = useCallback(
     () => setMatch(controller.state ? { ...controller.state } : null),
@@ -293,16 +297,37 @@ export function App() {
   }, [controller, match, sync]);
 
   useEffect(() => {
+    if (match) {
+      lobbyThemePlayedRef.current = false;
+      return;
+    }
+    if (!lobbyThemePlayedRef.current) {
+      audioRef.current.play("lobby-theme");
+      lobbyThemePlayedRef.current = true;
+    }
+  }, [match]);
+
+  useEffect(() => {
     const phase = match?.phase.kind ?? null;
-    if (phase && phase !== phaseRef.current) {
+    if (phase !== phaseRef.current) {
       inputRef.current = disarmUntilNeutral(inputRef.current);
-      if (phase === "answering") audioRef.current.play("question-start");
-      if (phase === "bonus-veto") audioRef.current.play("bonus");
-      if (phase === "reveal") audioRef.current.play("reveal");
-      if (phase === "finished") audioRef.current.play("winner");
+      for (const action of phaseAudioActions(phaseRef.current, phase)) {
+        if (action.type === "stop-music") audioRef.current.stopMusic();
+        else audioRef.current.play(action.cue);
+      }
     }
     phaseRef.current = phase;
   }, [match?.phase.kind]);
+
+  useEffect(() => {
+    if (!match || match.pause || match.phase.kind !== "answering") {
+      answeringAudioRef.current.reset();
+      return;
+    }
+    for (const cue of answeringAudioRef.current.observe(match.phase.baseRemainingMs)) {
+      audioRef.current.play(cue);
+    }
+  }, [match]);
 
   const rootClass = [
     preferences.textSize === "large" ? "text-large" : "",
