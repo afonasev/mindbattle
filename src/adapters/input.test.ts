@@ -232,7 +232,7 @@ describe("keyboard routing", () => {
     ).toEqual([{ type: "bonus-confirm", teamId: "blue" }]);
     expect(
       handleKeyboardInput(createInputRouterState(), { type: "keydown", code: "Space" }, keyboardAssignments, "difficulty-feedback").actions,
-    ).toEqual([{ type: "feedback-confirm", teamId: "green" }]);
+    ).toEqual([{ type: "feedback-confirm" }]);
   });
 
   it("requires neutral after a screen transition", () => {
@@ -280,7 +280,7 @@ describe("keyboard routing", () => {
         keyboardAssignments,
         "difficulty-feedback"
       );
-      expect(result.actions).toEqual([{ type: "feedback-direction", teamId: "green", direction }]);
+      expect(result.actions).toEqual([{ type: "feedback-direction", direction }]);
     }
   });
 });
@@ -368,7 +368,7 @@ describe("gamepad polling and lifecycle", () => {
   it("maps positional gamepad buttons to an independent difficulty direction", () => {
     let state = pollBaseline(createInputRouterState(), assignments, [pad(0), pad(1)]);
     const result = handleGamepadPoll(state, [pad(0, [2]), pad(1)], assignments, "difficulty-feedback");
-    expect(result.actions).toEqual([{ type: "feedback-direction", teamId: "green", direction: "west" }]);
+    expect(result.actions).toEqual([{ type: "feedback-direction", direction: "west" }]);
   });
 
   it("pauses once when an assigned gamepad disconnects", () => {

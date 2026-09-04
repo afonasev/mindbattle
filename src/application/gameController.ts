@@ -204,19 +204,16 @@ export class GameController {
   }
 
   async handleFeedbackDirection(
-    teamId: MatchState["config"]["teams"][number],
     direction: "north" | "east" | "south" | "west"
   ): Promise<boolean> {
     if (!this.currentState || !this.feedback || this.feedbackStatus === "pending") return false;
-    this.dispatch([{ type: "feedback-direction", teamId, direction }]);
+    this.dispatch([{ type: "feedback-direction", direction }]);
     return this.submitCompletedFeedback();
   }
 
-  async handleFeedbackConfirmation(
-    teamId: MatchState["config"]["teams"][number]
-  ): Promise<boolean> {
+  async handleFeedbackConfirmation(): Promise<boolean> {
     if (!this.currentState || !this.feedback || this.feedbackStatus === "pending") return false;
-    this.dispatch([{ type: "feedback-confirm", teamId }]);
+    this.dispatch([{ type: "feedback-confirm" }]);
     return this.submitCompletedFeedback();
   }
 
@@ -224,24 +221,22 @@ export class GameController {
     if (
       !this.currentState ||
       this.currentState.phase.kind !== "difficulty-feedback" ||
-      !Object.values(this.currentState.phase.responses).every((response) => response.completed)
+      this.currentState.phase.stage !== "done"
     ) return false;
 
     const feedback = this.feedback;
     if (!feedback) return false;
     const phase = this.currentState.phase;
     const event: DifficultyFeedbackEvent = {
-      schemaVersion: 2,
+      schemaVersion: 3,
       eventId: phase.eventId,
       matchId: this.currentState.matchId,
       catalogRevision: this.currentState.catalogRevision,
       questionId: phase.round.questionId,
       assignedDifficulty: phase.round.difficulty,
-      responses: Object.values(phase.responses).map((response) => ({
-        perceivedDifficulty: response.perceivedDifficulty!,
-        similarityPreference: response.similarityPreference!,
-        diagnosticFlags: [...response.diagnosticFlags]
-      })).sort((left, right) => JSON.stringify(left).localeCompare(JSON.stringify(right)))
+      hasComplaint: phase.hasComplaint!,
+      complaintReasons: [...phase.complaintReasons],
+      ...(phase.complaintNote ? { complaintNote: phase.complaintNote } : {})
     };
     this.feedbackStatus = "pending";
     this.feedbackError = null;
@@ -257,18 +252,12 @@ export class GameController {
     }
   }
 
-  /** Compatibility path for a v1 snapshot and legacy local callers. */
-  async rateDifficulty(teamId: MatchState["config"]["teams"][number], perceivedDifficulty: "easy" | "medium" | "hard"): Promise<boolean> {
+  setFeedbackNote(note: string): void { this.dispatch([{ type: "set-feedback-note", note }]); }
+  /** Legacy caller compatibility; new UI uses the common complaint flow. */
+  async rateDifficulty(teamId: MatchState["config"]["teams"][number], difficulty: "easy" | "medium" | "hard"): Promise<boolean> {
     if (!this.currentState || !this.feedback || this.feedbackStatus === "pending") return false;
-    this.dispatch([{ type: "rate-difficulty", teamId, difficulty: perceivedDifficulty }]);
-    if (!this.currentState || this.currentState.phase.kind !== "difficulty-feedback" || !this.currentState.phase.selectedDifficulty) return false;
-    const phase = this.currentState.phase;
-    const selectedDifficulty = phase.selectedDifficulty;
-    if (!selectedDifficulty) return false;
-    const event: DifficultyFeedbackEvent = { schemaVersion: 1, eventId: phase.eventId, matchId: this.currentState.matchId, catalogRevision: this.currentState.catalogRevision, questionId: phase.round.questionId, assignedDifficulty: phase.round.difficulty, perceivedDifficulty: selectedDifficulty };
-    this.feedbackStatus = "pending"; this.feedbackError = null;
-    try { await this.feedback.submit(event); this.feedbackStatus = "idle"; this.dispatch([{ type: "confirm-difficulty-feedback", eventId: phase.eventId }]); return true; }
-    catch (error) { this.feedbackStatus = "error"; this.feedbackError = error instanceof Error ? error.message : "Не удалось сохранить фидбэк"; return false; }
+    this.dispatch([{ type: "rate-difficulty", teamId, difficulty }]);
+    return this.submitCompletedFeedback();
   }
 
   resetQuestionHistory(): void {

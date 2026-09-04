@@ -144,18 +144,14 @@ function validPhase(value: unknown, config: MatchConfig): boolean {
       value.resolutions.length === config.teams.length &&
       validContinuation(value.continuation, config))) return false;
     if (value.kind === "difficulty-feedback") {
-      if (typeof value.eventId !== "string" || value.eventId.length === 0 ||
-        !["difficulty", "tags"].includes(String(value.stage)) || !record(value.responses)) return false;
-      const entries = Object.entries(value.responses);
-      if (entries.length < 2 || !entries.every(([teamId, response]) => {
-        if (!config.teams.includes(teamId as TeamId) || !record(response)) return false;
-        return (response.perceivedDifficulty === null || ["trivial", "easy", "medium", "hard"].includes(String(response.perceivedDifficulty))) &&
-          (response.similarityPreference === null || ["like", "abstain", "dislike"].includes(String(response.similarityPreference))) &&
-          stringArray(response.diagnosticFlags) && new Set(response.diagnosticFlags).size === response.diagnosticFlags.length &&
-          (response.diagnosticFlags as string[]).every((flag) => ["unfamiliar-topic", "unclear-wording", "suspected-error", "ambiguous-answer", "too-niche-or-uninteresting", "weak-answer-options"].includes(flag)) &&
-          finite(response.tagCursor) && Number.isSafeInteger(response.tagCursor) && response.tagCursor >= 0 && response.tagCursor < 10 &&
-          typeof response.completed === "boolean";
-      })) return false;
+      const reasons = ["too-easy", "too-hard", "weak-answer-options", "unclear-wording", "suspected-error", "ambiguous-answer", "uninteresting-for-quiz"];
+      if (typeof value.eventId !== "string" || value.eventId.length === 0 || !["choice", "reasons", "done"].includes(String(value.stage)) ||
+        !(value.hasComplaint === null || typeof value.hasComplaint === "boolean") || !stringArray(value.complaintReasons) ||
+        new Set(value.complaintReasons).size !== value.complaintReasons.length || !(value.complaintReasons as string[]).every((reason) => reasons.includes(reason)) ||
+        ((value.complaintReasons as string[]).includes("too-easy") && (value.complaintReasons as string[]).includes("too-hard")) ||
+        typeof value.complaintNote !== "string" || [...value.complaintNote].length > 500 || !finite(value.cursor) || !Number.isSafeInteger(value.cursor) || value.cursor < 0) return false;
+      if (value.hasComplaint === false && ((value.complaintReasons as string[]).length > 0 || value.complaintNote.length > 0)) return false;
+      if (value.hasComplaint === true && value.stage === "done" && (value.complaintReasons as string[]).length === 0) return false;
     }
     const resolvedTeams = new Set<string>();
     for (const resolution of value.resolutions) {
@@ -221,38 +217,28 @@ export function deserializeMatch(
     return null;
   }
   if (!record(value) || !validConfig(value.config)) return null;
-  if (value.schemaVersion === 1) {
-    const legacyPhase = record(value.phase) ? value.phase : null;
-    if (legacyPhase?.kind === "difficulty-feedback") {
-      const difficulty = legacyPhase.selectedDifficulty;
-      const validDifficulty = difficulty === "easy" || difficulty === "medium" || difficulty === "hard" ? difficulty : null;
-      const responses = Object.fromEntries((value.config.teams as TeamId[]).map((teamId) => [teamId, {
-        perceivedDifficulty: validDifficulty,
-        similarityPreference: validDifficulty ? "abstain" : null,
-        diagnosticFlags: [],
-        tagCursor: 0,
-        completed: validDifficulty !== null
-      }]));
-      value.phase = {
-        ...legacyPhase,
-        eventId: String(legacyPhase.eventId).replace("feedback-v1:", "feedback-v2:"),
-        stage: validDifficulty ? "tags" : "difficulty",
-        responses
-      };
-    }
-    value.schemaVersion = 2;
-  }
+  if (value.schemaVersion === 1) value.schemaVersion = 2;
   if (value.schemaVersion === 2 && record(value.phase) && value.phase.kind === "topic-confirmation" && value.phase.mode === undefined) {
     const bonus = typeof value.mainQuestionIndex === "number" &&
       (value.mainQuestionIndex + 1) % (value.config.questionCount / 3) === 0;
     value.phase = { ...value.phase, mode: "main", presentation: bonus ? "bonus" : "normal" };
   }
+  if (value.schemaVersion === 2 && record(value.phase) && value.phase.kind === "difficulty-feedback") {
+    value.phase = {
+      kind: "reveal",
+      round: value.phase.round,
+      resolutions: value.phase.resolutions,
+      continuation: value.phase.continuation,
+      legacySkipFeedback: true
+    };
+  }
+  if (value.schemaVersion === 2) value.schemaVersion = 3;
   if (record(value.config) && value.config.collectQuestionFeedback === undefined) {
     value.config = { ...value.config, collectQuestionFeedback: true };
   }
   const config = value.config as MatchConfig;
   if (
-    value.schemaVersion !== 2 ||
+    value.schemaVersion !== 3 ||
     value.catalogRevision !== expectedCatalogRevision ||
     typeof value.matchId !== "string" ||
     value.matchId.length === 0 ||

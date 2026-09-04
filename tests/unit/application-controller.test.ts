@@ -140,7 +140,7 @@ function chooseFirstTopic(controller: GameController): MatchState {
 }
 
 describe("GameController", () => {
-  it("persists one rating before advancing and retries the same event after failure", async () => {
+  it("persists one shared positive signal before advancing and retries the same event after failure", async () => {
     const storage = new MemoryStorage();
     const feedback = new FakeFeedback();
     feedback.fail = true;
@@ -152,14 +152,15 @@ describe("GameController", () => {
     controller.dispatch(CONFIG.teams.map((teamId) => ({ type: "answer" as const, teamId, position })));
     controller.dispatch([{ type: "continue", teamId: "green" }]);
     expect(controller.state?.phase.kind).toBe("difficulty-feedback");
-    expect(await controller.rateDifficulty("blue", "hard")).toBe(false);
+    expect(await controller.handleFeedbackConfirmation()).toBe(false);
     expect(controller.difficultyFeedbackStatus).toBe("error");
     const failedEventId = feedback.events[0].eventId;
     expect(feedback.events[0].matchId).toBe("match-v1:feedback-seed");
-    expect(controller.state?.phase.kind === "difficulty-feedback" && controller.state.phase.selectedDifficulty).toBe("hard");
+    expect(feedback.events[0]).toMatchObject({ schemaVersion: 3, hasComplaint: false, complaintReasons: [] });
     feedback.fail = false;
-    expect(await controller.rateDifficulty("green", "easy")).toBe(true);
+    expect(await controller.handleFeedbackConfirmation()).toBe(true);
     expect(feedback.events[1].eventId).toBe(failedEventId);
+    expect(feedback.events[1]).toMatchObject({ hasComplaint: false, complaintReasons: [] });
     expect(controller.state?.phase.kind).toBe("normal-topic");
   });
 

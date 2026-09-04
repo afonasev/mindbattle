@@ -439,7 +439,7 @@ describe("reveal, stages and sudden death", () => {
     expect(state.mainQuestionIndex).toBe(1);
   });
 
-  it("collects one difficulty rating and waits for the matching acknowledgement", () => {
+  it("records a single shared complaint result and waits for the matching acknowledgement", () => {
     const context = makeContext();
     let state = startQuestion(createMatch(TWO_TEAMS, "feedback", 0, context), context);
     state = answerAllCorrect(state, context);
@@ -448,16 +448,40 @@ describe("reveal, stages and sudden death", () => {
     expect(state.phase.kind).toBe("difficulty-feedback");
     if (state.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback");
     const eventId = state.phase.eventId;
-    state = frame(state, context, [
-      { type: "rate-difficulty", teamId: "blue", difficulty: "hard" },
-      { type: "rate-difficulty", teamId: "green", difficulty: "easy" }
-    ]);
-    expect(state.phase.kind === "difficulty-feedback" && state.phase.selectedDifficulty).toBe("hard");
+    state = frame(state, context, [{ type: "feedback-confirm" }]);
+    expect(state.phase.kind === "difficulty-feedback" && state.phase.hasComplaint).toBe(false);
     expect(deserializeMatch(serializeMatch(state), context.catalogRevision)?.phase).toEqual(state.phase);
+    state = frame(state, context, [{ type: "feedback-confirm" }]);
+    expect(state.phase).toMatchObject({ stage: "done", hasComplaint: false, complaintReasons: [] });
     state = frame(state, context, [{ type: "confirm-difficulty-feedback", eventId: "wrong" }]);
     expect(state.phase.kind).toBe("difficulty-feedback");
     state = frame(state, context, [{ type: "confirm-difficulty-feedback", eventId }]);
     expect(state.phase.kind).toBe("normal-topic");
+  });
+
+  it("requires a reason for a shared complaint and keeps opposite difficulty signals exclusive", () => {
+    const context = makeContext();
+    let state = answerAllCorrect(startQuestion(createMatch(TWO_TEAMS, "complaint", 0, context), context), context);
+    state = frame(state, context, [{ type: "continue", teamId: "green" }]);
+    state = frame(state, context, [{ type: "feedback-direction", direction: "west" }, { type: "feedback-confirm" }]);
+    if (state.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback");
+    expect(state.phase).toMatchObject({ stage: "reasons", hasComplaint: true, complaintReasons: [] });
+    state = frame(state, context, [{ type: "feedback-confirm" }, { type: "feedback-direction", direction: "east" }, { type: "feedback-confirm" }, { type: "set-feedback-note", note: "x".repeat(501) }]);
+    if (state.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback");
+    expect(state.phase.complaintReasons).toEqual(["too-hard"]);
+    expect([...state.phase.complaintNote]).toHaveLength(500);
+  });
+
+  it("migrates an incomplete v2 feedback snapshot without creating another feedback event", () => {
+    const context = makeContext();
+    let state = answerAllCorrect(startQuestion(createMatch(TWO_TEAMS, "legacy-feedback", 0, context), context), context);
+    state = frame(state, context, [{ type: "continue", teamId: "green" }]);
+    if (state.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback");
+    const legacy = JSON.parse(serializeMatch(state));
+    legacy.schemaVersion = 2;
+    legacy.phase = { ...legacy.phase, stage: "difficulty", responses: { green: { perceivedDifficulty: null, similarityPreference: null, diagnosticFlags: [], tagCursor: 0, completed: false }, blue: { perceivedDifficulty: null, similarityPreference: null, diagnosticFlags: [], tagCursor: 0, completed: false } } };
+    const restored = deserializeMatch(JSON.stringify(legacy), context.catalogRevision);
+    expect(restored?.phase).toMatchObject({ kind: "reveal", legacySkipFeedback: true });
   });
 
   it("scores correct, wrong and no-answer exactly once", () => {

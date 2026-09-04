@@ -20,6 +20,16 @@ const event = {
 };
 
 describe("difficulty feedback server store", () => {
+  it("stores a v3 positive signal and a complaint without team data", async () => {
+    const directory = await mkdtemp(join(tmpdir(), "mindbattle-feedback-"));
+    const store = await createFeedbackStore({ filePath: join(directory, "feedback.ndjson"), questions, catalogRevision: revision });
+    const positive = { schemaVersion: 3, eventId: "v3-no", matchId: "match-v3", catalogRevision: revision, questionId: "q-easy", assignedDifficulty: "easy", hasComplaint: false, complaintReasons: [] };
+    const complaint = { ...positive, eventId: "v3-yes", hasComplaint: true, complaintReasons: ["too-hard", "unclear-wording"], complaintNote: "Нужна редакторская проверка" };
+    expect(await store.append(positive)).toEqual({ status: "created" });
+    expect(await store.append(complaint)).toEqual({ status: "created" });
+    expect(store.summary().v3.byQuestion["q-easy"]).toMatchObject({ total: 2, complaints: 1, noComplaints: 1, reasons: { "too-hard": 1 } });
+    expect(await store.append({ ...complaint, eventId: "v3-invalid", complaintReasons: ["too-hard", "too-easy"] })).toMatchObject({ status: "invalid" });
+  });
   it("validates catalog identity and levels", () => {
     expect(validateFeedbackEvent(event, questions, revision)).toBeNull();
     expect(validateFeedbackEvent({ ...event, eventId: "" }, questions, revision)).toMatch(/схема/);

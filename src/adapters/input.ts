@@ -94,8 +94,8 @@ export type SemanticInputAction =
   | { readonly type: "bonus-confirm"; readonly teamId: TeamId }
   | { readonly type: "bonus-cancel"; readonly teamId: TeamId }
   | { readonly type: "continue"; readonly teamId: TeamId }
-  | { readonly type: "feedback-direction"; readonly teamId: TeamId; readonly direction: CardinalDirection }
-  | { readonly type: "feedback-confirm"; readonly teamId: TeamId }
+  | { readonly type: "feedback-direction"; readonly direction: CardinalDirection }
+  | { readonly type: "feedback-confirm" }
   | { readonly type: "pause"; readonly reason: "escape" | "blur" }
   | {
       readonly type: "pause";
@@ -201,7 +201,7 @@ function actionForDirection(
     return undefined;
   }
   if (mode === "difficulty-feedback") {
-    return { type: "feedback-direction", teamId, direction };
+    return { type: "feedback-direction", direction };
   }
   switch (direction) {
     case "west":
@@ -218,7 +218,7 @@ function actionForDirection(
 function actionForConfirm(teamId: TeamId, mode: InputMode): SemanticInputAction | undefined {
   if (mode === "normal-topic") return { type: "topic-confirm", teamId };
   if (mode === "bonus-veto") return { type: "bonus-confirm", teamId };
-  if (mode === "difficulty-feedback") return { type: "feedback-confirm", teamId };
+  if (mode === "difficulty-feedback") return { type: "feedback-confirm" };
   return undefined;
 }
 
@@ -361,9 +361,9 @@ function semanticGamepadAction(
   if (mode === "difficulty-feedback") {
     const direction = answerDirectionForGamepadButton(buttonIndex);
     return direction
-      ? { type: "feedback-direction", teamId, direction }
+      ? { type: "feedback-direction", direction }
       : bonusActionForGamepadButton(buttonIndex) === "confirm"
-        ? { type: "feedback-confirm", teamId }
+        ? { type: "feedback-confirm" }
         : undefined;
   }
 

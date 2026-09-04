@@ -327,57 +327,27 @@ export function DifficultyFeedbackScreen({
   feedback,
   status,
   error,
-  assignments
+  assignments,
+  setNote
 }: {
   readonly feedback: NonNullable<PublicMatchView["feedback"]>;
   readonly status: "idle" | "pending" | "error";
   readonly error: string | null;
   readonly assignments: readonly TeamControlAssignment[];
+  readonly setNote: (note: string) => void;
 }) {
-  const feedbackItems = [
-    ["like", "Да"], ["abstain", "Не уверен"], ["dislike", "Нет"],
-    ["unfamiliar-topic", "Тема нам почти не знакома"],
-    ["unclear-wording", "Непонятная формулировка"],
-    ["suspected-error", "Вопрос содержит ошибку"],
-    ["ambiguous-answer", "Неоднозначный ответ"],
-    ["too-niche-or-uninteresting", "Слишком узко или неинтересно"],
-    ["weak-answer-options", "Неправильные ответы слишком очевидные"], ["done", "Готово"]
-  ] as const;
-  const responses = Object.entries(feedback.responses) as readonly [TeamId, NonNullable<PublicMatchView["feedback"]>["responses"][TeamId]][];
-  const renderItem = ([tag, label]: readonly [string, string], index: number) => {
-    const markers = responses.filter(([, response]) => response.similarityPreference === tag || response.diagnosticFlags.includes(tag as never));
-    const cursors = responses.filter(([, response]) => !response.completed && response.tagCursor === index);
-    return <article key={tag} className={cursors.length > 0 ? "feedback-tag feedback-tag--cursor" : "feedback-tag"} role="listitem">
-      <strong>{label}</strong>
-      <span className="feedback-tag-state">
-        {markers.length > 0 && <span className="feedback-tag-markers" aria-label="Команды, выбравшие этот пункт">{markers.map(([teamId]) => <TeamDiamond key={teamId} teamId={teamId} />)}</span>}
-        {cursors.length > 0 && <span className="feedback-cursors" aria-label="Команды, чей курсор находится на этом пункте">{cursors.map(([teamId]) => <TeamDiamond key={teamId} teamId={teamId} />)}</span>}
-      </span>
-    </article>;
-  };
+  const isChoice = feedback.stage === "choice";
+  const isNoComplaintResult = feedback.stage === "done" && feedback.hasComplaint === false;
+  const items = isChoice
+    ? [["yes", "Да"], ["no", "Нет"]]
+    : [["too-easy", "Слишком лёгкий"], ["too-hard", "Слишком сложный"], ["weak-answer-options", "Неправильные ответы очевидны"], ["unclear-wording", "Непонятная формулировка"], ["suspected-error", "Фактическая ошибка"], ["ambiguous-answer", "Неоднозначный ответ"], ["uninteresting-for-quiz", "Неинтересный для викторины"], ["done", "Готово"]] as const;
   return (
     <section className="difficulty-feedback-stage" aria-labelledby="difficulty-feedback-title">
       <div className="stage-label">Фидбэк о вопросе</div>
-      <h2 id="difficulty-feedback-title">{feedback.stage === "difficulty" ? "Насколько вопрос был сложен для вашей команды?" : "Отметьте впечатление от вопроса"}</h2>
-      {feedback.stage === "difficulty" ? <>
-        <p className="feedback-instruction">Выберите скрытую оценку. Ваша оценка останется скрытой.</p>
-        <div className="difficulty-feedback-options" aria-label="Варианты сложности">
-          <article className="difficulty-feedback-option"><kbd>←</kbd><strong>Тривиальный</strong></article>
-          <article className="difficulty-feedback-option"><kbd>↑</kbd><strong>Лёгкий</strong></article>
-          <article className="difficulty-feedback-option"><kbd>→</kbd><strong>Средний</strong></article>
-          <article className="difficulty-feedback-option"><kbd>↓</kbd><strong>Сложный</strong></article>
-        </div>
-        <div className="feedback-readiness" aria-label="Готовность выбора сложности">
-          {responses.map(([teamId, response]) => <article key={teamId} className="feedback-team-status"><TeamDiamond teamId={teamId} /><strong>{TEAM_META[teamId].label}</strong><span>{response.difficultySelected ? "Сложность выбрана" : "Выбирает…"}</span></article>)}
-        </div>
-      </> : <>
-        <p className="feedback-instruction">Стрелки — курсор <span>·</span> подтвердить <ConfirmGlyphs assignments={assignments} /></p>
-        <div className="feedback-groups">
-          <section className="feedback-group feedback-group--reaction" aria-labelledby="feedback-reaction-title"><h3 id="feedback-reaction-title">Такой вопрос подходит для игры?</h3><p>Выберите один вариант кнопкой подтверждения</p><div className="feedback-reactions" role="list">{feedbackItems.slice(0, 3).map(renderItem)}</div></section>
-          <section className="feedback-group" aria-labelledby="feedback-tags-title"><h3 id="feedback-tags-title">Что можно улучшить?</h3><p>Можно отметить несколько пунктов кнопкой подтверждения</p><div className="feedback-tag-board" role="list">{feedbackItems.slice(3, 9).map((item, index) => renderItem(item, index + 3))}</div></section>
-          <div className="feedback-complete" role="list">{renderItem(feedbackItems[9], 9)}</div>
-        </div>
-      </>}
+      <h2 id="difficulty-feedback-title">{isChoice ? "Хотите пожаловаться на вопрос?" : isNoComplaintResult ? "Продолжаем игру" : "Что не так с вопросом?"}</h2>
+      {!isNoComplaintResult && <p className="feedback-instruction">Стрелки — курсор · подтвердить <ConfirmGlyphs assignments={assignments} /></p>}
+      {!isNoComplaintResult && <div className="feedback-tag-board" role="list">{items.map(([tag, label], index) => <article key={tag} className={feedback.cursor === index ? "feedback-tag feedback-tag--cursor" : "feedback-tag"}><strong>{label}</strong>{feedback.complaintReasons.includes(tag as never) && <span>✓</span>}</article>)}</div>}
+      {feedback.stage === "reasons" && <label className="feedback-note">Заметка (необязательно, до 500 символов)<textarea value={feedback.complaintNote} maxLength={500} onChange={(event) => setNote(event.target.value)} /></label>}
       <p
         className={status === "error" ? "feedback-status feedback-status--error" : "feedback-status"}
         aria-live="polite"
@@ -385,8 +355,8 @@ export function DifficultyFeedbackScreen({
         {status === "pending"
           ? "Сохраняем фидбэк на сервере…"
           : status === "error"
-            ? `${error ?? "Не удалось сохранить фидбэк"}. Нажмите направление ещё раз.`
-            : feedback.stage === "difficulty" ? "Все команды выбирают сложность одновременно" : "Каждая команда завершает анкету на пункте «Готово»"}
+            ? `${error ?? "Не удалось сохранить фидбэк"}. Нажмите любую назначенную кнопку, чтобы повторить.`
+            : isNoComplaintResult ? "Сохраняем ответ и открываем следующий вопрос…" : isChoice ? "«Нет» выбрано по умолчанию и тоже сохраняется" : "Выберите хотя бы одну причину и подтвердите «Готово»"}
       </p>
     </section>
   );

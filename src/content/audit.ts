@@ -42,6 +42,26 @@ export interface DifficultySignal {
   readonly suggestedDifficulty: Difficulty | null;
 }
 
+export interface ComplaintFeedbackInput {
+  readonly eventId: string;
+  readonly questionId: string;
+  readonly assignedDifficulty: Difficulty;
+  readonly hasComplaint: boolean;
+  readonly complaintReasons: readonly string[];
+}
+
+export function analyzeComplaintFeedback(events: readonly ComplaintFeedbackInput[], knownQuestionIds: ReadonlySet<string>) {
+  const seen = new Set<string>(); const duplicateEventIds = new Set<string>(); const unknownQuestionIds = new Set<string>();
+  const grouped = new Map<string, ComplaintFeedbackInput[]>();
+  for (const event of events) { if (seen.has(event.eventId)) { duplicateEventIds.add(event.eventId); continue; } seen.add(event.eventId); if (!knownQuestionIds.has(event.questionId)) { unknownQuestionIds.add(event.questionId); continue; } grouped.set(event.questionId, [...(grouped.get(event.questionId) ?? []), event]); }
+  const signals = [...grouped.entries()].map(([questionId, rows]) => {
+    const reasons: Record<string, number> = {}; const complaints = rows.filter(({ hasComplaint }) => hasComplaint);
+    for (const row of complaints) for (const reason of row.complaintReasons) reasons[reason] = (reasons[reason] ?? 0) + 1;
+    return { questionId, assignedDifficulty: rows[0].assignedDifficulty, total: rows.length, complaints: complaints.length, noComplaints: rows.length - complaints.length, complaintRate: complaints.length / rows.length, reasons };
+  }).sort((left, right) => right.total - left.total || left.questionId.localeCompare(right.questionId));
+  return { signals, duplicateEventIds: [...duplicateEventIds].sort(), unknownQuestionIds: [...unknownQuestionIds].sort(), correctnessRateAvailable: false as const };
+}
+
 export interface DuplicateCandidate {
   readonly leftQuestionId: string;
   readonly rightQuestionId: string;

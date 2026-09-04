@@ -172,14 +172,14 @@ export function App() {
       }
       if (action.type === "feedback-direction") {
         void controller
-          .handleFeedbackDirection(action.teamId as TeamId, action.direction)
+          .handleFeedbackDirection(action.direction)
           .finally(sync);
         queueMicrotask(sync);
         return [];
       }
       if (action.type === "feedback-confirm") {
         void controller
-          .handleFeedbackConfirmation(action.teamId as TeamId)
+          .handleFeedbackConfirmation()
           .finally(sync);
         queueMicrotask(sync);
         return [];
@@ -227,6 +227,7 @@ export function App() {
             ? "difficulty-feedback"
           : "continue";
     const keyboard = (event: KeyboardEvent) => {
+      if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) return;
       const result = handleKeyboardInput(
         inputRef.current,
         {
@@ -439,6 +440,7 @@ export function App() {
             status={controller.difficultyFeedbackStatus}
             error={controller.difficultyFeedbackError}
             assignments={settings.assignments}
+            setNote={(note: string) => { controller.setFeedbackNote(note); sync(); }}
           />
         )}
         {(view.phase === "answering" || view.phase === "reveal") && (

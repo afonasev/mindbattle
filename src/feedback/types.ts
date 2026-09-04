@@ -1,4 +1,4 @@
-import type { DiagnosticFlag, Difficulty, PerceivedDifficulty, SimilarityPreference } from "../domain/types";
+import type { ComplaintReason, DiagnosticFlag, Difficulty, PerceivedDifficulty, SimilarityPreference } from "../domain/types";
 
 export interface DifficultyFeedbackEventV1 {
   readonly schemaVersion: 1;
@@ -26,7 +26,19 @@ export interface DifficultyFeedbackEventV2 {
   readonly responses: readonly AnonymousFeedbackResponse[];
 }
 
-export type DifficultyFeedbackEvent = DifficultyFeedbackEventV1 | DifficultyFeedbackEventV2;
+export interface DifficultyFeedbackEventV3 {
+  readonly schemaVersion: 3;
+  readonly eventId: string;
+  readonly matchId: string;
+  readonly catalogRevision: string;
+  readonly questionId: string;
+  readonly assignedDifficulty: Difficulty;
+  readonly hasComplaint: boolean;
+  readonly complaintReasons: readonly ComplaintReason[];
+  readonly complaintNote?: string;
+}
+
+export type DifficultyFeedbackEvent = DifficultyFeedbackEventV1 | DifficultyFeedbackEventV2 | DifficultyFeedbackEventV3;
 
 export type StoredDifficultyFeedbackEvent = DifficultyFeedbackEvent & {
   readonly recordedAt: string;

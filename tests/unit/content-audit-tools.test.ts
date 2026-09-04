@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   analyzeDifficultyFeedback,
+  analyzeComplaintFeedback,
   findSemanticDuplicateCandidates,
   lintQuestionGrammar,
   validateAuditCoverage,
@@ -119,6 +120,14 @@ describe("catalog audit tools", () => {
     expect(report.duplicateEventIds).toEqual(["weak"]);
     expect(report.unknownQuestionIds).toEqual(["q-unknown"]);
     expect(report.correctnessRateAvailable).toBe(false);
+  });
+
+  it("counts v3 complaints against all shown questions without exposing notes", () => {
+    const report = analyzeComplaintFeedback([
+      { eventId: "no", questionId: "q", assignedDifficulty: "easy", hasComplaint: false, complaintReasons: [] },
+      { eventId: "yes", questionId: "q", assignedDifficulty: "easy", hasComplaint: true, complaintReasons: ["too-easy", "unclear-wording"] }
+    ], new Set(["q"]));
+    expect(report.signals[0]).toMatchObject({ total: 2, complaints: 1, noComplaints: 1, complaintRate: 0.5, reasons: { "too-easy": 1 } });
   });
 
   it("finds exact and near prompts while leaving distinct facts alone", () => {

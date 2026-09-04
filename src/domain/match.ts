@@ -15,8 +15,7 @@ import {
   type BonusVetoPhase,
   type DomainCommand,
   type DomainContext,
-  type DiagnosticFlag,
-  type FeedbackResponse,
+  type ComplaintReason,
   type InputFrame,
   type MatchConfig,
   type MatchPhase,
@@ -239,7 +238,7 @@ export function createMatch(
   const [firstChooserOffset, random] = nextInt(initialRandom, config.teams.length);
   const reserveMs = reserveFor(config.questionCount);
   const initial: MatchState = {
-    schemaVersion: 2,
+    schemaVersion: 3,
     catalogRevision: context.catalogRevision,
     matchId,
     seed,
@@ -535,7 +534,7 @@ function applyContinue(state: MatchState, teamId: TeamId, context: DomainContext
     );
   }
   if (state.phase.kind !== "reveal") return state;
-  if (!state.config.collectQuestionFeedback) {
+  if (!state.config.collectQuestionFeedback || state.phase.legacySkipFeedback) {
     return applyRevealContinuation(state, state.phase.continuation, context);
   }
   const sequence =
@@ -549,104 +548,47 @@ function applyContinue(state: MatchState, teamId: TeamId, context: DomainContext
       round: state.phase.round,
       resolutions: state.phase.resolutions,
       continuation: state.phase.continuation,
-      eventId: `feedback-v2:${state.matchId}:${sequence}:${state.phase.round.questionId}`,
-      stage: "difficulty",
-      responses: Object.fromEntries(
-        state.phase.round.attempts
-          .filter((attempt) => attempt.status !== "spectator")
-          .map((attempt) => [attempt.teamId, {
-            perceivedDifficulty: null,
-            similarityPreference: null,
-            diagnosticFlags: [],
-            tagCursor: 0,
-            completed: false
-          } satisfies FeedbackResponse])
-      ) as unknown as Readonly<Record<TeamId, FeedbackResponse>>,
-      selectedDifficulty: null
+      eventId: `feedback-v3:${state.matchId}:${sequence}:${state.phase.round.questionId}`,
+      stage: "choice",
+      hasComplaint: null,
+      complaintReasons: [],
+      complaintNote: "",
+      cursor: 1
     }
   };
 }
 
-const FEEDBACK_TAGS = [
-  "like",
-  "abstain",
-  "dislike",
-  "unfamiliar-topic",
-  "unclear-wording",
-  "suspected-error",
-  "ambiguous-answer",
-  "too-niche-or-uninteresting",
-  "weak-answer-options",
-  "done"
-] as const;
+const COMPLAINT_REASONS = ["too-easy", "too-hard", "weak-answer-options", "unclear-wording", "suspected-error", "ambiguous-answer", "uninteresting-for-quiz", "done"] as const;
 
-function feedbackDifficulty(direction: "north" | "east" | "south" | "west") {
-  return direction === "west" ? "trivial" : direction === "north" ? "easy" : direction === "east" ? "medium" : "hard";
+function applyFeedbackDirection(state: MatchState, direction: "north" | "east" | "south" | "west"): MatchState {
+  if (state.phase.kind !== "difficulty-feedback" || state.phase.stage === "done") return state;
+  const length = state.phase.stage === "choice" ? 2 : COMPLAINT_REASONS.length;
+  const delta = direction === "west" || direction === "north" ? -1 : 1;
+  return { ...state, phase: { ...state.phase, cursor: (state.phase.cursor + delta + length) % length } };
 }
 
-function updateFeedbackResponse(
-  state: MatchState,
-  teamId: TeamId,
-  update: (response: FeedbackResponse) => FeedbackResponse
-): MatchState {
+function applyFeedbackConfirmation(state: MatchState, eventId: string | null, context: DomainContext): MatchState {
   if (state.phase.kind !== "difficulty-feedback") return state;
-  const response = state.phase.responses[teamId];
-  if (!response || response.completed) return state;
-  return {
-    ...state,
-    phase: {
-      ...state.phase,
-      responses: { ...state.phase.responses, [teamId]: update(response) }
-    }
-  };
-}
-
-function allFeedbackDifficultiesSelected(state: MatchState): boolean {
-  return state.phase.kind === "difficulty-feedback" &&
-    Object.values(state.phase.responses).every((response) => response.perceivedDifficulty !== null);
-}
-
-function applyFeedbackDirection(
-  state: MatchState,
-  teamId: TeamId,
-  direction: "north" | "east" | "south" | "west"
-): MatchState {
-  if (state.phase.kind !== "difficulty-feedback" || !state.phase.responses[teamId]) return state;
-  if (state.phase.stage === "difficulty") {
-    const selected = updateFeedbackResponse(state, teamId, (response) => ({
-      ...response,
-      perceivedDifficulty: feedbackDifficulty(direction)
-    }));
-    if (allFeedbackDifficultiesSelected(selected) && selected.phase.kind === "difficulty-feedback") return { ...selected, phase: { ...selected.phase, stage: "tags" } };
-    return selected;
+  if (eventId !== null) {
+    if (state.phase.stage !== "done" || state.phase.eventId !== eventId) return state;
+    return applyRevealContinuation(state, state.phase.continuation, context);
   }
-  return updateFeedbackResponse(state, teamId, (response) => {
-    const cursor = response.tagCursor;
-    const rowStart = cursor < 3 ? 0 : cursor < 6 ? 3 : cursor < 9 ? 6 : 9;
-    const nextCursor = direction === "west"
-      ? cursor === 9 ? 8 : rowStart + ((cursor - rowStart + 2) % 3)
-      : direction === "east"
-        ? cursor === 9 ? 6 : rowStart + ((cursor - rowStart + 1) % 3)
-        : direction === "north"
-          ? cursor < 3 ? cursor : cursor === 9 ? 6 : cursor - 3
-          : cursor < 6 ? cursor + 3 : cursor < 9 ? 9 : 9;
-    return { ...response, tagCursor: nextCursor };
-  });
-}
-
-function applyFeedbackTagConfirmation(state: MatchState, teamId: TeamId): MatchState {
-  if (state.phase.kind !== "difficulty-feedback" || state.phase.stage !== "tags") return state;
-  return updateFeedbackResponse(state, teamId, (response) => {
-    const tag = FEEDBACK_TAGS[response.tagCursor];
-    if (tag !== "done" && !["like", "abstain", "dislike"].includes(tag)) {
-      const flags = new Set(response.diagnosticFlags);
-      flags.has(tag as DiagnosticFlag) ? flags.delete(tag as DiagnosticFlag) : flags.add(tag as DiagnosticFlag);
-      return { ...response, diagnosticFlags: [...flags].sort() as readonly DiagnosticFlag[] };
-    }
-    if (tag === "done") return response.similarityPreference ? { ...response, completed: true } : response;
-    if (tag === "like" || tag === "abstain" || tag === "dislike") return { ...response, similarityPreference: tag };
-    return response;
-  });
+  if (state.phase.stage === "choice") {
+    return state.phase.cursor === 1
+      ? { ...state, phase: { ...state.phase, hasComplaint: false, stage: "done" } }
+      : { ...state, phase: { ...state.phase, hasComplaint: true, stage: "reasons", cursor: 0 } };
+  }
+  // A completed response stays immutable while the controller retries its
+  // persistence event. Otherwise a second confirmation could turn a saved
+  // "no complaint" into an invalid response with a reason.
+  if (state.phase.stage === "done") return state;
+  const item = COMPLAINT_REASONS[state.phase.cursor];
+  if (item === "done") return state.phase.complaintReasons.length ? { ...state, phase: { ...state.phase, stage: "done" } } : state;
+  const reasons = new Set(state.phase.complaintReasons);
+  reasons.has(item as ComplaintReason) ? reasons.delete(item as ComplaintReason) : reasons.add(item as ComplaintReason);
+  if (item === "too-easy") reasons.delete("too-hard");
+  if (item === "too-hard") reasons.delete("too-easy");
+  return { ...state, phase: { ...state.phase, complaintReasons: [...reasons].sort() as readonly ComplaintReason[] } };
 }
 
 function applyRevealContinuation(
@@ -678,18 +620,6 @@ function applyRevealContinuation(
   );
 }
 
-function applyFeedbackConfirmation(
-  state: MatchState,
-  eventId: string,
-  context: DomainContext
-): MatchState {
-  if (
-    state.phase.kind !== "difficulty-feedback" ||
-    (!Object.values(state.phase.responses).every((response) => response.completed) && state.phase.selectedDifficulty === null) ||
-    state.phase.eventId !== eventId
-  ) return state;
-  return applyRevealContinuation(state, state.phase.continuation, context);
-}
 
 function processCommands(
   state: MatchState,
@@ -729,11 +659,13 @@ function processCommands(
       const changed = applyContinue(next, command.teamId, context);
       if (changed !== next) return changed;
     } else if (command.type === "feedback-direction") {
-      next = applyFeedbackDirection(next, command.teamId, command.direction);
+      next = applyFeedbackDirection(next, command.direction);
     } else if (command.type === "feedback-confirm") {
-      next = applyFeedbackTagConfirmation(next, command.teamId);
-    } else if (command.type === "rate-difficulty" && next.phase.kind === "difficulty-feedback" && next.phase.selectedDifficulty === null) {
-      next = { ...next, phase: { ...next.phase, selectedDifficulty: command.difficulty } };
+      next = applyFeedbackConfirmation(next, null, context);
+    } else if (command.type === "rate-difficulty" && next.phase.kind === "difficulty-feedback" && next.phase.stage !== "done") {
+      next = { ...next, phase: { ...next.phase, selectedDifficulty: command.difficulty, hasComplaint: false, stage: "done" } };
+    } else if (command.type === "set-feedback-note" && next.phase.kind === "difficulty-feedback" && next.phase.stage === "reasons") {
+      next = { ...next, phase: { ...next.phase, complaintNote: [...command.note].slice(0, 500).join("") } };
     } else if (command.type === "confirm-difficulty-feedback") {
       const changed = applyFeedbackConfirmation(next, command.eventId, context);
       if (changed !== next) return changed;

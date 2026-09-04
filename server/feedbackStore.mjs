@@ -29,13 +29,13 @@ function canonicalEvent(event) {
     questionId: event.questionId,
     assignedDifficulty: event.assignedDifficulty,
   };
-  return JSON.stringify(event.schemaVersion === 1 ? { ...base, perceivedDifficulty: event.perceivedDifficulty } : { ...base, responses: event.responses });
+  return JSON.stringify(event.schemaVersion === 1 ? { ...base, perceivedDifficulty: event.perceivedDifficulty } : event.schemaVersion === 2 ? { ...base, responses: event.responses } : { ...base, hasComplaint: event.hasComplaint, complaintReasons: event.complaintReasons, ...(event.complaintNote ? { complaintNote: event.complaintNote } : {}) });
 }
 
 export function validateFeedbackEvent(value, questions, catalogRevision) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return "Ожидался JSON-объект";
   const strings = ["eventId", "matchId", "catalogRevision", "questionId"];
-  if (![1, 2].includes(value.schemaVersion) || strings.some((key) => typeof value[key] !== "string" || value[key].length === 0)) {
+  if (![1, 2, 3].includes(value.schemaVersion) || strings.some((key) => typeof value[key] !== "string" || value[key].length === 0)) {
     return "Некорректная схема события";
   }
   if (!LEVELS.includes(value.assignedDifficulty)) {
@@ -46,6 +46,11 @@ export function validateFeedbackEvent(value, questions, catalogRevision) {
   if (!assigned) return "Неизвестный questionId";
   if (assigned !== value.assignedDifficulty) return "assignedDifficulty не соответствует каталогу";
   if (value.schemaVersion === 1) return LEVELS.includes(value.perceivedDifficulty) ? null : "Некорректный уровень сложности";
+  if (value.schemaVersion === 3) {
+    const reasons = ["too-easy", "too-hard", "weak-answer-options", "unclear-wording", "suspected-error", "ambiguous-answer", "uninteresting-for-quiz"];
+    if (typeof value.hasComplaint !== "boolean" || !Array.isArray(value.complaintReasons) || new Set(value.complaintReasons).size !== value.complaintReasons.length || !value.complaintReasons.every((reason) => reasons.includes(reason)) || (value.complaintReasons.includes("too-easy") && value.complaintReasons.includes("too-hard")) || (value.complaintNote !== undefined && (typeof value.complaintNote !== "string" || [...value.complaintNote].length > 500))) return "Некорректная жалоба";
+    return value.hasComplaint === (value.complaintReasons.length > 0) && (!value.hasComplaint ? value.complaintNote === undefined : true) ? null : "Причины не согласованы с жалобой";
+  }
   const flags = ["unfamiliar-topic", "unclear-wording", "suspected-error", "ambiguous-answer", "too-niche-or-uninteresting", "weak-answer-options"];
   if (!Array.isArray(value.responses) || value.responses.length === 0 || !value.responses.every((response) => response && typeof response === "object" && ["trivial", "easy", "medium", "hard"].includes(response.perceivedDifficulty) && ["like", "abstain", "dislike"].includes(response.similarityPreference) && Array.isArray(response.diagnosticFlags) && new Set(response.diagnosticFlags).size === response.diagnosticFlags.length && response.diagnosticFlags.every((flag) => flags.includes(flag)))) return "Некорректные ответы фидбэка";
   return null;
@@ -143,6 +148,7 @@ export async function createFeedbackStore({ filePath, questions, catalogRevision
     const v2ByQuestion = {};
     const v2ByAssignedDifficulty = Object.fromEntries(LEVELS.map((level) => [level, emptyV2Aggregate()]));
     let v2Events = 0;
+    const v3ByQuestion = {}; const v3ByAssignedDifficulty = Object.fromEntries(LEVELS.map((level) => [level, { total: 0, complaints: 0, noComplaints: 0, reasons: {} }])); let v3Events = 0;
     for (const event of events.values()) {
       if (event.schemaVersion === 2) {
         v2Events += 1;
@@ -150,6 +156,7 @@ export async function createFeedbackStore({ filePath, questions, catalogRevision
         for (const response of event.responses) { addV2(v2ByQuestion[event.questionId], response); addV2(v2ByAssignedDifficulty[event.assignedDifficulty], response); }
         continue;
       }
+      if (event.schemaVersion === 3) { v3Events += 1; const add = (target) => { target.total += 1; if (event.hasComplaint) { target.complaints += 1; for (const reason of event.complaintReasons) target.reasons[reason] = (target.reasons[reason] ?? 0) + 1; } else target.noComplaints += 1; }; v3ByQuestion[event.questionId] ??= { total: 0, complaints: 0, noComplaints: 0, reasons: {} }; add(v3ByQuestion[event.questionId]); add(v3ByAssignedDifficulty[event.assignedDifficulty]); continue; }
       byQuestion[event.questionId] ??= emptyAggregate();
       addToAggregate(byQuestion[event.questionId], event);
       addToAggregate(byAssignedDifficulty[event.assignedDifficulty], event);
@@ -161,7 +168,7 @@ export async function createFeedbackStore({ filePath, questions, catalogRevision
       historicalLines,
       byQuestion: Object.fromEntries(Object.entries(byQuestion).map(([id, value]) => [id, withRates(value)])),
       byAssignedDifficulty: Object.fromEntries(Object.entries(byAssignedDifficulty).map(([id, value]) => [id, withRates(value)]))
-      , v2: { events: v2Events, byQuestion: v2ByQuestion, byAssignedDifficulty: v2ByAssignedDifficulty }
+      , v2: { events: v2Events, byQuestion: v2ByQuestion, byAssignedDifficulty: v2ByAssignedDifficulty }, v3: { events: v3Events, byQuestion: v3ByQuestion, byAssignedDifficulty: v3ByAssignedDifficulty }
     };
   }
 

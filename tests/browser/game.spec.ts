@@ -762,7 +762,7 @@ test("shows each unanswered team its timer and switches to red reserve time", as
   await captureSettled(page, testInfo.outputPath("team-timers-reserve.png"));
 });
 
-test("keeps independent feedback on screen until the server accepts an idempotent retry", async ({ page }, testInfo) => {
+test("keeps a shared feedback result on screen until the server accepts an idempotent retry", async ({ page }, testInfo) => {
   let failed = false;
   let delayed = false;
   await page.route("**/api/difficulty-feedback", async (route) => {
@@ -789,16 +789,19 @@ test("keeps independent feedback on screen until the server accepts an idempoten
   await waitForInputGate(page);
   await page.keyboard.press("w");
   await expect(page.locator(".difficulty-feedback-stage")).toBeVisible();
-  await rateDifficulty(page, "a", false);
+  await expect(page.getByRole("heading", { name: "Хотите пожаловаться на вопрос?" })).toBeVisible();
+  await page.keyboard.press("Space");
   await expect(page.locator(".feedback-status--error")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Продолжаем игру" })).toBeVisible();
+  await expect(page.locator(".feedback-tag-board")).toHaveCount(0);
   await captureSettled(page, testInfo.outputPath("difficulty-feedback-error.png"));
   const pending = await storedState(page);
   expect(pending.phase.kind).toBe("difficulty-feedback");
-  expect(Object.values(pending.phase.responses).every((response: any) => response.completed)).toBe(true);
+  expect(pending.phase).toMatchObject({ stage: "done", hasComplaint: false, complaintReasons: [] });
   await page.reload();
   await page.getByRole("button", { name: "Продолжить партию" }).click();
   await page.getByRole("button", { name: "Продолжить" }).click();
-  await expect(page.getByRole("heading", { name: "Отметьте впечатление от вопроса" })).toBeVisible();
+  await expect(page.locator(".difficulty-feedback-stage")).toBeVisible();
   await waitForInputGate(page);
   await page.keyboard.press("Space");
   await expect(page.locator(".feedback-status")).toContainText("Сохраняем фидбэк");

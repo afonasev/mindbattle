@@ -64,14 +64,11 @@ export interface PublicMatchView {
     readonly eventId: string;
     readonly questionId: string;
     readonly assignedDifficulty: "easy" | "medium" | "hard";
-    readonly stage: "difficulty" | "tags";
-    readonly responses: Readonly<Record<TeamId, {
-      readonly difficultySelected: boolean;
-      readonly similarityPreference: "like" | "abstain" | "dislike" | null;
-      readonly diagnosticFlags: readonly import("./types").DiagnosticFlag[];
-      readonly tagCursor: number;
-      readonly completed: boolean;
-    }>>;
+    readonly stage: "choice" | "reasons" | "done";
+    readonly hasComplaint: boolean | null;
+    readonly complaintReasons: readonly import("./types").ComplaintReason[];
+    readonly complaintNote: string;
+    readonly cursor: number;
   };
 }
 
@@ -219,13 +216,10 @@ export function selectPublicView(state: MatchState, context: DomainContext): Pub
         questionId: state.phase.round.questionId,
         assignedDifficulty: state.phase.round.difficulty,
         stage: state.phase.stage,
-        responses: Object.fromEntries(Object.entries(state.phase.responses).map(([teamId, response]) => [teamId, {
-          difficultySelected: response.perceivedDifficulty !== null,
-          similarityPreference: response.similarityPreference,
-          diagnosticFlags: response.diagnosticFlags,
-          tagCursor: response.tagCursor,
-          completed: response.completed
-        }])) as PublicFeedback["responses"]
+        hasComplaint: state.phase.hasComplaint,
+        complaintReasons: state.phase.complaintReasons,
+        complaintNote: state.phase.complaintNote,
+        cursor: state.phase.cursor
       }
     };
   }

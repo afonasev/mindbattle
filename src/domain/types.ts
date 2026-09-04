@@ -11,6 +11,7 @@ export type DiagnosticFlag =
   | "ambiguous-answer"
   | "too-niche-or-uninteresting"
   | "weak-answer-options";
+export type ComplaintReason = "too-easy" | "too-hard" | "weak-answer-options" | "unclear-wording" | "suspected-error" | "ambiguous-answer" | "uninteresting-for-quiz";
 export type AnswerPosition = "up" | "right" | "down" | "left";
 export type TopicId = string;
 export type QuestionId = string;
@@ -163,6 +164,8 @@ export interface RevealPhase {
   readonly round: RoundState;
   readonly resolutions: readonly TeamResolution[];
   readonly continuation: RevealContinuation;
+  /** Migrated incomplete v1/v2 feedback resumes its original continuation without another event. */
+  readonly legacySkipFeedback?: boolean;
 }
 
 export interface DifficultyFeedbackPhase {
@@ -171,17 +174,13 @@ export interface DifficultyFeedbackPhase {
   readonly resolutions: readonly TeamResolution[];
   readonly continuation: RevealContinuation;
   readonly eventId: string;
-  readonly stage: "difficulty" | "tags";
-  readonly responses: Readonly<Record<TeamId, FeedbackResponse>>;
+  readonly stage: "choice" | "reasons" | "done";
+  readonly hasComplaint: boolean | null;
+  readonly complaintReasons: readonly ComplaintReason[];
+  readonly complaintNote: string;
+  readonly cursor: number;
+  /** Legacy test/snapshot compatibility; not sent in v3 events. */
   readonly selectedDifficulty?: Difficulty | null;
-}
-
-export interface FeedbackResponse {
-  readonly perceivedDifficulty: PerceivedDifficulty | null;
-  readonly similarityPreference: SimilarityPreference | null;
-  readonly diagnosticFlags: readonly DiagnosticFlag[];
-  readonly tagCursor: number;
-  readonly completed: boolean;
 }
 
 export interface StandingsPhase {
@@ -223,7 +222,7 @@ export interface TieBreakState {
 }
 
 export interface MatchState {
-  readonly schemaVersion: 2;
+  readonly schemaVersion: 3;
   readonly catalogRevision: string;
   readonly matchId: string;
   readonly seed: string;
@@ -250,9 +249,10 @@ export type DomainCommand =
   | { readonly type: "clear-veto"; readonly teamId: TeamId }
   | { readonly type: "answer"; readonly teamId: TeamId; readonly position: AnswerPosition }
   | { readonly type: "continue"; readonly teamId: TeamId }
-  | { readonly type: "feedback-direction"; readonly teamId: TeamId; readonly direction: "north" | "east" | "south" | "west" }
-  | { readonly type: "feedback-confirm"; readonly teamId: TeamId }
+  | { readonly type: "feedback-direction"; readonly direction: "north" | "east" | "south" | "west" }
+  | { readonly type: "feedback-confirm" }
   | { readonly type: "rate-difficulty"; readonly teamId: TeamId; readonly difficulty: Difficulty }
+  | { readonly type: "set-feedback-note"; readonly note: string }
   | { readonly type: "confirm-difficulty-feedback"; readonly eventId: string }
   | { readonly type: "pause"; readonly reason: PauseReason }
   | { readonly type: "resume" };
