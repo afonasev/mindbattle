@@ -20,6 +20,43 @@ npm run preview
 
 По умолчанию сервер слушает только `127.0.0.1:4173`, а оценки дописывает в `data/difficulty-feedback.ndjson`. Путь можно изменить через `MINDBATTLE_FEEDBACK_PATH`, адрес и порт — через `MINDBATTLE_HOST` и `MINDBATTLE_PORT`.
 
+## Деплой на `mindbattle.afonasev.tech`
+
+Игра развёртывается на VPS как отдельный Node-сервис: Caddy принимает HTTPS и
+проксирует запросы на `127.0.0.1:4173`, а оценки сложности сохраняются вне
+каталога приложения — в `/var/lib/mindbattle/difficulty-feedback.ndjson`.
+
+Перед первой выкладкой в DNS нужна запись `A`:
+
+```
+mindbattle.afonasev.tech → 72.56.39.20
+```
+
+На VPS уже должен быть SSH-профиль `gfe` из `~/.ssh/config`. Скрипт деплоя
+сам создаёт системного пользователя `mindbattle`, ставит и включает systemd
+сервис, размещает Caddy-сайт в `/etc/caddy/sites/mindbattle.caddy`, проверяет
+конфигурацию Caddy и перезапускает приложение. TLS-сертификат Caddy получает автоматически после
+того, как DNS-запись станет доступна извне.
+
+Обычная выкладка:
+
+```bash
+make deploy
+```
+
+При необходимости можно переопределить SSH-профиль или каталог приложения:
+
+```bash
+make deploy DEPLOY_HOST=my-vps APP_DIR=/opt/mindbattle
+```
+
+Проверка после выкладки:
+
+```bash
+curl -I https://mindbattle.afonasev.tech/
+curl https://mindbattle.afonasev.tech/api/difficulty-feedback/summary
+```
+
 ## Управление
 
 - Две клавиатурные схемы: `WASD` и `Стрелки`.
