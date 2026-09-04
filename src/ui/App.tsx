@@ -455,7 +455,7 @@ export function App() {
         )}
 
         {view.phase !== "standings" && view.phase !== "finished" && view.phase !== "difficulty-feedback" && (
-          <TeamCards view={view} activeTeamIds={match.config.teams} />
+          <TeamCards state={match} view={view} activeTeamIds={match.config.teams} />
         )}
         <footer>ESC · пауза</footer>
       </main>

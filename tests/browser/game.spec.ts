@@ -262,6 +262,8 @@ test("menu defaults, offline startup and responsive shell", async ({ context, pa
   await captureSettled(page, testInfo.outputPath("topic-selection.png"));
   await waitForInputGate(page);
   await chooseCurrentTopic(page);
+  await expect(page.locator(".team-question-timer")).toHaveCount(2);
+  await expect(page.locator(".team-question-timer--reserve")).toHaveCount(0);
   const accessibleRound = await storedState(page);
   const accessibleCorrect = accessibleRound.phase.round.correctPosition as Position;
   await answer(page, "green", accessibleCorrect);
@@ -590,6 +592,40 @@ test("marks a zero-reserve team as no-answer at the base deadline", async ({ pag
   await expect(page.locator(".question-stage--reveal")).toBeVisible({ timeout: 12_000 });
   await expect(page.locator(".game-team-card--no-answer")).toHaveCount(1);
   await expect(page.locator(".game-team-card--no-answer")).toContainText("Синяя");
+});
+
+test("shows each unanswered team its timer and switches to red reserve time", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium-1280", "The real-time reserve transition is checked once");
+  await page.getByRole("button", { name: "9", exact: true }).click();
+  await page.getByRole("button", { name: "10 c", exact: true }).click();
+  await page.getByRole("button", { name: "Начать игру" }).click();
+  await waitForInputGate(page);
+  await chooseCurrentTopic(page);
+
+  await expect(page.locator(".team-question-timer")).toHaveCount(2);
+  await expect(page.locator(".question-header .timer")).toHaveCount(0);
+  await captureSettled(page, testInfo.outputPath("team-timers-base.png"));
+  await answer(page, "green", "up");
+  await expect(page.locator(".game-team-card", { hasText: "Зелёная" }).locator(".team-question-timer")).toHaveCount(0);
+
+  await page.evaluate(() => {
+    const key = "mindbattle:data:v1";
+    const data = JSON.parse(localStorage.getItem(key)!);
+    data.lastMatch.state.phase.baseRemainingMs = 0;
+    localStorage.setItem(key, JSON.stringify(data));
+  });
+  await page.reload();
+  await page.getByRole("button", { name: "Продолжить партию" }).click();
+  await page.getByRole("button", { name: "Продолжить" }).click();
+
+  const blueCard = page.locator(".game-team-card", { hasText: "Синяя" });
+  await expect(blueCard.locator(".team-question-timer--reserve")).toBeVisible();
+  await expect(blueCard.locator(".team-question-timer--reserve")).toHaveAttribute(
+    "aria-label",
+    "Расходуется запас времени"
+  );
+  await expect(page.locator(".game-team-card", { hasText: "Зелёная" }).locator(".team-question-timer")).toHaveCount(0);
+  await captureSettled(page, testInfo.outputPath("team-timers-reserve.png"));
 });
 
 test("keeps the shared rating on screen until the server accepts an idempotent retry", async ({ page }, testInfo) => {
