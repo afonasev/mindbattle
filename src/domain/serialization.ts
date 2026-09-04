@@ -95,7 +95,9 @@ function validPhase(value: unknown, config: MatchConfig): boolean {
       value.topicId.length > 0 &&
       finite(value.remainingMs) &&
       value.remainingMs >= 0 &&
-      value.remainingMs <= 3_000;
+      value.remainingMs <= 3_000 &&
+      (value.mode === "main" || value.mode === "tie-break") &&
+      (value.presentation === "normal" || value.presentation === "bonus" || value.presentation === "final");
   }
   if (value.kind === "bonus-veto") {
     if (!(stringArray(value.candidates) &&
@@ -118,6 +120,21 @@ function validPhase(value: unknown, config: MatchConfig): boolean {
         candidates.includes(topicId)
     );
   }
+  if (value.kind === "final-veto") {
+    if (!(stringArray(value.candidates) &&
+      new Set(value.candidates).size === value.candidates.length &&
+      record(value.cursors) &&
+      record(value.vetoes))) return false;
+    const candidates = value.candidates as string[];
+    return candidates.length >= 3 && Object.entries(value.cursors).every(
+      ([teamId, cursor]) =>
+        config.teams.includes(teamId as TeamId) && finite(cursor) && Number.isSafeInteger(cursor) &&
+        cursor >= 0 && cursor < candidates.length
+    ) && Object.entries(value.vetoes).every(
+      ([teamId, topicId]) =>
+        config.teams.includes(teamId as TeamId) && typeof topicId === "string" && candidates.includes(topicId)
+    );
+  }
   if (value.kind === "answering") {
     return validRound(value.round, config) && finite(value.baseRemainingMs) && value.baseRemainingMs >= 0;
   }
@@ -126,13 +143,20 @@ function validPhase(value: unknown, config: MatchConfig): boolean {
       Array.isArray(value.resolutions) &&
       value.resolutions.length === config.teams.length &&
       validContinuation(value.continuation, config))) return false;
-    if (
-      value.kind === "difficulty-feedback" &&
-      (typeof value.eventId !== "string" ||
-        value.eventId.length === 0 ||
-        (value.selectedDifficulty !== null &&
-          !["easy", "medium", "hard"].includes(String(value.selectedDifficulty))))
-    ) return false;
+    if (value.kind === "difficulty-feedback") {
+      if (typeof value.eventId !== "string" || value.eventId.length === 0 ||
+        !["difficulty", "tags"].includes(String(value.stage)) || !record(value.responses)) return false;
+      const entries = Object.entries(value.responses);
+      if (entries.length < 2 || !entries.every(([teamId, response]) => {
+        if (!config.teams.includes(teamId as TeamId) || !record(response)) return false;
+        return (response.perceivedDifficulty === null || ["trivial", "easy", "medium", "hard"].includes(String(response.perceivedDifficulty))) &&
+          (response.similarityPreference === null || ["like", "abstain", "dislike"].includes(String(response.similarityPreference))) &&
+          stringArray(response.diagnosticFlags) && new Set(response.diagnosticFlags).size === response.diagnosticFlags.length &&
+          (response.diagnosticFlags as string[]).every((flag) => ["unfamiliar-topic", "unclear-wording", "suspected-error", "ambiguous-answer", "too-niche-or-uninteresting", "weak-answer-options"].includes(flag)) &&
+          finite(response.tagCursor) && Number.isSafeInteger(response.tagCursor) && response.tagCursor >= 0 && response.tagCursor < 10 &&
+          typeof response.completed === "boolean";
+      })) return false;
+    }
     const resolvedTeams = new Set<string>();
     for (const resolution of value.resolutions) {
       if (
@@ -197,9 +221,38 @@ export function deserializeMatch(
     return null;
   }
   if (!record(value) || !validConfig(value.config)) return null;
-  const config = value.config;
+  if (value.schemaVersion === 1) {
+    const legacyPhase = record(value.phase) ? value.phase : null;
+    if (legacyPhase?.kind === "difficulty-feedback") {
+      const difficulty = legacyPhase.selectedDifficulty;
+      const validDifficulty = difficulty === "easy" || difficulty === "medium" || difficulty === "hard" ? difficulty : null;
+      const responses = Object.fromEntries((value.config.teams as TeamId[]).map((teamId) => [teamId, {
+        perceivedDifficulty: validDifficulty,
+        similarityPreference: validDifficulty ? "abstain" : null,
+        diagnosticFlags: [],
+        tagCursor: 0,
+        completed: validDifficulty !== null
+      }]));
+      value.phase = {
+        ...legacyPhase,
+        eventId: String(legacyPhase.eventId).replace("feedback-v1:", "feedback-v2:"),
+        stage: validDifficulty ? "tags" : "difficulty",
+        responses
+      };
+    }
+    value.schemaVersion = 2;
+  }
+  if (value.schemaVersion === 2 && record(value.phase) && value.phase.kind === "topic-confirmation" && value.phase.mode === undefined) {
+    const bonus = typeof value.mainQuestionIndex === "number" &&
+      (value.mainQuestionIndex + 1) % (value.config.questionCount / 3) === 0;
+    value.phase = { ...value.phase, mode: "main", presentation: bonus ? "bonus" : "normal" };
+  }
+  if (record(value.config) && value.config.collectQuestionFeedback === undefined) {
+    value.config = { ...value.config, collectQuestionFeedback: true };
+  }
+  const config = value.config as MatchConfig;
   if (
-    value.schemaVersion !== 1 ||
+    value.schemaVersion !== 2 ||
     value.catalogRevision !== expectedCatalogRevision ||
     typeof value.matchId !== "string" ||
     value.matchId.length === 0 ||
@@ -251,6 +304,17 @@ export function deserializeMatch(
   const phase = value.phase;
   if (record(phase) && phase.kind === "normal-topic" && phase.cursor === undefined) {
     value.phase = { ...phase, cursor: 0 };
+  }
+  if (record(value.phase) && value.phase.kind === "final-veto") {
+    const finalPhase = value.phase;
+    const contenders = value.tieBreak && record(value.tieBreak) && stringArray(value.tieBreak.contenders)
+      ? value.tieBreak.contenders : [];
+    const cursorTeams = Object.keys(value.phase.cursors as Record<string, unknown>);
+    const vetoTeams = Object.keys(value.phase.vetoes as Record<string, unknown>);
+    if (contenders.length < 2 || !Array.isArray(finalPhase.candidates) ||
+      finalPhase.candidates.length !== contenders.length + 1 ||
+      !cursorTeams.every((teamId) => contenders.includes(teamId)) ||
+      !vetoTeams.every((teamId) => contenders.includes(teamId))) return null;
   }
   return value as unknown as MatchState;
 }

@@ -94,11 +94,8 @@ export type SemanticInputAction =
   | { readonly type: "bonus-confirm"; readonly teamId: TeamId }
   | { readonly type: "bonus-cancel"; readonly teamId: TeamId }
   | { readonly type: "continue"; readonly teamId: TeamId }
-  | {
-      readonly type: "difficulty-rating";
-      readonly teamId: TeamId;
-      readonly difficulty: "easy" | "medium" | "hard";
-    }
+  | { readonly type: "feedback-direction"; readonly teamId: TeamId; readonly direction: CardinalDirection }
+  | { readonly type: "feedback-confirm"; readonly teamId: TeamId }
   | { readonly type: "pause"; readonly reason: "escape" | "blur" }
   | {
       readonly type: "pause";
@@ -170,6 +167,16 @@ export const KEYBOARD_GLYPHS: Readonly<
   arrows: { north: "↑", east: "→", south: "↓", west: "←" },
 };
 
+export const KEYBOARD_CONFIRM_GLYPHS: Readonly<Record<KeyboardLayout, string>> = {
+  wasd: "Space",
+  arrows: "Right Shift",
+};
+
+const KEYBOARD_CONFIRM_CODES: Readonly<Record<KeyboardLayout, string>> = {
+  wasd: "Space",
+  arrows: "ShiftRight",
+};
+
 export function keyboardDirection(
   layout: KeyboardLayout,
   code: string,
@@ -191,29 +198,28 @@ function actionForDirection(
   if (mode === "normal-topic") {
     if (direction === "west") return { type: "topic-move", teamId, delta: -1 };
     if (direction === "east") return { type: "topic-move", teamId, delta: 1 };
-    return direction === "south" ? { type: "topic-confirm", teamId } : undefined;
+    return undefined;
   }
   if (mode === "difficulty-feedback") {
-    const difficulty =
-      direction === "west"
-        ? "easy"
-        : direction === "north"
-          ? "medium"
-          : direction === "east"
-            ? "hard"
-            : null;
-    return difficulty ? { type: "difficulty-rating", teamId, difficulty } : undefined;
+    return { type: "feedback-direction", teamId, direction };
   }
   switch (direction) {
     case "west":
       return { type: "bonus-move", teamId, delta: -1 };
     case "east":
       return { type: "bonus-move", teamId, delta: 1 };
-    case "south":
-      return { type: "bonus-confirm", teamId };
     case "north":
       return { type: "bonus-cancel", teamId };
+    case "south":
+      return undefined;
   }
+}
+
+function actionForConfirm(teamId: TeamId, mode: InputMode): SemanticInputAction | undefined {
+  if (mode === "normal-topic") return { type: "topic-confirm", teamId };
+  if (mode === "bonus-veto") return { type: "bonus-confirm", teamId };
+  if (mode === "difficulty-feedback") return { type: "feedback-confirm", teamId };
+  return undefined;
 }
 
 function keyboardAssignmentForCode(
@@ -232,10 +238,22 @@ function keyboardAssignmentForCode(
   return undefined;
 }
 
+function keyboardAssignmentForConfirmCode(
+  assignments: readonly TeamControlAssignment[],
+  code: string,
+): { readonly teamId: TeamId } | undefined {
+  for (const assignment of assignments) {
+    if (assignment.source.kind === "keyboard" && KEYBOARD_CONFIRM_CODES[assignment.source.layout] === code) {
+      return { teamId: assignment.teamId };
+    }
+  }
+  return undefined;
+}
+
 function hasPressedActionableKey(state: InputRouterState): boolean {
   return [...state.pressedKeys].some((code) =>
     (Object.keys(KEYBOARD_DIRECTIONS) as KeyboardLayout[]).some(
-      (layout) => keyboardDirection(layout, code) !== undefined,
+      (layout) => keyboardDirection(layout, code) !== undefined || KEYBOARD_CONFIRM_CODES[layout] === code,
     ),
   );
 }
@@ -290,9 +308,12 @@ export function handleKeyboardInput(
   }
 
   const assigned = keyboardAssignmentForCode(assignments, event.code);
+  const confirmAssignment = keyboardAssignmentForConfirmCode(assignments, event.code);
   const action = assigned
     ? actionForDirection(assigned.teamId, assigned.direction, mode)
-    : undefined;
+    : confirmAssignment
+      ? actionForConfirm(confirmAssignment.teamId, mode)
+      : undefined;
   return {
     state: nextState,
     actions: action ? [action] : [],
@@ -339,15 +360,11 @@ function semanticGamepadAction(
   }
   if (mode === "difficulty-feedback") {
     const direction = answerDirectionForGamepadButton(buttonIndex);
-    const difficulty =
-      direction === "west"
-        ? "easy"
-        : direction === "north"
-          ? "medium"
-          : direction === "east"
-            ? "hard"
-            : null;
-    return difficulty ? { type: "difficulty-rating", teamId, difficulty } : undefined;
+    return direction
+      ? { type: "feedback-direction", teamId, direction }
+      : bonusActionForGamepadButton(buttonIndex) === "confirm"
+        ? { type: "feedback-confirm", teamId }
+        : undefined;
   }
 
   const action = bonusActionForGamepadButton(buttonIndex);

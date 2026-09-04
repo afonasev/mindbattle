@@ -94,14 +94,15 @@ function startQuestion(state: MatchState, context: DomainContext): MatchState {
     ]);
     return frame(confirmation, context, [{ type: "continue", teamId: "green" }]);
   }
-  if (state.phase.kind === "bonus-veto") {
+  if (state.phase.kind === "bonus-veto" || state.phase.kind === "final-veto") {
+    const vetoPhase = state.phase;
     const confirmation = frame(
       state,
       context,
       state.config.teams.map((teamId, index) => ({
         type: "set-veto" as const,
         teamId,
-        topicId: state.phase.kind === "bonus-veto" ? state.phase.candidates[index] : ""
+        topicId: vetoPhase.candidates[index]
       }))
     );
     if (confirmation.phase.kind !== "topic-confirmation") {
@@ -227,7 +228,9 @@ describe("topic phases", () => {
     expect(confirmation.phase).toEqual({
       kind: "topic-confirmation",
       topicId: initial.phase.candidates[0],
-      remainingMs: 3_000
+      remainingMs: 3_000,
+      mode: "main",
+      presentation: "normal"
     });
     expect(confirmation.usedQuestionIds).toEqual([]);
     expect(selectPublicView(confirmation, context).confirmationBonus).toBe(false);
@@ -424,6 +427,18 @@ describe("answer clock, reserve and atomic frames", () => {
 });
 
 describe("reveal, stages and sudden death", () => {
+  it("skips question feedback and preserves the normal continuation when it is disabled", () => {
+    const context = makeContext();
+    const config: MatchConfig = { ...TWO_TEAMS, collectQuestionFeedback: false };
+    let state = startQuestion(createMatch(config, "feedback-off", 0, context), context);
+    state = answerAllCorrect(state, context);
+    expect(state.phase.kind).toBe("reveal");
+    state = frame(state, context, [{ type: "continue", teamId: "green" }]);
+    expect(state.config.collectQuestionFeedback).toBe(false);
+    expect(state.phase.kind).toBe("normal-topic");
+    expect(state.mainQuestionIndex).toBe(1);
+  });
+
   it("collects one difficulty rating and waits for the matching acknowledgement", () => {
     const context = makeContext();
     let state = startQuestion(createMatch(TWO_TEAMS, "feedback", 0, context), context);
@@ -475,6 +490,13 @@ describe("reveal, stages and sudden death", () => {
     state = answerAllCorrect(state, context);
     expect(state.phase.kind === "reveal" && state.phase.round.points).toBe(200);
     state = continueByGreen(state, context);
+    if (state.phase.kind !== "final-veto") return;
+    state = frame(state, context, state.tieBreak!.contenders.map((teamId, index) => ({
+      type: "set-veto" as const,
+      teamId,
+      topicId: state.phase.kind === "final-veto" ? state.phase.candidates[index] : ""
+    })));
+    state = frame(state, context, [{ type: "continue", teamId: "green" }]);
     expect(state.phase).toEqual({ kind: "standings", completedStage: 1 });
     state = continueByGreen(state, context);
     expect(state.mainQuestionIndex).toBe(3);
@@ -498,6 +520,16 @@ describe("reveal, stages and sudden death", () => {
       tieBreakContenders: ["green", "blue"]
     });
     state = continueByGreen(state, context);
+    expect(state.phase.kind).toBe("final-veto");
+    if (state.phase.kind !== "final-veto") return;
+    expect(state.phase.candidates).toHaveLength(3);
+    state = frame(state, context, state.tieBreak!.contenders.map((teamId, index) => ({
+      type: "set-veto" as const,
+      teamId,
+      topicId: state.phase.kind === "final-veto" ? state.phase.candidates[index] : ""
+    })));
+    expect(state.phase).toMatchObject({ kind: "topic-confirmation", mode: "tie-break", presentation: "final" });
+    state = frame(state, context, [{ type: "continue", teamId: "green" }]);
     expect(state.phase.kind).toBe("answering");
     if (state.phase.kind !== "answering") return;
     expect(state.phase.round).toMatchObject({ mode: "tie-break", difficulty: "hard", points: 0 });
@@ -557,6 +589,64 @@ describe("reveal, stages and sudden death", () => {
 });
 
 describe("public selectors and serialization", () => {
+  it("defaults the feedback setting for a legacy snapshot and preserves an explicit value", () => {
+    const context = makeContext();
+    const explicit = createMatch({ ...TWO_TEAMS, collectQuestionFeedback: false }, "feedback-setting", 0, context);
+    expect(deserializeMatch(serializeMatch(explicit), context.catalogRevision)?.config.collectQuestionFeedback).toBe(false);
+
+    const legacy = JSON.parse(serializeMatch(createMatch(TWO_TEAMS, "legacy-feedback-setting", 0, context)));
+    delete legacy.config.collectQuestionFeedback;
+    expect(deserializeMatch(JSON.stringify(legacy), context.catalogRevision)?.config.collectQuestionFeedback).toBe(true);
+  });
+
+  it("round-trips a final veto and rejects a spectator veto in its snapshot", () => {
+    const context = makeContext();
+    const config: MatchConfig = { ...TWO_TEAMS, teams: ["green", "blue", "yellow"] };
+    const initial = createMatch(config, "final-veto-snapshot", 0, context);
+    const finalVeto: MatchState = {
+      ...initial,
+      tieBreak: { originalLeaders: ["green", "blue"], contenders: ["green", "blue"], questionNumber: 1 },
+      phase: {
+        kind: "final-veto",
+        candidates: ["topic-1", "topic-2", "topic-3"],
+        cursors: { green: 0, blue: 1 },
+        vetoes: { green: "topic-1", blue: "topic-2" }
+      }
+    };
+    expect(deserializeMatch(serializeMatch(finalVeto), context.catalogRevision)).toEqual(finalVeto);
+    const damaged = JSON.parse(serializeMatch(finalVeto));
+    damaged.phase.vetoes.yellow = "topic-3";
+    expect(deserializeMatch(JSON.stringify(damaged), context.catalogRevision)).toBeNull();
+  });
+
+  it("ignores a spectator while final contenders set their vetoes", () => {
+    const context = makeContext();
+    const config: MatchConfig = { ...TWO_TEAMS, teams: ["green", "blue", "yellow"] };
+    const initial = createMatch(config, "final-veto-spectator", 0, context);
+    const state: MatchState = {
+      ...initial,
+      tieBreak: { originalLeaders: ["green", "blue"], contenders: ["green", "blue"], questionNumber: 1 },
+      phase: {
+        kind: "final-veto",
+        candidates: ["topic-1", "topic-2", "topic-3"],
+        cursors: { green: 0, blue: 1 },
+        vetoes: {}
+      }
+    };
+    const ignored = frame(state, context, [{ type: "set-veto", teamId: "yellow", topicId: "topic-3" }]);
+    expect(ignored).toEqual(state);
+    const selected = frame(ignored, context, [
+      { type: "set-veto", teamId: "green", topicId: "topic-1" },
+      { type: "set-veto", teamId: "blue", topicId: "topic-2" }
+    ]);
+    expect(selected.phase).toMatchObject({
+      kind: "topic-confirmation",
+      topicId: "topic-3",
+      mode: "tie-break",
+      presentation: "final"
+    });
+  });
+
   it("round-trips a topic confirmation and rejects an invalid remaining time", () => {
     const context = makeContext();
     const initial = createMatch(TWO_TEAMS, "confirmation-snapshot", 0, context);

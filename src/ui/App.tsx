@@ -81,6 +81,7 @@ export function App() {
   const [gamepads, setGamepads] = useState<readonly Gamepad[]>([]);
   const inputRef = useRef(createInputRouterState());
   const phaseRef = useRef<string | null>(null);
+  const confirmationSecondRef = useRef<number | null>(null);
   const answeringAudioRef = useRef(new AnsweringAudioMonitor());
   const lobbyThemePlayedRef = useRef(false);
   const audioRef = useRef(new AudioController(createHtmlAudioSourceFactory(), preferences));
@@ -106,7 +107,8 @@ export function App() {
         profile: "classic-v1",
         questionCount: settings.questionCount,
         answerTimeMs: settings.answerTimeMs,
-        teams
+        teams,
+        collectQuestionFeedback: settings.collectQuestionFeedback
       });
       inputRef.current = createInputRouterState(false);
       setMenuError(null);
@@ -168,9 +170,16 @@ export function App() {
       if (action.type === "continue") {
         return [{ type: "continue", teamId: action.teamId as TeamId }];
       }
-      if (action.type === "difficulty-rating") {
+      if (action.type === "feedback-direction") {
         void controller
-          .rateDifficulty(action.teamId as TeamId, action.difficulty)
+          .handleFeedbackDirection(action.teamId as TeamId, action.direction)
+          .finally(sync);
+        queueMicrotask(sync);
+        return [];
+      }
+      if (action.type === "feedback-confirm") {
+        void controller
+          .handleFeedbackConfirmation(action.teamId as TeamId)
           .finally(sync);
         queueMicrotask(sync);
         return [];
@@ -212,6 +221,8 @@ export function App() {
           ? "normal-topic"
         : match.phase.kind === "bonus-veto"
           ? "bonus-veto"
+          : match.phase.kind === "final-veto"
+            ? "bonus-veto"
           : match.phase.kind === "difficulty-feedback"
             ? "difficulty-feedback"
           : "continue";
@@ -261,6 +272,8 @@ export function App() {
             ? "normal-topic"
           : current.phase.kind === "bonus-veto"
             ? "bonus-veto"
+            : current.phase.kind === "final-veto"
+              ? "bonus-veto"
             : current.phase.kind === "difficulty-feedback"
               ? "difficulty-feedback"
             : "continue";
@@ -326,6 +339,18 @@ export function App() {
     }
     for (const cue of answeringAudioRef.current.observe(match.phase.baseRemainingMs)) {
       audioRef.current.play(cue);
+    }
+  }, [match]);
+
+  useEffect(() => {
+    if (!match || match.pause || match.phase.kind !== "topic-confirmation") {
+      confirmationSecondRef.current = null;
+      return;
+    }
+    const second = Math.ceil(match.phase.remainingMs / 1_000);
+    if (second > 0 && second !== confirmationSecondRef.current) {
+      audioRef.current.play("countdown");
+      confirmationSecondRef.current = second;
     }
   }, [match]);
 
@@ -401,15 +426,16 @@ export function App() {
           <TopicSelection
             view={view}
             titleById={titleById}
+            assignments={settings.assignments}
           />
         )}
         {view.phase === "topic-confirmation" && (
           <TopicConfirmation view={view} titleById={titleById} />
         )}
-        {view.phase === "bonus-veto" && <BonusVeto state={match} titleById={titleById} />}
+        {(view.phase === "bonus-veto" || view.phase === "final-veto") && <BonusVeto state={match} titleById={titleById} assignments={settings.assignments} />}
         {view.phase === "difficulty-feedback" && (
           <DifficultyFeedbackScreen
-            selected={match.phase.kind === "difficulty-feedback" ? match.phase.selectedDifficulty : null}
+            feedback={view.feedback!}
             status={controller.difficultyFeedbackStatus}
             error={controller.difficultyFeedbackError}
             assignments={settings.assignments}
@@ -434,7 +460,7 @@ export function App() {
             footer={
               match.phase.kind === "standings" && match.phase.completedStage === 3
                 ? "Новое нажатие начнёт финальную битву"
-                : "Отпустите кнопки, затем нажмите любую назначенную клавишу"
+                : "Нажмите любую клавишу"
             }
           />
         )}

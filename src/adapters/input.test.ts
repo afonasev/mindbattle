@@ -105,11 +105,11 @@ describe("control assignments and glyph profiles", () => {
       expect(GAMEPAD_GLYPHS[profile].bonus).toEqual({
         moveLeft: "D-pad ←",
         moveRight: "D-pad →",
-        confirm: "D-pad ↓",
+        confirm: "A",
         cancel: "D-pad ↑",
       });
     }
-    expect([14, 15, 13, 12].map(bonusActionForGamepadButton)).toEqual([
+    expect([14, 15, 0, 12].map(bonusActionForGamepadButton)).toEqual([
       "move-left",
       "move-right",
       "confirm",
@@ -170,11 +170,9 @@ describe("keyboard routing", () => {
     const expected = [
       ["KeyA", { type: "bonus-move", teamId: "green", delta: -1 }],
       ["KeyD", { type: "bonus-move", teamId: "green", delta: 1 }],
-      ["KeyS", { type: "bonus-confirm", teamId: "green" }],
       ["KeyW", { type: "bonus-cancel", teamId: "green" }],
       ["ArrowLeft", { type: "bonus-move", teamId: "blue", delta: -1 }],
       ["ArrowRight", { type: "bonus-move", teamId: "blue", delta: 1 }],
-      ["ArrowDown", { type: "bonus-confirm", teamId: "blue" }],
       ["ArrowUp", { type: "bonus-cancel", teamId: "blue" }],
     ] as const;
     for (const [code, action] of expected) {
@@ -198,7 +196,6 @@ describe("keyboard routing", () => {
     for (const [code, action] of [
       ["KeyA", { type: "topic-move", teamId: "green", delta: -1 }],
       ["KeyD", { type: "topic-move", teamId: "green", delta: 1 }],
-      ["KeyS", { type: "topic-confirm", teamId: "green" }],
     ] as const) {
       const result = handleKeyboardInput(
         createInputRouterState(),
@@ -216,6 +213,26 @@ describe("keyboard routing", () => {
         "normal-topic",
       ).actions,
     ).toEqual([]);
+    expect(
+      handleKeyboardInput(
+        createInputRouterState(),
+        { type: "keydown", code: "KeyS" },
+        keyboardAssignments,
+        "normal-topic",
+      ).actions,
+    ).toEqual([]);
+  });
+
+  it("uses a dedicated keyboard confirmation key in menus and on the public feedback board", () => {
+    expect(
+      handleKeyboardInput(createInputRouterState(), { type: "keydown", code: "Space" }, keyboardAssignments, "normal-topic").actions,
+    ).toEqual([{ type: "topic-confirm", teamId: "green" }]);
+    expect(
+      handleKeyboardInput(createInputRouterState(), { type: "keydown", code: "ShiftRight" }, keyboardAssignments, "bonus-veto").actions,
+    ).toEqual([{ type: "bonus-confirm", teamId: "blue" }]);
+    expect(
+      handleKeyboardInput(createInputRouterState(), { type: "keydown", code: "Space" }, keyboardAssignments, "difficulty-feedback").actions,
+    ).toEqual([{ type: "feedback-confirm", teamId: "green" }]);
   });
 
   it("requires neutral after a screen transition", () => {
@@ -249,27 +266,22 @@ describe("keyboard routing", () => {
     expect(continued.actions).toEqual([{ type: "continue", teamId: "green" }]);
   });
 
-  it("maps three shared difficulty ratings and ignores down", () => {
+  it("maps all four independent hidden difficulty directions", () => {
     const expected = [
-      ["KeyA", "easy"],
-      ["KeyW", "medium"],
-      ["KeyD", "hard"]
+      ["KeyA", "west"],
+      ["KeyW", "north"],
+      ["KeyD", "east"],
+      ["KeyS", "south"]
     ] as const;
-    for (const [code, difficulty] of expected) {
+    for (const [code, direction] of expected) {
       const result = handleKeyboardInput(
         createInputRouterState(),
         { type: "keydown", code },
         keyboardAssignments,
         "difficulty-feedback"
       );
-      expect(result.actions).toEqual([{ type: "difficulty-rating", teamId: "green", difficulty }]);
+      expect(result.actions).toEqual([{ type: "feedback-direction", teamId: "green", direction }]);
     }
-    expect(handleKeyboardInput(
-      createInputRouterState(),
-      { type: "keydown", code: "KeyS" },
-      keyboardAssignments,
-      "difficulty-feedback"
-    ).actions).toEqual([]);
   });
 });
 
@@ -284,7 +296,7 @@ describe("gamepad polling and lifecycle", () => {
     const expected = [
       [14, { type: "bonus-move", teamId: "green", delta: -1 }],
       [15, { type: "bonus-move", teamId: "green", delta: 1 }],
-      [13, { type: "bonus-confirm", teamId: "green" }],
+      [0, { type: "bonus-confirm", teamId: "green" }],
       [12, { type: "bonus-cancel", teamId: "green" }],
     ] as const;
     for (const [buttonIndex, action] of expected) {
@@ -312,7 +324,7 @@ describe("gamepad polling and lifecycle", () => {
     }
   });
 
-  it("uses D-pad west/east to move and D-pad south to confirm normal topics", () => {
+  it("uses D-pad west/east to move and the lower face button to confirm normal topics", () => {
     let state = pollBaseline(createInputRouterState(), assignments, [pad(0), pad(1)]);
     const west = handleGamepadPoll(state, [pad(0, [14]), pad(1)], assignments, "normal-topic");
     expect(west.actions).toEqual([
@@ -327,8 +339,8 @@ describe("gamepad polling and lifecycle", () => {
       { type: "topic-move", teamId: "green", delta: 1 }
     ]);
     state = handleGamepadPoll(east.state, [pad(0), pad(1)], assignments, "normal-topic").state;
-    const south = handleGamepadPoll(state, [pad(0, [13]), pad(1)], assignments, "normal-topic");
-    expect(south.actions).toEqual([{ type: "topic-confirm", teamId: "green" }]);
+    const confirm = handleGamepadPoll(state, [pad(0, [0]), pad(1)], assignments, "normal-topic");
+    expect(confirm.actions).toEqual([{ type: "topic-confirm", teamId: "green" }]);
   });
 
   it("does not pass a held button through a neutral gate", () => {
@@ -353,10 +365,10 @@ describe("gamepad polling and lifecycle", () => {
     expect(pressedAgain.actions).toEqual([{ type: "continue", teamId: "green" }]);
   });
 
-  it("maps positional gamepad buttons to a shared difficulty rating", () => {
+  it("maps positional gamepad buttons to an independent difficulty direction", () => {
     let state = pollBaseline(createInputRouterState(), assignments, [pad(0), pad(1)]);
     const result = handleGamepadPoll(state, [pad(0, [2]), pad(1)], assignments, "difficulty-feedback");
-    expect(result.actions).toEqual([{ type: "difficulty-rating", teamId: "green", difficulty: "easy" }]);
+    expect(result.actions).toEqual([{ type: "feedback-direction", teamId: "green", direction: "west" }]);
   });
 
   it("pauses once when an assigned gamepad disconnects", () => {

@@ -1,12 +1,14 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const testPort = Number(process.env.MINDBATTLE_TEST_PORT ?? 4187);
+
 export default defineConfig({
   testDir: "./tests/browser",
   fullyParallel: false,
   retries: 0,
   reporter: "list",
   use: {
-    baseURL: "http://127.0.0.1:4187",
+    baseURL: `http://127.0.0.1:${testPort}`,
     trace: "retain-on-failure"
   },
   projects: [
@@ -20,8 +22,8 @@ export default defineConfig({
     }
   ],
   webServer: {
-    command: "MINDBATTLE_PORT=4187 npm run preview",
-    url: "http://127.0.0.1:4187",
+    command: `MINDBATTLE_PORT=${testPort} npm run preview`,
+    url: `http://127.0.0.1:${testPort}`,
     reuseExistingServer: true,
     timeout: 120000
   }

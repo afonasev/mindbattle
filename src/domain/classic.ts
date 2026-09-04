@@ -43,6 +43,9 @@ export function validateMatchConfig(config: MatchConfig): MatchConfig {
   if (config.teams.some((teamId) => !(TEAM_IDS as readonly string[]).includes(teamId))) {
     throw new InvalidMatchConfigError("Unknown team identifier");
   }
+  if (config.collectQuestionFeedback !== undefined && typeof config.collectQuestionFeedback !== "boolean") {
+    throw new InvalidMatchConfigError("collectQuestionFeedback must be boolean");
+  }
   return config;
 }
 

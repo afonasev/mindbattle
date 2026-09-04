@@ -15,6 +15,8 @@ import {
   type BonusVetoPhase,
   type DomainCommand,
   type DomainContext,
+  type DiagnosticFlag,
+  type FeedbackResponse,
   type InputFrame,
   type MatchConfig,
   type MatchPhase,
@@ -185,7 +187,7 @@ function startQuestion(
   };
 }
 
-function startTieBreak(
+function prepareTieBreakSelection(
   state: MatchState,
   context: DomainContext,
   contenders: readonly TeamId[]
@@ -201,7 +203,26 @@ function startTieBreak(
         contenders: [...contenders],
         questionNumber: 1
       };
-  return startQuestion({ ...state, tieBreak }, context, null, "tie-break");
+  const selection = context.selectTopics({
+    count: contenders.length + 1,
+    difficulty: "hard",
+    excludedTopicIds: state.selectedTopicIds,
+    shownTopicCounts: state.shownTopicCounts,
+    random: state.random
+  });
+  validateTopicSelection(selection.topicIds, contenders.length + 1, state.selectedTopicIds);
+  return {
+    ...state,
+    tieBreak,
+    random: selection.random,
+    shownTopicCounts: addShownTopics(state.shownTopicCounts, selection.topicIds),
+    phase: {
+      kind: "final-veto",
+      candidates: selection.topicIds,
+      cursors: Object.fromEntries(contenders.map((teamId) => [teamId, 0])),
+      vetoes: {}
+    }
+  };
 }
 
 export function createMatch(
@@ -218,12 +239,12 @@ export function createMatch(
   const [firstChooserOffset, random] = nextInt(initialRandom, config.teams.length);
   const reserveMs = reserveFor(config.questionCount);
   const initial: MatchState = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     catalogRevision: context.catalogRevision,
     matchId,
     seed,
     random,
-    config: { ...config, teams: [...config.teams] },
+    config: { ...config, teams: [...config.teams], collectQuestionFeedback: config.collectQuestionFeedback ?? true },
     teams: config.teams.map((id) => ({
       id,
       score: 0,
@@ -363,7 +384,7 @@ function advanceClock(state: MatchState, atMs: number, context: DomainContext): 
       phase: { ...state.phase, remainingMs }
     };
     return remainingMs === 0
-      ? startQuestion(prepared, context, state.phase.topicId, "main")
+      ? startQuestion(prepared, context, state.phase.topicId, state.phase.mode)
       : prepared;
   }
   if (state.phase.kind !== "answering") return { ...state, lastFrameAtMs: atMs };
@@ -422,7 +443,13 @@ function applyNormalTopic(state: MatchState, command: DomainCommand): MatchState
   };
   return {
     ...selected,
-    phase: { kind: "topic-confirmation", topicId, remainingMs: TOPIC_CONFIRMATION_MS }
+    phase: {
+      kind: "topic-confirmation",
+      topicId,
+      remainingMs: TOPIC_CONFIRMATION_MS,
+      mode: "main",
+      presentation: "normal"
+    }
   };
 }
 
@@ -430,10 +457,16 @@ function applyBonusCommand(
   state: MatchState,
   command: DomainCommand
 ): MatchState {
-  if (state.phase.kind !== "bonus-veto" || !("teamId" in command) || !activeTeam(state, command.teamId)) {
+  if (
+    (state.phase.kind !== "bonus-veto" && state.phase.kind !== "final-veto") ||
+    !("teamId" in command) ||
+    !(state.phase.kind === "final-veto"
+      ? state.tieBreak?.contenders.includes(command.teamId)
+      : activeTeam(state, command.teamId))
+  ) {
     return state;
   }
-  let phase: BonusVetoPhase = state.phase;
+  let phase: BonusVetoPhase | import("./types").FinalVetoPhase = state.phase;
   if (command.type === "move-veto") {
     const previous = phase.cursors[command.teamId] ?? 0;
     const cursor = (previous + command.delta + phase.candidates.length) % phase.candidates.length;
@@ -451,8 +484,11 @@ function applyBonusCommand(
     return state;
   }
 
-  const vetoed = state.config.teams.map((teamId) => phase.vetoes[teamId]);
-  if (vetoed.every((topicId): topicId is string => topicId !== undefined) && new Set(vetoed).size === state.config.teams.length) {
+  const participants = state.phase.kind === "final-veto"
+    ? state.tieBreak?.contenders ?? []
+    : state.config.teams;
+  const vetoed = participants.map((teamId) => phase.vetoes[teamId]);
+  if (vetoed.every((topicId): topicId is string => topicId !== undefined) && new Set(vetoed).size === participants.length) {
     const remaining = phase.candidates.filter((topicId) => !vetoed.includes(topicId));
     if (remaining.length !== 1) throw new Error("Distinct bonus vetoes must leave exactly one topic");
     return {
@@ -461,7 +497,9 @@ function applyBonusCommand(
       phase: {
         kind: "topic-confirmation",
         topicId: remaining[0],
-        remainingMs: TOPIC_CONFIRMATION_MS
+        remainingMs: TOPIC_CONFIRMATION_MS,
+        mode: state.phase.kind === "final-veto" ? "tie-break" : "main",
+        presentation: state.phase.kind === "final-veto" ? "final" : "bonus"
       }
     };
   }
@@ -485,11 +523,11 @@ function applyAnswer(state: MatchState, teamId: TeamId, position: AnswerPosition
 function applyContinue(state: MatchState, teamId: TeamId, context: DomainContext): MatchState {
   if (!activeTeam(state, teamId)) return state;
   if (state.phase.kind === "topic-confirmation") {
-    return startQuestion(state, context, state.phase.topicId, "main");
+    return startQuestion(state, context, state.phase.topicId, state.phase.mode);
   }
   if (state.phase.kind === "standings") {
     if (state.phase.completedStage === 3 && state.phase.tieBreakContenders) {
-      return startTieBreak(state, context, state.phase.tieBreakContenders);
+      return prepareTieBreakSelection(state, context, state.phase.tieBreakContenders);
     }
     return prepareMainSelection(
       { ...state, mainQuestionIndex: state.mainQuestionIndex + 1 },
@@ -497,6 +535,9 @@ function applyContinue(state: MatchState, teamId: TeamId, context: DomainContext
     );
   }
   if (state.phase.kind !== "reveal") return state;
+  if (!state.config.collectQuestionFeedback) {
+    return applyRevealContinuation(state, state.phase.continuation, context);
+  }
   const sequence =
     state.phase.round.mode === "tie-break"
       ? `tie-break-${state.tieBreak?.questionNumber ?? 1}`
@@ -508,41 +549,116 @@ function applyContinue(state: MatchState, teamId: TeamId, context: DomainContext
       round: state.phase.round,
       resolutions: state.phase.resolutions,
       continuation: state.phase.continuation,
-      eventId: `feedback-v1:${state.matchId}:${sequence}:${state.phase.round.questionId}`,
+      eventId: `feedback-v2:${state.matchId}:${sequence}:${state.phase.round.questionId}`,
+      stage: "difficulty",
+      responses: Object.fromEntries(
+        state.phase.round.attempts
+          .filter((attempt) => attempt.status !== "spectator")
+          .map((attempt) => [attempt.teamId, {
+            perceivedDifficulty: null,
+            similarityPreference: null,
+            diagnosticFlags: [],
+            tagCursor: 0,
+            completed: false
+          } satisfies FeedbackResponse])
+      ) as unknown as Readonly<Record<TeamId, FeedbackResponse>>,
       selectedDifficulty: null
     }
   };
 }
 
-function applyFeedbackSelection(
-  state: MatchState,
-  teamId: TeamId,
-  difficulty: "easy" | "medium" | "hard"
-): MatchState {
-  if (
-    state.phase.kind !== "difficulty-feedback" ||
-    state.phase.selectedDifficulty !== null ||
-    !activeTeam(state, teamId)
-  ) return state;
-  return { ...state, phase: { ...state.phase, selectedDifficulty: difficulty } };
+const FEEDBACK_TAGS = [
+  "like",
+  "abstain",
+  "dislike",
+  "unfamiliar-topic",
+  "unclear-wording",
+  "suspected-error",
+  "ambiguous-answer",
+  "too-niche-or-uninteresting",
+  "weak-answer-options",
+  "done"
+] as const;
+
+function feedbackDifficulty(direction: "north" | "east" | "south" | "west") {
+  return direction === "west" ? "trivial" : direction === "north" ? "easy" : direction === "east" ? "medium" : "hard";
 }
 
-function applyFeedbackConfirmation(
+function updateFeedbackResponse(
   state: MatchState,
-  eventId: string,
+  teamId: TeamId,
+  update: (response: FeedbackResponse) => FeedbackResponse
+): MatchState {
+  if (state.phase.kind !== "difficulty-feedback") return state;
+  const response = state.phase.responses[teamId];
+  if (!response || response.completed) return state;
+  return {
+    ...state,
+    phase: {
+      ...state.phase,
+      responses: { ...state.phase.responses, [teamId]: update(response) }
+    }
+  };
+}
+
+function allFeedbackDifficultiesSelected(state: MatchState): boolean {
+  return state.phase.kind === "difficulty-feedback" &&
+    Object.values(state.phase.responses).every((response) => response.perceivedDifficulty !== null);
+}
+
+function applyFeedbackDirection(
+  state: MatchState,
+  teamId: TeamId,
+  direction: "north" | "east" | "south" | "west"
+): MatchState {
+  if (state.phase.kind !== "difficulty-feedback" || !state.phase.responses[teamId]) return state;
+  if (state.phase.stage === "difficulty") {
+    const selected = updateFeedbackResponse(state, teamId, (response) => ({
+      ...response,
+      perceivedDifficulty: feedbackDifficulty(direction)
+    }));
+    if (allFeedbackDifficultiesSelected(selected) && selected.phase.kind === "difficulty-feedback") return { ...selected, phase: { ...selected.phase, stage: "tags" } };
+    return selected;
+  }
+  return updateFeedbackResponse(state, teamId, (response) => {
+    const cursor = response.tagCursor;
+    const rowStart = cursor < 3 ? 0 : cursor < 6 ? 3 : cursor < 9 ? 6 : 9;
+    const nextCursor = direction === "west"
+      ? cursor === 9 ? 8 : rowStart + ((cursor - rowStart + 2) % 3)
+      : direction === "east"
+        ? cursor === 9 ? 6 : rowStart + ((cursor - rowStart + 1) % 3)
+        : direction === "north"
+          ? cursor < 3 ? cursor : cursor === 9 ? 6 : cursor - 3
+          : cursor < 6 ? cursor + 3 : cursor < 9 ? 9 : 9;
+    return { ...response, tagCursor: nextCursor };
+  });
+}
+
+function applyFeedbackTagConfirmation(state: MatchState, teamId: TeamId): MatchState {
+  if (state.phase.kind !== "difficulty-feedback" || state.phase.stage !== "tags") return state;
+  return updateFeedbackResponse(state, teamId, (response) => {
+    const tag = FEEDBACK_TAGS[response.tagCursor];
+    if (tag !== "done" && !["like", "abstain", "dislike"].includes(tag)) {
+      const flags = new Set(response.diagnosticFlags);
+      flags.has(tag as DiagnosticFlag) ? flags.delete(tag as DiagnosticFlag) : flags.add(tag as DiagnosticFlag);
+      return { ...response, diagnosticFlags: [...flags].sort() as readonly DiagnosticFlag[] };
+    }
+    if (tag === "done") return response.similarityPreference ? { ...response, completed: true } : response;
+    if (tag === "like" || tag === "abstain" || tag === "dislike") return { ...response, similarityPreference: tag };
+    return response;
+  });
+}
+
+function applyRevealContinuation(
+  state: MatchState,
+  continuation: RevealContinuation,
   context: DomainContext
 ): MatchState {
-  if (
-    state.phase.kind !== "difficulty-feedback" ||
-    state.phase.selectedDifficulty === null ||
-    state.phase.eventId !== eventId
-  ) return state;
-  const continuation = state.phase.continuation;
   if (continuation.kind === "finished") {
     return { ...state, phase: { kind: "finished", winnerId: continuation.winnerId } };
   }
   if (continuation.kind === "tie-break") {
-    return startTieBreak(state, context, continuation.contenders);
+    return prepareTieBreakSelection(state, context, continuation.contenders);
   }
   if (continuation.kind === "standings") {
     return {
@@ -560,6 +676,19 @@ function applyFeedbackConfirmation(
     { ...state, mainQuestionIndex: state.mainQuestionIndex + 1 },
     context
   );
+}
+
+function applyFeedbackConfirmation(
+  state: MatchState,
+  eventId: string,
+  context: DomainContext
+): MatchState {
+  if (
+    state.phase.kind !== "difficulty-feedback" ||
+    (!Object.values(state.phase.responses).every((response) => response.completed) && state.phase.selectedDifficulty === null) ||
+    state.phase.eventId !== eventId
+  ) return state;
+  return applyRevealContinuation(state, state.phase.continuation, context);
 }
 
 function processCommands(
@@ -587,7 +716,7 @@ function processCommands(
     if (next.phase.kind === "normal-topic" && (command.type === "move-topic" || command.type === "confirm-topic")) {
       const changed = applyNormalTopic(next, command);
       if (changed !== next) return changed;
-    } else if (next.phase.kind === "bonus-veto") {
+    } else if (next.phase.kind === "bonus-veto" || next.phase.kind === "final-veto") {
       const previousKind = next.phase.kind;
       next = applyBonusCommand(next, command);
       if (previousKind !== next.phase.kind) return next;
@@ -599,9 +728,12 @@ function processCommands(
     ) {
       const changed = applyContinue(next, command.teamId, context);
       if (changed !== next) return changed;
-    } else if (command.type === "rate-difficulty") {
-      const changed = applyFeedbackSelection(next, command.teamId, command.difficulty);
-      if (changed !== next) return changed;
+    } else if (command.type === "feedback-direction") {
+      next = applyFeedbackDirection(next, command.teamId, command.direction);
+    } else if (command.type === "feedback-confirm") {
+      next = applyFeedbackTagConfirmation(next, command.teamId);
+    } else if (command.type === "rate-difficulty" && next.phase.kind === "difficulty-feedback" && next.phase.selectedDifficulty === null) {
+      next = { ...next, phase: { ...next.phase, selectedDifficulty: command.difficulty } };
     } else if (command.type === "confirm-difficulty-feedback") {
       const changed = applyFeedbackConfirmation(next, command.eventId, context);
       if (changed !== next) return changed;
