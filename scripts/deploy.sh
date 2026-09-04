@@ -49,7 +49,18 @@ ssh -o BatchMode=yes "${SSH_HOST}" "
   if [ \"\$caddy_config_changed\" -eq 1 ]; then
     systemctl restart caddy
   fi
-  curl --fail --silent --show-error http://127.0.0.1:4173/api/difficulty-feedback/summary >/dev/null
+  healthcheck_ok=0
+  for attempt in \$(seq 1 15); do
+    if curl --fail --silent --show-error http://127.0.0.1:4173/api/difficulty-feedback/summary >/dev/null 2>&1; then
+      healthcheck_ok=1
+      break
+    fi
+    sleep 1
+  done
+  if [ "\$healthcheck_ok" -ne 1 ]; then
+    systemctl status ${SERVICE} --no-pager -l
+    exit 1
+  fi
 "
 
 echo "==> Done: https://mindbattle.afonasev.tech/"
