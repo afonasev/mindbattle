@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-09-04",
+  "reviewRunId": "codex-independent-review-86-90",
+  "scope": {
+    "manifestRange": [86, 90],
+    "topics": ["mountains-volcanoes", "national-parks-nature", "polar-regions", "tourism-travel", "beverages"],
+    "questions": 500,
+    "ledgerPackages": 20
+  },
+  "policy": {
+    "checks": ["factualCorrectness", "correctIndex", "distractors", "answerNotes", "difficulty", "grammar", "explanation", "sourceRelevance", "duplicates"],
+    "sourceVerification": "HTTP-статус использован только как транспортный сигнал; релевантность проверялась отдельно по содержанию источника и его связи с вопросом, ответом и объяснением.",
+    "duplicateVerification": "Автоматический lexical/Jaccard/fact-reuse аудит дополнен ручной семантической сверкой всех 500 вопросов."
+  },
+  "result": {
+    "status": "approved",
+    "checkedQuestions": 500,
+    "openCriticalFindings": 0,
+    "checksPerTopic": {"factualCorrectness": 100, "correctIndex": 100, "distractors": 100, "answerNotes": 100, "difficulty": 100, "grammar": 100, "explanation": 100, "sourceRelevance": 100, "duplicates": 100}
+  },
+  "resolvedFindings": [
+    {"questionId": "mountains-volcanoes-arete-glacial", "resolution": "Французское написание «Арête» заменено принятой русской формой «арет» в ответе и пояснениях."},
+    {"questionId": "national-parks-nature-091", "resolution": "Неясный повтор «река Река» уточнён как собственное название словенской реки."},
+    {"questionId": "polar-regions-penguins-southern-hemisphere", "resolution": "Ложное абсолютное утверждение исправлено с учётом галапагосского пингвина севернее экватора; источник заменён на Smithsonian Ocean."},
+    {"questionId": "beverages-black-tea-process-b", "resolution": "Формулировка согласована с вариантами-действиями."},
+    {"questionId": "beverages-oolong-process-b", "resolution": "Формулировка согласована с вариантами-действиями."},
+    {"questionId": "beverages-coffee-fine-grind-b", "resolution": "Формулировка согласована с вариантами-действиями."},
+    {"questionId": "beverages-arabic-service-b", "resolution": "Формулировка согласована с вариантами-действиями."},
+    {"questionId": "beverages-pear-shaped-a", "resolution": "Падеж вопроса согласован с ответом «грушевидной формы»."},
+    {"questionId": "beverages-shared-vessel-a", "resolution": "Ошибочный вопрос о частоте заменён вопросом о способе совместного питья мате."},
+    {"questionId": "beverages-shake-cup-a", "resolution": "Формулировка согласована с вариантом-действием."},
+    {"questionId": "beverages-invert-cup-a", "resolution": "Формулировка согласована с вариантами-действиями."},
+    {"questionId": "beverages-elders-first-a", "resolution": "Вопрос теперь проверяет действие, выражающее уважение к старшинству."},
+    {"questionId": "beverages-crush-herbs-a", "resolution": "Формулировка согласована с вариантами-действиями."},
+    {"questionId": "beverages-steam-leaves-a", "resolution": "Формулировка согласована с вариантами-действиями."}
+  ],
+  "automatedAudit": {
+    "grammarWarnings": 0,
+    "difficultyWarnings": 0,
+    "editorialWarnings": 0,
+    "correctIndexCandidates": 0,
+    "semanticDuplicateCandidates": 0,
+    "factReuseCandidates": 0
+  },
+  "sourceUrlChecks": {
+    "initialSnapshot": {"uniqueUrls": 386, "questionsCovered": 500, "reachable": 377, "contentInspectable": 162, "unreachable": 9, "definiteDead": 0, "networkOrServerLimited": 9},
+    "finalSnapshot": {"uniqueUrls": 386, "questionsCovered": 500, "reachable": 369, "contentInspectable": 194, "unreachable": 17, "definiteDead": 8, "networkOrServerLimited": 9},
+    "interpretation": "Восемь Britannica URL сменили допустимый ответ 403 в первом запуске на 404 во втором, поэтому это нестабильные ответы range-checker, а не доказанные содержательные поломки. Девять TypeError повторились; их тематическая релевантность проверена отдельно.",
+    "contentBlockers": []
+  },
+  "transportFollowups": [
+    {"group": "UNESCO Intangible Cultural Heritage", "urls": 5, "questionCount": 17, "observed": "TypeError в обоих запусках", "blocksEditorialApproval": false},
+    {"url": "https://kws.go.ke/park/nairobi-national-park/", "questionIds": ["national-parks-nature-083"], "observed": "TypeError в обоих запусках", "blocksEditorialApproval": false},
+    {"url": "https://www.tnp.si/en/park/area/triglavski-narodni-park/", "questionIds": ["national-parks-nature-070"], "observed": "TypeError в обоих запусках", "blocksEditorialApproval": false},
+    {"url": "https://www.usap.gov/aboutthecontinent/au_mcmurdo.cfm", "questionIds": ["polar-regions-mcmurdo-largest"], "observed": "TypeError в обоих запусках", "blocksEditorialApproval": false},
+    {"url": "https://www.usap.gov/videoclipsandmaps/spwebcam.cfm", "questionIds": ["polar-regions-amundsen-scott-south-pole"], "observed": "TypeError в обоих запусках", "blocksEditorialApproval": false}
+  ],
+  "transientTransport": {
+    "urls": 8,
+    "pattern": "Britannica 403 reachable в initial snapshot, затем 404 в final snapshot",
+    "blocksEditorialApproval": false
+  }
+}

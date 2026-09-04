@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-09-04",
+  "reviewRunId": "codex-independent-review-61-65",
+  "scope": {
+    "manifestRange": [61, 65],
+    "topics": [
+      "dance",
+      "opera-musical-theatre",
+      "musical-instruments",
+      "photography",
+      "design"
+    ],
+    "questions": 500,
+    "answerNotes": 2000,
+    "ledgerPackages": 20
+  },
+  "policy": {
+    "checks": [
+      "factualCorrectness",
+      "correctIndex",
+      "difficulty",
+      "distractors",
+      "answerNotes",
+      "grammar",
+      "explanation",
+      "sourceRelevance",
+      "duplicates"
+    ],
+    "sourceVerification": "HTTP-статус использован только как транспортный сигнал. Содержательная релевантность проверялась по материалу источника, вопросу, правильному ответу, объяснению и четырём answer notes.",
+    "hashVerification": "questionIdsSha256 вычислен как SHA-256 от topic.questions.map(({ id }) => id).join(\"\\n\") без завершающего LF — точно как в scripts/markReviewedPackages.mjs.",
+    "duplicateVerification": "Автоматический lexical/Jaccard/fact-reuse аудит дополнен ручной семантической сверкой всех 500 вопросов."
+  },
+  "result": {
+    "status": "approved",
+    "checkedQuestions": 500,
+    "checkedAnswerNotes": 2000,
+    "openCriticalFindings": 0,
+    "markReviewedPackagesCompatible": true,
+    "checksPerTopic": {
+      "factualCorrectness": 100,
+      "correctIndex": 100,
+      "difficulty": 100,
+      "distractors": 100,
+      "answerNotes": 100,
+      "grammar": 100,
+      "explanation": 100,
+      "sourceRelevance": 100,
+      "duplicates": 100
+    }
+  },
+  "resolvedFindings": [
+    {
+      "questionId": "dance-kathakali-kerala",
+      "issue": "Фраза «маскам лица» была грамматически неестественной и неточно описывала визуальную систему катхакали.",
+      "resolution": "Признак уточнён как сложный грим и выразительная мимика."
+    },
+    {
+      "questionId": "opera-musical-theatre-ring-cycle",
+      "issue": "Вопрос о числе частей «Кольца нибелунга» ошибочно предлагал Винченцо Беллини как правильный ответ.",
+      "resolution": "Ответ и note исправлены на четыре музыкальные драмы при сохранении correctIndex 0."
+    },
+    {
+      "questionId": "musical-instruments-snare-wires",
+      "issue": "Explanation и повторяемые notes содержали сломанную конструкцию «струнами-подструнником у нижней пластика».",
+      "resolution": "Во всём связанном наборе формулировка исправлена на струны подструнника у нижнего пластика."
+    },
+    {
+      "questionId": "musical-instruments-ophicleide-keys",
+      "issue": "Описание не отличало клавишный механизм офиклеида от вентильного механизма позднейших медных инструментов.",
+      "resolution": "Explanation и связанные notes уточнены как система крупных клапанов-клавиш."
+    },
+    {
+      "questionId": "photography-autochrome-starch",
+      "issue": "Explanation упрощал автохромный растр до обычных красного, зелёного и синего фильтров.",
+      "resolution": "Указаны исторические красно-оранжевый, зелёный и сине-фиолетовый цвета крахмальных зёрен и их роль мозаичного фильтра."
+    },
+    {
+      "questionId": "design-futura-renner",
+      "issue": "Britannica URL о Futura стабильно возвращал HTTP 404.",
+      "resolution": "Источник заменён на карточку Futura Национального музея американской истории Smithsonian, прямо называющую Паула Реннера дизайнером."
+    }
+  ],
+  "automatedAudit": {
+    "grammarWarnings": 0,
+    "difficultyWarnings": 0,
+    "editorialWarnings": 0,
+    "correctIndexCandidates": 0,
+    "semanticDuplicateCandidates": 0,
+    "factReuseCandidates": 10,
+    "manualFindingsMissedByAutomatedSignals": 6
+  },
+  "manualFalsePositives": [
+    {
+      "questionPairs": [
+        ["dance-waltz-triple-meter", "dance-waltz-three-four"],
+        ["dance-tango-close-embrace", "dance-tango-two-four"],
+        ["dance-salsa-latin-social", "dance-salsa-cuba-puerto-rico"],
+        ["dance-cha-cha-offspring-mambo", "dance-cha-cha-cuban"],
+        ["dance-samba-brazil", "dance-samba-two-four"],
+        ["musical-instruments-cello-floor", "musical-instruments-cello-tenor-bass"],
+        ["opera-musical-theatre-habanera-work", "opera-musical-theatre-carmen-character"],
+        ["opera-musical-theatre-nessun-dorma-work", "opera-musical-theatre-turandot-character"],
+        ["opera-musical-theatre-la-donna-work", "opera-musical-theatre-rigoletto-curse"],
+        ["opera-musical-theatre-bass-voice", "opera-musical-theatre-sarastro-bass"]
+      ],
+      "signal": "fact-reuse",
+      "decision": "Пары используют общий ответ и источник, но проверяют независимые признаки: танцевальную технику или метр, способ удержания и строй инструмента, арию или персонажа, диапазон или конкретную роль. Дублирующих вопросов нет."
+    }
+  ],
+  "sourceUrlChecks": {
+    "initialSnapshot": {
+      "uniqueUrls": 373,
+      "questionsCovered": 500,
+      "reachable": 367,
+      "contentInspectable": 107,
+      "unreachable": 6,
+      "definiteDead": 1,
+      "networkOrServerLimited": 5
+    },
+    "finalSnapshot": {
+      "uniqueUrls": 373,
+      "questionsCovered": 500,
+      "reachable": 368,
+      "contentInspectable": 111,
+      "unreachable": 5,
+      "definiteDead": 0,
+      "networkOrServerLimited": 5
+    },
+    "interpretation": "Единственный определённо мёртвый URL устранён. Недоступные локальному fetch страницы CCRT, UNESCO и Berkeley проверены по индексируемому содержимому: материалы прямо подтверждают термины индийского танца, происхождение бачаты/меренге/румбы и формулу гиперфокального расстояния с кружком рассеяния.",
+    "contentBlockers": []
+  },
+  "transportFollowups": [
+    {
+      "group": "CCRT and UNESCO timeouts",
+      "urls": 4,
+      "questionCount": 9,
+      "observed": "Два последовательных локальных fetch завершились AbortError; индексируемые официальные материалы содержательно соответствуют вопросам.",
+      "blocksEditorialApproval": false
+    },
+    {
+      "group": "Berkeley fetch incompatibility",
+      "urls": 1,
+      "questionCount": 1,
+      "observed": "Локальный fetch завершился TypeError; индексируемая страница прямо содержит h = f²/(a·c) + f и определяет c как диаметр кружка рассеяния.",
+      "blocksEditorialApproval": false
+    },
+    {
+      "group": "Remote anti-bot HTTP 403",
+      "urls": 251,
+      "questionCount": 329,
+      "observed": "Endpoints отвечают, но тела недоступны повторному автоматическому извлечению.",
+      "blocksEditorialApproval": false
+    },
+    {
+      "group": "Remote throttling HTTP 429",
+      "urls": 6,
+      "questionCount": 8,
+      "observed": "Endpoints отвечают ограничением частоты повторной проверки.",
+      "blocksEditorialApproval": false
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-09-04",
+  "reviewRunId": "codex-independent-review-101-105",
+  "scope": {
+    "manifestRange": [101, 105],
+    "topics": [
+      "history-united-kingdom",
+      "history-united-states",
+      "history-japan",
+      "history-china",
+      "history-france"
+    ],
+    "questions": 500,
+    "ledgerPackages": 20
+  },
+  "policy": {
+    "checks": [
+      "factualCorrectness",
+      "correctIndex",
+      "difficulty",
+      "distractors",
+      "answerNotes",
+      "grammar",
+      "explanation",
+      "sourceRelevance",
+      "duplicates"
+    ],
+    "sourceVerification": "HTTP-статус использован только как транспортный сигнал. Содержательная релевантность проверялась по связи вопроса, ответа и объяснения с материалом источника; для URL, которые не смог прочитать локальный fetch, дополнительно проверялись индексируемое содержание тех же страниц и первичные материалы тех же организаций.",
+    "duplicateVerification": "Автоматический lexical/Jaccard/fact-reuse аудит дополнен ручной семантической сверкой всех 500 вопросов."
+  },
+  "result": {
+    "status": "approved",
+    "checkedQuestions": 500,
+    "openCriticalFindings": 0,
+    "checksPerTopic": {
+      "factualCorrectness": 100,
+      "correctIndex": 100,
+      "difficulty": 100,
+      "distractors": 100,
+      "answerNotes": 100,
+      "grammar": 100,
+      "explanation": 100,
+      "sourceRelevance": 100,
+      "duplicates": 100
+    }
+  },
+  "resolvedFindings": [
+    {
+      "questionId": "history-united-kingdom-hard-03-02",
+      "issue": "Официальная страница UK Parliament The Model Parliament возвращала устойчивый HTTP 404.",
+      "resolution": "URL заменён на действующую официальную страницу Changes under Edward I, которая прямо подтверждает Образцовый парламент 1295 года, двух рыцарей от графства и двух горожан от города."
+    }
+  ],
+  "automatedAudit": {
+    "grammarWarnings": 0,
+    "difficultyWarnings": 1,
+    "editorialWarnings": 0,
+    "correctIndexCandidates": 0,
+    "semanticDuplicateCandidates": 0,
+    "factReuseCandidates": 1
+  },
+  "manualFalsePositives": [
+    {
+      "questionId": "history-united-kingdom-sample-01",
+      "signal": "easy-exact-year-manual-review",
+      "decision": "Уровень easy сохранён: 1215 год Великой хартии вольностей — базовая общеисторическая дата, а варианты разведены по известным эпохам."
+    },
+    {
+      "questionIds": [
+        "history-france-louis-execution",
+        "history-france-public-safety-role"
+      ],
+      "signal": "fact-reuse",
+      "decision": "Независимые факты об одном монархе: первый вопрос проверяет казнь Людовика XVI в революцию, второй — имя короля в начале революции 1789 года. Формулировки и проверяемые знания не дублируются."
+    }
+  ],
+  "sourceUrlChecks": {
+    "initialSnapshot": {
+      "uniqueUrls": 445,
+      "questionsCovered": 500,
+      "reachable": 433,
+      "contentInspectable": 283,
+      "unreachable": 12,
+      "definiteDead": 1,
+      "networkOrServerLimited": 11
+    },
+    "finalSnapshot": {
+      "uniqueUrls": 445,
+      "questionsCovered": 500,
+      "reachable": 434,
+      "contentInspectable": 282,
+      "unreachable": 11,
+      "definiteDead": 0,
+      "networkOrServerLimited": 11
+    },
+    "interpretation": "Единственный определённо мёртвый URL устранён. Изменение inspectable 283→282 отражает нестабильные ответы удалённых серверов между двумя запусками, а не изменение набора содержательно проверенных вопросов.",
+    "contentBlockers": []
+  },
+  "transportFollowups": [
+    {
+      "group": "Fetch TypeError on remote hosts",
+      "urls": 10,
+      "questionCount": 11,
+      "hosts": [
+        "digitalarchive.wilsoncenter.org",
+        "english.scio.gov.cn",
+        "ich.unesco.org",
+        "press.getlinkgroup.com",
+        "www.npc.gov.cn",
+        "www.unesco.org"
+      ],
+      "observed": "Локальный URL checker не получил HTTP-ответ, хотя индексируемое содержание UNESCO, Getlink и NPC и первичные материалы соответствующих организаций подтверждают заявленные факты.",
+      "blocksEditorialApproval": false
+    },
+    {
+      "group": "Transient timeout",
+      "urls": 1,
+      "questionCount": 1,
+      "observed": "Один China government URL завершился AbortError только в финальном запуске; тот же материал был inspectable в начальном снимке, а утверждение о социалистической рыночной экономике XIV съезда подтверждается параллельной публикацией NPC.",
+      "blocksEditorialApproval": false
+    },
+    {
+      "tool": "scripts/checkRussianCases.py",
+      "observed": "Опциональная локальная зависимость pymorphy3 отсутствует; использованы JavaScript grammar scan и ручная проверка всех формулировок.",
+      "blocksEditorialApproval": false
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "runId": "eb79879b-9033-41f4-a891-ce39dab70073",
+  "reviewedOn": "2026-09-04",
+  "manifestRange": [41, 45],
+  "topics": ["materials", "railways", "cars-road-transport", "aviation", "ships-navigation"],
+  "scope": {
+    "topics": 5,
+    "questions": 500,
+    "ledgerPackages": 20,
+    "difficultyQuotaPerTopic": { "easy": 40, "medium": 40, "hard": 20 },
+    "questionIdHashInput": "SHA-256 of questionIds in topic order joined with a newline"
+  },
+  "result": {
+    "status": "approved",
+    "criticalFindingsOpen": 0,
+    "checksPerTopic": { "factualCorrectness": 100, "correctIndex": 100, "difficulty": 100, "distractors": 100, "answerNotes": 100, "grammar": 100, "explanation": 100, "sourceRelevance": 100, "duplicates": 100 },
+    "resolvedFindingCount": 24,
+    "resolvedFindingBreakdown": { "grammarOrClarity": 19, "sourceRelevance": 4, "ambiguousDuplicateRewrite": 1 }
+  },
+  "resolvedFindingsByTopic": {
+    "materials": ["materials-tempering-toughness", "materials-bainite-intermediate", "materials-toughness-energy", "materials-ductility-deformation", "materials-paris-fatigue", "materials-reuse-glass-bottle", "materials-melting-crystals", "materials-low-density-foam"],
+    "railways": [],
+    "cars-road-transport": ["cars-road-transport-front-wheel-drive", "cars-road-transport-toe-wheel-direction", "cars-road-transport-damper-controls-oscillation", "cars-road-transport-base-course-load", "cars-road-transport-benz-patent-first", "cars-road-transport-model-t-mass-production", "cars-road-transport-beetle-rear-engine", "cars-road-transport-sight-distance-stop"],
+    "aviation": ["aviation-stall-high-aoa", "aviation-elevator-pitch", "aviation-compressibility-buffet", "aviation-point-to-point-network"],
+    "ships-navigation": ["ships-navigation-crossing-give-way", "ships-navigation-dock-action", "ships-navigation-leeway-error", "ships-navigation-set-drift"]
+  },
+  "correctIndexCandidatesRejectedAsFalsePositives": [
+    { "questionId": "cars-road-transport-alternator-charges", "reason": "Генератор заряжает аккумулятор; диагностический сканер только считывает данные." },
+    { "questionId": "cars-road-transport-hybrid-two-sources", "reason": "Гибрид действительно сочетает два источника тяги; электромобиль не является равнозначным вариантом." },
+    { "questionId": "railways-hunting-oscillation", "reason": "Hunting — название колебания колёсной пары, а коничность является его причиной." },
+    { "questionId": "ships-navigation-angle-of-loll", "reason": "Angle of loll — требуемый термин; GZ обозначает плечо остойчивости." }
+  ],
+  "automaticFindingsFinal": {
+    "grammarWarnings": 0,
+    "difficultyWarnings": 0,
+    "editorialWarnings": 0,
+    "semanticDuplicateCandidatesAtThreshold082": 0,
+    "factReuseCandidates": 0,
+    "correctIndexCandidates": 4,
+    "correctIndexCandidatesManuallyRejected": 4
+  },
+  "duplicateChecks": {
+    "exactPromptDuplicates": 0,
+    "exactExplanationDuplicates": 0,
+    "resolved": [{ "questionIds": ["ships-navigation-dock-action", "ships-navigation-moor-action"], "resolution": "dock-action переписан с действия причаливания на понятие причального места" }],
+    "nearMatchCandidatesRejectedAsDistinct": [
+      ["cars-road-transport-all-wheel-drive-auto", "cars-road-transport-four-wheel-drive-low-range"],
+      ["cars-road-transport-front-wheel-drive", "cars-road-transport-rear-wheel-drive"],
+      ["ships-navigation-port-side", "ships-navigation-starboard-side"],
+      ["ships-navigation-sextant-altitude", "world-exploration-sextant"],
+      ["materials-leather-hide", "russian-culture-valenki"],
+      ["ships-navigation-bow-part", "ships-navigation-stern-part"],
+      ["aviation-piston-engine-cylinders", "aviation-turboshaft-helicopter"],
+      ["aviation-controller-separation", "railways-dispatcher-job"],
+      ["ships-navigation-cargo-ship", "ships-navigation-bulk-carrier"],
+      ["ships-navigation-contour-line", "oceans-seas-cotidal-line"],
+      ["ships-navigation-deadweight-tonnage", "ships-navigation-lightship-weight"]
+    ]
+  },
+  "sourceAudit": {
+    "initial": { "uniqueUrls": 396, "reachable": 391, "unreachable": 5, "definiteDead": 0, "networkOrServerLimited": 5, "questionsCovered": 500 },
+    "final": { "uniqueUrls": 395, "reachableFromInitialCache": 389, "unreachableInRestrictedRunner": 6, "definiteDead": 0, "networkOrServerLimited": 6, "questionsCovered": 500 },
+    "targetWorktreeTransportRetry": { "uniqueUrls": 395, "reachable": 0, "networkOrServerLimited": 395, "definiteDead": 0, "cacheUsed": false, "reason": "restricted runner denied every network request; prior scoped cache was rejected because its catalog hash came from the source worktree" },
+    "relevanceFixes": [
+      { "questionId": "materials-low-density-foam", "source": "Encyclopaedia Britannica — Plastic foam" },
+      { "questionId": "aviation-point-to-point-network", "source": "IATA — Slots White Paper 2024" },
+      { "questionId": "ships-navigation-leeway-error", "source": "NGA — The American Practical Navigator, Volume I" },
+      { "questionId": "ships-navigation-set-drift", "source": "NGA — The American Practical Navigator, Volume I" }
+    ],
+    "networkLimitedQuestionIds": ["ships-navigation-nautical-almanac", "ships-navigation-dock-action", "ships-navigation-leeway-error", "ships-navigation-set-drift", "aviation-point-to-point-network", "railways-pantograph", "ships-navigation-satellite-navigation"],
+    "note": "Network-limited is an endpoint-runner result, not a content-relevance failure; no 404/410 was observed. New IATA, IMO and NGA sources were independently inspected for the asserted definitions."
+  },
+  "residualRisks": [
+    "Six unique endpoints covering seven questions could not be fetched by the restricted URL runner; they require a future unrestricted reachability retry.",
+    "Review confirms the current 500-question snapshot only; any content change invalidates contentSha256 and requires another review."
+  ]
+}

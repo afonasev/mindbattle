@@ -761,10 +761,11 @@ footer {
 .answer-cross {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-template-rows: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(3.25rem, 1fr));
+  justify-self: center;
   gap: clamp(0.35rem, 0.8vw, 0.65rem);
   width: min(100%, 1080px);
-  min-height: 0;
+  min-height: min(24vh, 12rem);
   margin: 0 auto;
 }
 
@@ -799,8 +800,12 @@ footer {
 }
 
 .answer-text {
+  display: block;
+  width: 100%;
   max-width: 27ch;
+  margin: auto;
   overflow-wrap: anywhere;
+  text-align: center;
   font-size: clamp(0.9rem, 1.35vw, 1.2rem);
   font-weight: 760;
   line-height: 1.24;
@@ -867,6 +872,12 @@ footer {
   text-align: center;
 }
 
+.question-stage--reveal .explanation {
+  margin-top: 0.1rem;
+  padding: 0.5rem 0.75rem;
+  font-size: clamp(0.9rem, 1.2vw, 1rem);
+}
+
 .explanation p {
   display: inline;
   margin: 0 0.4rem;
@@ -875,10 +886,10 @@ footer {
 
 .wrong-answer-notes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 0.5rem;
-  margin-top: 0.65rem;
-  padding-top: 0.65rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+  padding-top: 0.45rem;
   border-top: 1px solid color-mix(in srgb, var(--text-muted) 32%, transparent);
 }
 
@@ -888,8 +899,8 @@ footer {
 
 .wrong-answer-notes article {
   display: grid;
-  gap: 0.15rem;
-  padding: 0.45rem 0.55rem;
+  gap: 0.1rem;
+  padding: 0.35rem 0.5rem;
   border-radius: 0.55rem;
   background: rgba(6, 15, 30, 0.46);
   text-align: left;
@@ -898,6 +909,7 @@ footer {
 .wrong-answer-notes article p {
   margin: 0;
   color: var(--text-muted);
+  line-height: 1.28;
 }
 
 .explanation a {

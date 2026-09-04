@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-09-04",
+  "reviewRunId": "codex-independent-review-56-60",
+  "scope": {
+    "manifestRange": [56, 60],
+    "topics": [
+      "ancient-world",
+      "middle-ages",
+      "world-languages",
+      "linguistics-writing",
+      "theatre"
+    ],
+    "questions": 500,
+    "ledgerPackages": 20
+  },
+  "policy": {
+    "checks": [
+      "factualCorrectness",
+      "correctIndex",
+      "difficulty",
+      "distractors",
+      "answerNotes",
+      "grammar",
+      "explanation",
+      "sourceRelevance",
+      "duplicates"
+    ],
+    "sourceVerification": "HTTP-статус использован только как транспортный сигнал. Содержательная релевантность проверялась по материалу источника, вопросу, правильному ответу, объяснению и четырём answer notes.",
+    "hashVerification": "questionIdsSha256 вычислен как SHA-256 от topic.questions.map(({ id }) => id).join(\"\\n\") без завершающего LF — точно как в scripts/markReviewedPackages.mjs.",
+    "duplicateVerification": "Автоматический lexical/Jaccard/fact-reuse аудит дополнен ручной семантической сверкой всех 500 вопросов."
+  },
+  "result": {
+    "status": "approved",
+    "checkedQuestions": 500,
+    "openCriticalFindings": 0,
+    "markReviewedPackagesCompatible": true,
+    "checksPerTopic": {
+      "factualCorrectness": 100,
+      "correctIndex": 100,
+      "difficulty": 100,
+      "distractors": 100,
+      "answerNotes": 100,
+      "grammar": 100,
+      "explanation": 100,
+      "sourceRelevance": 100,
+      "duplicates": 100
+    }
+  },
+  "resolvedFindings": [
+    {
+      "questionId": "ancient-world-ab-urbe",
+      "issue": "В вопросе и объяснении после сокращения «н. э.» стояла лишняя вторая точка.",
+      "resolution": "Двойная пунктуация исправлена без изменения смысла и правильного ответа."
+    },
+    {
+      "questionIds": [
+        "linguistics-writing-root",
+        "linguistics-writing-subject",
+        "linguistics-writing-object",
+        "linguistics-writing-logogram",
+        "linguistics-writing-statement",
+        "linguistics-writing-question",
+        "linguistics-writing-command",
+        "linguistics-writing-abjad",
+        "linguistics-writing-pidgin",
+        "linguistics-writing-determinative",
+        "linguistics-writing-diacritic",
+        "linguistics-writing-assertive",
+        "linguistics-writing-directive",
+        "linguistics-writing-commissive"
+      ],
+      "issue": "Группа вопросов содержала пропущенные связки и субъекты, сломанное управление, повторы слов и синтаксические фрагменты.",
+      "resolution": "Формулировки и связанные объяснения отредактированы по отдельности; проверяемые термины и правильные ответы сохранены."
+    },
+    {
+      "questionId": "theatre-method-acting",
+      "issue": "Ответ «Актёрский Метод» был неестественной калькой с ошибочной капитализацией.",
+      "resolution": "Термин уточнён как «Метод актёрской игры (Method acting)» во всём связанном наборе ответов и заметок."
+    },
+    {
+      "questionId": "theatre-biomechanics",
+      "issue": "Словарная статья об общей биомеханике не подтверждала театральный тренинг Мейерхольда.",
+      "resolution": "Источник заменён на прямой проект ITI Germany Meyerhold's Biomechanics for Theatre."
+    },
+    {
+      "questionId": "theatre-presentational",
+      "issue": "Перевод «представляющая игра» был двусмысленным, а источник не подтверждал прямое признание аудитории.",
+      "resolution": "Термин уточнён как «Презентационная игра (presentational)»; explanation и источник заменены на театроведческий материал Cardiff University."
+    },
+    {
+      "questionId": "theatre-representational",
+      "issue": "Перевод «переживающая игра» смешивал representational acting с отдельной системой переживания.",
+      "resolution": "Термин уточнён как «Репрезентационная игра (representational)»; explanation, notes и источник исправлены."
+    }
+  ],
+  "automatedAudit": {
+    "grammarWarnings": 0,
+    "difficultyWarnings": 0,
+    "editorialWarnings": 0,
+    "correctIndexCandidates": 2,
+    "semanticDuplicateCandidates": 0,
+    "factReuseCandidates": 6
+  },
+  "manualFalsePositives": [
+    {
+      "questionId": "ancient-world-plebeian",
+      "signal": "correctIndex lexical candidate",
+      "decision": "correctIndex подтверждён: правильный ответ — плебей; патриций присутствует только как дистрактор с корректной заметкой."
+    },
+    {
+      "questionId": "middle-ages-page",
+      "signal": "correctIndex lexical candidate",
+      "decision": "correctIndex подтверждён: правильный ответ — паж; оруженосец присутствует только как следующая ступень в заметке дистрактора."
+    },
+    {
+      "questionPairs": [
+        ["world-languages-arabic", "world-languages-arabic-dialects"],
+        ["world-languages-japanese", "world-languages-japanese-scripts"],
+        ["world-languages-hebrew", "world-languages-hebrew-revival"],
+        ["world-languages-amharic", "world-languages-amharic-ethiopia"],
+        ["world-languages-maltese", "world-languages-maltese-eu"],
+        ["world-languages-georgian", "world-languages-georgian-family"]
+      ],
+      "signal": "fact-reuse",
+      "decision": "Каждая пара проверяет независимые свойства одного языка: классификацию/регион, письменность, статус, историю или диалектное устройство; дублирующих вопросов нет."
+    }
+  ],
+  "sourceUrlChecks": {
+    "initialSnapshot": {
+      "uniqueUrls": 469,
+      "questionsCovered": 500,
+      "reachable": 469,
+      "contentInspectable": 188,
+      "unreachable": 0,
+      "definiteDead": 0,
+      "networkOrServerLimited": 0
+    },
+    "finalSnapshot": {
+      "uniqueUrls": 468,
+      "questionsCovered": 500,
+      "reachable": 468,
+      "contentInspectable": 59,
+      "unreachable": 0,
+      "definiteDead": 0,
+      "networkOrServerLimited": 0
+    },
+    "interpretation": "Все URL остались транспортно достижимыми. Число уникальных URL уменьшилось на один, потому что два взаимосвязанных театральных вопроса теперь используют один прямой академический источник. Падение inspectable вызвано сменой удалёнными серверами обычных ответов на anti-bot 403/429 между прогонами и не означает потери содержательной проверки.",
+    "contentBlockers": []
+  },
+  "transportFollowups": [
+    {
+      "group": "Remote anti-bot HTTP 403",
+      "urls": 408,
+      "questionCount": 434,
+      "observed": "URL классифицированы checker как reachable, но тело источника не было доступно повторному автоматическому извлечению в финальном прогоне.",
+      "blocksEditorialApproval": false
+    },
+    {
+      "group": "Remote throttling HTTP 429",
+      "urls": 1,
+      "questionCount": 1,
+      "observed": "URL классифицирован как reachable; ограничение относится к повторному автоматическому извлечению.",
+      "blocksEditorialApproval": false
+    }
+  ]
+}

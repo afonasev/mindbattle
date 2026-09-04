@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-09-04",
+  "reviewRunId": "codex-independent-review-81-85",
+  "scope": {
+    "manifestRange": [81, 85],
+    "topics": [
+      "world-cities",
+      "countries-flags",
+      "landmarks-wonders",
+      "islands",
+      "rivers-lakes"
+    ],
+    "questions": 500,
+    "ledgerPackages": 20
+  },
+  "policy": {
+    "checks": [
+      "factualCorrectness",
+      "correctIndex",
+      "distractors",
+      "answerNotes",
+      "difficulty",
+      "grammar",
+      "explanation",
+      "sourceRelevance",
+      "duplicates"
+    ],
+    "sourceVerification": "HTTP-ответ использован только как транспортный сигнал. Содержательная релевантность проверялась отдельно по связи источника с вопросом, правильным ответом и объяснением.",
+    "duplicateVerification": "Автоматический lexical/Jaccard/fact-reuse аудит дополнен ручной семантической сверкой всех 500 вопросов."
+  },
+  "result": {
+    "status": "approved",
+    "checkedQuestions": 500,
+    "openCriticalFindings": 0,
+    "checksPerTopic": {
+      "factualCorrectness": 100,
+      "correctIndex": 100,
+      "distractors": 100,
+      "answerNotes": 100,
+      "difficulty": 100,
+      "grammar": 100,
+      "explanation": 100,
+      "sourceRelevance": 100,
+      "duplicates": 100
+    }
+  },
+  "resolvedFindings": [
+    {
+      "questionId": "world-cities-084",
+      "issue": "Вопрос спрашивал имя человека, тогда как все варианты, включая правильный, были названиями градостроительных планов.",
+      "resolution": "Вопрос теперь спрашивает название первоначальной схемы Канберры; заметка к правильному ответу также исправлена грамматически."
+    },
+    {
+      "questionId": "rivers-lakes-dead-sea-lowest-shore",
+      "issue": "Оборот «лежат ниже уровня моря дальше» был ненормативным и затруднял понимание факта.",
+      "resolution": "Формулировка прямо спрашивает об озере, берега которого образуют самый низкий открытый участок суши."
+    }
+  ],
+  "automatedAudit": {
+    "grammarWarnings": 0,
+    "difficultyWarnings": 0,
+    "editorialWarnings": 0,
+    "correctIndexCandidates": 0,
+    "semanticDuplicateCandidates": 0,
+    "factReuseCandidates": 0
+  },
+  "sourceUrlCheck": {
+    "initialSnapshot": {
+      "uniqueUrls": 488,
+      "questionsCovered": 500,
+      "reachable": 484,
+      "contentInspectable": 212,
+      "unreachable": 4,
+      "definiteDead": 0,
+      "networkOrServerLimited": 4
+    },
+    "finalSnapshot": {
+      "uniqueUrls": 488,
+      "questionsCovered": 500,
+      "reachable": 486,
+      "contentInspectable": 207,
+      "unreachable": 2,
+      "definiteDead": 0,
+      "networkOrServerLimited": 2
+    },
+    "contentBlockers": []
+  },
+  "transportFollowups": [
+    {
+      "url": "https://civitavecchia.portmobility.it/en/trastevere-how-get-there-and-what-see",
+      "questionIds": ["world-cities-042"],
+      "observed": "TypeError после двух попыток range-checker",
+      "contentEvidence": "Индексируемое содержимое самой страницы прямо объясняет происхождение Trastevere от латинского Trans Tiberim — «за Тибром».",
+      "blocksEditorialApproval": false
+    },
+    {
+      "url": "https://www.llm.gov.my/public/article/details/SMART",
+      "questionIds": ["world-cities-092"],
+      "observed": "TypeError после двух попыток range-checker",
+      "contentEvidence": "Официальные материалы SMART и Department of Irrigation and Drainage Malaysia подтверждают двойную дорожную и противопаводковую функцию тоннеля и закрытие дорожной части при крупных паводках.",
+      "blocksEditorialApproval": false
+    }
+  ],
+  "resolvedTransientTransport": [
+    {
+      "url": "https://www.usgs.gov/ngp-standards-and-specifications/cartographic-specifications-hydrography",
+      "initial": "TypeError",
+      "final": "HTTP 202"
+    },
+    {
+      "url": "https://www.usgs.gov/water-science-school/science/water-science-glossary",
+      "initial": "TypeError",
+      "final": "HTTP 202"
+    }
+  ]
+}

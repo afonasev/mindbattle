@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-09-04",
+  "reviewRunId": "codex-independent-review-96-100",
+  "scope": {
+    "manifestRange": [96, 100],
+    "topics": ["winter-sports", "motorsport", "combat-sports", "racket-sports", "chess"],
+    "questions": 500,
+    "ledgerPackages": 20
+  },
+  "policy": {
+    "checks": ["factualCorrectness", "correctIndex", "difficulty", "distractors", "answerNotes", "grammar", "explanation", "sourceRelevance", "duplicates"],
+    "sourceVerification": "HTTP-статус использован только как транспортный сигнал; релевантность проверялась по содержанию источника и его связи с вопросом, ответом и объяснением.",
+    "duplicateVerification": "Автоматический lexical/Jaccard/fact-reuse аудит дополнен ручной семантической сверкой всех 500 вопросов."
+  },
+  "result": {
+    "status": "approved",
+    "checkedQuestions": 500,
+    "openCriticalFindings": 0,
+    "checksPerTopic": {"factualCorrectness": 100, "correctIndex": 100, "difficulty": 100, "distractors": 100, "answerNotes": 100, "grammar": 100, "explanation": 100, "sourceRelevance": 100, "duplicates": 100}
+  },
+  "resolvedFindings": [
+    {"questionId": "racket-sports-16-1", "resolution": "ITTF Statutes, не описывающий технику чопа, заменён на прямой Special Olympics Table Tennis Coaching Guide."},
+    {"questionId": "racket-sports-16-2", "resolution": "Тот же нерелевантный rulebook заменён на coaching guide, содержащий технику атакующего topspin."},
+    {"questionId": "racket-sports-16-3", "resolution": "Тот же нерелевантный rulebook заменён на coaching guide, рассматривающий block как игровой навык."},
+    {"questionId": "racket-sports-16-4", "resolution": "Тот же нерелевантный rulebook заменён на coaching guide, прямо определяющий lob как высокий защитный удар."},
+    {"questionId": "racket-sports-24-1", "resolution": "Laws of Badminton, не описывающий ударную технику, заменён на материал Badminton England с round-the-head clear над неракеточным плечом."},
+    {"questionId": "chess-initial-pawns", "resolution": "Ненормативная форма «с восьмью пешками» исправлена на «с восемью пешками»."}
+  ],
+  "automatedAudit": {
+    "grammarWarnings": 0,
+    "difficultyWarnings": 0,
+    "editorialWarnings": 0,
+    "correctIndexCandidates": 2,
+    "semanticDuplicateCandidates": 0,
+    "factReuseCandidates": 2
+  },
+  "manualFalsePositives": [
+    {"questionId": "racket-sports-03-2", "signal": "correctIndex lexical candidate", "decision": "correctIndex 1 подтверждён: грунтовый Grand Slam в Париже — Roland Garros; упоминание US Open находится только в независимой заметке дистрактора."},
+    {"questionId": "racket-sports-21-1", "signal": "correctIndex lexical candidate", "decision": "correctIndex 0 подтверждён правилом ITF: принимающий, коснувшийся правильной подачи до отскока, проигрывает очко, поэтому очко получает подающий."},
+    {"questionIds": ["chess-queen-lines", "chess-black-pawn-rank"], "signal": "fact-reuse", "decision": "Независимые факты о ферзе: геометрия хода и начальная позиция на d-линии."},
+    {"questionIds": ["chess-knight-jump", "chess-check-symbol", "chess-white-pawn-rank"], "signal": "fact-reuse", "decision": "Три независимых факта о коне: ход, внешний образ и положение рядом с ладьями."}
+  ],
+  "sourceUrlChecks": {
+    "initialSnapshot": {"uniqueUrls": 138, "questionsCovered": 500, "reachable": 138, "contentInspectable": 89, "unreachable": 0, "definiteDead": 0, "networkOrServerLimited": 0},
+    "finalSnapshot": {"uniqueUrls": 140, "questionsCovered": 500, "reachable": 140, "contentInspectable": 88, "unreachable": 0, "definiteDead": 0, "networkOrServerLimited": 0},
+    "interpretation": "Два новых прямых coaching-источника доступны с 206 и inspectable=true. Снижение общего inspectable на один вызвано тремя неизменёнными Britannica URL, сменившими 206 на 403 между запусками.",
+    "contentBlockers": []
+  },
+  "transportFollowups": [
+    {"group": "Britannica anti-bot", "urls": 48, "questionCount": 124, "observed": "403 but reachable in final snapshot", "blocksEditorialApproval": false},
+    {"group": "NASCAR anti-bot", "urls": 3, "questionCount": 6, "observed": "403 but reachable in both snapshots", "blocksEditorialApproval": false},
+    {"group": "BWF document host", "urls": 1, "questionCount": 7, "observed": "403 but reachable; one technique question was moved to a direct Badminton England source", "blocksEditorialApproval": false},
+    {"group": "Britannica transient status change", "urls": 3, "questionCount": 11, "observed": "Kevlar, badminton and biathlon changed from 206 inspectable to 403 between snapshots", "blocksEditorialApproval": false},
+    {"tool": "scripts/checkRussianCases.py", "observed": "Local optional pymorphy3 dependency is absent; manual review and the JavaScript grammar scan were used instead.", "blocksEditorialApproval": false}
+  ]
+}

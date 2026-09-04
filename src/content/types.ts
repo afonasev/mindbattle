@@ -48,4 +48,24 @@ export interface ReviewEntry {
   readonly reviewedAt: string;
   readonly checkedQuestions: number;
   readonly criticalFindingsOpen: 0;
+  readonly evidence: {
+    readonly questionIdsSha256: string;
+    readonly checks: {
+      readonly factualCorrectness: number;
+      readonly correctIndex: number;
+      readonly difficulty: number;
+      readonly distractors: number;
+      readonly answerNotes: number;
+      readonly grammar: number;
+      readonly explanation: number;
+      readonly sourceRelevance: number;
+      readonly duplicates: number;
+    };
+    readonly reviewedPackageIds: readonly string[];
+    readonly resolvedFindings: readonly {
+      readonly questionId: string;
+      readonly issue: string;
+      readonly resolution: string;
+    }[];
+  };
 }
