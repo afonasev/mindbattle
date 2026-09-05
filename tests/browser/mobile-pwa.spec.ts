@@ -10,6 +10,7 @@ test("mobile menu exposes solo only and has an install manifest", async ({ page 
   expect(await page.locator("body").evaluate((body) => document.documentElement.scrollWidth <= window.innerWidth && body.scrollWidth <= window.innerWidth)).toBe(true);
   await page.getByRole("button", { name: "Соло-забег" }).click();
   await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
+  await page.waitForTimeout(300);
   expect(await page.locator("body").evaluate((body) => document.documentElement.scrollWidth <= window.innerWidth && body.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({ path: testInfo.outputPath("mindbattle-mobile-solo-topic.png"), fullPage: true });
 });
