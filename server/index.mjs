@@ -47,7 +47,7 @@ async function readJson(request) {
   catch { throw Object.assign(new Error("Некорректный JSON"), { status: 400 }); }
 }
 
-const mime = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".woff2": "font/woff2", ".svg": "image/svg+xml", ".png": "image/png" };
+const mime = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".woff2": "font/woff2", ".svg": "image/svg+xml", ".png": "image/png", ".webmanifest": "application/manifest+json" };
 async function serveStatic(request, response) {
   const dist = join(projectRoot, "dist");
   const pathname = decodeURIComponent(new URL(request.url, "http://local").pathname);
