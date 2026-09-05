@@ -96,42 +96,15 @@ async function answer(page: Page, team: Team, position: Position) {
   await page.keyboard.press(keys[team][position]);
 }
 
-async function rateDifficulty(page: Page, key = "a", expectDismissed = true) {
+async function rateDifficulty(page: Page, keepOpen = false) {
   await waitForInputGate(page);
-  await page.keyboard.press("KeyQ");
   await page.keyboard.press("w");
-  await page.waitForTimeout(120);
-  await page.keyboard.press("w");
-  await page.waitForTimeout(120);
-  await page.keyboard.press("ArrowUp");
-  await page.waitForTimeout(120);
-  await page.keyboard.press("ArrowUp");
-  await expect(page.getByRole("heading", { name: "Отметьте впечатление от вопроса" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Хотите пожаловаться на вопрос?" })).toBeVisible();
   await expect(page.locator(".difficulty-feedback-stage")).toBeVisible();
+  if (keepOpen) return;
   await waitForInputGate(page);
-  for (const team of ["green", "blue"] as const) {
-    for (let attempt = 0; attempt < 4; attempt += 1) {
-      const state = await storedState(page);
-      if (state.phase.kind !== "difficulty-feedback" || state.phase.responses[team].similarityPreference) break;
-      await page.keyboard.press(confirmKey(team));
-      await page.waitForTimeout(120);
-    }
-    for (let attempt = 0; attempt < 6; attempt += 1) {
-      const state = await storedState(page);
-      if (state.phase.kind !== "difficulty-feedback" || state.phase.responses[team].tagCursor === 9) break;
-      await page.keyboard.press(team === "green" ? "s" : "ArrowDown");
-      await page.waitForTimeout(120);
-    }
-    for (let attempt = 0; attempt < 4; attempt += 1) {
-      const state = await storedState(page);
-      if (state.phase.kind !== "difficulty-feedback" || state.phase.responses[team].completed) break;
-      await page.keyboard.press(confirmKey(team));
-      await page.waitForTimeout(120);
-    }
-  }
-  if (expectDismissed) {
-    await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
-  }
+  await page.keyboard.press("Space");
+  await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
 }
 
 async function pressVirtualPad(page: Page, padIndex: number, buttonIndex: number) {
@@ -308,7 +281,7 @@ test("menu defaults, offline startup and responsive shell", async ({ context, pa
   await expect(page.locator(".question-stage--reveal")).toBeVisible();
   await waitForInputGate(page);
   await page.keyboard.press("w");
-  await expect(page.getByRole("heading", { name: "Насколько вопрос был сложен для вашей команды?" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Хотите пожаловаться на вопрос?" })).toBeVisible();
   const feedbackMetrics = await page.locator(".difficulty-feedback-stage").evaluate((stage) => ({
     pageFits: document.documentElement.scrollWidth <= innerWidth,
     stageFits: stage.scrollWidth <= stage.clientWidth,
@@ -465,9 +438,12 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
       await captureSettled(page, testInfo.outputPath("reveal.png"));
     }
     if (round === 0) {
-      await rateDifficulty(page);
+      await rateDifficulty(page, true);
       await expect(page.locator(".feedback-difficulty")).toHaveText("Сложность: Лёгкий");
       await captureSettled(page, testInfo.outputPath("difficulty-feedback.png"));
+      await waitForInputGate(page);
+      await page.keyboard.press("Space");
+      await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
     } else {
       await rateDifficulty(page);
     }
