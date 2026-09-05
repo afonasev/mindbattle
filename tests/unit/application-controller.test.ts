@@ -11,6 +11,7 @@ import {
   type GameControllerClock,
   type GameSeedSource
 } from "../../src/application/gameController";
+import { SoloController } from "../../src/application/soloController";
 import { createMatch } from "../../src/domain/match";
 import { CatalogDomainContext } from "../../src/application/contentContext";
 import type { ContentCatalog, TopicPack } from "../../src/content/types";
@@ -354,6 +355,77 @@ describe("GameController", () => {
 
     const reloaded = makeController(storage, new FakeClock(), new FakeSeeds(["unused"]));
     expect(reloaded.preferences).toMatchObject({ muted: true, textSize: "large" });
+  });
+});
+
+describe("SoloController", () => {
+  it("retries one anonymous v3 feedback event before opening the next slot", async () => {
+    const storage = new MemoryStorage();
+    const clock = new FakeClock();
+    const feedback = new FakeFeedback();
+    feedback.fail = true;
+    const controller = new SoloController({
+      catalog: makeCatalog(),
+      storage,
+      clock,
+      seeds: new FakeSeeds(["solo-feedback-seed"]),
+      feedback
+    });
+    controller.start({ profile: "solo-endless-v1" });
+    const topic = controller.state;
+    if (!topic || topic.phase.kind !== "topic") throw new Error("Expected solo topic choice");
+    controller.dispatch([{ type: "confirm-topic" }]);
+    const answering = controller.state;
+    if (!answering || answering.phase.kind !== "answering") throw new Error("Expected solo question");
+    controller.dispatch([{ type: "answer", position: answering.phase.round.correctPosition }]);
+    controller.dispatch([{ type: "continue" }]);
+    expect(controller.state?.phase.kind).toBe("feedback");
+    controller.setFeedbackChoice(false);
+    expect(await controller.submitFeedback()).toBe(false);
+    expect(controller.state?.phase.kind).toBe("feedback");
+    const eventId = feedback.events[0].eventId;
+    expect(feedback.events[0]).toMatchObject({ schemaVersion: 3, hasComplaint: false, complaintReasons: [] });
+    feedback.fail = false;
+    expect(await controller.submitFeedback()).toBe(true);
+    expect(feedback.events[1].eventId).toBe(eventId);
+    expect(controller.state?.phase.kind).toBe("topic");
+  });
+
+  it("restores an unfinished solo run paused and saves the finished local result", () => {
+    const storage = new MemoryStorage();
+    const clock = new FakeClock();
+    const controller = new SoloController({
+      catalog: makeCatalog(),
+      storage,
+      clock,
+      seeds: new FakeSeeds(["solo-restore-seed"])
+    });
+    controller.start({ profile: "solo-endless-v1", collectQuestionFeedback: false });
+    controller.dispatch([{ type: "confirm-topic" }]);
+    const restoredController = new SoloController({
+      catalog: makeCatalog(),
+      storage,
+      clock,
+      seeds: new FakeSeeds(["unused"])
+    });
+    expect(restoredController.canRestore).toBe(true);
+    expect(restoredController.restore()?.paused).toBe(true);
+    restoredController.dispatch([{ type: "resume" }]);
+
+    for (let index = 0; index < 3; index += 1) {
+      const state = restoredController.state;
+      if (!state) throw new Error("Expected active solo run");
+      if (state.phase.kind === "topic") restoredController.dispatch([{ type: "confirm-topic" }]);
+      const answering = restoredController.state;
+      if (!answering || answering.phase.kind !== "answering") throw new Error("Expected solo question");
+      const wrong = answering.phase.round.correctPosition === "up" ? "right" : "up";
+      restoredController.dispatch([{ type: "answer", position: wrong }]);
+      if (index < 2) restoredController.dispatch([{ type: "continue" }]);
+    }
+    expect(restoredController.state?.phase.kind).toBe("finished");
+    const record = restoredController.saveResult("Игрок");
+    expect(record).toMatchObject({ name: "Игрок", score: 0 });
+    expect(restoredController.records[0]).toEqual(record);
   });
 });
 

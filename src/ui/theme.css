@@ -326,24 +326,35 @@ footer {
   flex: 0 0 auto;
 }
 
-.solo-card { position: absolute; top: 5.5rem; right: clamp(1rem, 4vw, 4rem); display: grid; gap: .3rem; min-width: 10rem; padding: .85rem 1rem; border: 1px solid rgba(163,198,255,.55); border-radius: .9rem; background: rgba(5,18,39,.9); text-align: center; }
-.solo-card strong { font-size: 1.7rem; color: #fff; }
-.solo-card em { font-style: normal; color: #b8cae6; font-weight: 800; }
-.solo-card .solo-reserve { color: #ff8491; }
 .solo-heart { color: #ff5d79; font-size: 1.35rem; letter-spacing: .12rem; }
 .solo-heart--empty { color: transparent; -webkit-text-stroke: 1px #ff8295; }
+.solo-team-strip { grid-template-columns: minmax(15rem, 22rem); justify-content: center; }
+.solo-player-mark { grid-row: 1 / 3; display: grid; width: 2rem; aspect-ratio: 1; place-items: center; border: 2px solid var(--team-color); border-radius: 50%; color: var(--team-color); font-weight: 900; }
+.solo-lives { grid-column: 2; color: #ff5d79; line-height: 1; }
+.solo-topic-stage { width: min(100%, 1080px); justify-self: center; }
 .solo-stage { display: grid; justify-items: center; align-content: center; gap: 1rem; width: min(72rem, calc(100vw - 2rem)); min-height: 65vh; margin: 0 auto; text-align: center; }
 .solo-stage > h2 { max-width: 58rem; margin: 0; font-size: clamp(1.7rem, 3.5vw, 3.2rem); }
 .solo-risk { max-width: 36rem; }
+.solo-risk-actions { margin-top: .9rem; }
+.solo-risk-actions .topic-choice { min-height: 5.5rem; font-size: 1.1rem; }
 .solo-risk p { margin: 0; color: #c3d4ee; font-size: 1.1rem; }
-.solo-question .answer-grid { width: min(48rem, 100%); }
-.solo-results { max-width: 36rem; margin: 8vh auto; }
-.solo-results ol { width: min(28rem, 100%); margin: 0; padding: 0; list-style: none; display: grid; gap: .45rem; }
-.solo-results li { display: flex; justify-content: space-between; padding: .6rem .8rem; border-radius: .5rem; background: rgba(17,44,83,.8); }
+.solo-answer-button { color: inherit; font: inherit; cursor: pointer; }
+.solo-answer-button:not(:disabled):hover, .solo-answer-button:not(:disabled):focus-visible { border-color: #8fb5ff; background: linear-gradient(150deg, rgba(42, 80, 137, .98), rgba(10, 31, 63, .98)); }
+.solo-answer-button kbd { display: inline-grid; margin-right: .5rem; padding: .12rem .38rem; border: 1px solid rgba(143,181,255,.75); border-radius: .35rem; color: #dce9ff; font: 800 .85em/1 inherit; }
+.solo-feedback-choice { width: min(100%, 42rem); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.solo-results { display: grid; justify-items: center; width: min(100%, 42rem); margin: 0 auto; }
+.solo-results ol { width: min(28rem, 100%); margin: 0; padding: 0; list-style: none; display: grid; justify-self: center; gap: .45rem; }
+.solo-results li { display: grid; grid-template-columns: 2rem 1fr auto; align-items: center; gap: .65rem; padding: .6rem .8rem; border: 1px solid var(--line); border-radius: .75rem; background: rgba(5, 14, 29, 0.72); text-align: left; }
 .solo-current { outline: 2px solid #ffd773; }
+.solo-record-rank, .solo-results b { font-size: 1.2rem; }
+.solo-rank { margin: .2rem 0; color: #cdd7e9; font-weight: 800; }
 .solo-results label { display: grid; gap: .45rem; text-align: left; font-weight: 800; }
 .solo-results input { min-width: 18rem; padding: .7rem; border-radius: .5rem; border: 1px solid #8fb5ff; background: #06152c; color: #fff; font: inherit; }
-@media (max-width: 760px) { .solo-card { position: static; width: min(18rem, calc(100vw - 2rem)); margin: 1rem auto -1rem; } }
+.solo-results .primary-action, .solo-results .secondary-action { justify-self: center; }
+.solo-results label + .primary-action { margin-top: .75rem; }
+.solo-name-form { display: grid; justify-items: center; width: min(100%, 18rem); gap: .75rem; }
+.solo-name-form label { width: 100%; }
+.solo-name-form input { box-sizing: border-box; width: 100%; min-width: 0; }
 
 .reserve-readout {
   display: grid;
@@ -557,6 +568,10 @@ footer {
 
 .topic-cards--three {
   grid-template-columns: repeat(3, 1fr);
+}
+
+.topic-cards--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .topic-choice,

@@ -38,6 +38,8 @@ export function MenuScreen({
   setPreferences,
   gamepads,
   start,
+  startSolo,
+  restoreSolo,
   restoreLabel,
   restore,
   resetHistory,
@@ -49,6 +51,8 @@ export function MenuScreen({
   readonly setPreferences: (preferences: AccessibilityPreferences) => void;
   readonly gamepads: readonly Gamepad[];
   readonly start: () => void;
+  readonly startSolo: () => void;
+  readonly restoreSolo: (() => void) | null;
   readonly restoreLabel: string | null;
   readonly restore: () => void;
   readonly resetHistory: () => void;
@@ -185,6 +189,8 @@ export function MenuScreen({
           <button className="primary-action" type="button" disabled={!valid} onClick={start}>
             Начать игру
           </button>
+          <button className="secondary-action" type="button" onClick={startSolo}>Соло-забег</button>
+          {restoreSolo && <button className="secondary-action" type="button" onClick={restoreSolo}>Продолжить соло-забег</button>}
           {restoreLabel && (
             <button className="secondary-action" type="button" onClick={restore}>
               {restoreLabel}

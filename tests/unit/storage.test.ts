@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  addSoloRecord,
   DEFAULT_PREFERENCES,
   STORAGE_KEY,
   decodePersistedData,
@@ -8,6 +9,7 @@ import {
   replaceLastMatch,
   resetQuestionHistory,
   savePersistedData,
+  soloLeaderboard,
   updatePreferences,
   updateControls,
   type StorageLike
@@ -132,5 +134,26 @@ describe("versioned persistence", () => {
     });
     expect(reset.history.serial).toBe(0);
     expect(reset.lastMatch).toEqual(data.lastMatch);
+  });
+
+  it("keeps history and snapshots when only the solo table is corrupt", () => {
+    const source = {
+      ...emptyPersistedData("r1"),
+      history: { version: 1 as const, serial: 7, bags: {} },
+      lastMatch: { status: "in-progress" as const, savedAt: "2026-09-05", state: { phase: "answering" } },
+      soloRecords: [{ id: "broken", name: "Игрок", score: "not-a-number", savedAt: "2026-09-05" }]
+    };
+    const decoded = decodePersistedData(JSON.stringify(source), "r1");
+    expect(decoded.history.serial).toBe(7);
+    expect(decoded.lastMatch).toEqual(source.lastMatch);
+    expect(decoded.soloRecords).toEqual([]);
+  });
+
+  it("sorts local solo records without discarding negative results", () => {
+    let data = emptyPersistedData("r1");
+    data = addSoloRecord(data, { id: "low", name: "Низ", score: -100, savedAt: "2026-09-05T10:00:00.000Z" });
+    data = addSoloRecord(data, { id: "high", name: "Верх", score: 600, savedAt: "2026-09-05T11:00:00.000Z" });
+    data = addSoloRecord(data, { id: "middle", name: "Середина", score: 100, savedAt: "2026-09-05T12:00:00.000Z" });
+    expect(soloLeaderboard(data.soloRecords).map((record) => record.id)).toEqual(["high", "middle", "low"]);
   });
 });

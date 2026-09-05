@@ -25,13 +25,22 @@ export interface LastMatchSnapshot<TState = unknown> {
   readonly state: TState;
 }
 
+export interface SoloRecord {
+  readonly id: string;
+  readonly name: string;
+  readonly score: number;
+  readonly savedAt: string;
+}
+
 export interface PersistedData<TState = unknown> {
   readonly version: 1;
   readonly catalogRevision: string;
   readonly history: QuestionHistory;
   readonly lastMatch: LastMatchSnapshot<TState> | null;
+  readonly lastSolo: LastMatchSnapshot | null;
   readonly preferences: AccessibilityPreferences;
   readonly controls: readonly TeamControlAssignment[];
+  readonly soloRecords: readonly SoloRecord[];
 }
 
 export interface StorageLike {
@@ -46,9 +55,22 @@ export function emptyPersistedData(catalogRevision: string): PersistedData {
     catalogRevision,
     history: EMPTY_QUESTION_HISTORY,
     lastMatch: null,
+    lastSolo: null,
     preferences: DEFAULT_PREFERENCES,
-    controls: []
+    controls: [],
+    soloRecords: []
   };
+}
+
+function decodeSoloRecords(value: unknown): readonly SoloRecord[] | null {
+  if (value === undefined) return [];
+  if (!Array.isArray(value)) return null;
+  const records: SoloRecord[] = [];
+  for (const item of value) {
+    if (!isRecord(item) || typeof item.id !== "string" || typeof item.name !== "string" || typeof item.score !== "number" || !Number.isFinite(item.score) || typeof item.savedAt !== "string") return null;
+    records.push({ id: item.id, name: item.name, score: item.score, savedAt: item.savedAt });
+  }
+  return records;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -181,11 +203,14 @@ export function decodePersistedData(
     const history = decodeHistory(parsed.history);
     const preferences = decodePreferences(parsed.preferences);
     const lastMatch = decodeLastMatch(parsed.lastMatch);
+    const lastSolo = decodeLastMatch(parsed.lastSolo ?? null);
     const controls = decodeControls(parsed.controls ?? []);
+    const soloRecords = decodeSoloRecords(parsed.soloRecords);
     if (
       !history ||
       !preferences ||
       lastMatch === undefined ||
+      lastSolo === undefined ||
       !controls ||
       typeof parsed.catalogRevision !== "string"
     ) {
@@ -197,8 +222,10 @@ export function decodePersistedData(
       catalogRevision,
       history: sameCatalog ? history : (migrateHistory?.(history) ?? history),
       lastMatch: sameCatalog ? lastMatch : null,
+      lastSolo: sameCatalog ? lastSolo : null,
       preferences,
-      controls
+      controls,
+      soloRecords: soloRecords ?? []
     };
   } catch {
     return emptyPersistedData(catalogRevision);
@@ -247,4 +274,15 @@ export function updateControls<TState>(
   controls: readonly TeamControlAssignment[]
 ): PersistedData<TState> {
   return { ...data, controls: [...controls] };
+}
+
+export function addSoloRecord<TState>(
+  data: PersistedData<TState>,
+  record: SoloRecord
+): PersistedData<TState> {
+  return { ...data, soloRecords: [...data.soloRecords, record] };
+}
+
+export function soloLeaderboard(records: readonly SoloRecord[]): readonly SoloRecord[] {
+  return [...records].sort((left, right) => right.score - left.score || left.savedAt.localeCompare(right.savedAt) || left.id.localeCompare(right.id));
 }

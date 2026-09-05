@@ -9,10 +9,13 @@ import {
   handleKeyboardInput,
   handleWindowBlur,
   phaseAudioActions,
+  soloGamepadCommand,
+  soloKeyboardCommand,
   type GamepadSnapshot,
+  type SoloInputKind,
   type SemanticInputAction
 } from "../adapters";
-import { GameController } from "../application";
+import { GameController, SoloController } from "../application";
 import { HttpDifficultyFeedbackSink } from "../feedback";
 import { assertFullCatalog, catalog, TOPIC_TITLE_BY_ID } from "../content";
 import {
@@ -22,6 +25,7 @@ import {
   type MatchState,
   type TeamId
 } from "../domain";
+import type { SoloCommand, SoloState } from "../domain/solo";
 import { DEFAULT_MENU_SETTINGS, MenuScreen, type MenuSettings } from "./MenuScreen";
 import {
   BonusVeto,
@@ -34,6 +38,7 @@ import {
   TopicConfirmation,
   TopicSelection
 } from "./gameUi";
+import { SoloFeedbackScreen, SoloScreen } from "./soloUi";
 
 const toPosition = {
   north: "up",
@@ -75,11 +80,22 @@ export function App() {
     []
   );
   const [settings, setSettings] = useState<MenuSettings>(DEFAULT_MENU_SETTINGS);
+  const soloController = useMemo(() => new SoloController({
+    catalog,
+    storage: localStorage,
+    clock: { now: () => performance.now(), wallTime: () => new Date().toISOString() },
+    seeds: { nextSeed },
+    feedback: new HttpDifficultyFeedbackSink()
+  }), []);
   const [preferences, setPreferences] = useState(controller.preferences);
   const [match, setMatch] = useState<MatchState | null>(controller.state);
+  const [solo, setSolo] = useState<SoloState | null>(soloController.state);
+  const [soloRecordId, setSoloRecordId] = useState<string | null>(null);
+  const [soloInput, setSoloInput] = useState<SoloInputKind>("pointer");
   const [menuError, setMenuError] = useState<string | null>(null);
   const [gamepads, setGamepads] = useState<readonly Gamepad[]>([]);
   const inputRef = useRef(createInputRouterState());
+  const soloGamepadButtonsRef = useRef(new Map<number, readonly boolean[]>());
   const phaseRef = useRef<string | null>(null);
   const confirmationSecondRef = useRef<number | null>(null);
   const answeringAudioRef = useRef(new AnsweringAudioMonitor());
@@ -119,6 +135,26 @@ export function App() {
       );
     }
   }, [controller, settings, sync]);
+
+  const startSolo = useCallback(() => {
+    try {
+      assertFullCatalog();
+      setSoloRecordId(null);
+      setSoloInput("pointer");
+      soloGamepadButtonsRef.current = new Map(gamepadSnapshots().map((gamepad) => [gamepad.index, gamepad.buttons]));
+      setSolo(soloController.start({ profile: "solo-endless-v1", collectQuestionFeedback: settings.collectQuestionFeedback }));
+      setMenuError(null);
+    } catch (error) {
+      setMenuError(error instanceof Error ? error.message.split("\n")[0] : "Не удалось начать соло-забег");
+    }
+  }, [settings.collectQuestionFeedback, soloController]);
+
+  const dispatchSolo = useCallback((command: SoloCommand) => setSolo(soloController.dispatch([command])), [soloController]);
+
+  const submitSoloFeedback = useCallback(async () => {
+    await soloController.submitFeedback();
+    setSolo(soloController.state ? { ...soloController.state } : null);
+  }, [soloController]);
 
   const restart = useCallback(() => {
     try {
@@ -311,6 +347,154 @@ export function App() {
   }, [controller, match, sync]);
 
   useEffect(() => {
+    if (!solo || solo.paused || solo.phase.kind !== "answering") return;
+    const timer = window.setInterval(() => setSolo(soloController.tick()), 100);
+    return () => window.clearInterval(timer);
+  }, [solo, soloController]);
+
+  useEffect(() => {
+    if (!solo) return;
+    const keyboard = (event: KeyboardEvent) => {
+      if (event.type !== "keydown" || event.repeat || event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) return;
+      const current = soloController.state;
+      if (current?.paused && (event.code === "Escape" || event.code === "Enter" || event.code === "Space")) {
+        event.preventDefault();
+        setSoloInput(event.code.startsWith("Arrow") ? "arrows" : "wasd");
+        dispatchSolo({ type: "resume" });
+        return;
+      }
+      const phase = current?.phase;
+      if (phase?.kind === "finished" && soloRecordId && (event.code === "Enter" || event.code === "Space")) {
+        event.preventDefault();
+        setSoloInput("wasd");
+        setSolo(null);
+        return;
+      }
+      if (phase && event.code === "Escape") {
+        event.preventDefault();
+        dispatchSolo({ type: "pause" });
+        return;
+      }
+      if (phase?.kind === "feedback") {
+        const source = event.code.startsWith("Arrow") ? "arrows" : "wasd";
+        const feedbackCursor = phase.feedbackCursor ?? (phase.hasComplaint === true ? 0 : 1);
+        if (phase.hasComplaint !== true && (event.code === "KeyA" || event.code === "ArrowLeft")) {
+          event.preventDefault();
+          setSoloInput(source);
+          dispatchSolo({ type: "set-feedback-cursor", cursor: 0 });
+          return;
+        }
+        if (phase.hasComplaint !== true && (event.code === "KeyD" || event.code === "ArrowRight")) {
+          event.preventDefault();
+          setSoloInput(source);
+          dispatchSolo({ type: "set-feedback-cursor", cursor: 1 });
+          return;
+        }
+        if (phase.hasComplaint === true && ["KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"].includes(event.code)) {
+          event.preventDefault();
+          const delta = event.code === "KeyW" || event.code === "ArrowUp" ? -3 : event.code === "KeyS" || event.code === "ArrowDown" ? 3 : event.code === "KeyA" || event.code === "ArrowLeft" ? -1 : 1;
+          const column = feedbackCursor % 3;
+          const cursor = delta === -1 && column === 0 ? feedbackCursor : delta === 1 && column === 2 ? feedbackCursor : feedbackCursor + delta;
+          setSoloInput(source);
+          dispatchSolo({ type: "set-feedback-cursor", cursor });
+          return;
+        }
+        if (event.code === "Enter" || event.code === "Space") {
+          event.preventDefault();
+          setSoloInput(source);
+          if (phase.hasComplaint !== true) {
+            const selected = feedbackCursor === 0;
+            if (phase.hasComplaint !== selected) setSolo(soloController.setFeedbackChoice(selected));
+            if (!selected) void submitSoloFeedback();
+          } else if (feedbackCursor === 7) {
+            if (phase.complaintReasons.length > 0 || phase.complaintNote.trim()) void submitSoloFeedback();
+          }
+          else {
+            const reasons = ["too-easy", "too-hard", "weak-answer-options", "unclear-wording", "suspected-error", "ambiguous-answer", "uninteresting-for-quiz"] as const;
+            dispatchSolo({ type: "toggle-feedback-reason", reason: reasons[feedbackCursor] });
+          }
+          return;
+        }
+      }
+      const action = soloKeyboardCommand(event.code, phase);
+      if (action) {
+        event.preventDefault();
+        setSoloInput(action.source);
+        dispatchSolo(action.command);
+      }
+    };
+    window.addEventListener("keydown", keyboard);
+    return () => window.removeEventListener("keydown", keyboard);
+  }, [dispatchSolo, solo, soloController, soloRecordId, submitSoloFeedback]);
+
+  useEffect(() => {
+    if (!solo) return;
+    let frame = 0;
+    const poll = () => {
+      const current = soloController.state;
+      const phase = current?.phase;
+      for (const gamepad of gamepadSnapshots()) {
+        const previous = soloGamepadButtonsRef.current.get(gamepad.index) ?? [];
+        const button = gamepad.buttons.findIndex((down, index) => down && !previous[index]);
+        soloGamepadButtonsRef.current.set(gamepad.index, gamepad.buttons);
+        if (button < 0) continue;
+        if (current?.paused && (button === 0 || button === 9)) {
+          setSoloInput("gamepad");
+          dispatchSolo({ type: "resume" });
+          break;
+        }
+        if (phase && button === 9) {
+          setSoloInput("gamepad");
+          dispatchSolo({ type: "pause" });
+          break;
+        }
+        if (phase?.kind === "finished" && soloRecordId && button === 0) {
+          setSoloInput("gamepad");
+          setSolo(null);
+          break;
+        }
+        if (phase?.kind === "feedback") {
+          const feedbackCursor = phase.feedbackCursor ?? (phase.hasComplaint === true ? 0 : 1);
+          if (phase.hasComplaint !== true && (button === 12 || button === 3)) {
+            setSoloInput("gamepad");
+            dispatchSolo({ type: "set-feedback-cursor", cursor: 0 });
+            break;
+          }
+          if (phase.hasComplaint !== true && button === 13) {
+            setSoloInput("gamepad");
+            dispatchSolo({ type: "set-feedback-cursor", cursor: 1 });
+            break;
+          }
+          if (button === 0) {
+            setSoloInput("gamepad");
+            if (phase.hasComplaint !== true) {
+              const selected = feedbackCursor === 0;
+              if (phase.hasComplaint !== selected) setSolo(soloController.setFeedbackChoice(selected));
+              if (!selected) void submitSoloFeedback();
+            } else if (feedbackCursor === 7) {
+              if (phase.complaintReasons.length > 0 || phase.complaintNote.trim()) void submitSoloFeedback();
+            }
+            else {
+              const reasons = ["too-easy", "too-hard", "weak-answer-options", "unclear-wording", "suspected-error", "ambiguous-answer", "uninteresting-for-quiz"] as const;
+              dispatchSolo({ type: "toggle-feedback-reason", reason: reasons[feedbackCursor] });
+            }
+            break;
+          }
+        }
+        const command = soloGamepadCommand(button, phase);
+        if (command) {
+          setSoloInput("gamepad");
+          dispatchSolo(command);
+          break;
+        }
+      }
+      frame = requestAnimationFrame(poll);
+    };
+    frame = requestAnimationFrame(poll);
+    return () => cancelAnimationFrame(frame);
+  }, [dispatchSolo, solo, soloController, soloRecordId, submitSoloFeedback]);
+
+  useEffect(() => {
     if (match) {
       lobbyThemePlayedRef.current = false;
       return;
@@ -361,6 +545,12 @@ export function App() {
     preferences.reducedMotion ? "reduced-motion" : ""
   ].join(" ");
 
+  if (solo) {
+    const questionId = solo.phase.kind === "answering" || solo.phase.kind === "reveal" ? solo.phase.round.questionId : null;
+    const question = questionId ? catalog.topics.flatMap((topic) => topic.questions).find((candidate) => candidate.id === questionId) : undefined;
+    return <div className={rootClass}>{solo.phase.kind === "feedback" ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} command={(command) => { setSoloInput("pointer"); dispatchSolo(command); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}</div>;
+  }
+
   if (!match || !controller.view) {
     return (
       <div className={rootClass}>
@@ -375,6 +565,8 @@ export function App() {
           }}
           gamepads={gamepads}
           start={start}
+          startSolo={startSolo}
+          restoreSolo={soloController.canRestore ? () => setSolo(soloController.restore()) : null}
           restoreLabel={
             controller.savedMatchStatus === "in-progress" ? "Продолжить партию" : null
           }
