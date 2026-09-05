@@ -70,9 +70,6 @@ const server = createServer(async (request, response) => {
       if (result.status === "conflict") return json(response, 409, result);
       return json(response, result.status === "created" ? 201 : 200, result);
     }
-    if (url.pathname === "/api/difficulty-feedback/summary" && request.method === "GET") {
-      return json(response, 200, store.summary());
-    }
     if (url.pathname.startsWith("/api/")) return json(response, 404, { error: "Not found" });
     if (vite) return vite.middlewares(request, response, () => json(response, 404, { error: "Not found" }));
     return serveStatic(request, response);

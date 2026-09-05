@@ -58,8 +58,13 @@ make deploy DEPLOY_HOST=my-vps APP_DIR=/opt/mindbattle
 
 ```bash
 curl -I https://mindbattle.afonasev.tech/
-curl https://mindbattle.afonasev.tech/api/difficulty-feedback/summary
+ssh gfe 'sudo -u mindbattle node /opt/mindbattle/scripts/generateProductionFeedbackReport.mjs /var/lib/mindbattle/difficulty-feedback.ndjson'
 ```
+
+`POST /api/difficulty-feedback` нужен игре для анонимной записи с любого
+устройства. Журнал, агрегаты и свободные заметки не имеют публичного HTTP
+endpoint: анализ доступен только оператору VPS через SSH. Команда отчёта пишет
+JSON только в stdout и не создаёт файлов в репозитории.
 
 ## Управление
 

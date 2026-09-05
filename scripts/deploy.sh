@@ -51,7 +51,7 @@ ssh -o BatchMode=yes "${SSH_HOST}" "
   fi
   healthcheck_ok=0
   for attempt in \$(seq 1 15); do
-    if curl --fail --silent --show-error http://127.0.0.1:4173/api/difficulty-feedback/summary >/dev/null 2>&1; then
+    if curl --fail --silent --show-error http://127.0.0.1:4173/ >/dev/null 2>&1; then
       healthcheck_ok=1
       break
     fi
