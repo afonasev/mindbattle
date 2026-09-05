@@ -563,7 +563,9 @@ const COMPLAINT_REASONS = ["too-easy", "too-hard", "weak-answer-options", "uncle
 function applyFeedbackDirection(state: MatchState, direction: "north" | "east" | "south" | "west"): MatchState {
   if (state.phase.kind !== "difficulty-feedback" || state.phase.stage === "done") return state;
   const length = state.phase.stage === "choice" ? 2 : COMPLAINT_REASONS.length;
-  const delta = direction === "west" || direction === "north" ? -1 : 1;
+  // Reasons are displayed in a three-column grid: vertical moves preserve the
+  // visible column, while horizontal moves retain the existing adjacent order.
+  const delta = direction === "north" ? -3 : direction === "south" ? 3 : direction === "west" ? -1 : 1;
   return { ...state, phase: { ...state.phase, cursor: (state.phase.cursor + delta + length) % length } };
 }
 
@@ -583,7 +585,10 @@ function applyFeedbackConfirmation(state: MatchState, eventId: string | null, co
   // "no complaint" into an invalid response with a reason.
   if (state.phase.stage === "done") return state;
   const item = COMPLAINT_REASONS[state.phase.cursor];
-  if (item === "done") return state.phase.complaintReasons.length ? { ...state, phase: { ...state.phase, stage: "done" } } : state;
+  if (item === "done") {
+    const hasSignal = state.phase.complaintReasons.length > 0 || state.phase.complaintNote.trim().length > 0;
+    return hasSignal ? { ...state, phase: { ...state.phase, stage: "done" } } : state;
+  }
   const reasons = new Set(state.phase.complaintReasons);
   reasons.has(item as ComplaintReason) ? reasons.delete(item as ComplaintReason) : reasons.add(item as ComplaintReason);
   if (item === "too-easy") reasons.delete("too-hard");

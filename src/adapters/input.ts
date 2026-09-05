@@ -216,6 +216,7 @@ function actionForDirection(
 }
 
 function actionForConfirm(teamId: TeamId, mode: InputMode): SemanticInputAction | undefined {
+  if (mode === "continue") return { type: "continue", teamId };
   if (mode === "normal-topic") return { type: "topic-confirm", teamId };
   if (mode === "bonus-veto") return { type: "bonus-confirm", teamId };
   if (mode === "difficulty-feedback") return { type: "feedback-confirm" };

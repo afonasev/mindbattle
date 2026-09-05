@@ -49,7 +49,8 @@ export function validateFeedbackEvent(value, questions, catalogRevision) {
   if (value.schemaVersion === 3) {
     const reasons = ["too-easy", "too-hard", "weak-answer-options", "unclear-wording", "suspected-error", "ambiguous-answer", "uninteresting-for-quiz"];
     if (typeof value.hasComplaint !== "boolean" || !Array.isArray(value.complaintReasons) || new Set(value.complaintReasons).size !== value.complaintReasons.length || !value.complaintReasons.every((reason) => reasons.includes(reason)) || (value.complaintReasons.includes("too-easy") && value.complaintReasons.includes("too-hard")) || (value.complaintNote !== undefined && (typeof value.complaintNote !== "string" || [...value.complaintNote].length > 500))) return "Некорректная жалоба";
-    return value.hasComplaint === (value.complaintReasons.length > 0) && (!value.hasComplaint ? value.complaintNote === undefined : true) ? null : "Причины не согласованы с жалобой";
+    const hasSignal = value.complaintReasons.length > 0 || (typeof value.complaintNote === "string" && value.complaintNote.trim().length > 0);
+    return value.hasComplaint === hasSignal && (!value.hasComplaint ? value.complaintNote === undefined : true) ? null : "Причины или заметка не согласованы с жалобой";
   }
   const flags = ["unfamiliar-topic", "unclear-wording", "suspected-error", "ambiguous-answer", "too-niche-or-uninteresting", "weak-answer-options"];
   if (!Array.isArray(value.responses) || value.responses.length === 0 || !value.responses.every((response) => response && typeof response === "object" && ["trivial", "easy", "medium", "hard"].includes(response.perceivedDifficulty) && ["like", "abstain", "dislike"].includes(response.similarityPreference) && Array.isArray(response.diagnosticFlags) && new Set(response.diagnosticFlags).size === response.diagnosticFlags.length && response.diagnosticFlags.every((flag) => flags.includes(flag)))) return "Некорректные ответы фидбэка";

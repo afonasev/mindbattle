@@ -25,10 +25,13 @@ describe("difficulty feedback server store", () => {
     const store = await createFeedbackStore({ filePath: join(directory, "feedback.ndjson"), questions, catalogRevision: revision });
     const positive = { schemaVersion: 3, eventId: "v3-no", matchId: "match-v3", catalogRevision: revision, questionId: "q-easy", assignedDifficulty: "easy", hasComplaint: false, complaintReasons: [] };
     const complaint = { ...positive, eventId: "v3-yes", hasComplaint: true, complaintReasons: ["too-hard", "unclear-wording"], complaintNote: "Нужна редакторская проверка" };
+    const noteOnly = { ...positive, eventId: "v3-note", hasComplaint: true, complaintReasons: [], complaintNote: "Проверить формулировку" };
     expect(await store.append(positive)).toEqual({ status: "created" });
     expect(await store.append(complaint)).toEqual({ status: "created" });
-    expect(store.summary().v3.byQuestion["q-easy"]).toMatchObject({ total: 2, complaints: 1, noComplaints: 1, reasons: { "too-hard": 1 } });
+    expect(await store.append(noteOnly)).toEqual({ status: "created" });
+    expect(store.summary().v3.byQuestion["q-easy"]).toMatchObject({ total: 3, complaints: 2, noComplaints: 1, reasons: { "too-hard": 1 } });
     expect(await store.append({ ...complaint, eventId: "v3-invalid", complaintReasons: ["too-hard", "too-easy"] })).toMatchObject({ status: "invalid" });
+    expect(await store.append({ ...noteOnly, eventId: "v3-whitespace", complaintNote: "   " })).toMatchObject({ status: "invalid" });
   });
   it("validates catalog identity and levels", () => {
     expect(validateFeedbackEvent(event, questions, revision)).toBeNull();

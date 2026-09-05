@@ -233,6 +233,12 @@ describe("keyboard routing", () => {
     expect(
       handleKeyboardInput(createInputRouterState(), { type: "keydown", code: "Space" }, keyboardAssignments, "difficulty-feedback").actions,
     ).toEqual([{ type: "feedback-confirm" }]);
+    expect(
+      handleKeyboardInput(createInputRouterState(), { type: "keydown", code: "Space" }, keyboardAssignments, "continue").actions,
+    ).toEqual([{ type: "continue", teamId: "green" }]);
+    expect(
+      handleKeyboardInput(createInputRouterState(), { type: "keydown", code: "ShiftRight" }, keyboardAssignments, "continue").actions,
+    ).toEqual([{ type: "continue", teamId: "blue" }]);
   });
 
   it("requires neutral after a screen transition", () => {

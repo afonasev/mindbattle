@@ -466,10 +466,30 @@ describe("reveal, stages and sudden death", () => {
     state = frame(state, context, [{ type: "feedback-direction", direction: "west" }, { type: "feedback-confirm" }]);
     if (state.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback");
     expect(state.phase).toMatchObject({ stage: "reasons", hasComplaint: true, complaintReasons: [] });
+    state = frame(state, context, [{ type: "feedback-direction", direction: "south" }]);
+    if (state.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback");
+    expect(state.phase.cursor).toBe(3);
+    state = frame(state, context, [{ type: "feedback-direction", direction: "north" }]);
+    if (state.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback");
+    expect(state.phase.cursor).toBe(0);
     state = frame(state, context, [{ type: "feedback-confirm" }, { type: "feedback-direction", direction: "east" }, { type: "feedback-confirm" }, { type: "set-feedback-note", note: "x".repeat(501) }]);
     if (state.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback");
     expect(state.phase.complaintReasons).toEqual(["too-hard"]);
     expect([...state.phase.complaintNote]).toHaveLength(500);
+  });
+
+  it("allows a non-empty complaint note to complete feedback without tags", () => {
+    const context = makeContext();
+    let state = answerAllCorrect(startQuestion(createMatch(TWO_TEAMS, "note-only", 0, context), context), context);
+    state = frame(state, context, [{ type: "continue", teamId: "green" }]);
+    state = frame(state, context, [{ type: "feedback-direction", direction: "west" }, { type: "feedback-confirm" }]);
+    state = frame(state, context, [{ type: "set-feedback-note", note: "Проверить формулировку" }]);
+    state = frame(state, context, [{ type: "feedback-direction", direction: "south" }, { type: "feedback-direction", direction: "south" }, { type: "feedback-direction", direction: "east" }]);
+    if (state.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback");
+    expect(state.phase.cursor).toBe(7);
+    state = frame(state, context, [{ type: "feedback-confirm" }]);
+    if (state.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback");
+    expect(state.phase).toMatchObject({ stage: "done", hasComplaint: true, complaintReasons: [], complaintNote: "Проверить формулировку" });
   });
 
   it("migrates an incomplete v2 feedback snapshot without creating another feedback event", () => {

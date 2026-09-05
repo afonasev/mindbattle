@@ -807,3 +807,49 @@ test("keeps a shared feedback result on screen until the server accepts an idemp
   await expect(page.locator(".feedback-status")).toContainText("Сохраняем фидбэк");
   await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
 });
+
+test("moves vertically through the complaint-tag grid", async ({ page }) => {
+  await page.getByRole("button", { name: "9", exact: true }).click();
+  await page.getByRole("button", { name: "Начать игру" }).click();
+  await waitForInputGate(page);
+  await chooseCurrentTopic(page);
+  const state = await storedState(page);
+  const correct = state.phase.round.correctPosition as Position;
+  await answer(page, "green", correct);
+  await answer(page, "blue", correct);
+  await waitForInputGate(page);
+  await page.keyboard.press("w");
+  await page.keyboard.press("a");
+  await page.keyboard.press("Space");
+  await expect(page.getByRole("heading", { name: "Что не так с вопросом?" })).toBeVisible();
+  await waitForInputGate(page);
+  await page.keyboard.press("s");
+  await expect(page.locator(".feedback-tag-board .feedback-tag").nth(3)).toHaveClass(/feedback-tag--cursor/);
+  await page.keyboard.press("w");
+  await expect(page.locator(".feedback-tag-board .feedback-tag").nth(0)).toHaveClass(/feedback-tag--cursor/);
+});
+
+test("submits a complaint note without requiring a tag", async ({ page }) => {
+  await page.getByRole("button", { name: "9", exact: true }).click();
+  await page.getByRole("button", { name: "Начать игру" }).click();
+  await waitForInputGate(page);
+  await chooseCurrentTopic(page);
+  const state = await storedState(page);
+  const correct = state.phase.round.correctPosition as Position;
+  await answer(page, "green", correct);
+  await answer(page, "blue", correct);
+  await waitForInputGate(page);
+  await page.keyboard.press("w");
+  await page.keyboard.press("a");
+  await page.keyboard.press("Space");
+  const note = page.locator(".feedback-note textarea");
+  await note.fill("Проверить формулировку");
+  await note.blur();
+  await waitForInputGate(page);
+  await page.keyboard.press("s");
+  await page.keyboard.press("s");
+  await page.keyboard.press("d");
+  await expect(page.locator(".feedback-tag-board .feedback-tag").nth(7)).toHaveClass(/feedback-tag--cursor/);
+  await page.keyboard.press("Space");
+  await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
+});
