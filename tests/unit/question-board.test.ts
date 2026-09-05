@@ -2,12 +2,12 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import type { MatchState, PublicMatchView } from "../../src/domain";
-import { QuestionBoard } from "../../src/ui/gameUi";
+import { DifficultyFeedbackScreen, QuestionBoard } from "../../src/ui/gameUi";
 
 const state = {
   phase: {
     kind: "reveal",
-    round: { mode: "main" }
+    round: { mode: "main", difficulty: "easy" }
   },
   mainQuestionIndex: 0,
   config: { questionCount: 9 },
@@ -33,6 +33,17 @@ function view(notes: NonNullable<PublicMatchView["question"]>["wrongAnswerNotes"
 }
 
 describe("QuestionBoard wrong-answer notes", () => {
+  it("shows the assigned difficulty in the team question header", () => {
+    const html = renderToStaticMarkup(createElement(QuestionBoard, {
+      state,
+      view: view([]),
+      assignments: [],
+      titleById: { topic: "Тема" }
+    }));
+
+    expect(html).toContain("Вопрос 1 / 9 (Лёгкий)");
+  });
+
   it("renders the source immediately after the explanation and selected notes below it", () => {
     const html = renderToStaticMarkup(createElement(QuestionBoard, {
       state,
@@ -60,5 +71,28 @@ describe("QuestionBoard wrong-answer notes", () => {
     }));
     expect(html).not.toContain("Справки о выбранных неправильных ответах");
     expect(html).toContain("Источник: Проверочный источник");
+  });
+});
+
+describe("DifficultyFeedbackScreen", () => {
+  it("keeps the hard-question context visible during feedback", () => {
+    const html = renderToStaticMarkup(createElement(DifficultyFeedbackScreen, {
+      feedback: {
+        eventId: "feedback-1",
+        questionId: "question",
+        assignedDifficulty: "hard",
+        stage: "choice",
+        hasComplaint: null,
+        complaintReasons: [],
+        complaintNote: "",
+        cursor: 1
+      },
+      status: "idle",
+      error: null,
+      assignments: [],
+      setNote: () => undefined
+    }));
+
+    expect(html).toContain("Сложность: Сложный");
   });
 });

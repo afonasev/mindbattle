@@ -7,6 +7,7 @@ import type {
   StandingRow,
   TeamId
 } from "../domain";
+import { difficultyLabel } from "./difficulty";
 
 export const TEAM_META: Readonly<
   Record<TeamId, { readonly letter: string; readonly label: string }>
@@ -263,8 +264,8 @@ export function QuestionBoard({
         <span>{titleById[question.topicId] ?? question.topicId}</span>
         <strong>
           {state.phase.round.mode === "tie-break"
-            ? `Финал ${state.tieBreak?.questionNumber ?? 1}`
-            : `Вопрос ${state.mainQuestionIndex + 1} / ${state.config.questionCount}`}
+            ? `Финал ${state.tieBreak?.questionNumber ?? 1} (${difficultyLabel(state.phase.round.difficulty)})`
+            : `Вопрос ${state.mainQuestionIndex + 1} / ${state.config.questionCount} (${difficultyLabel(state.phase.round.difficulty)})`}
         </strong>
       </header>
       <h2>{question.prompt}</h2>
@@ -344,6 +345,7 @@ export function DifficultyFeedbackScreen({
   return (
     <section className="difficulty-feedback-stage" aria-labelledby="difficulty-feedback-title">
       <div className="stage-label">Фидбэк о вопросе</div>
+      <p className="feedback-difficulty">Сложность: {difficultyLabel(feedback.assignedDifficulty)}</p>
       <h2 id="difficulty-feedback-title">{isChoice ? "Хотите пожаловаться на вопрос?" : isNoComplaintResult ? "Продолжаем игру" : "Что не так с вопросом?"}</h2>
       {!isNoComplaintResult && <p className="feedback-instruction">Стрелки — курсор · подтвердить <ConfirmGlyphs assignments={assignments} /></p>}
       {!isNoComplaintResult && <div className="feedback-tag-board" role="list">{items.map(([tag, label], index) => <article key={tag} className={feedback.cursor === index ? "feedback-tag feedback-tag--cursor" : "feedback-tag"}><strong>{label}</strong>{feedback.complaintReasons.includes(tag as never) && <span>✓</span>}</article>)}</div>}

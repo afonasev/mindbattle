@@ -364,6 +364,29 @@ test("skips question feedback without calling its API when the match setting is 
   expect(feedbackRequests).toBe(0);
 });
 
+test("shows the assigned difficulty on the team question and feedback screens", async ({ page }, testInfo) => {
+  await page.getByRole("button", { name: "9", exact: true }).click();
+  await page.getByRole("button", { name: "Начать игру" }).click();
+  await waitForInputGate(page);
+  await chooseCurrentTopic(page);
+
+  await expect(page.locator(".question-header strong")).toHaveText("Вопрос 1 / 9 (Лёгкий)");
+  await captureSettled(page, testInfo.outputPath("team-question-difficulty.png"));
+
+  const answering = await storedState(page);
+  if (answering.phase.kind !== "answering") throw new Error("Expected answering phase");
+  const correct = answering.phase.round.correctPosition as Position;
+  await answer(page, "green", correct);
+  await answer(page, "blue", correct);
+  await expect(page.locator(".question-stage--reveal")).toBeVisible();
+  await waitForInputGate(page);
+  await page.keyboard.press("w");
+
+  await expect(page.locator(".difficulty-feedback-stage")).toBeVisible();
+  await expect(page.locator(".feedback-difficulty")).toHaveText("Сложность: Лёгкий");
+  await captureSettled(page, testInfo.outputPath("team-feedback-difficulty.png"));
+});
+
 test("plays a complete keyboard match through bonus veto, restore and sudden death", async ({ page }, testInfo) => {
   test.setTimeout(60_000);
   await page.getByRole("button", { name: "9", exact: true }).click();
@@ -393,6 +416,7 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
     await waitForInputGate(page);
 
     if (round === 0) {
+      await expect(page.locator(".question-header strong")).toHaveText("Вопрос 1 / 9 (Лёгкий)");
       await captureSettled(page, testInfo.outputPath("question.png"));
       await expect(page.getByRole("link", { name: /^Источник:/ })).toHaveCount(0);
     }
@@ -442,6 +466,7 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
     }
     if (round === 0) {
       await rateDifficulty(page);
+      await expect(page.locator(".feedback-difficulty")).toHaveText("Сложность: Лёгкий");
       await captureSettled(page, testInfo.outputPath("difficulty-feedback.png"));
     } else {
       await rateDifficulty(page);

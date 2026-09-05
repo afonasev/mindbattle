@@ -199,6 +199,7 @@ test("uses the team feedback layout with no selected by default", async ({ page 
   await expect(page.getByRole("heading", { name: "Хотите пожаловаться на вопрос?" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Нет" })).toHaveClass(/feedback-tag--cursor/);
   await expect(page.getByRole("button", { name: "Да" })).not.toHaveClass(/feedback-tag--cursor/);
+  await expect(page.locator(".feedback-difficulty")).toHaveText("Сложность: Лёгкий");
   await expect(page.locator(".feedback-status")).toContainText("«Нет» выбрано по умолчанию");
   await captureSettled(page, testInfo.outputPath("solo-feedback-default-no.png"));
   await page.keyboard.press("KeyA");
@@ -230,7 +231,7 @@ test("matches the team reveal for a wrong solo answer", async ({ page }, testInf
 
   await expect(page.locator(".question-stage--reveal .answer-option--wrong")).toHaveCount(1);
   await expect(page.locator(".game-brand span")).toHaveText("Соло-забег");
-  await expect(page.locator(".question-header strong")).toHaveText("Вопрос 1");
+  await expect(page.locator(".question-header strong")).toHaveText("Вопрос 1 (Лёгкий)");
   await expect(page.locator(".solo-team-strip .game-team-card")).toHaveClass(/game-team-card--wrong/);
   await expect(page.locator(".wrong-answer-notes")).toBeVisible();
   await expect(page.locator(".wrong-answer-notes")).toContainText("А что означал выбранный вариант?");
