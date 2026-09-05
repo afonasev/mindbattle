@@ -39,6 +39,9 @@ import {
   TopicSelection
 } from "./gameUi";
 import { SoloFeedbackScreen, SoloScreen } from "./soloUi";
+import { applyPwaUpdate, onPwaUpdate } from "../main";
+import { QueuedDifficultyFeedbackSink } from "../feedback";
+import { canApplyPwaUpdate } from "../pwaUpdate";
 
 const toPosition = {
   north: "up",
@@ -85,7 +88,7 @@ export function App() {
     storage: localStorage,
     clock: { now: () => performance.now(), wallTime: () => new Date().toISOString() },
     seeds: { nextSeed },
-    feedback: new HttpDifficultyFeedbackSink()
+    feedback: new QueuedDifficultyFeedbackSink(new HttpDifficultyFeedbackSink(), localStorage)
   }), []);
   const [preferences, setPreferences] = useState(controller.preferences);
   const [match, setMatch] = useState<MatchState | null>(controller.state);
@@ -93,6 +96,7 @@ export function App() {
   const [soloRecordId, setSoloRecordId] = useState<string | null>(null);
   const [soloInput, setSoloInput] = useState<SoloInputKind>("pointer");
   const [menuError, setMenuError] = useState<string | null>(null);
+  const [pwaUpdateReady, setPwaUpdateReady] = useState(false);
   const [gamepads, setGamepads] = useState<readonly Gamepad[]>([]);
   const inputRef = useRef(createInputRouterState());
   const soloGamepadButtonsRef = useRef(new Map<number, readonly boolean[]>());
@@ -101,6 +105,15 @@ export function App() {
   const answeringAudioRef = useRef(new AnsweringAudioMonitor());
   const lobbyThemePlayedRef = useRef(false);
   const audioRef = useRef(new AudioController(createHtmlAudioSourceFactory(), preferences));
+
+  useEffect(() => onPwaUpdate(setPwaUpdateReady), []);
+  useEffect(() => {
+    const sink = new QueuedDifficultyFeedbackSink(new HttpDifficultyFeedbackSink(), localStorage);
+    void sink.flush();
+    const flush = () => void sink.flush();
+    window.addEventListener("online", flush);
+    return () => window.removeEventListener("online", flush);
+  }, []);
 
   const sync = useCallback(
     () => setMatch(controller.state ? { ...controller.state } : null),
@@ -548,12 +561,13 @@ export function App() {
   if (solo) {
     const questionId = solo.phase.kind === "answering" || solo.phase.kind === "reveal" ? solo.phase.round.questionId : null;
     const question = questionId ? catalog.topics.flatMap((topic) => topic.questions).find((candidate) => candidate.id === questionId) : undefined;
-    return <div className={rootClass}>{solo.phase.kind === "feedback" ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} command={(command) => { setSoloInput("pointer"); dispatchSolo(command); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}</div>;
+    return <div className={rootClass}>{pwaUpdateReady && canApplyPwaUpdate(false, solo.phase.kind) && <PwaUpdateButton />}{solo.phase.kind === "feedback" ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} command={(command) => { setSoloInput("pointer"); dispatchSolo(command); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}</div>;
   }
 
   if (!match || !controller.view) {
     return (
       <div className={rootClass}>
+        {pwaUpdateReady && <PwaUpdateButton />}
         <MenuScreen
           settings={settings}
           setSettings={setSettings}
@@ -699,3 +713,5 @@ export function App() {
     </div>
   );
 }
+
+function PwaUpdateButton() { return <button className="pwa-update" type="button" onClick={() => void applyPwaUpdate()}>Доступно обновление · Обновить</button>; }

@@ -104,7 +104,7 @@ export function MenuScreen({
         <p>Соберите команды. Остальное решит эрудиция.</p>
       </header>
 
-      <section className="setup-stage" aria-labelledby="setup-title">
+      <section className="setup-stage mobile-classic-setup" aria-labelledby="setup-title">
         <div className="stage-label">Настройка партии</div>
         <h2 id="setup-title">Классическая игра</h2>
         <div className="segmented-settings">
@@ -186,13 +186,13 @@ export function MenuScreen({
         </div>
 
         <div className="menu-actions">
-          <button className="primary-action" type="button" disabled={!valid} onClick={start}>
+          <button className="primary-action mobile-classic-action" type="button" disabled={!valid} onClick={start}>
             Начать игру
           </button>
           <button className="secondary-action" type="button" onClick={startSolo}>Соло-забег</button>
           {restoreSolo && <button className="secondary-action" type="button" onClick={restoreSolo}>Продолжить соло-забег</button>}
           {restoreLabel && (
-            <button className="secondary-action" type="button" onClick={restore}>
+            <button className="secondary-action mobile-classic-action" type="button" onClick={restore}>
               {restoreLabel}
             </button>
           )}
