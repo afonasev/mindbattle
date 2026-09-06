@@ -74,7 +74,8 @@ describe("Solo question and feedback difficulty", () => {
       setNote: () => undefined,
       submit: () => undefined,
       pending: false,
-      error: null
+      error: null,
+      exit: () => undefined
     }));
 
     expect(html).toContain("Сложность: Сложный");

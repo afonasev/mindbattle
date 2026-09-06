@@ -159,7 +159,7 @@ describe("solo-endless-v1", () => {
     expect(state.phase.kind).toBe("topic");
   });
 
-  it("uses the shared reserve and finishes after the third error", () => {
+  it("keeps the final reserve error revealed until continuation", () => {
     let state = createSoloRun({ profile: "solo-endless-v1", collectQuestionFeedback: false }, "timer", 0, context());
     for (let index = 0; index < 3; index += 1) {
       if (state.phase.kind !== "topic") throw new Error("Expected topic");
@@ -170,6 +170,10 @@ describe("solo-endless-v1", () => {
         state = frame(state, [{ type: "continue" }]);
       }
     }
+    expect(state.phase.kind).toBe("reveal");
+    if (state.phase.kind !== "reveal") throw new Error("Expected final reveal");
+    expect(state.phase.final).toBe(true);
+    state = frame(state, [{ type: "continue" }]);
     expect(state.phase.kind).toBe("finished");
     expect(state.lives).toBe(0);
     expect(state.reserveMs).toBe(0);

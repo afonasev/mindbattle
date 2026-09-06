@@ -422,6 +422,8 @@ describe("SoloController", () => {
       restoredController.dispatch([{ type: "answer", position: wrong }]);
       if (index < 2) restoredController.dispatch([{ type: "continue" }]);
     }
+    expect(restoredController.state?.phase.kind).toBe("reveal");
+    restoredController.dispatch([{ type: "continue" }]);
     expect(restoredController.state?.phase.kind).toBe("finished");
     const record = restoredController.saveResult("Игрок");
     expect(record).toMatchObject({ name: "Игрок", score: 0 });

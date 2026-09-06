@@ -44,7 +44,7 @@ export type SoloPhase =
   | { readonly kind: "topic"; readonly candidates: readonly [TopicId, TopicId, TopicId]; readonly cursor: number }
   | { readonly kind: "risk"; readonly difficulty: Difficulty; readonly cursor?: 0 | 1 }
   | { readonly kind: "answering"; readonly round: SoloRound; readonly baseRemainingMs: number; readonly answer: AnswerPosition | null }
-  | { readonly kind: "reveal"; readonly round: SoloRound; readonly result: "correct" | "wrong" | "no-answer"; readonly answer: AnswerPosition | null }
+  | { readonly kind: "reveal"; readonly round: SoloRound; readonly result: "correct" | "wrong" | "no-answer"; readonly answer: AnswerPosition | null; readonly final?: boolean }
   | { readonly kind: "feedback"; readonly round: SoloRound; readonly result: "correct" | "wrong" | "no-answer"; readonly eventId: string; readonly hasComplaint: boolean | null; readonly feedbackCursor: number; readonly complaintReasons: readonly ComplaintReason[]; readonly complaintNote: string }
   | { readonly kind: "finished" };
 
@@ -192,7 +192,7 @@ function settle(state: SoloState, result: "correct" | "wrong" | "no-answer"): So
   if (state.phase.kind !== "answering") return state;
   const score = result === "correct" ? state.score + state.phase.round.points : state.score;
   const lives = result === "correct" ? state.lives : state.lives - 1;
-  return { ...state, score, lives, phase: lives === 0 ? { kind: "finished" } : { kind: "reveal", round: state.phase.round, result, answer: state.phase.answer } };
+  return { ...state, score, lives, phase: { kind: "reveal", round: state.phase.round, result, answer: state.phase.answer, final: lives === 0 || undefined } };
 }
 
 function advance(state: SoloState, atMs: number): SoloState {
@@ -237,6 +237,7 @@ export function reduceSoloFrame(state: SoloState, frame: SoloFrame, context: Dom
       const answered = { ...next, phase: { ...next.phase, answer: command.position } };
       return settle(answered, command.position === answered.phase.round.correctPosition ? "correct" : "wrong");
     } else if (next.phase.kind === "reveal" && command.type === "continue") {
+      if (next.phase.final) return { ...next, phase: { kind: "finished" } };
       if (!next.config.collectQuestionFeedback) return nextSlot(next, context);
       return {
         ...next,

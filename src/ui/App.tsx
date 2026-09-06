@@ -56,6 +56,7 @@ function nextSeed(): string {
 }
 
 function gamepadSnapshots(): readonly GamepadSnapshot[] {
+  if (typeof navigator.getGamepads !== "function") return [];
   return [...navigator.getGamepads()]
     .filter((item): item is Gamepad => item !== null)
     .map((gamepad) => ({
@@ -182,7 +183,9 @@ export function App() {
 
   useEffect(() => {
     const update = () =>
-      setGamepads([...navigator.getGamepads()].filter((item): item is Gamepad => item !== null));
+      setGamepads(typeof navigator.getGamepads === "function"
+        ? [...navigator.getGamepads()].filter((item): item is Gamepad => item !== null)
+        : []);
     update();
     window.addEventListener("gamepadconnected", update);
     window.addEventListener("gamepaddisconnected", update);
@@ -561,7 +564,7 @@ export function App() {
   if (solo) {
     const questionId = solo.phase.kind === "answering" || solo.phase.kind === "reveal" ? solo.phase.round.questionId : null;
     const question = questionId ? catalog.topics.flatMap((topic) => topic.questions).find((candidate) => candidate.id === questionId) : undefined;
-    return <div className={rootClass}>{pwaUpdateReady && canApplyPwaUpdate(false, solo.phase.kind) && <PwaUpdateButton />}{solo.phase.kind === "feedback" ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} command={(command) => { setSoloInput("pointer"); dispatchSolo(command); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}</div>;
+    return <div className={rootClass}>{pwaUpdateReady && canApplyPwaUpdate(false, solo.phase.kind) && <PwaUpdateButton />}{solo.phase.kind === "feedback" ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} exit={() => setSolo(null)} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} command={(command) => { setSoloInput("pointer"); dispatchSolo(command); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}</div>;
   }
 
   if (!match || !controller.view) {

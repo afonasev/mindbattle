@@ -56,7 +56,8 @@ async function setVirtualGamepadButton(
   await page.waitForTimeout(80);
 }
 
-test("shows the appropriate solo controls without overflowing the topic stage", async ({ page }, testInfo) => {
+test("shows touch-only solo controls without overflowing the topic stage", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/?muted=1");
   await page.evaluate(() => localStorage.clear());
   await page.reload();
@@ -64,20 +65,30 @@ test("shows the appropriate solo controls without overflowing the topic stage", 
   await page.getByRole("button", { name: "Соло-забег" }).click();
 
   await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
-  await page.keyboard.press("KeyD");
-  await expect(page.locator(".control-help")).toHaveText("A/D · S");
+  await expect(page.getByRole("button", { name: "Меню" })).toBeVisible();
+  await expect(page.locator(".solo-shell")).not.toContainText(/ESC|Enter|WASD|стрелки/i);
   await expect(page.locator(".topic-choice--current")).toHaveCount(1);
-  await captureSettled(page, testInfo.outputPath("solo-wasd-topic.png"));
-
-  await page.keyboard.press("ArrowRight");
-  await expect(page.locator(".control-help")).toHaveText("←/→ · Enter");
   const metrics = await page.locator(".solo-topic-stage").evaluate((stage) => ({
     stageFits: stage.scrollWidth <= stage.clientWidth,
     pageFits: document.documentElement.scrollWidth <= innerWidth,
     cardBelowStage: document.querySelector(".solo-team-strip")!.getBoundingClientRect().top > stage.getBoundingClientRect().bottom
   }));
   expect(metrics).toEqual({ stageFits: true, pageFits: true, cardBelowStage: true });
-  await captureSettled(page, testInfo.outputPath("solo-arrows-topic.png"));
+  await captureSettled(page, testInfo.outputPath("solo-touch-topic.png"));
+  await page.locator(".topic-choice").nth(1).click();
+  await expect(page.locator(".question-stage")).toBeVisible();
+  await captureSettled(page, testInfo.outputPath("solo-touch-answers.png"));
+  await page.locator(".solo-answer-button").first().click();
+  await expect(page.locator(".question-stage--reveal")).toBeVisible();
+  await captureSettled(page, testInfo.outputPath("solo-touch-answer-reveal.png"));
+});
+
+test("boots when the browser does not implement the Gamepad API", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "getGamepads", { configurable: true, value: undefined });
+  });
+  await page.goto("/?muted=1");
+  await expect(page.getByRole("button", { name: "Соло-забег" })).toBeVisible();
 });
 
 test("explains the easy risk before declining it without creating a question", async ({ page }, testInfo) => {
@@ -197,10 +208,10 @@ test("uses the team feedback layout with no selected by default", async ({ page 
   await page.locator(".question-stage--reveal .explanation").click();
 
   await expect(page.getByRole("heading", { name: "Хотите пожаловаться на вопрос?" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Нет" })).toHaveClass(/feedback-tag--cursor/);
+  await expect(page.getByRole("button", { name: "Нет, продолжить" })).toHaveClass(/feedback-tag--cursor/);
   await expect(page.getByRole("button", { name: "Да" })).not.toHaveClass(/feedback-tag--cursor/);
   await expect(page.locator(".feedback-difficulty")).toHaveText("Сложность: Лёгкий");
-  await expect(page.locator(".feedback-status")).toContainText("«Нет» выбрано по умолчанию");
+  await expect(page.locator(".feedback-status")).toContainText("Нет, продолжить");
   await captureSettled(page, testInfo.outputPath("solo-feedback-default-no.png"));
   await page.keyboard.press("KeyA");
   await expect(page.getByRole("button", { name: "Да" })).toHaveClass(/feedback-tag--cursor/);
@@ -213,6 +224,23 @@ test("uses the team feedback layout with no selected by default", async ({ page 
   await expect(page.getByRole("button", { name: "Слишком сложный" })).toContainText("✓");
   await page.keyboard.press("KeyS");
   await expect(page.getByRole("button", { name: "Фактическая ошибка" })).toHaveClass(/feedback-tag--cursor/);
+});
+
+test("continues from solo feedback when No is tapped", async ({ page }) => {
+  await page.goto("/?muted=1");
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await muteAudio(page);
+  await page.getByRole("button", { name: "Соло-забег" }).click();
+  await page.keyboard.press("Enter");
+  const answering = await soloState(page);
+  const correctPosition = answering.phase.round?.correctPosition;
+  if (!correctPosition) throw new Error("Expected solo question");
+  await page.keyboard.press(answerKey[correctPosition]);
+  await page.locator(".question-stage--reveal .explanation").click();
+
+  await page.getByRole("button", { name: "Нет, продолжить" }).click();
+  await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
 });
 
 test("matches the team reveal for a wrong solo answer", async ({ page }, testInfo) => {
