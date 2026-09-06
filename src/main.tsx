@@ -9,7 +9,7 @@ const appIcon = document.getElementById("app-icon");
 if (appIcon instanceof HTMLLinkElement) {
   appIcon.href = import.meta.env.DEV
     ? "/icons/mindbattle-dev.png"
-    : "/icons/mindbattle.png";
+    : "/icons/mindbattle-192.png";
 }
 
 const root = document.getElementById("root");
