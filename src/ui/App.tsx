@@ -472,12 +472,12 @@ export function App() {
         }
         if (phase?.kind === "feedback") {
           const feedbackCursor = phase.feedbackCursor ?? (phase.hasComplaint === true ? 0 : 1);
-          if (phase.hasComplaint !== true && (button === 12 || button === 3)) {
+          if (phase.hasComplaint !== true && button === 14) {
             setSoloInput("gamepad");
             dispatchSolo({ type: "set-feedback-cursor", cursor: 0 });
             break;
           }
-          if (phase.hasComplaint !== true && button === 13) {
+          if (phase.hasComplaint !== true && button === 15) {
             setSoloInput("gamepad");
             dispatchSolo({ type: "set-feedback-cursor", cursor: 1 });
             break;

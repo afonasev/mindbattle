@@ -355,3 +355,57 @@ test("accepts a neutral virtual gamepad and updates the control hint", async ({ 
   await setVirtualGamepadButton(page, 0, true);
   await expect(page.locator(".question-stage")).toBeVisible();
 });
+
+test("uses D-pad left and right, not up and down, for solo feedback choices", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium-1280", "One viewport is enough for gamepad input coverage");
+  await page.addInitScript(() => {
+    const pad = {
+      index: 0,
+      id: "Virtual Xbox Solo",
+      mapping: "standard",
+      connected: true,
+      timestamp: 0,
+      axes: [],
+      vibrationActuator: null,
+      buttons: Array.from({ length: 16 }, () => ({ pressed: false, touched: false, value: 0 }))
+    } as unknown as Gamepad;
+    (globalThis as typeof globalThis & { __soloPad: Gamepad }).__soloPad = pad;
+    Object.defineProperty(navigator, "getGamepads", { configurable: true, value: () => [pad] });
+  });
+  await page.goto("/?muted=1");
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await muteAudio(page);
+  await page.getByRole("button", { name: "Соло-забег" }).click();
+  await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
+
+  await setVirtualGamepadButton(page, 15, true);
+  await setVirtualGamepadButton(page, 15, false);
+  await setVirtualGamepadButton(page, 0, true);
+  await setVirtualGamepadButton(page, 0, false);
+  await expect(page.locator(".question-stage")).toBeVisible();
+  const state = await soloState(page);
+  const correctPosition = state.phase.round?.correctPosition;
+  if (!correctPosition) throw new Error("Expected solo question");
+  const buttonForPosition: Record<Position, number> = { up: 3, right: 1, down: 0, left: 2 };
+  await setVirtualGamepadButton(page, buttonForPosition[correctPosition], true);
+  await setVirtualGamepadButton(page, buttonForPosition[correctPosition], false);
+  await expect(page.locator(".question-stage--reveal")).toBeVisible();
+  await setVirtualGamepadButton(page, 0, true);
+  await setVirtualGamepadButton(page, 0, false);
+  await expect(page.getByRole("heading", { name: "Хотите пожаловаться на вопрос?" })).toBeVisible();
+
+  const selected = page.locator(".feedback-tag--cursor");
+  await expect(selected).toHaveText("Нет, продолжить");
+  await setVirtualGamepadButton(page, 12, true);
+  await setVirtualGamepadButton(page, 12, false);
+  await setVirtualGamepadButton(page, 13, true);
+  await setVirtualGamepadButton(page, 13, false);
+  await expect(selected).toHaveText("Нет, продолжить");
+  await setVirtualGamepadButton(page, 14, true);
+  await setVirtualGamepadButton(page, 14, false);
+  await expect(selected).toHaveText("Да");
+  await setVirtualGamepadButton(page, 15, true);
+  await setVirtualGamepadButton(page, 15, false);
+  await expect(selected).toHaveText("Нет, продолжить");
+});
