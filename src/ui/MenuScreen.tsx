@@ -42,6 +42,7 @@ export function MenuScreen({
   restoreSolo,
   restoreLabel,
   restore,
+  viewRecords,
   resetHistory,
   error
 }: {
@@ -55,6 +56,7 @@ export function MenuScreen({
   readonly restoreSolo: (() => void) | null;
   readonly restoreLabel: string | null;
   readonly restore: () => void;
+  readonly viewRecords: () => void;
   readonly resetHistory: () => void;
   readonly error: string | null;
 }) {
@@ -101,7 +103,7 @@ export function MenuScreen({
       <header className="brand-lockup brand-lockup--menu">
         <span className="eyebrow">Интеллектуальная битва</span>
         <h1>Mindbattle</h1>
-        <p>Соберите команды. Остальное решит эрудиция.</p>
+        <p><span className="desktop-menu-tagline">Соберите команды. Остальное решит эрудиция.</span><span className="mobile-menu-tagline">Все решит эрудиция</span></p>
       </header>
 
       <section className="setup-stage mobile-classic-setup" aria-labelledby="setup-title">
@@ -196,6 +198,7 @@ export function MenuScreen({
               {restoreLabel}
             </button>
           )}
+          <button className="secondary-action" type="button" onClick={viewRecords}>Рекорды</button>
         </div>
         {error && <p className="menu-error" role="alert">{error}</p>}
       </section>

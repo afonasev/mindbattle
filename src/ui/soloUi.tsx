@@ -38,6 +38,13 @@ export function SoloScreen({ state, question, titleById, records, savedRecordId,
   </SoloFrame>;
 }
 
+export function SoloRecordsScreen({ records, exit }: {
+  readonly records: readonly SoloRecord[];
+  readonly exit: () => void;
+}) {
+  return <SoloFrame onMenu={exit}><section className="winner-stage solo-results" aria-labelledby="solo-records-title"><div className="stage-label stage-label--bonus">Соло-забег</div><h2 id="solo-records-title">Рекорды</h2>{records.length > 0 ? <ol>{records.slice(0, 10).map((record, index) => <li key={record.id}><span className="solo-record-rank">{index + 1}</span><strong>{record.name}</strong><b>{record.score}</b></li>)}</ol> : <p className="solo-rank">Пока нет сохранённых результатов.</p>}<button className="secondary-action" type="button" onClick={exit}>Назад</button></section></SoloFrame>;
+}
+
 function SoloFrame({ children, onMenu }: { readonly children: React.ReactNode; readonly onMenu?: () => void }) {
   return <main className="game-shell solo-shell"><div className="arena-glow" aria-hidden="true" /><header className="game-brand"><strong>Mindbattle</strong>{onMenu && <button className="solo-menu-button" type="button" onClick={onMenu}>Меню</button>}</header>{children}</main>;
 }

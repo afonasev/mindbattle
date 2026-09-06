@@ -38,7 +38,7 @@ import {
   TopicConfirmation,
   TopicSelection
 } from "./gameUi";
-import { SoloFeedbackScreen, SoloScreen } from "./soloUi";
+import { SoloFeedbackScreen, SoloRecordsScreen, SoloScreen } from "./soloUi";
 import { applyPwaUpdate, onPwaUpdate } from "../main";
 import { QueuedDifficultyFeedbackSink } from "../feedback";
 import { canApplyPwaUpdate } from "../pwaUpdate";
@@ -95,6 +95,7 @@ export function App() {
   const [match, setMatch] = useState<MatchState | null>(controller.state);
   const [solo, setSolo] = useState<SoloState | null>(soloController.state);
   const [soloRecordId, setSoloRecordId] = useState<string | null>(null);
+  const [showSoloRecords, setShowSoloRecords] = useState(false);
   const [soloInput, setSoloInput] = useState<SoloInputKind>("pointer");
   const [menuError, setMenuError] = useState<string | null>(null);
   const [pwaUpdateReady, setPwaUpdateReady] = useState(false);
@@ -571,7 +572,7 @@ export function App() {
     return (
       <div className={rootClass}>
         {pwaUpdateReady && <PwaUpdateButton />}
-        <MenuScreen
+        {showSoloRecords ? <SoloRecordsScreen records={soloController.records} exit={() => setShowSoloRecords(false)} /> : <MenuScreen
           settings={settings}
           setSettings={setSettings}
           preferences={preferences}
@@ -600,13 +601,14 @@ export function App() {
               sync();
             }
           }}
+          viewRecords={() => setShowSoloRecords(true)}
           resetHistory={() => {
             if (window.confirm("Сбросить историю вопросов? Последняя партия сохранится.")) {
               controller.resetQuestionHistory();
             }
           }}
           error={menuError}
-        />
+        />}
       </div>
     );
   }
