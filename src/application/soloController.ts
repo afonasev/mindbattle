@@ -1,6 +1,8 @@
 import {
   addSoloRecord,
+  loadSoloRecords,
   loadPersistedData,
+  saveSoloRecords,
   savePersistedData,
   soloLeaderboard,
   type PersistedData,
@@ -26,6 +28,7 @@ export class SoloController {
   private readonly clock: GameControllerClock;
   private readonly seeds: GameSeedSource;
   private persisted: PersistedData;
+  private soloRecords: readonly SoloRecord[];
   private context: CatalogDomainContext;
   private currentState: SoloState | null = null;
   private restorableState: SoloState | null = null;
@@ -40,12 +43,13 @@ export class SoloController {
     this.seeds = seeds;
     this.feedback = feedback;
     this.persisted = loadPersistedData(storage, catalog.revision, (history) => migrateQuestionHistory(catalog.topics, history));
+    this.soloRecords = loadSoloRecords(storage);
     this.context = new CatalogDomainContext(catalog, this.persisted.history);
     this.restorableState = this.persisted.lastSolo && this.persisted.lastSolo.status === "in-progress" && validSoloState(this.persisted.lastSolo.state, catalog.revision) ? this.persisted.lastSolo.state : null;
   }
 
   get state(): SoloState | null { return this.currentState; }
-  get records(): readonly SoloRecord[] { return soloLeaderboard(this.persisted.soloRecords); }
+  get records(): readonly SoloRecord[] { return soloLeaderboard(this.soloRecords); }
   get canRestore(): boolean { return this.restorableState !== null; }
   get difficultyFeedbackStatus(): FeedbackSubmissionStatus { return this.feedbackStatus; }
   get difficultyFeedbackError(): string | null { return this.feedbackError; }
@@ -130,8 +134,8 @@ export class SoloController {
       score: this.currentState.score,
       savedAt: this.clock.wallTime()
     };
-    this.persisted = addSoloRecord(this.persisted, record);
-    savePersistedData(this.storage, this.persisted);
+    this.soloRecords = addSoloRecord(this.persisted, record).soloRecords;
+    saveSoloRecords(this.storage, this.soloRecords);
     return record;
   }
 

@@ -2,6 +2,7 @@ import { EMPTY_QUESTION_HISTORY, type QuestionHistory } from "../content";
 import type { TeamControlAssignment } from "./input";
 
 export const STORAGE_KEY = "mindbattle:data:v1";
+export const SOLO_RECORDS_STORAGE_KEY = "mindbattle:solo-records:v1";
 
 export interface AccessibilityPreferences {
   readonly volume: number;
@@ -71,6 +72,33 @@ function decodeSoloRecords(value: unknown): readonly SoloRecord[] | null {
     records.push({ id: item.id, name: item.name, score: item.score, savedAt: item.savedAt });
   }
   return records;
+}
+
+function decodeSoloRecordsSource(source: string | null): readonly SoloRecord[] | null {
+  if (source === null) return null;
+  try {
+    const parsed: unknown = JSON.parse(source);
+    return Array.isArray(parsed) ? decodeSoloRecords(parsed) : null;
+  } catch { return null; }
+}
+
+export function loadSoloRecords(storage: StorageLike): readonly SoloRecord[] {
+  const stored = decodeSoloRecordsSource(storage.getItem(SOLO_RECORDS_STORAGE_KEY));
+  if (stored !== null) return stored;
+  let legacy: readonly SoloRecord[] = [];
+  try {
+    const parsed: unknown = JSON.parse(storage.getItem(STORAGE_KEY) ?? "null");
+    if (isRecord(parsed)) legacy = decodeSoloRecords(parsed.soloRecords) ?? [];
+  } catch { /* legacy data is optional */ }
+  saveSoloRecords(storage, legacy);
+  return legacy;
+}
+
+export function saveSoloRecords(storage: StorageLike, records: readonly SoloRecord[]): boolean {
+  try {
+    storage.setItem(SOLO_RECORDS_STORAGE_KEY, JSON.stringify(records));
+    return true;
+  } catch { return false; }
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

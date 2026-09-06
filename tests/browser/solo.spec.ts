@@ -81,6 +81,12 @@ test("shows touch-only solo controls without overflowing the topic stage", async
   await page.locator(".solo-answer-button").first().click();
   await expect(page.locator(".question-stage--reveal")).toBeVisible();
   await captureSettled(page, testInfo.outputPath("solo-touch-answer-reveal.png"));
+  await page.getByRole("button", { name: "Меню" }).click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await page.getByRole("button", { name: "Продолжить" }).click();
+  await expect(page.locator(".question-stage--reveal")).toBeVisible();
+  await page.locator(".solo-team-strip").click();
+  await expect(page.getByRole("heading", { name: "Хотите пожаловаться на вопрос?" })).toBeVisible();
 });
 
 test("boots when the browser does not implement the Gamepad API", async ({ page }) => {

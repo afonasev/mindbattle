@@ -2,10 +2,12 @@ import { describe, expect, it } from "vitest";
 import {
   addSoloRecord,
   DEFAULT_PREFERENCES,
+  SOLO_RECORDS_STORAGE_KEY,
   STORAGE_KEY,
   decodePersistedData,
   emptyPersistedData,
   loadPersistedData,
+  loadSoloRecords,
   replaceLastMatch,
   resetQuestionHistory,
   savePersistedData,
@@ -16,17 +18,15 @@ import {
 } from "../../src/adapters/storage";
 
 class MemoryStorage implements StorageLike {
-  value: string | null = null;
+  private readonly values = new Map<string, string>();
   getItem(key: string) {
-    expect(key).toBe(STORAGE_KEY);
-    return this.value;
+    return this.values.get(key) ?? null;
   }
   setItem(key: string, value: string) {
-    expect(key).toBe(STORAGE_KEY);
-    this.value = value;
+    this.values.set(key, value);
   }
-  removeItem() {
-    this.value = null;
+  removeItem(key: string) {
+    this.values.delete(key);
   }
 }
 
@@ -155,5 +155,15 @@ describe("versioned persistence", () => {
     data = addSoloRecord(data, { id: "high", name: "Верх", score: 600, savedAt: "2026-09-05T11:00:00.000Z" });
     data = addSoloRecord(data, { id: "middle", name: "Середина", score: 100, savedAt: "2026-09-05T12:00:00.000Z" });
     expect(soloLeaderboard(data.soloRecords).map((record) => record.id)).toEqual(["high", "middle", "low"]);
+  });
+
+  it("migrates records once and keeps them when the legacy snapshot is corrupt", () => {
+    const storage = new MemoryStorage();
+    const records = [{ id: "one", name: "Игрок", score: 100, savedAt: "2026-09-06" }];
+    storage.setItem(STORAGE_KEY, JSON.stringify({ version: 1, soloRecords: records, broken: true }));
+    expect(loadSoloRecords(storage)).toEqual(records);
+    storage.setItem(STORAGE_KEY, "{broken");
+    expect(loadSoloRecords(storage)).toEqual(records);
+    expect(JSON.parse(storage.getItem(SOLO_RECORDS_STORAGE_KEY)!)).toEqual(records);
   });
 });
