@@ -1,4 +1,5 @@
-import { EMPTY_QUESTION_HISTORY, type QuestionHistory } from "../content";
+import { EMPTY_QUESTION_HISTORY } from "../content/scheduler";
+import type { QuestionHistory } from "../content/scheduler";
 import type { TeamControlAssignment } from "./input";
 
 export const STORAGE_KEY = "mindbattle:data:v1";
@@ -105,7 +106,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function decodePreferences(value: unknown): AccessibilityPreferences | null {
+export function decodePreferences(value: unknown): AccessibilityPreferences | null {
   if (!isRecord(value)) return null;
   if (
     typeof value.volume !== "number" ||

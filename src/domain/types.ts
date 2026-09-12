@@ -1,6 +1,7 @@
 import type { RandomState } from "./prng";
 
-export type TeamId = "green" | "blue" | "yellow" | "red";
+export type LocalTeamId = "green" | "blue" | "yellow" | "red";
+export type TeamId = LocalTeamId | `player-${number}`;
 export type Difficulty = "easy" | "medium" | "hard";
 export type PerceivedDifficulty = "trivial" | "easy" | "medium" | "hard";
 export type SimilarityPreference = "like" | "abstain" | "dislike";
@@ -20,7 +21,7 @@ export type AnswerId = string;
 export const ANSWER_POSITIONS = ["up", "right", "down", "left"] as const satisfies readonly AnswerPosition[];
 
 export interface MatchConfig {
-  readonly profile: "classic-v1";
+  readonly profile: "classic-v1" | "network-v1";
   readonly questionCount: 9 | 15 | 21;
   readonly answerTimeMs: 10_000 | 20_000 | 30_000;
   readonly teams: readonly TeamId[];
@@ -222,6 +223,8 @@ export interface TieBreakState {
 }
 
 export interface MatchState {
+  readonly departedTeamIds?: readonly TeamId[];
+  readonly endReason?: "insufficient-players";
   readonly schemaVersion: 3;
   readonly catalogRevision: string;
   readonly matchId: string;

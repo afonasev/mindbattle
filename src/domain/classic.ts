@@ -17,6 +17,14 @@ export const CLASSIC_V1 = Object.freeze({
   })
 });
 
+export const NETWORK_V1 = Object.freeze({
+  ...CLASSIC_V1,
+  id: "network-v1" as const,
+  minPlayers: 2,
+  maxPlayers: 12,
+  bonusVoters: 4
+});
+
 export class InvalidMatchConfigError extends Error {
   constructor(message: string) {
     super(message);
@@ -25,7 +33,7 @@ export class InvalidMatchConfigError extends Error {
 }
 
 export function validateMatchConfig(config: MatchConfig): MatchConfig {
-  if (config.profile !== CLASSIC_V1.id) {
+  if (config.profile !== CLASSIC_V1.id && config.profile !== "network-v1") {
     throw new InvalidMatchConfigError(`Unknown profile: ${config.profile}`);
   }
   if (!(QUESTION_COUNTS as readonly number[]).includes(config.questionCount)) {
@@ -34,13 +42,15 @@ export function validateMatchConfig(config: MatchConfig): MatchConfig {
   if (!(ANSWER_TIMES_MS as readonly number[]).includes(config.answerTimeMs)) {
     throw new InvalidMatchConfigError(`Unsupported answer time: ${config.answerTimeMs}`);
   }
-  if (config.teams.length < 2 || config.teams.length > 4) {
+  if (config.teams.length < 2 || config.teams.length > (config.profile === "network-v1" ? NETWORK_V1.maxPlayers : 4)) {
     throw new InvalidMatchConfigError("A match requires two to four teams");
   }
   if (new Set(config.teams).size !== config.teams.length) {
     throw new InvalidMatchConfigError("Team identifiers must be unique");
   }
-  if (config.teams.some((teamId) => !(TEAM_IDS as readonly string[]).includes(teamId))) {
+  if (config.teams.some((teamId) => config.profile === "network-v1"
+    ? !/^player-([1-9]|1[0-2])$/.test(teamId)
+    : !(TEAM_IDS as readonly string[]).includes(teamId))) {
     throw new InvalidMatchConfigError("Unknown team identifier");
   }
   if (config.collectQuestionFeedback !== undefined && typeof config.collectQuestionFeedback !== "boolean") {
