@@ -1,6 +1,7 @@
 import { StrictMode, Suspense, lazy, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { registerSW } from "virtual:pwa-register";
+import { checkForPwaUpdate } from "./pwaUpdate";
 import "@fontsource-variable/onest/wght.css";
 const App = lazy(() => import("./ui/App").then(module => ({ default: module.App })));
 const NetworkApp = lazy(() => import("./ui/NetworkApp").then(module => ({ default: module.NetworkApp })));
@@ -35,7 +36,13 @@ function RoutedApp() {
   return path === "/network" ? <NetworkApp /> : <App />;
 }
 if ("serviceWorker" in navigator) {
-  applyUpdate = registerSW({ onNeedRefresh: () => updateListeners.forEach((listener) => listener(true)) });
+  applyUpdate = registerSW({
+    immediate: true,
+    onNeedRefresh: () => updateListeners.forEach((listener) => listener(true)),
+    onRegisteredSW: (_swScriptUrl, registration) => {
+      void checkForPwaUpdate(registration).catch(() => undefined);
+    }
+  });
 }
 
 if (!root) {

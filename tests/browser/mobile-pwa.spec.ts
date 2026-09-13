@@ -1,10 +1,9 @@
 import { expect, test } from "@playwright/test";
 
-test.use({ viewport: { width: 390, height: 844 } });
-
 test("mobile menu exposes solo only and has an install manifest", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
-  await expect(page.getByRole("button", { name: "Соло-забег" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Одиночная игра" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Начать игру" })).toBeHidden();
   await expect(page.getByText("Все решит эрудиция")).toBeVisible();
   await expect(page.getByText("Соберите команды. Остальное решит эрудиция.")).toBeHidden();
@@ -19,7 +18,7 @@ test("mobile menu exposes solo only and has an install manifest", async ({ page 
     { src: "/icons/mindbattle-512.png", sizes: "512x512", type: "image/png", purpose: "any maskable" }
   ]);
   expect((await page.request.get("/icons/apple-touch-icon.png")).ok()).toBe(true);
-  const soloButton = page.getByRole("button", { name: "Соло-забег" });
+  const soloButton = page.getByRole("button", { name: "Одиночная игра" });
   const recordsButton = page.getByRole("button", { name: "Рекорды" });
   const soloBox = await soloButton.boundingBox();
   const recordsBox = await recordsButton.boundingBox();
