@@ -215,7 +215,7 @@ export function NetworkApp() {
     !locked;
   return (
     <main
-      className={`network-app ${mobile ? "network-mobile" : "network-display"} ${preferences.textSize === "large" ? "network-text-large" : ""} ${preferences.highContrast ? "network-high-contrast" : ""} ${preferences.reducedMotion ? "reduced-motion" : ""}`}
+      className={`game-shell network-app ${mobile ? "network-mobile" : "network-display"} ${preferences.textSize === "large" ? "network-text-large" : ""} ${preferences.highContrast ? "network-high-contrast" : ""} ${preferences.reducedMotion ? "reduced-motion" : ""}`}
       onClick={
         canSkipConfirmation
           ? (event) => {
@@ -225,7 +225,7 @@ export function NetworkApp() {
           : undefined
       }
     >
-      <header className="network-header">
+      <header className="game-brand network-header">
         <a href="/">MINDBATTLE</a>
         <span>Сетевая игра{snapshot ? ` · ${snapshot.code}` : ""}</span>
         {!mobile && (
@@ -381,7 +381,7 @@ export function NetworkApp() {
       ) : (
         <>
           {phase === "lobby" ? (
-            <section className="network-lobby">
+            <section className="setup-stage network-lobby">
               <div className="network-lobby-intro">
                 <span className="network-eyebrow">Код комнаты</span>
                 <h1 className="network-code">{snapshot.code}</h1>
@@ -594,8 +594,8 @@ export function NetworkApp() {
                   </section>
                 </div>
               )}
-            {phase === "normal-topic" && (
-                <>
+              {phase === "normal-topic" && (
+                <section className="topic-stage network-topic-stage">
                   <h1>
                     {snapshot.canChoose
                       ? "Выберите тему"
@@ -614,10 +614,10 @@ export function NetworkApp() {
                       </button>
                     ))}
                   </div>
-                </>
+                </section>
               )}
               {phase === "bonus-veto" && (
-                <>
+                <section className="topic-stage network-topic-stage">
                   <h1>Бонусный вопрос · ×2</h1>
                   <p>
                     {snapshot.canVeto
@@ -671,21 +671,21 @@ export function NetworkApp() {
                       Снять запрет
                     </button>
                   )}
-                </>
+                </section>
               )}
               {phase === "topic-confirmation" && (
-                <div className="network-confirmation">
+                <section className="topic-confirmation-stage network-confirmation">
                   <p>
                     {view?.confirmationBonus ? "Бонусная тема" : "Тема вопроса"}
                   </p>
                   <h1>{snapshot.titles[view?.topicId ?? ""]}</h1>
                   <strong>{seconds(view?.confirmationRemainingMs ?? 0)}</strong>
-                </div>
+                </section>
               )}
               {(phase === "answering" || phase === "reveal") &&
                 view?.question && (
                   <div
-                    className={`network-question-area ${phase === "reveal" ? "revealed" : ""}`}
+                    className={`question-stage network-question-area ${phase === "reveal" ? "revealed" : ""}`}
                   >
                     <h1 className="network-question">{view.question.prompt}</h1>
                     <div className="network-answers">
@@ -852,7 +852,7 @@ export function NetworkApp() {
                 </>
               )}
               {(phase === "standings" || phase === "finished") && (
-                <>
+                <section className="standings-stage network-results">
                   <h1>
                     {phase === "finished"
                       ? snapshot.endReason
@@ -888,7 +888,7 @@ export function NetworkApp() {
                       Общие итоги — на большом экране.
                     </p>
                   )}
-                </>
+                </section>
               )}
               {phase === "finished" && snapshot.isLeader && (
                 <div className="network-actions">

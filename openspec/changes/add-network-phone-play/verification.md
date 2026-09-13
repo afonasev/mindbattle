@@ -33,6 +33,7 @@
 - Обычный выбор темы: unit и browser 12 phones подтверждают имя текущего выбирающего на ожидающем телефоне.
 - Отсчёт темы: unit подтверждает право только ведущего пропустить его; browser 12 phones кликом по шапке телефона ведущего сразу переводит всех к вопросу.
 - Переход после раскрытия: browser 12 phones подтверждает кнопку «Дальше» в верхней строке телефона ведущего; актуальный mobile PNG сохранён.
+- Визуальная согласованность: network lobby и игровые стадии используют общие shell, stage, card и answer-паттерны web-режима; desktop и mobile PNG с 12 игроками проверены.
 - Network audio: отдельный display create-gesture test PASS; в сценарии 12 телефонов ни одного аудиозапроса без принудительного mute на телефонах.
 - Отсчёт темы: `tests/unit/audio.test.ts` подтверждает отдельный сигнал для цифр 3, 2 и 1; browser audio regression PASS.
 - `node scripts/testNetworkApi.mjs`: production API PASS (код, authorization, замена stream, успешное закрытие, cleanup, удаление комнаты).
