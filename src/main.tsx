@@ -1,8 +1,10 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense, lazy } from "react";
 import { createRoot } from "react-dom/client";
 import { registerSW } from "virtual:pwa-register";
 import "@fontsource-variable/onest/wght.css";
-import { App } from "./ui/App";
+const App = lazy(() => location.pathname === "/network"
+  ? import("./ui/NetworkApp").then(module => ({ default: module.NetworkApp }))
+  : import("./ui/App").then(module => ({ default: module.App })));
 import "./ui/theme.css";
 
 const appIcon = document.getElementById("app-icon");
@@ -28,6 +30,6 @@ if (!root) {
 
 createRoot(root).render(
   <StrictMode>
-    <App />
+    <Suspense fallback={<p role="status">Загружаем Mindbattle…</p>}><App /></Suspense>
   </StrictMode>
 );

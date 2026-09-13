@@ -77,7 +77,7 @@ function validContinuation(value: unknown, config: MatchConfig): boolean {
     value.contenders.every((teamId) => config.teams.includes(teamId as TeamId));
 }
 
-function validPhase(value: unknown, config: MatchConfig): boolean {
+function validPhase(value: unknown, config: MatchConfig, departedCount = 0): boolean {
   if (!record(value) || typeof value.kind !== "string") return false;
   if (value.kind === "normal-topic") {
     return config.teams.includes(value.chooser as TeamId) &&
@@ -101,7 +101,7 @@ function validPhase(value: unknown, config: MatchConfig): boolean {
   }
   if (value.kind === "bonus-veto") {
     if (!(stringArray(value.candidates) &&
-      value.candidates.length === config.teams.length + 1 &&
+      value.candidates.length === (config.profile === "network-v1" ? Math.min(4, config.teams.length - departedCount) : config.teams.length) + 1 &&
       new Set(value.candidates).size === value.candidates.length &&
       record(value.cursors) &&
       record(value.vetoes))) return false;
@@ -237,6 +237,11 @@ export function deserializeMatch(
     value.config = { ...value.config, collectQuestionFeedback: true };
   }
   const config = value.config as MatchConfig;
+  if (value.departedTeamIds !== undefined && (config.profile !== "network-v1" ||
+    !stringArray(value.departedTeamIds) || new Set(value.departedTeamIds).size !== value.departedTeamIds.length ||
+    !value.departedTeamIds.every(id => config.teams.includes(id as TeamId)))) return null;
+  if (value.endReason !== undefined && (config.profile !== "network-v1" || value.endReason !== "insufficient-players")) return null;
+
   if (
     value.schemaVersion !== 3 ||
     value.catalogRevision !== expectedCatalogRevision ||
@@ -281,7 +286,7 @@ export function deserializeMatch(
       (count) => finite(count) && Number.isSafeInteger(count) && count >= 0
     ) ||
     !validTieBreak(value.tieBreak, config) ||
-    !validPhase(value.phase, config) ||
+    !validPhase(value.phase, config, Array.isArray(value.departedTeamIds) ? value.departedTeamIds.length : 0) ||
     !validPause(value.pause, config) ||
     !finite(value.lastFrameAtMs)
   ) {

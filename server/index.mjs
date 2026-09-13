@@ -30,6 +30,14 @@ if (dev) {
   vite = await createViteServer({ root: projectRoot, server: { middlewareMode: true }, appType: "spa" });
 }
 
+const { createNetworkApi } = vite
+  ? await vite.ssrLoadModule("/server/network.ts")
+  : await import("../server-dist/network.js");
+const networkApi = createNetworkApi(async (event) => {
+  const result = await store.append(event);
+  if (result.status === "invalid" || result.status === "conflict") throw new Error("Feedback rejected");
+});
+
 function json(response, status, body) {
   response.writeHead(status, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" });
   response.end(JSON.stringify(body));
@@ -63,6 +71,7 @@ async function serveStatic(request, response) {
 
 const server = createServer(async (request, response) => {
   try {
+    if (await networkApi(request, response)) return;
     const url = new URL(request.url, "http://local");
     if (url.pathname === "/api/difficulty-feedback" && request.method === "POST") {
       const result = await store.append(await readJson(request));

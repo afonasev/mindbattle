@@ -67,7 +67,7 @@ export function MenuScreen({
     setSettings({
       ...settings,
       teamCount,
-      assignments: settings.assignments.filter(({ teamId }) => teams.includes(teamId as TeamId))
+      assignments: settings.assignments.filter(({ teamId }) => (teams as readonly string[]).includes(teamId))
     });
   };
   const updateAssignment = (teamId: TeamId, value: string) => {
@@ -188,6 +188,8 @@ export function MenuScreen({
         </div>
 
         <div className="menu-actions">
+          <a className="secondary-action network-menu-desktop" href="/network">Создать сетевую игру</a>
+          <a className="secondary-action network-menu-mobile" href="/network">Подключиться к игре</a>
           <button className="primary-action mobile-classic-action" type="button" disabled={!valid} onClick={start}>
             Начать игру
           </button>

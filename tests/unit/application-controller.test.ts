@@ -22,14 +22,14 @@ import type { DifficultyFeedbackEvent, DifficultyFeedbackSink } from "../../src/
 class MemoryStorage implements StorageLike {
   value: string | null = null;
   writes = 0;
+  private additional = new Map<string, string>();
 
   getItem(key: string): string | null {
-    expect(key).toBe(STORAGE_KEY);
-    return this.value;
+    return key === STORAGE_KEY ? this.value : this.additional.get(key) ?? null;
   }
 
   setItem(key: string, value: string): void {
-    expect(key).toBe(STORAGE_KEY);
+    if (key !== STORAGE_KEY) { this.additional.set(key, value); return; }
     this.value = value;
     this.writes += 1;
   }

@@ -1,5 +1,6 @@
 import {
   CLASSIC_V1,
+  NETWORK_V1,
   isBonusQuestion,
   pointsFor,
   reserveFor,
@@ -58,11 +59,26 @@ function addShownTopics(
   return next;
 }
 
+export function activeTeams(state: MatchState): readonly TeamId[] {
+  return state.config.teams.filter(id => !state.departedTeamIds?.includes(id));
+}
+
+/** Stable original ring: departures never renumber the next ordinary choice. */
+export function choiceQueue(state: MatchState): readonly TeamId[] {
+  const ring = state.config.teams;
+  const start = (state.firstChooserOffset + state.normalChoiceOrdinal) % ring.length;
+  return [...ring.slice(start), ...ring.slice(0, start)].filter(id => activeTeam(state, id));
+}
+
+export function bonusParticipants(state: MatchState): readonly TeamId[] {
+  return state.config.profile === "network-v1" ? choiceQueue(state).slice(0, NETWORK_V1.bonusVoters) : state.config.teams;
+}
+
 function prepareMainSelection(state: MatchState, context: DomainContext): MatchState {
   const stage = stageFor(state.config, state.mainQuestionIndex);
   const difficulty = CLASSIC_V1.difficulties[stage];
   const bonus = isBonusQuestion(state.config, state.mainQuestionIndex);
-  const count = bonus ? state.config.teams.length + 1 : 3;
+  const count = bonus ? bonusParticipants(state).length + 1 : 3;
   const selection = context.selectTopics({
     count,
     difficulty,
@@ -74,7 +90,7 @@ function prepareMainSelection(state: MatchState, context: DomainContext): MatchS
   const shownTopicCounts = addShownTopics(state.shownTopicCounts, selection.topicIds);
 
   if (bonus) {
-    const cursors = Object.fromEntries(state.config.teams.map((teamId) => [teamId, 0]));
+    const cursors = Object.fromEntries(bonusParticipants(state).map((teamId) => [teamId, 0]));
     return {
       ...state,
       random: selection.random,
@@ -96,7 +112,7 @@ function prepareMainSelection(state: MatchState, context: DomainContext): MatchS
     shownTopicCounts,
     phase: {
       kind: "normal-topic",
-      chooser: state.config.teams[chooserIndex],
+      chooser: state.config.profile === "network-v1" ? choiceQueue(state)[0] : state.config.teams[chooserIndex],
       candidates: asTriple(selection.topicIds),
       cursor: 0
     }
@@ -161,7 +177,7 @@ function startQuestion(
   const contenders = new Set(state.tieBreak?.contenders ?? []);
   const attempts: readonly TeamAttempt[] = state.config.teams.map((teamId) => ({
     teamId,
-    status: mode === "main" || contenders.has(teamId) ? "open" : "spectator",
+    status: activeTeam(state, teamId) && (mode === "main" || contenders.has(teamId)) ? "open" : "spectator",
     answer: null
   }));
   const round: RoundState = {
@@ -202,6 +218,9 @@ function prepareTieBreakSelection(
         contenders: [...contenders],
         questionNumber: 1
       };
+  if (state.config.profile === "network-v1") {
+    return startQuestion({ ...state, tieBreak }, context, null, "tie-break");
+  }
   const selection = context.selectTopics({
     count: contenders.length + 1,
     difficulty: "hard",
@@ -272,7 +291,7 @@ export function createMatch(
 }
 
 function activeTeam(state: MatchState, teamId: TeamId): boolean {
-  return state.config.teams.includes(teamId);
+  return state.config.teams.includes(teamId) && !state.departedTeamIds?.includes(teamId);
 }
 
 function withAttempt(
@@ -346,7 +365,7 @@ function settleRound(state: MatchState): MatchState {
         ? { kind: "finished", winnerId: correct[0] }
         : { kind: "tie-break", contenders };
   } else if (state.mainQuestionIndex === state.config.questionCount - 1) {
-    const leaders = winnersByScore(teams);
+    const leaders = winnersByScore(teams.filter(team => activeTeam(state, team.id)));
     continuation =
       leaders.length === 1
         ? { kind: "finished", winnerId: leaders[0] }
@@ -438,7 +457,9 @@ function applyNormalTopic(state: MatchState, command: DomainCommand): MatchState
   const selected = {
     ...state,
     selectedTopicIds: [...state.selectedTopicIds, topicId],
-    normalChoiceOrdinal: state.normalChoiceOrdinal + 1
+    normalChoiceOrdinal: state.normalChoiceOrdinal + 1 + (state.config.profile === "network-v1"
+      ? (state.config.teams.indexOf(state.phase.chooser) - (state.firstChooserOffset + state.normalChoiceOrdinal) % state.config.teams.length + state.config.teams.length) % state.config.teams.length
+      : 0)
   };
   return {
     ...selected,
@@ -461,7 +482,7 @@ function applyBonusCommand(
     !("teamId" in command) ||
     !(state.phase.kind === "final-veto"
       ? state.tieBreak?.contenders.includes(command.teamId)
-      : activeTeam(state, command.teamId))
+      : bonusParticipants(state).includes(command.teamId))
   ) {
     return state;
   }
@@ -485,7 +506,7 @@ function applyBonusCommand(
 
   const participants = state.phase.kind === "final-veto"
     ? state.tieBreak?.contenders ?? []
-    : state.config.teams;
+    : bonusParticipants(state);
   const vetoed = participants.map((teamId) => phase.vetoes[teamId]);
   if (vetoed.every((topicId): topicId is string => topicId !== undefined) && new Set(vetoed).size === participants.length) {
     const remaining = phase.candidates.filter((topicId) => !vetoed.includes(topicId));
@@ -690,4 +711,59 @@ export function reduceFrame(
   const advanced = advanceClock(state, frame.atMs, context);
   if (wasAnswering && advanced.phase.kind === "reveal") return advanced;
   return processCommands(advanced, frame.commands, context);
+}
+
+/** Server-authorized departure; history is retained while every live right is removed. */
+export function excludeNetworkPlayer(state: MatchState, teamId: TeamId, context: DomainContext): MatchState {
+  if (state.config.profile !== "network-v1" || !activeTeam(state, teamId)) return state;
+  const oldBonus = bonusParticipants(state);
+  let next: MatchState = { ...state, departedTeamIds: [...(state.departedTeamIds ?? []), teamId] };
+  const active = activeTeams(next);
+  if (active.length < 2) return { ...next, endReason: "insufficient-players", phase: { kind: "finished", winnerId: active[0] ?? teamId } };
+  if (next.tieBreak) next = { ...next, tieBreak: { ...next.tieBreak,
+    contenders: next.tieBreak.contenders.filter(id => active.includes(id)),
+    originalLeaders: next.tieBreak.originalLeaders.filter(id => active.includes(id)) } };
+  const phase = next.phase;
+  if (phase.kind === "normal-topic" && phase.chooser === teamId) {
+    return { ...next, phase: { ...phase, chooser: choiceQueue(next)[0], cursor: 0 } };
+  }
+  if (phase.kind === "bonus-veto" && oldBonus.includes(teamId)) {
+    const participants = bonusParticipants(next);
+    if (phase.candidates.length !== participants.length + 1) return prepareMainSelection(next, context);
+    return { ...next, phase: { ...phase, cursors: Object.fromEntries(participants.map(id => [id, 0])), vetoes: {} } };
+  }
+  const survivingContenders = next.tieBreak?.contenders;
+  if (survivingContenders?.length === 1 && phase.kind !== "finished") {
+    return { ...next, phase: { kind: "finished", winnerId: survivingContenders[0] } };
+  }
+  if (survivingContenders?.length === 0) {
+    const leaders = winnersByScore(next.teams.filter(team => active.includes(team.id)));
+    return leaders.length === 1 ? { ...next, phase: { kind: "finished", winnerId: leaders[0] } }
+      : prepareTieBreakSelection({ ...next, tieBreak: null }, context, leaders);
+  }
+  if (phase.kind === "answering") {
+    next = { ...next, phase: { ...phase, round: { ...phase.round, attempts: phase.round.attempts.map(attempt =>
+      attempt.teamId === teamId ? { ...attempt, status: "spectator" as const, answer: null } : attempt) } } };
+    return settleRound(next);
+  }
+  const repair = (continuation: RevealContinuation): RevealContinuation => {
+    if (continuation.kind === "finished" && active.includes(continuation.winnerId)) return continuation;
+    if (continuation.kind === "finished" || (continuation.kind === "standings" && continuation.completedStage === 3)) {
+      const leaders = winnersByScore(next.teams.filter(team => active.includes(team.id)));
+      return leaders.length === 1 ? { kind: "finished", winnerId: leaders[0] }
+        : { kind: "standings", completedStage: 3, tieBreakContenders: leaders };
+    }
+    if (continuation.kind === "tie-break") {
+      const contenders = continuation.contenders.filter(id => active.includes(id));
+      return contenders.length === 1 ? { kind: "finished", winnerId: contenders[0] }
+        : { kind: "tie-break", contenders: contenders.length ? contenders : next.tieBreak?.contenders ?? active };
+    }
+    return continuation;
+  };
+  if (phase.kind === "reveal" || phase.kind === "difficulty-feedback") return { ...next, phase: { ...phase, continuation: repair(phase.continuation) } };
+  if (phase.kind === "standings" && phase.completedStage === 3) {
+    const continuation = repair({ kind: "standings", completedStage: 3 });
+    return { ...next, phase: continuation.kind === "finished" ? continuation : { ...phase, tieBreakContenders: continuation.kind === "standings" ? continuation.tieBreakContenders : undefined } };
+  }
+  return next;
 }
