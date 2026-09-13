@@ -127,6 +127,20 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
       await expect(
         phones[0].locator(".network-answers button").first(),
       ).toBeEnabled({ timeout: 10000 });
+      const mobileAnswerWidths = await phones[0]
+        .locator(".network-answers button")
+        .evaluateAll((buttons) =>
+          buttons.map((button) => ({
+            width: Math.round(button.getBoundingClientRect().width),
+            viewportWidth: innerWidth,
+          })),
+        );
+      expect(mobileAnswerWidths).toHaveLength(4);
+      expect(
+        mobileAnswerWidths.every(
+          ({ width, viewportWidth }) => width >= viewportWidth - 24,
+        ),
+      ).toBe(true);
       await expect(page.locator(".network-player-card")).toHaveCount(12);
       for (const phone of phones)
         await expect(phone.locator(".network-player-card")).toHaveCount(1);

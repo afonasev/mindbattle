@@ -77,6 +77,14 @@ test("shows touch-only solo controls without overflowing the topic stage", async
   await captureSettled(page, testInfo.outputPath("solo-touch-topic.png"));
   await page.locator(".topic-choice").nth(1).click();
   await expect(page.locator(".question-stage")).toBeVisible();
+  const answerWidths = await page.locator(".solo-answer-button").evaluateAll((buttons) =>
+    buttons.map((button) => ({
+      width: Math.round(button.getBoundingClientRect().width),
+      viewportWidth: innerWidth
+    }))
+  );
+  expect(answerWidths).toHaveLength(4);
+  expect(answerWidths.every(({ width, viewportWidth }) => width >= viewportWidth - 24)).toBe(true);
   await captureSettled(page, testInfo.outputPath("solo-touch-answers.png"));
   await page.locator(".solo-answer-button").first().click();
   await expect(page.locator(".question-stage--reveal")).toBeVisible();
