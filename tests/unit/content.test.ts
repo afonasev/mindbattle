@@ -220,6 +220,10 @@ describe("question shuffle bags", () => {
 
 describe("topic candidates", () => {
   const topics = Array.from({ length: 8 }, (_, index) => makeTopic(index));
+  const domainForTopic = (topicId: string) => {
+    const index = Number(topicId.replace("topic-", ""));
+    return ["history", "history", "science", "culture", "sport", "geography", "technology", "nature"][index] ?? "other";
+  };
 
   it("is reproducible for the same seed and avoids a fixed order for another seed", () => {
     const match = { selected: ["topic-7"], shownCounts: { "topic-0": 2 } };
@@ -230,5 +234,23 @@ describe("topic candidates", () => {
     expect(different.topicIds).not.toEqual(first.topicIds);
     expect(first.topicIds).not.toContain("topic-7");
     expect(first.topicIds).not.toContain("topic-0");
+  });
+
+  it("maximizes distinct domains for normal, bonus, and final topic sets", () => {
+    for (const count of [3, 4, 5]) {
+      const selection = chooseTopicCandidates(topics, count, { selected: [], shownCounts: {} }, seedRandom(`domains-${count}`), domainForTopic);
+      expect(new Set(selection.topicIds.map(domainForTopic)).size).toBe(count);
+    }
+  });
+
+  it("uses the minimum necessary domain repeat and stays reproducible", () => {
+    const limitedTopics = topics.slice(0, 4);
+    const limitedDomain = (topicId: string) => topicId === "topic-0" || topicId === "topic-1" ? "history" : "science";
+    const input = { selected: [], shownCounts: {} };
+    const first = chooseTopicCandidates(limitedTopics, 3, input, seedRandom("domain-fallback"), limitedDomain);
+    const repeated = chooseTopicCandidates(limitedTopics, 3, input, seedRandom("domain-fallback"), limitedDomain);
+    expect(new Set(first.topicIds).size).toBe(3);
+    expect(new Set(first.topicIds.map(limitedDomain))).toEqual(new Set(["history", "science"]));
+    expect(repeated).toEqual(first);
   });
 });

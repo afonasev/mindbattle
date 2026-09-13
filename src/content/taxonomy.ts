@@ -2,6 +2,24 @@ import type { Difficulty, TopicPack } from "./types";
 
 export type TopicTargetSize = 100 | 200 | 300;
 
+export const TOPIC_DOMAINS = [
+  "history",
+  "geography",
+  "literature-language",
+  "screen-media",
+  "music-performing-arts",
+  "visual-design",
+  "science",
+  "technology-transport",
+  "society",
+  "food",
+  "sports-games",
+  "nature",
+  "culture-leisure"
+] as const;
+
+export type TopicDomain = (typeof TOPIC_DOMAINS)[number];
+
 export interface DifficultyQuota {
   readonly easy: number;
   readonly medium: number;
@@ -10,6 +28,7 @@ export interface DifficultyQuota {
 
 export interface TopicTaxonomyEntry {
   readonly id: string;
+  readonly domain: TopicDomain;
   readonly title: string;
   readonly scope: string;
   readonly antiOverlap: string;
@@ -63,6 +82,9 @@ export function validateTaxonomyManifest(
     if (!ID.test(entry.id)) issues.push(`${entry.id || "<topic>"}: некорректный topic id`);
     if (ids.has(entry.id)) issues.push(`${entry.id}: повтор topic id`);
     ids.add(entry.id);
+    if (!TOPIC_DOMAINS.includes(entry.domain)) {
+      issues.push(`${entry.id}: недопустимая область темы ${entry.domain}`);
+    }
     const titleKey = entry.title.trim().toLocaleLowerCase("ru");
     if (!titleKey) issues.push(`${entry.id}: пустое название темы`);
     if (titles.has(titleKey)) issues.push(`${entry.id}: повтор названия темы`);

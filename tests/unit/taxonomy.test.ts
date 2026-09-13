@@ -25,6 +25,7 @@ function manifest(size: TopicTargetSize = 100): TaxonomyManifest {
     revision: "taxonomy-test-r1",
     topics: Array.from({ length: 110 }, (_, index) => ({
       id: `topic-${index}`,
+      domain: "history",
       title: `Тема ${index}`,
       scope: `Область темы ${index}`,
       antiOverlap: `Не пересекается с соседними темами ${index}`,
@@ -167,6 +168,15 @@ describe("taxonomy manifest", () => {
     };
     expect(() => validateTaxonomyManifest(broken)).toThrow(TaxonomyValidationError);
     expect(() => validateTaxonomyManifest(broken)).toThrow(/недопустимый targetSize|повтор topic id/);
+  });
+
+  it("requires a known domain for every taxonomy topic", () => {
+    const base = manifest();
+    const broken = {
+      ...base,
+      topics: base.topics.map((entry, index) => index === 0 ? { ...entry, domain: "unknown" } : entry)
+    } as unknown as TaxonomyManifest;
+    expect(() => validateTaxonomyManifest(broken)).toThrow(/недопустимая область темы/);
   });
 
   it("rejects packs that do not match taxonomy", () => {

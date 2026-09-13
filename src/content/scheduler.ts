@@ -165,7 +165,8 @@ export function chooseTopicCandidates(
   topics: readonly TopicPack[],
   count: number,
   matchHistory: MatchTopicHistory,
-  random: RandomState
+  random: RandomState,
+  domainForTopic: (topicId: string) => string = (topicId) => topicId
 ): {
   readonly topicIds: readonly string[];
   readonly random: RandomState;
@@ -179,10 +180,22 @@ export function chooseTopicCandidates(
   const ranked = candidates.map((topic) => {
     const [tie, nextState] = nextRandom(state);
     state = nextState;
-    return { id: topic.id, penalty: matchHistory.shownCounts[topic.id] ?? 0, tie };
+    const domain = domainForTopic(topic.id);
+    if (!domain) throw new Error(`Для темы ${topic.id} не задана область`);
+    return { id: topic.id, domain, penalty: matchHistory.shownCounts[topic.id] ?? 0, tie };
   });
-  ranked.sort((left, right) => left.penalty - right.penalty || left.tie - right.tie);
-  const topicIds = ranked.slice(0, count).map(({ id }) => id);
+  const topicIds: string[] = [];
+  const selectedDomains = new Set<string>();
+  const remaining = [...ranked];
+  while (topicIds.length < count) {
+    const unseenDomainCandidates = remaining.filter(({ domain }) => !selectedDomains.has(domain));
+    const pool = unseenDomainCandidates.length > 0 ? unseenDomainCandidates : remaining;
+    pool.sort((left, right) => left.penalty - right.penalty || left.tie - right.tie);
+    const next = pool[0];
+    topicIds.push(next.id);
+    selectedDomains.add(next.domain);
+    remaining.splice(remaining.indexOf(next), 1);
+  }
   const shownCounts = { ...matchHistory.shownCounts };
   for (const id of topicIds) shownCounts[id] = (shownCounts[id] ?? 0) + 1;
   return {

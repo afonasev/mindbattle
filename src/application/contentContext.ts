@@ -2,6 +2,7 @@ import {
   chooseTopicCandidates,
   drawQuestion,
   nextRandom,
+  TOPIC_DOMAIN_BY_ID,
   type ContentCatalog,
   type QuestionHistory,
   type RandomState,
@@ -75,7 +76,8 @@ export class CatalogDomainContext implements DomainContext {
         selected: request.excludedTopicIds,
         shownCounts: request.shownTopicCounts
       },
-      request.random
+      request.random,
+      (topicId) => TOPIC_DOMAIN_BY_ID[topicId] ?? topicId
     );
     return { topicIds: selection.topicIds, random: selection.random };
   }

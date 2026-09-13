@@ -115,7 +115,7 @@ export function MenuScreen({
       <section className="setup-stage menu-mode-stage" aria-label="Выбор режима">
         <div className="menu-actions">
           <button className="secondary-action" type="button" onClick={startSolo}>Одиночная игра</button>
-          <button className="primary-action mobile-classic-action" type="button" onClick={() => setClassicSetupOpen(true)}>На одном устройстве (2–4)</button>
+          <button className="secondary-action mobile-classic-action" type="button" onClick={() => setClassicSetupOpen(true)}>На одном устройстве (2–4)</button>
           <a className="secondary-action network-menu-desktop" href="/network" onClick={(event) => { event.preventDefault(); enterNetwork(); }}>Сетевая игра (2–12)</a>
           <a className="secondary-action network-menu-mobile" href="/network" onClick={(event) => { event.preventDefault(); enterNetwork(); }}>Сетевая игра (2–12)</a>
           {restoreSolo && <button className="secondary-action" type="button" onClick={restoreSolo}>Продолжить одиночную игру</button>}
