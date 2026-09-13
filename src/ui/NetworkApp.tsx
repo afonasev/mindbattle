@@ -13,10 +13,10 @@ import type {
 } from "../network/protocol";
 import {
   AudioController,
-  createHtmlAudioSourceFactory,
   phaseAudioActions,
   RevealAudioMonitor,
   shouldPlayNetworkAudio,
+  sharedAudioController,
   TopicCountdownAudioMonitor,
 } from "../adapters/audio";
 import {
@@ -25,16 +25,15 @@ import {
   STORAGE_KEY,
 } from "../adapters/storage";
 import "./network.css";
+import { PresentationSettings } from "./PresentationSettings";
 function initialPreferences() {
   try {
     return (
       decodePreferences(
-        JSON.parse(
-          localStorage.getItem("mindbattle-network-preferences-v1") ?? "null",
-        ),
+        JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null")?.preferences,
       ) ??
       decodePreferences(
-        JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null")?.preferences,
+        JSON.parse(localStorage.getItem("mindbattle-network-preferences-v1") ?? "null"),
       ) ??
       DEFAULT_PREFERENCES
     );
@@ -86,11 +85,10 @@ export function NetworkApp() {
   const [terminal, setTerminal] = useState(false);
   const [busy, setBusy] = useState(false);
   const [preferences, setPreferences] = useState(initialPreferences);
-  const [muted, setMuted] = useState(
-    () =>
-      new URLSearchParams(location.search).get("muted") === "1" ||
-      preferences.muted,
-  );
+  const [pauseSettingsOpen, setPauseSettingsOpen] = useState(false);
+  const muted =
+    new URLSearchParams(location.search).get("muted") === "1" ||
+    preferences.muted;
   const connection = useRef<NetworkConnection | null>(null);
   const audio = useRef<AudioController | null>(null);
   const lastPhase = useRef("");
@@ -98,7 +96,7 @@ export function NetworkApp() {
   const confirmationAudio = useRef(new TopicCountdownAudioMonitor());
   const enableAudio = () => {
     if (!mobile && !audio.current)
-      audio.current = new AudioController(createHtmlAudioSourceFactory(), {
+      audio.current = sharedAudioController({
         volume: preferences.volume,
         muted,
       });
@@ -107,12 +105,18 @@ export function NetworkApp() {
     audio.current?.update({ volume: preferences.volume, muted });
     if (muted) audio.current?.stopMusic();
   }, [muted, preferences.volume]);
-  useEffect(() => {
-    localStorage.setItem(
-      "mindbattle-network-preferences-v1",
-      JSON.stringify({ ...preferences, muted }),
-    );
-  }, [preferences, muted]);
+  const savePreferences = (next: typeof preferences) => {
+    setPreferences(next);
+    try {
+      localStorage.setItem("mindbattle-network-preferences-v1", JSON.stringify(next));
+      const persisted = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
+      if (persisted && typeof persisted === "object" && !Array.isArray(persisted)) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...persisted, preferences: next }));
+      }
+    } catch {
+      // Storage is optional presentation state.
+    }
+  };
   useEffect(() => {
     if (!credential) return;
     setTerminal(false);
@@ -238,17 +242,6 @@ export function NetworkApp() {
       <header className="game-brand network-header">
         <a href="/">MINDBATTLE</a>
         <span>Сетевая игра{snapshot ? ` · ${snapshot.code}` : ""}</span>
-        {!mobile && (
-          <button
-            onClick={() => {
-              enableAudio();
-              setMuted(!muted);
-            }}
-            aria-pressed={!muted}
-          >
-            {muted ? "Звук выключен" : "Звук включён"}
-          </button>
-        )}
       </header>
       {error && (
         <p className="network-error" role="alert">
@@ -882,6 +875,9 @@ export function NetworkApp() {
                       </button>
                     </div>
                   ))}
+                {(snapshot.isLeader || display) && (
+                  <button disabled={busy} onClick={() => setPauseSettingsOpen(true)}>Настройки</button>
+                )}
                 {snapshot.isLeader ? (
                   <>
                     <p>Когда все вернутся, продолжите игру.</p>
@@ -912,6 +908,11 @@ export function NetworkApp() {
             </div>
           )}
         </>
+      )}
+      {pauseSettingsOpen && (
+        <div className="pause-backdrop" role="dialog" aria-modal="true" aria-labelledby="menu-settings-title">
+          <PresentationSettings preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} />
+        </div>
       )}
     </main>
   );

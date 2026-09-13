@@ -122,6 +122,21 @@ export class AudioController {
   }
 }
 
+let activeSharedAudioController: AudioController | null = null;
+
+/**
+ * Keeps presentation audio alive while the SPA switches between game modes.
+ * Audio is intentionally shared only within one browser document.
+ */
+export function sharedAudioController(initial: AudioSettings): AudioController {
+  if (!activeSharedAudioController) {
+    activeSharedAudioController = new AudioController(createHtmlAudioSourceFactory(), initial);
+  } else {
+    activeSharedAudioController.update(initial);
+  }
+  return activeSharedAudioController;
+}
+
 export class AnsweringAudioMonitor {
   private previousBaseRemainingMs: number | null = null;
   private previousBaseSecond: number | null = null;

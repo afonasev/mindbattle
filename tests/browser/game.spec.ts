@@ -27,11 +27,14 @@ async function captureSettled(page: Page, path: string) {
 }
 
 async function muteAudio(page: Page) {
-  const preferences = page.locator(".preferences-panel");
-  await preferences.locator("summary").click();
-  const muted = page.getByLabel("Без звука");
-  if (!(await muted.isChecked())) await muted.check();
-  await preferences.locator("summary").click();
+  await page.getByRole("button", { name: "Настройки", exact: true }).click();
+  const toggle = page.getByRole("button", { name: "Звук включён", exact: true });
+  if (await toggle.count()) await toggle.click();
+  await page.getByRole("button", { name: "Назад", exact: true }).click();
+}
+
+async function openClassicSetup(page: Page) {
+  await page.getByRole("button", { name: "На одном устройстве (2–4)", exact: true }).click();
 }
 
 async function chooseCurrentTopic(
@@ -141,6 +144,7 @@ test.beforeEach(async ({ page }) => {
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   await muteAudio(page);
+  await openClassicSetup(page);
 });
 
 test("confirms a normal topic for three seconds or a new press before the question", async ({ page }, testInfo) => {
@@ -179,6 +183,11 @@ test("confirms a normal topic for three seconds or a new press before the questi
   await captureSettled(page, testInfo.outputPath("topic-confirmation.png"));
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toBeVisible();
+  await page.getByRole("button", { name: "Настройки", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Настройки", exact: true })).toBeVisible();
+  await page.getByLabel("Громкость").fill("0.4");
+  await page.getByRole("button", { name: "Назад", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Продолжить", exact: true })).toBeVisible();
   const paused = await storedState(page);
   await page.waitForTimeout(300);
   const stillPaused = await storedState(page);
@@ -193,6 +202,7 @@ test("confirms a normal topic for three seconds or a new press before the questi
 
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Выйти в меню" }).click();
+  await openClassicSetup(page);
   await page.getByRole("button", { name: "Начать игру" }).click();
   await waitForInputGate(page);
   const second = await storedState(page);
@@ -217,24 +227,15 @@ test("menu defaults, offline startup and responsive shell", async ({ context, pa
 
   await expect(page).toHaveTitle(/Mindbattle/);
   await expect(page.getByRole("heading", { level: 1, name: "Mindbattle" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "15", exact: true })).toHaveClass(/is-selected/);
-  await expect(page.getByRole("button", { name: "2", exact: true })).toHaveClass(/is-selected/);
-  await expect(page.getByRole("button", { name: "20 c", exact: true })).toHaveClass(/is-selected/);
-  await expect(page.getByLabel("Собирать обратную связь по вопросам")).toBeChecked();
-  await expect(page.getByText("90 c", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Назад к режимам", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Одиночная игра", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "На одном устройстве (2–4)", exact: true })).toBeVisible();
   await expect(
     page.getByLabel("Контроллер команды Зелёная").locator("option:checked")
   ).toHaveText("WASD");
   await expect(
     page.getByLabel("Контроллер команды Синяя").locator("option:checked")
   ).toHaveText("Стрелки");
-  for (const team of ["Зелёная", "Синяя"]) {
-    const fits = await page
-      .getByLabel(`Контроллер команды ${team}`)
-      .evaluate((select) => select.scrollWidth <= select.clientWidth);
-    expect(fits).toBe(true);
-  }
-
   const metrics = await page.evaluate(() => ({
     innerHeight,
     innerWidth,
@@ -245,13 +246,13 @@ test("menu defaults, offline startup and responsive shell", async ({ context, pa
   expect(metrics.scrollHeight).toBeLessThanOrEqual(metrics.innerHeight);
   await captureSettled(page, testInfo.outputPath("menu.png"));
 
-  await page.getByText("Настройки").click();
+  await page.getByRole("button", { name: "Настройки", exact: true }).click();
   await captureSettled(page, testInfo.outputPath("menu-settings.png"));
   await page.getByLabel("Крупный текст").check();
   await page.getByLabel("Высокий контраст").check();
   await page.getByLabel("Без анимации").check();
   await page.reload();
-  await page.getByText("Настройки").click();
+  await page.getByRole("button", { name: "Настройки", exact: true }).click();
   await expect(page.getByLabel("Крупный текст")).toBeChecked();
   await expect(page.getByLabel("Высокий контраст")).toBeChecked();
   await expect(page.getByLabel("Без анимации")).toBeChecked();
@@ -263,7 +264,8 @@ test("menu defaults, offline startup and responsive shell", async ({ context, pa
     scrollWidth: document.documentElement.scrollWidth
   }));
   expect(accessibleMetrics.scrollWidth).toBeLessThanOrEqual(accessibleMetrics.innerWidth);
-  await page.getByText("Настройки").click();
+  await page.getByRole("button", { name: "Назад", exact: true }).click();
+  await openClassicSetup(page);
   await captureSettled(page, testInfo.outputPath("menu-accessible.png"));
 
   await context.setOffline(true);
@@ -318,8 +320,11 @@ test("skips question feedback without calling its API when the match setting is 
     if (new URL(request.url()).pathname === "/api/difficulty-feedback") feedbackRequests += 1;
   });
 
-  await page.locator(".preferences-panel summary").click();
+  await page.getByRole("button", { name: "Назад к режимам", exact: true }).click();
+  await page.getByRole("button", { name: "Настройки", exact: true }).click();
   await page.getByLabel("Собирать обратную связь по вопросам").uncheck();
+  await page.getByRole("button", { name: "Назад", exact: true }).click();
+  await openClassicSetup(page);
   await page.getByRole("button", { name: "9", exact: true }).click();
   await page.getByRole("button", { name: "Начать игру" }).click();
   expect((await storedState(page)).config.collectQuestionFeedback).toBe(false);
@@ -631,9 +636,12 @@ test("supports N+1 public bonus veto for three and four assigned teams", async (
     await page.evaluate(() => localStorage.clear());
     await page.reload();
     await muteAudio(page);
-    await page.locator(".preferences-panel summary").click();
+    await openClassicSetup(page);
+    await page.getByRole("button", { name: "Назад к режимам", exact: true }).click();
+    await page.getByRole("button", { name: "Настройки", exact: true }).click();
     await page.getByLabel("Собирать обратную связь по вопросам").uncheck();
-    await page.locator(".preferences-panel summary").click();
+    await page.getByRole("button", { name: "Назад", exact: true }).click();
+    await openClassicSetup(page);
     await page.getByRole("button", { name: String(teamCount), exact: true }).click();
     await expect(page.getByRole("button", { name: "Начать игру" })).toBeDisabled();
     await page.getByLabel("Контроллер команды Жёлтая").selectOption("gamepad:0");

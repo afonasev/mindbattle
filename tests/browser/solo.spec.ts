@@ -17,10 +17,10 @@ const answerKey: Record<Position, string> = {
 };
 
 async function muteAudio(page: import("@playwright/test").Page) {
-  await page.locator(".preferences-panel summary").click();
-  const muted = page.getByLabel("Без звука");
-  if (!(await muted.isChecked())) await muted.check();
-  await page.locator(".preferences-panel summary").click();
+  await page.getByRole("button", { name: "Настройки", exact: true }).click();
+  const toggle = page.getByRole("button", { name: "Звук включён", exact: true });
+  if (await toggle.count()) await toggle.click();
+  await page.getByRole("button", { name: "Назад", exact: true }).click();
 }
 
 async function soloState(page: import("@playwright/test").Page): Promise<SoloPersistedState> {
@@ -32,10 +32,10 @@ async function soloState(page: import("@playwright/test").Page): Promise<SoloPer
 }
 
 async function startSoloWithoutFeedback(page: import("@playwright/test").Page) {
-  await page.locator(".preferences-panel summary").click();
+  await page.getByRole("button", { name: "Настройки", exact: true }).click();
   await page.getByLabel("Собирать обратную связь по вопросам").uncheck();
-  await page.locator(".preferences-panel summary").click();
-  await page.getByRole("button", { name: "Соло-забег" }).click();
+  await page.getByRole("button", { name: "Назад", exact: true }).click();
+  await page.getByRole("button", { name: "Одиночная игра" }).click();
 }
 
 async function captureSettled(page: import("@playwright/test").Page, path: string) {
@@ -62,7 +62,7 @@ test("shows touch-only solo controls without overflowing the topic stage", async
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   await muteAudio(page);
-  await page.getByRole("button", { name: "Соло-забег" }).click();
+  await page.getByRole("button", { name: "Одиночная игра" }).click();
 
   await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Меню" })).toBeVisible();
@@ -83,6 +83,10 @@ test("shows touch-only solo controls without overflowing the topic stage", async
   await captureSettled(page, testInfo.outputPath("solo-touch-answer-reveal.png"));
   await page.getByRole("button", { name: "Меню" }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
+  await page.getByRole("button", { name: "Настройки", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Настройки", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Назад", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Продолжить", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Продолжить" }).click();
   await expect(page.locator(".question-stage--reveal")).toBeVisible();
   await page.locator(".solo-team-strip").click();
@@ -94,7 +98,7 @@ test("boots when the browser does not implement the Gamepad API", async ({ page 
     Object.defineProperty(navigator, "getGamepads", { configurable: true, value: undefined });
   });
   await page.goto("/?muted=1");
-  await expect(page.getByRole("button", { name: "Соло-забег" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Одиночная игра" })).toBeVisible();
 });
 
 test("explains the easy risk before declining it without creating a question", async ({ page }, testInfo) => {
@@ -163,12 +167,12 @@ test("keeps the solo card and question readable with accessibility preferences",
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   await muteAudio(page);
-  await page.locator(".preferences-panel summary").click();
+  await page.getByRole("button", { name: "Настройки", exact: true }).click();
   await page.getByLabel("Крупный текст").check();
   await page.getByLabel("Высокий контраст").check();
   await page.getByLabel("Без анимации").check();
-  await page.locator(".preferences-panel summary").click();
-  await page.getByRole("button", { name: "Соло-забег" }).click();
+  await page.getByRole("button", { name: "Назад", exact: true }).click();
+  await page.getByRole("button", { name: "Одиночная игра" }).click();
   await page.keyboard.press("Enter");
 
   await expect(page.locator(".question-stage")).toBeVisible();
@@ -203,7 +207,7 @@ test("uses the team feedback layout with no selected by default", async ({ page 
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   await muteAudio(page);
-  await page.getByRole("button", { name: "Соло-забег" }).click();
+  await page.getByRole("button", { name: "Одиночная игра" }).click();
   await page.keyboard.press("Enter");
   const answering = await soloState(page);
   const correctPosition = answering.phase.round?.correctPosition;
@@ -237,7 +241,7 @@ test("continues from solo feedback when No is tapped", async ({ page }) => {
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   await muteAudio(page);
-  await page.getByRole("button", { name: "Соло-забег" }).click();
+  await page.getByRole("button", { name: "Одиночная игра" }).click();
   await page.keyboard.press("Enter");
   const answering = await soloState(page);
   const correctPosition = answering.phase.round?.correctPosition;
@@ -304,7 +308,7 @@ test("uses the team final-stage framing for solo results and leaderboard rank", 
   await page.evaluate(() => window.scrollTo(0, 0));
   await captureSettled(page, testInfo.outputPath("solo-leaderboard.png"));
   await page.keyboard.press("Enter");
-  await expect(page.getByRole("button", { name: "Соло-забег" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Одиночная игра" })).toBeVisible();
 });
 
 test("uses the team pause dialog and resumes the solo run", async ({ page }, testInfo) => {
@@ -319,6 +323,11 @@ test("uses the team pause dialog and resumes the solo run", async ({ page }, tes
   await expect(page.getByRole("heading", { name: "Соло-забег восстановлен" })).toBeVisible();
   await expect(page.locator(".game-brand")).toBeVisible();
   await captureSettled(page, testInfo.outputPath("solo-pause.png"));
+  await page.getByRole("button", { name: "Настройки", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Настройки", exact: true })).toBeVisible();
+  await page.getByLabel("Громкость").fill("0.4");
+  await page.getByRole("button", { name: "Назад", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Продолжить", exact: true })).toBeVisible();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
 });
@@ -376,7 +385,7 @@ test("uses D-pad left and right, not up and down, for solo feedback choices", as
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   await muteAudio(page);
-  await page.getByRole("button", { name: "Соло-забег" }).click();
+  await page.getByRole("button", { name: "Одиночная игра" }).click();
   await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
 
   await setVirtualGamepadButton(page, 15, true);

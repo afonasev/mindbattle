@@ -6,7 +6,7 @@ import { difficultyLabel } from "./difficulty";
 
 type SoloInputKind = "pointer" | "wasd" | "arrows" | "gamepad";
 
-export function SoloScreen({ state, question, titleById, records, savedRecordId, inputKind, command, finish, exit }: {
+export function SoloScreen({ state, question, titleById, records, savedRecordId, inputKind, command, settings = () => {}, finish, exit }: {
   readonly state: SoloState;
   readonly question: Question | undefined;
   readonly titleById: Readonly<Record<string, string>>;
@@ -14,6 +14,7 @@ export function SoloScreen({ state, question, titleById, records, savedRecordId,
   readonly savedRecordId: string | null;
   readonly inputKind: SoloInputKind;
   readonly command: (command: SoloCommand) => void;
+  readonly settings?: () => void;
   readonly finish: (name: string) => void;
   readonly exit: () => void;
 }) {
@@ -26,7 +27,7 @@ export function SoloScreen({ state, question, titleById, records, savedRecordId,
     return <NameEntry score={state.score} finish={finish} skip={exit} />;
   }
   const hearts = Array.from({ length: 3 }, (_, index) => <span key={index} className={index < state.lives ? "solo-heart" : "solo-heart solo-heart--empty"}>♥</span>);
-  if (state.paused) return <SoloFrame><div className="pause-backdrop" role="dialog" aria-modal="true" aria-labelledby="solo-pause-title"><section className="pause-dialog"><div className="stage-label">Пауза</div><h2 id="solo-pause-title">Соло-забег восстановлен</h2><p>Таймеры остановлены.</p><button type="button" onClick={() => command({ type: "resume" })}>Продолжить</button><button type="button" onClick={exit}>Выйти в меню</button></section></div></SoloFrame>;
+  if (state.paused) return <SoloFrame><div className="pause-backdrop" role="dialog" aria-modal="true" aria-labelledby="solo-pause-title"><section className="pause-dialog"><div className="stage-label">Пауза</div><h2 id="solo-pause-title">Соло-забег восстановлен</h2><p>Таймеры остановлены.</p><button type="button" onClick={() => command({ type: "resume" })}>Продолжить</button><button type="button" onClick={settings}>Настройки</button><button type="button" onClick={exit}>Выйти в меню</button></section></div></SoloFrame>;
   const timerMs = phase.kind === "answering" ? (phase.baseRemainingMs > 0 ? phase.baseRemainingMs : state.reserveMs) : null;
   const reserve = phase.kind === "answering" && phase.baseRemainingMs === 0;
   const playerResultClass = phase.kind === "reveal" ? `game-team-card--${phase.result}` : "";

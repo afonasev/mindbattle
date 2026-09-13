@@ -398,11 +398,13 @@ export function Standings({
 export function PauseOverlay({
   reason,
   resume,
+  settings,
   restart,
   exit
 }: {
   readonly reason: string;
   readonly resume: () => void;
+  readonly settings: () => void;
   readonly restart: () => void;
   readonly exit: () => void;
 }) {
@@ -412,6 +414,7 @@ export function PauseOverlay({
         <div className="stage-label">Пауза</div>
         <h2 id="pause-title">{reason}</h2>
         <button type="button" onClick={resume}>Продолжить</button>
+        <button type="button" onClick={settings}>Настройки</button>
         <button type="button" onClick={restart}>Начать заново</button>
         <button type="button" onClick={exit}>Выйти в меню</button>
       </section>

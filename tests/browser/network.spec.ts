@@ -239,6 +239,9 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
       .click();
     await expect(page.getByText("Участник 2 · Выбыл", { exact: true })).toBeVisible();
     await phones[0].getByRole("button", { name: "Пауза", exact: true }).click();
+    await phones[0].getByRole("button", { name: "Настройки", exact: true }).click();
+    await expect(phones[0].getByRole("heading", { name: "Настройки", exact: true })).toBeVisible();
+    await phones[0].getByRole("button", { name: "Назад", exact: true }).click();
     await phones[0]
       .getByRole("button", { name: "Вернуться в лобби", exact: true })
       .click();
@@ -265,4 +268,32 @@ test("network display starts the arena sound after create gesture", async ({ pag
   await page.getByRole("button", { name: "Создать сетевую игру", exact: true }).click();
   await expect(page.locator(".network-code")).toBeVisible();
   await expect.poll(() => audioRequests.includes("/audio/arena-v2/menu-theme.wav")).toBe(true);
+});
+
+test("network entry keeps the menu music playing", async ({ page }) => {
+  await page.addInitScript(() => {
+    const events: string[] = [];
+    (window as Window & { __musicEvents?: string[] }).__musicEvents = events;
+    const originalPlay = HTMLMediaElement.prototype.play;
+    const originalPause = HTMLMediaElement.prototype.pause;
+    HTMLMediaElement.prototype.play = function () {
+      if (new URL(this.currentSrc || this.src).pathname.endsWith("/menu-theme.wav")) events.push("play");
+      return originalPlay.call(this);
+    };
+    HTMLMediaElement.prototype.pause = function () {
+      if (new URL(this.currentSrc || this.src).pathname.endsWith("/menu-theme.wav")) events.push("pause");
+      return originalPause.call(this);
+    };
+  });
+  await page.goto("/");
+  await page.getByRole("link", { name: "Сетевая игра (2–12)", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Соберите свою компанию" })).toBeVisible();
+  await expect.poll(() => page.evaluate(() => (window as Window & { __musicEvents?: string[] }).__musicEvents ?? [])).toEqual(["play"]);
+});
+
+test("network entry has no sound toggle in its header", async ({ page }, testInfo) => {
+  await page.goto("/network?muted=1");
+  await expect(page.getByRole("heading", { name: "Соберите свою компанию" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Звук (включён|выключен)/ })).toHaveCount(0);
+  await page.screenshot({ path: testInfo.outputPath("network-entry-no-sound-toggle.png"), fullPage: true });
 });

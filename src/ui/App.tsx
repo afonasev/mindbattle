@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   AnsweringAudioMonitor,
-  AudioController,
-  createHtmlAudioSourceFactory,
   createInputRouterState,
   disarmUntilNeutral,
   handleGamepadPoll,
@@ -12,6 +10,7 @@ import {
   RevealAudioMonitor,
   soloGamepadCommand,
   soloKeyboardCommand,
+  sharedAudioController,
   type GamepadSnapshot,
   type SoloInputKind,
   type SemanticInputAction
@@ -40,7 +39,8 @@ import {
   TopicSelection
 } from "./gameUi";
 import { SoloFeedbackScreen, SoloRecordsScreen, SoloScreen } from "./soloUi";
-import { applyPwaUpdate, onPwaUpdate } from "../main";
+import { PresentationSettings } from "./PresentationSettings";
+import { applyPwaUpdate, navigate, onPwaUpdate } from "../main";
 import { QueuedDifficultyFeedbackSink } from "../feedback";
 import { canApplyPwaUpdate } from "../pwaUpdate";
 
@@ -100,6 +100,7 @@ export function App() {
   const [soloInput, setSoloInput] = useState<SoloInputKind>("pointer");
   const [menuError, setMenuError] = useState<string | null>(null);
   const [pwaUpdateReady, setPwaUpdateReady] = useState(false);
+  const [pauseSettingsOpen, setPauseSettingsOpen] = useState(false);
   const [gamepads, setGamepads] = useState<readonly Gamepad[]>([]);
   const inputRef = useRef(createInputRouterState());
   const soloGamepadButtonsRef = useRef(new Map<number, readonly boolean[]>());
@@ -112,7 +113,7 @@ export function App() {
   const soloRevealAudioRef = useRef(new RevealAudioMonitor());
   const lobbyThemePlayedRef = useRef(false);
   const audioActivationRef = useRef(false);
-  const audioRef = useRef(new AudioController(createHtmlAudioSourceFactory(), preferences));
+  const audioRef = useRef(sharedAudioController(preferences));
 
   useEffect(() => onPwaUpdate(setPwaUpdateReady), []);
   useEffect(() => {
@@ -642,7 +643,13 @@ export function App() {
   if (solo) {
     const questionId = solo.phase.kind === "answering" || solo.phase.kind === "reveal" ? solo.phase.round.questionId : null;
     const question = questionId ? catalog.topics.flatMap((topic) => topic.questions).find((candidate) => candidate.id === questionId) : undefined;
-    return <div className={rootClass}>{pwaUpdateReady && canApplyPwaUpdate(false, solo.phase.kind) && <PwaUpdateButton />}{solo.phase.kind === "feedback" ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} exit={() => setSolo(null)} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} command={(command) => { setSoloInput("pointer"); dispatchSolo(command); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}</div>;
+    const savePreferences = (next: typeof preferences) => {
+      const saved = controller.updatePreferences(next);
+      audioRef.current.update(saved);
+      if (saved.muted) audioRef.current.stopMusic();
+      setPreferences(saved);
+    };
+    return <div className={rootClass}>{pwaUpdateReady && canApplyPwaUpdate(false, solo.phase.kind) && <PwaUpdateButton />}{pauseSettingsOpen ? <PresentationSettings preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} /> : solo.phase.kind === "feedback" ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} exit={() => setSolo(null)} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} settings={() => setPauseSettingsOpen(true)} command={(command) => { setSoloInput("pointer"); setSolo(soloController.dispatch([command])); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}</div>;
   }
 
   if (!match || !controller.view) {
@@ -666,6 +673,7 @@ export function App() {
           gamepads={gamepads}
           start={start}
           startSolo={startSolo}
+          enterNetwork={() => navigate("/network")}
           restoreSolo={soloController.canRestore ? () => setSolo(soloController.restore()) : null}
           restoreLabel={
             controller.savedMatchStatus === "in-progress" ? "Продолжить игру на одном устройстве" : null
@@ -698,6 +706,15 @@ export function App() {
   const view = controller.view;
   const titleById = TOPIC_TITLE_BY_ID as Readonly<Record<string, string>>;
   const pauseReason = match.pause?.reasons[0];
+
+  if (pauseSettingsOpen) {
+    return <div className={rootClass}><PresentationSettings preferences={preferences} setPreferences={(next) => {
+      const saved = controller.updatePreferences(next);
+      audioRef.current.update(saved);
+      if (saved.muted) audioRef.current.stopMusic();
+      setPreferences(saved);
+    }} back={() => setPauseSettingsOpen(false)} /></div>;
+  }
 
   return (
     <div className={rootClass}>
@@ -793,6 +810,7 @@ export function App() {
                   : "Игра остановлена"
           }
           resume={() => dispatch([{ type: "resume" }])}
+          settings={() => setPauseSettingsOpen(true)}
           restart={restart}
           exit={() => setMatch(null)}
         />

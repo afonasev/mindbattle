@@ -40,6 +40,7 @@ export function MenuScreen({
   gamepads,
   start,
   startSolo,
+  enterNetwork,
   restoreSolo,
   restoreLabel,
   restore,
@@ -54,6 +55,7 @@ export function MenuScreen({
   readonly gamepads: readonly Gamepad[];
   readonly start: () => void;
   readonly startSolo: () => void;
+  readonly enterNetwork: () => void;
   readonly restoreSolo: (() => void) | null;
   readonly restoreLabel: string | null;
   readonly restore: () => void;
@@ -106,7 +108,7 @@ export function MenuScreen({
       <header className="brand-lockup brand-lockup--menu">
         <span className="eyebrow">Интеллектуальная битва</span>
         <h1>Mindbattle</h1>
-        <p><span className="desktop-menu-tagline">Соберите команды. Остальное решит эрудиция.</span><span className="mobile-menu-tagline">Все решит эрудиция</span></p>
+        <p>Все решит эрудиция</p>
       </header>
 
       {!settingsOpen && !classicSetupOpen && (
@@ -114,8 +116,8 @@ export function MenuScreen({
         <div className="menu-actions">
           <button className="secondary-action" type="button" onClick={startSolo}>Одиночная игра</button>
           <button className="primary-action mobile-classic-action" type="button" onClick={() => setClassicSetupOpen(true)}>На одном устройстве (2–4)</button>
-          <a className="secondary-action network-menu-desktop" href="/network">Сетевая игра (2–12)</a>
-          <a className="secondary-action network-menu-mobile" href="/network">Сетевая игра (2–12)</a>
+          <a className="secondary-action network-menu-desktop" href="/network" onClick={(event) => { event.preventDefault(); enterNetwork(); }}>Сетевая игра (2–12)</a>
+          <a className="secondary-action network-menu-mobile" href="/network" onClick={(event) => { event.preventDefault(); enterNetwork(); }}>Сетевая игра (2–12)</a>
           {restoreSolo && <button className="secondary-action" type="button" onClick={restoreSolo}>Продолжить одиночную игру</button>}
           {restoreLabel && <button className="secondary-action mobile-classic-action" type="button" onClick={restore}>{restoreLabel}</button>}
           <button className="secondary-action" type="button" onClick={() => setSettingsOpen(true)}>Настройки</button>
@@ -233,7 +235,7 @@ export function MenuScreen({
               </button>
               <label className="settings-range">
                 <span>Громкость <strong>{Math.round(preferences.volume * 100)}%</strong></span>
-                <input type="range" min="0" max="1" step="0.1" value={preferences.volume} onChange={(event) => setPreferences({ ...preferences, volume: Number(event.target.value) })} />
+                <input aria-label="Громкость" type="range" min="0" max="1" step="0.1" value={preferences.volume} onChange={(event) => setPreferences({ ...preferences, volume: Number(event.target.value) })} />
               </label>
             </section>
             <section className="settings-group" aria-labelledby="display-settings-title">
