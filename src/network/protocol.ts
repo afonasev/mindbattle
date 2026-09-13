@@ -23,6 +23,11 @@ export interface NetworkScoreRow {
   score: number;
   departed: boolean;
 }
+export interface NetworkVeto {
+  playerId: TeamId;
+  name: string;
+  topicId: string;
+}
 export interface NetworkSnapshot {
   code: string;
   epoch: number;
@@ -53,6 +58,7 @@ export interface NetworkSnapshot {
   endReason?: string;
   feedbackError?: string;
   scoreboard?: readonly NetworkScoreRow[];
+  vetoes?: readonly NetworkVeto[];
 }
 export type NetworkAction =
   | { type: "settings"; questionCount: number; answerTimeMs: number }

@@ -82,16 +82,39 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
         await expect(
           page.getByRole("heading", { name: "Бонусный вопрос · ×2" }),
         ).toBeVisible();
-        const voters = [];
-        for (const phone of phones)
-          if (
-            await phone
-              .getByText("Запретите одну тему. Запрет можно изменить.")
-              .isVisible()
-          )
-            voters.push(phone);
+        await expect.poll(async () => {
+          const statuses = await Promise.all(
+            phones.map((phone) =>
+              phone
+                .getByText("Запретите одну свободную тему. Свой запрет можно изменить.")
+                .isVisible(),
+            ),
+          );
+          return statuses.filter(Boolean).length;
+        }).toBe(4);
+        const vetoReady = await Promise.all(
+          phones.map((phone) =>
+            phone
+              .getByText("Запретите одну свободную тему. Свой запрет можно изменить.")
+              .isVisible(),
+          ),
+        );
+        const voters = phones.filter((_, index) => vetoReady[index]);
         expect(voters).toHaveLength(4);
-        for (let i = 0; i < 4; i++)
+        await voters[0].locator(".network-topics button").first().click();
+        await expect(
+          voters[1].locator(".network-topics button").first(),
+        ).toBeDisabled();
+        await expect(
+          voters[1].getByText(
+            `Исключил: Участник ${phones.indexOf(voters[0]) + 1}`,
+          ),
+        ).toBeVisible();
+        await voters[1].screenshot({
+          path: testInfo.outputPath("network-phone-bonus-veto.png"),
+          fullPage: true,
+        });
+        for (let i = 1; i < 4; i++)
           await voters[i].locator(".network-topics button").nth(i).click();
       }
       await expect(

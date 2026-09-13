@@ -597,34 +597,47 @@ export function NetworkApp() {
                   <h1>Бонусный вопрос · ×2</h1>
                   <p>
                     {snapshot.canVeto
-                      ? "Запретите одну тему. Запрет можно изменить."
+                      ? "Запретите одну свободную тему. Свой запрет можно изменить."
                       : display
                         ? `Запрещают темы: ${snapshot.vetoParticipants?.join(", ")}`
                         : "Тему выбирают участники очереди"}
                   </p>
                   <div className="network-topics">
-                    {view?.topicCandidates?.map((id) => (
-                      <button
-                        className={snapshot.ownVeto === id ? "selected" : ""}
-                        disabled={locked || !snapshot.canVeto}
-                        key={id}
-                        onClick={() => void act({ type: "veto", topicId: id })}
-                      >
-                        {snapshot.titles[id]}
-                        {display && (
-                          <small>
-                            {Object.entries(view.vetoes ?? {})
-                              .filter(([, topic]) => topic === id)
-                              .map(
-                                ([player]) =>
-                                  snapshot.players.find((p) => p.id === player)
-                                    ?.name,
-                              )
-                              .join(", ")}
-                          </small>
-                        )}
-                      </button>
-                    ))}
+                    {view?.topicCandidates?.map((id) => {
+                      const veto = snapshot.vetoes?.find(
+                        (entry) => entry.topicId === id,
+                      );
+                      const vetoedByOther =
+                        !!veto && veto.playerId !== snapshot.selfId;
+                      return (
+                        <button
+                          className={snapshot.ownVeto === id ? "selected" : ""}
+                          disabled={locked || !snapshot.canVeto || vetoedByOther}
+                          key={id}
+                          onClick={() => void act({ type: "veto", topicId: id })}
+                        >
+                          {snapshot.titles[id]}
+                          {display ? (
+                            <small>
+                              {Object.entries(view.vetoes ?? {})
+                                .filter(([, topic]) => topic === id)
+                                .map(
+                                  ([player]) =>
+                                    snapshot.players.find((p) => p.id === player)
+                                      ?.name,
+                                )
+                                .join(", ")}
+                            </small>
+                          ) : veto ? (
+                            <small>
+                              {vetoedByOther
+                                ? `Исключил: ${veto.name}`
+                                : "Ваш запрет"}
+                            </small>
+                          ) : null}
+                        </button>
+                      );
+                    })}
                   </div>
                   {snapshot.canVeto && snapshot.ownVeto && (
                     <button

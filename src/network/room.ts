@@ -339,6 +339,14 @@ export class NetworkRoom {
           !phase.candidates.includes(action.topicId)
         )
           throw new RoomError("Тема недоступна");
+        if (
+          action.type === "veto" &&
+          Object.entries(phase.vetoes).some(
+            ([playerId, topicId]) =>
+              playerId !== actor.id && topicId === action.topicId,
+          )
+        )
+          throw new RoomError("Эту тему уже исключил другой игрок", 409);
         commands = [
           action.type === "veto"
             ? { type: "set-veto", teamId: actor.id, topicId: action.topicId }
@@ -594,6 +602,20 @@ export class NetworkRoom {
       ownVeto:
         actor && phase.kind === "bonus-veto"
           ? phase.vetoes[actor.id]
+          : undefined,
+      vetoes:
+        actor && phase.kind === "bonus-veto"
+          ? Object.entries(phase.vetoes).flatMap(([playerId, topicId]) =>
+              topicId
+                ? [{
+                    playerId: playerId as TeamId,
+                    name:
+                      this.players.find((player) => player.id === playerId)
+                        ?.name ?? "Игрок",
+                    topicId,
+                  }]
+                : [],
+            )
           : undefined,
       vetoParticipants:
         !actor && phase.kind === "bonus-veto"

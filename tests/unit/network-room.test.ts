@@ -79,6 +79,30 @@ describe("network room", () => {
     expect(JSON.stringify(other)).not.toContain("correctAnswerId");
     expect(JSON.stringify(other)).not.toContain("secret-");
   });
+  it("shares named bonus vetoes and rejects another player's topic", () => {
+    const { room, seats, command } = setup();
+    command("display", { type: "start" });
+    const state = room.state!;
+    room.state = {
+      ...state,
+      phase: {
+        kind: "bonus-veto",
+        candidates: ["topic-1", "topic-2", "topic-3"],
+        cursors: { [seats[0].id]: 0, [seats[1].id]: 0 },
+        vetoes: { [seats[0].id]: "topic-1" },
+      },
+    };
+    const snapshot = room.snapshot(seats[1].token, 0);
+    expect(snapshot.vetoes).toEqual([
+      { playerId: seats[0].id, name: "Игрок 1", topicId: "topic-1" },
+    ]);
+    expect(snapshot.view?.vetoes).toBeUndefined();
+    expect(() =>
+      command(seats[1].token, { type: "veto", topicId: "topic-1" }),
+    ).toThrow("уже исключил");
+    command(seats[1].token, { type: "veto", topicId: "topic-2" });
+    expect(room.state?.phase.kind).toBe("topic-confirmation");
+  });
   it("restores identity, ignores stale stream close, and waits for leader", () => {
     const { room, seats, command } = setup();
     command("display", { type: "start" });
