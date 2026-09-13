@@ -122,6 +122,8 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
         for (let i = 1; i < 4; i++)
           await voters[i].locator(".network-topics button").nth(i).click();
       }
+      await expect(phones[0].locator(".network-confirmation")).toBeVisible();
+      await phones[0].locator(".network-header").click();
       await expect(
         phones[0].locator(".network-answers button").first(),
       ).toBeEnabled({ timeout: 10000 });

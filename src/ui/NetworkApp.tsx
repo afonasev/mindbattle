@@ -208,9 +208,22 @@ export function NetworkApp() {
   const own = view?.teams[0];
   const phase = snapshot?.phase;
   const display = snapshot?.role === "display";
+  const canSkipConfirmation =
+    mobile &&
+    !!snapshot?.isLeader &&
+    phase === "topic-confirmation" &&
+    !locked;
   return (
     <main
       className={`network-app ${mobile ? "network-mobile" : "network-display"} ${preferences.textSize === "large" ? "network-text-large" : ""} ${preferences.highContrast ? "network-high-contrast" : ""} ${preferences.reducedMotion ? "reduced-motion" : ""}`}
+      onClick={
+        canSkipConfirmation
+          ? (event) => {
+              event.preventDefault();
+              void act({ type: "continue" });
+            }
+          : undefined
+      }
     >
       <header className="network-header">
         <a href="/">MINDBATTLE</a>

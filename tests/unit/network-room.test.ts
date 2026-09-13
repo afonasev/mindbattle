@@ -64,6 +64,20 @@ describe("network room", () => {
       room.players.find((player) => player.id === phase.chooser)?.name,
     );
   });
+  it("lets only the leader skip a topic countdown", () => {
+    const { room, seats, command } = setup();
+    command("display", { type: "start" });
+    const phase = room.state!.phase;
+    if (phase.kind !== "normal-topic") throw Error();
+    command(seats.find((seat) => seat.id === phase.chooser)!.token, {
+      type: "topic",
+      topicId: phase.candidates[0],
+    });
+    expect(room.state?.phase.kind).toBe("topic-confirmation");
+    expect(() => command(seats[1].token, { type: "continue" })).toThrow();
+    command(seats[0].token, { type: "continue" });
+    expect(room.state?.phase.kind).toBe("answering");
+  });
   it("hides every other card and answer, including from display before reveal", () => {
     const { room, seats, command } = setup();
     command("display", { type: "start" });
