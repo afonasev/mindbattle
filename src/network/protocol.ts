@@ -46,6 +46,7 @@ export interface NetworkSnapshot {
   view?: Omit<PublicMatchView, "teams"> & { teams: NetworkCard[] };
   titles: Record<string, string>;
   canChoose: boolean;
+  chooserName?: string;
   canVeto: boolean;
   canAnswer: boolean;
   ownAnswer?: AnswerPosition | null;

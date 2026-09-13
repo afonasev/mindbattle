@@ -584,6 +584,10 @@ export class NetworkRoom {
         topicIds.map((id) => [id, this.titles[id] ?? id]),
       ),
       canChoose: phase.kind === "normal-topic" && phase.chooser === actor?.id,
+      chooserName:
+        actor && phase.kind === "normal-topic"
+          ? this.players.find((player) => player.id === phase.chooser)?.name
+          : undefined,
       canVeto:
         phase.kind === "bonus-veto" &&
         !!actor &&

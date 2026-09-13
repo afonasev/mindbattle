@@ -77,6 +77,11 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
             ),
           )
         ).indexOf(true);
+        await expect(
+          phones[(chooser + 1) % phones.length].getByRole("heading", {
+            name: `Выбирает Участник ${chooser + 1}`,
+          }),
+        ).toBeVisible();
         await phones[chooser].locator(".network-topics button").first().click();
       } else {
         await expect(

@@ -55,6 +55,15 @@ describe("network room", () => {
       room.command("display", { ...envelope, commandId: "different" }, 0),
     ).toThrow("Экран");
   });
+  it("names the player choosing the next normal topic on every phone", () => {
+    const { room, seats, command } = setup();
+    command("display", { type: "start" });
+    const phase = room.state!.phase;
+    if (phase.kind !== "normal-topic") throw Error();
+    expect(room.snapshot(seats[0].token, 0).chooserName).toBe(
+      room.players.find((player) => player.id === phase.chooser)?.name,
+    );
+  });
   it("hides every other card and answer, including from display before reveal", () => {
     const { room, seats, command } = setup();
     command("display", { type: "start" });

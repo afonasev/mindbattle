@@ -577,7 +577,7 @@ export function NetworkApp() {
                       ? "Выберите тему"
                       : display
                         ? `Выбирает ${snapshot.players.find((p) => p.id === view?.chooser)?.name ?? "игрок"}`
-                        : "Ждём выбора темы"}
+                        : `Выбирает ${snapshot.chooserName ?? "игрок"}`}
                   </h1>
                   <div className="network-topics">
                     {view?.topicCandidates?.map((id) => (
