@@ -72,10 +72,12 @@ export function NetworkApp() {
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [feedbackNote, setFeedbackNote] = useState("");
+  const [scoreboardOpen, setScoreboardOpen] = useState(false);
   useEffect(
     () => setFeedbackNote(snapshot?.view?.feedback?.complaintNote ?? ""),
     [snapshot?.view?.feedback?.eventId],
   );
+  useEffect(() => setScoreboardOpen(false), [snapshot?.epoch, snapshot?.phase]);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
   const [terminal, setTerminal] = useState(false);
@@ -489,6 +491,20 @@ export function NetworkApp() {
                     <article
                       className={`network-player-card ${card.departed ? "departed" : ""}`}
                       key={card.id}
+                      role={mobile ? "button" : undefined}
+                      tabIndex={mobile ? 0 : undefined}
+                      aria-label={mobile ? "Показать текущий счёт" : undefined}
+                      onClick={mobile ? () => setScoreboardOpen(true) : undefined}
+                      onKeyDown={
+                        mobile
+                          ? (event) => {
+                              if (event.key === "Enter" || event.key === " ") {
+                                event.preventDefault();
+                                setScoreboardOpen(true);
+                              }
+                            }
+                          : undefined
+                      }
                     >
                       <span className="network-player-number">
                         {display ? card.id.replace("player-", "") : "Я"}
@@ -520,6 +536,28 @@ export function NetworkApp() {
                 </div>
               )}
               {snapshot.spectating && <p>Вы наблюдаете финальную битву за первое место.</p>}
+              {mobile && scoreboardOpen && (
+                <div
+                  className="network-scoreboard-overlay"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label="Текущий счёт"
+                  onClick={() => setScoreboardOpen(false)}
+                >
+                  <section>
+                    <p>Текущий счёт</p>
+                    <div className="network-scoreboard-list">
+                      {snapshot.scoreboard?.map((row) => (
+                        <div key={row.teamId}>
+                          <span>{row.departed ? "—" : row.rank}</span>
+                          <strong>{row.name}{row.departed ? " · Выбыл" : ""}</strong>
+                          <b>{row.score}</b>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                </div>
+              )}
             {phase === "normal-topic" && (
                 <>
                   <h1>

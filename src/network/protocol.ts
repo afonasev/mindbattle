@@ -16,6 +16,13 @@ export type NetworkCard = PublicTeamCard & {
   departed: boolean;
   remainingMs?: number;
 };
+export interface NetworkScoreRow {
+  teamId: TeamId;
+  name: string;
+  rank: number;
+  score: number;
+  departed: boolean;
+}
 export interface NetworkSnapshot {
   code: string;
   epoch: number;
@@ -45,6 +52,7 @@ export interface NetworkSnapshot {
   difficulty?: string;
   endReason?: string;
   feedbackError?: string;
+  scoreboard?: readonly NetworkScoreRow[];
 }
 export type NetworkAction =
   | { type: "settings"; questionCount: number; answerTimeMs: number }

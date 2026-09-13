@@ -70,6 +70,10 @@ describe("network room", () => {
     expect(own.ownAnswer).toBe("up");
     expect(other.view?.teams).toHaveLength(1);
     expect(other.view?.teams[0].id).toBe(seats[1].id);
+    expect(other.scoreboard).toEqual([
+      expect.objectContaining({ name: "Игрок 1", score: 0 }),
+      expect.objectContaining({ name: "Игрок 2", score: 0 }),
+    ]);
     expect(display.view?.question?.correctPosition).toBeUndefined();
     expect(display.view?.teams[0].answerPosition).toBeUndefined();
     expect(JSON.stringify(other)).not.toContain("correctAnswerId");

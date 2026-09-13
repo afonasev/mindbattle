@@ -17,7 +17,7 @@
 | Лобби и роли | server/network.ts, src/network/room.ts, src/ui/NetworkApp.tsx | room: 12 мест, запрет 13-го/позднего входа, права; browser: 12 независимых контекстов, desktop settings и запуск |
 | Авторитет и скрытая информация | room.command/snapshot, protocol.ts, domain/match.ts | дубликаты, phase revision, чужие роли, до reveal нет ключа/чужих ответов, граничное истечение времени |
 | Правила и бонус | domain/classic.ts, match.ts | девять вопросов для 12 участников, четыре запрета без продвижения очереди, сложный финал, сохранение уже решённого победителя |
-| Общий и личный экран | NetworkApp.tsx, network.css | browser 1280×720/1920×1080 + 12 экранов 390×844: 12 карточек против одной, ответы скрыты/раскрыты; PNG; звук display и отсутствие audio requests телефонов |
+| Общий и личный экран | NetworkApp.tsx, network.css | browser 1280×720/1920×1080 + 12 экранов 390×844: 12 карточек против одной, ответы скрыты/раскрыты; личная карточка открывает таблицу счёта из 12 строк и закрывается любым тапом; PNG; звук display и отсутствие audio requests телефонов |
 | Отключение и возврат | client.ts, room.ts, server/network.ts | offline/online browser, refresh display, lease, stale stream generation, пауза до решения ведущего; API replacement/cleanup |
 | Исключение | excludeNetworkPlayer, room.ts | пропуск в очереди, пересоздание бонуса, сохранение очков, один оставшийся, смена ведущего и отказ исключённому token |
 | Повторная партия | room.ts replay | browser: прежний код и 11 оставшихся; unit: лобби и новый состав |
@@ -25,13 +25,14 @@
 
 ## Выполненные проверки
 
-- `npm run check`: 22 test files, 151 tests PASS; TypeScript и обе production-сборки PASS.
+- `npm test -- --run tests/unit/network-room.test.ts`: 8 PASS; подтверждает приватную проекцию и безопасный список текущих очков.
+- `npm run build`: TypeScript и обе production-сборки PASS.
 - Production browser regression: 26 PASS, 3 штатных SKIP, обнаружен overflow меню 720p. После исправления targeted run меню + network в обоих разрешениях: 4 PASS.
 - Network browser: три вопроса, включая бонус, скрытые ответы, feedback без жалобы, восстановление display, disconnect/reconnect, исключение, возврат в лобби.
 - Network audio: отдельный display create-gesture test PASS; в сценарии 12 телефонов ни одного аудиозапроса без принудительного mute на телефонах.
 - `node scripts/testNetworkApi.mjs`: production API PASS (код, authorization, замена stream, успешное закрытие, cleanup, удаление комнаты).
 - In-app Browser: создание/подключение в предыдущем проходе; актуальное меню, переход в network, обработка устаревшей комнаты и возврат к форме. Предложение PWA update отсутствует на network route; применение обновления из него недоступно.
-- В финальном UI общий экран результатов содержит две колонки без повторных карточек; раскрытие и таблица проверяются на отсутствие вертикальной прокрутки в 720p. Актуальные PNG сохранены в каталоге визуализаций текущей задачи.
+- В финальном UI общий экран результатов содержит единый вертикальный список без повторных карточек; раскрытие и таблица проверяются на отсутствие вертикальной прокрутки в 720p. На телефоне карточка игрока открывает счёт 12 участников и закрывается тапом. Актуальные PNG сохранены в каталоге визуализаций текущей задачи.
 - `openspec validate add-network-phone-play --strict`: PASS; `openspec validate --specs`: 13 PASS.
 - Архитектурный review: исправлены и перепроверены шесть замечаний — победитель при исключении, очистка streams map, feedback fencing, IP за reverse proxy, замена дублей SSE, освобождение retry listener.
 - В существующем application-controller.test.ts исправлен test double Storage: отдельный ключ solo records больше не перезаписывает основной. Две ошибки до правки воспроизводились и в исходном main.
@@ -45,7 +46,7 @@
 
 - Финал и редкие исключения покрыты детерминированными тестами ядра; не все такие сочетания пройдены через UI на физических устройствах.
 - PWA update проверен маршрутом и доступностью UI; реальная доставка нового service worker во время сетевой партии на телефоне не проведена.
-- Production deployment не выполнен. SSE через публичный HTTPS reverse proxy и разные мобильные сети необходимо подтвердить при доставке; комнаты живут в памяти процесса и не переживают restart сервера по согласованному design.
+- Production deployment выполнен; `node scripts/testNetworkApi.mjs` против https://mindbattle.afonasev.tech PASS. Физическая игра с разных мобильных сетей остаётся непроверенной; комнаты живут в памяти процесса и не переживают restart сервера по согласованному design.
 
 ## Итог
 

@@ -216,6 +216,10 @@
 .network-player-card.departed {
   opacity: 0.48;
 }
+.network-player-card[role="button"]:focus-visible {
+  outline: 3px solid #77e1ef;
+  outline-offset: 4px;
+}
 .network-topics {
   display: flex;
   flex-wrap: wrap;
@@ -327,6 +331,45 @@
 .network-standings > div > span {
   color: #a7bdd9;
 }
+.network-scoreboard-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(3, 9, 23, 0.9);
+}
+.network-scoreboard-overlay > section {
+  width: min(100%, 32rem);
+  max-height: min(78dvh, 42rem);
+  overflow: auto;
+  padding: 20px;
+  border: 1px solid #728ab751;
+  border-radius: 18px;
+  background: #14243a;
+}
+.network-scoreboard-overlay > section > p {
+  margin: 0 0 14px;
+  color: #eef3ff;
+  font-size: 21px;
+  font-weight: 800;
+}
+.network-scoreboard-list {
+  display: grid;
+  gap: 7px;
+}
+.network-scoreboard-list > div {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 11px;
+  border-radius: 10px;
+  background: #1b2d48;
+}
+.network-scoreboard-list > div > span { color: #a7bdd9; }
+.network-scoreboard-list > div > b { color: #a6f5d2; }
 .network-actions {
   display: flex;
   gap: 16px;
@@ -437,6 +480,7 @@
   .network-player-card {
     padding: 14px;
   }
+  .network-player-card[role="button"] { cursor: pointer; }
   .network-player-card strong {
     font-size: 17px;
   }

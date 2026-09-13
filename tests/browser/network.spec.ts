@@ -105,6 +105,21 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
           path: testInfo.outputPath("network-question-12.png"),
           fullPage: true,
         });
+        await phones[0].locator(".network-player-card").click();
+        const scoreboard = phones[0].getByRole("dialog", {
+          name: "Текущий счёт",
+        });
+        await expect(scoreboard).toBeVisible();
+        await expect(scoreboard.locator(".network-scoreboard-list > div")).toHaveCount(12);
+        await phones[0].screenshot({
+          path: testInfo.outputPath("network-phone-scoreboard.png"),
+          fullPage: true,
+        });
+        await scoreboard.click({ position: { x: 4, y: 4 } });
+        await expect(scoreboard).toBeHidden();
+        await phones[0].locator(".network-player-card").evaluate((card) =>
+          (card as HTMLElement).blur(),
+        );
         await phones[0].screenshot({
           path: testInfo.outputPath("network-phone-question.png"),
           fullPage: true,

@@ -521,19 +521,25 @@ export class NetworkRoom {
           remainingMs,
         };
       });
-    const standings = view.standings
-      ? [
-          ...selectStandings({
-            ...state,
-            teams: state.teams.filter(
-              (t) => !state.departedTeamIds?.includes(t.id),
-            ),
-          }),
-          ...view.standings
-            .filter((row) => state.departedTeamIds?.includes(row.teamId))
-            .map((row) => ({ ...row, rank: 0 })),
-        ]
-      : undefined;
+    const visibleStandings = [
+      ...selectStandings({
+        ...state,
+        teams: state.teams.filter(
+          (t) => !state.departedTeamIds?.includes(t.id),
+        ),
+      }),
+      ...selectStandings(state)
+        .filter((row) => state.departedTeamIds?.includes(row.teamId))
+        .map((row) => ({ ...row, rank: 0 })),
+    ];
+    const scoreboard = visibleStandings.map((row) => ({
+      teamId: row.teamId,
+      name: this.players.find((player) => player.id === row.teamId)?.name ?? "",
+      rank: row.rank,
+      score: row.score,
+      departed: !!this.players.find((player) => player.id === row.teamId)?.departed,
+    }));
+    const standings = view.standings ? visibleStandings : undefined;
     const personalView = {
       ...view,
       standings,
@@ -564,6 +570,7 @@ export class NetworkRoom {
     ];
     return {
       ...base,
+      scoreboard: actor ? scoreboard : undefined,
       view: personalView,
       titles: Object.fromEntries(
         topicIds.map((id) => [id, this.titles[id] ?? id]),
