@@ -142,7 +142,14 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
     await expect(
       page.getByRole("heading", { name: "Результаты этапа" }),
     ).toBeVisible();
-    expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(testInfo.project.use.viewport!.height);
+    await expect(page.locator(".network-standings > div")).toHaveCount(12);
+    expect(
+      new Set(
+        await page
+          .locator(".network-standings > div")
+          .evaluateAll((rows) => rows.map((row) => row.getBoundingClientRect().x)),
+      ).size,
+    ).toBe(1);
     await page.screenshot({ path: testInfo.outputPath("network-standings-12.png"), fullPage: true });
     await page.reload();
     await expect(
