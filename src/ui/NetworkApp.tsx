@@ -14,6 +14,7 @@ import type {
 import {
   AudioController,
   createHtmlAudioSourceFactory,
+  TopicCountdownAudioMonitor,
   type AudioCue,
 } from "../adapters/audio";
 import {
@@ -91,6 +92,7 @@ export function NetworkApp() {
   const connection = useRef<NetworkConnection | null>(null);
   const audio = useRef<AudioController | null>(null);
   const lastPhase = useRef("");
+  const confirmationAudio = useRef(new TopicCountdownAudioMonitor());
   const enableAudio = () => {
     if (!mobile && !audio.current)
       audio.current = new AudioController(createHtmlAudioSourceFactory(), {
@@ -136,7 +138,6 @@ export function NetworkApp() {
     if (snapshot.paused) return;
     const cues: Record<string, AudioCue> = {
       lobby: "lobby-theme",
-      "topic-confirmation": "countdown",
       answering: "question-start",
       reveal: "reveal",
       "bonus-veto": "bonus",
@@ -145,6 +146,17 @@ export function NetworkApp() {
     const cue = cues[snapshot.phase];
     if (cue) audio.current?.play(cue);
   }, [snapshot?.phase, snapshot?.epoch, mobile]);
+  useEffect(() => {
+    if (mobile || snapshot?.phase !== "topic-confirmation") {
+      confirmationAudio.current.reset();
+      return;
+    }
+    if (snapshot.paused) return;
+    const remainingMs = snapshot.view?.confirmationRemainingMs;
+    if (remainingMs === undefined) return;
+    for (const cue of confirmationAudio.current.observe(remainingMs))
+      audio.current?.play(cue);
+  }, [snapshot?.phase, snapshot?.paused, snapshot?.view?.confirmationRemainingMs, mobile]);
   useEffect(() => {
     if (snapshot?.paused) audio.current?.stopMusic();
   }, [snapshot?.paused]);

@@ -4,6 +4,7 @@ import {
   AUDIO_CUE_MANIFEST,
   AudioController,
   phaseAudioActions,
+  TopicCountdownAudioMonitor,
   type AudioSource,
   type AudioSourceFactory
 } from "../../src/adapters/audio";
@@ -71,6 +72,19 @@ describe("answering audio monitor", () => {
     expect(monitor.observe(2_100)).toEqual(["timer-last-second"]);
     expect(monitor.observe(0)).toEqual(["reserve-start"]);
     expect(monitor.observe(0)).toEqual([]);
+  });
+});
+
+describe("topic countdown audio monitor", () => {
+  it("plays once for every displayed countdown digit", () => {
+    const monitor = new TopicCountdownAudioMonitor();
+    expect(monitor.observe(3_000)).toEqual(["countdown"]);
+    expect(monitor.observe(2_950)).toEqual([]);
+    expect(monitor.observe(2_000)).toEqual(["countdown"]);
+    expect(monitor.observe(1_000)).toEqual(["countdown"]);
+    expect(monitor.observe(0)).toEqual([]);
+    monitor.reset();
+    expect(monitor.observe(3_000)).toEqual(["countdown"]);
   });
 });
 

@@ -120,6 +120,21 @@ export class AnsweringAudioMonitor {
   }
 }
 
+export class TopicCountdownAudioMonitor {
+  private previousSecond: number | null = null;
+
+  reset(): void {
+    this.previousSecond = null;
+  }
+
+  observe(remainingMs: number): readonly AudioCue[] {
+    const second = Math.ceil(Math.max(0, remainingMs) / 1_000);
+    const cues = second > 0 && second !== this.previousSecond ? ["countdown" as const] : [];
+    this.previousSecond = second;
+    return cues;
+  }
+}
+
 export type PhaseAudioAction =
   | { readonly type: "play"; readonly cue: AudioCue }
   | { readonly type: "stop-music" };
