@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type {
   AccessibilityPreferences,
   ControlSource,
@@ -60,6 +61,8 @@ export function MenuScreen({
   readonly resetHistory: () => void;
   readonly error: string | null;
 }) {
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [classicSetupOpen, setClassicSetupOpen] = useState(false);
   const activeTeams = TEAM_IDS.slice(0, settings.teamCount);
   const valid = assignmentsAreCompleteAndUnique(activeTeams, settings.assignments);
   const updateTeamCount = (teamCount: 2 | 3 | 4) => {
@@ -106,6 +109,23 @@ export function MenuScreen({
         <p><span className="desktop-menu-tagline">Соберите команды. Остальное решит эрудиция.</span><span className="mobile-menu-tagline">Все решит эрудиция</span></p>
       </header>
 
+      {!settingsOpen && !classicSetupOpen && (
+      <section className="setup-stage menu-mode-stage" aria-label="Выбор режима">
+        <div className="menu-actions">
+          <button className="secondary-action" type="button" onClick={startSolo}>Одиночная игра</button>
+          <button className="primary-action mobile-classic-action" type="button" onClick={() => setClassicSetupOpen(true)}>На одном устройстве (2–4)</button>
+          <a className="secondary-action network-menu-desktop" href="/network">Сетевая игра (2–12)</a>
+          <a className="secondary-action network-menu-mobile" href="/network">Сетевая игра (2–12)</a>
+          {restoreSolo && <button className="secondary-action" type="button" onClick={restoreSolo}>Продолжить одиночную игру</button>}
+          {restoreLabel && <button className="secondary-action mobile-classic-action" type="button" onClick={restore}>{restoreLabel}</button>}
+          <button className="secondary-action" type="button" onClick={() => setSettingsOpen(true)}>Настройки</button>
+          <button className="secondary-action" type="button" onClick={viewRecords}>Рекорды</button>
+        </div>
+        {error && <p className="menu-error" role="alert">{error}</p>}
+      </section>
+      )}
+
+      {classicSetupOpen && (
       <section className="setup-stage mobile-classic-setup" aria-labelledby="setup-title">
         <div className="stage-label">Настройка партии</div>
         <h2 id="setup-title">Классическая игра</h2>
@@ -188,47 +208,48 @@ export function MenuScreen({
         </div>
 
         <div className="menu-actions">
-          <a className="secondary-action network-menu-desktop" href="/network">Создать сетевую игру</a>
-          <a className="secondary-action network-menu-mobile" href="/network">Подключиться к игре</a>
-          <button className="primary-action mobile-classic-action" type="button" disabled={!valid} onClick={start}>
-            Начать игру
-          </button>
-          <button className="secondary-action" type="button" onClick={startSolo}>Соло-забег</button>
-          {restoreSolo && <button className="secondary-action" type="button" onClick={restoreSolo}>Продолжить соло-забег</button>}
-          {restoreLabel && (
-            <button className="secondary-action mobile-classic-action" type="button" onClick={restore}>
-              {restoreLabel}
-            </button>
-          )}
-          <button className="secondary-action" type="button" onClick={viewRecords}>Рекорды</button>
+          <button className="primary-action" type="button" disabled={!valid} onClick={start}>Начать игру</button>
+          <button className="secondary-action" type="button" onClick={() => setClassicSetupOpen(false)}>Назад к режимам</button>
         </div>
         {error && <p className="menu-error" role="alert">{error}</p>}
       </section>
+      )}
 
-      <details className="preferences-panel">
-        <summary>Настройки</summary>
-        <div>
-          <label className="feedback-setting"><input type="checkbox" checked={settings.collectQuestionFeedback} onChange={(event) => setSettings({ ...settings, collectQuestionFeedback: event.target.checked })} /> Собирать обратную связь по вопросам</label>
-          <label>
-            Громкость
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              value={preferences.volume}
-              onChange={(event) =>
-                setPreferences({ ...preferences, volume: Number(event.target.value) })
-              }
-            />
-          </label>
-          <label><input type="checkbox" checked={preferences.muted} onChange={(event) => setPreferences({ ...preferences, muted: event.target.checked })} /> Без звука</label>
-          <label><input type="checkbox" checked={preferences.textSize === "large"} onChange={(event) => setPreferences({ ...preferences, textSize: event.target.checked ? "large" : "normal" })} /> Крупный текст</label>
-          <label><input type="checkbox" checked={preferences.highContrast} onChange={(event) => setPreferences({ ...preferences, highContrast: event.target.checked })} /> Высокий контраст</label>
-          <label><input type="checkbox" checked={preferences.reducedMotion} onChange={(event) => setPreferences({ ...preferences, reducedMotion: event.target.checked })} /> Без анимации</label>
-          <button type="button" onClick={resetHistory}>Сбросить историю вопросов</button>
-        </div>
-      </details>
+      {settingsOpen && (
+        <section className="setup-stage menu-settings-stage" aria-labelledby="menu-settings-title">
+          <div className="settings-stage-heading">
+            <div>
+              <span className="stage-label">Панель управления</span>
+              <h2 id="menu-settings-title">Настройки</h2>
+              <p>Сделайте партию комфортной, не меняя её правил.</p>
+            </div>
+            <button className="secondary-action settings-back" type="button" onClick={() => setSettingsOpen(false)}>Назад</button>
+          </div>
+          <div className="settings-grid">
+            <section className="settings-group" aria-labelledby="sound-settings-title">
+              <h3 id="sound-settings-title">Звук</h3>
+              <button className={`settings-toggle ${preferences.muted ? "" : "is-active"}`} type="button" aria-pressed={!preferences.muted} onClick={() => setPreferences({ ...preferences, muted: !preferences.muted })}>
+                {preferences.muted ? "Звук выключен" : "Звук включён"}
+              </button>
+              <label className="settings-range">
+                <span>Громкость <strong>{Math.round(preferences.volume * 100)}%</strong></span>
+                <input type="range" min="0" max="1" step="0.1" value={preferences.volume} onChange={(event) => setPreferences({ ...preferences, volume: Number(event.target.value) })} />
+              </label>
+            </section>
+            <section className="settings-group" aria-labelledby="display-settings-title">
+              <h3 id="display-settings-title">Отображение</h3>
+              <label className="settings-check"><input type="checkbox" checked={preferences.textSize === "large"} onChange={(event) => setPreferences({ ...preferences, textSize: event.target.checked ? "large" : "normal" })} /><span>Крупный текст</span></label>
+              <label className="settings-check"><input type="checkbox" checked={preferences.highContrast} onChange={(event) => setPreferences({ ...preferences, highContrast: event.target.checked })} /><span>Высокий контраст</span></label>
+              <label className="settings-check"><input type="checkbox" checked={preferences.reducedMotion} onChange={(event) => setPreferences({ ...preferences, reducedMotion: event.target.checked })} /><span>Без анимации</span></label>
+            </section>
+            <section className="settings-group settings-group--session" aria-labelledby="session-settings-title">
+              <h3 id="session-settings-title">Партия и история</h3>
+              <label className="settings-check"><input type="checkbox" checked={settings.collectQuestionFeedback} onChange={(event) => setSettings({ ...settings, collectQuestionFeedback: event.target.checked })} /><span>Собирать обратную связь по вопросам</span></label>
+              <button className="settings-reset" type="button" onClick={resetHistory}>Сбросить историю вопросов</button>
+            </section>
+          </div>
+        </section>
+      )}
       <footer>Локально · Offline-first · один общий экран</footer>
     </main>
   );

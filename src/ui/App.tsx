@@ -9,6 +9,7 @@ import {
   handleKeyboardInput,
   handleWindowBlur,
   phaseAudioActions,
+  RevealAudioMonitor,
   soloGamepadCommand,
   soloKeyboardCommand,
   type GamepadSnapshot,
@@ -105,7 +106,12 @@ export function App() {
   const phaseRef = useRef<string | null>(null);
   const confirmationSecondRef = useRef<number | null>(null);
   const answeringAudioRef = useRef(new AnsweringAudioMonitor());
+  const revealAudioRef = useRef(new RevealAudioMonitor());
+  const soloPhaseRef = useRef<string | null>(null);
+  const soloAnsweringAudioRef = useRef(new AnsweringAudioMonitor());
+  const soloRevealAudioRef = useRef(new RevealAudioMonitor());
   const lobbyThemePlayedRef = useRef(false);
+  const audioActivationRef = useRef(false);
   const audioRef = useRef(new AudioController(createHtmlAudioSourceFactory(), preferences));
 
   useEffect(() => onPwaUpdate(setPwaUpdateReady), []);
@@ -141,6 +147,8 @@ export function App() {
         teams,
         collectQuestionFeedback: settings.collectQuestionFeedback
       });
+      audioRef.current.setMusicDucked(false);
+      audioRef.current.play("game-theme");
       inputRef.current = createInputRouterState(false);
       setMenuError(null);
       sync();
@@ -158,6 +166,9 @@ export function App() {
       setSoloInput("pointer");
       soloGamepadButtonsRef.current = new Map(gamepadSnapshots().map((gamepad) => [gamepad.index, gamepad.buttons]));
       setSolo(soloController.start({ profile: "solo-endless-v1", collectQuestionFeedback: settings.collectQuestionFeedback }));
+      soloPhaseRef.current = "topic";
+      audioRef.current.setMusicDucked(false);
+      audioRef.current.play("game-theme");
       setMenuError(null);
     } catch (error) {
       setMenuError(error instanceof Error ? error.message.split("\n")[0] : "Не удалось начать соло-забег");
@@ -512,15 +523,32 @@ export function App() {
   }, [dispatchSolo, solo, soloController, soloRecordId, submitSoloFeedback]);
 
   useEffect(() => {
-    if (match) {
+    if (match || solo) {
       lobbyThemePlayedRef.current = false;
       return;
     }
     if (!lobbyThemePlayedRef.current) {
-      audioRef.current.play("lobby-theme");
+      audioRef.current.setMusicDucked(false);
+      audioRef.current.play("menu-theme");
       lobbyThemePlayedRef.current = true;
     }
-  }, [match]);
+  }, [match, solo]);
+
+  useEffect(() => {
+    const activateMenuAudio = () => {
+      if (audioActivationRef.current || match || solo) return;
+      audioActivationRef.current = true;
+      audioRef.current.setMusicDucked(false);
+      audioRef.current.play("menu-theme");
+      lobbyThemePlayedRef.current = true;
+    };
+    window.addEventListener("pointerdown", activateMenuAudio, { capture: true, once: true });
+    window.addEventListener("keydown", activateMenuAudio, { capture: true, once: true });
+    return () => {
+      window.removeEventListener("pointerdown", activateMenuAudio, { capture: true });
+      window.removeEventListener("keydown", activateMenuAudio, { capture: true });
+    };
+  }, [match, solo]);
 
   useEffect(() => {
     const phase = match?.phase.kind ?? null;
@@ -528,11 +556,60 @@ export function App() {
       inputRef.current = disarmUntilNeutral(inputRef.current);
       for (const action of phaseAudioActions(phaseRef.current, phase)) {
         if (action.type === "stop-music") audioRef.current.stopMusic();
+        else if (action.type === "set-music-ducked") audioRef.current.setMusicDucked(action.ducked);
         else audioRef.current.play(action.cue);
       }
     }
     phaseRef.current = phase;
   }, [match?.phase.kind]);
+
+  useEffect(() => {
+    if (!match || match.pause || match.phase.kind !== "reveal") {
+      revealAudioRef.current.reset();
+      return;
+    }
+    const signature = `${match.phase.round.questionId}:${match.phase.resolutions.map(({ teamId, result }) => `${teamId}:${result}`).join("|")}`;
+    for (const cue of revealAudioRef.current.observe(signature, match.phase.resolutions)) audioRef.current.play(cue);
+  }, [match]);
+
+  useEffect(() => {
+    const phase = solo?.phase.kind ?? null;
+    if (phase === soloPhaseRef.current) return;
+    const toMatchPhase: Readonly<Record<NonNullable<typeof phase>, string>> = {
+      topic: "normal-topic",
+      risk: "bonus-veto",
+      answering: "answering",
+      reveal: "reveal",
+      feedback: "difficulty-feedback",
+      finished: "finished"
+    };
+    const previous = soloPhaseRef.current ? toMatchPhase[soloPhaseRef.current as NonNullable<typeof phase>] : null;
+    const current = phase ? toMatchPhase[phase] : null;
+    for (const action of phaseAudioActions(previous, current)) {
+      if (action.type === "stop-music") audioRef.current.stopMusic();
+      else if (action.type === "set-music-ducked") audioRef.current.setMusicDucked(action.ducked);
+      else audioRef.current.play(action.cue);
+    }
+    soloPhaseRef.current = phase;
+  }, [solo?.phase.kind]);
+
+  useEffect(() => {
+    if (!solo || solo.paused || solo.phase.kind !== "answering") {
+      soloAnsweringAudioRef.current.reset();
+      return;
+    }
+    for (const cue of soloAnsweringAudioRef.current.observe(solo.phase.baseRemainingMs)) audioRef.current.play(cue);
+  }, [solo]);
+
+  useEffect(() => {
+    if (!solo || solo.paused || solo.phase.kind !== "reveal") {
+      soloRevealAudioRef.current.reset();
+      return;
+    }
+    const signature = `${solo.runId}:${solo.slotIndex}:${solo.phase.result}`;
+    const result = solo.phase.result === "correct" ? "correct" : "wrong";
+    for (const cue of soloRevealAudioRef.current.observe(signature, [{ result }])) audioRef.current.play(cue);
+  }, [solo]);
 
   useEffect(() => {
     if (!match || match.pause || match.phase.kind !== "answering") {
@@ -579,6 +656,11 @@ export function App() {
           setPreferences={(next) => {
             const saved = controller.updatePreferences(next);
             audioRef.current.update(saved);
+            if (saved.muted) audioRef.current.stopMusic();
+            else if (!match && !solo) {
+              audioRef.current.setMusicDucked(false);
+              audioRef.current.play("menu-theme");
+            }
             setPreferences(saved);
           }}
           gamepads={gamepads}
@@ -586,7 +668,7 @@ export function App() {
           startSolo={startSolo}
           restoreSolo={soloController.canRestore ? () => setSolo(soloController.restore()) : null}
           restoreLabel={
-            controller.savedMatchStatus === "in-progress" ? "Продолжить партию" : null
+            controller.savedMatchStatus === "in-progress" ? "Продолжить игру на одном устройстве" : null
           }
           restore={() => {
             const restored = controller.restoreLastMatch();

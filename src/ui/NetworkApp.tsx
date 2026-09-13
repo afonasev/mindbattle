@@ -14,8 +14,10 @@ import type {
 import {
   AudioController,
   createHtmlAudioSourceFactory,
+  phaseAudioActions,
+  RevealAudioMonitor,
+  shouldPlayNetworkAudio,
   TopicCountdownAudioMonitor,
-  type AudioCue,
 } from "../adapters/audio";
 import {
   DEFAULT_PREFERENCES,
@@ -92,6 +94,7 @@ export function NetworkApp() {
   const connection = useRef<NetworkConnection | null>(null);
   const audio = useRef<AudioController | null>(null);
   const lastPhase = useRef("");
+  const revealAudio = useRef(new RevealAudioMonitor());
   const confirmationAudio = useRef(new TopicCountdownAudioMonitor());
   const enableAudio = () => {
     if (!mobile && !audio.current)
@@ -130,22 +133,29 @@ export function NetworkApp() {
     };
   }, [credential]);
   useEffect(() => {
-    if (mobile || !snapshot) return;
+    if (!snapshot || !shouldPlayNetworkAudio(snapshot.role, mobile)) return;
     const signature = `${snapshot.epoch}:${snapshot.phase}`;
     if (lastPhase.current === signature) return;
+    const previousPhase = lastPhase.current.split(":")[1] || null;
     lastPhase.current = signature;
-    audio.current?.stopMusic();
     if (snapshot.paused) return;
-    const cues: Record<string, AudioCue> = {
-      lobby: "lobby-theme",
-      answering: "question-start",
-      reveal: "reveal",
-      "bonus-veto": "bonus",
-      finished: "winner",
-    };
-    const cue = cues[snapshot.phase];
-    if (cue) audio.current?.play(cue);
+    for (const action of phaseAudioActions(previousPhase, snapshot.phase)) {
+      if (action.type === "stop-music") audio.current?.stopMusic();
+      else if (action.type === "set-music-ducked") audio.current?.setMusicDucked(action.ducked);
+      else audio.current?.play(action.cue);
+    }
+    if (snapshot.phase === "lobby") audio.current?.play("menu-theme");
   }, [snapshot?.phase, snapshot?.epoch, mobile]);
+  useEffect(() => {
+    if (!snapshot || !shouldPlayNetworkAudio(snapshot.role, mobile) || snapshot.paused || snapshot.phase !== "reveal" || !snapshot.view) {
+      if (snapshot?.phase !== "reveal") revealAudio.current.reset();
+      return;
+    }
+    const signature = `${snapshot.epoch}:${snapshot.phaseRevision}`;
+    for (const cue of revealAudio.current.observe(signature, snapshot.view.teams.map(({ result }) => ({ result: result ?? "no-answer" })))) {
+      audio.current?.play(cue);
+    }
+  }, [snapshot?.epoch, snapshot?.phase, snapshot?.phaseRevision, snapshot?.paused, snapshot?.view, mobile]);
   useEffect(() => {
     if (mobile || snapshot?.phase !== "topic-confirmation") {
       confirmationAudio.current.reset();
@@ -240,69 +250,6 @@ export function NetworkApp() {
           </button>
         )}
       </header>
-      {(!snapshot || snapshot.phase === "lobby") && (
-        <details className="network-preferences">
-          <summary>Настройки отображения</summary>
-          <label>
-            <input
-              type="checkbox"
-              checked={preferences.textSize === "large"}
-              onChange={(e) =>
-                setPreferences({
-                  ...preferences,
-                  textSize: e.target.checked ? "large" : "normal",
-                })
-              }
-            />
-            Крупный текст
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={preferences.highContrast}
-              onChange={(e) =>
-                setPreferences({
-                  ...preferences,
-                  highContrast: e.target.checked,
-                })
-              }
-            />
-            Повышенный контраст
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={preferences.reducedMotion}
-              onChange={(e) =>
-                setPreferences({
-                  ...preferences,
-                  reducedMotion: e.target.checked,
-                })
-              }
-            />
-            Без анимаций
-          </label>
-          {!mobile && (
-            <label>
-              Громкость
-              <input
-                aria-label="Громкость"
-                type="range"
-                min="0"
-                max="1"
-                step="0.1"
-                value={preferences.volume}
-                onChange={(e) =>
-                  setPreferences({
-                    ...preferences,
-                    volume: Number(e.target.value),
-                  })
-                }
-              />
-            </label>
-          )}
-        </details>
-      )}
       {error && (
         <p className="network-error" role="alert">
           {error}

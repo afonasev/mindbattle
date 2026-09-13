@@ -253,14 +253,16 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
   }
 });
 
-test("network display starts the arena sound after create gesture", async ({ page }) => {
+test("network display starts the arena sound after create gesture", async ({ page }, testInfo) => {
   const audioRequests: string[] = [];
   page.on("request", request => {
     const path = new URL(request.url()).pathname;
-    if (path.startsWith("/audio/arena-v1/")) audioRequests.push(path);
+    if (path.startsWith("/audio/arena-v2/")) audioRequests.push(path);
   });
   await page.goto("/network");
+  await expect(page.getByRole("heading", { name: "Соберите свою компанию" })).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("network-entry.png"), fullPage: true });
   await page.getByRole("button", { name: "Создать сетевую игру", exact: true }).click();
   await expect(page.locator(".network-code")).toBeVisible();
-  await expect.poll(() => audioRequests.includes("/audio/arena-v1/neon-arena.wav")).toBe(true);
+  await expect.poll(() => audioRequests.includes("/audio/arena-v2/menu-theme.wav")).toBe(true);
 });
