@@ -178,6 +178,7 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
         });
       }
       await phones[0]
+        .locator(".network-round-heading")
         .getByRole("button", { name: "Дальше", exact: true })
         .click();
       await phones[0]

@@ -502,12 +502,23 @@ export function NetworkApp() {
                     : ""}
                 </span>
                 {snapshot.isLeader && (
-                  <button
-                    disabled={busy || !!status}
-                    onClick={() => void act({ type: "pause" })}
-                  >
-                    Пауза
-                  </button>
+                  <div className="network-round-actions">
+                    {(phase === "reveal" || phase === "standings") && (
+                      <button
+                        className="network-primary"
+                        disabled={locked}
+                        onClick={() => void act({ type: "continue" })}
+                      >
+                        Дальше
+                      </button>
+                    )}
+                    <button
+                      disabled={busy || !!status}
+                      onClick={() => void act({ type: "pause" })}
+                    >
+                      Пауза
+                    </button>
+                  </div>
                 )}
               </div>
               {view && (!display || (phase !== "standings" && phase !== "finished")) && (
@@ -879,16 +890,6 @@ export function NetworkApp() {
                   )}
                 </>
               )}
-              {snapshot.isLeader &&
-                (phase === "reveal" || phase === "standings") && (
-                  <button
-                    className="network-primary"
-                    disabled={locked}
-                    onClick={() => void act({ type: "continue" })}
-                  >
-                    Дальше
-                  </button>
-                )}
               {phase === "finished" && snapshot.isLeader && (
                 <div className="network-actions">
                   <button
