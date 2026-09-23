@@ -144,7 +144,7 @@ class Flow:
         if target=='implementing' and not d['owner']: raise ValueError('Claim first')
         errors=self.blocks(d,target)
         if errors and target!='cancelled': raise ValueError('Blocked: '+str(errors))
-        needed={'ready':['scope'],'verified':['verification'],'merged':['merge'],'deployed':['release','smoke'],'published':['publication'],'finalizing':[],'awaiting-acceptance':['spec_sync','cleanup','acceptance_guide'],'archived':['archive']}.get(target,[])
+        needed={'ready':['scope'],'verified':['verification'],'merged':['merge','remote_push'],'deployed':['release','smoke'],'published':['publication'],'finalizing':[],'awaiting-acceptance':['spec_sync','cleanup','acceptance_guide'],'archived':['archive']}.get(target,[])
         for key in needed:
             if not d['evidence'].get(key): raise ValueError('Missing evidence: '+key)
         if target=='verified' and d['kind']=='software' and not d['evidence'].get('commit'): raise ValueError('Missing implementation commit')
@@ -153,6 +153,16 @@ class Flow:
         if target=='merged':
             e=d['evidence']['merge']
             subprocess.run(['git','-C',e['repo'],'merge-base','--is-ancestor',e['commit'],e['main_ref']],check=True,capture_output=True)
+            push=d['evidence']['remote_push']
+            if not isinstance(push,dict) or any(not push.get(key) for key in ('repo','remote','branch','commit')):
+                raise ValueError('Invalid remote_push evidence')
+            if push['repo']!=e['repo'] or push['branch']=='main':
+                raise ValueError('Remote push must identify the feature branch in the merge repository')
+            remote_ref='refs/heads/'+push['branch']
+            result=subprocess.run(['git','-C',push['repo'],'ls-remote','--heads',push['remote'],remote_ref],check=True,capture_output=True,text=True)
+            remote_tip=result.stdout.split()[0] if result.stdout.split() else None
+            if remote_tip!=push['commit']:
+                raise ValueError('Remote feature branch tip does not match remote_push evidence')
         if target=='awaiting-acceptance':
             guide=d['evidence']['acceptance_guide']
             if not (p.parent/guide).is_file(): raise ValueError('Acceptance guide missing')

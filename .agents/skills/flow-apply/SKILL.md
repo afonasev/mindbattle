@@ -9,6 +9,8 @@ Claim selected change with actual session ID. Read installed OpenSpec status/ins
 
 Tasks include checks, canonical spec sync, commit, merge, authorized deployment or report publication, smoke, durable evidence and cleanup. Observe leases. Record evidence and transition stage after each actual milestone. Missing runtime/model/tool availability is a real blocker, not proof of completion.
 
+For software changes in this project, after the verified implementation commit push the owned feature branch to the configured Git remote. Read back the remote branch tip and record `remote_push` evidence with repo, remote, branch and exact commit before the merged transition. After integration push `main` and read back its remote tip; record both commands and SHAs. A Git push does not authorize production deployment. Keep the remote feature branch available for human acceptance unless the user explicitly asks to remove it.
+
 Prepare acceptance.md with version/URL, exact steps and expected results, or a reviewable report summary. Finalize resources then enter awaiting-acceptance and release claim. Never accept on user's behalf or archive early. Inline human acceptance uses flow-inbox procedure; inline defects get a persistent feedback ID and rework tasks or linked change. Fresh worktree for previously finalized work. See efficiency.md for model/context decisions.
 
 References live at `.agents/references/flow/` relative to the code project root; resolve that root before reading. Helper: `python3 tools/flow.py --root <planning-root> --help`.

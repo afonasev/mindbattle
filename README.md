@@ -1,93 +1,63 @@
 # Mindbattle
 
-Локальная интеллектуальная битва для 2–4 команд на одном экране. Прототип работает в актуальном desktop Chromium без интернета: локальный Node-сервер обслуживает игру и сохраняет общую оценку сложности вопросов, а браузер хранит последнюю партию и компактную историю вопросов.
+[English](README.md) · [Русский](README.ru.md)
 
-## Запуск
+Mindbattle is a browser quiz game for playing together on one screen, on your own, or with phones connected to a shared display. It uses a local Node.js server for the game and feedback API. The interface is currently in Russian.
 
-Нужен Node.js 20.19+.
+**[Play online](https://mindbattle.afonasev.tech/)**
+
+## Play
+
+| Mode | Players and devices | How it works |
+| --- | --- | --- |
+| Classic | 2–4 teams at one desktop screen | Teams answer the same questions simultaneously. Two teams can use separate keyboard layouts; additional teams need compatible gamepads. |
+| Solo | One player on desktop or a portrait phone | An endless question run with lives, risk questions, and a local high score. The phone version can be installed as a PWA and used offline after its first online load. |
+| Network | 2–12 players with phones and one desktop display | The display creates a room code. Each player joins on a phone; the server coordinates questions, answers, timers, and reconnects. The display is not a player. |
+
+The network mode is implemented, but its real shared-display and multiple-physical-phone playtest is still open. Automated browser tests do not replace that check.
+
+## Run locally
+
+Requires **Node.js 20.19+** and npm. Desktop Chromium is the tested target for the shared-screen game.
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-Откройте адрес, который напечатает сервер. Для проверки production-сборки:
+Open the address printed by the server, normally `http://127.0.0.1:4173`. For a production build on your machine:
 
 ```bash
 npm run build
 npm run preview
 ```
 
-По умолчанию сервер слушает только `127.0.0.1:4173`, а оценки дописывает в `data/difficulty-feedback.ndjson`. Путь можно изменить через `MINDBATTLE_FEEDBACK_PATH`, адрес и порт — через `MINDBATTLE_HOST` и `MINDBATTLE_PORT`.
+The server listens on `127.0.0.1:4173` by default. Set `MINDBATTLE_HOST` and `MINDBATTLE_PORT` to change that. To open the local network mode from phones, bind the server to a reachable interface and use your computer's LAN address; `127.0.0.1` only works on the computer itself.
 
-## Деплой на `mindbattle.afonasev.tech`
+Anonymous question feedback is saved to `data/difficulty-feedback.ndjson` by default. Set `MINDBATTLE_FEEDBACK_PATH` to use another location. Game progress and solo records are stored in the browser.
 
-Игра развёртывается на VPS как отдельный Node-сервис: Caddy принимает HTTPS и
-проксирует запросы на `127.0.0.1:4173`, а оценки сложности сохраняются вне
-каталога приложения — в `/var/lib/mindbattle/difficulty-feedback.ndjson`.
+## Controls
 
-Перед первой выкладкой в DNS нужна запись `A`:
+- Classic supports `WASD`, arrow keys, and compatible Xbox, PlayStation, or Nintendo-style gamepads. Each team needs its own assigned input.
+- Choose answers by position: up, right, down, or left. `Escape` opens the pause menu.
+- Solo on a phone uses touch controls. In network mode, the shared display shows the room while each player answers on their phone.
 
-```
-mindbattle.afonasev.tech → 72.56.39.20
-```
-
-На VPS уже должен быть SSH-профиль `gfe` из `~/.ssh/config`. Скрипт деплоя
-сам создаёт системного пользователя `mindbattle`, ставит и включает systemd
-сервис, размещает Caddy-сайт в `/etc/caddy/sites/mindbattle.caddy`, проверяет
-конфигурацию Caddy и перезапускает приложение. TLS-сертификат Caddy получает автоматически после
-того, как DNS-запись станет доступна извне.
-
-Обычная выкладка:
+## Checks
 
 ```bash
-make deploy
+npm run check          # types, unit tests, and build
+npm run content-check  # question catalog checks
+npm run test:browser    # Playwright browser scenarios
 ```
 
-Это каноническая команда production-деплоя: она собирает приложение, синхронизирует
-его на VPS, обновляет и перезапускает systemd-сервис, дожидается готовности локального
-HTTP endpoint и завершается только после успешного healthcheck.
+Game rules live separately from the renderer and use serializable state and seeded randomness. See `src/domain/`, `src/application/`, `src/network/`, and `server/` for the main boundaries.
 
-При необходимости можно переопределить SSH-профиль или каталог приложения:
+## Project workflow and deployment
 
-```bash
-make deploy DEPLOY_HOST=my-vps APP_DIR=/opt/mindbattle
-```
+[workflow/project.json](workflow/project.json) records the shared OpenSpec planning store, checks, and release policy. The canonical game specification and OpenSpec history are kept in that separate planning store; [docs/GAME_SPEC.md](docs/GAME_SPEC.md) explains the location. Feature branches are pushed to `origin` after verification, then integrated and pushed to `main` with evidence recorded in the change. Production deployment is a separate, explicitly authorized step and human acceptance remains separate from automated checks.
 
-Проверка после выкладки:
+The maintainer deploys with `make deploy` to `mindbattle.afonasev.tech` using a configured VPS and SSH profile. This command builds the app, updates the server, restarts the service, and checks local health; it is not needed for local play. See [scripts/deploy.sh](scripts/deploy.sh) for the exact deployment procedure.
 
-```bash
-curl -I https://mindbattle.afonasev.tech/
-ssh gfe 'sudo -u mindbattle node /opt/mindbattle/scripts/generateProductionFeedbackReport.mjs /var/lib/mindbattle/difficulty-feedback.ndjson'
-```
+## License
 
-`POST /api/difficulty-feedback` нужен игре для анонимной записи с любого
-устройства. Журнал, агрегаты и свободные заметки не имеют публичного HTTP
-endpoint: анализ доступен только оператору VPS через SSH. Команда отчёта пишет
-JSON только в stdout и не создаёт файлов в репозитории.
-
-## Управление
-
-- Две клавиатурные схемы: `WASD` и `Стрелки`.
-- Для третьей и четвёртой команды нужен отдельный совместимый геймпад.
-- Ответы выбираются позиционно: вверх, вправо, вниз, влево.
-- Обычные темы выбираются напрямую: влево, вверх, вправо.
-- В бонусном выборе: вверх/вниз — курсор, вправо — запретить, влево — снять запрет.
-- После показа ответа игроки вместе отвечают на вопрос «Хотите пожаловаться на вопрос?»: «Нет» выбрано по умолчанию, а при выборе «Да» доступен общий список причин и необязательная заметка. Один общий результат может отправить любой назначенный контроллер.
-- `Escape` открывает паузу.
-
-## Проверки
-
-```bash
-npm run check
-npm run content-check
-npm run test:browser
-```
-
-Канонические правила игры и история OpenSpec находятся в общем planning root
-`/Users/eaafonasev/Projects/mindbattle-planning`. Путь, store ID, команды и
-политика поставки записаны в [`workflow/project.json`](workflow/project.json).
-Файл [`docs/GAME_SPEC.md`](docs/GAME_SPEC.md) объясняет, где найти спецификацию.
-Новые задачи проходят `flow-explore` → `flow-apply` → `flow-inbox`; старые
-изменения не запускаются автоматически. Production-деплой требует отдельного
-разрешения, а завершение работы — явной ручной приёмки.
+[MIT](LICENSE).

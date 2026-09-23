@@ -35,7 +35,8 @@ Use temporary payload files outside the source checkout; remove only those owned
 - resources: code repo, worktree, branch, baseline, owner, processes and durable evidence destination.
 - commit: exact implementation revision (string or structured evidence).
 - verification: checks, commands, exit codes, artifact paths and tested revision.
-- merge: object with repo (absolute path), commit (actual integrated revision), main_ref (verified primary ref), plus original revision mapping for squash.
+- remote_push: object with repo (absolute path), remote, branch and exact pushed commit; the helper reads back the remote ref before merge.
+- merge: object with repo (absolute path), commit (actual integrated revision), main_ref (verified primary ref), plus original revision mapping for squash and the verified `origin/main` push/readback.
 - release / smoke: exact published identity, URL, commands and observed results.
 - publication: report/initiative artifact location and revision.
 - spec_sync: canonical revision and applied delta IDs, or verified explanation of no requirement change.
