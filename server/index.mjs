@@ -1,9 +1,9 @@
-import { createReadStream } from "node:fs";
-import { readFile, readdir, stat } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { createServer } from "node:http";
-import { extname, join, normalize, resolve } from "node:path";
+import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createFeedbackStore } from "./feedbackStore.mjs";
+import { serveStatic } from "./static.mjs";
 
 const projectRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const dev = process.argv.includes("--dev");
@@ -55,20 +55,6 @@ async function readJson(request) {
   catch { throw Object.assign(new Error("Некорректный JSON"), { status: 400 }); }
 }
 
-const mime = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".woff2": "font/woff2", ".svg": "image/svg+xml", ".png": "image/png", ".webmanifest": "application/manifest+json" };
-async function serveStatic(request, response) {
-  const dist = join(projectRoot, "dist");
-  const pathname = decodeURIComponent(new URL(request.url, "http://local").pathname);
-  const relative = normalize(pathname).replace(/^[/\\]+/, "");
-  let target = resolve(dist, relative || "index.html");
-  if (!target.startsWith(`${dist}/`)) return json(response, 404, { error: "Not found" });
-  try {
-    if ((await stat(target)).isDirectory()) target = join(target, "index.html");
-  } catch { target = join(dist, "index.html"); }
-  response.writeHead(200, { "content-type": `${mime[extname(target)] ?? "application/octet-stream"}; charset=utf-8` });
-  createReadStream(target).pipe(response);
-}
-
 const server = createServer(async (request, response) => {
   try {
     if (await networkApi(request, response)) return;
@@ -81,7 +67,7 @@ const server = createServer(async (request, response) => {
     }
     if (url.pathname.startsWith("/api/")) return json(response, 404, { error: "Not found" });
     if (vite) return vite.middlewares(request, response, () => json(response, 404, { error: "Not found" }));
-    return serveStatic(request, response);
+    return serveStatic(request, response, join(projectRoot, "dist"));
   } catch (error) {
     return json(response, error?.status ?? 500, { error: error instanceof Error ? error.message : "Server error" });
   }
