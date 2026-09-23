@@ -84,4 +84,10 @@ npm run content-check
 npm run test:browser
 ```
 
-Канонические правила игры находятся в [`docs/GAME_SPEC.md`](docs/GAME_SPEC.md).
+Канонические правила игры и история OpenSpec находятся в общем planning root
+`/Users/eaafonasev/Projects/mindbattle-planning`. Путь, store ID, команды и
+политика поставки записаны в [`workflow/project.json`](workflow/project.json).
+Файл [`docs/GAME_SPEC.md`](docs/GAME_SPEC.md) объясняет, где найти спецификацию.
+Новые задачи проходят `flow-explore` → `flow-apply` → `flow-inbox`; старые
+изменения не запускаются автоматически. Production-деплой требует отдельного
+разрешения, а завершение работы — явной ручной приёмки.

@@ -4,10 +4,13 @@
 
 ## OpenSpec
 
+- Для нового изменения используй единый store `mindbattle-planning` из `workflow/project.json`; добавляй `--store mindbattle-planning` ко всем поддерживаемым командам. Общий `docs/GAME_SPEC.md` находится в planning root.
+- Новый маршрут: `flow-explore` для исследования, `flow-apply` для поставки, `flow-inbox` для вопросов и ручной приёмки. Их записи и lease описаны в `.agents/references/flow/`. Старые changes сохраняют свой schema и статус и не возобновляются автоматически.
+
 - Для исследования без фиксации решения используй `$openspec-explore`.
 - Для новой нетривиальной фичи после закрытия продуктовых развилок используй `$openspec-propose`: полный change содержит `proposal.md`, delta-specs в `specs/`, `design.md` и `tasks.md`.
 - Реализацию веди через `$openspec-apply-change`, затем отдельно проверяй через `$openspec-verify-change`.
-- Перед архивированием синхронизируй утверждённые требования с каноническими спеками, выполни `openspec validate <change> --strict` и проектные проверки. Архивируй через `$openspec-archive-change` только завершённый и закоммиченный change.
+- Перед архивированием синхронизируй утверждённые требования с каноническими спеками, выполни `openspec validate <change> --strict --store mindbattle-planning` и проектные проверки. Архивируй через `$openspec-archive-change` только завершённый, закоммиченный и явно принятый человеком change.
 
 ## Competitive integrity
 

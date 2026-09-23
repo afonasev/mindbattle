@@ -1,0 +1,35 @@
+{
+  "template_version": "1.1.0",
+  "planning_root": "/Users/eaafonasev/Projects/mindbattle-planning",
+  "store_id": "mindbattle-planning",
+  "code_repo": "/Users/eaafonasev/Projects/mindbattle",
+  "main_branch": "main",
+  "delivery_kind": "software",
+  "deploy_authorized": false,
+  "environment_role": "production",
+  "environment_url": "https://mindbattle.afonasev.tech/",
+  "commands": {
+    "focused_checks": "npm run typecheck",
+    "required_checks": "npm run check",
+    "build": "npm run build",
+    "deploy": "make deploy",
+    "release_identity": "bash scripts/checkReleaseIdentity.sh",
+    "smoke": "curl -fsS https://mindbattle.afonasev.tech/ >/dev/null && curl -fsS https://mindbattle.afonasev.tech/network >/dev/null && MINDBATTLE_TEST_ORIGIN=https://mindbattle.afonasev.tech node scripts/testNetworkApi.mjs",
+    "browser_checks": "npm run test:browser",
+    "network_api_smoke": "MINDBATTLE_TEST_ORIGIN=https://mindbattle.afonasev.tech node scripts/testNetworkApi.mjs"
+  },
+  "evidence_root": "/Users/eaafonasev/Projects/mindbattle-planning/evidence",
+  "model_preferences": {
+    "implementation": "gpt-6-sol / medium",
+    "mechanical": "gpt-6-luna / medium",
+    "trivial_when_available": "gpt-5.3-codex-spark / medium",
+    "architecture": "gpt-6-astra / high"
+  },
+  "limits": {
+    "max_unsuccessful_attempts": 2,
+    "max_parallel_workers": null,
+    "task_token_budget": null
+  },
+  "adoption_status": "configured",
+  "template_commit": "59b8df6d51e55105b0aac36cd60d598c81aa7bb6b"
+}
