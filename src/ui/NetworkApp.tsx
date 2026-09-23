@@ -26,6 +26,7 @@ import {
 } from "../adapters/storage";
 import "./network.css";
 import { PresentationSettings } from "./PresentationSettings";
+import { FeedbackUnavailableDialog, type FeedbackRecoveryChoice } from "./FeedbackUnavailableDialog";
 function initialPreferences() {
   try {
     return (
@@ -74,6 +75,7 @@ export function NetworkApp() {
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [feedbackNote, setFeedbackNote] = useState("");
+  const [feedbackRecoveryChoice, setFeedbackRecoveryChoice] = useState<FeedbackRecoveryChoice>("retry");
   const [scoreboardOpen, setScoreboardOpen] = useState(false);
   useEffect(
     () => setFeedbackNote(snapshot?.view?.feedback?.complaintNote ?? ""),
@@ -775,15 +777,12 @@ export function NetworkApp() {
                         <p>Сохраняем отзыв…</p>
                       )}
                       {snapshot.feedbackError && (
-                        <>
-                          <p role="alert">{snapshot.feedbackError}</p>
-                          <button
-                            disabled={locked}
-                            onClick={() => void act({ type: "retry-feedback" })}
-                          >
-                            Повторить отправку
-                          </button>
-                        </>
+                        <FeedbackUnavailableDialog
+                          selected={feedbackRecoveryChoice}
+                          onSelect={setFeedbackRecoveryChoice}
+                          onRetry={() => { setFeedbackRecoveryChoice("retry"); void act({ type: "retry-feedback" }); }}
+                          onSkip={() => { setFeedbackRecoveryChoice("retry"); void act({ type: "skip-feedback" }); }}
+                        />
                       )}
                     </div>
                   ) : (

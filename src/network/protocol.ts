@@ -73,7 +73,8 @@ export type NetworkAction =
         | "resume"
         | "continue"
         | "clear-veto"
-        | "retry-feedback";
+        | "retry-feedback"
+        | "skip-feedback";
     }
   | { type: "topic" | "veto"; topicId: string }
   | { type: "answer"; position: AnswerPosition }

@@ -1,5 +1,38 @@
 import { test, expect, type Page, type BrowserContext } from "@playwright/test";
 
+test("network feedback continues after a successful server write", async ({ browser, page }, testInfo) => {
+  await page.goto("/network?muted=1");
+  await page.getByRole("button", { name: "Создать сетевую игру", exact: true }).click();
+  const code = await page.locator(".network-code").innerText();
+  const contexts: BrowserContext[] = [];
+  const phones: Page[] = [];
+  try {
+    for (let i = 0; i < 2; i++) {
+      const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, baseURL: testInfo.project.use.baseURL });
+      contexts.push(context);
+      const phone = await context.newPage();
+      phones.push(phone);
+      await phone.goto("/network?muted=1");
+      await phone.getByLabel("Код комнаты").fill(code);
+      await phone.getByLabel("Ваше имя").fill(`Участник ${i + 1}`);
+      await phone.getByRole("button", { name: "Подключиться", exact: true }).click();
+    }
+    await page.getByRole("button", { name: "Начать игру", exact: true }).click();
+    const chooser = await phones[0].getByRole("heading", { name: "Выберите тему", exact: true }).isVisible() ? phones[0] : phones[1];
+    await chooser.locator(".network-topics button").first().click();
+    await phones[0].locator(".network-header").click();
+    await expect(phones[0].locator(".network-answers button").first()).toBeVisible();
+    await phones[0].locator(".network-answers button").first().click();
+    await phones[1].locator(".network-answers button").first().click();
+    await phones[0].getByRole("button", { name: "Дальше", exact: true }).click();
+    await phones[0].getByRole("button", { name: "Нет, дальше", exact: true }).click();
+    await expect(phones[0].getByRole("dialog", { name: "Отправка фидбэка временно недоступна" })).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: /Выбирает Участник/ })).toBeVisible();
+  } finally {
+    await Promise.all(contexts.map((context) => context.close()));
+  }
+});
+
 test("network: 12 phones, private answers, bonus, display restore and departure", async ({
   browser,
   page,

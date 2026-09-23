@@ -817,6 +817,30 @@ test("keeps a shared feedback result on screen until the server accepts an idemp
   await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
 });
 
+test("lets keyboard players skip an unavailable feedback submission", async ({ page }, testInfo) => {
+  await page.route("**/api/difficulty-feedback", (route) => route.abort("failed"));
+  await page.getByRole("button", { name: "9", exact: true }).click();
+  await page.getByRole("button", { name: "Начать игру" }).click();
+  await waitForInputGate(page);
+  await chooseCurrentTopic(page);
+  const state = await storedState(page);
+  const correct = state.phase.round.correctPosition as Position;
+  await answer(page, "green", correct);
+  await answer(page, "blue", correct);
+  await expect(page.locator(".question-stage--reveal")).toBeVisible();
+  await rateDifficulty(page, true);
+  await waitForInputGate(page);
+  await page.keyboard.press("Space");
+  const dialog = page.getByRole("dialog", { name: "Отправка фидбэка временно недоступна" });
+  await expect(dialog).toBeVisible({ timeout: 5_000 });
+  await page.screenshot({ path: testInfo.outputPath("shared-feedback-unavailable.png"), fullPage: true });
+  await page.keyboard.press("d");
+  await expect(dialog.getByRole("button", { name: "Пропустить" })).toHaveClass(/feedback-unavailable-selected/);
+  await page.keyboard.press("Space");
+  await expect(dialog).toHaveCount(0);
+  await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
+});
+
 test("moves vertically through the complaint-tag grid", async ({ page }) => {
   await page.getByRole("button", { name: "9", exact: true }).click();
   await page.getByRole("button", { name: "Начать игру" }).click();

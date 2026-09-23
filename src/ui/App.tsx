@@ -39,6 +39,7 @@ import {
   TopicSelection
 } from "./gameUi";
 import { SoloFeedbackScreen, SoloRecordsScreen, SoloScreen } from "./soloUi";
+import { FeedbackUnavailableDialog, type FeedbackRecoveryChoice } from "./FeedbackUnavailableDialog";
 import { PresentationSettings } from "./PresentationSettings";
 import { applyPwaUpdate, navigate, onPwaUpdate } from "../main";
 import { QueuedDifficultyFeedbackSink } from "../feedback";
@@ -90,7 +91,7 @@ export function App() {
     storage: localStorage,
     clock: { now: () => performance.now(), wallTime: () => new Date().toISOString() },
     seeds: { nextSeed },
-    feedback: new QueuedDifficultyFeedbackSink(new HttpDifficultyFeedbackSink(), localStorage)
+    feedback: new HttpDifficultyFeedbackSink()
   }), []);
   const [preferences, setPreferences] = useState(controller.preferences);
   const [match, setMatch] = useState<MatchState | null>(controller.state);
@@ -98,6 +99,7 @@ export function App() {
   const [soloRecordId, setSoloRecordId] = useState<string | null>(null);
   const [showSoloRecords, setShowSoloRecords] = useState(false);
   const [soloInput, setSoloInput] = useState<SoloInputKind>("pointer");
+  const [feedbackRecoveryChoice, setFeedbackRecoveryChoice] = useState<FeedbackRecoveryChoice>("retry");
   const [menuError, setMenuError] = useState<string | null>(null);
   const [pwaUpdateReady, setPwaUpdateReady] = useState(false);
   const [pauseSettingsOpen, setPauseSettingsOpen] = useState(false);
@@ -179,9 +181,27 @@ export function App() {
   const dispatchSolo = useCallback((command: SoloCommand) => setSolo(soloController.dispatch([command])), [soloController]);
 
   const submitSoloFeedback = useCallback(async () => {
-    await soloController.submitFeedback();
+    const submission = soloController.submitFeedback();
+    setSolo(soloController.state ? { ...soloController.state } : null);
+    await submission;
     setSolo(soloController.state ? { ...soloController.state } : null);
   }, [soloController]);
+
+  const skipSoloFeedback = useCallback(() => {
+    if (soloController.skipFeedback()) setSolo(soloController.state ? { ...soloController.state } : null);
+    setFeedbackRecoveryChoice("retry");
+  }, [soloController]);
+
+  const retrySharedFeedback = useCallback(() => {
+    setFeedbackRecoveryChoice("retry");
+    void controller.handleFeedbackConfirmation().finally(sync);
+    queueMicrotask(sync);
+  }, [controller, sync]);
+
+  const skipSharedFeedback = useCallback(() => {
+    if (controller.skipCompletedFeedback()) sync();
+    setFeedbackRecoveryChoice("retry");
+  }, [controller, sync]);
 
   const restart = useCallback(() => {
     try {
@@ -236,6 +256,11 @@ export function App() {
         return [{ type: "continue", teamId: action.teamId as TeamId }];
       }
       if (action.type === "feedback-direction") {
+        if (controller.difficultyFeedbackStatus === "error") {
+          if (action.direction === "west") setFeedbackRecoveryChoice("retry");
+          if (action.direction === "east") setFeedbackRecoveryChoice("skip");
+          return [];
+        }
         void controller
           .handleFeedbackDirection(action.direction)
           .finally(sync);
@@ -243,6 +268,11 @@ export function App() {
         return [];
       }
       if (action.type === "feedback-confirm") {
+        if (controller.difficultyFeedbackStatus === "error") {
+          if (feedbackRecoveryChoice === "retry") retrySharedFeedback();
+          else skipSharedFeedback();
+          return [];
+        }
         void controller
           .handleFeedbackConfirmation()
           .finally(sync);
@@ -275,7 +305,7 @@ export function App() {
       }
       return [];
     });
-  }, [controller, sync]);
+  }, [controller, feedbackRecoveryChoice, retrySharedFeedback, skipSharedFeedback, sync]);
 
   useEffect(() => {
     if (!match) return;
@@ -393,6 +423,16 @@ export function App() {
         return;
       }
       const phase = current?.phase;
+      if (phase?.kind === "feedback" && soloController.difficultyFeedbackStatus === "error") {
+        if (["KeyA", "ArrowLeft", "KeyD", "ArrowRight", "Enter", "Space"].includes(event.code)) event.preventDefault();
+        if (event.code === "KeyA" || event.code === "ArrowLeft") setFeedbackRecoveryChoice("retry");
+        else if (event.code === "KeyD" || event.code === "ArrowRight") setFeedbackRecoveryChoice("skip");
+        else if (event.code === "Enter" || event.code === "Space") {
+          if (feedbackRecoveryChoice === "retry") { setFeedbackRecoveryChoice("retry"); void submitSoloFeedback(); }
+          else skipSoloFeedback();
+        }
+        return;
+      }
       if (phase?.kind === "finished" && soloRecordId && (event.code === "Enter" || event.code === "Space")) {
         event.preventDefault();
         setSoloInput("wasd");
@@ -454,7 +494,7 @@ export function App() {
     };
     window.addEventListener("keydown", keyboard);
     return () => window.removeEventListener("keydown", keyboard);
-  }, [dispatchSolo, solo, soloController, soloRecordId, submitSoloFeedback]);
+  }, [dispatchSolo, feedbackRecoveryChoice, skipSoloFeedback, solo, soloController, soloRecordId, submitSoloFeedback]);
 
   useEffect(() => {
     if (!solo) return;
@@ -467,6 +507,15 @@ export function App() {
         const button = gamepad.buttons.findIndex((down, index) => down && !previous[index]);
         soloGamepadButtonsRef.current.set(gamepad.index, gamepad.buttons);
         if (button < 0) continue;
+        if (phase?.kind === "feedback" && soloController.difficultyFeedbackStatus === "error") {
+          if (button === 14) setFeedbackRecoveryChoice("retry");
+          else if (button === 15) setFeedbackRecoveryChoice("skip");
+          else if (button === 0) {
+            if (feedbackRecoveryChoice === "retry") { setFeedbackRecoveryChoice("retry"); void submitSoloFeedback(); }
+            else skipSoloFeedback();
+          }
+          break;
+        }
         if (current?.paused && (button === 0 || button === 9)) {
           setSoloInput("gamepad");
           dispatchSolo({ type: "resume" });
@@ -521,7 +570,7 @@ export function App() {
     };
     frame = requestAnimationFrame(poll);
     return () => cancelAnimationFrame(frame);
-  }, [dispatchSolo, solo, soloController, soloRecordId, submitSoloFeedback]);
+  }, [dispatchSolo, feedbackRecoveryChoice, skipSoloFeedback, solo, soloController, soloRecordId, submitSoloFeedback]);
 
   useEffect(() => {
     if (match || solo) {
@@ -649,7 +698,7 @@ export function App() {
       if (saved.muted) audioRef.current.stopMusic();
       setPreferences(saved);
     };
-    return <div className={rootClass}>{pwaUpdateReady && canApplyPwaUpdate(false, solo.phase.kind) && <PwaUpdateButton />}{pauseSettingsOpen ? <PresentationSettings preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} /> : solo.phase.kind === "feedback" ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} exit={() => setSolo(null)} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} settings={() => setPauseSettingsOpen(true)} command={(command) => { setSoloInput("pointer"); setSolo(soloController.dispatch([command])); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}</div>;
+    return <div className={rootClass}>{pwaUpdateReady && canApplyPwaUpdate(false, solo.phase.kind) && <PwaUpdateButton />}{pauseSettingsOpen ? <PresentationSettings preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} /> : solo.phase.kind === "feedback" ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} exit={() => setSolo(null)} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} settings={() => setPauseSettingsOpen(true)} command={(command) => { setSoloInput("pointer"); setSolo(soloController.dispatch([command])); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}{solo.phase.kind === "feedback" && soloController.difficultyFeedbackStatus === "error" && <FeedbackUnavailableDialog selected={feedbackRecoveryChoice} onSelect={setFeedbackRecoveryChoice} onRetry={() => { setFeedbackRecoveryChoice("retry"); void submitSoloFeedback(); }} onSkip={skipSoloFeedback} />}</div>;
   }
 
   if (!match || !controller.view) {
@@ -813,6 +862,14 @@ export function App() {
           settings={() => setPauseSettingsOpen(true)}
           restart={restart}
           exit={() => setMatch(null)}
+        />
+      )}
+      {match.phase.kind === "difficulty-feedback" && controller.difficultyFeedbackStatus === "error" && (
+        <FeedbackUnavailableDialog
+          selected={feedbackRecoveryChoice}
+          onSelect={setFeedbackRecoveryChoice}
+          onRetry={retrySharedFeedback}
+          onSkip={skipSharedFeedback}
         />
       )}
     </div>

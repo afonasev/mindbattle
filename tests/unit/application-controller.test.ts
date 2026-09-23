@@ -165,6 +165,22 @@ describe("GameController", () => {
     expect(controller.state?.phase.kind).toBe("normal-topic");
   });
 
+  it("lets a shared match skip a failed feedback write without another submission", async () => {
+    const feedback = new FakeFeedback();
+    feedback.fail = true;
+    const controller = makeController(new MemoryStorage(), new FakeClock(), new FakeSeeds(["skip-seed"]), feedback);
+    controller.start(CONFIG);
+    const state = chooseFirstTopic(controller);
+    if (state.phase.kind !== "answering") throw new Error("Expected answering");
+    const position = state.phase.round.correctPosition;
+    controller.dispatch(CONFIG.teams.map((teamId) => ({ type: "answer" as const, teamId, position })));
+    controller.dispatch([{ type: "continue", teamId: "green" }]);
+    expect(await controller.handleFeedbackConfirmation()).toBe(false);
+    expect(controller.skipCompletedFeedback()).toBe(true);
+    expect(controller.state?.phase.kind).toBe("normal-topic");
+    expect(feedback.events).toHaveLength(1);
+  });
+
   it("persists the chosen topic before the question is created", () => {
     const storage = new MemoryStorage();
     const controller = makeController(storage);
@@ -389,6 +405,26 @@ describe("SoloController", () => {
     expect(await controller.submitFeedback()).toBe(true);
     expect(feedback.events[1].eventId).toBe(eventId);
     expect(controller.state?.phase.kind).toBe("topic");
+  });
+
+  it("lets a solo run skip a failed feedback write", async () => {
+    const feedback = new FakeFeedback();
+    feedback.fail = true;
+    const controller = new SoloController({
+      catalog: makeCatalog(), storage: new MemoryStorage(), clock: new FakeClock(),
+      seeds: new FakeSeeds(["solo-skip-seed"]), feedback
+    });
+    controller.start({ profile: "solo-endless-v1" });
+    controller.dispatch([{ type: "confirm-topic" }]);
+    const answering = controller.state;
+    if (answering?.phase.kind !== "answering") throw new Error("Expected solo question");
+    controller.dispatch([{ type: "answer", position: answering.phase.round.correctPosition }]);
+    controller.dispatch([{ type: "continue" }]);
+    controller.setFeedbackChoice(false);
+    expect(await controller.submitFeedback()).toBe(false);
+    expect(controller.skipFeedback()).toBe(true);
+    expect(controller.state?.phase.kind).toBe("topic");
+    expect(feedback.events).toHaveLength(1);
   });
 
   it("restores an unfinished solo run paused and saves the finished local result", () => {

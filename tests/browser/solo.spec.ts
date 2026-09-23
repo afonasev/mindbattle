@@ -261,6 +261,37 @@ test("continues from solo feedback when No is tapped", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
 });
 
+test("offers retry and skip after three seconds of failed solo feedback", async ({ page }, testInfo) => {
+  const eventIds: string[] = [];
+  await page.route("**/api/difficulty-feedback", async (route) => {
+    eventIds.push(JSON.parse(route.request().postData() ?? "{}").eventId);
+    await route.abort("failed");
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?muted=1");
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await page.getByRole("button", { name: "Одиночная игра" }).click();
+  await page.locator(".topic-choice").first().click();
+  const answering = await soloState(page);
+  const correctPosition = answering.phase.round?.correctPosition;
+  if (!correctPosition) throw new Error("Expected solo question");
+  await page.locator(".solo-answer-button").nth(["up", "right", "down", "left"].indexOf(correctPosition)).click();
+  await page.locator(".question-stage--reveal .explanation").click();
+  await page.getByRole("button", { name: "Нет, продолжить" }).click();
+  const dialog = page.getByRole("dialog", { name: "Отправка фидбэка временно недоступна" });
+  await expect(dialog).toBeVisible({ timeout: 5_000 });
+  await page.screenshot({ path: testInfo.outputPath("solo-feedback-unavailable.png"), fullPage: true });
+  await dialog.getByRole("button", { name: "Повторить" }).click();
+  await expect(dialog).toHaveCount(0);
+  await expect(dialog).toBeVisible({ timeout: 5_000 });
+  expect(eventIds).toHaveLength(2);
+  expect(eventIds[1]).toBe(eventIds[0]);
+  await dialog.getByRole("button", { name: "Пропустить" }).click();
+  await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
+  expect(eventIds).toHaveLength(2);
+});
+
 test("matches the team reveal for a wrong solo answer", async ({ page }, testInfo) => {
   await page.goto("/?muted=1");
   await page.evaluate(() => localStorage.clear());

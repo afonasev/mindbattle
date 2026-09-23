@@ -116,6 +116,15 @@ export class SoloController {
     }
   }
 
+  skipFeedback(): boolean {
+    const phase = this.currentState?.phase;
+    if (phase?.kind !== "feedback" || this.feedbackStatus !== "error") return false;
+    this.feedbackStatus = "idle";
+    this.feedbackError = null;
+    this.dispatch([{ type: "confirm-feedback", eventId: phase.eventId }]);
+    return true;
+  }
+
   restore(): SoloState | null {
     if (!this.restorableState) return null;
     this.context = new CatalogDomainContext(this.catalog, this.persisted.history);

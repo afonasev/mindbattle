@@ -252,6 +252,15 @@ export class GameController {
     }
   }
 
+  skipCompletedFeedback(): boolean {
+    const phase = this.currentState?.phase;
+    if (phase?.kind !== "difficulty-feedback" || phase.stage !== "done" || this.feedbackStatus !== "error") return false;
+    this.feedbackStatus = "idle";
+    this.feedbackError = null;
+    this.dispatch([{ type: "confirm-difficulty-feedback", eventId: phase.eventId }]);
+    return true;
+  }
+
   setFeedbackNote(note: string): void { this.dispatch([{ type: "set-feedback-note", note }]); }
   /** Legacy caller compatibility; new UI uses the common complaint flow. */
   async rateDifficulty(teamId: MatchState["config"]["teams"][number], difficulty: "easy" | "medium" | "hard"): Promise<boolean> {

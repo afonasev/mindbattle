@@ -1,8 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { NetworkRoom } from "../../src/network/room";
 import { makeContext } from "./network-fixture";
 import type { NetworkAction } from "../../src/network/protocol";
-function setup(count = 2) {
+import type { DifficultyFeedbackEventV3 } from "../../src/feedback/types";
+function setup(count = 2, submit: (event: DifficultyFeedbackEventV3) => Promise<void> = async () => {}) {
   let serial = 0;
   const room = new NetworkRoom(
     "0001",
@@ -10,7 +11,7 @@ function setup(count = 2) {
     makeContext(),
     {},
     () => `secret-${++serial}`,
-    async () => {},
+    submit,
   );
   room.connect("display", 0);
   const seats = Array.from({ length: count }, (_, i) =>
@@ -198,6 +199,45 @@ describe("network room", () => {
       stage: "reasons",
       complaintReasons: [],
     });
+  });
+  it("offers the leader a skip after three seconds and ignores a late write", async () => {
+    vi.useFakeTimers();
+    try {
+      const completeWrites: (() => void)[] = [];
+      const events: DifficultyFeedbackEventV3[] = [];
+      const { room, seats, command } = setup(2, async (event) => {
+        events.push(event);
+        await new Promise<void>((resolve) => { completeWrites.push(resolve); });
+      });
+      command("display", { type: "start" });
+      const topic = room.state!.phase;
+      if (topic.kind !== "normal-topic") throw Error();
+      command(seats.find((s) => s.id === topic.chooser)!.token, { type: "topic", topicId: topic.candidates[0] });
+      command(seats[0].token, { type: "continue" });
+      for (const seat of seats) command(seat.token, { type: "answer", position: "up" });
+      command(seats[0].token, { type: "continue" });
+      command(seats[0].token, { type: "feedback-choice", complaint: false });
+      expect(room.state?.phase.kind).toBe("difficulty-feedback");
+      await vi.advanceTimersByTimeAsync(2_999);
+      expect(room.snapshot(seats[0].token, 0).feedbackError).toBe("");
+      await vi.advanceTimersByTimeAsync(1);
+      expect(room.snapshot(seats[0].token, 0).feedbackError).toContain("Не удалось");
+      expect(events).toHaveLength(1);
+      command(seats[0].token, { type: "retry-feedback" });
+      expect(room.snapshot(seats[0].token, 0).feedbackError).toBe("");
+      await vi.advanceTimersByTimeAsync(3_000);
+      expect(room.snapshot(seats[0].token, 0).feedbackError).toContain("Не удалось");
+      expect(events).toHaveLength(2);
+      expect(events[1].eventId).toBe(events[0].eventId);
+      command(seats[0].token, { type: "skip-feedback" });
+      expect(room.state?.phase.kind).toBe("normal-topic");
+      completeWrites.forEach((resolve) => resolve());
+      await Promise.resolve();
+      expect(room.state?.phase.kind).toBe("normal-topic");
+      expect(events).toHaveLength(2);
+    } finally {
+      vi.useRealTimers();
+    }
   });
   it("freezes even when a disconnect lands exactly as unanswered time expires", () => {
     const { room, seats, command } = setup();

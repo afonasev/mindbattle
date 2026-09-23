@@ -13,6 +13,7 @@ import type {
   TeamId,
 } from "../domain/types";
 import type { DifficultyFeedbackEventV3 } from "../feedback/types";
+import { sendFeedbackWithinDeadline } from "../feedback/deadline";
 import type {
   CommandEnvelope,
   NetworkPlayer,
@@ -357,7 +358,14 @@ export class NetworkRoom {
         if (action.type === "continue")
           commands = [{ type: "continue", teamId: actor.id }];
         else if (action.type === "retry-feedback") {
+          if (phase.kind !== "difficulty-feedback" || phase.stage !== "done" || !this.feedbackError)
+            throw new RoomError("Повторная отправка сейчас недоступна", 409);
           this.feedbackError = "";
+        } else if (action.type === "skip-feedback") {
+          if (phase.kind !== "difficulty-feedback" || phase.stage !== "done" || !this.feedbackError)
+            throw new RoomError("Пропуск фидбэка сейчас недоступен", 409);
+          this.feedbackError = "";
+          commands = [{ type: "confirm-difficulty-feedback", eventId: phase.eventId }];
         } else {
           if (phase.kind !== "difficulty-feedback")
             throw new RoomError("Оценка вопроса сейчас недоступна", 409);
@@ -438,7 +446,7 @@ export class NetworkRoom {
     const epoch = this.epoch;
     this.feedbackPending = true;
     try {
-      await this.submitFeedback({
+      await sendFeedbackWithinDeadline(() => this.submitFeedback({
         schemaVersion: 3,
         eventId: phase.eventId,
         matchId: state.matchId,
@@ -450,7 +458,7 @@ export class NetworkRoom {
         ...(phase.complaintNote.trim()
           ? { complaintNote: phase.complaintNote.trim() }
           : {}),
-      });
+      }));
       if (
         this.epoch === epoch &&
         this.state?.phase.kind === "difficulty-feedback" &&
