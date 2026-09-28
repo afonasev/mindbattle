@@ -300,16 +300,16 @@ export function QuestionBoard({
               Источник: {question.source.title} ↗
             </a>
           )}
-          {question.wrongAnswerNotes && question.wrongAnswerNotes.length > 0 && (
+          {question.answerNotes && question.answerNotes.length > 0 && (
             <section
               className="wrong-answer-notes"
-              aria-label="Справки о выбранных неправильных ответах"
+              aria-label="Справки ко всем вариантам"
               style={{
-                gridTemplateColumns: `repeat(${question.wrongAnswerNotes.length}, minmax(0, 1fr))`
+                gridTemplateColumns: `repeat(${question.answerNotes.length}, minmax(0, 1fr))`
               }}
             >
-              <strong>А что означали другие выбранные варианты?</strong>
-              {question.wrongAnswerNotes.map((item) => (
+              <strong>Справки ко всем вариантам</strong>
+              {question.answerNotes.map((item) => (
                 <article key={item.position}>
                   <b>{item.answer}</b>
                   <p>{item.note}</p>

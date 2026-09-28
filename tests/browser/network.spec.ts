@@ -124,7 +124,7 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
           const statuses = await Promise.all(
             phones.map((phone) =>
               phone
-                .getByText("Запретите одну свободную тему. Свой запрет можно изменить.")
+                .getByText("Исключите одну свободную тему.")
                 .isVisible(),
             ),
           );
@@ -133,7 +133,7 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
         const vetoReady = await Promise.all(
           phones.map((phone) =>
             phone
-              .getByText("Запретите одну свободную тему. Свой запрет можно изменить.")
+              .getByText("Исключите одну свободную тему.")
               .isVisible(),
           ),
         );
@@ -204,7 +204,7 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
       }
       await phones[0].locator(".network-answers button").first().click();
       await expect(
-        phones[0].getByText("Ответ принят. Его можно изменить до раскрытия."),
+        phones[0].getByText("Ответ принят. Ждём остальных. Его можно изменить до раскрытия"),
       ).toBeVisible();
       await expect(page.locator(".network-answers .correct")).toHaveCount(0);
       for (let i = 1; i < 12; i++)
@@ -213,6 +213,10 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
           .nth(i % 4)
           .click();
       await expect(page.locator(".network-answers .correct")).toHaveCount(1);
+      for (const phone of phones) {
+        await expect(phone.locator(".network-explanation p strong")).toHaveCount(4);
+        await expect(phone.locator(".network-answers small")).toContainText(["Участник 1", "Участник 2", "Участник 3", "Участник 4"]);
+      }
       if (round === 0) {
         expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(testInfo.project.use.viewport!.height);
         await page.screenshot({
@@ -236,6 +240,11 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
       page.getByRole("heading", { name: "Результаты этапа" }),
     ).toBeVisible();
     await expect(page.locator(".network-standings > div")).toHaveCount(12);
+    for (const phone of phones) {
+      await expect(phone.locator(".network-standings > div")).toHaveCount(12);
+      await expect(phone.locator(".network-standing--self")).toHaveCount(1);
+    }
+    await phones[0].screenshot({ path: testInfo.outputPath("network-phone-standings-12.png"), fullPage: true });
     expect(
       new Set(
         await page

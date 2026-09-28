@@ -14,7 +14,7 @@ const state = {
   tieBreak: null
 } as unknown as MatchState;
 
-function view(notes: NonNullable<PublicMatchView["question"]>["wrongAnswerNotes"]): PublicMatchView {
+function view(notes: NonNullable<PublicMatchView["question"]>["answerNotes"]): PublicMatchView {
   return {
     phase: "reveal",
     paused: false,
@@ -27,12 +27,12 @@ function view(notes: NonNullable<PublicMatchView["question"]>["wrongAnswerNotes"
       explanation: ["Основное объяснение."],
       source: { title: "Проверочный источник", url: "https://example.com/source" },
       correctPosition: "up",
-      wrongAnswerNotes: notes
+      answerNotes: notes
     }
   };
 }
 
-describe("QuestionBoard wrong-answer notes", () => {
+describe("QuestionBoard answer notes", () => {
   it("shows the assigned difficulty in the team question header", () => {
     const html = renderToStaticMarkup(createElement(QuestionBoard, {
       state,
@@ -62,14 +62,14 @@ describe("QuestionBoard wrong-answer notes", () => {
     expect(html.indexOf("Источник: Проверочный источник")).toBeLessThan(html.indexOf("Справка о первом."));
   });
 
-  it("omits the notes section when nobody selected a distractor", () => {
+  it("omits the notes section when legacy content has no notes", () => {
     const html = renderToStaticMarkup(createElement(QuestionBoard, {
       state,
       view: view([]),
       assignments: [],
       titleById: { topic: "Тема" }
     }));
-    expect(html).not.toContain("Справки о выбранных неправильных ответах");
+    expect(html).not.toContain("Справки ко всем вариантам");
     expect(html).toContain("Источник: Проверочный источник");
   });
 });

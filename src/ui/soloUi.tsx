@@ -2,6 +2,7 @@ import type { Question } from "../content";
 import type { SoloCommand, SoloState } from "../domain/solo";
 import type { SoloRecord } from "../adapters/storage";
 import type { AnswerPosition, ComplaintReason } from "../domain/types";
+import { selectAnswerNotes } from "../domain/selectors";
 import { difficultyLabel } from "./difficulty";
 
 type SoloInputKind = "pointer" | "wasd" | "arrows" | "gamepad";
@@ -52,11 +53,12 @@ function SoloFrame({ children, onMenu, onContinue }: { readonly children: React.
 
 function SoloQuestionBoard({ phase, question, questionNumber, titleById, inputKind, command }: { readonly phase: Extract<SoloState["phase"], { kind: "answering" | "reveal" }>; readonly question: Question; readonly questionNumber: number; readonly titleById: Readonly<Record<string, string>>; readonly inputKind: SoloInputKind; readonly command: (command: SoloCommand) => void }) {
   const reveal = phase.kind === "reveal";
-  const wrongAnswer = reveal && phase.result === "wrong" && phase.answer
-    ? question.answers[Number(phase.round.answerOrder[( ["up", "right", "down", "left"] as const).indexOf(phase.answer)].replace("answer-", ""))]
-    : null;
-  const wrongAnswerNote = wrongAnswer && typeof wrongAnswer !== "string" ? wrongAnswer : null;
-  return <section className={reveal ? "question-stage question-stage--reveal solo-question" : "question-stage solo-question"}><header className="question-header"><span>{titleById[phase.round.topicId] ?? phase.round.topicId}</span><strong>{phase.round.risk ? "Бонус · x3" : `Вопрос ${questionNumber}`} ({difficultyLabel(phase.round.difficulty)})</strong></header><h2>{question.prompt}</h2><div className="answer-cross">{phase.round.answerOrder.map((answerId, index) => { const answer = question.answers[Number(answerId.replace("answer-", ""))]; const position = (["up", "right", "down", "left"] as const)[index] as AnswerPosition; const text = typeof answer === "string" ? answer : answer.text; const selectedWrong = reveal && phase.result === "wrong" && phase.answer === position ? "answer-option--wrong" : ""; const className = ["answer-option", `answer-option--${position}`, reveal && position === phase.round.correctPosition ? "answer-option--correct" : "", selectedWrong].filter(Boolean).join(" "); return <button type="button" className={`${className} solo-answer-button`} disabled={reveal} onClick={(event) => { event.stopPropagation(); command({ type: "answer", position }); }} key={answerId}><span className="answer-text">{text}</span></button>; })}</div><aside className={reveal ? "explanation" : "explanation explanation--reserved"}>{reveal && <><strong>{phase.result === "correct" ? "Верно!" : "Правильный ответ"}</strong><p>{question.explanation}</p>{wrongAnswerNote && <section className="wrong-answer-notes" aria-label="Справки о выбранных неправильных ответах"><strong>А что означал выбранный вариант?</strong><article><b>{wrongAnswerNote.text}</b><p>{wrongAnswerNote.note}</p></article></section>}</>}</aside></section>;
+  const answerNotes = reveal ? selectAnswerNotes(phase.round.answerOrder, question.answers.map((answer, index) => ({
+    id: `answer-${index}`,
+    text: typeof answer === "string" ? answer : answer.text,
+    note: typeof answer === "string" ? "" : answer.note
+  }))) : [];
+  return <section className={reveal ? "question-stage question-stage--reveal solo-question" : "question-stage solo-question"}><header className="question-header"><span>{titleById[phase.round.topicId] ?? phase.round.topicId}</span><strong>{phase.round.risk ? "Бонус · x3" : `Вопрос ${questionNumber}`} ({difficultyLabel(phase.round.difficulty)})</strong></header><h2>{question.prompt}</h2><div className="answer-cross">{phase.round.answerOrder.map((answerId, index) => { const answer = question.answers[Number(answerId.replace("answer-", ""))]; const position = (["up", "right", "down", "left"] as const)[index] as AnswerPosition; const text = typeof answer === "string" ? answer : answer.text; const selectedWrong = reveal && phase.result === "wrong" && phase.answer === position ? "answer-option--wrong" : ""; const className = ["answer-option", `answer-option--${position}`, reveal && position === phase.round.correctPosition ? "answer-option--correct" : "", selectedWrong].filter(Boolean).join(" "); return <button type="button" className={`${className} solo-answer-button`} disabled={reveal} onClick={(event) => { event.stopPropagation(); command({ type: "answer", position }); }} key={answerId}><span className="answer-text">{text}</span></button>; })}</div><aside className={reveal ? "explanation" : "explanation explanation--reserved"}>{reveal && <><strong>{phase.result === "correct" ? "Верно!" : "Правильный ответ"}</strong><p>{question.explanation}</p>{answerNotes.length > 0 && <section className="wrong-answer-notes" aria-label="Справки ко всем вариантам"><strong>Справки ко всем вариантам</strong>{answerNotes.map((item) => <article key={item.position}><b>{item.answer}</b><p>{item.note}</p></article>)}</section>}</>}</aside></section>;
 }
 
 export function SoloFeedbackScreen({ value, choose, toggleReason, setNote, submit, pending, error, exit }: {

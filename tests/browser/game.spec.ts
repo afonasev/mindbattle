@@ -491,7 +491,7 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
   await captureSettled(page, testInfo.outputPath("completed-menu.png"));
 });
 
-test("renders zero through three selected wrong-answer notes without overflow", async ({ page }, testInfo) => {
+test("renders all four answer notes for zero through three wrong choices without overflow", async ({ page }, testInfo) => {
   await page.getByRole("button", { name: "9", exact: true }).click();
   await page.getByRole("button", { name: "Начать игру" }).click();
   await waitForInputGate(page);
@@ -550,10 +550,10 @@ test("renders zero through three selected wrong-answer notes without overflow", 
       localStorage.setItem("mindbattle:data:v1", JSON.stringify(data));
     }, { snapshot: revealSnapshot, wrongCount });
     await page.reload();
-    await page.getByRole("button", { name: "Продолжить партию" }).click();
+    await page.getByRole("button", { name: "Продолжить игру на одном устройстве" }).click();
     await page.getByRole("button", { name: "Продолжить" }).click();
     await expect(page.locator(".question-stage--reveal")).toBeVisible();
-    await expect(page.locator(".wrong-answer-notes article")).toHaveCount(wrongCount);
+    await expect(page.locator(".wrong-answer-notes article")).toHaveCount(4);
     const answerAlignment = await page.locator(".answer-cross").evaluate((cross) => {
       const crossRect = cross.getBoundingClientRect();
       const textOffsets = [...cross.querySelectorAll<HTMLElement>(".answer-option")].map((option) => {

@@ -38,7 +38,7 @@ export interface PublicQuestion {
     readonly url: string;
   };
   readonly correctPosition?: AnswerPosition;
-  readonly wrongAnswerNotes?: readonly {
+  readonly answerNotes?: readonly {
     readonly position: AnswerPosition;
     readonly answer: string;
     readonly note: string;
@@ -109,6 +109,18 @@ export function selectStandings(state: MatchState): readonly StandingRow[] {
   });
 }
 
+export function selectAnswerNotes(
+  answerOrder: readonly string[],
+  answers: readonly { readonly id: string; readonly text: string; readonly note: string }[]
+): NonNullable<PublicQuestion["answerNotes"]> {
+  const byId = new Map(answers.map((answer) => [answer.id, answer]));
+  return (["up", "right", "down", "left"] as const).map((position, index) => {
+    const answer = byId.get(answerOrder[index]);
+    if (!answer) throw new Error(`Answer ${answerOrder[index]} is absent from question`);
+    return { position, answer: answer.text, note: answer.note };
+  }).filter(({ note }) => note.trim().length > 0);
+}
+
 function selectQuestion(state: MatchState, context: DomainContext): PublicQuestion | undefined {
   if (
     state.phase.kind !== "answering" &&
@@ -128,21 +140,7 @@ function selectQuestion(state: MatchState, context: DomainContext): PublicQuesti
     })
   ) as Readonly<Record<AnswerPosition, string>>;
   if (state.phase.kind === "reveal" || state.phase.kind === "difficulty-feedback") {
-    const wrongPositions = new Set(
-      state.phase.resolutions
-        .filter((resolution) => resolution.result === "wrong" && resolution.answer !== null)
-        .map((resolution) => resolution.answer as AnswerPosition)
-    );
-    const wrongAnswerNotes = (["up", "right", "down", "left"] as const)
-      .filter((position) => wrongPositions.has(position))
-      .map((position) => {
-        const index = (["up", "right", "down", "left"] as const).indexOf(position);
-        const answerId = round.answerOrder[index];
-        const answer = answerById.get(answerId);
-        if (!answer) throw new Error(`Answer ${answerId} is absent from question ${question.id}`);
-        return { position, answer: answer.text, note: answer.note };
-      })
-      .filter(({ note }) => note.trim().length > 0);
+    const answerNotes = selectAnswerNotes(round.answerOrder, question.answers);
     return {
       id: question.id,
       topicId: question.topicId,
@@ -151,7 +149,7 @@ function selectQuestion(state: MatchState, context: DomainContext): PublicQuesti
       explanation: question.explanation,
       source: question.source,
       correctPosition: round.correctPosition,
-      wrongAnswerNotes
+      answerNotes
     };
   }
   return { id: question.id, topicId: question.topicId, prompt: question.prompt, options };

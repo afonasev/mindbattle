@@ -292,7 +292,8 @@ test("offers retry and skip after three seconds of failed solo feedback", async 
   expect(eventIds).toHaveLength(2);
 });
 
-test("matches the team reveal for a wrong solo answer", async ({ page }, testInfo) => {
+for (const width of [null, 360, 760]) test(`matches the team reveal for a wrong solo answer (${width ?? "desktop"})`, async ({ page }, testInfo) => {
+  if (width) await page.setViewportSize({width, height:800});
   await page.goto("/?muted=1");
   await page.evaluate(() => localStorage.clear());
   await page.reload();
@@ -307,12 +308,22 @@ test("matches the team reveal for a wrong solo answer", async ({ page }, testInf
   await page.keyboard.press(answerKey[wrongPosition]);
 
   await expect(page.locator(".question-stage--reveal .answer-option--wrong")).toHaveCount(1);
-  await expect(page.locator(".game-brand span")).toHaveText("Соло-забег");
+  await expect(page.locator(".solo-shell .game-brand strong")).toHaveText("Mindbattle");
   await expect(page.locator(".question-header strong")).toHaveText("Вопрос 1 (Лёгкий)");
   await expect(page.locator(".solo-team-strip .game-team-card")).toHaveClass(/game-team-card--wrong/);
   await expect(page.locator(".wrong-answer-notes")).toBeVisible();
-  await expect(page.locator(".wrong-answer-notes")).toContainText("А что означал выбранный вариант?");
-  await captureSettled(page, testInfo.outputPath("solo-wrong-answer-reveal.png"));
+  await expect(page.locator(".wrong-answer-notes article")).toHaveCount(4);
+  await expect(page.locator(".wrong-answer-notes")).toContainText("Справки ко всем вариантам");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  if (width) {
+    const fits = await page.evaluate(() => {
+      const notes = document.querySelector(".wrong-answer-notes")!.getBoundingClientRect();
+      const player = document.querySelector(".solo-team-strip")!.getBoundingClientRect();
+      return notes.bottom <= player.top;
+    });
+    expect(fits).toBe(true);
+  }
+  await captureSettled(page, testInfo.outputPath(`solo-wrong-answer-reveal-${width ?? "desktop"}.png`));
 });
 
 test("uses the team final-stage framing for solo results and leaderboard rank", async ({ page }, testInfo) => {

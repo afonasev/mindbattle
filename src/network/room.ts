@@ -506,9 +506,9 @@ export class NetworkRoom {
       leaderName: this.players.find((p) => p.id === this.leaderId)?.name ?? "",
       settings: this.settings,
       players: actor
-        ? this.state
+        ? this.state && !["standings", "finished"].includes(this.state.phase.kind)
           ? [publicSeat(actor)]
-          : this.players.filter((p) => !p.departed).map(publicSeat)
+          : (this.state ? this.players : this.players.filter((p) => !p.departed)).map(publicSeat)
         : this.players.map(publicSeat),
       displayConnected: this.display.connected,
       disconnected: actor
@@ -527,8 +527,7 @@ export class NetworkRoom {
     const state = this.state;
     const view = selectPublicView(state, this.context);
     const phase = state.phase;
-    const cards = view.teams
-      .filter((card) => !actor || card.id === actor.id)
+    const allCards = view.teams
       .map((card) => {
         const seat = this.players.find((p) => p.id === card.id)!;
         const attempt =
@@ -548,6 +547,10 @@ export class NetworkRoom {
           remainingMs,
         };
       });
+    const cards = allCards.filter((card) => !actor || card.id === actor.id);
+    const revealedChoices = phase.kind === "reveal" || phase.kind === "difficulty-feedback"
+      ? allCards
+      : undefined;
     const visibleStandings = [
       ...selectStandings({
         ...state,
@@ -573,23 +576,12 @@ export class NetworkRoom {
       teams: cards,
       ...(actor
         ? {
-            standings: undefined,
-            winnerId: undefined,
             vetoes: undefined,
             chooser: undefined,
             feedback: base.isLeader ? view.feedback : undefined,
           }
         : {}),
     };
-    if (actor && personalView.question?.wrongAnswerNotes) {
-      const own = cards[0]?.answerPosition;
-      personalView.question = {
-        ...personalView.question,
-        wrongAnswerNotes: personalView.question.wrongAnswerNotes.filter(
-          (n) => n.position === own,
-        ),
-      };
-    }
     const topicIds = [
       ...(view.topicCandidates ?? []),
       ...(view.topicId ? [view.topicId] : []),
@@ -598,6 +590,7 @@ export class NetworkRoom {
     return {
       ...base,
       scoreboard: actor ? scoreboard : undefined,
+      revealedChoices,
       view: personalView,
       titles: Object.fromEntries(
         topicIds.map((id) => [id, this.titles[id] ?? id]),
@@ -647,7 +640,7 @@ export class NetworkRoom {
             )
           : undefined,
       questionNumber: state.mainQuestionIndex + 1,
-      tieBreakNumber: state.tieBreak?.questionNumber,
+      tieBreakNumber: state.tieBreak?.questionNumber ?? (phase.kind === "standings" && phase.tieBreakContenders ? 1 : undefined),
       spectating: !!actor && !!state.tieBreak && !state.tieBreak.contenders.includes(actor.id),
       difficulty: "round" in phase ? phase.round.difficulty : undefined,
       endReason: state.endReason,

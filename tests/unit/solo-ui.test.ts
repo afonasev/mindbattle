@@ -66,6 +66,18 @@ describe("Solo question and feedback difficulty", () => {
     expect(html).toContain("Вопрос 6 (Средний)");
   });
 
+  it("reveals every shuffled note for correct, wrong and absent answers", () => {
+    const answers = question.answers.map((text, index) => ({ text, note: `Отдельный факт ${index}.` })) as unknown as readonly [{text:string;note:string},{text:string;note:string},{text:string;note:string},{text:string;note:string}];
+    for (const result of ["correct", "wrong", "no-answer"] as const) {
+      const html = renderToStaticMarkup(createElement(SoloScreen, {
+        state: { slotIndex:0, score:0, lives:3, reserveMs:60_000, paused:false, phase:{kind:"reveal",round:{...round,answerOrder:["answer-2","answer-0","answer-3","answer-1"]},answer: result === "no-answer" ? null : "up", result} } as unknown as SoloState,
+        question:{...question,answers}, titleById:{topic:"Тема"}, records:[],savedRecordId:null,inputKind:"pointer",command:()=>{},finish:()=>{},exit:()=>{}
+      }));
+      for (let i=0;i<4;i++) expect(html.match(new RegExp(`Отдельный факт ${i}\\.`, "g"))).toHaveLength(1);
+      expect(html.indexOf("Отдельный факт 2.")).toBeLessThan(html.indexOf("Отдельный факт 0."));
+    }
+  });
+
   it("shows hard difficulty on the solo feedback screen", () => {
     const html = renderToStaticMarkup(createElement(SoloFeedbackScreen, {
       value: { kind: "feedback", round: { ...round, difficulty: "hard" }, result: "correct", eventId: "feedback-1", hasComplaint: null, feedbackCursor: 1, complaintReasons: [], complaintNote: "" },
