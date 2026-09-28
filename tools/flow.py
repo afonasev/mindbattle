@@ -132,9 +132,9 @@ class Flow:
         for key in ['release','publication']:
             value=e.get(key)
             if isinstance(value,dict):
-                fields={k:value[k] for k in ['identity','revision','archive_sha256','sha256','path','url'] if value.get(k)}
+                fields={k:value[k] for k in ['identity','release_identity','version','revision','commit','code_commit','source_commit','release_commit','main_commit','planning_import_commit','archive_sha256','sha256','hashes','path','url'] if value.get(k)}
                 # Locations may move without changing an identified immutable artifact.
-                if fields.get('identity') or fields.get('revision') or fields.get('sha256') or fields.get('archive_sha256'):
+                if any(k not in {'path','url'} for k in fields):
                     fields.pop('path',None); fields.pop('url',None)
                 if fields: binding[key]=fields
             elif value: binding[key]=value

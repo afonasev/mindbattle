@@ -37,7 +37,7 @@ Use temporary payload files outside the source checkout; remove only those owned
 - verification: checks, commands, exit codes, artifact paths and tested revision.
 - remote_push: object with repo (absolute path), remote, branch and exact pushed commit; the helper reads back the remote ref before merge.
 - merge: object with repo (absolute path), commit (actual integrated revision), main_ref (verified primary ref), plus original revision mapping for squash and the verified `origin/main` push/readback.
-- release / smoke: exact published identity, URL, commands and observed results.
+- release / smoke: exact published identity, URL, commands and observed results. Legacy version, release_identity, commit/code_commit/source_commit/release_commit and publication main_commit/planning_import_commit fields are recognized as result identity without rewriting old records.
 - publication: report/initiative artifact location and revision.
 - spec_sync: canonical revision and applied delta IDs, or verified explanation of no requirement change.
 - cleanup: owned resource inventory, actual Git/status/branch/worktree/process checks and durable links.

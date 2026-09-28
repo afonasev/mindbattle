@@ -124,6 +124,26 @@ class Lifecycle(unittest.TestCase):
         self.assertEqual(self.f.acceptance_status(self.f.get('example')[1]),'deferred')
         self.assertFalse(self.f.inbox()[0]['acceptance'])
 
+    def test_legacy_publication_commits_are_reviewable(self):
+        self.new();self.report_delivered()
+        self.f.evidence('example','publication',{'main_commit':'config-revision','planning_import_commit':'spec-import-revision','application_deployed':False})
+        self.f.accept('example','Accepted configuration','user message','config-revision','Process report')
+        self.assertEqual(self.f.acceptance_status(self.f.get('example')[1]),'accepted')
+        self.finalization_evidence();self.f.finalize('example','worker')
+        self.assertEqual(self.f.get('example')[1]['stage'],'accepted')
+    def test_legacy_release_version_and_commit_bindings(self):
+        self.new(kind='software');self.ready();self.f.claim('example','worker')
+        self.f.transition('example','implementing','worker');self.f.evidence('example','commit','implementation-revision')
+        self.f.evidence('example','verification','verified');self.f.transition('example','verified','worker')
+        for key in ['release_identity','version','code_commit','source_commit','release_commit','commit']:
+            with self.subTest(key=key):
+                self.f.evidence('example','release',{key:'release-v1','url':'https://example.invalid/'})
+                self.f.accept('example','Reviewed release','user message','release-v1','Player result')
+                self.f.evidence('example','release',{key:'release-v1','url':'https://moved.example.invalid/','note':'metadata'})
+                self.assertEqual(self.f.acceptance_status(self.f.get('example')[1]),'accepted')
+                self.f.evidence('example','release',{key:'release-v2','url':'https://moved.example.invalid/'})
+                self.assertEqual(self.f.acceptance_status(self.f.get('example')[1]),'stale')
+
     def test_legacy_acceptance_stays_valid(self):
         self.new();self.report_delivered();self.finalize()
         p,d=self.f.get('example');d['stage']='accepted';d['owner']=None
