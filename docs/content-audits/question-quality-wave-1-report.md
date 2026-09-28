@@ -46,4 +46,4 @@
 
 Полный `npm run test:browser` на feature:78 passed,25 failed,5 skipped. Ошибки не скрыты и тесты не ослаблялись. На чистомmain воспроизведены те же25 названий падений при78 passed/5 skipped. Новых названий падений:0; это сравнение не отменяет открытые ошибки. Полный результат записан в planning verification. Полный browser gate остаётся FAIL; относящийся к содержимому сценарий и проверки render/reveal прошли.
 
-Поставка — commit/push feature и интеграция/pushmain с readback; точные SHA указаны в planning acceptance guide. Production не опубликован. Удалённая feature-ветка сохраняется для ручной приёмки; прикреплённый активный worktree остаётся cleanup debt на finalizing.
+Поставка — commit/push feature и интеграция/pushmain с readback; точные SHA указаны в planning acceptance guide. Production не опубликован. Удалённая feature-ветка сохраняется для ручной приёмки; прикреплённый активный worktree сохранён как учтённый cleanup debt. Фактический helper stage — merged: переход к finalizing требует сначала deployed, которого без разрешения на production нет.
