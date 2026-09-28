@@ -1,5 +1,6 @@
 import { nextRandom, seedRandom, shuffle, type RandomState } from "./random";
 import type { Difficulty, TopicPack } from "./types";
+import { topicGroupLimit, type TopicChoiceKind } from "./topicDiversity";
 
 export interface BagHistory {
   readonly cycle: number;
@@ -166,43 +167,74 @@ export function chooseTopicCandidates(
   count: number,
   matchHistory: MatchTopicHistory,
   random: RandomState,
-  domainForTopic: (topicId: string) => string = (topicId) => topicId
+  domainForTopic: (topicId: string) => string = (topicId) => topicId,
+  kind: TopicChoiceKind = count === 3 ? "normal" : "bonus"
 ): {
   readonly topicIds: readonly string[];
+  readonly reusedTopicIds: readonly string[];
   readonly random: RandomState;
   readonly matchHistory: MatchTopicHistory;
 } {
+  const cap = topicGroupLimit(kind, count);
   const selected = new Set(matchHistory.selected);
-  const candidates = topics.filter((topic) => !selected.has(topic.id));
-  if (candidates.length < count) throw new Error(`Недостаточно тем: требуется ${count}`);
-
   let state = random;
-  const ranked = candidates.map((topic) => {
+  const ranked = topics.map((topic) => {
     const [tie, nextState] = nextRandom(state);
     state = nextState;
     const domain = domainForTopic(topic.id);
     if (!domain) throw new Error(`Для темы ${topic.id} не задана область`);
-    return { id: topic.id, domain, penalty: matchHistory.shownCounts[topic.id] ?? 0, tie };
+    return { id: topic.id, domain, reused: selected.has(topic.id) ? 1 : 0, penalty: matchHistory.shownCounts[topic.id] ?? 0, tie };
   });
-  const topicIds: string[] = [];
-  const selectedDomains = new Set<string>();
-  const remaining = [...ranked];
-  while (topicIds.length < count) {
-    const unseenDomainCandidates = remaining.filter(({ domain }) => !selectedDomains.has(domain));
-    const pool = unseenDomainCandidates.length > 0 ? unseenDomainCandidates : remaining;
-    pool.sort((left, right) => left.penalty - right.penalty || left.tie - right.tie);
-    const next = pool[0];
-    topicIds.push(next.id);
-    selectedDomains.add(next.domain);
-    remaining.splice(remaining.indexOf(next), 1);
+  if (new Set(ranked.map(({ id }) => id)).size !== ranked.length) throw new Error("Повтор идентификатора темы");
+  type Candidate = (typeof ranked)[number];
+  interface Plan { topics: readonly Candidate[]; reused: number; groups: number; penalty: number; tie: number }
+  const groups = new Map<string, Candidate[]>();
+  for (const candidate of ranked) {
+    const group = groups.get(candidate.domain) ?? [];
+    group.push(candidate);
+    groups.set(candidate.domain, group);
   }
+  const better = (left: Plan, right: Plan | undefined) => !right ||
+    left.reused < right.reused || left.reused === right.reused && (
+      left.groups > right.groups || left.groups === right.groups && (
+        left.penalty < right.penalty || left.penalty === right.penalty && left.tie < right.tie
+      )
+    );
+  // One DP layer per group: every retained plan has respected the group cap.
+  // Additive priorities let us keep only the best plan for each cardinality.
+  let plans: (Plan | undefined)[] = [{ topics: [], reused: 0, groups: 0, penalty: 0, tie: 0 }];
+  for (const group of groups.values()) {
+    const options: Candidate[][] = [[], ...group.map((candidate) => [candidate])];
+    if (cap === 2) {
+      for (let a = 0; a < group.length; a += 1) {
+        for (let b = a + 1; b < group.length; b += 1) options.push([group[a], group[b]]);
+      }
+    }
+    const next: (Plan | undefined)[] = [];
+    for (const plan of plans) {
+      if (!plan) continue;
+      for (const option of options) {
+        const size = plan.topics.length + option.length;
+        if (size > count) continue;
+        const candidate: Plan = {
+          topics: [...plan.topics, ...option],
+          reused: plan.reused + option.reduce((sum, item) => sum + item.reused, 0),
+          groups: plan.groups + (option.length > 0 ? 1 : 0),
+          penalty: plan.penalty + option.reduce((sum, item) => sum + item.penalty, 0),
+          tie: plan.tie + option.reduce((sum, item) => sum + item.tie, 0)
+        };
+        if (better(candidate, next[size])) next[size] = candidate;
+      }
+    }
+    plans = next;
+  }
+  const plan = plans[count];
+  if (!plan) throw new Error(`Недостаточно допустимых групп тем: требуется ${count}, лимит ${cap}`);
+  const topicIds = [...plan.topics].sort((left, right) => left.tie - right.tie).map(({ id }) => id);
+  const reusedTopicIds = topicIds.filter((id) => selected.has(id));
   const shownCounts = { ...matchHistory.shownCounts };
   for (const id of topicIds) shownCounts[id] = (shownCounts[id] ?? 0) + 1;
-  return {
-    topicIds,
-    random: state,
-    matchHistory: { ...matchHistory, shownCounts }
-  };
+  return { topicIds, reusedTopicIds, random: state, matchHistory: { ...matchHistory, shownCounts } };
 }
 
 export { seedRandom };

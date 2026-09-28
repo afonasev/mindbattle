@@ -117,6 +117,8 @@ function prepareSlot(state: SoloState, context: DomainContext): SoloState {
   if (slot.kind === "risk") return { ...state, phase: { kind: "risk", difficulty: slot.difficulty, cursor: 0 } };
   const selection = context.selectTopics({
     count: 3,
+    kind: "normal",
+    excludedQuestionIds: state.usedQuestionIds,
     difficulty: slot.difficulty,
     excludedTopicIds: state.recentTopicIds,
     shownTopicCounts: state.shownTopicCounts,

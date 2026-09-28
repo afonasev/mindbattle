@@ -50,6 +50,8 @@ export interface QuestionDefinition {
 }
 
 export interface TopicSelectionRequest {
+  readonly kind: "normal" | "bonus" | "final";
+  readonly excludedQuestionIds: readonly QuestionId[];
   readonly count: number;
   readonly difficulty: Difficulty;
   readonly excludedTopicIds: readonly TopicId[];
@@ -58,6 +60,7 @@ export interface TopicSelectionRequest {
 }
 
 export interface TopicSelection {
+  readonly reusedTopicIds?: readonly TopicId[];
   readonly topicIds: readonly TopicId[];
   readonly random: RandomState;
 }

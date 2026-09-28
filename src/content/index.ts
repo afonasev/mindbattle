@@ -7,3 +7,4 @@ export * from "./taxonomy";
 export * from "./topicDefinitions";
 export * from "./types";
 export * from "./validator";
+export * from "./topicDiversity";

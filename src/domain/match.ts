@@ -39,13 +39,18 @@ function asTriple(values: readonly TopicId[]): readonly [TopicId, TopicId, Topic
 function validateTopicSelection(
   topics: readonly TopicId[],
   expectedCount: number,
-  excluded: readonly TopicId[]
+  excluded: readonly TopicId[],
+  reused: readonly TopicId[] = []
 ): void {
   if (topics.length !== expectedCount || new Set(topics).size !== expectedCount) {
     throw new Error(`Expected ${expectedCount} unique topic candidates`);
   }
   const blocked = new Set(excluded);
-  if (topics.some((topicId) => blocked.has(topicId))) {
+  const allowed = new Set(reused);
+  if (allowed.size !== reused.length || reused.some((id) => !blocked.has(id) || !topics.includes(id))) {
+    throw new Error("Invalid reused topic declaration");
+  }
+  if (topics.some((topicId) => blocked.has(topicId) && !allowed.has(topicId))) {
     throw new Error("The topic selector returned a topic already selected in this match");
   }
 }
@@ -81,12 +86,14 @@ function prepareMainSelection(state: MatchState, context: DomainContext): MatchS
   const count = bonus ? bonusParticipants(state).length + 1 : 3;
   const selection = context.selectTopics({
     count,
+    kind: bonus ? "bonus" : "normal",
+    excludedQuestionIds: state.usedQuestionIds,
     difficulty,
     excludedTopicIds: state.selectedTopicIds,
     shownTopicCounts: state.shownTopicCounts,
     random: state.random
   });
-  validateTopicSelection(selection.topicIds, count, state.selectedTopicIds);
+  validateTopicSelection(selection.topicIds, count, state.selectedTopicIds, selection.reusedTopicIds);
   const shownTopicCounts = addShownTopics(state.shownTopicCounts, selection.topicIds);
 
   if (bonus) {
@@ -223,12 +230,14 @@ function prepareTieBreakSelection(
   }
   const selection = context.selectTopics({
     count: contenders.length + 1,
+    kind: "final",
+    excludedQuestionIds: state.usedQuestionIds,
     difficulty: "hard",
     excludedTopicIds: state.selectedTopicIds,
     shownTopicCounts: state.shownTopicCounts,
     random: state.random
   });
-  validateTopicSelection(selection.topicIds, contenders.length + 1, state.selectedTopicIds);
+  validateTopicSelection(selection.topicIds, contenders.length + 1, state.selectedTopicIds, selection.reusedTopicIds);
   return {
     ...state,
     tieBreak,
@@ -456,7 +465,7 @@ function applyNormalTopic(state: MatchState, command: DomainCommand): MatchState
   const topicId = state.phase.candidates[state.phase.cursor];
   const selected = {
     ...state,
-    selectedTopicIds: [...state.selectedTopicIds, topicId],
+    selectedTopicIds: [...new Set([...state.selectedTopicIds, topicId])],
     normalChoiceOrdinal: state.normalChoiceOrdinal + 1 + (state.config.profile === "network-v1"
       ? (state.config.teams.indexOf(state.phase.chooser) - (state.firstChooserOffset + state.normalChoiceOrdinal) % state.config.teams.length + state.config.teams.length) % state.config.teams.length
       : 0)
@@ -513,7 +522,7 @@ function applyBonusCommand(
     if (remaining.length !== 1) throw new Error("Distinct bonus vetoes must leave exactly one topic");
     return {
       ...state,
-      selectedTopicIds: [...state.selectedTopicIds, remaining[0]],
+      selectedTopicIds: [...new Set([...state.selectedTopicIds, remaining[0]])],
       phase: {
         kind: "topic-confirmation",
         topicId: remaining[0],

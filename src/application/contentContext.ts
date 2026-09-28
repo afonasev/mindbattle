@@ -70,16 +70,19 @@ export class CatalogDomainContext implements DomainContext {
 
   selectTopics(request: TopicSelectionRequest) {
     const selection = chooseTopicCandidates(
-      this.catalog.topics,
+      this.catalog.topics.filter((topic) => topic.questions.some((question) =>
+        question.difficulty === request.difficulty && !request.excludedQuestionIds.includes(question.id)
+      )),
       request.count,
       {
         selected: request.excludedTopicIds,
         shownCounts: request.shownTopicCounts
       },
       request.random,
-      (topicId) => TOPIC_DOMAIN_BY_ID[topicId] ?? topicId
+      (topicId) => TOPIC_DOMAIN_BY_ID[topicId] ?? topicId,
+      request.kind
     );
-    return { topicIds: selection.topicIds, random: selection.random };
+    return { topicIds: selection.topicIds, reusedTopicIds: selection.reusedTopicIds, random: selection.random };
   }
 
   selectQuestion(request: QuestionSelectionRequest) {

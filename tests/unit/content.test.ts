@@ -243,14 +243,10 @@ describe("topic candidates", () => {
     }
   });
 
-  it("uses the minimum necessary domain repeat and stays reproducible", () => {
+  it("diagnoses too few groups instead of repeating one in a normal set", () => {
     const limitedTopics = topics.slice(0, 4);
     const limitedDomain = (topicId: string) => topicId === "topic-0" || topicId === "topic-1" ? "history" : "science";
-    const input = { selected: [], shownCounts: {} };
-    const first = chooseTopicCandidates(limitedTopics, 3, input, seedRandom("domain-fallback"), limitedDomain);
-    const repeated = chooseTopicCandidates(limitedTopics, 3, input, seedRandom("domain-fallback"), limitedDomain);
-    expect(new Set(first.topicIds).size).toBe(3);
-    expect(new Set(first.topicIds.map(limitedDomain))).toEqual(new Set(["history", "science"]));
-    expect(repeated).toEqual(first);
+    expect(() => chooseTopicCandidates(limitedTopics, 3, { selected: [], shownCounts: {} }, seedRandom("domain-fallback"), limitedDomain))
+      .toThrow(/Недостаточно допустимых групп/);
   });
 });
