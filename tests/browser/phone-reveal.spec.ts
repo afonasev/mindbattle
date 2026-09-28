@@ -26,6 +26,8 @@ for (const width of [360,760]) for (const count of [2,12]) {
     await page.route("**/api/network/heartbeat?*", route => route.fulfill({json:{ok:true}}));
     await page.goto("/network?muted=1");
     await expect(page.locator(".network-explanation p strong")).toHaveCount(4);
+    await expect(page.locator(".network-explanation p")).toHaveCount(4);
+    await expect(page.locator(".network-explanation")).not.toContainText("Основное объяснение раскрывается");
     await expect(page.locator(".network-answers .wrong")).toHaveCount(count === 2 ? 0 : 3);
     await expect(page.locator(".network-answers small").first()).toContainText("Александр 1");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

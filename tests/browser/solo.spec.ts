@@ -313,6 +313,7 @@ for (const width of [null, 360, 760]) test(`matches the team reveal for a wrong 
   await expect(page.locator(".solo-team-strip .game-team-card")).toHaveClass(/game-team-card--wrong/);
   await expect(page.locator(".wrong-answer-notes")).toBeVisible();
   await expect(page.locator(".wrong-answer-notes article")).toHaveCount(4);
+  await expect(page.locator(".explanation > p")).toHaveCount(0);
   await expect(page.locator(".wrong-answer-notes")).toContainText("Справки ко всем вариантам");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   if (width) {
