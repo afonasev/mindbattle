@@ -1,3 +1,4 @@
+import { ResultObserver, type ResultSink } from '../statistics/events';
 import {
   addSoloRecord,
   loadSoloRecords,
@@ -23,6 +24,7 @@ function validSoloState(value: unknown, revision: string): value is SoloState {
 }
 
 export class SoloController {
+  private results: ResultObserver;
   private readonly catalog: ContentCatalog;
   private readonly storage: StorageLike;
   private readonly clock: GameControllerClock;
@@ -36,7 +38,7 @@ export class SoloController {
   private feedbackStatus: FeedbackSubmissionStatus = "idle";
   private feedbackError: string | null = null;
 
-  constructor({ catalog, storage, clock, seeds, feedback }: { catalog: ContentCatalog; storage: StorageLike; clock: GameControllerClock; seeds: GameSeedSource; feedback?: DifficultyFeedbackSink }) {
+  constructor({ catalog, storage, clock, seeds, feedback, results }: { catalog: ContentCatalog; storage: StorageLike; clock: GameControllerClock; seeds: GameSeedSource; feedback?: DifficultyFeedbackSink; results?: ResultSink }) {
     this.catalog = catalog;
     this.storage = storage;
     this.clock = clock;
@@ -45,6 +47,7 @@ export class SoloController {
     this.persisted = loadPersistedData(storage, catalog.revision, (history) => migrateQuestionHistory(catalog.topics, history));
     this.soloRecords = loadSoloRecords(storage);
     this.context = new CatalogDomainContext(catalog, this.persisted.history);
+    this.results = new ResultObserver(results, this.context);
     this.restorableState = this.persisted.lastSolo && this.persisted.lastSolo.status === "in-progress" && validSoloState(this.persisted.lastSolo.state, catalog.revision) ? this.persisted.lastSolo.state : null;
   }
 
@@ -55,9 +58,12 @@ export class SoloController {
   get difficultyFeedbackError(): string | null { return this.feedbackError; }
 
   start(config: SoloConfig = { profile: "solo-endless-v1" }): SoloState {
+    const previous = this.currentState ?? this.restorableState;
+    if (previous && previous.phase.kind !== "finished") this.results.solo(previous, "replaced");
     this.context = new CatalogDomainContext(this.catalog, this.persisted.history);
     const seed = this.seeds.nextSeed();
     this.currentState = createSoloRun(config, seed, this.clock.now(), this.context);
+    this.results.solo(this.currentState, undefined, true);
     this.persistCurrent();
     return this.currentState;
   }
@@ -155,6 +161,7 @@ export class SoloController {
 
   private persistCurrent(): void {
     if (!this.currentState) return;
+    this.results.solo(this.currentState);
     this.persisted = { ...this.persisted, history: this.context.history, lastSolo: { status: this.currentState.phase.kind === "finished" ? "completed" : "in-progress", savedAt: this.clock.wallTime(), state: this.currentState } };
     this.restorableState = this.currentState.phase.kind === "finished" ? null : this.currentState;
     savePersistedData(this.storage, this.persisted);

@@ -1,3 +1,4 @@
+import { ResultObserver, type ResultSink } from '../statistics/events';
 import {
   activeTeams,
   bonusParticipants,
@@ -45,6 +46,7 @@ export class NetworkRoom {
   display = { connected: false, generation: 0, lastSeen: 0 };
   closed = false;
   feedbackError = "";
+  private readonly results: ResultObserver;
   private sequence = 0;
   private processed = new Map<string, Set<string>>();
   private feedbackPending = false;
@@ -58,7 +60,11 @@ export class NetworkRoom {
       event: DifficultyFeedbackEventV3,
     ) => Promise<void>,
     private readonly changed: () => void = () => {},
-  ) {}
+    results?: ResultSink,
+  ) { this.results = new ResultObserver(results, context); }
+  interruptResults(reason: string) {
+    if (this.state && this.state.phase.kind !== "finished") this.results.match(this.state, reason);
+  }
   private actor(token: string) {
     if (this.closed) throw new RoomError("Комната закрыта", 410);
     if (token === this.organizerToken) return null;
@@ -160,6 +166,7 @@ export class NetworkRoom {
       { atMs: at, sequence: ++this.sequence, commands },
       this.context,
     );
+    this.results.match(this.state);
     if (
       this.state.phase.kind !== before ||
       (this.state.phase.kind === "difficulty-feedback" &&
@@ -231,6 +238,7 @@ export class NetworkRoom {
         throw new RoomError("Игрок уже подключился", 409);
       if (this.state) {
         this.state = excludeNetworkPlayer(this.state, seat.id, this.context);
+        this.results.match(this.state);
         seat.departed = true;
         this.phaseRevision++;
       } else this.players.splice(this.players.indexOf(seat), 1);
@@ -269,11 +277,13 @@ export class NetworkRoom {
         this.context,
         `network:${this.code}:${seed}`,
       );
+      this.results.match(this.state, undefined, true);
     } else if (action.type === "replay") {
       requireLeader();
       if (!this.state) throw new RoomError("Партия ещё не началась");
       for (let i = this.players.length - 1; i >= 0; i--)
         if (this.players[i].departed) this.players.splice(i, 1);
+      this.interruptResults("replay");
       this.state = null;
       this.epoch++;
       this.phaseRevision++;
@@ -281,6 +291,7 @@ export class NetworkRoom {
     } else if (action.type === "close") {
       if (this.state) requireLeader();
       else requireDisplay();
+      this.interruptResults("closed");
       this.closed = true;
     } else if (action.type === "pause") {
       requireLeader();

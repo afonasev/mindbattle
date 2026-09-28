@@ -1,3 +1,4 @@
+import { browserResults } from '../statistics/outbox';
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   AnsweringAudioMonitor,
@@ -81,6 +82,7 @@ export function App() {
           wallTime: () => new Date().toISOString()
         },
         seeds: { nextSeed },
+        results: browserResults(),
         feedback: new HttpDifficultyFeedbackSink()
       }),
     []
@@ -91,6 +93,7 @@ export function App() {
     storage: localStorage,
     clock: { now: () => performance.now(), wallTime: () => new Date().toISOString() },
     seeds: { nextSeed },
+    results: browserResults(),
     feedback: new HttpDifficultyFeedbackSink()
   }), []);
   const [preferences, setPreferences] = useState(controller.preferences);

@@ -1,3 +1,4 @@
+import { ResultObserver, type ResultSink } from '../statistics/events';
 import {
   loadPersistedData,
   resetQuestionHistory as resetStoredQuestionHistory,
@@ -43,6 +44,7 @@ export interface GameControllerDependencies {
   readonly clock: GameControllerClock;
   readonly seeds: GameSeedSource;
   readonly feedback?: DifficultyFeedbackSink;
+  readonly results?: ResultSink;
 }
 
 export type SavedMatchStatus = "in-progress" | "completed" | null;
@@ -75,6 +77,7 @@ function validSavedState(
 }
 
 export class GameController {
+  private results: ResultObserver;
   private readonly catalog: ContentCatalog;
   private readonly storage: StorageLike;
   private readonly clock: GameControllerClock;
@@ -101,6 +104,7 @@ export class GameController {
       (history) => migrateQuestionHistory(this.catalog.topics, history)
     ) as PersistedData<MatchState>;
     this.context = new CatalogDomainContext(this.catalog, this.persisted.history);
+    this.results = new ResultObserver(dependencies.results, this.context);
     this.restorableState = validSavedState(this.persisted.lastMatch, this.catalog.revision);
     if (!this.restorableState && this.persisted.lastMatch) {
       this.persisted = { ...this.persisted, lastMatch: null };
@@ -146,6 +150,8 @@ export class GameController {
   }
 
   start(config: MatchConfig): MatchState {
+    const previous = this.currentState ?? this.restorableState;
+    if (previous && previous.phase.kind !== "finished") this.results.match(previous, "replaced");
     this.context = new CatalogDomainContext(this.catalog, this.persisted.history);
     const seed = this.seeds.nextSeed();
     this.currentState = createMatch(
@@ -155,6 +161,7 @@ export class GameController {
       this.context,
       `match-v1:${seed}`
     );
+    this.results.match(this.currentState, undefined, true);
     this.sequence = 0;
     this.restorableState = this.currentState;
     this.persistCurrent();
@@ -292,6 +299,7 @@ export class GameController {
 
   private persistCurrent(): void {
     if (!this.currentState) return;
+    this.results.match(this.currentState);
     const lastMatch: LastMatchSnapshot<MatchState> = {
       status: snapshotStatus(this.currentState),
       savedAt: this.clock.wallTime(),

@@ -1,3 +1,4 @@
+import type { ResultSink } from '../src/statistics/events';
 import { randomBytes, randomInt } from "node:crypto";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { NetworkRoom, RoomError } from "../src/network/room";
@@ -8,6 +9,7 @@ import type { DifficultyFeedbackEventV3 } from "../src/feedback/types";
 import type { CommandEnvelope } from "../src/network/protocol";
 export function createNetworkApi(
   submit: (event: DifficultyFeedbackEventV3) => Promise<void>,
+  results?: ResultSink,
 ) {
   const rooms = new Map<string, NetworkRoom>();
   const streams = new Map<
@@ -49,6 +51,7 @@ export function createNetworkApi(
             86400000)
       ) {
         for (const stream of streams.get(room) ?? []) stream.response.end();
+        room.interruptResults("expired");
         streams.delete(room);
         rooms.delete(room.code);
       }
@@ -122,6 +125,7 @@ export function createNetworkApi(
             secret,
             submit,
             () => broadcast(room),
+            results,
           );
           room.display.lastSeen = now();
           rooms.set(code, room);

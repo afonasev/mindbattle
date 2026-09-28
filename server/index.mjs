@@ -1,3 +1,5 @@
+import { readResults, interruptedNetworkCheckpoints } from './resultReport.mjs';
+import { createResultStore, createServerResultQueue, validateResult } from './resultStore.mjs';
 import { readFile, readdir } from "node:fs/promises";
 import { createServer } from "node:http";
 import { join, resolve } from "node:path";
@@ -24,6 +26,25 @@ async function loadQuestions() {
 }
 
 const store = await createFeedbackStore({ filePath: dataPath, questions: await loadQuestions(), catalogRevision });
+const resultPath = resolve(projectRoot, process.env.MINDBATTLE_RESULTS_PATH ?? 'data/match-results.ndjson');
+let resultsPromise;
+let resultWrites = Promise.resolve();
+function appendResult(event) {
+  const work = resultWrites.then(async () => {
+    try {
+      resultsPromise ??= createResultStore(resultPath);
+      return await (await resultsPromise).append(event);
+    } catch (error) { resultsPromise = undefined; throw error; }
+  });
+  resultWrites = work.catch(() => {});
+  return work;
+}
+const resultQueue = createServerResultQueue(resultPath + '.outbox', appendResult);
+// Existing network rooms cannot resume after process restart. Close their durable checkpoints.
+try {
+  await resultQueue.flush();
+  for (const e of interruptedNetworkCheckpoints((await readResults(resultPath)).events)) resultQueue.enqueue(e);
+} catch (error) { if (error.code !== 'ENOENT') console.error('Result recovery deferred:', error.message); }
 let vite = null;
 if (dev) {
   const { createServer: createViteServer } = await import("vite");
@@ -36,7 +57,7 @@ const { createNetworkApi } = vite
 const networkApi = createNetworkApi(async (event) => {
   const result = await store.append(event);
   if (result.status === "invalid" || result.status === "conflict") throw new Error("Feedback rejected");
-});
+}, resultQueue);
 
 function json(response, status, body) {
   response.writeHead(status, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" });
@@ -59,6 +80,13 @@ const server = createServer(async (request, response) => {
   try {
     if (await networkApi(request, response)) return;
     const url = new URL(request.url, "http://local");
+    if (url.pathname === '/api/match-results' && request.method === 'POST') {
+      if (request.headers.origin && new URL(request.headers.origin).host !== request.headers.host) return json(response, 403, { error: 'Origin rejected' });
+      const event = await readJson(request);
+      if (!validateResult(event, false)) return json(response, 400, { status: 'invalid' });
+      const ack = await appendResult(event);
+      return json(response, ack.status === 'created' ? 201 : ack.status === 'duplicate' ? 200 : 409, ack);
+    }
     if (url.pathname === "/api/difficulty-feedback" && request.method === "POST") {
       const result = await store.append(await readJson(request));
       if (result.status === "invalid") return json(response, 400, result);
