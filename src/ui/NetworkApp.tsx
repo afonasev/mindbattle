@@ -807,8 +807,7 @@ export function NetworkApp() {
                         <th scope="col">Игрок</th>
                         <th scope="col" className="network-standing-score">Очки</th>
                         <th scope="col" className="network-standing-stat" aria-label="Правильные ответы"><abbr title="Правильные ответы">✓</abbr></th>
-                        <th scope="col" className="network-standing-stat" aria-label="Неправильные ответы"><abbr title="Неправильные ответы">✕</abbr></th>
-                        <th scope="col" className="network-standing-stat" aria-label="Без ответа"><abbr title="Без ответа">—</abbr></th>
+                        <th scope="col" className="network-standing-stat" aria-label="Неверно, включая отсутствие ответа"><abbr title="Неверно, включая отсутствие ответа">✕</abbr></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -821,14 +820,13 @@ export function NetworkApp() {
                             <th scope="row" className="network-standing-name">{player?.name}{self ? " · Вы" : ""}{player?.departed && <small>Выбыл</small>}</th>
                             <td className="network-standing-score">{row.score}</td>
                             <td>{row.correct}</td>
-                            <td>{row.incorrect}</td>
-                            <td>{row.noAnswer}</td>
+                            <td>{row.incorrect + row.noAnswer}</td>
                           </tr>
                         );
                       })}
                     </tbody>
                   </table>
-                  <p className="network-standings-key">✓ верно · ✕ неверно · — без ответа</p>
+                  <p className="network-standings-key">✓ верно · ✕ неверно, включая пропуски</p>
                 </section>
               )}
               {phase === "finished" && snapshot.isLeader && (

@@ -37,10 +37,12 @@ for (const width of [360,760]) for (const count of [2,12]) {
     await expect(page.locator(".network-standings")).toContainText("Выбыл");
     await expect(page.locator(".network-cards")).toHaveCount(0);
     await expect(page.getByRole("columnheader", {name:"Правильные ответы", exact:true})).toBeVisible();
+    await expect(page.locator(".network-standings thead th")).toHaveCount(5);
+    await expect(page.locator(".network-standing--self td").last()).toHaveText("3");
     const rowHeights = await page.locator(".network-standings tbody > tr").evaluateAll(rows => rows.map(row => row.getBoundingClientRect().height));
     expect(Math.max(...rowHeights)).toBeLessThan(80);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await page.screenshot({path:info.outputPath(`results-table-v2-standings-${width}-${count}.png`),fullPage:true});
+    await page.screenshot({path:info.outputPath(`results-table-v3-standings-${width}-${count}.png`),fullPage:true});
     current = {...current, phase:"bonus-veto", canVeto:true, titles:{topic:"История науки",other:"Мировая культура",third:"География"},view:{...current.view!,phase:"bonus-veto",standings:undefined,topicCandidates:["topic","other","third"]}};
     await page.reload();
     await expect(page.locator(".network-turn-status--required")).toHaveText("Выберите тему, которую хотите исключить");
