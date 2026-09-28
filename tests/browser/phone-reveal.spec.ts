@@ -32,11 +32,15 @@ for (const width of [360,760]) for (const count of [2,12]) {
     await page.screenshot({path:info.outputPath(`${seed}-reveal-${width}-${count}.png`),fullPage:true});
     current = {...current, phase:"standings", revealedChoices:undefined, view:{...current.view!,phase:"standings",question:undefined,standings:current.players.map((p,index)=>({teamId:p.id,rank:p.departed ? 0 : 1,score:100,correct:1,incorrect:2,noAnswer:1}))}};
     await page.reload();
-    await expect(page.locator(".network-standings > div")).toHaveCount(count);
+    await expect(page.locator(".network-standings tbody > tr")).toHaveCount(count);
     await expect(page.locator(".network-standing--self")).toContainText("Александр 1 Константинопольский · Вы");
     await expect(page.locator(".network-standings")).toContainText("Выбыл");
+    await expect(page.locator(".network-cards")).toHaveCount(0);
+    await expect(page.getByRole("columnheader", {name:"Правильные ответы", exact:true})).toBeVisible();
+    const rowHeights = await page.locator(".network-standings tbody > tr").evaluateAll(rows => rows.map(row => row.getBoundingClientRect().height));
+    expect(Math.max(...rowHeights)).toBeLessThan(80);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await page.screenshot({path:info.outputPath(`${seed}-standings-${width}-${count}.png`),fullPage:true});
+    await page.screenshot({path:info.outputPath(`results-table-v2-standings-${width}-${count}.png`),fullPage:true});
     current = {...current, phase:"bonus-veto", canVeto:true, titles:{topic:"История науки",other:"Мировая культура",third:"География"},view:{...current.view!,phase:"bonus-veto",standings:undefined,topicCandidates:["topic","other","third"]}};
     await page.reload();
     await expect(page.locator(".network-turn-status--required")).toHaveText("Выберите тему, которую хотите исключить");

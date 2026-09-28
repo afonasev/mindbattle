@@ -469,7 +469,7 @@ export function NetworkApp() {
                   {turnStatus!.text}
                 </p>
               )}
-              {view && (!display || (phase !== "standings" && phase !== "finished")) && (
+              {view && phase !== "standings" && phase !== "finished" && (
                 <div className="network-cards">
                   {view.teams.map((card, i) => (
                     <article
@@ -800,20 +800,35 @@ export function NetworkApp() {
                         : view?.winnerId ? `Победитель — ${snapshot.players.find(p => p.id === view.winnerId)?.name}` : "Игра завершена"
                       : snapshot.tieBreakNumber ? "Результаты основной игры · впереди финальная битва" : "Результаты этапа"}
                   </h1>
-                  <div className="network-standings" aria-label="Результаты всех игроков">
-                    {view?.standings?.map((row) => {
-                      const player = snapshot.players.find((p) => p.id === row.teamId);
-                      const self = row.teamId === snapshot.selfId;
-                      return (
-                        <div key={row.teamId} className={self ? "network-standing--self" : ""} aria-current={self ? "true" : undefined}>
-                          <span>{player?.departed ? "—" : row.rank}</span>
-                          <strong>{player?.name}{self ? " · Вы" : ""}{player?.departed ? " · Выбыл" : ""}</strong>
-                          <span>{row.correct} верно · {row.incorrect} неверно · {row.noAnswer} без ответа</span>
-                          <b>{row.score}</b>
-                        </div>
-                      );
-                    })}
-                  </div>
+                  <table className="network-standings" aria-label="Результаты всех игроков">
+                    <thead>
+                      <tr>
+                        <th scope="col" className="network-standing-rank" aria-label="Место">#</th>
+                        <th scope="col">Игрок</th>
+                        <th scope="col" className="network-standing-score">Очки</th>
+                        <th scope="col" className="network-standing-stat" aria-label="Правильные ответы"><abbr title="Правильные ответы">✓</abbr></th>
+                        <th scope="col" className="network-standing-stat" aria-label="Неправильные ответы"><abbr title="Неправильные ответы">✕</abbr></th>
+                        <th scope="col" className="network-standing-stat" aria-label="Без ответа"><abbr title="Без ответа">—</abbr></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {view?.standings?.map((row) => {
+                        const player = snapshot.players.find((p) => p.id === row.teamId);
+                        const self = row.teamId === snapshot.selfId;
+                        return (
+                          <tr key={row.teamId} className={self ? "network-standing--self" : ""} aria-current={self ? "true" : undefined}>
+                            <td>{player?.departed ? "—" : row.rank}</td>
+                            <th scope="row" className="network-standing-name">{player?.name}{self ? " · Вы" : ""}{player?.departed && <small>Выбыл</small>}</th>
+                            <td className="network-standing-score">{row.score}</td>
+                            <td>{row.correct}</td>
+                            <td>{row.incorrect}</td>
+                            <td>{row.noAnswer}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  <p className="network-standings-key">✓ верно · ✕ неверно · — без ответа</p>
                 </section>
               )}
               {phase === "finished" && snapshot.isLeader && (

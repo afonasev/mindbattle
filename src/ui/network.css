@@ -351,26 +351,51 @@
 .network-explanation a {
   color: #97dfed;
 }
+.network-results {
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+  text-align: left;
+}
+.network-results > h1 {
+  font-size: clamp(1.15rem, 2.4vw, 2rem);
+}
 .network-standings {
-  display: grid;
-  gap: 8px;
-  margin: 25px 0;
+  width: 100%;
+  margin: 12px 0 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(0.8rem, 1.4vw, 1rem);
 }
-.network-standings > div {
-  display: grid;
-  grid-template-columns: 36px 1fr 2fr 90px;
-  gap: 20px;
-  align-items: center;
-  padding: 14px;
-  background: #17263e;
-  border-radius: 12px;
-}
-.network-standings > div > b {
+.network-standings th,
+.network-standings td {
+  padding: 9px 6px;
+  border-bottom: 1px solid #34435c;
   text-align: right;
-  color: #a6f5d2;
+  vertical-align: middle;
 }
-.network-standings > div > span {
+.network-standings thead th {
   color: #a7bdd9;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+.network-standings th:nth-child(2) { text-align: left; }
+.network-standings th:first-child,
+.network-standings td:first-child { text-align: center; color: #a7bdd9; }
+.network-standings .network-standing-rank { width: 2rem; }
+.network-standings .network-standing-score { width: 4.5rem; }
+.network-standings td.network-standing-score { color: #a6f5d2; font-weight: 800; }
+.network-standings .network-standing-stat { width: 3rem; }
+.network-standings abbr { text-decoration: none; }
+.network-standing-name { overflow-wrap: anywhere; line-height: 1.3; font-weight: 600; }
+.network-standing-name small { display: block; color: #a7bdd9; font-size: 0.8em; font-weight: 400; }
+.network-standings .network-standing--self { background: #302747; }
+.network-standings .network-standing--self th { color: #e0cfff; }
+.network-results .network-standings-key { margin: 8px 0 0; color: #a7bdd9; font-size: 0.72rem; }
+@media (max-width: 760px) {
+  .network-standings th, .network-standings td { padding: 7px 3px; }
+  .network-standings .network-standing-rank { width: 1.4rem; }
+  .network-standings .network-standing-score { width: 3rem; }
+  .network-standings .network-standing-stat { width: 1.5rem; }
 }
 .network-scoreboard-overlay {
   position: fixed;
@@ -675,8 +700,6 @@
 .network-high-contrast .network-player-card, .network-high-contrast button { border-color: #cfdef5; }
 .network-high-contrast p, .network-high-contrast small { color: #f0f5ff; }
 @media (min-width: 761px) {
-  .network-display .network-standings { grid-template-columns: 1fr; }
-  .network-display .network-standings > div { grid-template-columns: 36px 1fr 2fr 90px; gap: 20px; }
 }
 @media (min-width: 761px) and (max-height: 800px) {
   .network-display { padding-bottom: 12px; }
@@ -702,19 +725,6 @@
 .network-app .network-action-required button:not(:disabled) {
   border-color: #bfa3ff;
   background: #342954;
-}
-.network-standings strong { overflow-wrap: anywhere; min-width: 0; }
-.network-standings > .network-standing--self {
-  border: 2px solid #bfa3ff;
-  background: #302747;
-}
-@media (max-width: 760px) {
-  .network-standings > div {
-    grid-template-columns: 28px minmax(0, 1fr) auto;
-    gap: 8px;
-  }
-  .network-standings > div > span:nth-child(3) { grid-column: 2 / -1; grid-row: 2; }
-  .network-standings > div > b { grid-column: 3; grid-row: 1; }
 }
 @media (min-width: 761px) {
   .network-display .network-question-area.revealed {

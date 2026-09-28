@@ -239,16 +239,16 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
     await expect(
       page.getByRole("heading", { name: "Результаты этапа" }),
     ).toBeVisible();
-    await expect(page.locator(".network-standings > div")).toHaveCount(12);
+    await expect(page.locator(".network-standings tbody > tr")).toHaveCount(12);
     for (const phone of phones) {
-      await expect(phone.locator(".network-standings > div")).toHaveCount(12);
+      await expect(phone.locator(".network-standings tbody > tr")).toHaveCount(12);
       await expect(phone.locator(".network-standing--self")).toHaveCount(1);
     }
     await phones[0].screenshot({ path: testInfo.outputPath("network-phone-standings-12.png"), fullPage: true });
     expect(
       new Set(
         await page
-          .locator(".network-standings > div")
+          .locator(".network-standings tbody > tr")
           .evaluateAll((rows) => rows.map((row) => row.getBoundingClientRect().x)),
       ).size,
     ).toBe(1);
@@ -293,7 +293,7 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
     await page
       .getByRole("button", { name: "Продолжить без Участник 2", exact: true })
       .click();
-    await expect(page.getByText("Участник 2 · Выбыл", { exact: true })).toBeVisible();
+    await expect(page.locator(".network-standings tbody tr").filter({hasText:"Участник 2"}).getByText("Выбыл", {exact:true})).toBeVisible();
     await phones[0].getByRole("button", { name: "Пауза", exact: true }).click();
     await phones[0].getByRole("button", { name: "Настройки", exact: true }).click();
     await expect(phones[0].getByRole("heading", { name: "Настройки", exact: true })).toBeVisible();
