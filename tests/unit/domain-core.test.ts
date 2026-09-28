@@ -728,7 +728,7 @@ describe("public selectors and serialization", () => {
     });
   });
 
-  it("reveals notes only for unique selected distractors in stable screen order", () => {
+  it("reveals all four notes in shuffled screen order regardless of answers", () => {
     const context = makeContext();
     const config: MatchConfig = { ...TWO_TEAMS, teams: ["green", "blue", "yellow", "red"] };
     const answering = startQuestion(createMatch(config, "wrong-answer-notes", 0, context), context);
@@ -755,17 +755,19 @@ describe("public selectors and serialization", () => {
       }
     });
 
-    expect(selectPublicView(reveal([round.correctPosition, null, null, null]), context).question?.wrongAnswerNotes).toEqual([]);
-    const one = selectPublicView(reveal([wrong[2], wrong[2], null, round.correctPosition]), context).question?.wrongAnswerNotes;
-    expect(one).toHaveLength(1);
-    expect(one?.[0].position).toBe(wrong[2]);
-
-    const two = selectPublicView(reveal([wrong[2], wrong[0], wrong[2], null]), context).question?.wrongAnswerNotes;
-    expect(two?.map(({ position }) => position)).toEqual(positions.filter((position) => [wrong[0], wrong[2]].includes(position)));
-
-    const three = selectPublicView(reveal([wrong[2], wrong[0], wrong[1], null]), context).question?.wrongAnswerNotes;
-    expect(three?.map(({ position }) => position)).toEqual(positions.filter((position) => wrong.includes(position)));
-    expect(three?.every(({ note }) => note.startsWith("Справка о"))).toBe(true);
+    expect(selectPublicView(answering, context).question?.answerNotes).toBeUndefined();
+    const expected = positions.map((position, index) => {
+      const answer = context.getQuestion(round.questionId)!.answers.find(({ id }) => id === round.answerOrder[index])!;
+      return { position, answer: answer.text, note: answer.note };
+    });
+    for (const answers of [
+      [round.correctPosition, round.correctPosition, round.correctPosition, round.correctPosition],
+      [null, null, null, null],
+      [wrong[2], wrong[2], null, round.correctPosition],
+      [wrong[2], wrong[0], wrong[1], null]
+    ]) {
+      expect(selectPublicView(reveal(answers as (typeof positions[number] | null)[]), context).question?.answerNotes).toEqual(expected);
+    }
   });
 
   it("round-trips JSON and rejects corrupt or incompatible snapshots", () => {

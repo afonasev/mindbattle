@@ -59,6 +59,7 @@ export interface NetworkSnapshot {
   endReason?: string;
   feedbackError?: string;
   scoreboard?: readonly NetworkScoreRow[];
+  revealedChoices?: readonly NetworkCard[];
   vetoes?: readonly NetworkVeto[];
 }
 export type NetworkAction =

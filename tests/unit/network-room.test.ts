@@ -103,6 +103,74 @@ describe("network room", () => {
     expect(JSON.stringify(other)).not.toContain("correctAnswerId");
     expect(JSON.stringify(other)).not.toContain("secret-");
   });
+  it("shares revealed choices and four shuffled notes with every phone, including a final spectator", () => {
+    const { room, seats, command } = setup(4);
+    command("display", { type: "start" });
+    const topic = room.state!.phase;
+    if (topic.kind !== "normal-topic") throw Error();
+    command(seats.find(s => s.id === topic.chooser)!.token, { type: "topic", topicId: topic.candidates[0] });
+    command(seats[0].token, { type: "continue" });
+    const answering = room.state!;
+    if (answering.phase.kind !== "answering") throw Error();
+    const round = answering.phase.round;
+    for (const token of ["display", ...seats.map(s => s.token)]) {
+      const snapshot = room.snapshot(token, 0);
+      expect(snapshot.revealedChoices).toBeUndefined();
+      expect(snapshot.view?.question?.answerNotes).toBeUndefined();
+      expect(snapshot.view?.question?.explanation).toBeUndefined();
+      expect(snapshot.view?.question?.correctPosition).toBeUndefined();
+    }
+    const wrong = (["up", "right", "down", "left"] as const).find(p => p !== round.correctPosition)!;
+    room.state = {
+      ...answering,
+      tieBreak: { originalLeaders: [seats[0].id, seats[1].id], contenders: [seats[0].id, seats[1].id], questionNumber: 1 },
+      phase: { kind: "reveal", round, continuation: { kind: "tie-break", contenders: [seats[0].id] }, resolutions: [
+        { teamId: seats[0].id, answer: round.correctPosition, result: "correct" },
+        { teamId: seats[1].id, answer: wrong, result: "wrong" },
+        { teamId: seats[2].id, answer: null, result: "no-answer" },
+        { teamId: seats[3].id, answer: null, result: "spectator" }
+      ] }
+    };
+    const display = room.snapshot("display", 0);
+    expect(display.view?.question?.answerNotes).toHaveLength(4);
+    for (const seat of seats) {
+      const snapshot = room.snapshot(seat.token, 0);
+      expect(snapshot.view?.teams).toHaveLength(1);
+      expect(snapshot.view?.teams[0].id).toBe(seat.id);
+      expect(snapshot.revealedChoices).toEqual(display.revealedChoices);
+      expect(snapshot.view?.question).toEqual(display.view?.question);
+      expect(snapshot.revealedChoices?.filter(c => c.answerPosition != null)).toHaveLength(2);
+      for (const note of snapshot.view!.question!.answerNotes!) {
+        expect(note.answer).toBe(snapshot.view!.question!.options[note.position]);
+      }
+    }
+    expect(room.snapshot(seats[3].token, 0).spectating).toBe(true);
+  });
+
+  it("sends full tied standings and departed rows to every phone at every results phase", () => {
+    const { room, seats, command } = setup(12);
+    command("display", { type: "start" });
+    const state = room.state!;
+    room.players[11].departed = true;
+    for (const phase of [
+      { kind: "standings" as const, completedStage: 1 as const },
+      { kind: "standings" as const, completedStage: 3 as const, tieBreakContenders: [seats[0].id, seats[1].id] },
+      { kind: "finished" as const, winnerId: seats[1].id }
+    ]) {
+      room.state = { ...state, departedTeamIds: [seats[11].id], phase };
+      const display = room.snapshot("display", 0);
+      for (const seat of seats.slice(0, 11)) {
+        const snapshot = room.snapshot(seat.token, 0);
+        expect(snapshot.view?.standings).toEqual(display.view?.standings);
+        expect(snapshot.view?.standings).toHaveLength(12);
+        expect(snapshot.players).toHaveLength(12);
+        expect(snapshot.players[11].departed).toBe(true);
+        expect(snapshot.view?.winnerId).toBe(display.view?.winnerId);
+        expect(snapshot.view?.standings?.at(-1)?.rank).toBe(0);
+      }
+    }
+  });
+
   it("shares named bonus vetoes and rejects another player's topic", () => {
     const { room, seats, command } = setup();
     command("display", { type: "start" });

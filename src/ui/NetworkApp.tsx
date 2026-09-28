@@ -25,6 +25,7 @@ import {
   STORAGE_KEY,
 } from "../adapters/storage";
 import "./network.css";
+import { phoneStatus } from "./networkStatus";
 import { PresentationSettings } from "./PresentationSettings";
 import { FeedbackUnavailableDialog, type FeedbackRecoveryChoice } from "./FeedbackUnavailableDialog";
 function initialPreferences() {
@@ -221,9 +222,9 @@ export function NetworkApp() {
   }
   const locked = busy || !!status || !!snapshot?.paused;
   const view = snapshot?.view;
-  const own = view?.teams[0];
   const phase = snapshot?.phase;
   const display = snapshot?.role === "display";
+  const turnStatus = snapshot ? phoneStatus(snapshot) : null;
   const canSkipConfirmation =
     mobile &&
     !!snapshot?.isLeader &&
@@ -463,6 +464,11 @@ export function NetworkApp() {
                   </div>
                 )}
               </div>
+              {!display && turnStatus && (
+                <p role="status" className={`network-turn-status network-turn-status--${turnStatus!.required ? "required" : "waiting"}`}>
+                  {turnStatus!.text}
+                </p>
+              )}
               {view && (!display || (phase !== "standings" && phase !== "finished")) && (
                 <div className="network-cards">
                   {view.teams.map((card, i) => (
@@ -545,7 +551,7 @@ export function NetworkApp() {
                         ? `Выбирает ${snapshot.players.find((p) => p.id === view?.chooser)?.name ?? "игрок"}`
                         : `Выбирает ${snapshot.chooserName ?? "игрок"}`}
                   </h1>
-                  <div className="network-topics">
+                  <div className={`network-topics ${!display && turnStatus?.required ? "network-action-required" : ""}`}>
                     {view?.topicCandidates?.map((id) => (
                       <button
                         disabled={locked || !snapshot.canChoose}
@@ -563,12 +569,12 @@ export function NetworkApp() {
                   <h1>Бонусный вопрос · ×2</h1>
                   <p>
                     {snapshot.canVeto
-                      ? "Запретите одну свободную тему. Свой запрет можно изменить."
+                      ? snapshot.ownVeto ? "Для замены выберите свободную тему или снимите свой запрет." : "Исключите одну свободную тему."
                       : display
                         ? `Запрещают темы: ${snapshot.vetoParticipants?.join(", ")}`
-                        : "Тему выбирают участники очереди"}
+                        : "Другие игроки исключают темы"}
                   </p>
-                  <div className="network-topics">
+                  <div className={`network-topics ${!display && turnStatus?.required ? "network-action-required" : ""}`}>
                     {view?.topicCandidates?.map((id) => {
                       const veto = snapshot.vetoes?.find(
                         (entry) => entry.topicId === id,
@@ -630,14 +636,14 @@ export function NetworkApp() {
                     className={`question-stage network-question-area ${phase === "reveal" ? "revealed" : ""}`}
                   >
                     <h1 className="network-question">{view.question.prompt}</h1>
-                    <div className="network-answers">
+                    <div className={`network-answers ${turnStatus?.required ? "network-action-required" : ""}`}>
                       {positions.map((position) => {
                         const question = view.question!;
                         const chosen = snapshot.ownAnswer === position;
                         const correct = question.correctPosition === position;
                         const wrong =
                           phase === "reveal" &&
-                          view.teams.some(
+                          (snapshot.revealedChoices ?? []).some(
                             (c) =>
                               c.answerPosition === position &&
                               c.result === "wrong",
@@ -661,8 +667,8 @@ export function NetworkApp() {
                             <span>{question.options[position]}</span>
                             {phase === "reveal" && (
                               <small>
-                                {correct ? "✓ Правильный ответ " : ""}
-                                {view.teams
+                                {correct ? "✓ Правильный ответ · " : wrong ? "✕ Неверный ответ · " : ""}
+                                {(snapshot.revealedChoices ?? [])
                                   .filter((c) => c.answerPosition === position)
                                   .map((c) => c.name)
                                   .join(", ")}
@@ -672,17 +678,12 @@ export function NetworkApp() {
                         );
                       })}
                     </div>
-                    {phase === "answering" && snapshot.ownAnswer && (
-                      <p role="status">
-                        Ответ принят. Его можно изменить до раскрытия.
-                      </p>
-                    )}
                     {phase === "reveal" && (
                       <div className="network-explanation">
                         {view.question.explanation?.map((line, i) => (
                           <p key={i}>{line}</p>
                         ))}
-                        {view.question.wrongAnswerNotes?.map((note) => (
+                        {view.question.answerNotes?.map((note) => (
                           <p key={note.position}>
                             <strong>{note.answer}:</strong> {note.note}
                           </p>
@@ -733,7 +734,7 @@ export function NetworkApp() {
                         </>
                       ) : view.feedback.stage === "reasons" ? (
                         <>
-                          <div className="network-topics">
+                          <div className={`network-topics ${!display && turnStatus?.required ? "network-action-required" : ""}`}>
                             {reasons.map((label, index) => (
                               <button
                                 key={label}
@@ -796,37 +797,23 @@ export function NetworkApp() {
                     {phase === "finished"
                       ? snapshot.endReason
                         ? "Партия завершена: остался один игрок"
-                        : display && view?.winnerId ? `Победитель — ${snapshot.players.find(p => p.id === view.winnerId)?.name}` : "Игра завершена"
-                      : "Результаты этапа"}
+                        : view?.winnerId ? `Победитель — ${snapshot.players.find(p => p.id === view.winnerId)?.name}` : "Игра завершена"
+                      : snapshot.tieBreakNumber ? "Результаты основной игры · впереди финальная битва" : "Результаты этапа"}
                   </h1>
-                  {display ? (
-                    <div className="network-standings">
-                      {view?.standings?.map((row) => {
-                        const player = snapshot.players.find(
-                          (p) => p.id === row.teamId,
-                        );
-                        return (
-                          <div key={row.teamId}>
-                            <span>{player?.departed ? "—" : row.rank}</span>
-                            <strong>
-                              {player?.name}
-                              {player?.departed ? " · Выбыл" : ""}
-                            </strong>
-                            <span>
-                              {row.correct} верно · {row.incorrect} неверно ·{" "}
-                              {row.noAnswer} без ответа
-                            </span>
-                            <b>{row.score}</b>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <p>
-                      Ваш результат: <strong>{own?.score ?? 0} очков</strong>.
-                      Общие итоги — на большом экране.
-                    </p>
-                  )}
+                  <div className="network-standings" aria-label="Результаты всех игроков">
+                    {view?.standings?.map((row) => {
+                      const player = snapshot.players.find((p) => p.id === row.teamId);
+                      const self = row.teamId === snapshot.selfId;
+                      return (
+                        <div key={row.teamId} className={self ? "network-standing--self" : ""} aria-current={self ? "true" : undefined}>
+                          <span>{player?.departed ? "—" : row.rank}</span>
+                          <strong>{player?.name}{self ? " · Вы" : ""}{player?.departed ? " · Выбыл" : ""}</strong>
+                          <span>{row.correct} верно · {row.incorrect} неверно · {row.noAnswer} без ответа</span>
+                          <b>{row.score}</b>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </section>
               )}
               {phase === "finished" && snapshot.isLeader && (
