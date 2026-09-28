@@ -438,7 +438,8 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
       await expect(sourceLink).toHaveAttribute("rel", /noopener/);
       await expect(sourceLink).toHaveAttribute("rel", /noreferrer/);
     }
-    await expect(page.getByText("Почему так?")).toBeVisible();
+    await expect(page.getByText("Почему так?")).toHaveCount(0);
+    await expect(page.locator(".wrong-answer-notes article")).toHaveCount(4);
     if (round === 0) {
       await captureSettled(page, testInfo.outputPath("reveal.png"));
     }
@@ -554,6 +555,7 @@ test("renders all four answer notes for zero through three wrong choices without
     await page.getByRole("button", { name: "Продолжить" }).click();
     await expect(page.locator(".question-stage--reveal")).toBeVisible();
     await expect(page.locator(".wrong-answer-notes article")).toHaveCount(4);
+    await expect(page.locator(".explanation > p")).toHaveCount(0);
     const answerAlignment = await page.locator(".answer-cross").evaluate((cross) => {
       const crossRect = cross.getBoundingClientRect();
       const textOffsets = [...cross.querySelectorAll<HTMLElement>(".answer-option")].map((option) => {

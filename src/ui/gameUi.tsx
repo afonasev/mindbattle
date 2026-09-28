@@ -293,8 +293,10 @@ export function QuestionBoard({
       </div>
       {reveal && (
         <aside className="explanation">
-          <strong>Почему так?</strong>
-          <p>{question.explanation?.join(" ")}</p>
+          {!question.answerNotes?.length && <>
+            <strong>Почему так?</strong>
+            <p>{question.explanation?.join(" ")}</p>
+          </>}
           {question.source && (
             <a href={question.source.url} target="_blank" rel="noopener noreferrer">
               Источник: {question.source.title} ↗

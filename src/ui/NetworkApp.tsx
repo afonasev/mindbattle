@@ -680,7 +680,7 @@ export function NetworkApp() {
                     </div>
                     {phase === "reveal" && (
                       <div className="network-explanation">
-                        {view.question.explanation?.map((line, i) => (
+                        {!view.question.answerNotes?.length && view.question.explanation?.map((line, i) => (
                           <p key={i}>{line}</p>
                         ))}
                         {view.question.answerNotes?.map((note) => (
