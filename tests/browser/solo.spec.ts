@@ -312,9 +312,13 @@ for (const width of [null, 360, 760]) test(`matches the team reveal for a wrong 
   await expect(page.locator(".question-header strong")).toHaveText("Вопрос 1 (Лёгкий)");
   await expect(page.locator(".solo-team-strip .game-team-card")).toHaveClass(/game-team-card--wrong/);
   await expect(page.locator(".wrong-answer-notes")).toBeVisible();
-  await expect(page.locator(".wrong-answer-notes article")).toHaveCount(4);
-  await expect(page.locator(".explanation > p")).toHaveCount(0);
-  await expect(page.locator(".wrong-answer-notes")).toContainText("Справки ко всем вариантам");
+  await expect(page.locator(".wrong-answer-notes article")).toHaveCount(3);
+  await expect(page.locator(".explanation > p")).toHaveCount(1);
+  await expect(page.locator(".wrong-answer-notes > strong")).toHaveCount(0);
+  if (!width) {
+    const rows = await page.locator(".wrong-answer-notes article").evaluateAll(cards => cards.map(card => Math.round(card.getBoundingClientRect().top)));
+    expect(new Set(rows).size).toBe(1);
+  }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   if (width) {
     const fits = await page.evaluate(() => {

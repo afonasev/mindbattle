@@ -25,9 +25,11 @@ for (const width of [360,760]) for (const count of [2,12]) {
     await page.route("**/api/network/stream?*", route => route.fulfill({contentType:"text/event-stream", body:`event: connected\ndata: {"generation":1}\n\ndata: ${JSON.stringify(current)}\n\n`}));
     await page.route("**/api/network/heartbeat?*", route => route.fulfill({json:{ok:true}}));
     await page.goto("/network?muted=1");
-    await expect(page.locator(".network-explanation p strong")).toHaveCount(4);
-    await expect(page.locator(".network-explanation p")).toHaveCount(4);
-    await expect(page.locator(".network-explanation")).not.toContainText("Основное объяснение раскрывается");
+    await expect(page.locator(".network-explanation > p")).toHaveCount(1);
+    await expect(page.locator(".network-explanation > p")).toContainText("Основное объяснение раскрывается");
+    await expect(page.locator(".network-explanation .wrong-answer-notes article")).toHaveCount(3);
+    await expect(page.locator(".network-explanation .wrong-answer-notes")).not.toContainText("Верный вариант");
+    await expect(page.locator(".wrong-answer-notes > strong")).toHaveCount(0);
     await expect(page.locator(".network-answers .wrong")).toHaveCount(count === 2 ? 0 : 3);
     await expect(page.locator(".network-answers small").first()).toContainText("Александр 1");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

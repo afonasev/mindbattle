@@ -248,6 +248,7 @@ export function QuestionBoard({
   const question = view.question;
   if (!question || (state.phase.kind !== "answering" && state.phase.kind !== "reveal")) return null;
   const reveal = state.phase.kind === "reveal";
+  const wrongAnswerNotes = question.answerNotes?.filter((note) => note.position !== question.correctPosition) ?? [];
   const selectedWrong = new Set(
     view.teams
       .map((team) => team.answerPosition)
@@ -293,25 +294,19 @@ export function QuestionBoard({
       </div>
       {reveal && (
         <aside className="explanation">
-          {!question.answerNotes?.length && <>
-            <strong>Почему так?</strong>
-            <p>{question.explanation?.join(" ")}</p>
-          </>}
+          <strong>Почему так?</strong>
+          <p>{question.explanation?.join(" ")}</p>
           {question.source && (
             <a href={question.source.url} target="_blank" rel="noopener noreferrer">
               Источник: {question.source.title} ↗
             </a>
           )}
-          {question.answerNotes && question.answerNotes.length > 0 && (
+          {wrongAnswerNotes.length > 0 && (
             <section
               className="wrong-answer-notes"
-              aria-label="Справки ко всем вариантам"
-              style={{
-                gridTemplateColumns: `repeat(${question.answerNotes.length}, minmax(0, 1fr))`
-              }}
+              aria-label="Справки к неправильным вариантам"
             >
-              <strong>Справки ко всем вариантам</strong>
-              {question.answerNotes.map((item) => (
+              {wrongAnswerNotes.map((item) => (
                 <article key={item.position}>
                   <b>{item.answer}</b>
                   <p>{item.note}</p>
