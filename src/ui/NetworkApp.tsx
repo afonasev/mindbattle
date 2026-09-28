@@ -680,14 +680,19 @@ export function NetworkApp() {
                     </div>
                     {phase === "reveal" && (
                       <div className="network-explanation">
-                        {!view.question.answerNotes?.length && view.question.explanation?.map((line, i) => (
+                        {view.question.explanation?.map((line, i) => (
                           <p key={i}>{line}</p>
                         ))}
-                        {view.question.answerNotes?.map((note) => (
-                          <p key={note.position}>
-                            <strong>{note.answer}:</strong> {note.note}
-                          </p>
-                        ))}
+                        {view.question.answerNotes?.some((note) => note.position !== view.question?.correctPosition) && (
+                          <section className="wrong-answer-notes" aria-label="Справки к неправильным вариантам">
+                            {view.question.answerNotes.filter((note) => note.position !== view.question?.correctPosition).map((note) => (
+                              <article key={note.position}>
+                                <b>{note.answer}</b>
+                                <p>{note.note}</p>
+                              </article>
+                            ))}
+                          </section>
+                        )}
                         {view.question.source && (
                           <a
                             href={view.question.source.url}

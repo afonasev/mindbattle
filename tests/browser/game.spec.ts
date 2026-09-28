@@ -438,8 +438,8 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
       await expect(sourceLink).toHaveAttribute("rel", /noopener/);
       await expect(sourceLink).toHaveAttribute("rel", /noreferrer/);
     }
-    await expect(page.getByText("Почему так?")).toHaveCount(0);
-    await expect(page.locator(".wrong-answer-notes article")).toHaveCount(4);
+    await expect(page.getByText("Почему так?")).toBeVisible();
+    await expect(page.locator(".wrong-answer-notes article")).toHaveCount(3);
     if (round === 0) {
       await captureSettled(page, testInfo.outputPath("reveal.png"));
     }
@@ -492,7 +492,7 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
   await captureSettled(page, testInfo.outputPath("completed-menu.png"));
 });
 
-test("renders all four answer notes for zero through three wrong choices without overflow", async ({ page }, testInfo) => {
+test("renders the main explanation and three horizontal wrong-answer cards without overflow", async ({ page }, testInfo) => {
   await page.getByRole("button", { name: "9", exact: true }).click();
   await page.getByRole("button", { name: "Начать игру" }).click();
   await waitForInputGate(page);
@@ -554,8 +554,11 @@ test("renders all four answer notes for zero through three wrong choices without
     await page.getByRole("button", { name: "Продолжить игру на одном устройстве" }).click();
     await page.getByRole("button", { name: "Продолжить" }).click();
     await expect(page.locator(".question-stage--reveal")).toBeVisible();
-    await expect(page.locator(".wrong-answer-notes article")).toHaveCount(4);
-    await expect(page.locator(".explanation > p")).toHaveCount(0);
+    await expect(page.locator(".wrong-answer-notes article")).toHaveCount(3);
+    await expect(page.locator(".explanation > p")).toHaveCount(1);
+    await expect(page.locator(".wrong-answer-notes > strong")).toHaveCount(0);
+    const cardRows = await page.locator(".wrong-answer-notes article").evaluateAll(cards => cards.map(card => Math.round(card.getBoundingClientRect().top)));
+    expect(new Set(cardRows).size).toBe(1);
     const answerAlignment = await page.locator(".answer-cross").evaluate((cross) => {
       const crossRect = cross.getBoundingClientRect();
       const textOffsets = [...cross.querySelectorAll<HTMLElement>(".answer-option")].map((option) => {

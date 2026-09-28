@@ -66,15 +66,19 @@ describe("Solo question and feedback difficulty", () => {
     expect(html).toContain("Вопрос 6 (Средний)");
   });
 
-  it("reveals every shuffled note for correct, wrong and absent answers", () => {
+  it("reveals the main explanation and three shuffled wrong notes for every result", () => {
     const answers = question.answers.map((text, index) => ({ text, note: `Отдельный факт ${index}.` })) as unknown as readonly [{text:string;note:string},{text:string;note:string},{text:string;note:string},{text:string;note:string}];
     for (const result of ["correct", "wrong", "no-answer"] as const) {
       const html = renderToStaticMarkup(createElement(SoloScreen, {
-        state: { slotIndex:0, score:0, lives:3, reserveMs:60_000, paused:false, phase:{kind:"reveal",round:{...round,answerOrder:["answer-2","answer-0","answer-3","answer-1"]},answer: result === "no-answer" ? null : "up", result} } as unknown as SoloState,
+        state: { slotIndex:0, score:0, lives:3, reserveMs:60_000, paused:false, phase:{kind:"reveal",round:{...round,correctPosition:"right",answerOrder:["answer-2","answer-0","answer-3","answer-1"]},answer: result === "no-answer" ? null : "up", result} } as unknown as SoloState,
         question:{...question,answers}, titleById:{topic:"Тема"}, records:[],savedRecordId:null,inputKind:"pointer",command:()=>{},finish:()=>{},exit:()=>{}
       }));
-      for (let i=0;i<4;i++) expect(html.match(new RegExp(`Отдельный факт ${i}\\.`, "g"))).toHaveLength(1);
-      expect(html.indexOf("Отдельный факт 2.")).toBeLessThan(html.indexOf("Отдельный факт 0."));
+      for (let i=1;i<4;i++) expect(html.match(new RegExp(`Отдельный факт ${i}\\.`, "g"))).toHaveLength(1);
+      expect(html).not.toContain("Отдельный факт 0.");
+      expect(html.match(/Пояснение/g)).toHaveLength(1);
+      expect(html).not.toContain("Справки ко всем вариантам");
+      expect(html.indexOf("Отдельный факт 2.")).toBeLessThan(html.indexOf("Отдельный факт 3."));
+      expect(html.indexOf("Отдельный факт 3.")).toBeLessThan(html.indexOf("Отдельный факт 1."));
     }
   });
 
