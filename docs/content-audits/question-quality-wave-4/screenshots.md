@@ -59,4 +59,3 @@
 ![world-exploration, 390×844](browser/world-exploration-390.png)
 
 [Верхняя часть до прокрутки](browser/world-exploration-390-top-fold.png)
-
