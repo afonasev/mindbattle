@@ -5,6 +5,7 @@ type SoloPersistedState = {
   readonly slotIndex: number;
   readonly phase: {
     readonly kind: string;
+    readonly cursor?: number;
     readonly round?: { readonly correctPosition: Position; readonly risk: boolean; readonly points: number };
   };
 };
@@ -387,7 +388,7 @@ test("uses the team pause dialog and resumes the solo run", async ({ page }, tes
   await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
 });
 
-test("accepts a neutral virtual gamepad and updates the control hint", async ({ page }, testInfo) => {
+test("accepts a neutral virtual gamepad before moving and confirming", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "chromium-1280", "One viewport is enough for gamepad input coverage");
   await page.addInitScript(() => {
     const pad = {
@@ -411,10 +412,13 @@ test("accepts a neutral virtual gamepad and updates the control hint", async ({ 
 
   await page.waitForTimeout(180);
   await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
-  await expect(page.locator(".control-help")).toHaveText("Кликните карточку");
+  expect((await soloState(page)).phase).toMatchObject({ kind: "topic", cursor: 0 });
   await setVirtualGamepadButton(page, 0, false);
   await setVirtualGamepadButton(page, 15, true);
-  await expect(page.locator(".control-help")).toHaveText("D-pad · A");
+  await expect.poll(async () => {
+    const phase = (await soloState(page)).phase;
+    return phase.kind === "topic" ? phase.cursor : null;
+  }).toBe(1);
   await setVirtualGamepadButton(page, 15, false);
   await setVirtualGamepadButton(page, 0, true);
   await expect(page.locator(".question-stage")).toBeVisible();

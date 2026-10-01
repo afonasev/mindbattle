@@ -214,7 +214,9 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
           .click();
       await expect(page.locator(".network-answers .correct")).toHaveCount(1);
       for (const phone of phones) {
-        await expect(phone.locator(".network-explanation p strong")).toHaveCount(4);
+        await expect(phone.locator(".network-explanation > p")).toHaveCount(1);
+        await expect(phone.locator(".network-explanation .wrong-answer-notes article")).toHaveCount(3);
+        await expect(phone.locator(".network-explanation .wrong-answer-notes article b")).toHaveCount(3);
         await expect(phone.locator(".network-answers small")).toContainText(["Участник 1", "Участник 2", "Участник 3", "Участник 4"]);
       }
       if (round === 0) {

@@ -12,7 +12,7 @@ import subprocess
 import tempfile
 
 STAGES = {'draft','ready','implementing','verified','merged','deployed','published','finalizing','awaiting-acceptance','rework-required','accepted','archived','cancelled'}
-EDGES = {'draft':{'ready'},'ready':{'implementing'},'implementing':{'verified'},'verified':{'merged','published'},'merged':{'deployed'},'deployed':{'finalizing'},'published':{'finalizing'},'finalizing':{'awaiting-acceptance','accepted','rework-required'},'awaiting-acceptance':{'accepted','rework-required'},'rework-required':{'implementing'},'accepted':{'archived','rework-required'}}
+EDGES = {'draft':{'ready'},'ready':{'implementing'},'implementing':{'verified'},'verified':{'merged','published'},'merged':{'deployed','finalizing'},'deployed':{'finalizing'},'published':{'finalizing'},'finalizing':{'awaiting-acceptance','accepted','rework-required'},'awaiting-acceptance':{'accepted','rework-required'},'rework-required':{'implementing'},'accepted':{'archived','rework-required'}}
 
 def now():
     return datetime.datetime.now(datetime.timezone.utc).isoformat()
@@ -231,6 +231,15 @@ class Flow:
         elif target not in EDGES.get(old,set()): raise ValueError('Invalid transition: '+old+' → '+target)
         if d['owner'] and d['owner']!=owner: raise ValueError('Change belongs to another session')
         if target=='implementing' and not d['owner']: raise ValueError('Claim first')
+        if old=='merged' and target=='finalizing':
+            # Source-only QA tooling has no game release to deploy. This is an
+            # explicit reviewed exemption, never inferred from paths or tests.
+            delivery=d['evidence'].get('source_only_delivery', {})
+            merged=d['evidence'].get('merge', {})
+            if (delivery.get('scope')!='qa-tooling' or delivery.get('runtime_changed') is not False
+                or not delivery.get('reason') or not delivery.get('authorization_source')
+                or not merged.get('commit') or delivery.get('commit')!=merged.get('commit')):
+                raise ValueError('Source-only QA tooling delivery evidence required; runtime changes require deployment')
         errors=self.blocks(d,target)
         if errors and target!='cancelled': raise ValueError('Blocked: '+str(errors))
         needed={'ready':['scope'],'verified':['verification'],'merged':['merge','remote_push'],'deployed':['release','smoke'],'published':['publication'],'finalizing':[],'awaiting-acceptance':['spec_sync','cleanup','acceptance_guide'],'archived':['archive']}.get(target,[])

@@ -23,3 +23,5 @@
 | Нетривиальная реализация, worktree или поставка | `.agents/references/delivery-workflow.md` |
 | Релиз, desktop-установщики, GitHub Releases, обновления content/shell или web-deploy | `docs/desktop/RELEASE.md` |
 | Player-visible/input/audio/browser QA | `.agents/references/game-qa.md` |
+
+| Выбор required checks по влиянию на контракты | `.agents/references/qa-scope.md` |

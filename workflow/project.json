@@ -12,14 +12,17 @@
   "environment_role": "production",
   "environment_url": "https://mindbattle.afonasev.tech/",
   "commands": {
-    "focused_checks": "npm run typecheck",
-    "required_checks": "npm run check",
+    "focused_checks": "npm run qa:ui",
+    "required_checks": "npm run qa",
     "build": "npm run build",
     "deploy": "make deploy",
     "release_identity": "bash scripts/checkReleaseIdentity.sh",
     "smoke": "curl -fsS https://mindbattle.afonasev.tech/ >/dev/null && curl -fsS https://mindbattle.afonasev.tech/network >/dev/null && MINDBATTLE_TEST_ORIGIN=https://mindbattle.afonasev.tech node scripts/testNetworkApi.mjs",
     "browser_checks": "npm run test:browser",
-    "network_api_smoke": "MINDBATTLE_TEST_ORIGIN=https://mindbattle.afonasev.tech node scripts/testNetworkApi.mjs"
+    "network_api_smoke": "MINDBATTLE_TEST_ORIGIN=https://mindbattle.afonasev.tech node scripts/testNetworkApi.mjs",
+    "tooling_checks": "npm run qa:tooling",
+    "network_checks": "npm run qa:network",
+    "input_checks": "npm run qa:input"
   },
   "evidence_root": "/Users/eaafonasev/Projects/mindbattle-planning/evidence",
   "model_preferences": {
@@ -47,8 +50,22 @@
         "shared planning schemas and apply/archive guidance"
       ],
       "adopted_at": "2026-09-28",
-      "source": "User instruction in task 01a0e66f-bc8d-7662-9b4c-42687745b5b7: обнови настройки соседних проектов, там такой же флоу",
+      "source": "User instruction in task 01a0e66f-bc8d-7662-9b4c-42687745b5b7: \u043e\u0431\u043d\u043e\u0432\u0438 \u043d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u0441\u043e\u0441\u0435\u0434\u043d\u0438\u0445 \u043f\u0440\u043e\u0435\u043a\u0442\u043e\u0432, \u0442\u0430\u043c \u0442\u0430\u043a\u043e\u0439 \u0436\u0435 \u0444\u043b\u043e\u0443",
       "note": "Selective update; original full-adoption version retained. Existing project commands, authorization, runtime, remote-push policy and historical delivery records preserved. Legacy release/publication identity fields supported without rewriting historical records."
     }
-  ]
+  ],
+  "qa_policy": {
+    "matrix": ".agents/references/qa-scope.md",
+    "selection": "Review contract impact and record scope in change verification; union affected integration routes; unknown or shared critical impact uses full.",
+    "required_checks_by_scope": {
+      "tooling": "npm run qa:tooling",
+      "ui": "npm run qa:ui",
+      "network": "npm run qa:network",
+      "input": "npm run qa:input",
+      "full": "npm run qa"
+    },
+    "production_requires_full": true,
+    "tooling_only_requires_game_build": false,
+    "human_device_acceptance": "Independent; never inferred from automated gates"
+  }
 }

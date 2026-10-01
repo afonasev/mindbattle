@@ -45,7 +45,12 @@ Anonymous question feedback is saved to `data/difficulty-feedback.ndjson` by def
 ## Checks
 
 ```bash
-npm run check          # types, unit tests, and build
+npm run qa:ui          # bounded UI: types, focused units, browser smoke
+npm run qa:network     # network unit + real SSE/browser integration
+npm run qa:input       # input/controller + virtual gamepad integration
+npm run qa:tooling     # QA tooling contracts + types
+npm run qa             # full: units + production build + browser
+npm run check          # types, all unit tests, and build (types once)
 npm run content-check  # question catalog checks
 npm run test:browser    # Playwright browser scenarios
 ```
@@ -63,3 +68,5 @@ For website publication, GitHub Releases, and desktop update channels, follow [d
 ## License
 
 [MIT](LICENSE).
+
+Выбирайте локальный gate по [матрице QA](.agents/references/qa-scope.md): влияние на контракты, а не имя файла. `qa` сохраняет точную revision, counts и время в отдельной evidence-папке; для durable evidence добавьте `-- --evidence /absolute/path`. Физические телефоны/gamepad и явная ручная приёмка остаются отдельными.
