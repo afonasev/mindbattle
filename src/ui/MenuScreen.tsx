@@ -1,3 +1,4 @@
+import { DesktopDisplaySettings, DesktopQuit } from "./DesktopControls";
 import { useState } from "react";
 import type {
   AccessibilityPreferences,
@@ -228,6 +229,7 @@ export function MenuScreen({
             <button className="secondary-action settings-back" type="button" onClick={() => setSettingsOpen(false)}>Назад</button>
           </div>
           <div className="settings-grid">
+            <DesktopDisplaySettings />
             <section className="settings-group" aria-labelledby="sound-settings-title">
               <h3 id="sound-settings-title">Звук</h3>
               <button className={`settings-toggle ${preferences.muted ? "" : "is-active"}`} type="button" aria-pressed={!preferences.muted} onClick={() => setPreferences({ ...preferences, muted: !preferences.muted })}>
@@ -252,6 +254,7 @@ export function MenuScreen({
           </div>
         </section>
       )}
+      <div className="desktop-quit"><DesktopQuit /></div>
       <footer>Локально · Offline-first · один общий экран</footer>
     </main>
   );

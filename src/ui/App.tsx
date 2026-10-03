@@ -1,3 +1,4 @@
+import { ReleaseAction } from "./ReleaseAction";
 import { browserResults } from '../statistics/outbox';
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -42,7 +43,7 @@ import {
 import { SoloFeedbackScreen, SoloRecordsScreen, SoloScreen } from "./soloUi";
 import { FeedbackUnavailableDialog, type FeedbackRecoveryChoice } from "./FeedbackUnavailableDialog";
 import { PresentationSettings } from "./PresentationSettings";
-import { applyPwaUpdate, navigate, onPwaUpdate } from "../main";
+import { navigate } from "../main";
 import { QueuedDifficultyFeedbackSink } from "../feedback";
 import { canApplyPwaUpdate } from "../pwaUpdate";
 
@@ -104,7 +105,6 @@ export function App() {
   const [soloInput, setSoloInput] = useState<SoloInputKind>("pointer");
   const [feedbackRecoveryChoice, setFeedbackRecoveryChoice] = useState<FeedbackRecoveryChoice>("retry");
   const [menuError, setMenuError] = useState<string | null>(null);
-  const [pwaUpdateReady, setPwaUpdateReady] = useState(false);
   const [pauseSettingsOpen, setPauseSettingsOpen] = useState(false);
   const [gamepads, setGamepads] = useState<readonly Gamepad[]>([]);
   const inputRef = useRef(createInputRouterState());
@@ -120,7 +120,6 @@ export function App() {
   const audioActivationRef = useRef(false);
   const audioRef = useRef(sharedAudioController(preferences));
 
-  useEffect(() => onPwaUpdate(setPwaUpdateReady), []);
   useEffect(() => {
     const sink = new QueuedDifficultyFeedbackSink(new HttpDifficultyFeedbackSink(), localStorage);
     void sink.flush();
@@ -701,13 +700,13 @@ export function App() {
       if (saved.muted) audioRef.current.stopMusic();
       setPreferences(saved);
     };
-    return <div className={rootClass}>{pwaUpdateReady && canApplyPwaUpdate(false, solo.phase.kind) && <PwaUpdateButton />}{pauseSettingsOpen ? <PresentationSettings preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} /> : solo.phase.kind === "feedback" ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} exit={() => setSolo(null)} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} settings={() => setPauseSettingsOpen(true)} command={(command) => { setSoloInput("pointer"); setSolo(soloController.dispatch([command])); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}{solo.phase.kind === "feedback" && soloController.difficultyFeedbackStatus === "error" && <FeedbackUnavailableDialog selected={feedbackRecoveryChoice} onSelect={setFeedbackRecoveryChoice} onRetry={() => { setFeedbackRecoveryChoice("retry"); void submitSoloFeedback(); }} onSkip={skipSoloFeedback} />}</div>;
+    return <div className={rootClass}>{<ReleaseAction safe={canApplyPwaUpdate(false, solo.phase.kind)} />}{pauseSettingsOpen ? <PresentationSettings preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} /> : solo.phase.kind === "feedback" ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} exit={() => setSolo(null)} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} settings={() => setPauseSettingsOpen(true)} command={(command) => { setSoloInput("pointer"); setSolo(soloController.dispatch([command])); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}{solo.phase.kind === "feedback" && soloController.difficultyFeedbackStatus === "error" && <FeedbackUnavailableDialog selected={feedbackRecoveryChoice} onSelect={setFeedbackRecoveryChoice} onRetry={() => { setFeedbackRecoveryChoice("retry"); void submitSoloFeedback(); }} onSkip={skipSoloFeedback} />}</div>;
   }
 
   if (!match || !controller.view) {
     return (
       <div className={rootClass}>
-        {pwaUpdateReady && <PwaUpdateButton />}
+        <ReleaseAction />
         {showSoloRecords ? <SoloRecordsScreen records={soloController.records} exit={() => setShowSoloRecords(false)} /> : <MenuScreen
           settings={settings}
           setSettings={setSettings}
@@ -878,5 +877,3 @@ export function App() {
     </div>
   );
 }
-
-function PwaUpdateButton() { return <button className="pwa-update" type="button" onClick={() => void applyPwaUpdate()}>Доступно обновление · Обновить</button>; }

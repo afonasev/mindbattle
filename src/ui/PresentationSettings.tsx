@@ -1,3 +1,4 @@
+import { DesktopDisplaySettings } from "./DesktopControls";
 import type { AccessibilityPreferences } from "../adapters/storage";
 
 export function PresentationSettings({ preferences, setPreferences, back }: {
@@ -15,6 +16,7 @@ export function PresentationSettings({ preferences, setPreferences, back }: {
       <button className="secondary-action settings-back" type="button" onClick={back}>Назад</button>
     </div>
     <div className="settings-grid">
+            <DesktopDisplaySettings />
       <section className="settings-group" aria-labelledby="sound-settings-title">
         <h3 id="sound-settings-title">Звук</h3>
         <button className={`settings-toggle ${preferences.muted ? "" : "is-active"}`} type="button" aria-pressed={!preferences.muted} onClick={() => setPreferences({ ...preferences, muted: !preferences.muted })}>

@@ -1,3 +1,4 @@
+import { ReleaseAction } from "./ReleaseAction";
 import { useEffect, useRef, useState } from "react";
 import {
   NetworkConnection,
@@ -242,6 +243,7 @@ export function NetworkApp() {
           : undefined
       }
     >
+      <ReleaseAction safe={!credential || terminal} />
       <header className="game-brand network-header">
         <a href="/">MINDBATTLE</a>
         <span>Сетевая игра{snapshot ? ` · ${snapshot.code}` : ""}</span>

@@ -14,6 +14,7 @@ npm run build
 echo "==> Syncing application to ${SSH_HOST}:${APP_DIR}"
 rsync -az --delete \
   --exclude='.git' --exclude='.codex' --exclude='.agents' --exclude='node_modules' \
+  --exclude='desktop/bundle' --exclude='desktop-app' --exclude='desktop-release' --exclude='desktop-installers' \
   --exclude='data' --exclude='playwright-report' --exclude='test-results' \
   ./ "${SSH_HOST}:${APP_DIR}/"
 

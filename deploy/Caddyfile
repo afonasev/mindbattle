@@ -1,4 +1,16 @@
 mindbattle.afonasev.tech {
-	reverse_proxy 127.0.0.1:4173
+	handle_path /desktop/content/* {
+		root * /var/lib/mindbattle-desktop/content/current
+		header Cache-Control "no-store"
+		file_server
+	}
+	handle_path /desktop/* {
+		root * /var/lib/mindbattle-desktop/installers/current
+		header Cache-Control "no-store"
+		file_server
+	}
+	handle {
+		reverse_proxy 127.0.0.1:4173
+	}
 	encode zstd gzip
 }

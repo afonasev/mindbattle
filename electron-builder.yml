@@ -1,0 +1,28 @@
+appId: tech.afonasev.mindbattle
+productName: Mindbattle
+directories:
+  app: desktop-app
+  output: desktop-installers
+files:
+  - desktop/**/*
+  - package.json
+asar: true
+npmRebuild: false
+artifactName: Mindbattle-${version}-${os}-${arch}.${ext}
+mac:
+  target:
+    - target: dmg
+      arch: [universal]
+  category: public.app-category.trivia-games
+  identity: null
+  icon: public/icons/mindbattle-512.png
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: public/icons/mindbattle-512.png
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: false
