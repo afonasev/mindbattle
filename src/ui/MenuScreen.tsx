@@ -69,6 +69,7 @@ export function MenuScreen({
 }) {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [classicSetupOpen, setClassicSetupOpen] = useState(false);
+  const home = !settingsOpen && !classicSetupOpen;
   const activeTeams = TEAM_IDS.slice(0, settings.teamCount);
   const valid = assignmentsAreCompleteAndUnique(activeTeams, settings.assignments);
   const updateTeamCount = (teamCount: 2 | 3 | 4) => {
@@ -107,23 +108,28 @@ export function MenuScreen({
   };
 
   return (
-    <ScreenSurface className="menu-shell">
-      <ScreenHeader hero={!settingsOpen && !classicSetupOpen} subtitle={settingsOpen ? "Настройки" : "На одном устройстве"} back={settingsOpen ? () => setSettingsOpen(false) : classicSetupOpen ? () => setClassicSetupOpen(false) : undefined} />
+    <ScreenSurface className={`menu-shell ${home ? "menu-home" : "menu-subpage"}`}>
+      {home && <div className="menu-scenery" aria-hidden="true"><div className="arena-orbit"><div className="arena-core" /></div><div className="arena-horizon" /></div>}
+      <ScreenHeader hero={home} subtitle={settingsOpen ? "Настройки" : "На одном устройстве"} back={settingsOpen ? () => setSettingsOpen(false) : classicSetupOpen ? () => setClassicSetupOpen(false) : undefined} />
 
-      {!settingsOpen && !classicSetupOpen && (
-      <section className="setup-stage menu-mode-stage" aria-label="Выбор режима">
-        <div className="menu-actions">
-          <MenuAction onClick={startSolo}>Одиночная игра</MenuAction>
-          <MenuAction className="mobile-classic-action" onClick={() => setClassicSetupOpen(true)}>На одном устройстве (2–4)</MenuAction>
-          <MenuAction onClick={enterNetwork}>Сетевая игра (2–12)</MenuAction>
-          {restoreSolo && <MenuAction onClick={restoreSolo}>Продолжить одиночную игру</MenuAction>}
-          {restoreLabel && <MenuAction className="mobile-classic-action" onClick={restore}>{restoreLabel}</MenuAction>}
-          <MenuAction onClick={() => setSettingsOpen(true)}>Настройки</MenuAction>
-          <MenuAction onClick={viewRecords}>Рекорды</MenuAction>
+      {home && (
+      <section className="menu-mode-stage" aria-label="Выбор режима">
+        <div className="menu-actions main-menu-actions">
+          <MenuAction variant="primary" arrow caption="Свой темп. Личный рекорд." onClick={startSolo}>Одиночная игра</MenuAction>
+          <MenuAction className="mobile-classic-action" aria-label="На одном устройстве (2–4)" arrow caption="2–4 команды · один общий экран" onClick={() => setClassicSetupOpen(true)}>На одном устройстве</MenuAction>
+          <MenuAction className="desktop-network-action" aria-label="Сетевая игра (2–12)" arrow caption="Создать комнату для 2–12 игроков" onClick={enterNetwork}>Сетевая игра</MenuAction>
+          <MenuAction className="mobile-network-action" arrow caption="Войти в сетевую комнату по коду" onClick={enterNetwork}>Подключиться к игре</MenuAction>
+          {restoreSolo && <MenuAction arrow caption="Вернуться к сохранённому забегу" onClick={restoreSolo}>Продолжить одиночную игру</MenuAction>}
+          {restoreLabel && <MenuAction className="mobile-classic-action" arrow onClick={restore}>{restoreLabel}</MenuAction>}
         </div>
         {error && <p className="menu-error" role="alert">{error}</p>}
       </section>
       )}
+      {home && <div className="menu-utilities">
+        <MenuAction className="menu-records-action" arrow caption="Лучшие результаты одиночной игры" onClick={viewRecords}>Рекорды</MenuAction>
+        <MenuAction arrow onClick={() => setSettingsOpen(true)}>Настройки</MenuAction>
+        <DesktopQuit />
+      </div>}
 
       {classicSetupOpen && (
       <section className="setup-stage mobile-classic-setup" aria-labelledby="setup-title">
@@ -172,8 +178,6 @@ export function MenuScreen({
       )}
 
       {settingsOpen && <PresentationSettings preferences={preferences} setPreferences={setPreferences} session={{ collectQuestionFeedback: settings.collectQuestionFeedback, setCollectQuestionFeedback: (value) => setSettings({ ...settings, collectQuestionFeedback: value }), resetHistory }} />}
-      <div className="desktop-quit"><DesktopQuit /></div>
-      <footer>Локально · Offline-first · один общий экран</footer>
     </ScreenSurface>
   );
 }

@@ -1,11 +1,17 @@
 import { useEffect, useId, useRef, type ButtonHTMLAttributes, type HTMLAttributes, type ReactNode } from "react";
 
 export function ScreenSurface({ children, ...props }: HTMLAttributes<HTMLElement>) {
-  return <main {...props}><div className="arena-glow" aria-hidden="true" />{children}</main>;
+  return <main {...props}>{children}</main>;
 }
 
-export function MenuAction({ variant = "secondary", className = "", onClick, ...props }: ButtonHTMLAttributes<HTMLButtonElement> & { readonly variant?: "primary" | "secondary" }) {
-  return <button {...props} type={props.type ?? "button"} className={`menu-action ${variant}-action ${className}`} onClick={(event) => { event.stopPropagation(); onClick?.(event); }} />;
+export function MenuAction({ variant = "secondary", className = "", onClick, children, caption, arrow = false, ...props }: ButtonHTMLAttributes<HTMLButtonElement> & { readonly variant?: "primary" | "secondary"; readonly caption?: ReactNode; readonly arrow?: boolean }) {
+  const id = useId();
+  const describedBy = [props["aria-describedby"], caption ? `${id}-caption` : undefined].filter(Boolean).join(" ") || undefined;
+  return <button {...props} aria-labelledby={props["aria-labelledby"] ?? (caption && !props["aria-label"] ? `${id}-label` : undefined)} aria-describedby={describedBy} type={props.type ?? "button"} className={`menu-action ${variant}-action ${caption || arrow ? "menu-action--detailed" : ""} ${className}`} onClick={(event) => { event.stopPropagation(); onClick?.(event); }}>
+    <span className="menu-action-label" id={`${id}-label`}>{children}</span>
+    {caption && <span className="menu-action-caption" id={`${id}-caption`}>{caption}</span>}
+    {arrow && <span className="menu-action-arrow" aria-hidden="true">→</span>}
+  </button>;
 }
 
 export function ScreenHeader({ subtitle, back, menu, disabled = false, hero = false, className = "" }: { readonly subtitle?: ReactNode; readonly back?: () => void; readonly menu?: () => void; readonly disabled?: boolean; readonly hero?: boolean; readonly className?: string }) {
