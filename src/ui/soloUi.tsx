@@ -1,3 +1,4 @@
+import { MenuAction, ScreenHeader, ScreenSurface, SessionMenu } from "./menuUi";
 import type { Question } from "../content";
 import type { SoloCommand, SoloState } from "../domain/solo";
 import type { SoloRecord } from "../adapters/storage";
@@ -23,12 +24,12 @@ export function SoloScreen({ state, question, titleById, records, savedRecordId,
   if (phase.kind === "finished") {
     if (savedRecordId) {
       const rank = records.findIndex((record) => record.id === savedRecordId) + 1;
-      return <SoloFrame onMenu={exit}><section className="winner-stage solo-results"><div className="stage-label stage-label--bonus">Соло-рекорд</div><h2>Ваш результат: {state.score}</h2><ol>{records.slice(0, 10).map((record, index) => <li className={record.id === savedRecordId ? "solo-current" : ""} key={record.id}><span className="solo-record-rank">{index + 1}</span><strong>{record.name}</strong><b>{record.score}</b></li>)}</ol><p className="solo-rank">Ваше место: {rank} из {records.length} · {state.score} очков</p><button className="secondary-action" type="button" onClick={exit}>В меню</button></section></SoloFrame>;
+      return <SoloFrame onMenu={exit}><section className="winner-stage solo-results"><div className="stage-label stage-label--bonus">Соло-рекорд</div><h2>Ваш результат: {state.score}</h2><ol>{records.slice(0, 10).map((record, index) => <li className={record.id === savedRecordId ? "solo-current" : ""} key={record.id}><span className="solo-record-rank">{index + 1}</span><strong>{record.name}</strong><b>{record.score}</b></li>)}</ol><p className="solo-rank">Ваше место: {rank} из {records.length} · {state.score} очков</p><MenuAction onClick={exit}>Выйти в меню</MenuAction></section></SoloFrame>;
     }
     return <NameEntry score={state.score} finish={finish} skip={exit} />;
   }
   const hearts = Array.from({ length: 3 }, (_, index) => <span key={index} className={index < state.lives ? "solo-heart" : "solo-heart solo-heart--empty"}>♥</span>);
-  if (state.paused) return <SoloFrame><div className="pause-backdrop" role="dialog" aria-modal="true" aria-labelledby="solo-pause-title"><section className="pause-dialog"><div className="stage-label">Пауза</div><h2 id="solo-pause-title">Соло-забег восстановлен</h2><p>Таймеры остановлены.</p><button type="button" onClick={() => command({ type: "resume" })}>Продолжить</button><button type="button" onClick={settings}>Настройки</button><button type="button" onClick={exit}>Выйти в меню</button></section></div></SoloFrame>;
+  if (state.paused) return <SoloFrame><SessionMenu title="Игра на паузе" resume={() => command({ type: "resume" })} settings={settings} exit={exit}><p>Таймеры остановлены.</p></SessionMenu></SoloFrame>;
   const timerMs = phase.kind === "answering" ? (phase.baseRemainingMs > 0 ? phase.baseRemainingMs : state.reserveMs) : null;
   const reserve = phase.kind === "answering" && phase.baseRemainingMs === 0;
   const playerResultClass = phase.kind === "reveal" ? `game-team-card--${phase.result}` : "";
@@ -44,11 +45,11 @@ export function SoloRecordsScreen({ records, exit }: {
   readonly records: readonly SoloRecord[];
   readonly exit: () => void;
 }) {
-  return <SoloFrame onMenu={exit}><section className="winner-stage solo-results" aria-labelledby="solo-records-title"><div className="stage-label stage-label--bonus">Соло-забег</div><h2 id="solo-records-title">Рекорды</h2>{records.length > 0 ? <ol>{records.slice(0, 10).map((record, index) => <li key={record.id}><span className="solo-record-rank">{index + 1}</span><strong>{record.name}</strong><b>{record.score}</b></li>)}</ol> : <p className="solo-rank">Пока нет сохранённых результатов.</p>}<button className="secondary-action" type="button" onClick={exit}>Назад</button></section></SoloFrame>;
+  return <SoloFrame onBack={exit}><section className="winner-stage solo-results" aria-labelledby="solo-records-title"><div className="stage-label stage-label--bonus">Соло-забег</div><h2 id="solo-records-title">Рекорды</h2>{records.length > 0 ? <ol>{records.slice(0, 10).map((record, index) => <li key={record.id}><span className="solo-record-rank">{index + 1}</span><strong>{record.name}</strong><b>{record.score}</b></li>)}</ol> : <p className="solo-rank">Пока нет сохранённых результатов.</p>}</section></SoloFrame>;
 }
 
-function SoloFrame({ children, onMenu, onContinue }: { readonly children: React.ReactNode; readonly onMenu?: () => void; readonly onContinue?: () => void }) {
-  return <main className="game-shell solo-shell" onClick={onContinue}><div className="arena-glow" aria-hidden="true" /><header className="game-brand"><strong>Mindbattle</strong>{onMenu && <button className="solo-menu-button" type="button" onClick={(event) => { event.stopPropagation(); onMenu(); }}>Меню</button>}</header>{children}</main>;
+function SoloFrame({ children, onMenu, onBack, onContinue }: { readonly children: React.ReactNode; readonly onMenu?: () => void; readonly onBack?: () => void; readonly onContinue?: () => void }) {
+  return <ScreenSurface className="game-shell solo-shell" onClick={onContinue}><ScreenHeader subtitle="Одиночная игра" menu={onMenu} back={onBack} />{children}</ScreenSurface>;
 }
 
 function SoloQuestionBoard({ phase, question, questionNumber, titleById, inputKind, command }: { readonly phase: Extract<SoloState["phase"], { kind: "answering" | "reveal" }>; readonly question: Question; readonly questionNumber: number; readonly titleById: Readonly<Record<string, string>>; readonly inputKind: SoloInputKind; readonly command: (command: SoloCommand) => void }) {
@@ -80,5 +81,5 @@ export function SoloFeedbackScreen({ value, choose, toggleReason, setNote, submi
 
 function NameEntry({ score, finish, skip }: { readonly score: number; readonly finish: (name: string) => void; readonly skip: () => void }) {
   let input: HTMLInputElement | null = null;
-  return <SoloFrame><section className="winner-stage solo-results"><div className="stage-label">Забег завершён</div><h2>Результат: {score}</h2><form className="solo-name-form" onSubmit={(event) => { event.preventDefault(); finish(input?.value ?? ""); }}><label>Ваше имя<input autoFocus maxLength={32} ref={(element) => { input = element; }} /></label><button className="primary-action" type="submit">Сохранить результат</button><button className="secondary-action" type="button" onClick={skip}>Пропустить</button></form></section></SoloFrame>;
+  return <SoloFrame onMenu={skip}><section className="winner-stage solo-results"><div className="stage-label">Забег завершён</div><h2>Результат: {score}</h2><form className="solo-name-form" onSubmit={(event) => { event.preventDefault(); finish(input?.value ?? ""); }}><label>Ваше имя<input autoFocus maxLength={32} ref={(element) => { input = element; }} /></label><MenuAction variant="primary" type="submit">Сохранить результат</MenuAction><MenuAction onClick={skip}>Пропустить</MenuAction></form></section></SoloFrame>;
 }
