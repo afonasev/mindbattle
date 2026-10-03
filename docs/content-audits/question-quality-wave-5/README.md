@@ -11,4 +11,4 @@
 
 `npm run check`: typecheck,208 unit tests и build PASS. `npm run content-check`:2 PASS. Строгая OpenSpec-проверка PASS. Отдельные исторические review-записи сохранены; текущие пять review-хешей привязаны к реально прочитанным файлам.
 
-Интеграция, postmerge-проверки и push/readback ещё ожидаются. Ручная приёмка pending. Production не разрешён. Это500 вопросов текущей волны, а не завершение всего каталога11000.
+Контент и review-записи интегрированы вmain6804406. Postmerge npmcheck208PASS и полный browser98PASS/23FAIL/5skip; один boot-timeout в общем прогоне не повторился при отдельной проверке наbaseline иmain. Обе отдельные проверки сохранили одинаковый историческийFAIL на ожидаемой второй кнопке сети. См. `postmerge-verification.json`. Окончательные mainpush/readback иspecsync ещё выполняются. Ручная приёмка pending. Production не разрешён. Это500 вопросов текущей волны, а не завершение всего каталога11000.
