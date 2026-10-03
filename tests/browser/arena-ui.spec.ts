@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type BrowserContext, type Page } from "@playwright/test";
 
 for (const width of [360, 390, 760, 1280, 1920]) {
   test(`arena menu has direct accessible actions at ${width}px`, async ({ page }, info) => {
@@ -90,8 +90,8 @@ test("arena network surfaces support twelve connected phones", async ({ browser,
   await page.goto("/network?muted=1");
   await page.getByRole("button", { name: "Создать сетевую игру", exact: true }).click();
   const code = await page.locator(".network-code").innerText();
-  const contexts = [];
-  const phones = [];
+  const contexts: BrowserContext[] = [];
+  const phones: Page[] = [];
   try {
     for (let index = 0; index < 12; index++) {
       const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, baseURL: info.project.use.baseURL });
