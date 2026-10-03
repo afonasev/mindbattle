@@ -8,7 +8,7 @@ const appIcons = [
 ];
 
 export default defineConfig({
-  plugins: [react(), VitePWA({ registerType: "prompt", injectRegister: false, manifest: { name: "Mindbattle — интеллектуальная битва", short_name: "Mindbattle", lang: "ru", theme_color: "#07101f", background_color: "#07101f", display: "standalone", icons: appIcons }, workbox: { navigateFallback: "/index.html", globPatterns: ["**/*.{js,css,html,ico,png,svg,json,wav,woff2}"], maximumFileSizeToCacheInBytes: 20 * 1024 * 1024 } })],
+  plugins: [react(), VitePWA({ registerType: "prompt", injectRegister: false, manifest: { name: "Mindbattle — интеллектуальная битва", short_name: "Mindbattle", lang: "ru", theme_color: "#07101f", background_color: "#07101f", display: "standalone", icons: appIcons }, workbox: { navigateFallback: "/index.html", globPatterns: ["**/*.{js,css,html,ico,png,svg,json,wav,mp3,woff2}"], maximumFileSizeToCacheInBytes: 20 * 1024 * 1024 } })],
   server: {
     host: "127.0.0.1",
     port: 4173,

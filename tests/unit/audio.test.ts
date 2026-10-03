@@ -1,9 +1,11 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   AnsweringAudioMonitor,
   AUDIO_CUE_MANIFEST,
   AudioController,
   phaseAudioActions,
+  classicMusicStage,
+  presentationMusicCue,
   RevealAudioMonitor,
   shouldPlayNetworkAudio,
   revealOutcomeCue,
@@ -109,8 +111,7 @@ describe("topic countdown audio monitor", () => {
 describe("phase audio orchestration", () => {
   it("keeps the game theme under a question and ducks it before the question cue", () => {
     expect(phaseAudioActions(null, "normal-topic")).toEqual([
-      { type: "set-music-ducked", ducked: false },
-      { type: "play", cue: "game-theme" }
+      { type: "set-music-ducked", ducked: false }
     ]);
     expect(phaseAudioActions("normal-topic", "topic-confirmation")).toEqual([{ type: "play", cue: "screen-transition" }]);
     expect(phaseAudioActions("topic-confirmation", "answering")).toEqual([
@@ -123,9 +124,66 @@ describe("phase audio orchestration", () => {
       { type: "play", cue: "bonus" }
     ]);
     expect(phaseAudioActions("reveal", "finished")).toEqual([
-      { type: "set-music-ducked", ducked: false },
-      { type: "play", cue: "winner" }
+      { type: "set-music-ducked", ducked: false }
     ]);
+  });
+});
+
+describe("stage music and lifecycle", () => {
+  it.each([9, 15, 21])("selects all three stages and tie-break for %i questions", (count) => {
+    const size = count / 3;
+    expect(classicMusicStage(0, count)).toBe(0);
+    expect(classicMusicStage(size - 1, count)).toBe(0);
+    expect(classicMusicStage(size, count)).toBe(1);
+    expect(classicMusicStage(2 * size - 1, count)).toBe(1);
+    expect(classicMusicStage(2 * size, count)).toBe(2);
+    expect(classicMusicStage(count, count, true)).toBe(2);
+    expect(presentationMusicCue("answering", 1)).toBe("game-theme-two");
+    expect(presentationMusicCue("reveal", 2)).toBe("game-theme-three");
+    expect(presentationMusicCue("finished", 2)).toBe("winner");
+    expect(presentationMusicCue("lobby", 2)).toBe("menu-theme");
+  });
+
+  it("keeps the selected stage playing under bonus and restores it after mute/pause", () => {
+    const sources: FakeSource[] = [];
+    const audio = new AudioController(factory(sources));
+    audio.play("game-theme-two");
+    audio.play("bonus");
+    expect(sources[0].paused).toBe(false);
+    audio.update({ volume: .4, muted: false });
+    audio.play("game-theme-two");
+    expect(sources).toHaveLength(2);
+    audio.update({ volume: .4, muted: true });
+    expect(sources[0].paused).toBe(true);
+    audio.update({ volume: .4, muted: false });
+    audio.play("game-theme-two");
+    audio.stopMusic();
+    audio.setMusicDucked(true);
+    audio.play("game-theme-two");
+    expect(sources[3].volume).toBeCloseTo(.112);
+  });
+
+  it("crossfades a theme change and stops both sources when muted mid-transition", () => {
+    vi.useFakeTimers();
+    try {
+      const sources: FakeSource[] = [];
+      const audio = new AudioController(factory(sources), { volume: .5, muted: false }, 650);
+      audio.play("game-theme");
+      audio.play("game-theme-two");
+      expect(sources[1].volume).toBe(0);
+      vi.advanceTimersByTime(325);
+      expect(sources[0].volume).toBeCloseTo(.25);
+      expect(sources[1].volume).toBeCloseTo(.25);
+      vi.advanceTimersByTime(325);
+      expect(sources[0].paused).toBe(true);
+      expect(sources[1].volume).toBeCloseTo(.5);
+      audio.play("game-theme-three");
+      vi.advanceTimersByTime(100);
+      audio.update({ volume: .5, muted: true });
+      expect(sources[1].paused).toBe(true);
+      expect(sources[2].paused).toBe(true);
+      expect(vi.getTimerCount()).toBe(0);
+    } finally { vi.useRealTimers(); }
   });
 });
 

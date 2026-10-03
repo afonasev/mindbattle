@@ -18,6 +18,8 @@ import type {
 import {
   AudioController,
   phaseAudioActions,
+  classicMusicStage,
+  presentationMusicCue,
   RevealAudioMonitor,
   shouldPlayNetworkAudio,
   sharedAudioController,
@@ -146,18 +148,29 @@ export function NetworkApp() {
   }, [credential]);
   useEffect(() => {
     if (!snapshot || !shouldPlayNetworkAudio(snapshot.role, mobile)) return;
+    if (snapshot.paused) return;
     const signature = `${snapshot.epoch}:${snapshot.phase}`;
     if (lastPhase.current === signature) return;
     const previousPhase = lastPhase.current.split(":")[1] || null;
     lastPhase.current = signature;
-    if (snapshot.paused) return;
     for (const action of phaseAudioActions(previousPhase, snapshot.phase)) {
       if (action.type === "stop-music") audio.current?.stopMusic();
       else if (action.type === "set-music-ducked") audio.current?.setMusicDucked(action.ducked);
       else audio.current?.play(action.cue);
     }
-    if (snapshot.phase === "lobby") audio.current?.play("menu-theme");
-  }, [snapshot?.phase, snapshot?.epoch, mobile]);
+  }, [snapshot?.phase, snapshot?.epoch, snapshot?.paused, mobile]);
+  const musicCue = presentationMusicCue(snapshot?.phase ?? "lobby", snapshot
+    ? classicMusicStage((snapshot.questionNumber ?? 1) - 1, snapshot.settings.questionCount, !!snapshot.tieBreakNumber)
+    : 0);
+  useEffect(() => {
+    if (mobile || (snapshot && !shouldPlayNetworkAudio(snapshot.role, mobile))) return;
+    if (snapshot?.paused || muted || preferences.volume === 0) {
+      audio.current?.stopMusic();
+      return;
+    }
+    audio.current?.setMusicDucked(snapshot?.phase === "answering");
+    audio.current?.play(musicCue);
+  }, [musicCue, snapshot?.phase, snapshot?.paused, snapshot?.epoch, snapshot?.role, credential, mobile, muted, preferences.volume]);
   useEffect(() => {
     if (!snapshot || !shouldPlayNetworkAudio(snapshot.role, mobile) || snapshot.paused || snapshot.phase !== "reveal" || !snapshot.view) {
       if (snapshot?.phase !== "reveal") revealAudio.current.reset();
