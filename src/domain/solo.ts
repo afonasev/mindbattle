@@ -56,6 +56,8 @@ export interface SoloState {
   readonly random: RandomState;
   readonly config: Required<SoloConfig>;
   readonly slotIndex: number;
+  /** Presentation music progression; old saved runs default to stage one. */
+  readonly musicStage?: 0 | 1 | 2;
   readonly score: number;
   readonly lives: number;
   readonly reserveMs: number;
@@ -178,6 +180,7 @@ export function createSoloRun(config: SoloConfig, seed: string, atMs: number, co
     random: seedRandom(seed),
     config: { profile: config.profile, collectQuestionFeedback: config.collectQuestionFeedback ?? true },
     slotIndex: 0,
+    musicStage: 0,
     score: 0,
     lives: SOLO_ENDLESS_V1.lives,
     reserveMs: SOLO_ENDLESS_V1.reserveMs,
@@ -209,7 +212,13 @@ function advance(state: SoloState, atMs: number): SoloState {
 }
 
 function nextSlot(state: SoloState, context: DomainContext) {
-  return prepareSlot({ ...state, slotIndex: state.slotIndex + 1 }, context);
+  const completedRisk = (state.phase.kind === "reveal" || state.phase.kind === "feedback") && state.phase.round.risk;
+  const musicStage = completedRisk && state.slotIndex === 4
+    ? 1
+    : completedRisk && state.slotIndex === 14
+      ? 2
+      : state.musicStage ?? 0;
+  return prepareSlot({ ...state, musicStage, slotIndex: state.slotIndex + 1 }, context);
 }
 
 export function reduceSoloFrame(state: SoloState, frame: SoloFrame, context: DomainContext): SoloState {

@@ -380,7 +380,7 @@ test("uses the team pause dialog and resumes the solo run", async ({ page }, tes
   await captureSettled(page, testInfo.outputPath("solo-pause.png"));
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Настройки", exact: true })).toBeVisible();
-  await page.getByLabel("Громкость").fill("0.4");
+  await page.getByLabel("Громкость музыки").fill("0.4");
   await page.getByRole("button", { name: "Назад", exact: true }).click();
   await expect(page.getByRole("button", { name: "Продолжить", exact: true })).toBeVisible();
   await page.keyboard.press("Enter");

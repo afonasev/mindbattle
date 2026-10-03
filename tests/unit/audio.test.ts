@@ -48,8 +48,8 @@ describe("audio controller", () => {
   it("uses stable local URLs, loops themes and does not restart the active music cue", () => {
     expect(Object.values(AUDIO_CUE_MANIFEST).every(({ url }) => url.startsWith("/audio/"))).toBe(true);
     const sources: FakeSource[] = [];
-    const audio = new AudioController(factory(sources), { volume: 2, muted: false });
-    audio.update({ volume: 2, muted: false });
+    const audio = new AudioController(factory(sources), { musicVolume: 2, effectsVolume: 1, muted: false });
+    audio.update({ musicVolume: 2, effectsVolume: 1, muted: false });
     expect(audio.play("menu-theme")).toBe(true);
     expect(audio.play("countdown")).toBe(true);
     expect(audio.play("game-theme")).toBe(true);
@@ -61,22 +61,36 @@ describe("audio controller", () => {
 
   it("ducks active game music while keeping events at the requested volume", () => {
     const sources: FakeSource[] = [];
-    const audio = new AudioController(factory(sources), { volume: 0.5, muted: false });
+    const audio = new AudioController(factory(sources), { musicVolume: 0.5, effectsVolume: 0.8, muted: false });
     audio.play("game-theme");
     audio.setMusicDucked(true);
     expect(sources[0].volume).toBeCloseTo(0.14);
     audio.play("timer-last-second");
-    expect(sources[1].volume).toBeCloseTo(0.5);
+    expect(sources[1].volume).toBeCloseTo(0.8);
     audio.setMusicDucked(false);
     expect(sources[0].volume).toBeCloseTo(0.5);
   });
 
+  it("keeps music playback alive at zero volume and restores separate levels without restarting", () => {
+    const sources: FakeSource[] = [];
+    const audio = new AudioController(factory(sources), { musicVolume: 0.6, effectsVolume: 0.2, muted: false });
+    audio.play("game-theme");
+    audio.update({ musicVolume: 0, effectsVolume: 0.9, muted: false });
+    expect(sources[0]).toMatchObject({ paused: false, volume: 0, playCalls: 1 });
+    expect(audio.play("countdown")).toBe(true);
+    expect(sources[1].volume).toBeCloseTo(0.9);
+    audio.update({ musicVolume: 0.4, effectsVolume: 0.9, muted: false });
+    expect(audio.play("game-theme")).toBe(true);
+    expect(sources).toHaveLength(2);
+    expect(sources[0]).toMatchObject({ paused: false, volume: 0.4, playCalls: 1 });
+  });
+
   it("is silent when muted and survives source failure", async () => {
     const sources: FakeSource[] = [];
-    const audio = new AudioController(factory(sources), { volume: 0.5, muted: true });
+    const audio = new AudioController(factory(sources), { musicVolume: 0.5, effectsVolume: 0.5, muted: true });
     expect(audio.play("winner")).toBe(false);
     expect(sources).toEqual([]);
-    audio.update({ volume: 0.5, muted: false });
+    audio.update({ musicVolume: 0.5, effectsVolume: 0.5, muted: false });
     expect(audio.play("winner")).toBe(true);
     await Promise.resolve();
     expect(new AudioController(factory([], { throwOnCreate: true })).play("winner")).toBe(false);
@@ -150,12 +164,12 @@ describe("stage music and lifecycle", () => {
     audio.play("game-theme-two");
     audio.play("bonus");
     expect(sources[0].paused).toBe(false);
-    audio.update({ volume: .4, muted: false });
+    audio.update({ musicVolume: .4, effectsVolume: .2, muted: false });
     audio.play("game-theme-two");
     expect(sources).toHaveLength(2);
-    audio.update({ volume: .4, muted: true });
+    audio.update({ musicVolume: .4, effectsVolume: .2, muted: true });
     expect(sources[0].paused).toBe(true);
-    audio.update({ volume: .4, muted: false });
+    audio.update({ musicVolume: .4, effectsVolume: .2, muted: false });
     audio.play("game-theme-two");
     audio.stopMusic();
     audio.setMusicDucked(true);
@@ -167,7 +181,7 @@ describe("stage music and lifecycle", () => {
     vi.useFakeTimers();
     try {
       const sources: FakeSource[] = [];
-      const audio = new AudioController(factory(sources), { volume: .5, muted: false }, 650);
+      const audio = new AudioController(factory(sources), { musicVolume: .5, effectsVolume: .5, muted: false }, 650);
       audio.play("game-theme");
       audio.play("game-theme-two");
       expect(sources[1].volume).toBe(0);
@@ -179,7 +193,7 @@ describe("stage music and lifecycle", () => {
       expect(sources[1].volume).toBeCloseTo(.5);
       audio.play("game-theme-three");
       vi.advanceTimersByTime(100);
-      audio.update({ volume: .5, muted: true });
+      audio.update({ musicVolume: .5, effectsVolume: .5, muted: true });
       expect(sources[1].paused).toBe(true);
       expect(sources[2].paused).toBe(true);
       expect(vi.getTimerCount()).toBe(0);

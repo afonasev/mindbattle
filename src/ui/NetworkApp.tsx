@@ -107,14 +107,15 @@ export function NetworkApp() {
   const enableAudio = () => {
     if (!mobile && !audio.current)
       audio.current = sharedAudioController({
-        volume: preferences.volume,
+        musicVolume: preferences.musicVolume,
+        effectsVolume: preferences.effectsVolume,
         muted,
       });
   };
   useEffect(() => {
-    audio.current?.update({ volume: preferences.volume, muted });
+    audio.current?.update({ musicVolume: preferences.musicVolume, effectsVolume: preferences.effectsVolume, muted });
     if (muted) audio.current?.stopMusic();
-  }, [muted, preferences.volume]);
+  }, [muted, preferences.musicVolume, preferences.effectsVolume]);
   const savePreferences = (next: typeof preferences) => {
     setPreferences(next);
     try {
@@ -164,13 +165,13 @@ export function NetworkApp() {
     : 0);
   useEffect(() => {
     if (mobile || (snapshot && !shouldPlayNetworkAudio(snapshot.role, mobile))) return;
-    if (snapshot?.paused || muted || preferences.volume === 0) {
+    if (snapshot?.paused || muted) {
       audio.current?.stopMusic();
       return;
     }
     audio.current?.setMusicDucked(snapshot?.phase === "answering");
     audio.current?.play(musicCue);
-  }, [musicCue, snapshot?.phase, snapshot?.paused, snapshot?.epoch, snapshot?.role, credential, mobile, muted, preferences.volume]);
+  }, [musicCue, snapshot?.phase, snapshot?.paused, snapshot?.epoch, snapshot?.role, credential, mobile, muted, preferences.musicVolume, preferences.effectsVolume]);
   useEffect(() => {
     if (!snapshot || !shouldPlayNetworkAudio(snapshot.role, mobile) || snapshot.paused || snapshot.phase !== "reveal" || !snapshot.view) {
       if (snapshot?.phase !== "reveal") revealAudio.current.reset();

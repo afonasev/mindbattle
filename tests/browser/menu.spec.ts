@@ -21,10 +21,10 @@ test("persists presentation volume in the browser", async ({ page }) => {
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
-  await page.getByLabel("Громкость").fill("0.4");
+  await page.getByLabel("Громкость музыки").fill("0.4");
   await page.reload();
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
-  await expect(page.getByLabel("Громкость")).toHaveValue("0.4");
+  await expect(page.getByLabel("Громкость музыки")).toHaveValue("0.4");
 });
 
 for (const width of [1280, 390]) {
@@ -32,7 +32,7 @@ for (const width of [1280, 390]) {
     await page.setViewportSize({ width, height: 844 });
     await page.goto("/?muted=1");
     await page.getByRole("button", { name: "Настройки", exact: true }).click();
-    await expect(page.getByLabel("Громкость")).toBeVisible();
+    await expect(page.getByLabel("Громкость музыки")).toBeVisible();
     await page.keyboard.press("Escape");
     await page.getByRole("button", { name: "Рекорды", exact: true }).click();
     await page.getByRole("button", { name: "Назад", exact: true }).click();
@@ -43,7 +43,7 @@ for (const width of [1280, 390]) {
     await page.getByRole("button", { name: "Меню", exact: true }).click();
     await expect(page.getByRole("dialog", { name: "Игра на паузе", exact: true })).toBeVisible();
     await page.getByRole("button", { name: "Настройки", exact: true }).click();
-    await page.getByLabel("Громкость").fill("0.3");
+    await page.getByLabel("Громкость музыки").fill("0.3");
     await page.keyboard.press("Escape");
     await expect(page.getByRole("dialog", { name: "Игра на паузе", exact: true })).toBeVisible();
     await page.screenshot({ path: testInfo.outputPath(`shared-pause-${width}.png`), fullPage: true });
@@ -99,7 +99,7 @@ test("classic menu can pause twice and settings never resume its clock", async (
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible();
     await dialog.getByRole("button", { name: "Настройки", exact: true }).click();
-    await page.getByLabel("Громкость").fill("0.3");
+    await page.getByLabel("Громкость музыки").fill("0.3");
     await page.keyboard.press("Escape");
     await expect(page.getByRole("button", { name: "Продолжить", exact: true })).toBeVisible();
     const state = await page.evaluate(() => JSON.parse(localStorage.getItem("mindbattle:data:v1")!).lastMatch.state);

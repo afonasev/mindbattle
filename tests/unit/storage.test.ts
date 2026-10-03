@@ -31,6 +31,15 @@ class MemoryStorage implements StorageLike {
 }
 
 describe("versioned persistence", () => {
+  it("migrates one legacy volume into independent music and effects levels", () => {
+    expect(decodePersistedData(JSON.stringify({
+      ...emptyPersistedData("r1"),
+      preferences: { volume: 0.35, muted: true, textSize: "large", highContrast: false, reducedMotion: true }
+    }), "r1").preferences).toEqual({
+      musicVolume: 0.35, effectsVolume: 0.35, muted: true,
+      textSize: "large", highContrast: false, reducedMotion: true
+    });
+  });
   it("round-trips one last match, history and preferences", () => {
     const storage = new MemoryStorage();
     let data = emptyPersistedData("catalog-r1");
@@ -50,6 +59,13 @@ describe("versioned persistence", () => {
     ]);
     expect(savePersistedData(storage, data)).toBe(true);
     expect(loadPersistedData(storage, "catalog-r1")).toEqual(data);
+  });
+
+  it("round-trips independent audio volumes", () => {
+    const data = updatePreferences(emptyPersistedData("r1"), {
+      ...DEFAULT_PREFERENCES, musicVolume: 0.2, effectsVolume: 0.9
+    });
+    expect(decodePersistedData(JSON.stringify(data), "r1").preferences).toMatchObject({ musicVolume: 0.2, effectsVolume: 0.9 });
   });
 
   it("fails safe on corruption and unsupported versions", () => {

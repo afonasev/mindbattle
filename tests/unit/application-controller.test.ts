@@ -367,7 +367,7 @@ describe("GameController", () => {
       textSize: "large"
     });
     expect(loadPersistedData(storage, makeCatalog().revision).lastMatch).toEqual(snapshot);
-    expect(() => controller.updatePreferences({ volume: 2 })).toThrow(RangeError);
+    expect(() => controller.updatePreferences({ musicVolume: 2 })).toThrow(RangeError);
 
     const reloaded = makeController(storage, new FakeClock(), new FakeSeeds(["unused"]));
     expect(reloaded.preferences).toMatchObject({ muted: true, textSize: "large" });

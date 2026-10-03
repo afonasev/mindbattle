@@ -36,8 +36,10 @@ test("selected menu decodes, survives volume changes and resumes after mute", as
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
   await expect.poll(() => events(page, "play", "/audio/quiz-v1/menu.mp3")).toBeGreaterThan(0);
   const prior = await events(page, "play", "/audio/quiz-v1/menu.mp3");
-  await page.getByRole("slider", { name: "Громкость" }).fill("0.4");
+  await page.getByRole("slider", { name: "Громкость музыки" }).fill("0.4");
+  await page.getByRole("slider", { name: "Громкость эффектов" }).fill("0.8");
   expect(await events(page, "play", "/audio/quiz-v1/menu.mp3")).toBe(prior);
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("mindbattle:data:v1")!).preferences)).toMatchObject({ musicVolume: 0.4, effectsVolume: 0.8 });
   await page.getByRole("button", { name: "Звук включён", exact: true }).click();
   await expect.poll(() => events(page, "pause", "/audio/quiz-v1/menu.mp3")).toBeGreaterThan(0);
   await page.getByRole("button", { name: "Звук выключен", exact: true }).click();
@@ -82,4 +84,34 @@ test("solo uses the calm selected theme and retains question cues", async ({ pag
   await page.locator(".topic-choice").first().click();
   await expect.poll(() => events(page, "play", "/audio/arena-v1/question-start.wav")).toBe(1);
   expect(await events(page, "play", "/audio/quiz-v1/stage-one.mp3")).toBe(1);
+});
+
+test("solo advances after the first completed bonus and restores the saved music stage", async ({ page }) => {
+  await observeAudio(page);
+  await page.goto("/");
+  await page.getByRole("button", { name: "Настройки", exact: true }).click();
+  await page.getByLabel("Собирать обратную связь по вопросам").uncheck();
+  await page.getByRole("button", { name: "Назад", exact: true }).click();
+  await page.getByRole("button", { name: "Одиночная игра", exact: true }).click();
+  const answerCurrentQuestion = async (continueAfterReveal = true) => {
+    const state = await page.evaluate(() => JSON.parse(localStorage.getItem("mindbattle:data:v1")!).lastSolo.state);
+    await page.locator(`.solo-answer-button.answer-option--${state.phase.round.correctPosition}`).click();
+    await expect(page.locator(".question-stage--reveal")).toBeVisible();
+    if (continueAfterReveal) await page.locator(".question-stage--reveal .explanation").click();
+  };
+  for (let slot = 0; slot < 4; slot += 1) {
+    await page.locator(".topic-choice").first().click();
+    await answerCurrentQuestion();
+  }
+  expect(await events(page, "play", "/audio/quiz-v1/stage-two.mp3")).toBe(0);
+  await page.getByRole("button", { name: "Принять риск" }).click();
+  await answerCurrentQuestion(false);
+  expect(await events(page, "play", "/audio/quiz-v1/stage-two.mp3")).toBe(0);
+  await page.locator(".question-stage--reveal .explanation").click();
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("mindbattle:data:v1")!).lastSolo.state)).toMatchObject({ slotIndex: 5, musicStage: 1 });
+  await expect.poll(() => events(page, "play", "/audio/quiz-v1/stage-two.mp3")).toBe(1);
+  await page.reload();
+  await page.getByRole("button", { name: "Продолжить одиночную игру", exact: true }).click();
+  await page.getByRole("button", { name: "Продолжить", exact: true }).click();
+  await expect.poll(() => events(page, "play", "/audio/quiz-v1/stage-two.mp3")).toBe(1);
 });

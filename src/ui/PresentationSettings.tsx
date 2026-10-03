@@ -25,8 +25,12 @@ export function PresentationSettings({ preferences, setPreferences, back, sessio
           {preferences.muted ? "Звук выключен" : "Звук включён"}
         </button>
         <label className="settings-range">
-          <span>Громкость <strong>{Math.round(preferences.volume * 100)}%</strong></span>
-          <input aria-label="Громкость" type="range" min="0" max="1" step="0.1" value={preferences.volume} onChange={(event) => setPreferences({ ...preferences, volume: Number(event.target.value) })} />
+          <span>Музыка <strong>{Math.round(preferences.musicVolume * 100)}%</strong></span>
+          <input aria-label="Громкость музыки" type="range" min="0" max="1" step="0.1" value={preferences.musicVolume} onChange={(event) => setPreferences({ ...preferences, musicVolume: Number(event.target.value) })} />
+        </label>
+        <label className="settings-range">
+          <span>Эффекты <strong>{Math.round(preferences.effectsVolume * 100)}%</strong></span>
+          <input aria-label="Громкость эффектов" type="range" min="0" max="1" step="0.1" value={preferences.effectsVolume} onChange={(event) => setPreferences({ ...preferences, effectsVolume: Number(event.target.value) })} />
         </label>
       </section>
       <section className="settings-group" aria-labelledby="display-settings-title">

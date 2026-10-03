@@ -6,7 +6,8 @@ export const STORAGE_KEY = "mindbattle:data:v1";
 export const SOLO_RECORDS_STORAGE_KEY = "mindbattle:solo-records:v1";
 
 export interface AccessibilityPreferences {
-  readonly volume: number;
+  readonly musicVolume: number;
+  readonly effectsVolume: number;
   readonly muted: boolean;
   readonly textSize: "normal" | "large";
   readonly highContrast: boolean;
@@ -14,7 +15,8 @@ export interface AccessibilityPreferences {
 }
 
 export const DEFAULT_PREFERENCES: AccessibilityPreferences = {
-  volume: 0.7,
+  musicVolume: 0.7,
+  effectsVolume: 0.7,
   muted: false,
   textSize: "normal",
   highContrast: false,
@@ -108,10 +110,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 export function decodePreferences(value: unknown): AccessibilityPreferences | null {
   if (!isRecord(value)) return null;
+  const musicVolume = typeof value.musicVolume === "number" ? value.musicVolume : value.volume;
+  const effectsVolume = typeof value.effectsVolume === "number" ? value.effectsVolume : value.volume;
   if (
-    typeof value.volume !== "number" ||
-    value.volume < 0 ||
-    value.volume > 1 ||
+    typeof musicVolume !== "number" || musicVolume < 0 || musicVolume > 1 ||
+    typeof effectsVolume !== "number" || effectsVolume < 0 || effectsVolume > 1 ||
     typeof value.muted !== "boolean" ||
     (value.textSize !== "normal" && value.textSize !== "large") ||
     typeof value.highContrast !== "boolean" ||
@@ -120,7 +123,8 @@ export function decodePreferences(value: unknown): AccessibilityPreferences | nu
     return null;
   }
   return {
-    volume: value.volume,
+    musicVolume,
+    effectsVolume,
     muted: value.muted,
     textSize: value.textSize,
     highContrast: value.highContrast,

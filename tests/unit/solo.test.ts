@@ -100,6 +100,47 @@ describe("solo-endless-v1", () => {
     expect(next.lives).toBe(3);
     expect(next.usedQuestionIds).toEqual([]);
     expect(next.slotIndex).toBe(5);
+    expect(next.musicStage).toBe(0);
+  });
+
+  it.each([[4, 0], [9, 1], [14, 1]] as const)("does not advance music when risk in slot %i is declined", (slotIndex, musicStage) => {
+    const initial = createSoloRun({ profile: "solo-endless-v1" }, `decline-music-${slotIndex}`, 0, context());
+    const risk = { ...initial, slotIndex, musicStage, phase: { kind: "risk", difficulty: "medium" } as const };
+    expect(frame(risk, [{ type: "decline-risk" }]).musicStage).toBe(musicStage);
+  });
+
+  it("advances solo music only when bonus questions in slots 4 and 14 are completed", () => {
+    let state = createSoloRun({ profile: "solo-endless-v1", collectQuestionFeedback: false }, "music-milestones", 0, context());
+    for (let index = 0; index < 4; index += 1) state = finishCorrectQuestion(state);
+    expect(state.slotIndex).toBe(4);
+    expect(state.phase.kind).toBe("risk");
+    state = finishCorrectQuestion(state);
+    expect(state).toMatchObject({ slotIndex: 5, musicStage: 1 });
+    for (let index = 5; index < 9; index += 1) state = finishCorrectQuestion(state);
+    expect(state.slotIndex).toBe(9);
+    state = finishCorrectQuestion(state);
+    expect(state).toMatchObject({ slotIndex: 10, musicStage: 1 });
+    for (let index = 10; index < 14; index += 1) state = finishCorrectQuestion(state);
+    expect(state.slotIndex).toBe(14);
+    state = finishCorrectQuestion(state);
+    expect(state).toMatchObject({ slotIndex: 15, musicStage: 2 });
+    state = finishCorrectQuestion(state);
+    expect(state.musicStage).toBe(2);
+  });
+
+  it("keeps bonus music progression through reveal and feedback until completion", () => {
+    let state = createSoloRun({ profile: "solo-endless-v1" }, "music-feedback", 0, context());
+    state = { ...state, slotIndex: 4, phase: { kind: "risk", difficulty: "easy" } };
+    state = frame(state, [{ type: "accept-risk" }]);
+    if (state.phase.kind !== "answering") throw new Error("Expected bonus answer");
+    state = frame(state, [{ type: "answer", position: state.phase.round.correctPosition }]);
+    expect(state.musicStage).toBe(0);
+    state = frame(state, [{ type: "continue" }]);
+    expect(state.phase.kind).toBe("feedback");
+    expect(state.musicStage).toBe(0);
+    if (state.phase.kind !== "feedback") throw new Error("Expected feedback");
+    state = frame(state, [{ type: "confirm-feedback", eventId: state.phase.eventId }]);
+    expect(state).toMatchObject({ slotIndex: 5, musicStage: 1 });
   });
 
   it("confirms the risk option selected by the same horizontal cursor as menus", () => {

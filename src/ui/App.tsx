@@ -621,19 +621,19 @@ export function App() {
   }, [match?.phase.kind]);
 
   const musicPhase = solo?.phase.kind ?? match?.phase.kind ?? null;
-  const musicCue = presentationMusicCue(musicPhase, match
-    ? classicMusicStage(match.mainQuestionIndex, match.config.questionCount, !!match.tieBreak)
-    : 0);
+  const musicCue = presentationMusicCue(musicPhase, solo
+    ? (solo.musicStage ?? 0)
+    : match ? classicMusicStage(match.mainQuestionIndex, match.config.questionCount, !!match.tieBreak) : 0);
   const musicPaused = solo?.paused ?? !!match?.pause;
   useEffect(() => {
     audioRef.current.update(preferences);
-    if (musicPaused || preferences.muted || preferences.volume === 0) {
+    if (musicPaused || preferences.muted) {
       audioRef.current.stopMusic();
       return;
     }
     audioRef.current.setMusicDucked(musicPhase === "answering");
     audioRef.current.play(musicCue);
-  }, [musicCue, musicPhase, musicPaused, preferences.muted, preferences.volume]);
+  }, [musicCue, musicPhase, musicPaused, preferences.muted, preferences.musicVolume, preferences.effectsVolume]);
 
   useEffect(() => {
     if (!match || match.pause || match.phase.kind !== "reveal") {

@@ -42,7 +42,8 @@ export const AUDIO_CUE_MANIFEST: Readonly<Record<AudioCue, AudioCueDefinition>> 
 };
 
 export interface AudioSettings {
-  readonly volume: number;
+  readonly musicVolume: number;
+  readonly effectsVolume: number;
   readonly muted: boolean;
 }
 
@@ -69,7 +70,7 @@ export class AudioController {
 
   constructor(
     private readonly sourceFactory: AudioSourceFactory,
-    initial: AudioSettings = { volume: 0.7, muted: false },
+    initial: AudioSettings = { musicVolume: 0.7, effectsVolume: 0.7, muted: false },
     private readonly musicTransitionMs = 0
   ) {
     this.settings = initial;
@@ -78,9 +79,10 @@ export class AudioController {
   update(settings: AudioSettings) {
     this.settings = {
       muted: settings.muted,
-      volume: Math.min(1, Math.max(0, settings.volume))
+      musicVolume: Math.min(1, Math.max(0, settings.musicVolume)),
+      effectsVolume: Math.min(1, Math.max(0, settings.effectsVolume))
     };
-    if (this.settings.muted || this.settings.volume === 0) this.stopMusic();
+    if (this.settings.muted) this.stopMusic();
     this.applyMusicVolume();
   }
 
@@ -90,7 +92,7 @@ export class AudioController {
   }
 
   private applyMusicVolume(): void {
-    if (this.activeMusic) this.activeMusic.volume = this.settings.volume * (this.musicDucked ? 0.28 : 1) * this.fadeProgress;
+    if (this.activeMusic) this.activeMusic.volume = this.settings.musicVolume * (this.musicDucked ? 0.28 : 1) * this.fadeProgress;
   }
 
   private clearTransition(): void {
@@ -118,15 +120,16 @@ export class AudioController {
   }
 
   play(cue: AudioCue): boolean {
-    if (this.settings.muted || this.settings.volume === 0) return false;
     const definition = AUDIO_CUE_MANIFEST[cue];
+    const volume = definition.track === "music" ? this.settings.musicVolume : this.settings.effectsVolume;
+    if (this.settings.muted || volume === 0) return false;
     if (definition.track === "music" && this.activeMusic && this.activeMusicCue === cue) {
       this.applyMusicVolume();
       return true;
     }
     try {
       const source = this.sourceFactory.create(definition.url);
-      source.volume = this.settings.volume * (definition.track === "music" && this.musicDucked ? 0.28 : 1);
+      source.volume = volume * (definition.track === "music" && this.musicDucked ? 0.28 : 1);
       source.currentTime = 0;
       source.loop = definition.loop === true;
       if (definition.track === "music") {

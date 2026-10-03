@@ -284,7 +284,7 @@ export class GameController {
 
   updatePreferences(patch: Partial<AccessibilityPreferences>): AccessibilityPreferences {
     const preferences = { ...this.persisted.preferences, ...patch };
-    if (!Number.isFinite(preferences.volume) || preferences.volume < 0 || preferences.volume > 1) {
+    if (![preferences.musicVolume, preferences.effectsVolume].every((volume) => Number.isFinite(volume) && volume >= 0 && volume <= 1)) {
       throw new RangeError("Volume must be between 0 and 1");
     }
     this.persisted = replacePreferences(this.persisted, preferences);

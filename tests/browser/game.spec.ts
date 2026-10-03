@@ -185,7 +185,7 @@ test("confirms a normal topic for three seconds or a new press before the questi
   await expect(page.getByRole("dialog")).toBeVisible();
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Настройки", exact: true })).toBeVisible();
-  await page.getByLabel("Громкость").fill("0.4");
+  await page.getByLabel("Громкость музыки").fill("0.4");
   await page.getByRole("button", { name: "Назад", exact: true }).click();
   await expect(page.getByRole("button", { name: "Продолжить", exact: true })).toBeVisible();
   const paused = await storedState(page);
