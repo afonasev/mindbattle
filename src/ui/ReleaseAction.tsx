@@ -64,6 +64,7 @@ export function ReleaseAction({ safe = true }: { safe?: boolean }) {
           <a
             className="pwa-update release-action"
             href={url}
+            download
             title="Скачать игру"
             aria-label="Скачать игру"
           >
