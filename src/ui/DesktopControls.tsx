@@ -1,14 +1,14 @@
+import { MenuAction } from "./menuUi";
 import { useEffect, useState } from "react";
 import { desktop, type DisplaySettings } from "../desktop";
 export function DesktopQuit() {
   return desktop ? (
-    <button
+    <MenuAction
       type="button"
-      className="secondary-action"
       onClick={() => void desktop!.quit()}
     >
       Выход из игры
-    </button>
+    </MenuAction>
   ) : null;
 }
 export function DesktopDisplaySettings() {

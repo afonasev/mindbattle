@@ -226,10 +226,12 @@ test("menu defaults, offline startup and responsive shell", async ({ context, pa
   });
 
   await expect(page).toHaveTitle(/Mindbattle/);
+  await expect(page.getByRole("heading", { name: "Классическая игра", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Назад", exact: true }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Mindbattle" })).toBeVisible();
-  await page.getByRole("button", { name: "Назад к режимам", exact: true }).click();
   await expect(page.getByRole("button", { name: "Одиночная игра", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "На одном устройстве (2–4)", exact: true })).toBeVisible();
+  await openClassicSetup(page);
   await expect(
     page.getByLabel("Контроллер команды Зелёная").locator("option:checked")
   ).toHaveText("WASD");
@@ -246,6 +248,7 @@ test("menu defaults, offline startup and responsive shell", async ({ context, pa
   expect(metrics.scrollHeight).toBeLessThanOrEqual(metrics.innerHeight);
   await captureSettled(page, testInfo.outputPath("menu.png"));
 
+  await page.getByRole("button", { name: "Назад", exact: true }).click();
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
   await captureSettled(page, testInfo.outputPath("menu-settings.png"));
   await page.getByLabel("Крупный текст").check();
@@ -320,7 +323,7 @@ test("skips question feedback without calling its API when the match setting is 
     if (new URL(request.url()).pathname === "/api/difficulty-feedback") feedbackRequests += 1;
   });
 
-  await page.getByRole("button", { name: "Назад к режимам", exact: true }).click();
+  await page.getByRole("button", { name: "Назад", exact: true }).click();
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
   await page.getByLabel("Собирать обратную связь по вопросам").uncheck();
   await page.getByRole("button", { name: "Назад", exact: true }).click();
@@ -642,7 +645,7 @@ test("supports N+1 public bonus veto for three and four assigned teams", async (
     await page.reload();
     await muteAudio(page);
     await openClassicSetup(page);
-    await page.getByRole("button", { name: "Назад к режимам", exact: true }).click();
+    await page.getByRole("button", { name: "Назад", exact: true }).click();
     await page.getByRole("button", { name: "Настройки", exact: true }).click();
     await page.getByLabel("Собирать обратную связь по вопросам").uncheck();
     await page.getByRole("button", { name: "Назад", exact: true }).click();

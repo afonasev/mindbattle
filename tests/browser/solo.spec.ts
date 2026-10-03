@@ -375,7 +375,7 @@ test("uses the team pause dialog and resumes the solo run", async ({ page }, tes
 
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Соло-забег восстановлен" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Игра на паузе" })).toBeVisible();
   await expect(page.locator(".game-brand")).toBeVisible();
   await captureSettled(page, testInfo.outputPath("solo-pause.png"));
   await page.getByRole("button", { name: "Настройки", exact: true }).click();

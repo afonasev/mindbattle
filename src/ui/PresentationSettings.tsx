@@ -1,10 +1,12 @@
+import { MenuAction, MenuDialog } from "./menuUi";
 import { DesktopDisplaySettings } from "./DesktopControls";
 import type { AccessibilityPreferences } from "../adapters/storage";
 
-export function PresentationSettings({ preferences, setPreferences, back }: {
+export function PresentationSettings({ preferences, setPreferences, back, session }: {
   readonly preferences: AccessibilityPreferences;
   readonly setPreferences: (preferences: AccessibilityPreferences) => void;
-  readonly back: () => void;
+  readonly back?: () => void;
+  readonly session?: { readonly collectQuestionFeedback: boolean; readonly setCollectQuestionFeedback: (value: boolean) => void; readonly resetHistory: () => void };
 }) {
   return <section className="setup-stage menu-settings-stage" aria-labelledby="menu-settings-title">
     <div className="settings-stage-heading">
@@ -13,7 +15,7 @@ export function PresentationSettings({ preferences, setPreferences, back }: {
         <h2 id="menu-settings-title">Настройки</h2>
         <p>Сделайте партию комфортной, не меняя её правил.</p>
       </div>
-      <button className="secondary-action settings-back" type="button" onClick={back}>Назад</button>
+      {back && <MenuAction className="settings-back navigation-action" onClick={back}>Назад</MenuAction>}
     </div>
     <div className="settings-grid">
             <DesktopDisplaySettings />
@@ -33,6 +35,11 @@ export function PresentationSettings({ preferences, setPreferences, back }: {
         <label className="settings-check"><input type="checkbox" checked={preferences.highContrast} onChange={(event) => setPreferences({ ...preferences, highContrast: event.target.checked })} /><span>Высокий контраст</span></label>
         <label className="settings-check"><input type="checkbox" checked={preferences.reducedMotion} onChange={(event) => setPreferences({ ...preferences, reducedMotion: event.target.checked })} /><span>Без анимации</span></label>
       </section>
+      {session && <section className="settings-group settings-group--session" aria-labelledby="session-settings-title"><h3 id="session-settings-title">Партия и история</h3><label className="settings-check"><input type="checkbox" checked={session.collectQuestionFeedback} onChange={(event) => session.setCollectQuestionFeedback(event.target.checked)} /><span>Собирать обратную связь по вопросам</span></label><MenuAction onClick={session.resetHistory}>Сбросить историю вопросов</MenuAction></section>}
     </div>
   </section>;
+}
+
+export function SettingsDialog(props: Parameters<typeof PresentationSettings>[0] & { readonly back: () => void }) {
+  return <MenuDialog wide title="Настройки" back={props.back}><PresentationSettings {...props} /></MenuDialog>;
 }

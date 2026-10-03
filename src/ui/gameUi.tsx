@@ -1,3 +1,4 @@
+import { SessionMenu } from "./menuUi";
 import type { TeamControlAssignment } from "../adapters";
 import { GAMEPAD_GLYPHS, KEYBOARD_CONFIRM_GLYPHS, KEYBOARD_GLYPHS } from "../adapters";
 import type {
@@ -405,16 +406,5 @@ export function PauseOverlay({
   readonly restart: () => void;
   readonly exit: () => void;
 }) {
-  return (
-    <div className="pause-backdrop" role="dialog" aria-modal="true" aria-labelledby="pause-title">
-      <section className="pause-dialog">
-        <div className="stage-label">Пауза</div>
-        <h2 id="pause-title">{reason}</h2>
-        <button type="button" onClick={resume}>Продолжить</button>
-        <button type="button" onClick={settings}>Настройки</button>
-        <button type="button" onClick={restart}>Начать заново</button>
-        <button type="button" onClick={exit}>Выйти в меню</button>
-      </section>
-    </div>
-  );
+  return <SessionMenu title={reason} resume={resume} settings={settings} restart={restart} exit={exit} />;
 }

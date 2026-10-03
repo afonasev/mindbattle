@@ -294,7 +294,7 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
       .getByRole("button", { name: "Продолжить без Участник 2", exact: true })
       .click();
     await expect(page.locator(".network-standings tbody tr").filter({hasText:"Участник 2"}).getByText("Выбыл", {exact:true})).toBeVisible();
-    await phones[0].getByRole("button", { name: "Пауза", exact: true }).click();
+    await phones[0].getByRole("button", { name: "Меню", exact: true }).click();
     await phones[0].getByRole("button", { name: "Настройки", exact: true }).click();
     await expect(phones[0].getByRole("heading", { name: "Настройки", exact: true })).toBeVisible();
     await phones[0].getByRole("button", { name: "Назад", exact: true }).click();
@@ -342,7 +342,7 @@ test("network entry keeps the menu music playing", async ({ page }) => {
     };
   });
   await page.goto("/");
-  await page.getByRole("link", { name: "Сетевая игра (2–12)", exact: true }).click();
+  await page.getByRole("button", { name: "Сетевая игра (2–12)", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Соберите свою компанию" })).toBeVisible();
   await expect.poll(() => page.evaluate(() => (window as Window & { __musicEvents?: string[] }).__musicEvents ?? [])).toEqual(["play"]);
 });

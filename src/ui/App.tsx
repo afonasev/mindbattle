@@ -1,3 +1,4 @@
+import { MenuAction, ScreenHeader, ScreenSurface } from "./menuUi";
 import { ReleaseAction } from "./ReleaseAction";
 import { browserResults } from '../statistics/outbox';
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -42,7 +43,7 @@ import {
 } from "./gameUi";
 import { SoloFeedbackScreen, SoloRecordsScreen, SoloScreen } from "./soloUi";
 import { FeedbackUnavailableDialog, type FeedbackRecoveryChoice } from "./FeedbackUnavailableDialog";
-import { PresentationSettings } from "./PresentationSettings";
+import { SettingsDialog } from "./PresentationSettings";
 import { navigate } from "../main";
 import { QueuedDifficultyFeedbackSink } from "../feedback";
 import { canApplyPwaUpdate } from "../pwaUpdate";
@@ -324,6 +325,7 @@ export function App() {
             ? "difficulty-feedback"
           : "continue";
     const keyboard = (event: KeyboardEvent) => {
+      if ((pauseSettingsOpen || match?.pause) && event.type === "keydown") return;
       if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) return;
       const result = handleKeyboardInput(
         inputRef.current,
@@ -355,7 +357,7 @@ export function App() {
       window.removeEventListener("keyup", keyboard);
       window.removeEventListener("blur", blur);
     };
-  }, [dispatch, match, semanticToDomain, settings.assignments]);
+  }, [dispatch, match, pauseSettingsOpen, semanticToDomain, settings.assignments]);
 
   useEffect(() => {
     if (!match) return;
@@ -387,12 +389,12 @@ export function App() {
       );
       inputRef.current = result.state;
       const commands = semanticToDomain(result.actions);
-      if (commands.length > 0) dispatch(commands);
+      if (commands.length > 0 && !pauseSettingsOpen) dispatch(commands);
       frame = requestAnimationFrame(poll);
     };
     frame = requestAnimationFrame(poll);
     return () => cancelAnimationFrame(frame);
-  }, [controller, dispatch, match, semanticToDomain, settings.assignments]);
+  }, [controller, dispatch, match, pauseSettingsOpen, semanticToDomain, settings.assignments]);
 
   useEffect(() => {
     if (
@@ -416,6 +418,7 @@ export function App() {
   useEffect(() => {
     if (!solo) return;
     const keyboard = (event: KeyboardEvent) => {
+      if (pauseSettingsOpen || solo?.paused) return;
       if (event.type !== "keydown" || event.repeat || event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) return;
       const current = soloController.state;
       if (current?.paused && (event.code === "Escape" || event.code === "Enter" || event.code === "Space")) {
@@ -496,7 +499,7 @@ export function App() {
     };
     window.addEventListener("keydown", keyboard);
     return () => window.removeEventListener("keydown", keyboard);
-  }, [dispatchSolo, feedbackRecoveryChoice, skipSoloFeedback, solo, soloController, soloRecordId, submitSoloFeedback]);
+  }, [dispatchSolo, feedbackRecoveryChoice, pauseSettingsOpen, skipSoloFeedback, solo, soloController, soloRecordId, submitSoloFeedback]);
 
   useEffect(() => {
     if (!solo) return;
@@ -508,7 +511,7 @@ export function App() {
         const previous = soloGamepadButtonsRef.current.get(gamepad.index) ?? [];
         const button = gamepad.buttons.findIndex((down, index) => down && !previous[index]);
         soloGamepadButtonsRef.current.set(gamepad.index, gamepad.buttons);
-        if (button < 0) continue;
+        if (button < 0 || pauseSettingsOpen) continue;
         if (phase?.kind === "feedback" && soloController.difficultyFeedbackStatus === "error") {
           if (button === 14) setFeedbackRecoveryChoice("retry");
           else if (button === 15) setFeedbackRecoveryChoice("skip");
@@ -572,7 +575,7 @@ export function App() {
     };
     frame = requestAnimationFrame(poll);
     return () => cancelAnimationFrame(frame);
-  }, [dispatchSolo, feedbackRecoveryChoice, skipSoloFeedback, solo, soloController, soloRecordId, submitSoloFeedback]);
+  }, [dispatchSolo, feedbackRecoveryChoice, pauseSettingsOpen, skipSoloFeedback, solo, soloController, soloRecordId, submitSoloFeedback]);
 
   useEffect(() => {
     if (match || solo) {
@@ -700,7 +703,7 @@ export function App() {
       if (saved.muted) audioRef.current.stopMusic();
       setPreferences(saved);
     };
-    return <div className={rootClass}>{<ReleaseAction safe={canApplyPwaUpdate(false, solo.phase.kind)} />}{pauseSettingsOpen ? <PresentationSettings preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} /> : solo.phase.kind === "feedback" ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} exit={() => setSolo(null)} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} settings={() => setPauseSettingsOpen(true)} command={(command) => { setSoloInput("pointer"); setSolo(soloController.dispatch([command])); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}{solo.phase.kind === "feedback" && soloController.difficultyFeedbackStatus === "error" && <FeedbackUnavailableDialog selected={feedbackRecoveryChoice} onSelect={setFeedbackRecoveryChoice} onRetry={() => { setFeedbackRecoveryChoice("retry"); void submitSoloFeedback(); }} onSkip={skipSoloFeedback} />}</div>;
+    return <div className={rootClass}>{<ReleaseAction safe={canApplyPwaUpdate(false, solo.phase.kind)} />}{pauseSettingsOpen ? <SettingsDialog preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} /> : solo.phase.kind === "feedback" && !solo.paused ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} exit={() => dispatchSolo({ type: "pause" })} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} settings={() => setPauseSettingsOpen(true)} command={(command) => { setSoloInput("pointer"); setSolo(soloController.dispatch([command])); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}{solo.phase.kind === "feedback" && !solo.paused && !pauseSettingsOpen && soloController.difficultyFeedbackStatus === "error" && <FeedbackUnavailableDialog selected={feedbackRecoveryChoice} onSelect={setFeedbackRecoveryChoice} onRetry={() => { setFeedbackRecoveryChoice("retry"); void submitSoloFeedback(); }} onSkip={skipSoloFeedback} />}</div>;
   }
 
   if (!match || !controller.view) {
@@ -759,7 +762,7 @@ export function App() {
   const pauseReason = match.pause?.reasons[0];
 
   if (pauseSettingsOpen) {
-    return <div className={rootClass}><PresentationSettings preferences={preferences} setPreferences={(next) => {
+    return <div className={rootClass}><SettingsDialog preferences={preferences} setPreferences={(next) => {
       const saved = controller.updatePreferences(next);
       audioRef.current.update(saved);
       if (saved.muted) audioRef.current.stopMusic();
@@ -769,20 +772,8 @@ export function App() {
 
   return (
     <div className={rootClass}>
-      <main className="game-shell">
-        <div className="arena-glow" aria-hidden="true" />
-        <header className="game-brand">
-          <strong>Mindbattle</strong>
-          <span>
-            {match.tieBreak
-              ? "Финальная битва"
-              : `Этап ${
-                  Math.floor(
-                    match.mainQuestionIndex / (match.config.questionCount / 3)
-                  ) + 1
-                }`}
-          </span>
-        </header>
+      <ScreenSurface className="game-shell">
+        <ScreenHeader subtitle={match.tieBreak ? "Финальная битва" : `Этап ${Math.floor(match.mainQuestionIndex / (match.config.questionCount / 3)) + 1}`} menu={() => view.phase === "finished" ? setMatch(null) : dispatch([{ type: "pause", reason: { kind: "manual" } }])} />
 
         {view.phase === "normal-topic" && (
           <TopicSelection
@@ -833,12 +824,12 @@ export function App() {
             <h2>{TEAM_META[view.winnerId!].label} команда</h2>
             <Standings rows={view.standings ?? []} title="Итоговая таблица" footer="" />
             <div className="winner-actions">
-              <button type="button" className="primary-action" onClick={restart}>
+              <MenuAction variant="primary" onClick={restart}>
                 Начать заново
-              </button>
-              <button type="button" className="secondary-action" onClick={() => setMatch(null)}>
+              </MenuAction>
+              <MenuAction onClick={() => setMatch(null)}>
                 Выйти в меню
-              </button>
+              </MenuAction>
             </div>
           </section>
         )}
@@ -847,7 +838,7 @@ export function App() {
           <TeamCards state={match} view={view} activeTeamIds={match.config.teams} />
         )}
         <footer>ESC · пауза</footer>
-      </main>
+      </ScreenSurface>
 
       {match.pause && (
         <PauseOverlay
@@ -866,7 +857,7 @@ export function App() {
           exit={() => setMatch(null)}
         />
       )}
-      {match.phase.kind === "difficulty-feedback" && controller.difficultyFeedbackStatus === "error" && (
+      {match.phase.kind === "difficulty-feedback" && !match.pause && controller.difficultyFeedbackStatus === "error" && (
         <FeedbackUnavailableDialog
           selected={feedbackRecoveryChoice}
           onSelect={setFeedbackRecoveryChoice}
