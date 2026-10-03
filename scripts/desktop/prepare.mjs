@@ -19,7 +19,7 @@ if (!Number.isSafeInteger(sequence) || sequence < 1)
   throw new Error("Invalid sequence");
 const config = JSON.parse(await readFile("desktop/config.json", "utf8"));
 const output = path.resolve("desktop-release");
-await rm(output, { recursive: true, force: true });
+await rm(path.join(output, "content"), { recursive: true, force: true });
 await mkdir(path.join(output, "content", "objects"), { recursive: true });
 const files = [];
 async function walk(dir, relative = "") {

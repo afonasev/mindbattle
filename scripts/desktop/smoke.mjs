@@ -62,6 +62,7 @@ try {
   await page.screenshot({ path: path.join(evidence, "desktop-menu.png") });
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
   await page.getByLabel("Разрешение окна").selectOption("1600x900");
+  await app.evaluate(({app, BrowserWindow})=>{app.focus({steal:true}); BrowserWindow.getAllWindows()[0].focus();});
   await page.getByLabel("Режим экрана").selectOption("full");
   for (
     let i = 0;
@@ -72,6 +73,7 @@ try {
     i++
   )
     await new Promise((r) => setTimeout(r, 100));
+  if(!(await app.evaluate(({ BrowserWindow })=>BrowserWindow.getAllWindows()[0].isFullScreen()))) console.error("Fullscreen diagnostic", await app.evaluate(({BrowserWindow})=>{const w=BrowserWindow.getAllWindows()[0];return {fullscreenable:w.isFullScreenable(), visible:w.isVisible(), focused:w.isFocused(),bounds:w.getBounds()};}), await page.getByLabel("Режим экрана").inputValue(), await page.locator("body").innerText(), await page.evaluate(()=>window.mindbattleDesktop.display()));
   assert.equal(
     await app.evaluate(({ BrowserWindow }) =>
       BrowserWindow.getAllWindows()[0].isFullScreen(),

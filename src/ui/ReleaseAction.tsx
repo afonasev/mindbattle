@@ -49,8 +49,8 @@ export function ReleaseAction({ safe = true }: { safe?: boolean }) {
           onClick={() => {
             setBusy(true);
             void applyPwaUpdate()
-              .catch(() =>
-                setError("Обновление не применилось. Попробуйте ещё раз."),
+              .catch((e: unknown) =>
+                setError(e instanceof Error && desktop ? e.message.replace(/^Error invoking remote method[^:]*: Error: /, "") : "Обновление не применилось. Попробуйте ещё раз."),
               )
               .finally(() => setBusy(false));
           }}

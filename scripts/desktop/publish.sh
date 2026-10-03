@@ -2,7 +2,7 @@
 # Explicit release operation. Requires production authorization; never called by build/deploy.
 set -euo pipefail
 kind="${1:-}"
-case "$kind" in content|installers) ;; *) echo 'Usage: publish.sh content|installers' >&2; exit 2;; esac
+case "$kind" in content|shell|installers) ;; *) echo 'Usage: publish.sh content|shell|installers' >&2; exit 2;; esac
 node scripts/desktop/verify-release.mjs "$kind"
 source_dir="desktop-release/${kind}"
 test -d "$source_dir"
