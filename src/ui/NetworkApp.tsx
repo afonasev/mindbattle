@@ -1,3 +1,7 @@
+import { MatchSetupFields } from "./MatchSetupFields";
+import { MenuAction, ScreenHeader, ScreenSurface, SessionMenu } from "./menuUi";
+import { navigate } from "../main";
+import { ReleaseAction } from "./ReleaseAction";
 import { useEffect, useRef, useState } from "react";
 import {
   NetworkConnection,
@@ -14,6 +18,8 @@ import type {
 import {
   AudioController,
   phaseAudioActions,
+  classicMusicStage,
+  presentationMusicCue,
   RevealAudioMonitor,
   shouldPlayNetworkAudio,
   sharedAudioController,
@@ -26,7 +32,7 @@ import {
 } from "../adapters/storage";
 import "./network.css";
 import { phoneStatus } from "./networkStatus";
-import { PresentationSettings } from "./PresentationSettings";
+import { SettingsDialog } from "./PresentationSettings";
 import { FeedbackUnavailableDialog, type FeedbackRecoveryChoice } from "./FeedbackUnavailableDialog";
 function initialPreferences() {
   try {
@@ -89,6 +95,7 @@ export function NetworkApp() {
   const [busy, setBusy] = useState(false);
   const [preferences, setPreferences] = useState(initialPreferences);
   const [pauseSettingsOpen, setPauseSettingsOpen] = useState(false);
+  const [localMenuOpen, setLocalMenuOpen] = useState(false);
   const muted =
     new URLSearchParams(location.search).get("muted") === "1" ||
     preferences.muted;
@@ -141,18 +148,29 @@ export function NetworkApp() {
   }, [credential]);
   useEffect(() => {
     if (!snapshot || !shouldPlayNetworkAudio(snapshot.role, mobile)) return;
+    if (snapshot.paused) return;
     const signature = `${snapshot.epoch}:${snapshot.phase}`;
     if (lastPhase.current === signature) return;
     const previousPhase = lastPhase.current.split(":")[1] || null;
     lastPhase.current = signature;
-    if (snapshot.paused) return;
     for (const action of phaseAudioActions(previousPhase, snapshot.phase)) {
       if (action.type === "stop-music") audio.current?.stopMusic();
       else if (action.type === "set-music-ducked") audio.current?.setMusicDucked(action.ducked);
       else audio.current?.play(action.cue);
     }
-    if (snapshot.phase === "lobby") audio.current?.play("menu-theme");
-  }, [snapshot?.phase, snapshot?.epoch, mobile]);
+  }, [snapshot?.phase, snapshot?.epoch, snapshot?.paused, mobile]);
+  const musicCue = presentationMusicCue(snapshot?.phase ?? "lobby", snapshot
+    ? classicMusicStage((snapshot.questionNumber ?? 1) - 1, snapshot.settings.questionCount, !!snapshot.tieBreakNumber)
+    : 0);
+  useEffect(() => {
+    if (mobile || (snapshot && !shouldPlayNetworkAudio(snapshot.role, mobile))) return;
+    if (snapshot?.paused || muted || preferences.volume === 0) {
+      audio.current?.stopMusic();
+      return;
+    }
+    audio.current?.setMusicDucked(snapshot?.phase === "answering");
+    audio.current?.play(musicCue);
+  }, [musicCue, snapshot?.phase, snapshot?.paused, snapshot?.epoch, snapshot?.role, credential, mobile, muted, preferences.volume]);
   useEffect(() => {
     if (!snapshot || !shouldPlayNetworkAudio(snapshot.role, mobile) || snapshot.paused || snapshot.phase !== "reveal" || !snapshot.view) {
       if (snapshot?.phase !== "reveal") revealAudio.current.reset();
@@ -200,17 +218,22 @@ export function NetworkApp() {
     }
   }
   async function act(action: NetworkAction) {
-    if (!snapshot || !connection.current || busy) return;
+    if (!snapshot || !connection.current || busy) return false;
     setBusy(true);
     setError("");
     enableAudio();
     try {
       await connection.current.command(snapshot, action);
+      return true;
     } catch (e) {
       setError((e as Error).message);
+      return false;
     } finally {
       setBusy(false);
     }
+  }
+  async function exitRoom() {
+    if (await act({ type: "close" })) { reset(); navigate("/"); }
   }
   function reset() {
     if (credential) forgetCredential(credential);
@@ -219,6 +242,8 @@ export function NetworkApp() {
     setTerminal(false);
     setStatus("");
     setError("");
+    setLocalMenuOpen(false);
+    setPauseSettingsOpen(false);
   }
   const locked = busy || !!status || !!snapshot?.paused;
   const view = snapshot?.view;
@@ -230,11 +255,24 @@ export function NetworkApp() {
     !!snapshot?.isLeader &&
     phase === "topic-confirmation" &&
     !locked;
+  function openMenu() {
+    if (snapshot?.isLeader && phase !== "lobby" && phase !== "finished" && !snapshot.paused) void act({ type: "pause" });
+    else setLocalMenuOpen(true);
+  }
+  useEffect(() => {
+    const keyboard = (event: KeyboardEvent) => {
+      if (event.code !== "Escape" || event.repeat || event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
+      event.preventDefault();
+      if (credential && !terminal) openMenu();
+    };
+    window.addEventListener("keydown", keyboard);
+    return () => window.removeEventListener("keydown", keyboard);
+  });
   return (
-    <main
+    <ScreenSurface
       className={`game-shell network-app ${mobile ? "network-mobile" : "network-display"} ${preferences.textSize === "large" ? "network-text-large" : ""} ${preferences.highContrast ? "network-high-contrast" : ""} ${preferences.reducedMotion ? "reduced-motion" : ""}`}
       onClick={
-        canSkipConfirmation
+        canSkipConfirmation && !localMenuOpen && !pauseSettingsOpen
           ? (event) => {
               event.preventDefault();
               void act({ type: "continue" });
@@ -242,10 +280,8 @@ export function NetworkApp() {
           : undefined
       }
     >
-      <header className="game-brand network-header">
-        <a href="/">MINDBATTLE</a>
-        <span>Сетевая игра{snapshot ? ` · ${snapshot.code}` : ""}</span>
-      </header>
+      <ReleaseAction safe={!credential || terminal} />
+      <ScreenHeader className="network-header" subtitle={<>Сетевая игра{snapshot ? ` · ${snapshot.code}` : ""}</>} back={!credential || terminal ? () => navigate("/") : undefined} menu={credential && !terminal ? openMenu : undefined} disabled={busy} />
       {error && (
         <p className="network-error" role="alert">
           {error}
@@ -259,7 +295,7 @@ export function NetworkApp() {
       {terminal ? (
         <section className="network-entry">
           <h1>Подключение завершено</h1>
-          <button onClick={reset}>Вернуться к подключению</button>
+          <MenuAction onClick={reset}>Вернуться к подключению</MenuAction>
         </section>
       ) : !credential ? (
         <section className="network-entry">
@@ -299,27 +335,29 @@ export function NetworkApp() {
                   onChange={(e) => setName(e.target.value)}
                 />
               </label>
-              <button
-                className="network-primary"
+              <MenuAction
+                type="submit"
+                variant="primary"
                 disabled={busy || code.length !== 4}
               >
                 Подключиться
-              </button>
+              </MenuAction>
             </form>
           ) : (
-            <button
-              className="network-primary"
+            <MenuAction
+              variant="primary"
               disabled={busy}
               onClick={() => void enter(true)}
             >
               Создать сетевую игру
-            </button>
+            </MenuAction>
           )}
         </section>
       ) : !snapshot ? (
         <section className="network-entry">
           <p>Ожидаем состояние комнаты…</p>
-          <button onClick={reset}>Другая комната</button>
+          <MenuAction onClick={reset}>Другая комната</MenuAction>
+          {localMenuOpen && <SessionMenu title="Подключение" settings={() => setPauseSettingsOpen(true)} exit={() => navigate("/")} back={() => setLocalMenuOpen(false)} />}
         </section>
       ) : (
         <>
@@ -351,15 +389,15 @@ export function NetworkApp() {
                       </span>
                       {display && (
                         <span className="network-roster-actions">
-                          <button
+                          <MenuAction
                             disabled={busy}
                             onClick={() =>
                               void act({ type: "leader", playerId: p.id })
                             }
                           >
                             Ведущий
-                          </button>
-                          <button
+                          </MenuAction>
+                          <MenuAction
                             aria-label={`Удалить ${p.name}`}
                             disabled={busy}
                             onClick={() =>
@@ -367,7 +405,7 @@ export function NetworkApp() {
                             }
                           >
                             Удалить
-                          </button>
+                          </MenuAction>
                         </span>
                       )}
                     </li>
@@ -375,48 +413,9 @@ export function NetworkApp() {
                 </ul>
                 {display && (
                   <>
-                    <div className="network-settings">
-                      <label>
-                        Вопросов
-                        <select
-                          aria-label="Вопросов"
-                          value={snapshot.settings.questionCount}
-                          onChange={(e) =>
-                            void act({
-                              type: "settings",
-                              ...snapshot.settings,
-                              questionCount: Number(e.target.value),
-                            })
-                          }
-                        >
-                          {[9, 15, 21].map((n) => (
-                            <option key={n}>{n}</option>
-                          ))}
-                        </select>
-                      </label>
-                      <label>
-                        Время на ответ
-                        <select
-                          aria-label="Время на ответ"
-                          value={snapshot.settings.answerTimeMs}
-                          onChange={(e) =>
-                            void act({
-                              type: "settings",
-                              ...snapshot.settings,
-                              answerTimeMs: Number(e.target.value),
-                            })
-                          }
-                        >
-                          {[10000, 20000, 30000].map((n) => (
-                            <option key={n} value={n}>
-                              {n / 1000} секунд
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                    </div>
-                    <button
-                      className="network-primary"
+                    <MatchSetupFields compact disabled={busy} questionCount={snapshot.settings.questionCount} answerTimeMs={snapshot.settings.answerTimeMs} setQuestionCount={(questionCount) => void act({ type: "settings", ...snapshot.settings, questionCount })} setAnswerTimeMs={(answerTimeMs) => void act({ type: "settings", ...snapshot.settings, answerTimeMs })} />
+                    <MenuAction
+                      variant="primary"
                       disabled={
                         busy ||
                         snapshot.players.length < 2 ||
@@ -425,10 +424,10 @@ export function NetworkApp() {
                       onClick={() => void act({ type: "start" })}
                     >
                       Начать игру
-                    </button>
-                    <button onClick={() => void act({ type: "close" })}>
+                    </MenuAction>
+                    <MenuAction onClick={() => void exitRoom()}>
                       Закрыть комнату
-                    </button>
+                    </MenuAction>
                   </>
                 )}
               </div>
@@ -447,20 +446,15 @@ export function NetworkApp() {
                 {snapshot.isLeader && (
                   <div className="network-round-actions">
                     {(phase === "reveal" || phase === "standings") && (
-                      <button
-                        className="network-primary"
+                      <MenuAction
+                        variant="primary"
                         disabled={locked}
                         onClick={() => void act({ type: "continue" })}
                       >
                         Дальше
-                      </button>
+                      </MenuAction>
                     )}
-                    <button
-                      disabled={busy || !!status}
-                      onClick={() => void act({ type: "pause" })}
-                    >
-                      Пауза
-                    </button>
+
                   </div>
                 )}
               </div>
@@ -553,13 +547,13 @@ export function NetworkApp() {
                   </h1>
                   <div className={`network-topics ${!display && turnStatus?.required ? "network-action-required" : ""}`}>
                     {view?.topicCandidates?.map((id) => (
-                      <button
+                      <MenuAction
                         disabled={locked || !snapshot.canChoose}
                         key={id}
                         onClick={() => void act({ type: "topic", topicId: id })}
                       >
                         {snapshot.titles[id]}
-                      </button>
+                      </MenuAction>
                     ))}
                   </div>
                 </section>
@@ -582,7 +576,7 @@ export function NetworkApp() {
                       const vetoedByOther =
                         !!veto && veto.playerId !== snapshot.selfId;
                       return (
-                        <button
+                        <MenuAction
                           className={snapshot.ownVeto === id ? "selected" : ""}
                           disabled={locked || !snapshot.canVeto || vetoedByOther}
                           key={id}
@@ -607,17 +601,17 @@ export function NetworkApp() {
                                 : "Ваш запрет"}
                             </small>
                           ) : null}
-                        </button>
+                        </MenuAction>
                       );
                     })}
                   </div>
                   {snapshot.canVeto && snapshot.ownVeto && (
-                    <button
+                    <MenuAction
                       disabled={locked}
                       onClick={() => void act({ type: "clear-veto" })}
                     >
                       Снять запрет
-                    </button>
+                    </MenuAction>
                   )}
                 </section>
               )}
@@ -649,7 +643,7 @@ export function NetworkApp() {
                               c.result === "wrong",
                           );
                         return (
-                          <button
+                          <MenuAction
                             key={position}
                             className={`${chosen ? "selected" : ""} ${correct ? "correct" : ""} ${wrong ? "wrong" : ""}`}
                             disabled={
@@ -674,7 +668,7 @@ export function NetworkApp() {
                                   .join(", ")}
                               </small>
                             )}
-                          </button>
+                          </MenuAction>
                         );
                       })}
                     </div>
@@ -713,7 +707,7 @@ export function NetworkApp() {
                     <div className="network-feedback">
                       {view.feedback.stage === "choice" ? (
                         <>
-                          <button
+                          <MenuAction
                             disabled={locked}
                             onClick={() =>
                               void act({
@@ -723,9 +717,9 @@ export function NetworkApp() {
                             }
                           >
                             Да
-                          </button>
-                          <button
-                            className="network-primary"
+                          </MenuAction>
+                          <MenuAction
+                            variant="primary"
                             disabled={locked}
                             onClick={() =>
                               void act({
@@ -735,13 +729,13 @@ export function NetworkApp() {
                             }
                           >
                             Нет, дальше
-                          </button>
+                          </MenuAction>
                         </>
                       ) : view.feedback.stage === "reasons" ? (
                         <>
                           <div className={`network-topics ${!display && turnStatus?.required ? "network-action-required" : ""}`}>
                             {reasons.map((label, index) => (
-                              <button
+                              <MenuAction
                                 key={label}
                                 className={
                                   view.feedback!.complaintReasons.includes(
@@ -756,7 +750,7 @@ export function NetworkApp() {
                                 }
                               >
                                 {label}
-                              </button>
+                              </MenuAction>
                             ))}
                           </div>
                           <label>
@@ -767,7 +761,7 @@ export function NetworkApp() {
                               onChange={(e) => setFeedbackNote(e.target.value)}
                             />
                           </label>
-                          <button
+                          <MenuAction
                             disabled={locked}
                             onClick={() =>
                               void act({
@@ -777,12 +771,12 @@ export function NetworkApp() {
                             }
                           >
                             Отправить
-                          </button>
+                          </MenuAction>
                         </>
                       ) : (
                         <p>Сохраняем отзыв…</p>
                       )}
-                      {snapshot.feedbackError && (
+                      {snapshot.feedbackError && !snapshot.paused && !localMenuOpen && !pauseSettingsOpen && (
                         <FeedbackUnavailableDialog
                           selected={feedbackRecoveryChoice}
                           onSelect={setFeedbackRecoveryChoice}
@@ -836,88 +830,49 @@ export function NetworkApp() {
               )}
               {phase === "finished" && snapshot.isLeader && (
                 <div className="network-actions">
-                  <button
-                    className="network-primary"
+                  <MenuAction
+                    variant="primary"
                     disabled={busy || !!status}
                     onClick={() => void act({ type: "replay" })}
                   >
                     Сыграть ещё
-                  </button>
-                  <button
+                  </MenuAction>
+                  <MenuAction
                     disabled={busy}
-                    onClick={() => void act({ type: "close" })}
+                    onClick={() => void exitRoom()}
                   >
                     Выйти в меню
-                  </button>
+                  </MenuAction>
                 </div>
               )}
             </section>
           )}
-          {snapshot.paused && phase !== "finished" && (
-            <div
-              className="network-pause"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="network-pause-title"
+          {(snapshot.paused || localMenuOpen) && !pauseSettingsOpen && (
+            <SessionMenu
+              title={snapshot.paused ? "Игра на паузе" : "Сетевая игра"}
+              disabled={busy}
+              resumeDisabled={!!status}
+              resume={snapshot.paused && snapshot.isLeader ? () => void act({ type: "resume" }) : undefined}
+              settings={() => setPauseSettingsOpen(true)}
+              restart={snapshot.isLeader && phase !== "lobby" ? () => void act({ type: "replay" }) : undefined}
+              restartLabel="Вернуться в лобби"
+              exit={(phase === "lobby" ? display : snapshot.isLeader) ? () => void exitRoom() : () => navigate("/")}
+              exitLabel={(phase === "lobby" ? display : snapshot.isLeader) ? "Завершить игру" : "Выйти в меню"}
+              back={!snapshot.paused ? () => setLocalMenuOpen(false) : undefined}
             >
-              <section>
-                <h2 id="network-pause-title">Игра на паузе</h2>
-                {!snapshot.displayConnected && (
-                  <p>Ждём возвращения общего экрана</p>
-                )}
-                {display &&
-                  snapshot.disconnected.map((p) => (
-                    <div key={p.id}>
-                      <p>{p.name} отключился</p>
-                      <button
-                        disabled={busy}
-                        onClick={() =>
-                          void act({ type: "exclude", playerId: p.id })
-                        }
-                      >
-                        Продолжить без {p.name}
-                      </button>
-                    </div>
-                  ))}
-                {(snapshot.isLeader || display) && (
-                  <button disabled={busy} onClick={() => setPauseSettingsOpen(true)}>Настройки</button>
-                )}
-                {snapshot.isLeader ? (
-                  <>
-                    <p>Когда все вернутся, продолжите игру.</p>
-                    <button
-                      className="network-primary"
-                      disabled={busy || !!status}
-                      onClick={() => void act({ type: "resume" })}
-                    >
-                      Продолжить
-                    </button>
-                    <button
-                      disabled={busy}
-                      onClick={() => void act({ type: "replay" })}
-                    >
-                      Вернуться в лобби
-                    </button>
-                    <button
-                      disabled={busy}
-                      onClick={() => void act({ type: "close" })}
-                    >
-                      Завершить игру
-                    </button>
-                  </>
-                ) : (
-                  <p>Ждём подключения игроков и команды ведущего.</p>
-                )}
-              </section>
-            </div>
+              {snapshot.paused && <>
+                {!snapshot.displayConnected && <p>Ждём возвращения общего экрана</p>}
+                {display && snapshot.disconnected.map((player) => <div key={player.id}><p>{player.name} отключился</p><MenuAction disabled={busy} onClick={() => void act({ type: "exclude", playerId: player.id })}>Продолжить без {player.name}</MenuAction></div>)}
+                <p>{snapshot.isLeader ? "Когда все вернутся, продолжите игру." : "Ждём подключения игроков и команды ведущего."}</p>
+              </>}
+              {!snapshot.paused && phase !== "lobby" && phase !== "finished" && <p>Сетевая партия продолжается. Общей паузой управляет ведущий.</p>}
+            </SessionMenu>
           )}
         </>
       )}
       {pauseSettingsOpen && (
-        <div className="pause-backdrop" role="dialog" aria-modal="true" aria-labelledby="menu-settings-title">
-          <PresentationSettings preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} />
-        </div>
+        <SettingsDialog preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} />
       )}
-    </main>
+    </ScreenSurface>
   );
 }

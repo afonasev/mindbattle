@@ -1,6 +1,8 @@
 export type AudioCue =
   | "menu-theme"
   | "game-theme"
+  | "game-theme-two"
+  | "game-theme-three"
   | "screen-transition"
   | "countdown"
   | "question-start"
@@ -22,8 +24,10 @@ export interface AudioCueDefinition {
 }
 
 export const AUDIO_CUE_MANIFEST: Readonly<Record<AudioCue, AudioCueDefinition>> = {
-  "menu-theme": { track: "music", url: "/audio/arena-v2/menu-theme.wav", loop: true },
-  "game-theme": { track: "music", url: "/audio/arena-v2/game-theme.wav", loop: true },
+  "menu-theme": { track: "music", url: "/audio/quiz-v1/menu.mp3", loop: true },
+  "game-theme": { track: "music", url: "/audio/quiz-v1/stage-one.mp3", loop: true },
+  "game-theme-two": { track: "music", url: "/audio/quiz-v1/stage-two.mp3", loop: true },
+  "game-theme-three": { track: "music", url: "/audio/quiz-v1/stage-three.mp3", loop: true },
   "screen-transition": { track: "event", url: "/audio/arena-v2/screen-transition.wav" },
   countdown: { track: "event", url: "/audio/arena-v1/topic-countdown.wav" },
   "question-start": { track: "event", url: "/audio/arena-v1/question-start.wav" },
@@ -33,7 +37,7 @@ export const AUDIO_CUE_MANIFEST: Readonly<Record<AudioCue, AudioCueDefinition>> 
   "reveal-all": { track: "event", url: "/audio/arena-v2/reveal-all.wav" },
   "reveal-some": { track: "event", url: "/audio/arena-v2/reveal-some.wav" },
   "reveal-none": { track: "event", url: "/audio/arena-v2/reveal-none.wav" },
-  bonus: { track: "music", url: "/audio/arena-v1/bonus.wav" },
+  bonus: { track: "event", url: "/audio/arena-v1/bonus.wav" },
   winner: { track: "music", url: "/audio/arena-v1/violet-victory.wav" }
 };
 
@@ -59,10 +63,14 @@ export class AudioController {
   private activeMusic: AudioSource | null = null;
   private activeMusicCue: AudioCue | null = null;
   private musicDucked = false;
+  private retiringMusic: AudioSource | null = null;
+  private fadeTimer: ReturnType<typeof setInterval> | null = null;
+  private fadeProgress = 1;
 
   constructor(
     private readonly sourceFactory: AudioSourceFactory,
-    initial: AudioSettings = { volume: 0.7, muted: false }
+    initial: AudioSettings = { volume: 0.7, muted: false },
+    private readonly musicTransitionMs = 0
   ) {
     this.settings = initial;
   }
@@ -72,6 +80,7 @@ export class AudioController {
       muted: settings.muted,
       volume: Math.min(1, Math.max(0, settings.volume))
     };
+    if (this.settings.muted || this.settings.volume === 0) this.stopMusic();
     this.applyMusicVolume();
   }
 
@@ -81,10 +90,22 @@ export class AudioController {
   }
 
   private applyMusicVolume(): void {
-    if (this.activeMusic) this.activeMusic.volume = this.settings.volume * (this.musicDucked ? 0.28 : 1);
+    if (this.activeMusic) this.activeMusic.volume = this.settings.volume * (this.musicDucked ? 0.28 : 1) * this.fadeProgress;
+  }
+
+  private clearTransition(): void {
+    if (this.fadeTimer !== null) clearInterval(this.fadeTimer);
+    this.fadeTimer = null;
+    if (this.retiringMusic) {
+      this.retiringMusic.pause();
+      this.retiringMusic.currentTime = 0;
+      this.retiringMusic = null;
+    }
+    this.fadeProgress = 1;
   }
 
   stopMusic(): void {
+    this.clearTransition();
     if (!this.activeMusic) return;
     try {
       this.activeMusic.pause();
@@ -109,12 +130,30 @@ export class AudioController {
       source.currentTime = 0;
       source.loop = definition.loop === true;
       if (definition.track === "music") {
-        this.stopMusic();
+        const previousMusic = this.activeMusic;
+        this.clearTransition();
+        if (previousMusic && this.musicTransitionMs <= 0) this.stopMusic();
         this.activeMusic = source;
         this.activeMusicCue = cue;
+        if (previousMusic && this.musicTransitionMs > 0) {
+          this.retiringMusic = previousMusic;
+          const previousVolume = previousMusic.volume;
+          const startedAt = Date.now();
+          this.fadeProgress = 0;
+          this.applyMusicVolume();
+          this.fadeTimer = setInterval(() => {
+            this.fadeProgress = Math.min(1, (Date.now() - startedAt) / this.musicTransitionMs);
+            previousMusic.volume = previousVolume * (1 - this.fadeProgress);
+            this.applyMusicVolume();
+            if (this.fadeProgress === 1) this.clearTransition();
+          }, 25);
+        }
       }
       const result = source.play();
-      if (result instanceof Promise) void result.catch(() => undefined);
+      if (result instanceof Promise) void result.catch(() => {
+        // Allow the next user gesture to retry after an autoplay denial.
+        if (this.activeMusic === source) this.stopMusic();
+      });
       return true;
     } catch {
       return false;
@@ -130,7 +169,7 @@ let activeSharedAudioController: AudioController | null = null;
  */
 export function sharedAudioController(initial: AudioSettings): AudioController {
   if (!activeSharedAudioController) {
-    activeSharedAudioController = new AudioController(createHtmlAudioSourceFactory(), initial);
+    activeSharedAudioController = new AudioController(createHtmlAudioSourceFactory(), initial, 650);
   } else {
     activeSharedAudioController.update(initial);
   }
@@ -186,6 +225,18 @@ export type PhaseAudioAction =
   | { readonly type: "stop-music" }
   | { readonly type: "set-music-ducked"; readonly ducked: boolean };
 
+/** Presentation-only stage selection; index is zero-based, network questionNumber is not. */
+export function classicMusicStage(questionIndex: number, questionCount: number, tieBreak = false): 0 | 1 | 2 {
+  if (tieBreak) return 2;
+  return Math.min(2, Math.max(0, Math.floor(questionIndex / (questionCount / 3)))) as 0 | 1 | 2;
+}
+
+export function presentationMusicCue(phase: string | null, stage: 0 | 1 | 2 = 0): AudioCue {
+  if (!phase || phase === "lobby") return "menu-theme";
+  if (phase === "finished") return "winner";
+  return (["game-theme", "game-theme-two", "game-theme-three"] as const)[stage];
+}
+
 export function phaseAudioActions(
   previousPhase: string | null,
   currentPhase: string | null
@@ -193,13 +244,13 @@ export function phaseAudioActions(
   if (previousPhase === currentPhase) return [];
   if (!currentPhase) return [];
   if (["normal-topic", "final-veto", "difficulty-feedback", "standings"].includes(currentPhase)) {
-    return [{ type: "set-music-ducked", ducked: false }, { type: "play", cue: "game-theme" }];
+    return [{ type: "set-music-ducked", ducked: false }];
   }
   if (currentPhase === "topic-confirmation") return [{ type: "play", cue: "screen-transition" }];
   if (currentPhase === "answering") return [{ type: "set-music-ducked", ducked: true }, { type: "play", cue: "question-start" }];
   if (currentPhase === "bonus-veto") return [{ type: "set-music-ducked", ducked: false }, { type: "play", cue: "bonus" }];
   if (currentPhase === "reveal") return [{ type: "set-music-ducked", ducked: false }];
-  if (currentPhase === "finished") return [{ type: "set-music-ducked", ducked: false }, { type: "play", cue: "winner" }];
+  if (currentPhase === "finished") return [{ type: "set-music-ducked", ducked: false }];
   return [{ type: "play", cue: "screen-transition" }];
 }
 

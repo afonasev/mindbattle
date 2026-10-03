@@ -76,8 +76,8 @@ test("loads the local arena palette across topic confirmation, timer, reserve an
   );
   const playedAudio = await page.evaluate(() => (window as Window & { __playedAudio?: string[] }).__playedAudio ?? []);
   expect(playedAudio).toEqual(expect.arrayContaining([
-    "/audio/arena-v2/menu-theme.wav",
-    "/audio/arena-v2/game-theme.wav",
+    "/audio/quiz-v1/menu.mp3",
+    "/audio/quiz-v1/stage-one.mp3",
     "/audio/arena-v2/screen-transition.wav",
     "/audio/arena-v1/topic-countdown.wav",
     "/audio/arena-v1/question-start.wav",
@@ -115,7 +115,7 @@ test("plays the arena palette in mobile solo", async ({ page }) => {
   await expect(page.locator(".question-stage--reveal")).toBeVisible();
   const played = await page.evaluate(() => (window as Window & { __playedAudio?: string[] }).__playedAudio ?? []);
   expect(played).toEqual(expect.arrayContaining([
-    "/audio/arena-v2/game-theme.wav",
+    "/audio/quiz-v1/stage-one.mp3",
     "/audio/arena-v1/question-start.wav",
     "/audio/arena-v2/reveal-all.wav"
   ]));

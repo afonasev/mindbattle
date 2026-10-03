@@ -1,3 +1,4 @@
+import { desktop } from "./desktop";
 import { browserResults } from './statistics/outbox';
 import { StrictMode, Suspense, lazy, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
@@ -20,8 +21,9 @@ browserResults();
 const root = document.getElementById("root");
 
 let applyUpdate: (() => Promise<void>) | undefined;
+let updateReady = false;
 const updateListeners = new Set<(ready: boolean) => void>();
-export const onPwaUpdate = (listener: (ready: boolean) => void) => { updateListeners.add(listener); return () => { updateListeners.delete(listener); }; };
+export const onPwaUpdate = (listener: (ready: boolean) => void) => { updateListeners.add(listener); listener(updateReady); return () => { updateListeners.delete(listener); }; };
 export const applyPwaUpdate = () => applyUpdate?.() ?? Promise.resolve();
 export function navigate(path: string) {
   if (location.pathname === path) return;
@@ -30,6 +32,7 @@ export function navigate(path: string) {
 }
 
 function RoutedApp() {
+  useEffect(() => { void desktop?.ready(); }, []);
   const [path, setPath] = useState(location.pathname);
   useEffect(() => {
     const syncPath = () => setPath(location.pathname);
@@ -38,10 +41,15 @@ function RoutedApp() {
   }, []);
   return path === "/network" ? <NetworkApp /> : <App />;
 }
-if ("serviceWorker" in navigator) {
+function updateAvailable(ready: boolean) { updateReady = ready; updateListeners.forEach(listener => listener(ready)); }
+if (desktop) {
+  applyUpdate = async () => { if (!await desktop!.applyUpdate()) throw new Error("Update not applied"); };
+  desktop.onUpdate(updateAvailable);
+  void desktop.status().then(state => updateAvailable(state.ready));
+} else if ("serviceWorker" in navigator) {
   applyUpdate = registerSW({
     immediate: true,
-    onNeedRefresh: () => updateListeners.forEach((listener) => listener(true)),
+    onNeedRefresh: () => updateAvailable(true),
     onRegisteredSW: (_swScriptUrl, registration) => {
       void checkForPwaUpdate(registration).catch(() => undefined);
     }

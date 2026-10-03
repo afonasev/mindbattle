@@ -294,7 +294,7 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
       .getByRole("button", { name: "Продолжить без Участник 2", exact: true })
       .click();
     await expect(page.locator(".network-standings tbody tr").filter({hasText:"Участник 2"}).getByText("Выбыл", {exact:true})).toBeVisible();
-    await phones[0].getByRole("button", { name: "Пауза", exact: true }).click();
+    await phones[0].getByRole("button", { name: "Меню", exact: true }).click();
     await phones[0].getByRole("button", { name: "Настройки", exact: true }).click();
     await expect(phones[0].getByRole("heading", { name: "Настройки", exact: true })).toBeVisible();
     await phones[0].getByRole("button", { name: "Назад", exact: true }).click();
@@ -316,14 +316,14 @@ test("network display starts the arena sound after create gesture", async ({ pag
   const audioRequests: string[] = [];
   page.on("request", request => {
     const path = new URL(request.url()).pathname;
-    if (path.startsWith("/audio/arena-v2/")) audioRequests.push(path);
+    if (path.startsWith("/audio/quiz-v1/")) audioRequests.push(path);
   });
   await page.goto("/network");
   await expect(page.getByRole("heading", { name: "Соберите свою компанию" })).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("network-entry.png"), fullPage: true });
   await page.getByRole("button", { name: "Создать сетевую игру", exact: true }).click();
   await expect(page.locator(".network-code")).toBeVisible();
-  await expect.poll(() => audioRequests.includes("/audio/arena-v2/menu-theme.wav")).toBe(true);
+  await expect.poll(() => audioRequests.includes("/audio/quiz-v1/menu.mp3")).toBe(true);
 });
 
 test("network entry keeps the menu music playing", async ({ page }) => {
@@ -333,16 +333,16 @@ test("network entry keeps the menu music playing", async ({ page }) => {
     const originalPlay = HTMLMediaElement.prototype.play;
     const originalPause = HTMLMediaElement.prototype.pause;
     HTMLMediaElement.prototype.play = function () {
-      if (new URL(this.currentSrc || this.src).pathname.endsWith("/menu-theme.wav")) events.push("play");
+      if (new URL(this.currentSrc || this.src).pathname.endsWith("/quiz-v1/menu.mp3")) events.push("play");
       return originalPlay.call(this);
     };
     HTMLMediaElement.prototype.pause = function () {
-      if (new URL(this.currentSrc || this.src).pathname.endsWith("/menu-theme.wav")) events.push("pause");
+      if (new URL(this.currentSrc || this.src).pathname.endsWith("/quiz-v1/menu.mp3")) events.push("pause");
       return originalPause.call(this);
     };
   });
   await page.goto("/");
-  await page.getByRole("link", { name: "Сетевая игра (2–12)", exact: true }).click();
+  await page.getByRole("button", { name: "Сетевая игра (2–12)", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Соберите свою компанию" })).toBeVisible();
   await expect.poll(() => page.evaluate(() => (window as Window & { __musicEvents?: string[] }).__musicEvents ?? [])).toEqual(["play"]);
 });

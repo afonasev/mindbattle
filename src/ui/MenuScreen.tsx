@@ -1,3 +1,7 @@
+import { MatchSetupFields } from "./MatchSetupFields";
+import { MenuAction, ScreenHeader, ScreenSurface } from "./menuUi";
+import { PresentationSettings } from "./PresentationSettings";
+import { DesktopQuit } from "./DesktopControls";
 import { useState } from "react";
 import type {
   AccessibilityPreferences,
@@ -103,25 +107,19 @@ export function MenuScreen({
   };
 
   return (
-    <main className="menu-shell">
-      <div className="arena-glow" aria-hidden="true" />
-      <header className="brand-lockup brand-lockup--menu">
-        <span className="eyebrow">Интеллектуальная битва</span>
-        <h1>Mindbattle</h1>
-        <p>Все решит эрудиция</p>
-      </header>
+    <ScreenSurface className="menu-shell">
+      <ScreenHeader hero={!settingsOpen && !classicSetupOpen} subtitle={settingsOpen ? "Настройки" : "На одном устройстве"} back={settingsOpen ? () => setSettingsOpen(false) : classicSetupOpen ? () => setClassicSetupOpen(false) : undefined} />
 
       {!settingsOpen && !classicSetupOpen && (
       <section className="setup-stage menu-mode-stage" aria-label="Выбор режима">
         <div className="menu-actions">
-          <button className="secondary-action" type="button" onClick={startSolo}>Одиночная игра</button>
-          <button className="secondary-action mobile-classic-action" type="button" onClick={() => setClassicSetupOpen(true)}>На одном устройстве (2–4)</button>
-          <a className="secondary-action network-menu-desktop" href="/network" onClick={(event) => { event.preventDefault(); enterNetwork(); }}>Сетевая игра (2–12)</a>
-          <a className="secondary-action network-menu-mobile" href="/network" onClick={(event) => { event.preventDefault(); enterNetwork(); }}>Сетевая игра (2–12)</a>
-          {restoreSolo && <button className="secondary-action" type="button" onClick={restoreSolo}>Продолжить одиночную игру</button>}
-          {restoreLabel && <button className="secondary-action mobile-classic-action" type="button" onClick={restore}>{restoreLabel}</button>}
-          <button className="secondary-action" type="button" onClick={() => setSettingsOpen(true)}>Настройки</button>
-          <button className="secondary-action" type="button" onClick={viewRecords}>Рекорды</button>
+          <MenuAction onClick={startSolo}>Одиночная игра</MenuAction>
+          <MenuAction className="mobile-classic-action" onClick={() => setClassicSetupOpen(true)}>На одном устройстве (2–4)</MenuAction>
+          <MenuAction onClick={enterNetwork}>Сетевая игра (2–12)</MenuAction>
+          {restoreSolo && <MenuAction onClick={restoreSolo}>Продолжить одиночную игру</MenuAction>}
+          {restoreLabel && <MenuAction className="mobile-classic-action" onClick={restore}>{restoreLabel}</MenuAction>}
+          <MenuAction onClick={() => setSettingsOpen(true)}>Настройки</MenuAction>
+          <MenuAction onClick={viewRecords}>Рекорды</MenuAction>
         </div>
         {error && <p className="menu-error" role="alert">{error}</p>}
       </section>
@@ -131,57 +129,13 @@ export function MenuScreen({
       <section className="setup-stage mobile-classic-setup" aria-labelledby="setup-title">
         <div className="stage-label">Настройка партии</div>
         <h2 id="setup-title">Классическая игра</h2>
-        <div className="segmented-settings">
-          <fieldset>
-            <legend>Вопросов</legend>
-            {[9, 15, 21].map((value) => (
-              <button
-                className={settings.questionCount === value ? "is-selected" : ""}
-                key={value}
-                type="button"
-                onClick={() => setSettings({ ...settings, questionCount: value as 9 | 15 | 21 })}
-              >
-                {value}
-              </button>
-            ))}
-          </fieldset>
-          <fieldset>
-            <legend>Команд</legend>
-            {[2, 3, 4].map((value) => (
-              <button
-                className={settings.teamCount === value ? "is-selected" : ""}
-                key={value}
-                type="button"
-                onClick={() => updateTeamCount(value as 2 | 3 | 4)}
-              >
-                {value}
-              </button>
-            ))}
-          </fieldset>
-          <fieldset>
-            <legend>На ответ</legend>
-            {[10, 20, 30].map((value) => (
-              <button
-                className={settings.answerTimeMs === value * 1000 ? "is-selected" : ""}
-                key={value}
-                type="button"
-                onClick={() =>
-                  setSettings({
-                    ...settings,
-                    answerTimeMs: (value * 1000) as 10_000 | 20_000 | 30_000
-                  })
-                }
-              >
-                {value} c
-              </button>
-            ))}
-          </fieldset>
+        <MatchSetupFields questionCount={settings.questionCount} answerTimeMs={settings.answerTimeMs} teamCount={settings.teamCount} setQuestionCount={(questionCount) => setSettings({ ...settings, questionCount })} setAnswerTimeMs={(answerTimeMs) => setSettings({ ...settings, answerTimeMs })} setTeamCount={updateTeamCount}>
           <div className="reserve-readout">
             <span>Запас времени</span>
             <strong>{reserveFor(settings.questionCount) / 1000} c</strong>
             <small>для каждой команды</small>
           </div>
-        </div>
+        </MatchSetupFields>
 
         <div className="controller-grid">
           {activeTeams.map((teamId) => {
@@ -210,49 +164,16 @@ export function MenuScreen({
         </div>
 
         <div className="menu-actions">
-          <button className="primary-action" type="button" disabled={!valid} onClick={start}>Начать игру</button>
-          <button className="secondary-action" type="button" onClick={() => setClassicSetupOpen(false)}>Назад к режимам</button>
+          <MenuAction variant="primary" className="" disabled={!valid} onClick={start}>Начать игру</MenuAction>
+
         </div>
         {error && <p className="menu-error" role="alert">{error}</p>}
       </section>
       )}
 
-      {settingsOpen && (
-        <section className="setup-stage menu-settings-stage" aria-labelledby="menu-settings-title">
-          <div className="settings-stage-heading">
-            <div>
-              <span className="stage-label">Панель управления</span>
-              <h2 id="menu-settings-title">Настройки</h2>
-              <p>Сделайте партию комфортной, не меняя её правил.</p>
-            </div>
-            <button className="secondary-action settings-back" type="button" onClick={() => setSettingsOpen(false)}>Назад</button>
-          </div>
-          <div className="settings-grid">
-            <section className="settings-group" aria-labelledby="sound-settings-title">
-              <h3 id="sound-settings-title">Звук</h3>
-              <button className={`settings-toggle ${preferences.muted ? "" : "is-active"}`} type="button" aria-pressed={!preferences.muted} onClick={() => setPreferences({ ...preferences, muted: !preferences.muted })}>
-                {preferences.muted ? "Звук выключен" : "Звук включён"}
-              </button>
-              <label className="settings-range">
-                <span>Громкость <strong>{Math.round(preferences.volume * 100)}%</strong></span>
-                <input aria-label="Громкость" type="range" min="0" max="1" step="0.1" value={preferences.volume} onChange={(event) => setPreferences({ ...preferences, volume: Number(event.target.value) })} />
-              </label>
-            </section>
-            <section className="settings-group" aria-labelledby="display-settings-title">
-              <h3 id="display-settings-title">Отображение</h3>
-              <label className="settings-check"><input type="checkbox" checked={preferences.textSize === "large"} onChange={(event) => setPreferences({ ...preferences, textSize: event.target.checked ? "large" : "normal" })} /><span>Крупный текст</span></label>
-              <label className="settings-check"><input type="checkbox" checked={preferences.highContrast} onChange={(event) => setPreferences({ ...preferences, highContrast: event.target.checked })} /><span>Высокий контраст</span></label>
-              <label className="settings-check"><input type="checkbox" checked={preferences.reducedMotion} onChange={(event) => setPreferences({ ...preferences, reducedMotion: event.target.checked })} /><span>Без анимации</span></label>
-            </section>
-            <section className="settings-group settings-group--session" aria-labelledby="session-settings-title">
-              <h3 id="session-settings-title">Партия и история</h3>
-              <label className="settings-check"><input type="checkbox" checked={settings.collectQuestionFeedback} onChange={(event) => setSettings({ ...settings, collectQuestionFeedback: event.target.checked })} /><span>Собирать обратную связь по вопросам</span></label>
-              <button className="settings-reset" type="button" onClick={resetHistory}>Сбросить историю вопросов</button>
-            </section>
-          </div>
-        </section>
-      )}
+      {settingsOpen && <PresentationSettings preferences={preferences} setPreferences={setPreferences} session={{ collectQuestionFeedback: settings.collectQuestionFeedback, setCollectQuestionFeedback: (value) => setSettings({ ...settings, collectQuestionFeedback: value }), resetHistory }} />}
+      <div className="desktop-quit"><DesktopQuit /></div>
       <footer>Локально · Offline-first · один общий экран</footer>
-    </main>
+    </ScreenSurface>
   );
 }
