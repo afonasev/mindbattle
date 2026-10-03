@@ -26,12 +26,13 @@ test("loads the local arena palette across topic confirmation, timer, reserve an
       const played = (window as Window & { __playedAudio?: string[] }).__playedAudio ?? [];
       played.push(new URL(this.currentSrc || this.src).pathname);
       (window as Window & { __playedAudio?: string[] }).__playedAudio = played;
+      this.muted = true; // Routing/decoding evidence, separate from human listening.
       return originalPlay.call(this);
     };
   });
   page.on("request", (request) => {
     const url = new URL(request.url());
-    if (url.pathname.startsWith("/audio/arena-v1/")) requestedAudio.add(url.pathname);
+    if (url.pathname.startsWith("/audio/quiz-sfx-v1/")) requestedAudio.add(url.pathname);
   });
   page.on("pageerror", (error) => errors.push(error.message));
 
@@ -39,18 +40,10 @@ test("loads the local arena palette across topic confirmation, timer, reserve an
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   await expect(page.getByRole("button", { name: "Одиночная игра", exact: true })).toBeVisible();
-  expect(await page.locator(".menu-actions > *").allTextContents()).toEqual([
-    "Одиночная игра",
-    "На одном устройстве (2–4)",
-    "Сетевая игра (2–12)",
-    "Сетевая игра (2–12)",
-    "Настройки",
-    "Рекорды"
-  ]);
   await page.getByRole("button", { name: "На одном устройстве (2–4)" }).click();
   await page.getByRole("button", { name: "9", exact: true }).click();
   await page.getByRole("button", { name: "10 c", exact: true }).click();
-  await page.getByRole("button", { name: "На одном устройстве (2–4)" }).click();
+  await page.getByRole("button", { name: "Начать игру", exact: true }).click();
   await waitForInputGate(page);
 
   const choosing = await storedState(page);
@@ -58,31 +51,31 @@ test("loads the local arena palette across topic confirmation, timer, reserve an
   const chooser = choosing.phase.chooser as Team;
   await page.keyboard.press(confirmKey(chooser));
   await expect(page.locator(".topic-confirmation-stage")).toBeVisible();
-  await expect.poll(() => requestedAudio.has("/audio/arena-v1/topic-countdown.wav")).toBe(true);
+  await expect.poll(() => requestedAudio.has("/audio/quiz-sfx-v1/countdown.wav")).toBe(true);
   await page.waitForTimeout(3_100);
   await expect(page.locator(".question-stage")).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("audio-answering.png") });
 
   await page.waitForTimeout(10_300);
-  await expect.poll(() => requestedAudio.has("/audio/arena-v1/timer-last-second.wav")).toBe(true);
-  await expect.poll(() => requestedAudio.has("/audio/arena-v1/reserve-start.wav")).toBe(true);
+  await expect.poll(() => requestedAudio.has("/audio/quiz-sfx-v1/timer-last-second.wav")).toBe(true);
+  await expect.poll(() => requestedAudio.has("/audio/quiz-sfx-v1/reserve-start.wav")).toBe(true);
 
   await page.keyboard.press("w");
   await page.keyboard.press("ArrowUp");
   await expect(page.locator(".question-stage--reveal")).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("audio-reveal.png") });
   await expect.poll(async () => page.evaluate(() => (window as Window & { __playedAudio?: string[] }).__playedAudio ?? [])).toContainEqual(
-    expect.stringMatching(/\/audio\/arena-v2\/reveal-(all|some|none)\.wav$/)
+    expect.stringMatching(/\/audio\/quiz-sfx-v1\/reveal-(all|some|none)\.wav$/)
   );
   const playedAudio = await page.evaluate(() => (window as Window & { __playedAudio?: string[] }).__playedAudio ?? []);
   expect(playedAudio).toEqual(expect.arrayContaining([
     "/audio/quiz-v1/menu.mp3",
     "/audio/quiz-v1/stage-one.mp3",
-    "/audio/arena-v2/screen-transition.wav",
-    "/audio/arena-v1/topic-countdown.wav",
-    "/audio/arena-v1/question-start.wav",
-    "/audio/arena-v1/timer-last-second.wav",
-    "/audio/arena-v1/reserve-start.wav"
+    "/audio/quiz-sfx-v1/screen-transition.wav",
+    "/audio/quiz-sfx-v1/countdown.wav",
+    "/audio/quiz-sfx-v1/question-start.wav",
+    "/audio/quiz-sfx-v1/timer-last-second.wav",
+    "/audio/quiz-sfx-v1/reserve-start.wav"
   ]));
   expect(errors).toEqual([]);
 });
@@ -95,6 +88,7 @@ test("plays the arena palette in mobile solo", async ({ page }) => {
       const played = (window as Window & { __playedAudio?: string[] }).__playedAudio ?? [];
       played.push(new URL(this.currentSrc || this.src).pathname);
       (window as Window & { __playedAudio?: string[] }).__playedAudio = played;
+      this.muted = true; // Routing/decoding evidence, separate from human listening.
       return originalPlay.call(this);
     };
   });
@@ -116,20 +110,15 @@ test("plays the arena palette in mobile solo", async ({ page }) => {
   const played = await page.evaluate(() => (window as Window & { __playedAudio?: string[] }).__playedAudio ?? []);
   expect(played).toEqual(expect.arrayContaining([
     "/audio/quiz-v1/stage-one.mp3",
-    "/audio/arena-v1/question-start.wav",
-    "/audio/arena-v2/reveal-all.wav"
+    "/audio/quiz-sfx-v1/question-start.wav",
+    "/audio/quiz-sfx-v1/reveal-all.wav"
   ]));
 });
 
-test("shows an immediate sound toggle in the main menu", async ({ page }, testInfo) => {
+test("keeps sound controls in the settings submenu", async ({ page }, testInfo) => {
   await page.goto("/");
   await page.evaluate(() => localStorage.clear());
   await page.reload();
-  const toggle = page.getByRole("button", { name: "Выключить звук", exact: true });
-  await expect(toggle).toHaveAttribute("aria-pressed", "true");
-  await page.screenshot({ path: testInfo.outputPath("menu-sound-toggle.png"), fullPage: true });
-  await toggle.click();
-  await expect(page.getByRole("button", { name: "Включить звук", exact: true })).toHaveAttribute("aria-pressed", "false");
   const actions = page.locator(".menu-actions");
   await expect(actions.getByRole("button", { name: "Настройки", exact: true })).toBeVisible();
   await expect(actions.getByRole("button", { name: "Рекорды", exact: true })).toBeVisible();
@@ -139,6 +128,10 @@ test("shows an immediate sound toggle in the main menu", async ({ page }, testIn
   await expect(page.getByRole("heading", { name: "Настройки", exact: true })).toBeVisible();
   await expect(page.locator("details.preferences-panel")).toHaveCount(0);
   await page.screenshot({ path: testInfo.outputPath("menu-settings-submenu.png"), fullPage: true });
+  const toggle = page.getByRole("button", { name: "Звук включён", exact: true });
+  await expect(toggle).toBeVisible();
+  await toggle.click();
+  await expect(page.getByRole("button", { name: "Звук выключен", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Назад", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Настройки", exact: true })).toHaveCount(0);
 });

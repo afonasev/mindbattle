@@ -55,6 +55,7 @@ export interface PublicMatchView {
   readonly topicCursor?: number;
   readonly topicId?: string;
   readonly confirmationRemainingMs?: number;
+  readonly baseRemainingMs?: number;
   readonly confirmationBonus?: boolean;
   readonly confirmationPresentation?: "normal" | "bonus" | "final";
   readonly vetoes?: Readonly<Partial<Record<TeamId, string>>>;
@@ -204,7 +205,8 @@ export function selectPublicView(state: MatchState, context: DomainContext): Pub
     };
   }
   if (state.phase.kind === "answering" || state.phase.kind === "reveal") {
-    return { ...base, question: selectQuestion(state, context) };
+    return { ...base, question: selectQuestion(state, context),
+      ...(state.phase.kind === "answering" ? { baseRemainingMs: state.phase.baseRemainingMs } : {}) };
   }
   if (state.phase.kind === "difficulty-feedback") {
     return {

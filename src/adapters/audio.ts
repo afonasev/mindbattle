@@ -8,6 +8,8 @@ export type AudioCue =
   | "question-start"
   | "timer-last-second"
   | "reserve-start"
+  | "answer-locked"
+  | "timeout"
   | "reveal"
   | "reveal-all"
   | "reveal-some"
@@ -21,6 +23,8 @@ export interface AudioCueDefinition {
   readonly track: AudioTrack;
   readonly url: string;
   readonly loop?: boolean;
+  readonly durationMs?: number;
+  readonly duckMusic?: boolean;
 }
 
 export const AUDIO_CUE_MANIFEST: Readonly<Record<AudioCue, AudioCueDefinition>> = {
@@ -28,17 +32,19 @@ export const AUDIO_CUE_MANIFEST: Readonly<Record<AudioCue, AudioCueDefinition>> 
   "game-theme": { track: "music", url: "/audio/quiz-v1/stage-one.mp3", loop: true },
   "game-theme-two": { track: "music", url: "/audio/quiz-v1/stage-two.mp3", loop: true },
   "game-theme-three": { track: "music", url: "/audio/quiz-v1/stage-three.mp3", loop: true },
-  "screen-transition": { track: "event", url: "/audio/arena-v2/screen-transition.wav" },
-  countdown: { track: "event", url: "/audio/arena-v1/topic-countdown.wav" },
-  "question-start": { track: "event", url: "/audio/arena-v1/question-start.wav" },
-  "timer-last-second": { track: "event", url: "/audio/arena-v1/timer-last-second.wav" },
-  "reserve-start": { track: "event", url: "/audio/arena-v1/reserve-start.wav" },
-  reveal: { track: "event", url: "/audio/arena-v1/reveal.wav" },
-  "reveal-all": { track: "event", url: "/audio/arena-v2/reveal-all.wav" },
-  "reveal-some": { track: "event", url: "/audio/arena-v2/reveal-some.wav" },
-  "reveal-none": { track: "event", url: "/audio/arena-v2/reveal-none.wav" },
-  bonus: { track: "event", url: "/audio/arena-v1/bonus.wav" },
-  winner: { track: "music", url: "/audio/arena-v1/violet-victory.wav" }
+  "screen-transition": { track: "event", url: "/audio/quiz-sfx-v1/screen-transition.wav", durationMs: 300 },
+  countdown: { track: "event", url: "/audio/quiz-sfx-v1/countdown.wav", durationMs: 180 },
+  "question-start": { track: "event", url: "/audio/quiz-sfx-v1/question-start.wav", durationMs: 600 },
+  "timer-last-second": { track: "event", url: "/audio/quiz-sfx-v1/timer-last-second.wav", durationMs: 200 },
+  "reserve-start": { track: "event", url: "/audio/quiz-sfx-v1/reserve-start.wav", durationMs: 800 },
+  "answer-locked": { track: "event", url: "/audio/quiz-sfx-v1/answer-locked.wav", durationMs: 120 },
+  timeout: { track: "event", url: "/audio/quiz-sfx-v1/timeout.wav", durationMs: 3000, duckMusic: true },
+  reveal: { track: "event", url: "/audio/quiz-sfx-v1/reveal.wav", durationMs: 2000, duckMusic: true },
+  "reveal-all": { track: "event", url: "/audio/quiz-sfx-v1/reveal-all.wav", durationMs: 3000, duckMusic: true },
+  "reveal-some": { track: "event", url: "/audio/quiz-sfx-v1/reveal-some.wav", durationMs: 2000, duckMusic: true },
+  "reveal-none": { track: "event", url: "/audio/quiz-sfx-v1/reveal-none.wav", durationMs: 3000, duckMusic: true },
+  bonus: { track: "event", url: "/audio/quiz-sfx-v1/bonus.wav", durationMs: 2000, duckMusic: true },
+  winner: { track: "event", url: "/audio/quiz-sfx-v1/winner.wav", durationMs: 4000, duckMusic: true }
 };
 
 export interface AudioSettings {
@@ -53,6 +59,7 @@ export interface AudioSource {
   loop: boolean;
   play(): void | Promise<void>;
   pause(): void;
+  addEventListener?(type: string, listener: () => void, options?: { once?: boolean }): void;
 }
 
 export interface AudioSourceFactory {
@@ -67,6 +74,7 @@ export class AudioController {
   private retiringMusic: AudioSource | null = null;
   private fadeTimer: ReturnType<typeof setInterval> | null = null;
   private fadeProgress = 1;
+  private readonly events = new Map<AudioSource, { cue: AudioCue; timer: ReturnType<typeof setTimeout>; duckMusic: boolean }>();
 
   constructor(
     private readonly sourceFactory: AudioSourceFactory,
@@ -82,7 +90,11 @@ export class AudioController {
       musicVolume: Math.min(1, Math.max(0, settings.musicVolume)),
       effectsVolume: Math.min(1, Math.max(0, settings.effectsVolume))
     };
-    if (this.settings.muted) this.stopMusic();
+    if (this.settings.muted) {
+      this.stopMusic();
+      this.stopEvents();
+    }
+    for (const source of this.events.keys()) source.volume = this.settings.effectsVolume;
     this.applyMusicVolume();
   }
 
@@ -92,7 +104,25 @@ export class AudioController {
   }
 
   private applyMusicVolume(): void {
-    if (this.activeMusic) this.activeMusic.volume = this.settings.musicVolume * (this.musicDucked ? 0.28 : 1) * this.fadeProgress;
+    const eventDuck = [...this.events.values()].some(event => event.duckMusic);
+    if (this.activeMusic) this.activeMusic.volume = this.settings.musicVolume * (this.musicDucked || eventDuck ? 0.28 : 1) * this.fadeProgress;
+  }
+
+  private finishEvent(source: AudioSource): void {
+    const event = this.events.get(source);
+    if (!event) return;
+    clearTimeout(event.timer);
+    this.events.delete(source);
+    this.applyMusicVolume();
+  }
+
+  stopEvents(): void {
+    for (const [source, event] of this.events) {
+      clearTimeout(event.timer);
+      try { source.pause(); source.currentTime = 0; } catch { /* Optional audio. */ }
+    }
+    this.events.clear();
+    this.applyMusicVolume();
   }
 
   private clearTransition(): void {
@@ -127,11 +157,27 @@ export class AudioController {
       this.applyMusicVolume();
       return true;
     }
+    let source: AudioSource | null = null;
     try {
-      const source = this.sourceFactory.create(definition.url);
+      source = this.sourceFactory.create(definition.url);
+      const playingSource = source;
       source.volume = volume * (definition.track === "music" && this.musicDucked ? 0.28 : 1);
       source.currentTime = 0;
       source.loop = definition.loop === true;
+      if (definition.track === "event") {
+        // Outcome replaces countdown/reserve tails, but preserves the brief neutral lock.
+        if (definition.duckMusic) {
+          for (const [playing, event] of this.events) {
+            if (event.cue === "answer-locked") continue;
+            try { playing.pause(); playing.currentTime = 0; } catch { /* Optional audio. */ }
+            this.finishEvent(playing);
+          }
+        }
+        const timer = setTimeout(() => this.finishEvent(playingSource), (definition.durationMs ?? 3000) + 500);
+        this.events.set(source, { cue, timer, duckMusic: definition.duckMusic === true });
+        source.addEventListener?.("ended", () => this.finishEvent(playingSource), { once: true });
+        this.applyMusicVolume();
+      }
       if (definition.track === "music") {
         const previousMusic = this.activeMusic;
         this.clearTransition();
@@ -152,13 +198,16 @@ export class AudioController {
           }, 25);
         }
       }
+      this.applyMusicVolume();
       const result = source.play();
       if (result instanceof Promise) void result.catch(() => {
         // Allow the next user gesture to retry after an autoplay denial.
         if (this.activeMusic === source) this.stopMusic();
+        this.finishEvent(playingSource);
       });
       return true;
     } catch {
+      if (source) this.finishEvent(source);
       return false;
     }
   }
@@ -234,9 +283,9 @@ export function classicMusicStage(questionIndex: number, questionCount: number, 
   return Math.min(2, Math.max(0, Math.floor(questionIndex / (questionCount / 3)))) as 0 | 1 | 2;
 }
 
-export function presentationMusicCue(phase: string | null, stage: 0 | 1 | 2 = 0): AudioCue {
+export function presentationMusicCue(phase: string | null, stage: 0 | 1 | 2 = 0): AudioCue | null {
   if (!phase || phase === "lobby") return "menu-theme";
-  if (phase === "finished") return "winner";
+  if (phase === "finished") return null;
   return (["game-theme", "game-theme-two", "game-theme-three"] as const)[stage];
 }
 
@@ -253,7 +302,10 @@ export function phaseAudioActions(
   if (currentPhase === "answering") return [{ type: "set-music-ducked", ducked: true }, { type: "play", cue: "question-start" }];
   if (currentPhase === "bonus-veto") return [{ type: "set-music-ducked", ducked: false }, { type: "play", cue: "bonus" }];
   if (currentPhase === "reveal") return [{ type: "set-music-ducked", ducked: false }];
-  if (currentPhase === "finished") return [{ type: "set-music-ducked", ducked: false }];
+  if (currentPhase === "finished") return [
+    { type: "stop-music" },
+    ...(previousPhase ? [{ type: "play" as const, cue: "winner" as const }] : [])
+  ];
   return [{ type: "play", cue: "screen-transition" }];
 }
 
@@ -262,8 +314,27 @@ export function revealOutcomeCue(
 ): AudioCue {
   const active = resolutions.filter(({ result }) => result !== "spectator");
   const correct = active.filter(({ result }) => result === "correct").length;
+  if (active.length > 0 && active.every(({ result }) => result === "no-answer")) return "timeout";
   if (correct === 0) return "reveal-none";
   return correct === active.length ? "reveal-all" : "reveal-some";
+}
+
+/** Observes acceptance only; never sees an answer position or correct result. */
+export class AnswerCommitAudioMonitor {
+  private signature: string | null = null;
+  private answered = new Set<string>();
+
+  observe(signature: string, answeredIds: readonly string[]): readonly AudioCue[] {
+    const current = new Set(answeredIds);
+    if (signature !== this.signature) {
+      this.signature = signature;
+      this.answered = current; // Restored/reconnected answers must stay silent.
+      return [];
+    }
+    const added = [...current].some(id => !this.answered.has(id));
+    this.answered = current;
+    return added ? ["answer-locked"] : [];
+  }
 }
 
 export class RevealAudioMonitor {

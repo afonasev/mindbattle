@@ -137,7 +137,13 @@ export function App() {
   );
   const dispatch = useCallback(
     (commands: readonly DomainCommand[]) => {
+      const before = controller.view;
       controller.dispatch(commands);
+      const after = controller.view;
+      if (before?.phase === "answering" && !before.paused && commands.some(command => command.type === "answer") &&
+          after?.teams.some(team => team.hasAnswered && !before.teams.find(previous => previous.id === team.id)?.hasAnswered)) {
+        audioRef.current.play("answer-locked");
+      }
       sync();
     },
     [controller, sync]
@@ -183,7 +189,15 @@ export function App() {
     }
   }, [settings.collectQuestionFeedback, soloController]);
 
-  const dispatchSolo = useCallback((command: SoloCommand) => setSolo(soloController.dispatch([command])), [soloController]);
+  const dispatchSolo = useCallback((command: SoloCommand) => {
+    const before = soloController.state;
+    const next = soloController.dispatch([command]);
+    if (command.type === "answer" && before?.phase.kind === "answering" && !before.paused && before.phase.answer === null &&
+        next && (next.phase.kind === "answering" || next.phase.kind === "reveal") && next.phase.answer !== null) {
+      audioRef.current.play("answer-locked");
+    }
+    setSolo(next);
+  }, [soloController]);
 
   const submitSoloFeedback = useCallback(async () => {
     const submission = soloController.submitFeedback();
@@ -611,6 +625,7 @@ export function App() {
     const phase = match?.phase.kind ?? null;
     if (phase !== phaseRef.current) {
       inputRef.current = disarmUntilNeutral(inputRef.current);
+      if (phase !== "reveal") audioRef.current.stopEvents();
       for (const action of phaseAudioActions(phaseRef.current, phase)) {
         if (action.type === "stop-music") audioRef.current.stopMusic();
         else if (action.type === "set-music-ducked") audioRef.current.setMusicDucked(action.ducked);
@@ -629,19 +644,23 @@ export function App() {
     audioRef.current.update(preferences);
     if (musicPaused || preferences.muted) {
       audioRef.current.stopMusic();
+      audioRef.current.stopEvents();
       return;
     }
+    if (!musicCue) { audioRef.current.stopMusic(); return; }
     audioRef.current.setMusicDucked(musicPhase === "answering");
     audioRef.current.play(musicCue);
   }, [musicCue, musicPhase, musicPaused, preferences.muted, preferences.musicVolume, preferences.effectsVolume]);
 
   useEffect(() => {
-    if (!match || match.pause || match.phase.kind !== "reveal") {
+    if (!match || match.phase.kind !== "reveal") {
       revealAudioRef.current.reset();
       return;
     }
     const signature = `${match.phase.round.questionId}:${match.phase.resolutions.map(({ teamId, result }) => `${teamId}:${result}`).join("|")}`;
-    for (const cue of revealAudioRef.current.observe(signature, match.phase.resolutions)) audioRef.current.play(cue);
+    for (const cue of revealAudioRef.current.observe(signature, match.phase.resolutions)) {
+      if (!match.pause) audioRef.current.play(cue);
+    }
   }, [match]);
 
   useEffect(() => {
@@ -657,6 +676,7 @@ export function App() {
     };
     const previous = soloPhaseRef.current ? toMatchPhase[soloPhaseRef.current as NonNullable<typeof phase>] : null;
     const current = phase ? toMatchPhase[phase] : null;
+    if (phase !== "reveal") audioRef.current.stopEvents();
     for (const action of phaseAudioActions(previous, current)) {
       if (action.type === "stop-music") audioRef.current.stopMusic();
       else if (action.type === "set-music-ducked") audioRef.current.setMusicDucked(action.ducked);
@@ -666,28 +686,31 @@ export function App() {
   }, [solo?.phase.kind]);
 
   useEffect(() => {
-    if (!solo || solo.paused || solo.phase.kind !== "answering") {
+    if (!solo || solo.phase.kind !== "answering") {
       soloAnsweringAudioRef.current.reset();
       return;
     }
+    if (solo.paused) return;
     for (const cue of soloAnsweringAudioRef.current.observe(solo.phase.baseRemainingMs)) audioRef.current.play(cue);
   }, [solo]);
 
   useEffect(() => {
-    if (!solo || solo.paused || solo.phase.kind !== "reveal") {
+    if (!solo || solo.phase.kind !== "reveal") {
       soloRevealAudioRef.current.reset();
       return;
     }
     const signature = `${solo.runId}:${solo.slotIndex}:${solo.phase.result}`;
-    const result = solo.phase.result === "correct" ? "correct" : "wrong";
-    for (const cue of soloRevealAudioRef.current.observe(signature, [{ result }])) audioRef.current.play(cue);
+    for (const cue of soloRevealAudioRef.current.observe(signature, [{ result: solo.phase.result }])) {
+      if (!solo.paused) audioRef.current.play(cue);
+    }
   }, [solo]);
 
   useEffect(() => {
-    if (!match || match.pause || match.phase.kind !== "answering") {
+    if (!match || match.phase.kind !== "answering") {
       answeringAudioRef.current.reset();
       return;
     }
+    if (match.pause) return;
     for (const cue of answeringAudioRef.current.observe(match.phase.baseRemainingMs)) {
       audioRef.current.play(cue);
     }
@@ -720,7 +743,7 @@ export function App() {
       if (saved.muted) audioRef.current.stopMusic();
       setPreferences(saved);
     };
-    return <div className={rootClass}>{<ReleaseAction safe={canApplyPwaUpdate(false, solo.phase.kind)} />}{pauseSettingsOpen ? <SettingsDialog preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} /> : solo.phase.kind === "feedback" && !solo.paused ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} exit={() => dispatchSolo({ type: "pause" })} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} settings={() => setPauseSettingsOpen(true)} command={(command) => { setSoloInput("pointer"); setSolo(soloController.dispatch([command])); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}{solo.phase.kind === "feedback" && !solo.paused && !pauseSettingsOpen && soloController.difficultyFeedbackStatus === "error" && <FeedbackUnavailableDialog selected={feedbackRecoveryChoice} onSelect={setFeedbackRecoveryChoice} onRetry={() => { setFeedbackRecoveryChoice("retry"); void submitSoloFeedback(); }} onSkip={skipSoloFeedback} />}</div>;
+    return <div className={rootClass}>{<ReleaseAction safe={canApplyPwaUpdate(false, solo.phase.kind)} />}{pauseSettingsOpen ? <SettingsDialog preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} /> : solo.phase.kind === "feedback" && !solo.paused ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} exit={() => dispatchSolo({ type: "pause" })} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} settings={() => setPauseSettingsOpen(true)} command={(command) => { setSoloInput("pointer"); dispatchSolo(command); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}{solo.phase.kind === "feedback" && !solo.paused && !pauseSettingsOpen && soloController.difficultyFeedbackStatus === "error" && <FeedbackUnavailableDialog selected={feedbackRecoveryChoice} onSelect={setFeedbackRecoveryChoice} onRetry={() => { setFeedbackRecoveryChoice("retry"); void submitSoloFeedback(); }} onSkip={skipSoloFeedback} />}</div>;
   }
 
   if (!match || !controller.view) {

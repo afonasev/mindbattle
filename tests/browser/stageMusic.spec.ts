@@ -82,7 +82,7 @@ test("solo uses the calm selected theme and retains question cues", async ({ pag
   await page.getByRole("button", { name: "Одиночная игра", exact: true }).click();
   await expect.poll(() => events(page, "play", "/audio/quiz-v1/stage-one.mp3")).toBeGreaterThan(0);
   await page.locator(".topic-choice").first().click();
-  await expect.poll(() => events(page, "play", "/audio/arena-v1/question-start.wav")).toBe(1);
+  await expect.poll(() => events(page, "play", "/audio/quiz-sfx-v1/question-start.wav")).toBe(1);
   expect(await events(page, "play", "/audio/quiz-v1/stage-one.mp3")).toBe(1);
 });
 

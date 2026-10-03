@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   AnsweringAudioMonitor,
+  AnswerCommitAudioMonitor,
   AUDIO_CUE_MANIFEST,
   AudioController,
   phaseAudioActions,
@@ -138,8 +139,9 @@ describe("phase audio orchestration", () => {
       { type: "play", cue: "bonus" }
     ]);
     expect(phaseAudioActions("reveal", "finished")).toEqual([
-      { type: "set-music-ducked", ducked: false }
+      { type: "stop-music" }, { type: "play", cue: "winner" }
     ]);
+    expect(phaseAudioActions(null, "finished")).toEqual([{ type: "stop-music" }]);
   });
 });
 
@@ -154,7 +156,7 @@ describe("stage music and lifecycle", () => {
     expect(classicMusicStage(count, count, true)).toBe(2);
     expect(presentationMusicCue("answering", 1)).toBe("game-theme-two");
     expect(presentationMusicCue("reveal", 2)).toBe("game-theme-three");
-    expect(presentationMusicCue("finished", 2)).toBe("winner");
+    expect(presentationMusicCue("finished", 2)).toBeNull();
     expect(presentationMusicCue("lobby", 2)).toBe("menu-theme");
   });
 
@@ -224,5 +226,74 @@ describe("network audio role", () => {
     expect(shouldPlayNetworkAudio("display", false)).toBe(true);
     expect(shouldPlayNetworkAudio("player", false)).toBe(false);
     expect(shouldPlayNetworkAudio("display", true)).toBe(false);
+  });
+});
+
+
+describe("accepted answer and SFX lifecycle", () => {
+  it("confirms new accepted players, deduplicates replacements, and silently primes reconnects", () => {
+    const monitor = new AnswerCommitAudioMonitor();
+    expect(monitor.observe("q1", [])).toEqual([]);
+    expect(monitor.observe("q1", ["red"])).toEqual(["answer-locked"]);
+    expect(monitor.observe("q1", ["red"])).toEqual([]);
+    expect(monitor.observe("q1", ["red", "blue"])).toEqual(["answer-locked"]);
+    expect(monitor.observe("q2", ["blue"])).toEqual([]);
+    expect(monitor.observe("q2", ["blue", "red"])).toEqual(["answer-locked"]);
+  });
+
+  it("separates timeout from error while preserving mixed/all/none outcomes and spectators", () => {
+    expect(revealOutcomeCue([{ result: "no-answer" }])).toBe("timeout");
+    expect(revealOutcomeCue([{ result: "no-answer" }, { result: "spectator" }])).toBe("timeout");
+    expect(revealOutcomeCue([{ result: "wrong" }, { result: "no-answer" }])).toBe("reveal-none");
+    expect(revealOutcomeCue([{ result: "correct" }, { result: "no-answer" }])).toBe("reveal-some");
+  });
+
+  it("plays victory at effects volume with silent music, and stops all active tails on mute", () => {
+    vi.useFakeTimers();
+    try {
+      const sources: FakeSource[] = [];
+      const audio = new AudioController(factory(sources), { musicVolume: 0, effectsVolume: .6, muted: false });
+      expect(audio.play("winner")).toBe(true);
+      expect(sources[0].volume).toBeCloseTo(.6);
+      audio.update({ musicVolume: 0, effectsVolume: .2, muted: false });
+      expect(sources[0]).toMatchObject({ volume: .2, playCalls: 1 });
+      audio.update({ musicVolume: 0, effectsVolume: .2, muted: true });
+      expect(sources[0]).toMatchObject({ paused: true, currentTime: 0 });
+      expect(vi.getTimerCount()).toBe(0);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it("gives a result space in the mix, preserves neutral lock, and releases ducking on ended", () => {
+    vi.useFakeTimers();
+    try {
+      const sources: FakeSource[] = [];
+      const audio = new AudioController(factory(sources), { musicVolume: .5, effectsVolume: .7, muted: false });
+      audio.play("game-theme");
+      audio.play("timer-last-second");
+      audio.play("answer-locked");
+      audio.play("reveal-all");
+      expect(sources[1].paused).toBe(true);
+      expect(sources[2].paused).toBe(false);
+      expect(sources[0].volume).toBeCloseTo(.14);
+      vi.advanceTimersByTime(3500);
+      expect(sources[0].volume).toBeCloseTo(.5);
+      audio.play("reveal-none");
+      audio.setMusicDucked(true);
+      audio.stopEvents();
+      expect(sources[4].paused).toBe(true);
+      expect(sources[0].volume).toBeCloseTo(.14);
+      expect(vi.getTimerCount()).toBe(0);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it("clears rejected effects without leaving the music ducked", async () => {
+    vi.useFakeTimers();
+    try {
+      const sources: FakeSource[] = [];
+      const audio = new AudioController(factory(sources, { reject: true }));
+      audio.play("reveal-all");
+      await Promise.resolve();
+      expect(vi.getTimerCount()).toBe(0);
+    } finally { vi.useRealTimers(); }
   });
 });

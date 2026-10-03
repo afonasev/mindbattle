@@ -17,6 +17,8 @@ import type {
 } from "../network/protocol";
 import {
   AudioController,
+  AnswerCommitAudioMonitor,
+  AnsweringAudioMonitor,
   phaseAudioActions,
   classicMusicStage,
   presentationMusicCue,
@@ -103,6 +105,8 @@ export function NetworkApp() {
   const audio = useRef<AudioController | null>(null);
   const lastPhase = useRef("");
   const revealAudio = useRef(new RevealAudioMonitor());
+  const answerCommitAudio = useRef(new AnswerCommitAudioMonitor());
+  const answeringAudio = useRef(new AnsweringAudioMonitor());
   const confirmationAudio = useRef(new TopicCountdownAudioMonitor());
   const enableAudio = () => {
     if (!mobile && !audio.current)
@@ -154,6 +158,7 @@ export function NetworkApp() {
     if (lastPhase.current === signature) return;
     const previousPhase = lastPhase.current.split(":")[1] || null;
     lastPhase.current = signature;
+    if (snapshot.phase !== "reveal") audio.current?.stopEvents();
     for (const action of phaseAudioActions(previousPhase, snapshot.phase)) {
       if (action.type === "stop-music") audio.current?.stopMusic();
       else if (action.type === "set-music-ducked") audio.current?.setMusicDucked(action.ducked);
@@ -167,21 +172,36 @@ export function NetworkApp() {
     if (mobile || (snapshot && !shouldPlayNetworkAudio(snapshot.role, mobile))) return;
     if (snapshot?.paused || muted) {
       audio.current?.stopMusic();
+      audio.current?.stopEvents();
       return;
     }
+    if (!musicCue) { audio.current?.stopMusic(); return; }
     audio.current?.setMusicDucked(snapshot?.phase === "answering");
     audio.current?.play(musicCue);
   }, [musicCue, snapshot?.phase, snapshot?.paused, snapshot?.epoch, snapshot?.role, credential, mobile, muted, preferences.musicVolume, preferences.effectsVolume]);
   useEffect(() => {
-    if (!snapshot || !shouldPlayNetworkAudio(snapshot.role, mobile) || snapshot.paused || snapshot.phase !== "reveal" || !snapshot.view) {
+    if (!snapshot || !shouldPlayNetworkAudio(snapshot.role, mobile) || !snapshot.view ||
+        !["answering", "reveal"].includes(snapshot.phase)) return;
+    const signature = `${snapshot.epoch}:${snapshot.questionNumber}:${snapshot.tieBreakNumber ?? 0}`;
+    const cues = answerCommitAudio.current.observe(signature, snapshot.view.teams.filter(team => team.hasAnswered).map(team => team.id));
+    for (const cue of cues) if (!snapshot.paused) audio.current?.play(cue);
+  }, [snapshot, mobile]);
+  useEffect(() => {
+    if (!snapshot || !shouldPlayNetworkAudio(snapshot.role, mobile) || snapshot.phase !== "reveal" || !snapshot.view) {
       if (snapshot?.phase !== "reveal") revealAudio.current.reset();
       return;
     }
     const signature = `${snapshot.epoch}:${snapshot.phaseRevision}`;
     for (const cue of revealAudio.current.observe(signature, snapshot.view.teams.map(({ result }) => ({ result: result ?? "no-answer" })))) {
-      audio.current?.play(cue);
+      if (!snapshot.paused) audio.current?.play(cue);
     }
   }, [snapshot?.epoch, snapshot?.phase, snapshot?.phaseRevision, snapshot?.paused, snapshot?.view, mobile]);
+  useEffect(() => {
+    if (!snapshot || !shouldPlayNetworkAudio(snapshot.role, mobile)) return;
+    if (snapshot.phase !== "answering") { answeringAudio.current.reset(); return; }
+    if (snapshot.paused || snapshot.view?.baseRemainingMs === undefined) return;
+    for (const cue of answeringAudio.current.observe(snapshot.view.baseRemainingMs)) audio.current?.play(cue);
+  }, [snapshot, mobile]);
   useEffect(() => {
     if (mobile || snapshot?.phase !== "topic-confirmation") {
       confirmationAudio.current.reset();
@@ -194,9 +214,9 @@ export function NetworkApp() {
       audio.current?.play(cue);
   }, [snapshot?.phase, snapshot?.paused, snapshot?.view?.confirmationRemainingMs, mobile]);
   useEffect(() => {
-    if (snapshot?.paused) audio.current?.stopMusic();
+    if (snapshot?.paused) { audio.current?.stopMusic(); audio.current?.stopEvents(); }
   }, [snapshot?.paused]);
-  useEffect(() => () => audio.current?.stopMusic(), []);
+  useEffect(() => () => { audio.current?.stopMusic(); audio.current?.stopEvents(); }, []);
   async function enter(create = false) {
     setBusy(true);
     setError("");
