@@ -36,7 +36,7 @@ for (const width of [1280, 390]) {
     await page.keyboard.press("Escape");
     await page.getByRole("button", { name: "Рекорды", exact: true }).click();
     await page.getByRole("button", { name: "Назад", exact: true }).click();
-    await page.getByRole("button", { name: "Сетевая игра (2–12)", exact: true }).click();
+    await page.getByRole("button", { name: width <= 760 ? "Подключиться к игре" : "Сетевая игра (2–12)", exact: true }).click();
     await expect(page).toHaveURL(/\/network$/);
     await page.getByRole("button", { name: "Назад", exact: true }).click();
     await page.getByRole("button", { name: "Одиночная игра", exact: true }).click();
