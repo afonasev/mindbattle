@@ -38,6 +38,7 @@ test.describe("real PWA update", () => {
     await page.goto(origin);
     await page.evaluate(async () => { await navigator.serviceWorker.ready; });
     await page.reload();
+    await expect(page.getByRole("button", { name: "Одиночная игра", exact: true })).toBeVisible();
     const update = page.getByRole("button", { name: "Обновить", exact: true });
     await expect(update).toBeHidden();
     await page.screenshot({ path: info.outputPath("update-web-hidden.png"), fullPage: true });
@@ -55,6 +56,7 @@ test.describe("real PWA update", () => {
     const reloaded = page.waitForEvent("load");
     await update.click();
     await reloaded;
+    await expect(page.getByRole("button", { name: "Одиночная игра", exact: true })).toBeVisible();
     await expect(update).toBeHidden();
     expect(await page.evaluate(() => localStorage.getItem("manual-update-loads"))).not.toBe(loads);
     expect(await page.evaluate(() => localStorage.getItem("manual-update-preserved"))).toBe("saved-data");
