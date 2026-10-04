@@ -48,7 +48,7 @@ export function MainMenuUpdate() {
   }
   if (!ready) return null;
   return <div className="menu-update">
-    <MenuAction arrow caption={version ? `Версия ${version}` : "Обновить игру"} disabled={phase !== "idle"} aria-busy={phase !== "idle"} onClick={() => void update()}>
+    <MenuAction arrow caption={version ? `Версия ${version.split("+")[0]}` : "Обновить игру"} disabled={phase !== "idle"} aria-busy={phase !== "idle"} onClick={() => void update()}>
       {phase === "checking" ? "Проверяем…" : phase === "applying" ? "Обновляем…" : "Появилось новое обновление"}
     </MenuAction>
     {message && <p className="menu-update-message" role={error ? "alert" : "status"}>{message}</p>}

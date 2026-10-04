@@ -1,4 +1,4 @@
-const version = document.querySelector<HTMLMetaElement>('meta[name="mindbattle:version"]')?.content || "Разработка";
+const version = document.querySelector<HTMLMetaElement>('meta[name="mindbattle:version"]')?.content.split("+")[0] || "Разработка";
 const publication = document.querySelector<HTMLMetaElement>('meta[name="mindbattle:published-at"]')?.content;
 const publishedAt = publication && Number.isFinite(Date.parse(publication)) ? new Date(publication) : undefined;
 const publicationLabel = publishedAt ? new Intl.DateTimeFormat("ru-RU", {

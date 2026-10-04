@@ -62,7 +62,7 @@ try {
   assert.equal(await page.evaluate(() => !!window.mindbattleDesktop), true);
   const footer = () => page.getByRole("contentinfo", { name: "Версия приложения" });
   const currentRelease = await footer().innerText();
-  assert.match(currentRelease, /Версия 0\.1\.0\+/);
+  assert.match(currentRelease, /Версия 0\.1\.0(?:\s|$)/);
   assert.match(currentRelease, /Ещё не опубликована/);
   await page.screenshot({ path: path.join(evidence, "desktop-menu.png") });
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
@@ -188,7 +188,9 @@ try {
   await page.evaluate(() => window.mindbattleDesktop.checkUpdate());
   await page.getByRole("button", { name: "Появилось новое обновление", exact: true }).waitFor();
   assert.equal(await footer().innerText(), currentRelease);
-  assert.match(await page.getByRole("button", { name: "Появилось новое обновление", exact: true }).innerText(), /Версия 0\.1\.0\+smoke-new/);
+  assert.equal((await page.evaluate(() => window.mindbattleDesktop.status())).updateVersion, "0.1.0+smoke-new");
+  assert.match(await page.getByRole("button", { name: "Появилось новое обновление", exact: true }).innerText(), /Версия 0\.1\.0(?:\s|$)/);
+  assert.doesNotMatch(await page.getByRole("button", { name: "Появилось новое обновление", exact: true }).innerText(), /\+smoke-new/);
   await page.screenshot({ path: path.join(evidence, "desktop-update.png") });
   await page
     .getByRole("button", {
@@ -199,7 +201,7 @@ try {
   await page.waitForFunction(
     () => document.documentElement.dataset.desktopUpdated === "yes",
   );
-  assert.match(await footer().innerText(), /Версия 0\.1\.0\+smoke-new/);
+  assert.match(await footer().innerText(), /Версия 0\.1\.0(?:\s|$)/);
   assert.equal(
     await page.evaluate(() => localStorage.getItem("desktop-smoke")),
     "preserved",

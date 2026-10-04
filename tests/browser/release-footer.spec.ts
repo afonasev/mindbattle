@@ -23,7 +23,9 @@ for (const desktop of [false, true]) {
     });
     await page.goto("/");
     const footer = page.getByRole("contentinfo", { name: "Версия приложения" });
-    await expect(footer).toContainText("Версия 0.1.0+published");
+    await expect(footer).toContainText("Версия 0.1.0");
+    await expect(footer).not.toContainText("+published");
+    expect(await page.locator('meta[name="mindbattle:version"]').getAttribute("content")).toBe("0.1.0+published");
     await expect(footer).toContainText("Опубликована");
     await expect(footer.locator("time")).toHaveAttribute("datetime", "2026-10-04T07:00:00.000Z");
     await expect(footer).toContainText("04.10.2026");
@@ -33,7 +35,7 @@ for (const desktop of [false, true]) {
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: info.outputPath("footer-mobile.png"), fullPage: true });
       await page.goto("/network");
-      await expect(footer).toContainText("Версия 0.1.0+published");
+      await expect(footer).toContainText("Версия 0.1.0");
       await expect(footer.locator("time")).toHaveAttribute("datetime", "2026-10-04T07:00:00.000Z");
     }
   });

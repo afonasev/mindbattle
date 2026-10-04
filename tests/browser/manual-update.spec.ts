@@ -99,9 +99,10 @@ for (const legacy of [false, true]) {
     const update = page.getByRole("button", { name: "Появилось новое обновление", exact: true });
     await expect(page.getByRole("button", { name: "Одиночная игра", exact: true })).toBeVisible();
     await expect(update).toBeHidden();
-    await page.evaluate(() => (window as any).notifyUpdate(true, "1.2.3"));
+    await page.evaluate(() => (window as any).notifyUpdate(true, "1.2.3+abcdef12"));
     await expect(update).toBeVisible();
     await expect(update).toContainText("Версия 1.2.3");
+    await expect(update).not.toContainText("abcdef12");
     await update.click();
     await expect(page.getByRole("alert")).toContainText("Не удалось обновить");
     await expect(update).toBeEnabled();
