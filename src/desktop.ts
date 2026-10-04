@@ -6,6 +6,7 @@ export interface DisplaySettings {
 export interface DesktopBridge {
   version: 1;
   status(): Promise<{ ready: boolean; shellVersion: string }>;
+  checkUpdate?(): Promise<{ ready: boolean }>;
   onUpdate(listener: (ready: boolean) => void): () => void;
   applyUpdate(): Promise<boolean>;
   safeToUpdate(safe: boolean): void;

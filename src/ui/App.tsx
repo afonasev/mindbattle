@@ -749,7 +749,7 @@ export function App() {
   if (!match || !controller.view) {
     return (
       <div className={rootClass}>
-        <ReleaseAction />
+        <ReleaseAction showUpdate={showSoloRecords} />
         {showSoloRecords ? <SoloRecordsScreen records={soloController.records} exit={() => setShowSoloRecords(false)} /> : <MenuScreen
           settings={settings}
           setSettings={setSettings}

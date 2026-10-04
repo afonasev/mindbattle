@@ -178,21 +178,12 @@ try {
   assert.deepEqual(await app.evaluate(() => globalThis.testNetwork.events), [
     "offline-smoke",
   ]);
-  // Restart with network enabled from harness flag so automatic startup update check runs.
-  await app.close();
-  app = null;
-  await writeFile(path.join(user, "fixture-online"), "yes");
-  page = await launch();
-  await page
-    .getByRole("button", {
-      name: "Доступно обновление · Обновить",
-      exact: true,
-    })
-    .waitFor({ timeout: 30000 });
+  // A manual check uses the real trusted IPC and awaits the signed download.
+  await page.getByRole("button", { name: "Обновить", exact: true }).waitFor();
   await page.screenshot({ path: path.join(evidence, "desktop-update.png") });
   await page
     .getByRole("button", {
-      name: "Доступно обновление · Обновить",
+      name: "Обновить",
       exact: true,
     })
     .click();

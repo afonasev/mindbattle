@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { desktop, downloadPlatform } from "../desktop";
 import { applyPwaUpdate, onPwaUpdate } from "../main";
-export function ReleaseAction({ safe = true }: { safe?: boolean }) {
+export function ReleaseAction({ safe = true, showUpdate = true }: { safe?: boolean; showUpdate?: boolean }) {
   const [ready, setReady] = useState(false);
   const [url, setUrl] = useState<string>();
   const [error, setError] = useState("");
@@ -39,7 +39,7 @@ export function ReleaseAction({ safe = true }: { safe?: boolean }) {
   if (!safe) return null;
   return (
     <>
-      {ready ? (
+      {ready ? (showUpdate && (
         <button
           className="pwa-update release-action"
           type="button"
@@ -59,7 +59,7 @@ export function ReleaseAction({ safe = true }: { safe?: boolean }) {
             <path d="M20 7v5h-5M4 17v-5h5M6.1 7a7 7 0 0 1 11.6-1L20 9M4 15l2.3 3a7 7 0 0 0 11.6-1" />
           </svg>
         </button>
-      ) : (
+      )) : (
         url && (
           <a
             className="pwa-update release-action"

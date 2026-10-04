@@ -68,9 +68,9 @@ for (const outcome of ['confirmed', 'rolled-back']) {
         game.process().stdout.on("data", bytes => process.stdout.write(bytes));
         const page = await game.firstWindow();
         await page.waitForSelector('text=Mindbattle');
-        await page.getByRole('button', { name: 'Доступно обновление · Обновить' }).waitFor({ timeout: 180000 });
+        await page.getByRole('button', { name: /^(?:Доступно обновление · )?Обновить$/ }).waitFor({ timeout: 180000 });
         await page.screenshot({ path: path.join(evidence, `shell-${outcome}-ready.png`) });
-        await page.getByRole('button', { name: 'Доступно обновление · Обновить' }).click();
+        await page.getByRole('button', { name: /^(?:Доступно обновление · )?Обновить$/ }).click();
         let journal; let disconnected=false;
         for (let i = 0; i < 1200; i++) {
             try {

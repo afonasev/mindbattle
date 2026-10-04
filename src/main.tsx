@@ -3,7 +3,8 @@ import { browserResults } from './statistics/outbox';
 import { StrictMode, Suspense, lazy, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { registerSW } from "virtual:pwa-register";
-import { checkForPwaUpdate } from "./pwaUpdate";
+import { checkForPwaUpdate, findPwaUpdate } from "./pwaUpdate";
+import { runManualUpdate, withUpdateTimeout } from "./gameUpdate";
 import "@fontsource-variable/onest/wght.css";
 const App = lazy(() => import("./ui/App").then(module => ({ default: module.App })));
 const NetworkApp = lazy(() => import("./ui/NetworkApp").then(module => ({ default: module.NetworkApp })));
@@ -24,7 +25,34 @@ let applyUpdate: (() => Promise<void>) | undefined;
 let updateReady = false;
 const updateListeners = new Set<(ready: boolean) => void>();
 export const onPwaUpdate = (listener: (ready: boolean) => void) => { updateListeners.add(listener); listener(updateReady); return () => { updateListeners.delete(listener); }; };
-export const applyPwaUpdate = () => applyUpdate?.() ?? Promise.resolve();
+export const applyPwaUpdate = () => applyUpdate?.() ?? Promise.reject(new Error("Обновление пока недоступно. Попробуйте ещё раз."));
+let registrationError: unknown;
+let registered: (registration: ServiceWorkerRegistration | undefined) => void;
+const registrationReady = new Promise<ServiceWorkerRegistration | undefined>(resolve => { registered = resolve; });
+export function updateGame(isSafe: () => boolean, onApplying: () => void) {
+  return runManualUpdate({ isSafe, onApplying, apply: applyPwaUpdate, check: async () => {
+    if (updateReady) return true;
+    if (desktop) {
+      if (desktop.checkUpdate) return (await desktop.checkUpdate()).ready;
+      if ((await desktop.status()).ready) return true;
+      throw new Error("В этой версии приложения обновления проверяются автоматически. Попробуйте ещё раз чуть позже.");
+    }
+    if (!("serviceWorker" in navigator)) throw new Error("Обновление недоступно в этом браузере.");
+    const registration = await withUpdateTimeout(registrationReady, 15_000);
+    if (!registration) throw new Error("Не удалось подготовить обновление. Попробуйте перезапустить игру.", { cause: registrationError });
+    if (!navigator.onLine && !registration.waiting) throw new Error("Не удалось обновить игру. Проверьте подключение и попробуйте ещё раз.");
+    if (!await findPwaUpdate(registration)) return false;
+    // Workbox installs its reload listener when it emits onNeedRefresh.
+    await new Promise<void>((resolve, reject) => {
+      const timer = setTimeout(() => { unsubscribe(); reject(new Error("Обновление загружено. Нажмите «Обновить» ещё раз.")); }, 5_000);
+      let unsubscribe = () => {};
+      const listener = (ready: boolean) => { if (ready) { clearTimeout(timer); unsubscribe(); resolve(); } };
+      unsubscribe = onPwaUpdate(listener);
+      if (updateReady) unsubscribe();
+    });
+    return true;
+  } });
+}
 export function navigate(path: string) {
   if (location.pathname === path) return;
   history.pushState(null, "", path);
@@ -51,8 +79,10 @@ if (desktop) {
     immediate: true,
     onNeedRefresh: () => updateAvailable(true),
     onRegisteredSW: (_swScriptUrl, registration) => {
+      registered(registration);
       void checkForPwaUpdate(registration).catch(() => undefined);
-    }
+    },
+    onRegisterError: (error) => { registrationError = error; registered(undefined); }
   });
 }
 

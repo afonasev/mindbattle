@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer } = require("electron");
 contextBridge.exposeInMainWorld("mindbattleDesktop", {
   version: 1,
   status: () => ipcRenderer.invoke("desktop:status"),
+  checkUpdate: () => ipcRenderer.invoke("desktop:check-update"),
   onUpdate: (listener) => {
     const handler = (_event, ready) => listener(ready);
     ipcRenderer.on("desktop:update", handler);

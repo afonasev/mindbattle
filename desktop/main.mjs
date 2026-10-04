@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { ShellStore, acknowledgeShell } from "./shell.mjs";
 import { ContentStore, atomicJson } from "./content.mjs";
 import { createHandler, APP_ORIGIN } from "./protocol.mjs";
+import { createUpdateCheck } from "./updateCheck.mjs";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const config = JSON.parse(await readFile(path.join(here, "config.json"), "utf8"));
 protocol.registerSchemesAsPrivileged([
@@ -189,18 +190,14 @@ else {
         handle("desktop:quit", () => {
             app.quit();
         });
-        const check = async () => {
-            try {
-                if ((await shellStore.check().catch(error => { console.warn("Shell update unavailable:", error.message); return Boolean(shellStore.state.pending); }) || await store.check()) && !window.isDestroyed())
-                    window.webContents.send("desktop:update", true);
-            }
-            catch (error) {
-                console.warn("Content update unavailable:", error.message);
-            }
-        };
+        const check = createUpdateCheck(shellStore, store, () => {
+            if (!window.isDestroyed()) window.webContents.send("desktop:update", true);
+        });
+        handle("desktop:check-update", check);
+        const backgroundCheck = () => void check().catch(error => console.warn("Update unavailable:", error.message));
         await window.loadURL(`${APP_ORIGIN}/`);
-        void check();
-        checkTimer = setInterval(check, 5 * 60 * 1000);
+        backgroundCheck();
+        checkTimer = setInterval(backgroundCheck, 5 * 60 * 1000);
     })
         .catch((error) => {
         console.error(error);

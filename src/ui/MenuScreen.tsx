@@ -2,6 +2,7 @@ import { MatchSetupFields } from "./MatchSetupFields";
 import { MenuAction, ScreenHeader, ScreenSurface } from "./menuUi";
 import { PresentationSettings } from "./PresentationSettings";
 import { DesktopQuit } from "./DesktopControls";
+import { MainMenuUpdate } from "./MainMenuUpdate";
 import { useState } from "react";
 import type {
   AccessibilityPreferences,
@@ -129,6 +130,7 @@ export function MenuScreen({
       {home && <div className="menu-utilities">
         <MenuAction className="menu-records-action" arrow caption="Лучшие результаты одиночной игры" onClick={viewRecords}>Рекорды</MenuAction>
         <MenuAction arrow onClick={() => setSettingsOpen(true)}>Настройки</MenuAction>
+        <MainMenuUpdate />
         <DesktopQuit />
       </div>}
 
