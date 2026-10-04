@@ -35,6 +35,7 @@ export function checkManifest(envelope, publicKey, shellVersion) {
   )
     throw new Error("Invalid content signature");
   const m = JSON.parse(envelope.payload);
+  if (m.version !== undefined && (typeof m.version !== "string" || !/^[0-9][a-zA-Z0-9.+_-]{0,63}$/.test(m.version))) throw new Error("Invalid content version");
   if (
     m.format !== 1 ||
     !Number.isSafeInteger(m.sequence) ||

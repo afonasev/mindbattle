@@ -46,3 +46,19 @@ export function findPwaUpdate(registration: ServiceWorkerRegistration, timeoutMs
     });
   });
 }
+
+// Ask the waiting worker itself: a network request could describe a newer release.
+export function waitingUpdateVersion(worker: ServiceWorker, timeoutMs = 3_000): Promise<string | undefined> {
+  return new Promise(resolve => {
+    const channel = new MessageChannel();
+    const finish = (value?: string) => {
+      clearTimeout(timer);
+      channel.port1.close();
+      channel.port2.close();
+      resolve(value);
+    };
+    const timer = setTimeout(() => finish(), timeoutMs);
+    channel.port1.onmessage = event => finish(typeof event.data === "string" && /^[0-9][a-zA-Z0-9.+_-]{0,63}$/.test(event.data) ? event.data : undefined);
+    try { worker.postMessage("mindbattle:update-version", [channel.port2]); } catch { finish(); }
+  });
+}

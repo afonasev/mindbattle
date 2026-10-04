@@ -10,7 +10,8 @@ export function MainMenuUpdate() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
   const [ready, setReady] = useState(false);
-  useEffect(() => onPwaUpdate(setReady), []);
+  const [version, setVersion] = useState<string>();
+  useEffect(() => onPwaUpdate((available, nextVersion) => { setReady(available); setVersion(nextVersion); }), []);
   useEffect(() => { active.current = true; return () => { active.current = false; clearTimeout(restartTimer.current); }; }, []);
   async function update() {
     if (pending.current) return;
@@ -47,8 +48,8 @@ export function MainMenuUpdate() {
   }
   if (!ready) return null;
   return <div className="menu-update">
-    <MenuAction arrow disabled={phase !== "idle"} aria-busy={phase !== "idle"} onClick={() => void update()}>
-      {phase === "checking" ? "Проверяем…" : phase === "applying" ? "Обновляем…" : "Обновить"}
+    <MenuAction arrow caption={version ? `Версия ${version}` : "Обновить игру"} disabled={phase !== "idle"} aria-busy={phase !== "idle"} onClick={() => void update()}>
+      {phase === "checking" ? "Проверяем…" : phase === "applying" ? "Обновляем…" : "Появилось новое обновление"}
     </MenuAction>
     {message && <p className="menu-update-message" role={error ? "alert" : "status"}>{message}</p>}
   </div>;

@@ -43,6 +43,7 @@ await walk("dist");
 const payload = JSON.stringify({
   format: 1,
   sequence,
+  version: JSON.parse(await readFile("dist/game-version.json", "utf8")).version,
   bridge: 1,
   shellMajor: Number(config.shellVersion.split(".")[0]),
   files,

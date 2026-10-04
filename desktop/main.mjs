@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { ShellStore, acknowledgeShell } from "./shell.mjs";
 import { ContentStore, atomicJson } from "./content.mjs";
 import { createHandler, APP_ORIGIN } from "./protocol.mjs";
-import { createUpdateCheck } from "./updateCheck.mjs";
+import { createUpdateCheck, pendingUpdateVersion } from "./updateCheck.mjs";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const config = JSON.parse(await readFile(path.join(here, "config.json"), "utf8"));
 protocol.registerSchemesAsPrivileged([
@@ -131,9 +131,10 @@ else {
             if (trusted(event))
                 safe = value === true;
         });
-        handle("desktop:status", () => ({
+        handle("desktop:status", async () => ({
             ready: Boolean(shellStore.state.pending || store.state.pending),
             shellVersion: config.shellVersion,
+            updateVersion: await pendingUpdateVersion(shellStore, store),
         }));
         handle("desktop:apply", async () => {
             if (!safe)
@@ -190,8 +191,9 @@ else {
         handle("desktop:quit", () => {
             app.quit();
         });
-        const check = createUpdateCheck(shellStore, store, () => {
-            if (!window.isDestroyed()) window.webContents.send("desktop:update", true);
+        const check = createUpdateCheck(shellStore, store, async () => {
+            const version = await pendingUpdateVersion(shellStore, store);
+            if (!window.isDestroyed()) window.webContents.send("desktop:update", true, version);
         });
         handle("desktop:check-update", check);
         const backgroundCheck = () => void check().catch(error => console.warn("Update unavailable:", error.message));

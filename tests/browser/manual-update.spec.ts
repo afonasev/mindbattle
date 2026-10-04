@@ -10,11 +10,16 @@ test.describe("real PWA update", () => {
   let server: Server;
   let origin: string;
   let tag = "A";
+  let offline = false;
   test.beforeAll(async ({}, info) => {
     test.skip(info.project.name !== "chromium-1280", "Shared worker fixture runs once");
     original = await readFile("dist/sw.js", "utf8");
     server = createServer((request, response) => {
-      if (request.url === "/sw.js") {
+      if (offline) { response.writeHead(503); response.end(); return; }
+      if (request.url === "/update-version.js") {
+        response.writeHead(200, { "content-type": "text/javascript", "cache-control": "no-store" });
+        response.end(`self.addEventListener('message', event => { if (event.data === 'mindbattle:update-version') event.ports[0].postMessage('2.0.0-${tag}'); });`);
+      } else if (request.url === "/sw.js") {
         response.writeHead(200, { "content-type": "text/javascript", "cache-control": "no-store" });
         response.end(`${original}\nself.addEventListener('message', event => { if (event.data === 'update-test-tag') event.ports[0].postMessage('${tag}'); });\n`);
       } else void serveStatic(request, response, resolve("dist")).catch(() => { response.writeHead(500); response.end(); });
@@ -30,6 +35,7 @@ test.describe("real PWA update", () => {
   });
   test("web/mobile hides current, offers a ready update and applies A→B offline", async ({ page, context }, info) => {
     tag = "A";
+    offline = false;
     await page.addInitScript(() => {
       // Mute browser QA at the media boundary irrespective of settings schema.
       HTMLMediaElement.prototype.play = async () => {};
@@ -39,12 +45,13 @@ test.describe("real PWA update", () => {
     await page.evaluate(async () => { await navigator.serviceWorker.ready; });
     await page.reload();
     await expect(page.getByRole("button", { name: "Одиночная игра", exact: true })).toBeVisible();
-    const update = page.getByRole("button", { name: "Обновить", exact: true });
+    const update = page.getByRole("button", { name: "Появилось новое обновление", exact: true });
     await expect(update).toBeHidden();
     await page.screenshot({ path: info.outputPath("update-web-hidden.png"), fullPage: true });
     tag = "B";
     await page.evaluate(async () => { await (await navigator.serviceWorker.getRegistration())!.update(); });
     await expect(update).toBeVisible();
+    await expect(update).toContainText("Версия 2.0.0-B");
     await page.screenshot({ path: info.outputPath("update-web.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
     expect(await update.evaluate(element => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
@@ -52,7 +59,10 @@ test.describe("real PWA update", () => {
     await page.screenshot({ path: info.outputPath("update-mobile.png"), fullPage: true });
     await page.evaluate(() => localStorage.setItem("manual-update-preserved", "saved-data"));
     const loads = await page.evaluate(() => localStorage.getItem("manual-update-loads"));
+    offline = true; // Service-worker requests bypass Playwright page offline emulation.
+    tag = "C"; // The server advanced, but the button must still describe waiting B.
     await context.setOffline(true);
+    await expect(update).toContainText("Версия 2.0.0-B");
     const reloaded = page.waitForEvent("load");
     await update.click();
     await reloaded;
@@ -81,11 +91,12 @@ for (const legacy of [false, true]) {
       };
     }, legacy);
     await page.goto("/");
-    const update = page.getByRole("button", { name: "Обновить", exact: true });
+    const update = page.getByRole("button", { name: "Появилось новое обновление", exact: true });
     await expect(page.getByRole("button", { name: "Одиночная игра", exact: true })).toBeVisible();
     await expect(update).toBeHidden();
-    await page.evaluate(() => (window as any).notifyUpdate(true));
+    await page.evaluate(() => (window as any).notifyUpdate(true, "1.2.3"));
     await expect(update).toBeVisible();
+    await expect(update).toContainText("Версия 1.2.3");
     await update.click();
     await expect(page.getByRole("alert")).toContainText("Не удалось обновить");
     await expect(update).toBeEnabled();

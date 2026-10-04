@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { createUpdateCheck } from "../../desktop/updateCheck.mjs";
+import { createUpdateCheck, pendingUpdateVersion } from "../../desktop/updateCheck.mjs";
 const store = (check) => ({ state: { pending: null }, check });
 test("background and manual callers await one download", async () => {
   let release;
@@ -34,4 +34,16 @@ test("a ready cached update is available offline and shell keeps priority", asyn
 });
 test("current requires both channels to succeed", async () => {
   assert.deepEqual(await createUpdateCheck(store(async () => false), store(async () => false), () => {})(), { ready: false });
+});
+
+test("pending version follows apply priority and never uses current shell version", async () => {
+  const shell = { state: { pending: "shell" }, pendingManifest: async () => ({ version: "1.2.0" }) };
+  const content = { state: { pending: "content" }, directory: id => id, manifestAt: async () => ({ version: "0.1.0+abcd1234" }) };
+  assert.equal(await pendingUpdateVersion(shell, content), "1.2.0");
+  shell.state.pending = null;
+  assert.equal(await pendingUpdateVersion(shell, content), "0.1.0+abcd1234");
+  content.manifestAt = async () => ({ sequence: 3 }); // older signed content
+  assert.equal(await pendingUpdateVersion(shell, content), undefined);
+  content.state.pending = null;
+  assert.equal(await pendingUpdateVersion(shell, content), undefined);
 });

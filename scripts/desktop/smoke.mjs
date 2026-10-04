@@ -18,6 +18,7 @@ const envelope = JSON.parse(
 );
 const manifest = JSON.parse(envelope.payload);
 manifest.sequence++;
+manifest.version = "0.1.0+smoke-new";
 const html = manifest.files.find((f) => f.path === "index.html");
 const changed = Buffer.from(
   (await readFile(path.join(content, "objects", html.sha256), "utf8")).replace(
@@ -180,11 +181,12 @@ try {
   ]);
   // Simulate background discovery through trusted IPC before offering apply.
   await page.evaluate(() => window.mindbattleDesktop.checkUpdate());
-  await page.getByRole("button", { name: "Обновить", exact: true }).waitFor();
+  await page.getByRole("button", { name: "Появилось новое обновление", exact: true }).waitFor();
+  assert.match(await page.getByRole("button", { name: "Появилось новое обновление", exact: true }).innerText(), /Версия 0\.1\.0\+smoke-new/);
   await page.screenshot({ path: path.join(evidence, "desktop-update.png") });
   await page
     .getByRole("button", {
-      name: "Обновить",
+      name: "Появилось новое обновление",
       exact: true,
     })
     .click();

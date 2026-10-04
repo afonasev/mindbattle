@@ -3,7 +3,7 @@ import { browserResults } from './statistics/outbox';
 import { StrictMode, Suspense, lazy, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { registerSW } from "virtual:pwa-register";
-import { checkForPwaUpdate, findPwaUpdate } from "./pwaUpdate";
+import { checkForPwaUpdate, findPwaUpdate, waitingUpdateVersion } from "./pwaUpdate";
 import { runManualUpdate, withUpdateTimeout } from "./gameUpdate";
 import "@fontsource-variable/onest/wght.css";
 const App = lazy(() => import("./ui/App").then(module => ({ default: module.App })));
@@ -23,8 +23,9 @@ const root = document.getElementById("root");
 
 let applyUpdate: (() => Promise<void>) | undefined;
 let updateReady = false;
-const updateListeners = new Set<(ready: boolean) => void>();
-export const onPwaUpdate = (listener: (ready: boolean) => void) => { updateListeners.add(listener); listener(updateReady); return () => { updateListeners.delete(listener); }; };
+let updateVersion: string | undefined;
+const updateListeners = new Set<(ready: boolean, version?: string) => void>();
+export const onPwaUpdate = (listener: (ready: boolean, version?: string) => void) => { updateListeners.add(listener); listener(updateReady, updateVersion); return () => { updateListeners.delete(listener); }; };
 export const applyPwaUpdate = () => applyUpdate?.() ?? Promise.reject(new Error("Обновление пока недоступно. Попробуйте ещё раз."));
 let registrationError: unknown;
 let registered: (registration: ServiceWorkerRegistration | undefined) => void;
@@ -69,15 +70,23 @@ function RoutedApp() {
   }, []);
   return path === "/network" ? <NetworkApp /> : <App />;
 }
-function updateAvailable(ready: boolean) { updateReady = ready; updateListeners.forEach(listener => listener(ready)); }
+function updateAvailable(ready: boolean, version?: string) { updateReady = ready; updateVersion = ready ? version : undefined; updateListeners.forEach(listener => listener(ready, updateVersion)); }
 if (desktop) {
   applyUpdate = async () => { if (!await desktop!.applyUpdate()) throw new Error("Update not applied"); };
   desktop.onUpdate(updateAvailable);
-  void desktop.status().then(state => updateAvailable(state.ready));
+  void desktop.status().then(state => updateAvailable(state.ready, state.updateVersion));
 } else if ("serviceWorker" in navigator) {
   applyUpdate = registerSW({
     immediate: true,
-    onNeedRefresh: () => updateAvailable(true),
+    onNeedRefresh: () => {
+      updateAvailable(true);
+      void registrationReady.then(async registration => {
+        const worker = registration?.waiting;
+        if (!worker) return;
+        const version = await waitingUpdateVersion(worker);
+        if (registration.waiting === worker && updateReady) updateAvailable(true, version);
+      });
+    },
     onRegisteredSW: (_swScriptUrl, registration) => {
       registered(registration);
       void checkForPwaUpdate(registration).catch(() => undefined);
