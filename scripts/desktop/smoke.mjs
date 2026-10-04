@@ -178,7 +178,8 @@ try {
   assert.deepEqual(await app.evaluate(() => globalThis.testNetwork.events), [
     "offline-smoke",
   ]);
-  // A manual check uses the real trusted IPC and awaits the signed download.
+  // Simulate background discovery through trusted IPC before offering apply.
+  await page.evaluate(() => window.mindbattleDesktop.checkUpdate());
   await page.getByRole("button", { name: "Обновить", exact: true }).waitFor();
   await page.screenshot({ path: path.join(evidence, "desktop-update.png") });
   await page

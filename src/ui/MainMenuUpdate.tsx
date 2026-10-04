@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { updateGame } from "../main";
+import { onPwaUpdate, updateGame } from "../main";
 import { MenuAction } from "./menuUi";
 
 export function MainMenuUpdate() {
@@ -9,6 +9,8 @@ export function MainMenuUpdate() {
   const [phase, setPhase] = useState<"idle" | "checking" | "applying">("idle");
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
+  const [ready, setReady] = useState(false);
+  useEffect(() => onPwaUpdate(setReady), []);
   useEffect(() => { active.current = true; return () => { active.current = false; clearTimeout(restartTimer.current); }; }, []);
   async function update() {
     if (pending.current) return;
@@ -19,7 +21,7 @@ export function MainMenuUpdate() {
     let restarting = false;
     try {
       const result = await updateGame(() => active.current, () => setPhase("applying"));
-      if (active.current && result === "current") setMessage("Обновлений нет.");
+      if (active.current && result === "current") setReady(false);
       if (active.current && result === "applied") {
         restarting = true;
         setMessage("Перезапускаем игру…");
@@ -43,6 +45,7 @@ export function MainMenuUpdate() {
       }
     }
   }
+  if (!ready) return null;
   return <div className="menu-update">
     <MenuAction arrow disabled={phase !== "idle"} aria-busy={phase !== "idle"} onClick={() => void update()}>
       {phase === "checking" ? "Проверяем…" : phase === "applying" ? "Обновляем…" : "Обновить"}

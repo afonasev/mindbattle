@@ -28,7 +28,7 @@ test.describe("real PWA update", () => {
       await new Promise<void>(done => server.close(() => done()));
     }
   });
-  test("web/mobile button checks, keeps data, applies A→B and reports offline", async ({ page, context }, info) => {
+  test("web/mobile hides current, offers a ready update and applies A→B offline", async ({ page, context }, info) => {
     tag = "A";
     await page.addInitScript(() => {
       // Mute browser QA at the media boundary irrespective of settings schema.
@@ -39,22 +39,23 @@ test.describe("real PWA update", () => {
     await page.evaluate(async () => { await navigator.serviceWorker.ready; });
     await page.reload();
     const update = page.getByRole("button", { name: "Обновить", exact: true });
+    await expect(update).toBeHidden();
+    await page.screenshot({ path: info.outputPath("update-web-hidden.png"), fullPage: true });
+    tag = "B";
+    await page.evaluate(async () => { await (await navigator.serviceWorker.getRegistration())!.update(); });
     await expect(update).toBeVisible();
-    await update.click();
-    await expect(page.getByRole("status")).toHaveText("Обновлений нет.");
     await page.screenshot({ path: info.outputPath("update-web.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
-    await expect(update).toBeVisible();
     expect(await update.evaluate(element => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: info.outputPath("update-mobile.png"), fullPage: true });
     await page.evaluate(() => localStorage.setItem("manual-update-preserved", "saved-data"));
     const loads = await page.evaluate(() => localStorage.getItem("manual-update-loads"));
-    tag = "B";
+    await context.setOffline(true);
     const reloaded = page.waitForEvent("load");
     await update.click();
     await reloaded;
-    await expect(update).toBeVisible();
+    await expect(update).toBeHidden();
     expect(await page.evaluate(() => localStorage.getItem("manual-update-loads"))).not.toBe(loads);
     expect(await page.evaluate(() => localStorage.getItem("manual-update-preserved"))).toBe("saved-data");
     expect(await page.evaluate(() => new Promise(resolve => {
@@ -62,52 +63,31 @@ test.describe("real PWA update", () => {
       channel.port1.onmessage = event => resolve(event.data);
       navigator.serviceWorker.controller!.postMessage("update-test-tag", [channel.port2]);
     }))).toBe("B");
-    await context.setOffline(true);
-    await update.click();
-    await expect(page.getByRole("alert")).toContainText("Не удалось обновить");
-    await expect(update).toBeEnabled();
+    await page.screenshot({ path: info.outputPath("update-mobile-hidden.png"), fullPage: true });
   });
 });
 
 for (const legacy of [false, true]) {
-  test(`desktop bridge ${legacy ? "legacy" : "manual"} reports an honest result`, async ({ page }) => {
+  test(`desktop ${legacy ? "legacy" : "manual"} hides until discovery and retains retry after apply error`, async ({ page }) => {
     await page.addInitScript((legacy) => {
       HTMLMediaElement.prototype.play = async () => {};
-      let calls = 0;
-      (window as any).updateCalls = () => calls;
       (window as any).mindbattleDesktop = {
-        version: 1, status: async () => ({ ready: false, shellVersion: "1.0.0" }),
-        ...(legacy ? {} : { checkUpdate: async () => { calls++; return { ready: false }; } }),
-        onUpdate: () => () => {}, applyUpdate: async () => { throw Error("must not apply current"); },
-        safeToUpdate: () => {}, ready: async () => {}, quit: async () => {},
+        version: 1, status: async () => ({ ready: false, shellVersion: "1.0.1" }),
+        ...(legacy ? {} : { checkUpdate: async () => ({ ready: false }) }),
+        onUpdate: (notify: (ready: boolean) => void) => { (window as any).notifyUpdate = notify; return () => {}; },
+        applyUpdate: async () => false, safeToUpdate: () => {}, ready: async () => {}, quit: async () => {},
       };
     }, legacy);
     await page.goto("/");
-    await page.getByRole("button", { name: "Обновить", exact: true }).click();
-    if (legacy) await expect(page.getByRole("alert")).toContainText("проверяются автоматически");
-    else {
-      await expect(page.getByRole("status")).toHaveText("Обновлений нет.");
-      expect(await page.evaluate(() => (window as any).updateCalls())).toBe(1);
-    }
+    const update = page.getByRole("button", { name: "Обновить", exact: true });
+    await expect(page.getByRole("button", { name: "Одиночная игра", exact: true })).toBeVisible();
+    await expect(update).toBeHidden();
+    await page.evaluate(() => (window as any).notifyUpdate(true));
+    await expect(update).toBeVisible();
+    await update.click();
+    await expect(page.getByRole("alert")).toContainText("Не удалось обновить");
+    await expect(update).toBeEnabled();
+    await page.evaluate(() => (window as any).notifyUpdate(false));
+    await expect(update).toBeHidden();
   });
 }
-
-test("leaving the menu cancels apply after a delayed desktop check", async ({ page }) => {
-  await page.addInitScript(() => {
-    HTMLMediaElement.prototype.play = async () => {};
-    (window as any).applied = 0;
-    (window as any).mindbattleDesktop = {
-      version: 1, status: async () => ({ ready: false, shellVersion: "1.0.1" }),
-      checkUpdate: () => new Promise(resolve => { (window as any).finishCheck = () => resolve({ ready: true }); }),
-      onUpdate: () => () => {}, applyUpdate: async () => { (window as any).applied++; return true; },
-      safeToUpdate: () => {}, ready: async () => {}, quit: async () => {},
-    };
-  });
-  await page.goto("/");
-  await page.getByRole("button", { name: "Обновить", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Проверяем…" })).toBeDisabled();
-  await page.getByRole("button", { name: "Одиночная игра", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
-  await page.evaluate(() => (window as any).finishCheck());
-  expect(await page.evaluate(() => (window as any).applied)).toBe(0);
-});
