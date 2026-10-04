@@ -63,7 +63,11 @@ try {
   const footer = () => page.getByRole("contentinfo", { name: "Версия приложения" });
   const currentRelease = await footer().innerText();
   assert.match(currentRelease, /Версия 0\.1\.0(?:\s|$)/);
-  assert.match(currentRelease, /Ещё не опубликована/);
+  const release = JSON.parse(await readFile("dist/game-version.json", "utf8"));
+  if (release.publishedAt) {
+    assert.match(currentRelease, /Опубликована/);
+    assert.equal(await footer().locator("time").getAttribute("datetime"), release.publishedAt);
+  } else assert.match(currentRelease, /Ещё не опубликована/);
   await page.screenshot({ path: path.join(evidence, "desktop-menu.png") });
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
   await page.getByLabel("Разрешение окна").selectOption("1600x900");

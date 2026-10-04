@@ -7,6 +7,7 @@ import { serveStatic } from "../../server/static.mjs";
 // The real generated worker participates; the small tag identifies A/B workers.
 test.describe("real PWA update", () => {
   let original: string;
+  let release: { publishedAt?: string };
   let server: Server;
   let origin: string;
   let tag = "A";
@@ -14,6 +15,7 @@ test.describe("real PWA update", () => {
   test.beforeAll(async ({}, info) => {
     test.skip(info.project.name !== "chromium-1280", "Shared worker fixture runs once");
     original = await readFile("dist/sw.js", "utf8");
+    release = JSON.parse(await readFile("dist/game-version.json", "utf8"));
     server = createServer((request, response) => {
       if (offline) { response.writeHead(503); response.end(); return; }
       if (request.url === "/update-version.js") {
@@ -49,7 +51,10 @@ test.describe("real PWA update", () => {
     await expect(update).toBeHidden();
     const footer = page.getByRole("contentinfo", { name: "Версия приложения" });
     const currentVersion = await footer.innerText();
-    await expect(footer).toContainText("Ещё не опубликована");
+    if (release.publishedAt) {
+      await expect(footer).toContainText("Опубликована");
+      await expect(footer.locator("time")).toHaveAttribute("datetime", release.publishedAt);
+    } else await expect(footer).toContainText("Ещё не опубликована");
     await page.screenshot({ path: info.outputPath("update-web-hidden.png"), fullPage: true });
     tag = "B";
     await page.evaluate(async () => { await (await navigator.serviceWorker.getRegistration())!.update(); });
