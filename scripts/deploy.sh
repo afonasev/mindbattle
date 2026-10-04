@@ -9,7 +9,8 @@ DATA_DIR="/var/lib/mindbattle"
 SERVICE="mindbattle.service"
 
 echo "==> Building production bundle"
-npm run build
+# This release timestamp is embedded in HTML and the offline bundle.
+MINDBATTLE_PUBLISHED_AT="${MINDBATTLE_PUBLISHED_AT:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}" npm run build
 
 echo "==> Syncing application to ${SSH_HOST}:${APP_DIR}"
 rsync -az --delete \

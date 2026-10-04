@@ -9,6 +9,7 @@ import "@fontsource-variable/onest/wght.css";
 const App = lazy(() => import("./ui/App").then(module => ({ default: module.App })));
 const NetworkApp = lazy(() => import("./ui/NetworkApp").then(module => ({ default: module.NetworkApp })));
 import "./ui/theme.css";
+import { AppFooter } from "./ui/AppFooter";
 
 const appIcon = document.getElementById("app-icon");
 if (appIcon instanceof HTMLLinkElement) {
@@ -68,7 +69,7 @@ function RoutedApp() {
     window.addEventListener("popstate", syncPath);
     return () => window.removeEventListener("popstate", syncPath);
   }, []);
-  return path === "/network" ? <NetworkApp /> : <App />;
+  return <>{path === "/network" ? <NetworkApp /> : <App />}<AppFooter /></>;
 }
 function updateAvailable(ready: boolean, version?: string) { updateReady = ready; updateVersion = ready ? version : undefined; updateListeners.forEach(listener => listener(ready, updateVersion)); }
 if (desktop) {

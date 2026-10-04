@@ -24,7 +24,7 @@ const changed = Buffer.from(
   (await readFile(path.join(content, "objects", html.sha256), "utf8")).replace(
     "<html",
     '<html data-desktop-updated="yes"',
-  ),
+  ).replace(/(<meta name="mindbattle:version" content=")[^"]*/, '$1' + manifest.version),
 );
 html.sha256 = digest(changed);
 html.size = changed.length;
@@ -60,6 +60,10 @@ const launch = async () => {
 try {
   let page = await launch();
   assert.equal(await page.evaluate(() => !!window.mindbattleDesktop), true);
+  const footer = () => page.getByRole("contentinfo", { name: "Версия приложения" });
+  const currentRelease = await footer().innerText();
+  assert.match(currentRelease, /Версия 0\.1\.0\+/);
+  assert.match(currentRelease, /Ещё не опубликована/);
   await page.screenshot({ path: path.join(evidence, "desktop-menu.png") });
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
   await page.getByLabel("Разрешение окна").selectOption("1600x900");
@@ -124,6 +128,7 @@ try {
   await app.close();
   app = null;
   page = await launch();
+  assert.equal(await footer().innerText(), currentRelease);
   assert.equal(
     await page.evaluate(() => localStorage.getItem("desktop-smoke")),
     "preserved",
@@ -182,6 +187,7 @@ try {
   // Simulate background discovery through trusted IPC before offering apply.
   await page.evaluate(() => window.mindbattleDesktop.checkUpdate());
   await page.getByRole("button", { name: "Появилось новое обновление", exact: true }).waitFor();
+  assert.equal(await footer().innerText(), currentRelease);
   assert.match(await page.getByRole("button", { name: "Появилось новое обновление", exact: true }).innerText(), /Версия 0\.1\.0\+smoke-new/);
   await page.screenshot({ path: path.join(evidence, "desktop-update.png") });
   await page
@@ -193,6 +199,7 @@ try {
   await page.waitForFunction(
     () => document.documentElement.dataset.desktopUpdated === "yes",
   );
+  assert.match(await footer().innerText(), /Версия 0\.1\.0\+smoke-new/);
   assert.equal(
     await page.evaluate(() => localStorage.getItem("desktop-smoke")),
     "preserved",

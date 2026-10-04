@@ -47,11 +47,15 @@ test.describe("real PWA update", () => {
     await expect(page.getByRole("button", { name: "Одиночная игра", exact: true })).toBeVisible();
     const update = page.getByRole("button", { name: "Появилось новое обновление", exact: true });
     await expect(update).toBeHidden();
+    const footer = page.getByRole("contentinfo", { name: "Версия приложения" });
+    const currentVersion = await footer.innerText();
+    await expect(footer).toContainText("Ещё не опубликована");
     await page.screenshot({ path: info.outputPath("update-web-hidden.png"), fullPage: true });
     tag = "B";
     await page.evaluate(async () => { await (await navigator.serviceWorker.getRegistration())!.update(); });
     await expect(update).toBeVisible();
     await expect(update).toContainText("Версия 2.0.0-B");
+    expect(await footer.innerText()).toBe(currentVersion);
     await page.screenshot({ path: info.outputPath("update-web.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
     expect(await update.evaluate(element => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
@@ -68,6 +72,7 @@ test.describe("real PWA update", () => {
     await reloaded;
     await expect(page.getByRole("button", { name: "Одиночная игра", exact: true })).toBeVisible();
     await expect(update).toBeHidden();
+    expect(await footer.innerText()).toBe(currentVersion);
     expect(await page.evaluate(() => localStorage.getItem("manual-update-loads"))).not.toBe(loads);
     expect(await page.evaluate(() => localStorage.getItem("manual-update-preserved"))).toBe("saved-data");
     expect(await page.evaluate(() => new Promise(resolve => {
