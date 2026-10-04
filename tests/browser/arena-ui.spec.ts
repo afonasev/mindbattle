@@ -37,7 +37,7 @@ for (const width of [360, 390, 760, 1280, 1920]) {
     await page.screenshot({ path: info.outputPath(`arena-menu-high-contrast-${width}.png`), fullPage: true, animations: "disabled" });
     await page.getByRole("button", { name: width <= 760 ? "Подключиться к игре" : "Сетевая игра (2–12)", exact: true }).click();
     await expect(page).toHaveURL(/\/network$/);
-    await expect(page.getByRole("button", { name: "Подключиться", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: width <= 760 ? "Подключиться" : "Создать сетевую игру", exact: true })).toBeVisible();
     await page.screenshot({ path: info.outputPath(`arena-network-entry-${width}.png`), fullPage: true, animations: "disabled" });
   });
 }
