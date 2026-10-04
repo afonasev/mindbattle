@@ -110,10 +110,11 @@ export function MenuScreen({
   return (
     <ScreenSurface className={`menu-shell ${home ? "menu-home" : "menu-subpage"}`}>
       {home && <div className="menu-scenery" aria-hidden="true"><div className="arena-orbit"><div className="arena-core" /></div><div className="arena-horizon" /></div>}
-      <ScreenHeader hero={home} subtitle={settingsOpen ? "Настройки" : "На одном устройстве"} back={settingsOpen ? () => setSettingsOpen(false) : classicSetupOpen ? () => setClassicSetupOpen(false) : undefined} />
+      <ScreenHeader hero={home} subtitle={home ? "Главное меню" : settingsOpen ? "Настройки" : "На одном устройстве"} back={settingsOpen ? () => setSettingsOpen(false) : classicSetupOpen ? () => setClassicSetupOpen(false) : undefined} />
 
       {home && (
       <section className="menu-mode-stage" aria-label="Выбор режима">
+        <div className="menu-intro"><span className="eyebrow">Интеллектуальная битва</span><p>Все решит эрудиция</p></div>
         <div className="menu-actions main-menu-actions">
           <MenuAction variant="primary" arrow caption="Свой темп. Личный рекорд." onClick={startSolo}>Одиночная игра</MenuAction>
           <MenuAction className="mobile-classic-action" aria-label="На одном устройстве (2–4)" arrow caption="2–4 команды · один общий экран" onClick={() => setClassicSetupOpen(true)}>На одном устройстве</MenuAction>

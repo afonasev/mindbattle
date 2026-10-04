@@ -23,10 +23,13 @@ export function ScreenHeader({ subtitle, back, menu, disabled = false, hero = fa
     window.addEventListener("keydown", keyboard);
     return () => window.removeEventListener("keydown", keyboard);
   }, [back]);
-  return <header className={hero ? "brand-lockup brand-lockup--menu" : `game-brand screen-header ${className}`}>
-    {hero ? <><span className="eyebrow">Интеллектуальная битва</span><h1>Mindbattle</h1><p>Все решит эрудиция</p></> : <><strong>Mindbattle</strong><span className="screen-header-subtitle">{subtitle}</span></>}
-    {back && <MenuAction className="navigation-action" onClick={back}>Назад</MenuAction>}
-    {menu && <MenuAction className="navigation-action" disabled={disabled} onClick={menu}>Меню</MenuAction>}
+  return <header className={`game-brand screen-header ${className}`}>
+    {hero ? <h1 className="screen-header-brand">Mindbattle</h1> : <strong className="screen-header-brand">Mindbattle</strong>}
+    <span className="screen-header-subtitle">{subtitle}</span>
+    <div className="screen-header-actions">
+      {back && <MenuAction className="navigation-action" onClick={back}>Назад</MenuAction>}
+      {menu && <MenuAction className="navigation-action" disabled={disabled} onClick={menu}>Меню</MenuAction>}
+    </div>
   </header>;
 }
 

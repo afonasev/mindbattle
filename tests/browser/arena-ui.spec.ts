@@ -37,6 +37,7 @@ for (const width of [360, 390, 760, 1280, 1920]) {
     await page.screenshot({ path: info.outputPath(`arena-menu-high-contrast-${width}.png`), fullPage: true, animations: "disabled" });
     await page.getByRole("button", { name: width <= 760 ? "Подключиться к игре" : "Сетевая игра (2–12)", exact: true }).click();
     await expect(page).toHaveURL(/\/network$/);
+    await expect(page.getByRole("button", { name: "Подключиться", exact: true })).toBeVisible();
     await page.screenshot({ path: info.outputPath(`arena-network-entry-${width}.png`), fullPage: true, animations: "disabled" });
   });
 }
@@ -61,6 +62,7 @@ test("installed desktop retains its native exit action", async ({ page }, info) 
 });
 
 test("solo result remains reachable after its final answer reveal", async ({ page }, info) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/?muted=1");
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
   await page.getByLabel("Собирать обратную связь по вопросам").uncheck();
@@ -69,6 +71,12 @@ test("solo result remains reachable after its final answer reveal", async ({ pag
   for (let round = 0; round < 3; round++) {
     await page.locator(".topic-choice").first().click();
     await expect(page.locator(".solo-answer-button")).toHaveCount(4);
+    if (round === 0) {
+      await page.screenshot({ path: info.outputPath("arena-solo-mobile-question.png"), fullPage: true, animations: "disabled" });
+      await page.getByRole("button", { name: "Меню", exact: true }).click();
+      await page.screenshot({ path: info.outputPath("arena-mobile-pause.png"), fullPage: true, animations: "disabled" });
+      await page.getByRole("button", { name: "Продолжить", exact: true }).click();
+    }
     const wrongPosition = await page.evaluate(() => {
       const state = JSON.parse(localStorage.getItem("mindbattle:data:v1")!).lastSolo.state;
       return state.phase.round.correctPosition === "up" ? "right" : "up";
@@ -130,3 +138,24 @@ test("arena network surfaces support twelve connected phones", async ({ browser,
     await Promise.all(contexts.map(context => context.close()));
   }
 });
+
+for (const width of [390, 1280]) {
+  test(`headers share geometry across menu, settings, solo and network at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto("/?muted=1");
+    const metrics = () => page.locator(".screen-header").evaluate(header => {
+      const box = header.getBoundingClientRect();
+      const brand = header.querySelector(".screen-header-brand")!;
+      const style = getComputedStyle(header);
+      return { x: box.x, y: box.y, width: box.width, height: box.height, border: style.borderBottom, brandSize: getComputedStyle(brand).fontSize };
+    });
+    const home = await metrics();
+    await page.getByRole("button", { name: "Настройки", exact: true }).click();
+    expect(await metrics()).toEqual(home);
+    await page.getByRole("button", { name: "Назад", exact: true }).click();
+    await page.getByRole("button", { name: "Одиночная игра", exact: true }).click();
+    expect(await metrics()).toEqual(home);
+    await page.goto("/network?muted=1");
+    expect(await metrics()).toEqual(home);
+  });
+}
