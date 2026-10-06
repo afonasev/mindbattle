@@ -11,15 +11,16 @@ let release = releases.find(r => r.tag_name === tag);
 if (!release) {
   const commit = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
   gh("release", "create", tag, "--repo", repo, "--target", commit, "--draft", "--title", `Mindbattle ${config.shellVersion}`, "--notes", "Windows: Program Files installation, game icon, desktop shortcut and launch options together on the finish page. macOS: universal Intel/Apple Silicon DMG. Installers are unsigned. Windows installation acceptance remains pending.");
-  release = JSON.parse(gh("api", `repos/${repo}/releases/tags/${tag}`));
+  release = JSON.parse(gh("api", `repos/${repo}/releases?per_page=100`)).find(r => r.tag_name === tag);
 }
+if (!release) throw new Error(`Release ${tag} missing after creation`);
 for (const item of Object.values(catalog)) {
   const name = item.url.split("/").at(-1);
   if (!release.assets.some(a => a.name === name)) {
     gh("release", "upload", tag, `desktop-release/installers/installers/${name}`, "--repo", repo);
   }
 }
-release = JSON.parse(gh("api", `repos/${repo}/releases/tags/${tag}`));
+release = JSON.parse(gh("api", `repos/${repo}/releases?per_page=100`)).find(r => r.tag_name === tag);
 for (const item of Object.values(catalog)) {
   const asset = release.assets.find(a => a.browser_download_url === item.url);
   if (!asset || asset.size !== item.size || asset.digest !== `sha256:${item.sha256}`) {
