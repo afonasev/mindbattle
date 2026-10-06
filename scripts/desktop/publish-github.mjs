@@ -22,10 +22,14 @@ for (const item of Object.values(catalog)) {
 }
 release = JSON.parse(gh("api", `repos/${repo}/releases?per_page=100`)).find(r => r.tag_name === tag);
 for (const item of Object.values(catalog)) {
-  const asset = release.assets.find(a => a.browser_download_url === item.url);
+  const asset = release.assets.find(a => a.name === item.url.split("/").at(-1));
   if (!asset || asset.size !== item.size || asset.digest !== `sha256:${item.sha256}`) {
     throw new Error(`GitHub asset integrity mismatch: ${item.url}; current VPS files retained`);
   }
+}
+if (release.draft) {
+  const commit = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
+  gh("release", "edit", tag, "--repo", repo, "--target", commit);
 }
 gh("release", "edit", tag, "--repo", repo, "--draft=false", "--latest");
 console.log(`Verified GitHub assets: https://github.com/${repo}/releases/tag/${tag}`);
