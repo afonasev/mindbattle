@@ -58,6 +58,8 @@ npm run test:browser    # браузерные сценарии Playwright
 
 Владелец выкладывает игру на `mindbattle.afonasev.tech` командой `make deploy` с настроенным VPS и SSH-профилем. Команда собирает приложение, обновляет сервер, перезапускает сервис и проверяет локальную доступность; для локальной игры она не нужна. Точные действия описаны в [scripts/deploy.sh](scripts/deploy.sh).
 
+Инструкция по публикации сайта, GitHub Releases и desktop-обновлений: [docs/desktop/RELEASE.md](docs/desktop/RELEASE.md). Установщики скачиваются с GitHub; VPS хранит только каталог ссылок и подписанные каналы обновлений.
+
 ## Лицензия
 
 [MIT](LICENSE).

@@ -1,57 +1,137 @@
-# Desktop releases
+# Публикация Mindbattle
 
-Mindbattle packages a sandboxed Electron renderer with the complete offline game. Runtime/main/preload are the **shell**; signed JS/CSS/catalog/assets are **content**. Content updates download in the background and are applied with the update icon in the menu. Active matches are never reloaded by the updater. A stable `mindbattle://game` origin and persistent partition keep localStorage and the IndexedDB statistics outbox across releases. Statistics upload uses the existing acknowledgement/idempotency contract, startup/online triggers and bounded retries.
+Каноническая инструкция для сайта, установщиков и обновлений установленной игры. Исходники и установщики публикуются в публичном репозитории [afonasev/mindbattle](https://github.com/afonasev/mindbattle). Публикация требует разрешения пользователя на соответствующую среду; сборка, Git push и запись этой инструкции сами по себе его не дают.
 
-## Build
+## Что публикуем
 
-Use Node matching package.json and `npm ci`. The pinned public key is `desktop/content-public.pem`. The corresponding Ed25519 private key is held by the release operator outside the repo; set `MINDBATTLE_CONTENT_KEY` to its absolute path. Never put its contents in Git, build output or logs. `npm run desktop:key` is only for the initial key creation; do not rotate the pin for an existing installation without a separate migration.
+| Изменение | Подготовка | Публикация |
+|---|---|---|
+| Сайт / PWA | `npm run build` (включён в deploy) | `make deploy` |
+| Игра, вопросы, JS/CSS, музыка и другие content-ассеты для установленной игры | `npm run desktop:content` | `bash scripts/desktop/publish.sh content` |
+| Electron, main/preload, native updater или другие файлы оболочки | Новая `shellVersion`, content, оба установщика и `npm run desktop:shell` | `publish.sh content`, `publish.sh shell`, `publish.sh installers` |
+| Только оформление / поведение установщика | Новая `shellVersion`, content, оба установщика и `npm run desktop:catalog` | `publish.sh installers`; shell/content отдельно, если они входят в разрешённую поставку |
+
+`make deploy` не собирает и не публикует desktop-дистрибутивы. GitHub Release с установщиками не обновляет content/shell каналы автоматически. Для выпуска игры одновременно на сайте и установленным клиентам нужны обе соответствующие публикации. Обычная правка игры не требует пересборки установщиков.
+
+## Где находятся версии и файлы
+
+- `package.json` → `version`: версия самой игры. Публикационный build добавляет идентификатор содержимого; UI показывает номер без хэша.
+- `desktop/config.json` → `shellVersion`: версия оболочки и установщиков. Для нового комплекта увеличивай её; это же номер тега `v<shellVersion>`. Не переиспользуй опубликованный тег для других бинарников.
+- Windows: `Mindbattle-<shellVersion>.exe`; macOS: `Mindbattle-<shellVersion>-mac-universal.dmg` (Intel + Apple Silicon).
+- `desktop-release/installers/downloads.json`: каталог с версиями, HTTPS GitHub URLs, размерами и SHA-256 для обеих ОС.
+- GitHub Releases хранит версионные установщики. На VPS `/var/lib/mindbattle-desktop/installers/current` хранится только каталог; EXE/DMG туда больше не загружаются.
+- Подписанные content и shell обновления остаются на VPS в `/var/lib/mindbattle-desktop/{content,shell}/current`. Их нельзя удалять при очистке установщиков. Эти данные находятся вне `/opt/mindbattle` и области `rsync --delete` web-deploy.
+
+## Подготовка выпуска
+
+1. Работай в worktree/ветке своей задачи. Обнови нужную версию, проверь согласованный scope, текущие Git refs и опубликованные каталоги. Сохрани чужие изменения.
+2. Нужны Node из `package.json`, `npm ci`, SSH-профиль `gfe`, `rsync` и авторизованный `gh` с правом писать Releases в `afonasev/mindbattle`. Для сборки обоих установщиков на macOS нужны Go и `lipo` (native helper), несколько ГБ свободного места.
+3. Используй существующий Ed25519 private key вне репозитория, совпадающий с `desktop/content-public.pem`. Не выводи ключ и не клади его в Git, артефакты или VPS web-root. `npm run desktop:key` предназначен только для первого создания ключа; новый ключ не заменяет pin существующих установок.
+4. Задай один UTC timestamp для всего выпуска **до** `desktop:content` и повторно используй его при web-deploy. Иначе offline-игра покажет «Ещё не опубликована» или даты сайта и установщика разойдутся.
 
 ```sh
-# Rebuild game/content, not installers. The sequence must increase.
-MINDBATTLE_CONTENT_KEY=/secure/path/content-signing.pem npm run desktop:content
-# Only for a new shell release (version in desktop/config.json).
+set -euo pipefail
+export MINDBATTLE_CONTENT_KEY=/secure/path/content-signing.pem
+export MINDBATTLE_PUBLISHED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+# DEPLOY_HOST при необходимости меняет SSH-профиль; по умолчанию gfe.
+gh auth status
+ssh -o BatchMode=yes "${DEPLOY_HOST:-gfe}" true
+npm ci
+npm run check
+npm run test:desktop
+```
+
+`MINDBATTLE_CONTENT_SEQUENCE` и `MINDBATTLE_SHELL_SEQUENCE` по умолчанию берутся из текущего времени. Новая sequence должна быть выше опубликованной; проверяй часы и актуальный manifest перед публикацией. Явное значение задавай только при необходимости, не откатывай счётчик.
+
+## Новый комплект установщиков
+
+После изменения `shellVersion` подготовь актуальную offline-игру, затем последовательно собери обе платформы. Не редактируй исходники и не запускай другие сборки в этом же worktree во время packaging.
+
+```sh
+npm run desktop:content
 npm run desktop:mac
 npm run desktop:win
-MINDBATTLE_CONTENT_KEY=/secure/path/content-signing.pem npm run desktop:shell
 npm run desktop:catalog
+node scripts/desktop/verify-release.mjs installers
+npm run desktop:smoke
+# Если выпускается новая оболочка для обновления существующих установок:
+npm run desktop:shell
+node scripts/desktop/verify-release.mjs shell
 ```
 
-macOS produces a universal Intel/Apple Silicon DMG. Windows produces an x64 all-users NSIS installer, `Mindbattle-<version>.exe`, with Program Files as the default path and UAC elevation at installation. Desktop shortcut and launch checkboxes are together on the last page and checked by default. The first distribution has no developer certificate/notarization. Install warnings are expected; this does not weaken content signature verification. The normal `npm run build` / web deploy does not rebuild installers. Reserve several GB of free disk space for universal packaging. Build installers sequentially.
+`desktop:content` создаёт `desktop/bundle` и `desktop-release/content`. Установщики содержат именно этот bundle. Команды packaging обновляют main/preload/helper из исходников перед сборкой. После изменения содержимого, даты публикации или packaged-файлов пересобери затронутые артефакты и заново создай каталог. После изменения runtime файлов нужен новый shell manifest.
 
-`desktop:content` prepares `desktop/bundle` and `desktop-release/content`. Installer commands refresh shell sources before packaging so an old staging directory cannot ship stale main/preload files. Do not edit code while packaging. The bundled game corresponds to the most recent `desktop:content` invocation.
+Проверки выбирай по затронутому поведению: для ссылки скачивания есть `tests/browser/github-download.spec.ts`; изменения игровой логики требуют проектных game-QA gates. `desktop:smoke` проверяет офлайн-запуск, сохранения, display-настройки и подписанное content-обновление с отдельным профилем. Для механизма shell-обновления `node scripts/desktop/smoke-shell.mjs` проверяет packaged macOS N→N+1 и восстановление после неуспешного старта; это не Windows acceptance. Все обычные QA запускай без звука.
 
-## Publish (requires explicit production authorization)
+До внешней публикации сохрани проверенные исходники в Git, отправь feature-ветку, интегрируй и отправь `main`, проверь удалённые SHA. Публикуй из чистого checkout этой проверенной ревизии. `publish-github.mjs` привязывает новый draft/tag к `HEAD`; не запускай его из постороннего checkout. Собранные файлы и их происхождение должны соответствовать записанной ревизии.
 
-The Caddy `/desktop/` routes must first be deployed from this change. Runtime assets live under `/var/lib/mindbattle-desktop`, outside `/opt/mindbattle` and its rsync `--delete` scope.
+## Публикация и её порядок
+
+Команды ниже выполняются только для каналов, включённых в разрешённую поставку. Для полного выпуска оболочки нужны все три desktop-канала; для installer-only выпуска достаточно `installers`.
 
 ```sh
+# Подготовленное игровое содержимое для существующих установок:
 bash scripts/desktop/publish.sh content
+# Подготовленная новая оболочка, если она входит в выпуск:
 bash scripts/desktop/publish.sh shell
+# Новый комплект установщиков и ссылка лендинга:
 bash scripts/desktop/publish.sh installers
+# Сайт/PWA, если они входят в выпуск; сохраняет экспортированный timestamp:
+make deploy
 ```
 
-Content and shell publishing upload to an isolated directory, check all hashes/sizes under a lock, atomically switch `current`, then remove previous completed releases of that kind. Installer publishing uploads both assets to the public `afonasev/mindbattle` GitHub Release tagged `v<shellVersion>`, verifies GitHub SHA-256 digests and sizes, and publishes the release. The VPS downloads and hashes both public assets before atomically switching its metadata-only catalog and deleting previous installer payloads. Requires authenticated `gh` with repository release write access. Incomplete uploads are not activated. `downloads.json` is switched with the pair of current installers. GitHub retains versioned releases; the VPS retains only download metadata. Content is published independently; an interrupted client download retains the installed game and retries a complete current release later. Server retention and client last-good recovery are separate.
+`publish.sh installers` — основной способ публикации установщиков. Не заменяй его ручной загрузкой на VPS или одиночным `gh release upload`:
 
-After publication, verify `/desktop/downloads.json`, both installer URLs and sizes/hashes, `/desktop/content/latest.json`, and the actual installed N→N+1 path. A build is not a deployment. Do not claim installation acceptance from packaging alone.
+1. Проверяет локальные EXE/DMG по каталогу.
+2. Создаёт/находит GitHub draft `v<shellVersion>`, загружает недостающие assets обеих ОС, проверяет GitHub digest SHA-256 и размер. Draft-файлы определяются по имени: до публикации GitHub использует временный `untagged-*` URL.
+3. Публикует проверенный релиз и помечает его latest.
+4. Передаёт на VPS только `downloads.json`. VPS скачивает публичные GitHub assets и проверяет размер и SHA-256 ещё раз.
+5. Под lock атомарно переключает `current`, затем удаляет предыдущие installer-каталоги и payloads. Лендинг выбирает ссылку своей ОС из `/desktop/downloads.json`.
 
-## Native shell updates
+Публикация content/shell отдельно проверяет объекты и монотонность sequence, переключает `current` под lock и удаляет предыдущий завершённый релиз этого канала. Клиентская last-good/rollback копия независима от retention сервера.
 
-Ordinary shell upgrades use a separate native helper compiled with Go (CGO disabled), universal on macOS and x64 on Windows. Build requires Go and macOS lipo. A signed platform manifest includes every runtime file, mode, internal framework symlink and the executable entry point. The game downloads/verifies the complete runtime into userData. Clicking the update icon in a safe menu prepares a sibling installation, preserves installer/user extras using the installed inventory, then launches the independent helper from userData and exits. The helper verifies the pinned signature and hashes again, renames old/new directories, and launches the game at the same path with the same profile. A real rendered-menu acknowledgement confirms startup; failed startup restores and relaunches the previous installation. A failed release is not offered again until a newer signed sequence appears.
+Для каждого выпуска подготовь актуальные release notes с его изменениями и ограничениями приёмки. Сейчас `publish-github.mjs` использует фиксированный текст про Windows-установщик; он не описывает автоматически будущие изменения. После успешной публикации обнови описание из подготовленного файла:
 
-Full shell packages are published explicitly alongside installer rebuilds. Gameplay/catalog updates only need content publication. Updating Electron for security requires a shell release even when gameplay changes are small. The VPS retains only the latest complete runtime per platform and installer catalog; local last-good recovery is separate.
+```sh
+# Подставь существующий файл с описанием именно этого выпуска.
+version="$(node -p 'JSON.parse(require("fs").readFileSync("desktop/config.json", "utf8")).shellVersion')"
+gh release edit "v${version}" --repo afonasev/mindbattle --notes-file /absolute/path/release-notes.md
+```
 
-The replacement uses two directory renames with a journal, not an atomic exchange. Power loss between renames, an unwritable install directory, running from DMG/translocation, or failure to restore a damaged installation can require exceptional manual recovery. Do not delete a transaction backup while recovery is required. No sudo/UAC or policy bypass is used. Initial installers remain unsigned.
+## Если публикация прервалась
 
-A writable installation is required. Windows NSIS installs in Program Files for all users. The existing runtime helper does not elevate privileges: in protected Program Files, shell upgrades may require the new installer; signed game/content updates in userData continue to work. On macOS, copy the app from DMG into a writable applications folder before launching. Preserve the private signing key permanently: installed games trust the pinned public key and cannot accept releases signed by a replacement key.
+- Повтори `publish.sh installers` с той же ревизией и **теми же файлами/каталогом**: отсутствующие assets будут загружены, существующие — проверены. Путь повторения работает, пока релиз присутствует среди последних 100 записей GitHub API, которые читает скрипт.
+- Несовпадение хэша/размера останавливает публикацию; скрипт не перезаписывает существующий asset. Не обходи проверку и не удаляй рабочие VPS-файлы вручную.
+- Если пришлось пересобрать ещё не опубликованный **собственный draft**, проверь его статус/владение и удали только его устаревшие assets, затем заново создай каталог и повтори публикацию. Опубликованный релиз сохраняй; для изменённых бинарников увеличь версию.
+- GitHub и VPS не являются одной транзакцией: при сбое серверной проверки релиз может уже быть публичным, а VPS продолжит отдавать прежний каталог. Исправь причину и повтори публикацию тех же проверенных файлов. До переключения `current` старый каталог и дистрибутивы сохраняются.
+- Для content/shell после уже успешной активации та же sequence не принимается повторно. Сначала прочитай текущий manifest; новый выпуск требует большей sequence.
 
-## Verification
+## Проверки после публикации
 
-With the signing key set, `node scripts/desktop/smoke-shell.mjs` verifies packaged macOS N→N+1 through the actual menu update button, and recovery after a candidate exits without acknowledging startup, using an isolated profile and loopback HTTP server. Windows helper is cross-compiled; macOS evidence does not establish Windows installation/update acceptance.
+```sh
+version="$(node -p 'JSON.parse(require("fs").readFileSync("desktop/config.json", "utf8")).shellVersion')"
+gh release view "v${version}" --repo afonasev/mindbattle
+curl -fsS https://mindbattle.afonasev.tech/desktop/downloads.json
+curl -fsSI https://mindbattle.afonasev.tech/
+curl -fsS https://mindbattle.afonasev.tech/network >/dev/null
+bash scripts/checkReleaseIdentity.sh
+MINDBATTLE_TEST_ORIGIN=https://mindbattle.afonasev.tech node scripts/testNetworkApi.mjs
+```
 
-`npm run test:desktop` exercises signatures, corruption, interruption/replay, rollback and protocol limits. `npm run check` covers the shared game. With `MINDBATTLE_CONTENT_KEY` set, `npm run desktop:smoke` launches real Electron with an isolated profile and a test-only fake upstream (never production), verifies offline launch, statistics persistence/ack, saved resolution, explicit signed update and storage survival. Optionally set `MINDBATTLE_DESKTOP_TEST_API=http://127.0.0.1:PORT` for the real local network API/SSE check. Evidence path can be set with `MINDBATTLE_DESKTOP_EVIDENCE`.
+Для web-deploy проверь совпадение локального и серверного bundle через `checkReleaseIdentity.sh`, опубликованную дату в HTML и загрузку меню. Эта hash-проверка относится только к `server-dist/network.js`; она не доказывает целостность установщиков или всех web-ассетов.
 
-Human acceptance: install/open from DMG and NSIS on macOS/Windows; confirm offline play with actual input, full screen/windowed switching, exit, re-open; update a previously installed build; connect real phones in network mode. Track these separately from automated smoke.
+Для desktop-релиза прочитай каталог обратно, сравни версию/URLs/размеры/SHA-256 с локальным, проверь публичное скачивание обеих ОС и отсутствие EXE/DMG в VPS installer-каталоге. После content/shell публикации отдельно проверь соответствующие `/desktop/content/latest.json` и `/desktop/shell/{darwin-universal,win32-x64}/latest.json`. В браузере проверь ссылку своей ОС; уже открытая PWA может сначала предложить применить загруженное обновление. Мобильная PWA не показывает desktop-download.
 
-## Current version footer
+## Установка и ручная приёмка
 
-For a publication build, set `MINDBATTLE_PUBLISHED_AT` to the release UTC ISO timestamp when running `desktop:content` (for example `2026-10-04T08:00:00Z`), and reuse that same value for the web publication build. `game-version.json` and the bundled HTML carry that timestamp; changing it requires rebuilding/re-signing content. Ordinary local builds leave it unset and display “Ещё не опубликована”. The footer reads the loaded HTML, never a newer upstream release. `scripts/deploy.sh` sets the web release timestamp unless the release operator supplies one. This setting does not authorize deployment.
+Windows: установка для всех пользователей в Program Files с UAC, без страницы выбора user/system; путь можно менять. На последнем экране вместе стоят отмеченные галочки запуска и создания ярлыка. Ярлык создаётся в Public Desktop, с иконкой игры; запуск выполняется для обычного пользователя. Проверь реальные opt-in/opt-out, иконку EXE/ярлыка/панели задач, запуск и удаление ярлыка при uninstall.
+
+macOS: скопируй universal app из DMG в подходящую папку приложений; проверь запуск и иконку. Текущие установщики без developer-сертификатов/notarization. Packaging и cross-compilation не заменяют реальную установку на Windows/macOS, offline-play с физическим вводом, повторный запуск и N→N+1 с сохранением профиля. Физические проверки телефонов нужны при изменении соответствующего взаимодействия.
+
+Content updater пишет в userData и работает при защищённой установке. Native shell updater требует writable installation и не повышает права; в защищённой Program Files обновление оболочки может потребовать нового установщика. DMG/translocation, недоступный путь, неисправимое повреждение или потеря питания во время замены также могут потребовать ручного восстановления. Не удаляй backup/journal незавершённой recovery-транзакции.
+
+## Завершение выпуска
+
+Запиши в shared planning change исходную ревизию, GitHub tag/URLs, каталог с хэшами, manifests, checks/smoke и отдельно pending human/platform acceptance. Сохрани необходимые screenshots и точные артефакты для приёмки; проверенный опубликованный GitHub asset с хэшем может быть постоянной копией установщика.
+
+Прочитай `~/.codex/references/task-cleanup.md`. Удали только принадлежащие задаче staging/build-копии, временные логи/профили и dev-серверы после сохранения доказательств. Проверь Git/status, интеграцию и владельцев перед удалением worktree; чужие ресурсы сохраняй. Заверши технический lifecycle через helper `finalize`; без явной приёмки результат остаётся `awaiting-acceptance`, а архивирование требует отдельного разрешения и gates.
