@@ -5,7 +5,7 @@ const config = JSON.parse(await readFile("desktop/config.json", "utf8"));
 const files = await readdir("desktop-installers");
 const choices = {
   mac: `Mindbattle-${config.shellVersion}-mac-universal.dmg`,
-  windows: `Mindbattle-${config.shellVersion}-win-x64.exe`,
+  windows: `Mindbattle-${config.shellVersion}.exe`,
 };
 const root = "desktop-release/installers";
 await rm(root, { recursive: true, force: true });
@@ -18,7 +18,7 @@ for (const [platform, name] of Object.entries(choices)) {
   await cp(source, path.join(root, "installers", name));
   catalog[platform] = {
     version: config.shellVersion,
-    url: `/desktop/installers/${name}`,
+    url: `https://github.com/afonasev/mindbattle/releases/download/v${config.shellVersion}/${name}`,
     size: bytes.length,
     sha256: digest(bytes),
   };

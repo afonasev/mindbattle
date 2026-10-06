@@ -8,6 +8,7 @@ import { createHandler, APP_ORIGIN } from "./protocol.mjs";
 import { createUpdateCheck, pendingUpdateVersion } from "./updateCheck.mjs";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const config = JSON.parse(await readFile(path.join(here, "config.json"), "utf8"));
+if (process.platform === "win32") app.setAppUserModelId("tech.afonasev.mindbattle");
 protocol.registerSchemesAsPrivileged([
     {
         scheme: "mindbattle",
@@ -90,6 +91,7 @@ else {
             fullscreen: display.fullscreen,
             show: false,
             backgroundColor: "#07101f",
+            icon: app.isPackaged ? path.join(process.resourcesPath, "mindbattle-icon.png") : path.join(here, "../public/icons/mindbattle-512.png"),
             webPreferences: {
                 preload: path.join(here, "preload.cjs"),
                 session: ses,

@@ -16,7 +16,7 @@ MINDBATTLE_CONTENT_KEY=/secure/path/content-signing.pem npm run desktop:shell
 npm run desktop:catalog
 ```
 
-macOS produces a universal Intel/Apple Silicon DMG. Windows produces an x64 per-user NSIS installer. The first distribution has no developer certificate/notarization. Install warnings are expected; this does not weaken content signature verification. The normal `npm run build` / web deploy does not rebuild installers. Reserve several GB of free disk space for universal packaging. Build installers sequentially.
+macOS produces a universal Intel/Apple Silicon DMG. Windows produces an x64 all-users NSIS installer, `Mindbattle-<version>.exe`, with Program Files as the default path and UAC elevation at installation. Desktop shortcut and launch checkboxes are together on the last page and checked by default. The first distribution has no developer certificate/notarization. Install warnings are expected; this does not weaken content signature verification. The normal `npm run build` / web deploy does not rebuild installers. Reserve several GB of free disk space for universal packaging. Build installers sequentially.
 
 `desktop:content` prepares `desktop/bundle` and `desktop-release/content`. Installer commands refresh shell sources before packaging so an old staging directory cannot ship stale main/preload files. Do not edit code while packaging. The bundled game corresponds to the most recent `desktop:content` invocation.
 
@@ -30,7 +30,7 @@ bash scripts/desktop/publish.sh shell
 bash scripts/desktop/publish.sh installers
 ```
 
-Publishing uploads to an isolated directory, checks all hashes/sizes under a lock, atomically switches `current`, then removes previous completed releases of that kind. Incomplete uploads are not activated. `downloads.json` is switched with the pair of current installers. Only the newest completed installer per target is retained. Content is published independently; an interrupted client download retains the installed game and retries a complete current release later. Server retention and client last-good recovery are separate.
+Content and shell publishing upload to an isolated directory, check all hashes/sizes under a lock, atomically switch `current`, then remove previous completed releases of that kind. Installer publishing uploads both assets to the public `afonasev/mindbattle` GitHub Release tagged `v<shellVersion>`, verifies GitHub SHA-256 digests and sizes, and publishes the release. The VPS downloads and hashes both public assets before atomically switching its metadata-only catalog and deleting previous installer payloads. Requires authenticated `gh` with repository release write access. Incomplete uploads are not activated. `downloads.json` is switched with the pair of current installers. GitHub retains versioned releases; the VPS retains only download metadata. Content is published independently; an interrupted client download retains the installed game and retries a complete current release later. Server retention and client last-good recovery are separate.
 
 After publication, verify `/desktop/downloads.json`, both installer URLs and sizes/hashes, `/desktop/content/latest.json`, and the actual installed N→N+1 path. A build is not a deployment. Do not claim installation acceptance from packaging alone.
 
@@ -38,11 +38,11 @@ After publication, verify `/desktop/downloads.json`, both installer URLs and siz
 
 Ordinary shell upgrades use a separate native helper compiled with Go (CGO disabled), universal on macOS and x64 on Windows. Build requires Go and macOS lipo. A signed platform manifest includes every runtime file, mode, internal framework symlink and the executable entry point. The game downloads/verifies the complete runtime into userData. Clicking the update icon in a safe menu prepares a sibling installation, preserves installer/user extras using the installed inventory, then launches the independent helper from userData and exits. The helper verifies the pinned signature and hashes again, renames old/new directories, and launches the game at the same path with the same profile. A real rendered-menu acknowledgement confirms startup; failed startup restores and relaunches the previous installation. A failed release is not offered again until a newer signed sequence appears.
 
-Full shell packages are published explicitly alongside installer rebuilds. Gameplay/catalog updates only need content publication. Updating Electron for security requires a shell release even when gameplay changes are small. The VPS retains only the latest complete runtime per platform and installer pair; local last-good recovery is separate.
+Full shell packages are published explicitly alongside installer rebuilds. Gameplay/catalog updates only need content publication. Updating Electron for security requires a shell release even when gameplay changes are small. The VPS retains only the latest complete runtime per platform and installer catalog; local last-good recovery is separate.
 
 The replacement uses two directory renames with a journal, not an atomic exchange. Power loss between renames, an unwritable install directory, running from DMG/translocation, or failure to restore a damaged installation can require exceptional manual recovery. Do not delete a transaction backup while recovery is required. No sudo/UAC or policy bypass is used. Initial installers remain unsigned.
 
-A writable installation is required. Windows NSIS defaults to a per-user install. On macOS, copy the app from DMG into a writable applications folder before launching. Preserve the private signing key permanently: installed games trust the pinned public key and cannot accept releases signed by a replacement key.
+A writable installation is required. Windows NSIS installs in Program Files for all users. The existing runtime helper does not elevate privileges: in protected Program Files, shell upgrades may require the new installer; signed game/content updates in userData continue to work. On macOS, copy the app from DMG into a writable applications folder before launching. Preserve the private signing key permanently: installed games trust the pinned public key and cannot accept releases signed by a replacement key.
 
 ## Verification
 

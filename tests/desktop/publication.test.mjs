@@ -23,18 +23,23 @@ test("publication preserves current on failure and retains only latest complete 
     `Path(${JSON.stringify(root)})`,
   );
   const script = path.join(root, "publish.py");
-  await writeFile(script, code);
+  // Deterministic upstream fixture: exercise remote digest checking without real network.
+  await writeFile(script, code.replace("kind, release = sys.argv[1:]", `import io
+kind, release = sys.argv[1:]
+def urlopen(request, timeout):
+    platform = request.full_url.rsplit('/', 1)[1].split('.')[0].removeprefix('Mindbattle-')
+    return io.BytesIO((release + '-' + platform).encode())`));
   const base = path.join(root, "installers");
   await mkdir(base);
   async function stage(id, corrupt = false) {
     const dir = path.join(base, `incoming-${id}`);
-    await mkdir(path.join(dir, "installers"), { recursive: true });
+    await mkdir(dir, { recursive: true });
     const catalog = {};
     for (const p of ["mac", "windows"]) {
       const bytes = Buffer.from(`${id}-${p}`);
-      await writeFile(path.join(dir, "installers", `${p}.bin`), bytes);
+
       catalog[p] = {
-        url: `/desktop/installers/${p}.bin`,
+        url: `https://github.com/afonasev/mindbattle/releases/download/v1.0.4/Mindbattle-${p}.bin`,
         sha256: digest(bytes),
         size: bytes.length + (corrupt ? 1 : 0),
       };
@@ -50,6 +55,8 @@ test("publication preserves current on failure and retains only latest complete 
   assert.equal((await stage(first)).status, 0);
   assert.notEqual((await stage(bad, true)).status, 0);
   assert.equal(await readlink(path.join(base, "current")), `release-${first}`);
+  // A legacy payload is removed only after the verified metadata replaces it.
+  await mkdir(path.join(base, `release-${first}`, "installers"));
   assert.equal((await stage(last)).status, 0);
   assert.deepEqual(
     (await readdir(base)).filter((x) => x.startsWith("release-")),

@@ -4,11 +4,19 @@ set -euo pipefail
 kind="${1:-}"
 case "$kind" in content|shell|installers) ;; *) echo 'Usage: publish.sh content|shell|installers' >&2; exit 2;; esac
 node scripts/desktop/verify-release.mjs "$kind"
+if [ "$kind" = installers ]; then
+  node scripts/desktop/publish-github.mjs
+fi
 source_dir="desktop-release/${kind}"
 test -d "$source_dir"
 release_id="$(date -u +%Y%m%dT%H%M%S)-$(openssl rand -hex 6)"
 remote_host="${DEPLOY_HOST:-gfe}"
 remote_base="/var/lib/mindbattle-desktop/${kind}"
 ssh -o BatchMode=yes "$remote_host" "mkdir -p '${remote_base}/incoming-${release_id}'"
-rsync -az "${source_dir}/" "${remote_host}:${remote_base}/incoming-${release_id}/"
+if [ "$kind" = installers ]; then
+  # Keep only metadata on the VPS. Remote verification precedes deletion.
+  rsync -az "${source_dir}/downloads.json" "${remote_host}:${remote_base}/incoming-${release_id}/"
+else
+  rsync -az "${source_dir}/" "${remote_host}:${remote_base}/incoming-${release_id}/"
+fi
 ssh -o BatchMode=yes "$remote_host" python3 - "$kind" "$release_id" < scripts/desktop/publish-remote.py

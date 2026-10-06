@@ -7,6 +7,7 @@ import re
 import shutil
 import sys
 from pathlib import Path
+from urllib.request import Request, urlopen
 kind, release = sys.argv[1:]
 assert kind in ('content', 'shell', 'installers') and re.fullmatch(r'\d{8}T\d{6}-[a-f0-9]{12}', release)
 base = Path('/var/lib/mindbattle-desktop') / kind
@@ -35,8 +36,17 @@ with (base / '.publish.lock').open('w') as lock:
         assert set(catalog) == {'mac', 'windows'}
         entries = []
         for item in catalog.values():
-            assert re.fullmatch(r'/desktop/installers/[A-Za-z0-9_.-]+', item['url'])
-            entries.append((source / 'installers' / item['url'].rsplit('/', 1)[1], item))
+            assert re.fullmatch(r'https://github\.com/afonasev/mindbattle/releases/download/v[0-9]+\.[0-9]+\.[0-9]+/Mindbattle-[A-Za-z0-9_.-]+', item['url'])
+            assert re.fullmatch(r'[a-f0-9]{64}', item['sha256'])
+            assert isinstance(item['size'], int) and item['size'] > 0
+            # Fetch the public asset, following GitHub's CDN redirect, before switching.
+            digest = hashlib.sha256()
+            size = 0
+            with urlopen(Request(item['url'], headers={'User-Agent': 'Mindbattle-release-verifier'}), timeout=120) as stream:
+                for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+                    digest.update(chunk)
+                    size += len(chunk)
+            assert size == item['size'] and digest.hexdigest() == item['sha256'], 'GitHub asset integrity mismatch'
     for file, item in entries:
         assert re.fullmatch(r'[a-f0-9]{64}', item['sha256'])
         assert file.stat().st_size == item['size']

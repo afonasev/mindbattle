@@ -10,6 +10,8 @@ asar: true
 npmRebuild: false
 afterPack: scripts/desktop/layout-hook.cjs
 extraResources:
+  - from: public/icons/mindbattle-512.png
+    to: mindbattle-icon.png
   - from: desktop/install-identity.json
     to: mindbattle-installation.json
 artifactName: Mindbattle-${version}-${os}-${arch}.${ext}
@@ -26,11 +28,12 @@ win:
       arch: [x64]
   icon: public/icons/mindbattle-512.png
 nsis:
+  installerLanguages: [en_US, ru_RU]
   oneClick: false
-  perMachine: false
-  selectPerMachineByDefault: true
+  perMachine: true
+  artifactName: Mindbattle-${version}.${ext}
   allowToChangeInstallationDirectory: true
-  createDesktopShortcut: true
+  createDesktopShortcut: false
   runAfterFinish: true
   include: desktop/installer.nsh
   deleteAppDataOnUninstall: false

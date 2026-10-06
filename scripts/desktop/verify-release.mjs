@@ -31,9 +31,9 @@ else if (kind === "installers") {
     if (Object.keys(catalog).sort().join(",") !== "mac,windows")
         throw new Error("Both platforms required");
     for (const entry of Object.values(catalog)) {
-        if (!/^\/desktop\/installers\/[a-zA-Z0-9_.-]+$/.test(entry.url))
+        if (!/^https:\/\/github\.com\/afonasev\/mindbattle\/releases\/download\/v[0-9]+\.[0-9]+\.[0-9]+\/Mindbattle-[a-zA-Z0-9_.-]+$/.test(entry.url))
             throw new Error("Invalid installer path");
-        const bytes = await readFile(`desktop-release/installers/${entry.url.slice("/desktop/".length)}`);
+        const bytes = await readFile(`desktop-release/installers/installers/${entry.url.split("/").at(-1)}`);
         if (bytes.length !== entry.size || digest(bytes) !== entry.sha256)
             throw new Error("Invalid installer");
     }

@@ -29,7 +29,7 @@ export function ReleaseAction({ safe = true, showUpdate = true }: { safe?: boole
         const entry = data?.[platform];
         if (
           typeof entry?.url === "string" &&
-          /^\/desktop\/installers\/[a-zA-Z0-9_.-]+$/.test(entry.url)
+          /^https:\/\/github\.com\/afonasev\/mindbattle\/releases\/download\/v[0-9]+\.[0-9]+\.[0-9]+\/Mindbattle-[a-zA-Z0-9_.-]+$/.test(entry.url)
         )
           setUrl(entry.url);
       })
@@ -64,7 +64,6 @@ export function ReleaseAction({ safe = true, showUpdate = true }: { safe?: boole
           <a
             className="pwa-update release-action"
             href={url}
-            download
             title="Скачать игру"
             aria-label="Скачать игру"
           >
