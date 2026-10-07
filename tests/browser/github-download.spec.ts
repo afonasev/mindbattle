@@ -13,6 +13,15 @@ for (const platform of ["MacIntel", "Win32"]) {
     await page.goto("/");
     await expect(page.getByRole("link", { name: "Скачать игру" })).toHaveAttribute("href", platform === "MacIntel" ? mac : windows);
     await page.screenshot({ path: info.outputPath(`github-${platform}.png`), fullPage: true });
+    await page.goto("/network");
+    const download = page.getByRole("link", { name: "Скачать игру" });
+    const back = page.getByRole("button", { name: "Назад", exact: true });
+    await expect(download).toBeVisible();
+    await expect(back).toBeVisible();
+    const downloadLeft = await download.evaluate(el => el.getBoundingClientRect().left);
+    const backRight = await back.evaluate(el => el.getBoundingClientRect().right);
+    expect(downloadLeft).toBeGreaterThanOrEqual(backRight);
+    await page.screenshot({ path: info.outputPath(`network-download-${platform}.png`), fullPage: true });
   });
 }
 test("foreign repository download links are rejected", async ({ page }) => {
