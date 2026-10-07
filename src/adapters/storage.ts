@@ -1,3 +1,5 @@
+import { legacySnapshotFeedback } from '../feedback/legacy';
+import type { DifficultyFeedbackEvent } from '../feedback/types';
 import { EMPTY_QUESTION_HISTORY } from "../content/scheduler";
 import type { QuestionHistory } from "../content/scheduler";
 import type { TeamControlAssignment } from "./input";
@@ -37,6 +39,7 @@ export interface SoloRecord {
 }
 
 export interface PersistedData<TState = unknown> {
+  readonly pendingFeedback?: readonly DifficultyFeedbackEvent[];
   readonly version: 1;
   readonly catalogRevision: string;
   readonly history: QuestionHistory;
@@ -250,6 +253,7 @@ export function decodePersistedData(
       return emptyPersistedData(catalogRevision);
     }
     const sameCatalog = parsed.catalogRevision === catalogRevision;
+    const pendingFeedback = legacySnapshotFeedback(source);
     return {
       version: 1,
       catalogRevision,
@@ -258,7 +262,8 @@ export function decodePersistedData(
       lastSolo: sameCatalog ? lastSolo : null,
       preferences,
       controls,
-      soloRecords: soloRecords ?? []
+      soloRecords: soloRecords ?? [],
+      ...(pendingFeedback.length ? { pendingFeedback } : {})
     };
   } catch {
     return emptyPersistedData(catalogRevision);
@@ -275,7 +280,9 @@ export function loadPersistedData(
 
 export function savePersistedData(storage: StorageLike, data: PersistedData): boolean {
   try {
-    storage.setItem(STORAGE_KEY, JSON.stringify(data));
+    const pending = legacySnapshotFeedback(storage.getItem(STORAGE_KEY));
+    for (const event of data.pendingFeedback ?? []) if (!pending.some(item => item.eventId === event.eventId)) pending.push(event);
+    storage.setItem(STORAGE_KEY, JSON.stringify({ ...data, ...(pending.length ? { pendingFeedback: pending } : {}) }));
     return true;
   } catch {
     return false;

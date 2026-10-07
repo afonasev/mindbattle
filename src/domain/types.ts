@@ -163,7 +163,14 @@ export type RevealContinuation =
   | { readonly kind: "tie-break"; readonly contenders: readonly TeamId[] }
   | { readonly kind: "finished"; readonly winnerId: TeamId };
 
+export interface LegacyComplaintDraft {
+  readonly eventId: string;
+  readonly complaintReasons: readonly ComplaintReason[];
+  readonly complaintNote: string;
+}
+
 export interface RevealPhase {
+  readonly complaintDraft?: LegacyComplaintDraft;
   readonly kind: "reveal";
   readonly round: RoundState;
   readonly resolutions: readonly TeamResolution[];

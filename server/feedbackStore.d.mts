@@ -2,6 +2,7 @@ export interface FeedbackStoreOptions {
   filePath: string;
   questions: ReadonlyMap<string, string>;
   catalogRevision: string;
+  historicalCatalogs?: Record<string, Record<string, string>>;
 }
 
 export function validateFeedbackEvent(

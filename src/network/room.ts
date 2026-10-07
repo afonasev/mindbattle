@@ -662,6 +662,10 @@ export class NetworkRoom {
       difficulty: "round" in phase ? phase.round.difficulty : undefined,
       endReason: state.endReason,
       feedbackError: base.isLeader ? this.feedbackError : undefined,
+      complaintContext: base.isLeader && phase.kind === 'reveal' && state.config.collectQuestionFeedback ? {
+        eventId: `feedback-v3:${state.matchId}:${phase.round.mode === 'tie-break' ? `tie-break-${state.tieBreak?.questionNumber ?? 1}` : `main-${state.mainQuestionIndex + 1}`}:${phase.round.questionId}`,
+        matchId: state.matchId, catalogRevision: state.catalogRevision, questionId: phase.round.questionId, assignedDifficulty: phase.round.difficulty
+      } : undefined,
     };
   }
 }

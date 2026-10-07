@@ -16,9 +16,10 @@ describe("queued feedback", () => {
     expect(sink.events.at(-1)?.eventId).toBe("event-1");
   });
 
-  it("drops corrupted queue safely", async () => {
+  it("preserves a corrupted legacy queue for recovery without sending junk", async () => {
     const storage = new Store(); storage.setItem("mindbattle:feedback-queue:v1", "broken"); const sink = new Sink(); sink.fail = false;
     await new QueuedDifficultyFeedbackSink(sink, storage).flush();
-    expect(storage.getItem("mindbattle:feedback-queue:v1")).toBeNull();
+    expect(storage.getItem("mindbattle:feedback-queue:v1")).toBe("broken");
+    expect(sink.events).toEqual([]);
   });
 });

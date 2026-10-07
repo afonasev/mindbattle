@@ -1,3 +1,4 @@
+import type { ComplaintContext } from '../feedback/types';
 import type { PublicMatchView, PublicTeamCard } from "../domain/selectors";
 import type { AnswerPosition, MatchConfig, TeamId } from "../domain/types";
 export interface Credential {
@@ -75,6 +76,7 @@ export interface NetworkSnapshot {
   difficulty?: string;
   endReason?: string;
   feedbackError?: string;
+  complaintContext?: ComplaintContext;
   scoreboard?: readonly NetworkScoreRow[];
   revealedChoices?: readonly NetworkCard[];
   vetoes?: readonly NetworkVeto[];

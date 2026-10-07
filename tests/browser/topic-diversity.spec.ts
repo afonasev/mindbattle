@@ -82,7 +82,6 @@ test('network authoritative three and five topic lists agree on display and phon
       for (let i = 0; i < 4; i++) await phones[i].locator('.network-answers button').nth(i).click();
       await expect(page.locator('.network-answers .correct')).toHaveCount(1);
       await phones[0].locator('.network-round-heading').getByRole('button', { name: 'Дальше', exact: true }).click();
-      await phones[0].getByRole('button', { name: 'Нет, дальше', exact: true }).click();
     }
     expect(errors).toEqual([]); console.log('network QA room', code);
   } finally { for (const ctx of contexts) await ctx.close(); }

@@ -397,14 +397,16 @@ export function PauseOverlay({
   reason,
   resume,
   settings,
+  complaint,
   restart,
   exit
 }: {
   readonly reason: string;
   readonly resume: () => void;
   readonly settings: () => void;
+  readonly complaint?: () => void;
   readonly restart: () => void;
   readonly exit: () => void;
 }) {
-  return <SessionMenu title={reason} resume={resume} settings={settings} restart={restart} exit={exit} />;
+  return <SessionMenu title={reason} resume={resume} settings={settings} complaint={complaint} restart={restart} exit={exit} />;
 }

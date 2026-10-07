@@ -1,4 +1,6 @@
 import { NetworkEntry } from "./NetworkEntry";
+import { ComplaintDialog } from './ComplaintDialog';
+import type { ComplaintContext } from '../feedback/types';
 import { MatchSetupFields } from "./MatchSetupFields";
 import { MenuAction, ScreenHeader, ScreenSurface, SessionMenu } from "./menuUi";
 import { navigate } from "../main";
@@ -85,6 +87,7 @@ export function NetworkApp() {
   const [rosterPage, setRosterPage] = useState(0);
   const [rosterHeight, setRosterHeight] = useState(innerHeight);
   useEffect(() => { const resize = () => setRosterHeight(window.visualViewport?.height ?? innerHeight); window.addEventListener("resize", resize); return () => window.removeEventListener("resize", resize); }, []);
+  const [complaint, setComplaint] = useState<ComplaintContext | null>(null);
   const [feedbackNote, setFeedbackNote] = useState("");
   const [feedbackRecoveryChoice, setFeedbackRecoveryChoice] = useState<FeedbackRecoveryChoice>("retry");
   const [scoreboardOpen, setScoreboardOpen] = useState(false);
@@ -261,6 +264,9 @@ export function NetworkApp() {
   const display = snapshot?.role === "display";
   const personalCard = view?.teams.find((card) => card.id === snapshot?.selfId);
   const turnStatus = snapshot ? phoneStatus(snapshot) : null;
+  useEffect(() => {
+    if (complaint && (!snapshot?.isLeader || phase !== 'reveal' || snapshot.complaintContext?.eventId !== complaint.eventId)) setComplaint(null);
+  }, [snapshot?.isLeader, phase, snapshot?.complaintContext?.eventId, complaint]);
   const canSkipConfirmation =
     mobile &&
     !!snapshot?.isLeader &&
@@ -819,12 +825,13 @@ export function NetworkApp() {
               {display && playerCards}
             </section>
           )}
-          {(snapshot.paused || localMenuOpen) && !pauseSettingsOpen && (
+          {(snapshot.paused || localMenuOpen) && !pauseSettingsOpen && !complaint && (
             <SessionMenu
               title={snapshot.paused ? "Игра на паузе" : "Сетевая игра"}
               disabled={busy}
               resumeDisabled={!!status}
               resume={snapshot.paused && snapshot.isLeader ? () => void act({ type: "resume" }) : undefined}
+              complaint={snapshot.complaintContext ? () => setComplaint(snapshot.complaintContext!) : undefined}
               settings={() => setPauseSettingsOpen(true)}
               restart={snapshot.isLeader && phase !== "lobby" ? () => void act({ type: "replay" }) : undefined}
               restartLabel="Вернуться в лобби"
@@ -843,6 +850,7 @@ export function NetworkApp() {
           )}
         </>
       )}
+      {complaint && snapshot?.complaintContext?.eventId === complaint.eventId && snapshot.isLeader && <ComplaintDialog context={complaint} close={() => { setComplaint(null); if (snapshot.paused) void act({ type: 'resume' }); else setLocalMenuOpen(false); }} />}
       {pauseSettingsOpen && (
         <SettingsDialog preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} />
       )}

@@ -564,28 +564,7 @@ function applyContinue(state: MatchState, teamId: TeamId, context: DomainContext
     );
   }
   if (state.phase.kind !== "reveal") return state;
-  if (!state.config.collectQuestionFeedback || state.phase.legacySkipFeedback) {
-    return applyRevealContinuation(state, state.phase.continuation, context);
-  }
-  const sequence =
-    state.phase.round.mode === "tie-break"
-      ? `tie-break-${state.tieBreak?.questionNumber ?? 1}`
-      : `main-${state.mainQuestionIndex + 1}`;
-  return {
-    ...state,
-    phase: {
-      kind: "difficulty-feedback",
-      round: state.phase.round,
-      resolutions: state.phase.resolutions,
-      continuation: state.phase.continuation,
-      eventId: `feedback-v3:${state.matchId}:${sequence}:${state.phase.round.questionId}`,
-      stage: "choice",
-      hasComplaint: null,
-      complaintReasons: [],
-      complaintNote: "",
-      cursor: 1
-    }
-  };
+  return applyRevealContinuation(state, state.phase.continuation, context);
 }
 
 const COMPLAINT_REASONS = ["too-easy", "too-hard", "weak-answer-options", "unclear-wording", "suspected-error", "ambiguous-answer", "uninteresting-for-quiz", "done"] as const;

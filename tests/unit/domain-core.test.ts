@@ -426,6 +426,11 @@ describe("answer clock, reserve and atomic frames", () => {
   });
 });
 
+function legacyFeedback(state: MatchState): MatchState {
+  if (state.phase.kind !== 'reveal') throw Error('Expected reveal');
+  return { ...state, phase: { ...state.phase, kind: 'difficulty-feedback', eventId: 'legacy-event', stage: 'choice', hasComplaint: null, complaintReasons: [], complaintNote: '', cursor: 1 } };
+}
+
 describe("reveal, stages and sudden death", () => {
   it("skips question feedback and preserves the normal continuation when it is disabled", () => {
     const context = makeContext();
@@ -439,30 +444,21 @@ describe("reveal, stages and sudden death", () => {
     expect(state.mainQuestionIndex).toBe(1);
   });
 
-  it("records a single shared complaint result and waits for the matching acknowledgement", () => {
+  it("continues directly with complaint collection enabled and preserves scores and seed", () => {
     const context = makeContext();
-    let state = startQuestion(createMatch(TWO_TEAMS, "feedback", 0, context), context);
-    state = answerAllCorrect(state, context);
-    expect(state.phase.kind).toBe("reveal");
-    state = frame(state, context, [{ type: "continue", teamId: "green" }]);
-    expect(state.phase.kind).toBe("difficulty-feedback");
-    if (state.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback");
-    const eventId = state.phase.eventId;
-    state = frame(state, context, [{ type: "feedback-confirm" }]);
-    expect(state.phase.kind === "difficulty-feedback" && state.phase.hasComplaint).toBe(false);
-    expect(deserializeMatch(serializeMatch(state), context.catalogRevision)?.phase).toEqual(state.phase);
-    state = frame(state, context, [{ type: "feedback-confirm" }]);
-    expect(state.phase).toMatchObject({ stage: "done", hasComplaint: false, complaintReasons: [] });
-    state = frame(state, context, [{ type: "confirm-difficulty-feedback", eventId: "wrong" }]);
-    expect(state.phase.kind).toBe("difficulty-feedback");
-    state = frame(state, context, [{ type: "confirm-difficulty-feedback", eventId }]);
-    expect(state.phase.kind).toBe("normal-topic");
+    let state = answerAllCorrect(startQuestion(createMatch(TWO_TEAMS, 'optional', 0, context), context), context);
+    const before = state;
+    state = frame(state, context, [{ type: 'continue', teamId: 'green' }]);
+    expect(state.phase.kind).toBe('normal-topic');
+    expect(state.mainQuestionIndex).toBe(1);
+    expect(state.teams).toEqual(before.teams);
+    expect(state.seed).toBe(before.seed);
+    expect(state.config.collectQuestionFeedback).toBe(true);
   });
-
   it("requires a reason for a shared complaint and keeps opposite difficulty signals exclusive", () => {
     const context = makeContext();
     let state = answerAllCorrect(startQuestion(createMatch(TWO_TEAMS, "complaint", 0, context), context), context);
-    state = frame(state, context, [{ type: "continue", teamId: "green" }]);
+    state = legacyFeedback(state);
     state = frame(state, context, [{ type: "feedback-direction", direction: "west" }, { type: "feedback-confirm" }]);
     if (state.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback");
     expect(state.phase).toMatchObject({ stage: "reasons", hasComplaint: true, complaintReasons: [] });
@@ -481,7 +477,7 @@ describe("reveal, stages and sudden death", () => {
   it("allows a non-empty complaint note to complete feedback without tags", () => {
     const context = makeContext();
     let state = answerAllCorrect(startQuestion(createMatch(TWO_TEAMS, "note-only", 0, context), context), context);
-    state = frame(state, context, [{ type: "continue", teamId: "green" }]);
+    state = legacyFeedback(state);
     state = frame(state, context, [{ type: "feedback-direction", direction: "west" }, { type: "feedback-confirm" }]);
     state = frame(state, context, [{ type: "set-feedback-note", note: "Проверить формулировку" }]);
     state = frame(state, context, [{ type: "feedback-direction", direction: "south" }, { type: "feedback-direction", direction: "south" }, { type: "feedback-direction", direction: "east" }]);
@@ -495,7 +491,7 @@ describe("reveal, stages and sudden death", () => {
   it("migrates an incomplete v2 feedback snapshot without creating another feedback event", () => {
     const context = makeContext();
     let state = answerAllCorrect(startQuestion(createMatch(TWO_TEAMS, "legacy-feedback", 0, context), context), context);
-    state = frame(state, context, [{ type: "continue", teamId: "green" }]);
+    state = legacyFeedback(state);
     if (state.phase.kind !== "difficulty-feedback") throw new Error("Expected feedback");
     const legacy = JSON.parse(serializeMatch(state));
     legacy.schemaVersion = 2;

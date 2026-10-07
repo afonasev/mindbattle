@@ -1,3 +1,4 @@
+import { openComplaint, pendingComplaints } from './complaintHelpers';
 import { expect, test } from "@playwright/test";
 
 type Position = "up" | "right" | "down" | "left";
@@ -10,6 +11,12 @@ type SoloPersistedState = {
   };
 };
 
+async function revealSolo(page: import('@playwright/test').Page) {
+  await page.goto('/?muted=1'); await page.evaluate(() => localStorage.clear()); await page.reload(); await muteAudio(page);
+  await page.getByRole('button', { name:'Одиночная игра' }).click(); await page.keyboard.press('Enter');
+  const state=await soloState(page); if (!state.phase.round) throw Error('Expected question');
+  await page.keyboard.press(answerKey[state.phase.round.correctPosition]); await expect(page.locator('.question-stage--reveal')).toBeVisible();
+}
 const answerKey: Record<Position, string> = {
   up: "KeyW",
   right: "KeyD",
@@ -99,7 +106,7 @@ test("shows touch-only solo controls without overflowing the topic stage", async
   await page.getByRole("button", { name: "Продолжить" }).click();
   await expect(page.locator(".question-stage--reveal")).toBeVisible();
   await page.locator(".solo-team-strip").click();
-  await expect(page.getByRole("heading", { name: "Хотите пожаловаться на вопрос?" })).toBeVisible();
+  await expect(page.locator(".solo-topic-stage")).toBeVisible();
 });
 
 test("boots when the browser does not implement the Gamepad API", async ({ page }) => {
@@ -211,86 +218,25 @@ test("shows the shared reserve on the solo player card after the base timer", as
   await captureSettled(page, testInfo.outputPath("solo-reserve-timer.png"));
 });
 
-test("uses the team feedback layout with no selected by default", async ({ page }, testInfo) => {
-  await page.goto("/?muted=1");
-  await page.evaluate(() => localStorage.clear());
-  await page.reload();
-  await muteAudio(page);
-  await page.getByRole("button", { name: "Одиночная игра" }).click();
-  await page.keyboard.press("Enter");
-  const answering = await soloState(page);
-  const correctPosition = answering.phase.round?.correctPosition;
-  if (!correctPosition) throw new Error("Expected solo question");
-  await page.keyboard.press(answerKey[correctPosition]);
-  await expect(page.locator(".question-stage--reveal")).toBeVisible();
-  await expect(page.locator(".solo-team-strip .game-team-card")).toHaveClass(/game-team-card--correct/);
-  await page.locator(".question-stage--reveal .explanation").click();
-
-  await expect(page.getByRole("heading", { name: "Хотите пожаловаться на вопрос?" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Нет, продолжить" })).toHaveClass(/feedback-tag--cursor/);
-  await expect(page.getByRole("button", { name: "Да" })).not.toHaveClass(/feedback-tag--cursor/);
-  await expect(page.locator(".feedback-difficulty")).toHaveText("Сложность: Лёгкий");
-  await expect(page.locator(".feedback-status")).toContainText("Нет, продолжить");
-  await captureSettled(page, testInfo.outputPath("solo-feedback-default-no.png"));
-  await page.keyboard.press("KeyA");
-  await expect(page.getByRole("button", { name: "Да" })).toHaveClass(/feedback-tag--cursor/);
-  await page.keyboard.press("Enter");
-  await expect(page.getByRole("heading", { name: "Что не так с вопросом?" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Слишком лёгкий" })).toHaveClass(/feedback-tag--cursor/);
-  await page.keyboard.press("KeyD");
-  await expect(page.getByRole("button", { name: "Слишком сложный" })).toHaveClass(/feedback-tag--cursor/);
-  await page.keyboard.press("Enter");
-  await expect(page.getByRole("button", { name: "Слишком сложный" })).toContainText("✓");
-  await page.keyboard.press("KeyS");
-  await expect(page.getByRole("button", { name: "Фактическая ошибка" })).toHaveClass(/feedback-tag--cursor/);
+test("offers an optional complaint only in the reveal pause menu", async ({ page }, testInfo) => {
+  await revealSolo(page); expect(await page.getByRole('button',{name:'Пожаловаться на вопрос',exact:true}).count()).toBe(0); await openComplaint(page);
+  await expect(page.getByText('Сложность: Лёгкий',{exact:true})).toBeVisible(); await expect(page.getByRole('button',{name:'Сохранить жалобу',exact:true})).toBeDisabled();
+  await captureSettled(page,testInfo.outputPath('solo-complaint-menu.png'));await page.getByRole('button',{name:'Отмена',exact:true}).click();
+  await expect(page.locator('.question-stage--reveal')).toBeVisible();expect((await soloState(page)).slotIndex).toBe(0);
 });
 
-test("continues from solo feedback when No is tapped", async ({ page }) => {
-  await page.goto("/?muted=1");
-  await page.evaluate(() => localStorage.clear());
-  await page.reload();
-  await muteAudio(page);
-  await page.getByRole("button", { name: "Одиночная игра" }).click();
-  await page.keyboard.press("Enter");
-  const answering = await soloState(page);
-  const correctPosition = answering.phase.round?.correctPosition;
-  if (!correctPosition) throw new Error("Expected solo question");
-  await page.keyboard.press(answerKey[correctPosition]);
-  await page.locator(".question-stage--reveal .explanation").click();
-
-  await page.getByRole("button", { name: "Нет, продолжить" }).click();
-  await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
+test("continues solo reveal with no feedback step or HTTP request", async ({ page }) => {
+  let calls=0;await page.route('**/api/difficulty-feedback',route => {calls++;return route.abort('failed');});
+  await revealSolo(page); await page.locator('.question-stage--reveal .explanation').click();
+  await expect(page.locator('.solo-topic-stage')).toBeVisible();expect((await soloState(page)).slotIndex).toBe(1);expect(calls).toBe(0);
 });
 
-test("offers retry and skip after three seconds of failed solo feedback", async ({ page }, testInfo) => {
-  const eventIds: string[] = [];
-  await page.route("**/api/difficulty-feedback", async (route) => {
-    eventIds.push(JSON.parse(route.request().postData() ?? "{}").eventId);
-    await route.abort("failed");
-  });
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/?muted=1");
-  await page.evaluate(() => localStorage.clear());
-  await page.reload();
-  await page.getByRole("button", { name: "Одиночная игра" }).click();
-  await page.locator(".topic-choice").first().click();
-  const answering = await soloState(page);
-  const correctPosition = answering.phase.round?.correctPosition;
-  if (!correctPosition) throw new Error("Expected solo question");
-  await page.locator(".solo-answer-button").nth(["up", "right", "down", "left"].indexOf(correctPosition)).click();
-  await page.locator(".question-stage--reveal .explanation").click();
-  await page.getByRole("button", { name: "Нет, продолжить" }).click();
-  const dialog = page.getByRole("dialog", { name: "Отправка фидбэка временно недоступна" });
-  await expect(dialog).toBeVisible({ timeout: 5_000 });
-  await page.screenshot({ path: testInfo.outputPath("solo-feedback-unavailable.png"), fullPage: true });
-  await dialog.getByRole("button", { name: "Повторить" }).click();
-  await expect(dialog).toHaveCount(0);
-  await expect(dialog).toBeVisible({ timeout: 5_000 });
-  expect(eventIds).toHaveLength(2);
-  expect(eventIds[1]).toBe(eventIds[0]);
-  await dialog.getByRole("button", { name: "Пропустить" }).click();
-  await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
-  expect(eventIds).toHaveLength(2);
+test("saves solo complaints offline without retry or skip dialogs", async ({ page }, testInfo) => {
+  await page.route('**/api/difficulty-feedback',route => route.abort('failed'));await revealSolo(page);const before=await soloState(page);await openComplaint(page);
+  await page.getByRole('button',{name:'Неинтересный для викторины',exact:true}).click();await captureSettled(page,testInfo.outputPath('solo-offline-complaint.png'));
+  await page.getByRole('button',{name:'Сохранить жалобу',exact:true}).click();await expect(page.locator('.question-stage--reveal')).toBeVisible();expect((await soloState(page)).phase).toEqual(before.phase);
+  await expect.poll(async () => (await pendingComplaints(page)).length).toBe(1);
+  await page.locator('.question-stage--reveal .explanation').click();await expect(page.locator('.solo-topic-stage')).toBeVisible();
 });
 
 for (const width of [null, 360, 760]) test(`matches the team reveal for a wrong solo answer (${width ?? "desktop"})`, async ({ page }, testInfo) => {
@@ -422,7 +368,7 @@ test("accepts a neutral virtual gamepad before moving and confirming", async ({ 
   await expect(page.locator(".question-stage")).toBeVisible();
 });
 
-test("uses D-pad left and right, not up and down, for solo feedback choices", async ({ page }, testInfo) => {
+test("uses D-pad navigation in the optional solo complaint menu", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "chromium-1280", "One viewport is enough for gamepad input coverage");
   await page.addInitScript(() => {
     const pad = {
@@ -457,21 +403,10 @@ test("uses D-pad left and right, not up and down, for solo feedback choices", as
   await setVirtualGamepadButton(page, buttonForPosition[correctPosition], true);
   await setVirtualGamepadButton(page, buttonForPosition[correctPosition], false);
   await expect(page.locator(".question-stage--reveal")).toBeVisible();
-  await setVirtualGamepadButton(page, 0, true);
-  await setVirtualGamepadButton(page, 0, false);
-  await expect(page.getByRole("heading", { name: "Хотите пожаловаться на вопрос?" })).toBeVisible();
-
-  const selected = page.locator(".feedback-tag--cursor");
-  await expect(selected).toHaveText("Нет, продолжить");
-  await setVirtualGamepadButton(page, 12, true);
-  await setVirtualGamepadButton(page, 12, false);
-  await setVirtualGamepadButton(page, 13, true);
-  await setVirtualGamepadButton(page, 13, false);
-  await expect(selected).toHaveText("Нет, продолжить");
-  await setVirtualGamepadButton(page, 14, true);
-  await setVirtualGamepadButton(page, 14, false);
-  await expect(selected).toHaveText("Да");
-  await setVirtualGamepadButton(page, 15, true);
-  await setVirtualGamepadButton(page, 15, false);
-  await expect(selected).toHaveText("Нет, продолжить");
+  await openComplaint(page);await page.waitForTimeout(80);
+  const press=async (button:number) => {await setVirtualGamepadButton(page,button,true);await setVirtualGamepadButton(page,button,false);};
+  const easy=page.getByRole('button',{name:'Слишком лёгкий',exact:true});const hard=page.getByRole('button',{name:'Слишком сложный',exact:true});
+  await expect(easy).toBeFocused();await press(13);await expect(hard).toBeFocused();await press(0);await expect(hard).toHaveAttribute('aria-pressed','true');
+  await press(12);await expect(easy).toBeFocused();await press(0);await expect(easy).toHaveAttribute('aria-pressed','true');await expect(hard).toHaveAttribute('aria-pressed','false');
+  await press(1);await expect(page.locator('.question-stage--reveal')).toBeVisible();
 });

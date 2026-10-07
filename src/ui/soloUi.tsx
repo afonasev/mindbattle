@@ -8,7 +8,7 @@ import { difficultyLabel } from "./difficulty";
 
 type SoloInputKind = "pointer" | "wasd" | "arrows" | "gamepad";
 
-export function SoloScreen({ state, question, titleById, records, savedRecordId, inputKind, command, settings = () => {}, finish, exit }: {
+export function SoloScreen({ state, question, titleById, records, savedRecordId, inputKind, command, settings = () => {}, complaint, finish, exit }: {
   readonly state: SoloState;
   readonly question: Question | undefined;
   readonly titleById: Readonly<Record<string, string>>;
@@ -17,6 +17,7 @@ export function SoloScreen({ state, question, titleById, records, savedRecordId,
   readonly inputKind: SoloInputKind;
   readonly command: (command: SoloCommand) => void;
   readonly settings?: () => void;
+  readonly complaint?: () => void;
   readonly finish: (name: string) => void;
   readonly exit: () => void;
 }) {
@@ -29,7 +30,7 @@ export function SoloScreen({ state, question, titleById, records, savedRecordId,
     return <NameEntry score={state.score} finish={finish} skip={exit} />;
   }
   const hearts = Array.from({ length: 3 }, (_, index) => <span key={index} className={index < state.lives ? "solo-heart" : "solo-heart solo-heart--empty"}>♥</span>);
-  if (state.paused) return <SoloFrame><SessionMenu title="Игра на паузе" resume={() => command({ type: "resume" })} settings={settings} exit={exit}><p>Таймеры остановлены.</p></SessionMenu></SoloFrame>;
+  if (state.paused) return <SoloFrame><SessionMenu title="Игра на паузе" resume={() => command({ type: "resume" })} settings={settings} complaint={complaint} exit={exit}><p>Таймеры остановлены.</p></SessionMenu></SoloFrame>;
   const timerMs = phase.kind === "answering" ? (phase.baseRemainingMs > 0 ? phase.baseRemainingMs : state.reserveMs) : null;
   const reserve = phase.kind === "answering" && phase.baseRemainingMs === 0;
   const playerResultClass = phase.kind === "reveal" ? `game-team-card--${phase.result}` : "";

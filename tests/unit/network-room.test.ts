@@ -235,77 +235,38 @@ describe("network room", () => {
     expect(room.code).toBe("0001");
     expect(room.players).toHaveLength(2);
   });
-  it("fences feedback stages and rejects a repeated choice on the reasons screen", () => {
+  it("exposes optional complaint context only to the leader during reveal", () => {
     const { room, seats, command } = setup();
-    command("display", { type: "start" });
-    const phase = room.state!.phase;
-    if (phase.kind !== "normal-topic") throw Error();
-    command(seats.find((s) => s.id === phase.chooser)!.token, {
-      type: "topic",
-      topicId: phase.candidates[0],
-    });
-    command(seats[0].token, { type: "continue" });
-    for (const seat of seats)
-      command(seat.token, { type: "answer", position: "up" });
-    command(seats[0].token, { type: "continue" });
-    const envelope = command(seats[0].token, {
-      type: "feedback-choice",
-      complaint: true,
-    });
-    expect(() =>
-      room.command(
-        seats[0].token,
-        { ...envelope, commandId: "late-choice" },
-        0,
-      ),
-    ).toThrow("Экран");
-    expect(() =>
-      command(seats[0].token, { type: "feedback-choice", complaint: true }),
-    ).toThrow("Экран");
-    expect(room.state!.phase).toMatchObject({
-      kind: "difficulty-feedback",
-      stage: "reasons",
-      complaintReasons: [],
-    });
+    command('display', { type: 'start' });
+    const topic = room.state!.phase;
+    if (topic.kind !== 'normal-topic') throw Error();
+    command(seats.find(seat => seat.id === topic.chooser)!.token, { type: 'topic', topicId: topic.candidates[0] });
+    command(seats[0].token, { type: 'continue' });
+    expect(room.snapshot(seats[0].token,0).complaintContext).toBeUndefined();
+    for (const seat of seats) command(seat.token, { type: 'answer', position: 'up' });
+    const context = room.snapshot(seats[0].token,0).complaintContext;
+    expect(context).toMatchObject({ matchId: room.state!.matchId, catalogRevision: room.state!.catalogRevision });
+    expect(room.snapshot(seats[1].token,0).complaintContext).toBeUndefined();
+    expect(room.snapshot('display',0).complaintContext).toBeUndefined();
+    command(seats[0].token, { type: 'pause' });
+    expect(room.snapshot(seats[0].token,0).complaintContext).toEqual(context);
+    command(seats[0].token, { type: 'resume' });
+    command(seats[0].token, { type: 'continue' });
+    expect(room.state!.phase.kind).toBe('normal-topic');
+    expect(room.snapshot(seats[0].token,0).complaintContext).toBeUndefined();
   });
-  it("offers the leader a skip after three seconds and ignores a late write", async () => {
-    vi.useFakeTimers();
-    try {
-      const completeWrites: (() => void)[] = [];
-      const events: DifficultyFeedbackEventV3[] = [];
-      const { room, seats, command } = setup(2, async (event) => {
-        events.push(event);
-        await new Promise<void>((resolve) => { completeWrites.push(resolve); });
-      });
-      command("display", { type: "start" });
-      const topic = room.state!.phase;
-      if (topic.kind !== "normal-topic") throw Error();
-      command(seats.find((s) => s.id === topic.chooser)!.token, { type: "topic", topicId: topic.candidates[0] });
-      command(seats[0].token, { type: "continue" });
-      for (const seat of seats) command(seat.token, { type: "answer", position: "up" });
-      command(seats[0].token, { type: "continue" });
-      command(seats[0].token, { type: "feedback-choice", complaint: false });
-      expect(room.state?.phase.kind).toBe("difficulty-feedback");
-      await vi.advanceTimersByTimeAsync(2_999);
-      expect(room.snapshot(seats[0].token, 0).feedbackError).toBe("");
-      await vi.advanceTimersByTimeAsync(1);
-      expect(room.snapshot(seats[0].token, 0).feedbackError).toContain("Не удалось");
-      expect(events).toHaveLength(1);
-      command(seats[0].token, { type: "retry-feedback" });
-      expect(room.snapshot(seats[0].token, 0).feedbackError).toBe("");
-      await vi.advanceTimersByTimeAsync(3_000);
-      expect(room.snapshot(seats[0].token, 0).feedbackError).toContain("Не удалось");
-      expect(events).toHaveLength(2);
-      expect(events[1].eventId).toBe(events[0].eventId);
-      command(seats[0].token, { type: "skip-feedback" });
-      expect(room.state?.phase.kind).toBe("normal-topic");
-      completeWrites.forEach((resolve) => resolve());
-      await Promise.resolve();
-      expect(room.state?.phase.kind).toBe("normal-topic");
-      expect(events).toHaveLength(2);
-    } finally {
-      vi.useRealTimers();
-    }
+  it("continues without invoking the old room feedback sink", () => {
+    const submit = vi.fn(async () => { throw Error('offline'); });
+    const { room, seats, command } = setup(2, submit);
+    command('display', { type: 'start' });
+    const topic = room.state!.phase;
+    if (topic.kind !== 'normal-topic') throw Error();
+    command(seats.find(seat => seat.id === topic.chooser)!.token, { type: 'topic', topicId: topic.candidates[0] });
+    command(seats[0].token, { type: 'continue' });
+    for (const seat of seats) command(seat.token, { type: 'answer', position: 'up' });
+    command(seats[0].token, { type: 'continue' });
+    expect(room.state!.phase.kind).toBe('normal-topic');
+    expect(submit).not.toHaveBeenCalled();
   });
   it("freezes even when a disconnect lands exactly as unanswered time expires", () => {
     const { room, seats, command } = setup();

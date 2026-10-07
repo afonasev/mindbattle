@@ -44,7 +44,7 @@ export type SoloPhase =
   | { readonly kind: "topic"; readonly candidates: readonly [TopicId, TopicId, TopicId]; readonly cursor: number }
   | { readonly kind: "risk"; readonly difficulty: Difficulty; readonly cursor?: 0 | 1 }
   | { readonly kind: "answering"; readonly round: SoloRound; readonly baseRemainingMs: number; readonly answer: AnswerPosition | null }
-  | { readonly kind: "reveal"; readonly round: SoloRound; readonly result: "correct" | "wrong" | "no-answer"; readonly answer: AnswerPosition | null; readonly final?: boolean }
+  | { readonly kind: "reveal"; readonly complaintDraft?: import("./types").LegacyComplaintDraft; readonly round: SoloRound; readonly result: "correct" | "wrong" | "no-answer"; readonly answer: AnswerPosition | null; readonly final?: boolean }
   | { readonly kind: "feedback"; readonly round: SoloRound; readonly result: "correct" | "wrong" | "no-answer"; readonly eventId: string; readonly hasComplaint: boolean | null; readonly feedbackCursor: number; readonly complaintReasons: readonly ComplaintReason[]; readonly complaintNote: string }
   | { readonly kind: "finished" };
 
@@ -249,20 +249,7 @@ export function reduceSoloFrame(state: SoloState, frame: SoloFrame, context: Dom
       return settle(answered, command.position === answered.phase.round.correctPosition ? "correct" : "wrong");
     } else if (next.phase.kind === "reveal" && command.type === "continue") {
       if (next.phase.final) return { ...next, phase: { kind: "finished" } };
-      if (!next.config.collectQuestionFeedback) return nextSlot(next, context);
-      return {
-        ...next,
-        phase: {
-          kind: "feedback",
-          round: next.phase.round,
-          result: next.phase.result,
-          eventId: `feedback-v3:${next.runId}:solo-${next.slotIndex + 1}:${next.phase.round.questionId}`,
-          hasComplaint: null,
-          feedbackCursor: 1,
-          complaintReasons: [],
-          complaintNote: ""
-        }
-      };
+      return nextSlot(next, context);
     } else if (next.phase.kind === "feedback") {
       if (command.type === "set-feedback-choice") {
         return { ...next, phase: { ...next.phase, hasComplaint: command.hasComplaint, feedbackCursor: command.hasComplaint ? 0 : 1, complaintReasons: command.hasComplaint ? next.phase.complaintReasons : [], complaintNote: command.hasComplaint ? next.phase.complaintNote : "" } };
