@@ -7,6 +7,7 @@ import path from "node:path";
 const fixtureRoot = path.resolve("dist/desktop");
 const installer = Buffer.from("MZ Mindbattle download regression fixture");
 const installerUrl = "/desktop/installers/Mindbattle-test-win-x64.exe";
+const githubUrl = "https://github.com/afonasev/mindbattle/releases/download/v1.2.3/Mindbattle-test-win-x64.exe";
 
 // The fixtures share one production server. Run once rather than concurrently
 // for both viewport projects; download handling does not depend on viewport.
@@ -15,7 +16,7 @@ test.beforeAll(async ({}, testInfo) => {
   await mkdir(path.join(fixtureRoot, "installers"), { recursive: true });
   await writeFile(path.join(fixtureRoot, "installers/Mindbattle-test-win-x64.exe"), installer);
   await writeFile(path.join(fixtureRoot, "downloads.json"), JSON.stringify({
-    windows: { url: installerUrl },
+    windows: { url: githubUrl },
   }));
   await writeFile(path.join(fixtureRoot, "download-check.html"),
     `<a href="${installerUrl}">Installer</a>`);
@@ -30,12 +31,13 @@ test("Windows installer downloads with an active PWA without replacing the game"
   await page.addInitScript(() => {
     Object.defineProperty(navigator, "platform", { get: () => "Win32" });
   });
+  await page.route(githubUrl, route => route.fulfill({ body: installer, contentType: "application/octet-stream", headers: { "content-disposition": "attachment; filename=Mindbattle-test-win-x64.exe" } }));
   await page.goto("/");
   await page.evaluate(async () => { await navigator.serviceWorker.ready; });
   await page.reload();
   await expect.poll(() => page.evaluate(() => !!navigator.serviceWorker.controller)).toBe(true);
   const link = page.getByRole("link", { name: "Скачать игру" });
-  await expect(link).toHaveAttribute("href", installerUrl);
+  await expect(link).toHaveAttribute("href", githubUrl);
   const downloaded = page.waitForEvent("download", { timeout: 5000 });
   await link.click();
   const download = await downloaded;

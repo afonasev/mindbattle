@@ -27,6 +27,7 @@ for (const desktop of [false, true]) {
     await expect(footer).not.toContainText("+published");
     expect(await page.locator('meta[name="mindbattle:version"]').getAttribute("content")).toBe("0.1.0+published");
     await expect(footer).toContainText("Опубликована");
+    await expect.poll(() => page.evaluate(() => Math.abs(parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--app-footer-height")) - document.querySelector("footer")!.getBoundingClientRect().height))).toBeLessThanOrEqual(1);
     await expect(footer.locator("time")).toHaveAttribute("datetime", "2026-10-04T07:00:00.000Z");
     await expect(footer).toContainText("04.10.2026");
     await page.screenshot({ path: info.outputPath(`footer-${desktop ? "desktop" : "web"}.png`), fullPage: true });

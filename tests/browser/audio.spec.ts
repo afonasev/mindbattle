@@ -119,11 +119,11 @@ test("keeps sound controls in the settings submenu", async ({ page }, testInfo) 
   await page.goto("/");
   await page.evaluate(() => localStorage.clear());
   await page.reload();
-  const actions = page.locator(".menu-actions");
+  const actions = page.locator(".menu-utilities");
   await expect(actions.getByRole("button", { name: "Настройки", exact: true })).toBeVisible();
   await expect(actions.getByRole("button", { name: "Рекорды", exact: true })).toBeVisible();
-  const actionLabels = await actions.getByRole("button").allTextContents();
-  expect(actionLabels.indexOf("Настройки")).toBeLessThan(actionLabels.indexOf("Рекорды"));
+  const actionLabels = await actions.locator(".menu-action-label").allTextContents();
+  expect(actionLabels.indexOf("Рекорды")).toBeLessThan(actionLabels.indexOf("Настройки"));
   await actions.getByRole("button", { name: "Настройки", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Настройки", exact: true })).toBeVisible();
   await expect(page.locator("details.preferences-panel")).toHaveCount(0);

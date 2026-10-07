@@ -1,4 +1,6 @@
 import { test, expect, type Page, type BrowserContext } from "@playwright/test";
+import { readdirSync, readFileSync } from "node:fs";
+const catalogQuestions = readdirSync("src/content/topics").filter(name => name.endsWith(".json")).flatMap(name => JSON.parse(readFileSync(`src/content/topics/${name}`, "utf8")).questions) as Array<{ prompt: string; explanation: string }>;
 
 test("network feedback continues after a successful server write", async ({ browser, page }, testInfo) => {
   await page.goto("/network?muted=1");
@@ -213,18 +215,23 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
           .nth(i % 4)
           .click();
       await expect(page.locator(".network-answers .correct")).toHaveCount(1);
+      const prompt = await page.locator(".network-question").innerText();
+      const question = catalogQuestions.find(question => question.prompt === prompt);
+      expect(question, "revealed question must exist in the actual catalog").toBeDefined();
+      expect(question!.explanation.length).toBeGreaterThan(0);
+      await expect.poll(async () => (await page.locator(".network-explanation > p").allTextContents()).join(" ").replace(/\s+/g, " ").trim()).toBe(question!.explanation.replace(/\s+/g, " ").trim());
       for (const phone of phones) {
-        await expect(phone.locator(".network-explanation > p")).toHaveCount(1);
+        await expect.poll(async () => (await phone.locator(".network-explanation > p").allTextContents()).join(" ").replace(/\s+/g, " ").trim()).toBe(question!.explanation.replace(/\s+/g, " ").trim());
         await expect(phone.locator(".network-explanation .wrong-answer-notes article")).toHaveCount(3);
         await expect(phone.locator(".network-explanation .wrong-answer-notes article b")).toHaveCount(3);
         await expect(phone.locator(".network-answers small")).toContainText(["Участник 1", "Участник 2", "Участник 3", "Участник 4"]);
       }
       if (round === 0) {
-        expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(testInfo.project.use.viewport!.height);
         await page.screenshot({
           path: testInfo.outputPath("network-reveal-12.png"),
           fullPage: true,
         });
+        expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(testInfo.project.use.viewport!.height);
         await phones[0].screenshot({
           path: testInfo.outputPath("network-phone-reveal.png"),
           fullPage: true,

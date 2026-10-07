@@ -1,10 +1,12 @@
 import { expect, test } from "@playwright/test";
 
+import catalogIdentity from "../../src/content/revision.json" with { type: "json" };
+
 const event = (suffix: string) => ({
   schemaVersion: 3,
   eventId: `production-browser-${suffix}-${Date.now()}`,
   matchId: `production-match-${suffix}`,
-  catalogRevision: "mindbattle-questions-2026-09-02-r3",
+  catalogRevision: catalogIdentity.revision,
   questionId: "agriculture-01-1",
   assignedDifficulty: "easy",
   hasComplaint: false,

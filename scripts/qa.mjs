@@ -50,17 +50,17 @@ async function command(name, executable, argv, env = childEnv) {
     return phase;
   } finally { active = undefined; closeSync(fd); }
 }
-async function ownedHost(dev) {
+async function ownedHost() {
   const probe = createServer();
   probe.listen(0, '127.0.0.1'); await once(probe, 'listening');
   const port = probe.address().port;
   await new Promise((done, fail) => probe.close(error => error ? fail(error) : done()));
   const data = await mkdtemp(join(tmpdir(), 'mindbattle-qa-data-'));
-  summary.host = { port, data, kind: dev ? 'dev' : 'production-preview' };
+  summary.host = { port, data, kind: 'production-preview' };
   const env = { ...childEnv, MINDBATTLE_HOST: '127.0.0.1', MINDBATTLE_PORT: String(port), MINDBATTLE_FEEDBACK_PATH: join(data, 'feedback.ndjson'), MINDBATTLE_RESULTS_PATH: join(data, 'results.ndjson') };
   const fd = openSync(join(runDir, 'host.log'), 'w');
   const begin = performance.now();
-  host = spawn(process.execPath, ['server/index.mjs', ...(dev ? ['--dev'] : [])], { env, stdio: ['ignore', fd, fd] });
+  host = spawn(process.execPath, ['server/index.mjs'], { env, stdio: ['ignore', fd, fd] });
   closeSync(fd);
   summary.host.pid = host.pid;
   let spawnError;
@@ -93,10 +93,10 @@ try {
     await command('unit', process.execPath, ['node_modules/vitest/vitest.mjs', 'run', ...(scope.units ?? []), '--reporter=default', '--reporter=json', `--outputFile.json=${join(runDir, 'unit.json')}`]);
     summary.unit = verifyVitest(JSON.parse(await readFile(join(runDir, 'unit.json'), 'utf8')), scope.units);
   }
-  if (scopeName === 'full') await command('build', 'npm', ['run', 'build:assets']);
+  if (scope.browser === null || scope.browser.length) await command('build', 'npm', ['run', 'build:assets']);
   if (scope.browser === null || scope.browser.length) {
-    const port = await ownedHost(scopeName !== 'full');
-    // Compile the dev module graph before timed scenarios; do not inflate their timeouts.
+    const port = await ownedHost();
+    // Warm the actual built app before timed scenarios; do not inflate their timeouts.
     const warmStart = performance.now();
     const { chromium } = await import('@playwright/test');
     const warmBrowser = await chromium.launch({ args: ['--mute-audio'] });

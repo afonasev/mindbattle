@@ -25,8 +25,14 @@ export function verifyBrowser(report, scope, projects = ['chromium-1280', 'chrom
     if (full && t.status === 'skipped') {
       requireValue(t.projectName === 'chromium-1920' && (
         spec.file.endsWith('solo.spec.ts') && /^(accepts a neutral virtual gamepad|uses D-pad left and right)/.test(spec.title) ||
-        spec.file.endsWith('game.spec.ts') && /^(supports N\+1 public bonus veto|marks a zero-reserve team|shows each unanswered team)/.test(spec.title)
+        spec.file.endsWith('game.spec.ts') && /^(supports N\+1 public bonus veto|marks a zero-reserve team|shows each unanswered team)/.test(spec.title) ||
+        spec.file.endsWith('desktop-download.spec.ts') && spec.title === 'Windows installer downloads with an active PWA without replacing the game' ||
+        spec.file.endsWith('manual-update.spec.ts') && spec.title === 'web/mobile hides current, offers a ready update and applies A→B offline'
       ), 'Unapproved full-suite skip');
+      requireValue(specs.some(other => other.file === spec.file && other.title === spec.title && other.tests.some(test =>
+        test.projectName === 'chromium-1280' && test.status === 'expected' && test.expectedStatus === 'passed' &&
+        test.results.length === 1 && test.results[0].status === 'passed'
+      )), 'Skipped duplicate has no successful primary viewport');
       requireValue(t.results.length === 1 && t.results[0].status === 'skipped', 'Invalid full-suite skip');
       continue;
     }

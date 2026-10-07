@@ -44,6 +44,18 @@ test('full rejects arbitrary skips, expected failures, and all-skipped reports',
   const failed = browser(); failed.suites[0].specs[0].tests[0].expectedStatus = 'failed';
   assert.throws(() => verifyBrowser(failed, scopes.full));
 });
+
+test('existing shared-server viewport duplicates require an executed successful primary', () => {
+  const r = browser();
+  const spec = r.suites[0].specs[0];
+  spec.file = 'desktop-download.spec.ts';
+  spec.title = 'Windows installer downloads with an active PWA without replacing the game';
+  spec.tests.push({ projectName: 'chromium-1920', expectedStatus: 'passed', status: 'skipped', results: [{ status: 'skipped' }] });
+  r.stats.skipped = 1;
+  assert.equal(verifyBrowser(r, scopes.full).skipped, 1);
+  spec.tests.shift(); r.stats.expected = 0;
+  assert.throws(() => verifyBrowser(r, scopes.full), /successful primary/);
+});
 test('CLI rejects unknown scope and arguments before running checks', () => {
   for (const args of [['--scope', 'unknown'], ['--scope'], ['--typo']]) {
     const result = spawnSync(process.execPath, ['scripts/qa.mjs', ...args], { encoding: 'utf8' });

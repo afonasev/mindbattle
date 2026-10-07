@@ -44,10 +44,12 @@ privacy/bonus/display restore/departure, авторитетные списки �
 без Gamepad API, virtual-pad neutral gate/cursor/confirm и D-pad feedback и 3/4 team bonus veto только
 1280; это автоматизированная проверка, а не physical acceptance.
 
-Full сохраняет существующие gameplay assertions, clocks и длительности. Пять
-существующих исключений второго viewport (virtual-pad и real-time deadline)
+Full сохраняет существующие gameplay assertions, clocks и длительности. Семь
+существующих дублей второго viewport (virtual-pad, real-time deadline и два
+shared-server download/update сценария)
 показываются как skipped, а не passed; runner разрешает только эти известные
-file/title/project исключения. Focused routes не допускают skipped, todo,
+file/title/project исключения при успешном непустом counterpart на основном
+viewport. Focused routes не допускают skipped, todo,
 flaky, expected failures или нулевые tests. `npm run check` остаётся types +
 все unit tests + builds; `npm run test:browser` остаётся самостоятельным
 production build + browser gate. `check` не повторяет typecheck внутри build;
@@ -65,9 +67,11 @@ clean commit. Отсутствующий/некорректный JSON report �
 Browser runner запускает собственный Node host на свободном loopback port,
 проверяет startup и записывает его время отдельно от Playwright wall time.
 У него отдельные временные feedback/results data; он завершает только свой
-процесс и удаляет только свои data. Focused использует Vite dev (не проверяет
-production bundling/service worker/cache); full использует свежую сборку и
-production preview. Установи зависимости в worktree через `npm ci`; симлинк на
+процесс и удаляет только свои data. Browser QA ограничен двумя workers:
+сетевой сценарий сам открывает до 13 contexts; CPU-default перегружал host. Все browser routes используют свежую
+сборку и production preview: dev reload большого каталога нестабилен при
+параллельных browser contexts. Focused ускоряет QA выбором unit/browser
+контрактов; сборку и service worker не подменяет dev-сервером. Установи зависимости в worktree через `npm ci`; симлинк на
 чужой node_modules может блокировать шрифты в Vite. Vitest import/transform
 время смотри в unit.log: суммы по workers не равны wall time. Не обещай
 ускорение относительно full browser без измерения обоих маршрутов.

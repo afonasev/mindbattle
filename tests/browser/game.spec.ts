@@ -413,7 +413,7 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
       await waitForInputGate(page);
 
       await page.reload();
-      await page.getByRole("button", { name: "Продолжить партию" }).click();
+      await page.getByRole("button", { name: "Продолжить игру на одном устройстве" }).click();
       await expect(page.getByRole("dialog")).toContainText("Партия восстановлена");
       await page.getByRole("button", { name: "Продолжить" }).click();
       await waitForInputGate(page);
@@ -562,6 +562,9 @@ test("renders the main explanation and three horizontal wrong-answer cards witho
     await expect(page.locator(".wrong-answer-notes > strong")).toHaveCount(0);
     const cardRows = await page.locator(".wrong-answer-notes article").evaluateAll(cards => cards.map(card => Math.round(card.getBoundingClientRect().top)));
     expect(new Set(cardRows).size).toBe(1);
+    await page.locator(".question-stage--reveal").evaluate(async stage => {
+      await Promise.all(stage.getAnimations({ subtree: true }).filter(animation => animation.effect?.getComputedTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {})));
+    });
     const answerAlignment = await page.locator(".answer-cross").evaluate((cross) => {
       const crossRect = cross.getBoundingClientRect();
       const textOffsets = [...cross.querySelectorAll<HTMLElement>(".answer-option")].map((option) => {
@@ -735,7 +738,7 @@ test("marks a zero-reserve team as no-answer at the base deadline", async ({ pag
     localStorage.setItem(key, JSON.stringify(data));
   });
   await page.reload();
-  await page.getByRole("button", { name: "Продолжить партию" }).click();
+  await page.getByRole("button", { name: "Продолжить игру на одном устройстве" }).click();
   await page.getByRole("button", { name: "Продолжить" }).click();
   await waitForInputGate(page);
   await page.keyboard.press("w");
@@ -766,7 +769,7 @@ test("shows each unanswered team its timer and switches to red reserve time", as
     localStorage.setItem(key, JSON.stringify(data));
   });
   await page.reload();
-  await page.getByRole("button", { name: "Продолжить партию" }).click();
+  await page.getByRole("button", { name: "Продолжить игру на одном устройстве" }).click();
   await page.getByRole("button", { name: "Продолжить" }).click();
 
   const blueCard = page.locator(".game-team-card", { hasText: "Синяя" });
@@ -816,7 +819,7 @@ test("keeps a shared feedback result on screen until the server accepts an idemp
   expect(pending.phase.kind).toBe("difficulty-feedback");
   expect(pending.phase).toMatchObject({ stage: "done", hasComplaint: false, complaintReasons: [] });
   await page.reload();
-  await page.getByRole("button", { name: "Продолжить партию" }).click();
+  await page.getByRole("button", { name: "Продолжить игру на одном устройстве" }).click();
   await page.getByRole("button", { name: "Продолжить" }).click();
   await expect(page.locator(".difficulty-feedback-stage")).toBeVisible();
   await waitForInputGate(page);

@@ -347,10 +347,8 @@ test("uses the team final-stage framing for solo results and leaderboard rank", 
     const wrongPosition = (["up", "right", "down", "left"] as const).find((position) => position !== correctPosition);
     if (!wrongPosition) throw new Error("Expected a wrong position");
     await page.keyboard.press(answerKey[wrongPosition]);
-    if (index < 2) {
-      await expect(page.locator(".question-stage--reveal")).toBeVisible();
-      await page.keyboard.press("Enter");
-    }
+    await expect(page.locator(".question-stage--reveal")).toBeVisible();
+    await page.keyboard.press("Enter");
   }
 
   await expect(page.getByRole("heading", { name: "Результат: 0" })).toBeVisible();

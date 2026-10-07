@@ -2,6 +2,7 @@ import { TOPIC_DEFINITIONS } from "./topicDefinitions";
 import { contentReviews } from "./reviews";
 import type { ContentCatalog, TopicPack } from "./types";
 import { validateCatalog } from "./validator";
+import catalogIdentity from "./revision.json";
 
 const topicModules = import.meta.glob("./topics/*.json", {
   eager: true,
@@ -19,7 +20,7 @@ export function buildCatalog(topics: readonly TopicPack[]): ContentCatalog {
       (definitionOrder.get(right.id as never) ?? Number.MAX_SAFE_INTEGER)
   );
   return {
-    revision: "mindbattle-questions-2026-09-29-quality-wave-3",
+    revision: catalogIdentity.revision,
     topics: ordered
   };
 }
