@@ -25,35 +25,37 @@ def finish(data, target=-23):
     data *= min(10**(target/20)/max(rms, 1e-9), .74/max(np.abs(data).max(), 1e-9))
     return data
 
-def pulse(seconds, frequency, decay, seed):
-    t = np.arange(round(seconds*SR))/SR
-    rng = np.random.default_rng(seed)
-    # Rounded low body with a soft textured attack, deliberately not a melody.
-    body = np.sin(2*np.pi*frequency*t) + .18*np.sin(2*np.pi*frequency*2.01*t)
-    noise = rng.normal(0, 1, len(t))
-    noise = np.convolve(noise, np.ones(24)/24, mode='same')
-    mono = body*np.exp(-decay*t) + .14*noise*np.exp(-60*t)
-    stereo = np.column_stack([mono, mono])
-    for delay, gain in [(.031,.13), (.067,.07)]:
-        n = round(delay*SR)
-        stereo[n:,1] += mono[:-n]*gain
-    return stereo
+def utility(recipe, sources):
+    """Edit recorded arena textures; do not generate oscillator/noise placeholders.
 
-def utility(name):
-    parameters = {
-        'answer-locked': (.12, 430, 46, 63201, -29),
-        'countdown': (.18, 320, 30, 63202, -27),
-        'timer-last-second': (.20, 250, 35, 63203, -27),
-        'screen-transition': (.30, 210, 15, 63204, -29),
-        'question-start': (.60, 160, 9, 63205, -25),
-        'reserve-start': (.80, 110, 6, 63206, -25),
-    }
-    seconds, freq, decay, seed, target = parameters[name]
-    data = pulse(seconds, freq, decay, seed)
-    if name == 'reserve-start':
-        n = round(.23*SR)
-        data[n:] += .45*pulse(seconds-.23, freq*1.5, decay, seed+20)
-    return finish(data, target)
+    Recipes retain source regions, timing, speed, filtering and layer gains.
+    Both channels share the time mapping, preserving the recorded stereo image.
+    Short envelopes keep repeated ticks clean and remove crop-edge clicks.
+    """
+    output = np.zeros((round(recipe['duration_ms'] * SR / 1000), 2))
+    for layer in recipe['layers']:
+        start = round(layer['start_ms'] * SR / 1000)
+        length = round(layer['length_ms'] * SR / 1000)
+        grain = sources[layer['source']][start:start + length].copy()
+        if len(grain) != length:
+            raise ValueError('Source region out of bounds: ' + recipe['cue'])
+        if layer.get('reverse'):
+            grain = grain[::-1]
+        width = layer.get('lowpass_frames', 1)
+        if width > 1:
+            grain = np.column_stack([np.convolve(grain[:, ch], np.ones(width)/width, mode='same') for ch in range(2)])
+        frames = round(layer['duration_ms'] * SR / 1000)
+        positions = np.linspace(0, len(grain) - 1, frames)
+        grain = np.column_stack([np.interp(positions, np.arange(len(grain)), grain[:, ch]) for ch in range(2)])
+        attack = min(round(.004 * SR), frames // 4)
+        release = min(round(.065 * SR), frames // 3)
+        grain[:attack] *= np.linspace(0, 1, attack)[:, None]
+        grain[-release:] *= np.linspace(1, 0, release)[:, None]
+        offset = round(layer['offset_ms'] * SR / 1000)
+        if offset + frames > len(output):
+            raise ValueError('Layer exceeds cue duration: ' + recipe['cue'])
+        output[offset:offset + frames] += grain * layer['gain']
+    return finish(output, recipe['rms_dbfs'])
 
 def main():
     parser = argparse.ArgumentParser()
@@ -63,6 +65,7 @@ def main():
     metadata = json.loads((SOURCES/'sources.json').read_text())
     OUTPUT.mkdir(parents=True, exist_ok=True)
     tracks = {}
+    recorded_sources = {}
     for item in metadata['tracks']:
         source = SOURCES/(item['id']+'.wav')
         if not source.exists():
@@ -75,15 +78,16 @@ def main():
         item['source_sha256'] = sha(source)
         data, rate = sf.read(source, always_2d=True)
         assert rate == SR and data.shape[1] == 2
+        recorded_sources[item['id']] = data
         tracks[item['id']] = finish(data)
-    for name in ['answer-locked','countdown','timer-last-second','screen-transition','question-start','reserve-start']:
-        tracks[name] = utility(name)
+    for recipe in metadata['utility_recipes']:
+        tracks[recipe['cue']] = utility(recipe, recorded_sources)
     tracks['reveal-all'] = tracks.pop('correct')
     tracks['reveal-none'] = tracks.pop('wrong')
     tracks['reveal-some'] = tracks.pop('mixed')
     # Legacy generic reveal remains a neutral cue; current UI uses outcome cues.
     tracks['reveal'] = tracks['reveal-some']
-    manifest = {'version':'quiz-sfx-v1','sample_rate':SR,'channels':2,'source_manifest':'assets/audio/quiz-sfx-v1/sources.json','renderer':'scripts/renderQuizSfx.py','tracks':[]}
+    manifest = {'version':'quiz-sfx-v1','sample_rate':SR,'channels':2,'source_manifest':'assets/audio/quiz-sfx-v1/sources.json','renderer':'scripts/renderQuizSfx.py','utility_renderer':metadata['utility_renderer'],'tracks':[]}
     for name, data in tracks.items():
         path = OUTPUT/(name+'.wav')
         sf.write(path, data, SR, subtype='PCM_16')
