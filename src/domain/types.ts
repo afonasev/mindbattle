@@ -27,6 +27,8 @@ export interface MatchConfig {
   readonly teams: readonly TeamId[];
   /** Omitted only by legacy callers and snapshots; it defaults to true. */
   readonly collectQuestionFeedback?: boolean;
+  readonly collectStatistics?: boolean;
+  readonly statisticsGeneration?: number;
 }
 
 export interface AnswerDefinition {

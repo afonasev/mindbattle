@@ -13,7 +13,7 @@ export interface ResultEvent {
   units?: { id: string; score: number; correct: number; incorrect: number; noAnswer: number }[];
   score?: number; lives?: number; winnerId?: string;
 }
-export interface ResultSink { enqueue(event: ResultEvent): void }
+export interface ResultSink { enqueue(event: ResultEvent, generation?: number): void; disableMatch?(matchId: string): Promise<void> }
 // Content fingerprint of the complete domain question; not a cryptographic signature.
 export function questionVersion(context: DomainContext, id: string): string {
   let hash = 14695981039346656037n;
@@ -29,13 +29,14 @@ export function metrics(e: ResultEvent) {
 }
 export class ResultObserver {
   private seen = new Set<string>();
-  constructor(private sink: ResultSink | undefined, private context: DomainContext) {}
-  private emit(e: ResultEvent) {
-    if (!this.sink || this.seen.has(e.eventId)) return;
+  constructor(private sink: ResultSink | undefined, private context: DomainContext, private permitted: (generation?: number) => boolean = () => true) {}
+  private emit(e: ResultEvent, generation?: number) {
+    if (!this.permitted(generation) || !this.sink || this.seen.has(e.eventId)) return;
     this.seen.add(e.eventId);
-    try { this.sink.enqueue(e); } catch { /* diagnostics must never break play */ }
+    try { this.sink.enqueue(e, generation ?? 0); } catch { /* diagnostics must never break play */ }
   }
   match(state: MatchState, interrupted?: string, starting = false) {
+    if (!this.permitted(state.config.statisticsGeneration) || state.config.collectStatistics === false) return;
     try { this.captureMatch(state, interrupted, starting); } catch { /* isolated diagnostics */ }
   }
   private captureMatch(state: MatchState, interrupted?: string, starting: boolean = false) {
@@ -51,17 +52,18 @@ export class ResultObserver {
         assignedDifficulty: p.round.difficulty, roundKind: p.round.mode === 'tie-break' ? 'tie-break' : p.round.points > ({ easy: 100, medium: 200, hard: 300 }[p.round.difficulty]) ? 'bonus' : 'normal',
         eligible: units.length, correct: units.filter(r => r.result === 'correct').length,
         wrong: units.filter(r => r.result === 'wrong').length, noAnswer: units.filter(r => r.result === 'no-answer').length,
-        timeout: p.round.attempts.filter(a => a.status === 'timed-out' && units.some(u => u.teamId === a.teamId)).length, choices });
+        timeout: p.round.attempts.filter(a => a.status === 'timed-out' && units.some(u => u.teamId === a.teamId)).length, choices }, state.config.statisticsGeneration);
     }
     if (starting || interrupted || p.kind === 'finished' || p.kind === 'reveal') {
       const status = interrupted || state.endReason ? 'interrupted' : p.kind === 'finished' ? 'completed' : 'in-progress';
       this.emit({ ...base, kind: 'match', eventId: `${state.matchId}:match:${status === 'in-progress' ? starting ? 'start' : ordinal : 'end'}`, status,
         reason: interrupted ?? state.endReason ?? (status === 'completed' ? 'finished' : 'checkpoint'),
         units: state.teams.map(t => ({ id: t.id, score: t.score, correct: t.correct, incorrect: t.incorrect, noAnswer: t.noAnswer })),
-        ...(p.kind === 'finished' ? { winnerId: p.winnerId } : {}) });
+        ...(p.kind === 'finished' ? { winnerId: p.winnerId } : {}) }, state.config.statisticsGeneration);
     }
   }
   solo(state: SoloState, interrupted?: string, starting = false) {
+    if (!this.permitted(state.config.statisticsGeneration) || state.config.collectStatistics === false) return;
     try { this.captureSolo(state, interrupted, starting); } catch { /* isolated diagnostics */ }
   }
   private captureSolo(state: SoloState, interrupted?: string, starting: boolean = false) {
@@ -73,12 +75,12 @@ export class ResultObserver {
       this.emit({ ...base, kind: 'question', eventId: `${state.runId}:question:${state.slotIndex}`, questionId: p.round.questionId,
         questionVersion: questionVersion(this.context, p.round.questionId), assignedDifficulty: p.round.difficulty,
         roundKind: p.round.risk ? 'bonus' : 'normal', eligible: 1, correct: +(p.result === 'correct'), wrong: +(p.result === 'wrong'),
-        noAnswer: +(p.result === 'no-answer'), timeout: +(p.result === 'no-answer'), choices });
+        noAnswer: +(p.result === 'no-answer'), timeout: +(p.result === 'no-answer'), choices }, state.config.statisticsGeneration);
     }
     if (starting || interrupted || p.kind === 'finished' || p.kind === 'reveal') {
       const status = interrupted ? 'interrupted' : p.kind === 'finished' ? 'completed' : 'in-progress';
       this.emit({ ...base, kind: 'match', eventId: `${state.runId}:match:${status === 'in-progress' ? starting ? 'start' : state.slotIndex : 'end'}`,
-        status, reason: interrupted ?? (status === 'completed' ? 'lives-exhausted' : 'checkpoint'), score: state.score, lives: state.lives });
+        status, reason: interrupted ?? (status === 'completed' ? 'lives-exhausted' : 'checkpoint'), score: state.score, lives: state.lives }, state.config.statisticsGeneration);
     }
   }
 }

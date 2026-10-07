@@ -41,7 +41,6 @@ async function soloState(page: import("@playwright/test").Page): Promise<SoloPer
 
 async function startSoloWithoutFeedback(page: import("@playwright/test").Page) {
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
-  await page.getByLabel("Собирать обратную связь по вопросам").uncheck();
   await page.getByRole("button", { name: "Назад", exact: true }).click();
   await page.getByRole("button", { name: "Одиночная игра" }).click();
 }

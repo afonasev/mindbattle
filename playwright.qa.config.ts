@@ -6,7 +6,8 @@ const port = process.env.MINDBATTLE_TEST_PORT;
 if (!scope || !port) throw new Error('Run through npm run qa:ui/network/input (owned host required)');
 export default defineConfig({
   ...base,
-  workers: 2, // Network scenarios open up to 13 contexts each; bound host contention.
+  // A busy shared host can serialize suites without changing tests or timeouts.
+  workers: process.env.MINDBATTLE_QA_WORKERS === "1" ? 1 : 2,
   webServer: undefined, // The runner starts and verifies its own host; never reuse a foreign one.
   testMatch: scope.browser ? [...new Set(scope.browser.map(([file]) => file))] : undefined,
   grep: scope.browser ? new RegExp(scope.browser.map(([, pattern]) => `(?:${pattern})`).join('|')) : undefined,

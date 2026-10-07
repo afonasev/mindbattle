@@ -166,6 +166,8 @@ export function createNetworkApi(
           const title = data.title.trim();
           if (!title || [...title].length > 60 || /[\p{Cc}\p{Cf}]/u.test(title))
             throw new RoomError("Название должно содержать от 1 до 60 символов");
+          if (data.collectStatistics !== undefined && typeof data.collectStatistics !== "boolean") throw new RoomError("Некорректная настройка статистики");
+          if ([data.statisticsRevision, data.statisticsGeneration].some(value => value !== undefined && (!Number.isSafeInteger(value) || value < 0))) throw new RoomError("Некорректная версия настройки статистики");
           const password = passwordInput(data.password);
           const salt = randomBytes(16);
           const hash = password ? await hashPassword(password, salt) : undefined;
@@ -183,6 +185,8 @@ export function createNetworkApi(
             results,
             title,
             !!hash,
+            data.collectStatistics ?? true,
+            undefined, data.statisticsRevision ?? 0, data.statisticsGeneration ?? 0,
           );
           room.display.lastSeen = now();
           rooms.set(code, room);
@@ -198,6 +202,7 @@ export function createNetworkApi(
           const room = rooms.get(data.code);
           if (!room) throw new RoomError("Комната не найдена", 404);
           room.lobbySummary();
+          if ([data.statisticsRevision, data.statisticsGeneration].some(value => value !== undefined && (!Number.isSafeInteger(value) || value < 0))) throw new RoomError("Некорректная версия настройки статистики");
           const password = passwordInput(data.password);
           const protection = passwords.get(room);
           if (protection && !timingSafeEqual(await hashPassword(password, protection.salt), protection.hash))
@@ -251,6 +256,12 @@ export function createNetworkApi(
       if (path === "heartbeat" && req.method === "POST") {
         const data = await body(req);
         room.heartbeat(token, data.generation, now());
+        json(res, 200, {});
+        return true;
+      }
+      if (path === "statistics" && req.method === "POST") {
+        const data = await body(req);
+        await room.setStatistics(token, data?.enabled, data?.revision, data?.generation);
         json(res, 200, {});
         return true;
       }

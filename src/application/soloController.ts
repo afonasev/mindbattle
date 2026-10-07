@@ -20,11 +20,13 @@ import type { DifficultyFeedbackEvent, DifficultyFeedbackSink, FeedbackSubmissio
 function validSoloState(value: unknown, revision: string): value is SoloState {
   if (!value || typeof value !== "object") return false;
   const state = value as Partial<SoloState>;
-  return state.schemaVersion === 1 && state.catalogRevision === revision && state.config?.profile === "solo-endless-v1" && typeof state.slotIndex === "number" && typeof state.score === "number" && typeof state.lives === "number" && typeof state.reserveMs === "number" && typeof state.lastFrameAtMs === "number" && !!state.phase;
+  return state.schemaVersion === 1 && state.catalogRevision === revision && state.config?.profile === "solo-endless-v1" && (state.config.collectStatistics === undefined || typeof state.config.collectStatistics === "boolean") && typeof state.slotIndex === "number" && typeof state.score === "number" && typeof state.lives === "number" && typeof state.reserveMs === "number" && typeof state.lastFrameAtMs === "number" && !!state.phase;
 }
 
 export class SoloController {
   private results: ResultObserver;
+  private readonly statisticsEnabled: () => boolean;
+  private readonly statisticsGeneration: () => number;
   private readonly catalog: ContentCatalog;
   private readonly storage: StorageLike;
   private readonly clock: GameControllerClock;
@@ -38,7 +40,7 @@ export class SoloController {
   private feedbackStatus: FeedbackSubmissionStatus = "idle";
   private feedbackError: string | null = null;
 
-  constructor({ catalog, storage, clock, seeds, feedback, results }: { catalog: ContentCatalog; storage: StorageLike; clock: GameControllerClock; seeds: GameSeedSource; feedback?: DifficultyFeedbackSink; results?: ResultSink }) {
+  constructor({ catalog, storage, clock, seeds, feedback, results, statisticsEnabled, statisticsGeneration }: { catalog: ContentCatalog; storage: StorageLike; clock: GameControllerClock; seeds: GameSeedSource; feedback?: DifficultyFeedbackSink; results?: ResultSink; statisticsEnabled?: () => boolean; statisticsGeneration?: () => number }) {
     this.catalog = catalog;
     this.storage = storage;
     this.clock = clock;
@@ -47,7 +49,9 @@ export class SoloController {
     this.persisted = loadPersistedData(storage, catalog.revision, (history) => migrateQuestionHistory(catalog.topics, history));
     this.soloRecords = loadSoloRecords(storage);
     this.context = new CatalogDomainContext(catalog, this.persisted.history);
-    this.results = new ResultObserver(results, this.context);
+    this.statisticsGeneration = statisticsGeneration ?? (() => 0);
+    this.statisticsEnabled = statisticsEnabled ?? (() => true);
+    this.results = new ResultObserver(results, this.context, generation => this.statisticsEnabled() && (generation ?? 0) === this.statisticsGeneration());
     this.restorableState = this.persisted.lastSolo && this.persisted.lastSolo.status === "in-progress" && validSoloState(this.persisted.lastSolo.state, catalog.revision) ? this.persisted.lastSolo.state : null;
     if (this.restorableState?.phase.kind === 'feedback') {
       const old = this.restorableState.phase;
@@ -67,7 +71,7 @@ export class SoloController {
     if (previous && previous.phase.kind !== "finished") this.results.solo(previous, "replaced");
     this.context = new CatalogDomainContext(this.catalog, this.persisted.history);
     const seed = this.seeds.nextSeed();
-    this.currentState = createSoloRun(config, seed, this.clock.now(), this.context);
+    this.currentState = createSoloRun({ ...config, statisticsGeneration: this.statisticsGeneration(), collectStatistics: this.statisticsEnabled() && config.collectStatistics !== false }, seed, this.clock.now(), this.context);
     this.results.solo(this.currentState, undefined, true);
     this.persistCurrent();
     return this.currentState;
@@ -164,8 +168,15 @@ export class SoloController {
     savePersistedData(this.storage, this.persisted);
   }
 
+  disableStatistics(): void {
+    if (this.currentState) this.currentState = { ...this.currentState, config: { ...this.currentState.config, collectStatistics: false } };
+    if (this.restorableState) this.restorableState = { ...this.restorableState, config: { ...this.restorableState.config, collectStatistics: false } };
+    if (this.currentState) this.persistCurrent();
+  }
+
   private persistCurrent(): void {
     if (!this.currentState) return;
+    if (!this.statisticsEnabled()) this.currentState = { ...this.currentState, config: { ...this.currentState.config, collectStatistics: false } };
     this.results.solo(this.currentState);
     this.persisted = { ...this.persisted, history: this.context.history, lastSolo: { status: this.currentState.phase.kind === "finished" ? "completed" : "in-progress", savedAt: this.clock.wallTime(), state: this.currentState } };
     this.restorableState = this.currentState.phase.kind === "finished" ? null : this.currentState;

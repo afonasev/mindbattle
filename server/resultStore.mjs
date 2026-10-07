@@ -66,40 +66,65 @@ export async function createResultStore(filePath) {
 // Spool writes and result writes run outside the room reducer. Durable files survive restarts.
 export function createServerResultQueue(directory, append) {
   const pending = new Map();
-  let writing = Promise.resolve(), running = false;
-  async function persist(e) {
+  const denied = new Set();
+  let chain = Promise.resolve(), flushing;
+  const serialize = fn => { const work = chain.then(fn); chain = work.catch(() => {}); return work; };
+  const hash = id => createHash('sha256').update(id).digest('hex');
+  async function isDenied(id) {
+    if (denied.has(id)) return true;
+    try {
+      const value = JSON.parse(await readFile(join(directory, hash(id) + '.deny.json'), 'utf8'));
+      if (value.matchId !== id) throw Error('Invalid statistics revocation');
+      denied.add(id); return true;
+    } catch (e) { if (e.code === 'ENOENT') return denied.has(id); throw e; }
+  }
+  async function durable(path, value) {
     await mkdir(directory, { recursive: true });
-    const name = createHash('sha256').update(e.eventId).digest('hex') + '.json';
-    const path = join(directory, name), temp = path + '.' + randomUUID() + '.tmp';
+    const temp = path + '.' + randomUUID() + '.tmp';
     const file = await open(temp, 'wx');
-    try { await file.writeFile(JSON.stringify(e)); await file.sync(); } finally { await file.close(); }
+    try { await file.writeFile(JSON.stringify(value)); await file.sync(); } finally { await file.close(); }
     await rename(temp, path);
     const dir = await open(directory, 'r');
     try { await dir.sync(); } finally { await dir.close(); }
   }
-  async function flush() {
-    if (running) return;
-    running = true;
-    try {
-      await writing;
+  async function persist(e) {
+    if (await isDenied(e.matchId)) return;
+    await durable(join(directory, hash(e.eventId) + '.json'), e);
+  }
+  function flush() {
+    if (flushing) return flushing;
+    flushing = serialize(async () => {
       for (const e of pending.values()) { await persist(e); pending.delete(e.eventId); }
       await mkdir(directory, { recursive: true });
       for (const name of await readdir(directory)) {
         if (!/^[0-9a-f]{64}\.json$/.test(name)) continue;
         const path = join(directory, name), e = JSON.parse(await readFile(path, 'utf8'));
+        if (await isDenied(e.matchId)) { await unlink(path); continue; }
         const ack = await append(e);
         if (['created', 'duplicate'].includes(ack.status) && ack.eventId === e.eventId) await unlink(path);
       }
-    } catch (error) { console.error('Result outbox retry:', error.message); }
-    finally { running = false; }
+    }).catch(error => { console.error('Result outbox retry:', error.message); }).finally(() => { flushing = undefined; });
+    return flushing;
   }
   const timer = setInterval(() => void flush(), 5000); timer.unref();
   void flush();
   return {
     enqueue(e) {
       pending.set(e.eventId, e);
-      writing = writing.then(async () => { try { await persist(e); pending.delete(e.eventId); } catch { /* next flush retries memory */ } });
-      void writing.then(flush);
+      void serialize(async () => { const latest = pending.get(e.eventId); if (latest) { await persist(latest); pending.delete(e.eventId); } }).then(flush).catch(() => {});
+    },
+    disableMatch(matchId) {
+      denied.add(matchId);
+      return serialize(async () => {
+        await durable(join(directory, hash(matchId) + '.deny.json'), { matchId });
+        denied.add(matchId);
+        for (const [id, e] of pending) if (e.matchId === matchId) pending.delete(id);
+        for (const name of await readdir(directory)) {
+          if (!/^[0-9a-f]{64}\.json$/.test(name)) continue;
+          const path = join(directory, name), e = JSON.parse(await readFile(path, 'utf8'));
+          if (e.matchId === matchId) await unlink(path);
+        }
+      });
     },
     flush,
     stop() { clearInterval(timer); }

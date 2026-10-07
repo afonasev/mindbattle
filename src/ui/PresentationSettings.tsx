@@ -1,3 +1,4 @@
+import { useStatistics } from './useStatistics';
 import { MenuAction, MenuDialog } from "./menuUi";
 import { DesktopDisplaySettings } from "./DesktopControls";
 import type { AccessibilityPreferences } from "../adapters/storage";
@@ -6,8 +7,9 @@ export function PresentationSettings({ preferences, setPreferences, back, sessio
   readonly preferences: AccessibilityPreferences;
   readonly setPreferences: (preferences: AccessibilityPreferences) => void;
   readonly back?: () => void;
-  readonly session?: { readonly collectQuestionFeedback: boolean; readonly setCollectQuestionFeedback: (value: boolean) => void; readonly resetHistory: () => void };
+  readonly session?: { readonly resetHistory: () => void };
 }) {
+  const statistics = useStatistics();
   return <section className="setup-stage menu-settings-stage" aria-labelledby="menu-settings-title">
     <div className="settings-stage-heading">
       <div>
@@ -39,7 +41,8 @@ export function PresentationSettings({ preferences, setPreferences, back, sessio
         <label className="settings-check"><input type="checkbox" checked={preferences.highContrast} onChange={(event) => setPreferences({ ...preferences, highContrast: event.target.checked })} /><span>Высокий контраст</span></label>
         <label className="settings-check"><input type="checkbox" checked={preferences.reducedMotion} onChange={(event) => setPreferences({ ...preferences, reducedMotion: event.target.checked })} /><span>Без анимации</span></label>
       </section>
-      {session && <section className="settings-group settings-group--session" aria-labelledby="session-settings-title"><h3 id="session-settings-title">Партия и история</h3><label className="settings-check"><input type="checkbox" checked={session.collectQuestionFeedback} onChange={(event) => session.setCollectQuestionFeedback(event.target.checked)} /><span>Собирать обратную связь по вопросам</span></label><MenuAction onClick={session.resetHistory}>Сбросить историю вопросов</MenuAction></section>}
+      <section className="settings-group" aria-labelledby="statistics-settings-title"><h3 id="statistics-settings-title">Статистика</h3><label className="settings-check"><input type="checkbox" checked={statistics.enabled} disabled={statistics.pending} aria-describedby="statistics-description" onChange={event => void statistics.setEnabled(event.target.checked)} /><span>Отправлять анонимную статистику</span></label><p id="statistics-description">Помогает улучшать вопросы и баланс игры. Без имён и данных устройства.</p><p>После включения сбор начнётся с новых матчей. Жалобы и локальные рекорды доступны всегда.</p>{statistics.error && <p role="alert">{statistics.error}</p>}</section>
+      {session && <section className="settings-group settings-group--session" aria-labelledby="session-settings-title"><h3 id="session-settings-title">Партия и история</h3><MenuAction onClick={session.resetHistory}>Сбросить историю вопросов</MenuAction></section>}
     </div>
   </section>;
 }

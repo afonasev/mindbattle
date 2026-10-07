@@ -1,3 +1,5 @@
+import { statisticsEnabled, statisticsGeneration } from '../statistics/preference';
+import { useStatistics } from './useStatistics';
 import { ComplaintDialog } from './ComplaintDialog';
 import { browserFeedback } from '../feedback/outbox';
 import type { ComplaintContext } from '../feedback/types';
@@ -88,6 +90,7 @@ export function App() {
         },
         seeds: { nextSeed },
         results: browserResults(),
+        statisticsEnabled, statisticsGeneration,
         feedback: browserFeedback()
       }),
     []
@@ -99,8 +102,11 @@ export function App() {
     clock: { now: () => performance.now(), wallTime: () => new Date().toISOString() },
     seeds: { nextSeed },
     results: browserResults(),
+        statisticsEnabled, statisticsGeneration,
     feedback: browserFeedback()
   }), []);
+  const statistics = useStatistics();
+  useEffect(() => { if (!statistics.enabled) { controller.disableStatistics(); soloController.disableStatistics(); } }, [statistics.enabled, controller, soloController]);
   const [complaint, setComplaint] = useState<ComplaintContext | null>(null);
   const [preferences, setPreferences] = useState(controller.preferences);
   const [match, setMatch] = useState<MatchState | null>(controller.state);
@@ -154,7 +160,7 @@ export function App() {
         questionCount: settings.questionCount,
         answerTimeMs: settings.answerTimeMs,
         teams,
-        collectQuestionFeedback: settings.collectQuestionFeedback
+        collectQuestionFeedback: true
       });
       audioRef.current.setMusicDucked(false);
       audioRef.current.play("game-theme");
@@ -174,7 +180,7 @@ export function App() {
       setSoloRecordId(null);
       setSoloInput("pointer");
       soloGamepadButtonsRef.current = new Map(gamepadSnapshots().map((gamepad) => [gamepad.index, gamepad.buttons]));
-      setSolo(soloController.start({ profile: "solo-endless-v1", collectQuestionFeedback: settings.collectQuestionFeedback }));
+      setSolo(soloController.start({ profile: "solo-endless-v1", collectQuestionFeedback: true }));
       soloPhaseRef.current = "topic";
       audioRef.current.setMusicDucked(false);
       audioRef.current.play("game-theme");
@@ -182,7 +188,7 @@ export function App() {
     } catch (error) {
       setMenuError(error instanceof Error ? error.message.split("\n")[0] : "Не удалось начать соло-забег");
     }
-  }, [settings.collectQuestionFeedback, soloController]);
+  }, [soloController]);
 
   const dispatchSolo = useCallback((command: SoloCommand) => {
     const before = soloController.state;
@@ -738,7 +744,7 @@ export function App() {
       if (saved.muted) audioRef.current.stopMusic();
       setPreferences(saved);
     };
-    const openComplaint = solo.phase.kind === 'reveal' && solo.config.collectQuestionFeedback ? () => {
+    const openComplaint = solo.phase.kind === 'reveal' ? () => {
       if (solo.phase.kind !== 'reveal') return;
       setComplaint({ eventId: `feedback-v3:${solo.runId}:solo-${solo.slotIndex + 1}:${solo.phase.round.questionId}`, matchId: solo.runId, catalogRevision: solo.catalogRevision, questionId: solo.phase.round.questionId, assignedDifficulty: solo.phase.round.difficulty });
     } : undefined;
@@ -801,7 +807,7 @@ export function App() {
   const titleById = TOPIC_TITLE_BY_ID as Readonly<Record<string, string>>;
   const pauseReason = match.pause?.reasons[0];
 
-  const openComplaint = match.phase.kind === 'reveal' && match.config.collectQuestionFeedback ? () => {
+  const openComplaint = match.phase.kind === 'reveal' ? () => {
     if (match.phase.kind !== 'reveal') return;
     const sequence = match.phase.round.mode === 'tie-break' ? `tie-break-${match.tieBreak?.questionNumber ?? 1}` : `main-${match.mainQuestionIndex + 1}`;
     setComplaint({ eventId: `feedback-v3:${match.matchId}:${sequence}:${match.phase.round.questionId}`, matchId: match.matchId, catalogRevision: match.catalogRevision, questionId: match.phase.round.questionId, assignedDifficulty: match.phase.round.difficulty });

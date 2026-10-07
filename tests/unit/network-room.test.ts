@@ -235,7 +235,7 @@ describe("network room", () => {
     expect(room.code).toBe("0001");
     expect(room.players).toHaveLength(2);
   });
-  it("exposes optional complaint context only to the leader during reveal", () => {
+  it("exposes independent opaque complaint contexts to every player during reveal", () => {
     const { room, seats, command } = setup();
     command('display', { type: 'start' });
     const topic = room.state!.phase;
@@ -246,7 +246,12 @@ describe("network room", () => {
     for (const seat of seats) command(seat.token, { type: 'answer', position: 'up' });
     const context = room.snapshot(seats[0].token,0).complaintContext;
     expect(context).toMatchObject({ matchId: room.state!.matchId, catalogRevision: room.state!.catalogRevision });
-    expect(room.snapshot(seats[1].token,0).complaintContext).toBeUndefined();
+    const other = room.snapshot(seats[1].token,0).complaintContext!;
+    expect(other).toMatchObject({ matchId: context!.matchId, questionId: context!.questionId });
+    expect(other.eventId).not.toBe(context!.eventId);
+    expect(other.eventId).not.toContain(seats[1].id);
+    expect(other.eventId).not.toContain(seats[1].token);
+    expect(room.snapshot(seats[1].token,0).complaintContext).toEqual(other);
     expect(room.snapshot('display',0).complaintContext).toBeUndefined();
     command(seats[0].token, { type: 'pause' });
     expect(room.snapshot(seats[0].token,0).complaintContext).toEqual(context);

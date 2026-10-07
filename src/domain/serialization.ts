@@ -242,6 +242,8 @@ export function deserializeMatch(
     value.config = { ...value.config, collectQuestionFeedback: true };
   }
   const config = value.config as MatchConfig;
+  if (config.statisticsGeneration !== undefined && (!Number.isSafeInteger(config.statisticsGeneration) || config.statisticsGeneration < 0)) return null;
+  if (config.collectStatistics !== undefined && typeof config.collectStatistics !== "boolean") return null;
   if (value.departedTeamIds !== undefined && (config.profile !== "network-v1" ||
     !stringArray(value.departedTeamIds) || new Set(value.departedTeamIds).size !== value.departedTeamIds.length ||
     !value.departedTeamIds.every(id => config.teams.includes(id as TeamId)))) return null;

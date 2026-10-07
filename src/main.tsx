@@ -1,6 +1,6 @@
 import { browserFeedback } from './feedback/outbox';
 import { desktop } from "./desktop";
-import { browserResults } from './statistics/outbox';
+import { initializeStatistics } from './statistics/control';
 import { StrictMode, Suspense, lazy, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { registerSW } from "virtual:pwa-register";
@@ -19,7 +19,7 @@ if (appIcon instanceof HTMLLinkElement) {
     : "/icons/mindbattle-192.png";
 }
 
-browserResults();
+initializeStatistics();
 browserFeedback();
 
 const root = document.getElementById("root");

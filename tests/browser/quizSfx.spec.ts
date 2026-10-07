@@ -28,7 +28,6 @@ async function solo(page: Page) {
   await instrument(page);
   await page.goto("/");
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
-  await page.getByLabel("Собирать обратную связь по вопросам").uncheck();
   await page.getByRole("button", { name: "Назад", exact: true }).click();
   await page.getByRole("button", { name: "Одиночная игра", exact: true }).click();
   await page.locator(".topic-choice").first().click();
