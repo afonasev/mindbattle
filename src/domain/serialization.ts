@@ -139,6 +139,11 @@ function validPhase(value: unknown, config: MatchConfig, departedCount = 0): boo
     return validRound(value.round, config) && finite(value.baseRemainingMs) && value.baseRemainingMs >= 0;
   }
   if (value.kind === "reveal" || value.kind === "difficulty-feedback") {
+    if (value.kind === 'reveal' && value.complaintDraft !== undefined) {
+      const draft = value.complaintDraft;
+      const reasons = ['too-easy','too-hard','weak-answer-options','unclear-wording','suspected-error','ambiguous-answer','uninteresting-for-quiz'];
+      if (!record(draft) || typeof draft.eventId !== 'string' || !draft.eventId || !stringArray(draft.complaintReasons) || new Set(draft.complaintReasons).size !== draft.complaintReasons.length || !draft.complaintReasons.every(reason => reasons.includes(reason)) || (draft.complaintReasons.includes('too-easy') && draft.complaintReasons.includes('too-hard')) || typeof draft.complaintNote !== 'string' || [...draft.complaintNote].length > 500) return false;
+    }
     if (!(validRound(value.round, config) &&
       Array.isArray(value.resolutions) &&
       value.resolutions.length === config.teams.length &&
@@ -151,7 +156,7 @@ function validPhase(value: unknown, config: MatchConfig, departedCount = 0): boo
         ((value.complaintReasons as string[]).includes("too-easy") && (value.complaintReasons as string[]).includes("too-hard")) ||
         typeof value.complaintNote !== "string" || [...value.complaintNote].length > 500 || !finite(value.cursor) || !Number.isSafeInteger(value.cursor) || value.cursor < 0) return false;
       if (value.hasComplaint === false && ((value.complaintReasons as string[]).length > 0 || value.complaintNote.length > 0)) return false;
-      if (value.hasComplaint === true && value.stage === "done" && (value.complaintReasons as string[]).length === 0) return false;
+      if (value.hasComplaint === true && value.stage === "done" && (value.complaintReasons as string[]).length === 0 && !value.complaintNote.trim()) return false;
     }
     const resolvedTeams = new Set<string>();
     for (const resolution of value.resolutions) {
@@ -306,6 +311,11 @@ export function deserializeMatch(
       finalPhase.candidates.length !== contenders.length + 1 ||
       !cursorTeams.every((teamId) => contenders.includes(teamId)) ||
       !vetoTeams.every((teamId) => contenders.includes(teamId))) return null;
+  }
+  if (record(value.phase) && value.phase.kind === 'difficulty-feedback') {
+    const old = value.phase;
+    value.phase = { kind: 'reveal', round: old.round, resolutions: old.resolutions, continuation: old.continuation,
+      ...(old.hasComplaint === true ? { complaintDraft: { eventId: old.eventId, complaintReasons: old.complaintReasons, complaintNote: old.complaintNote } } : {}) };
   }
   return value as unknown as MatchState;
 }

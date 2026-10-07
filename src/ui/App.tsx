@@ -1,3 +1,6 @@
+import { ComplaintDialog } from './ComplaintDialog';
+import { browserFeedback } from '../feedback/outbox';
+import type { ComplaintContext } from '../feedback/types';
 import { MenuAction, ScreenHeader, ScreenSurface } from "./menuUi";
 import { ReleaseAction } from "./ReleaseAction";
 import { browserResults } from '../statistics/outbox';
@@ -21,7 +24,6 @@ import {
   type SemanticInputAction
 } from "../adapters";
 import { GameController, SoloController } from "../application";
-import { HttpDifficultyFeedbackSink } from "../feedback";
 import { assertFullCatalog, catalog, TOPIC_TITLE_BY_ID } from "../content";
 import {
   selectStandings,
@@ -47,7 +49,6 @@ import { SoloFeedbackScreen, SoloRecordsScreen, SoloScreen } from "./soloUi";
 import { FeedbackUnavailableDialog, type FeedbackRecoveryChoice } from "./FeedbackUnavailableDialog";
 import { SettingsDialog } from "./PresentationSettings";
 import { navigate } from "../main";
-import { QueuedDifficultyFeedbackSink } from "../feedback";
 import { canApplyPwaUpdate } from "../pwaUpdate";
 
 const toPosition = {
@@ -87,7 +88,7 @@ export function App() {
         },
         seeds: { nextSeed },
         results: browserResults(),
-        feedback: new HttpDifficultyFeedbackSink()
+        feedback: browserFeedback()
       }),
     []
   );
@@ -98,8 +99,9 @@ export function App() {
     clock: { now: () => performance.now(), wallTime: () => new Date().toISOString() },
     seeds: { nextSeed },
     results: browserResults(),
-    feedback: new HttpDifficultyFeedbackSink()
+    feedback: browserFeedback()
   }), []);
+  const [complaint, setComplaint] = useState<ComplaintContext | null>(null);
   const [preferences, setPreferences] = useState(controller.preferences);
   const [match, setMatch] = useState<MatchState | null>(controller.state);
   const [solo, setSolo] = useState<SoloState | null>(soloController.state);
@@ -123,13 +125,6 @@ export function App() {
   const audioActivationRef = useRef(false);
   const audioRef = useRef(sharedAudioController(preferences));
 
-  useEffect(() => {
-    const sink = new QueuedDifficultyFeedbackSink(new HttpDifficultyFeedbackSink(), localStorage);
-    void sink.flush();
-    const flush = () => void sink.flush();
-    window.addEventListener("online", flush);
-    return () => window.removeEventListener("online", flush);
-  }, []);
 
   const sync = useCallback(
     () => setMatch(controller.state ? { ...controller.state } : null),
@@ -405,7 +400,7 @@ export function App() {
       );
       inputRef.current = result.state;
       const commands = semanticToDomain(result.actions);
-      if (commands.length > 0 && !pauseSettingsOpen) dispatch(commands);
+      if (commands.length > 0 && !pauseSettingsOpen && !document.querySelector('[aria-modal="true"]')) dispatch(commands);
       frame = requestAnimationFrame(poll);
     };
     frame = requestAnimationFrame(poll);
@@ -527,7 +522,7 @@ export function App() {
         const previous = soloGamepadButtonsRef.current.get(gamepad.index) ?? [];
         const button = gamepad.buttons.findIndex((down, index) => down && !previous[index]);
         soloGamepadButtonsRef.current.set(gamepad.index, gamepad.buttons);
-        if (button < 0 || pauseSettingsOpen) continue;
+        if (button < 0 || pauseSettingsOpen || document.querySelector('[aria-modal="true"]')) continue;
         if (phase?.kind === "feedback" && soloController.difficultyFeedbackStatus === "error") {
           if (button === 14) setFeedbackRecoveryChoice("retry");
           else if (button === 15) setFeedbackRecoveryChoice("skip");
@@ -743,7 +738,12 @@ export function App() {
       if (saved.muted) audioRef.current.stopMusic();
       setPreferences(saved);
     };
-    return <div className={rootClass}>{<ReleaseAction safe={canApplyPwaUpdate(false, solo.phase.kind)} />}{pauseSettingsOpen ? <SettingsDialog preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} /> : solo.phase.kind === "feedback" && !solo.paused ? <SoloFeedbackScreen value={solo.phase} choose={(hasComplaint) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackChoice(hasComplaint)); if (!hasComplaint) void submitSoloFeedback(); }} toggleReason={(reason) => { setSoloInput("pointer"); setSolo(soloController.toggleFeedbackReason(reason)); }} setNote={(note) => { setSoloInput("pointer"); setSolo(soloController.setFeedbackNote(note)); }} submit={() => void submitSoloFeedback()} pending={soloController.difficultyFeedbackStatus === "pending"} error={soloController.difficultyFeedbackError} exit={() => dispatchSolo({ type: "pause" })} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} settings={() => setPauseSettingsOpen(true)} command={(command) => { setSoloInput("pointer"); dispatchSolo(command); }} finish={(name) => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}{solo.phase.kind === "feedback" && !solo.paused && !pauseSettingsOpen && soloController.difficultyFeedbackStatus === "error" && <FeedbackUnavailableDialog selected={feedbackRecoveryChoice} onSelect={setFeedbackRecoveryChoice} onRetry={() => { setFeedbackRecoveryChoice("retry"); void submitSoloFeedback(); }} onSkip={skipSoloFeedback} />}</div>;
+    const openComplaint = solo.phase.kind === 'reveal' && solo.config.collectQuestionFeedback ? () => {
+      if (solo.phase.kind !== 'reveal') return;
+      setComplaint({ eventId: `feedback-v3:${solo.runId}:solo-${solo.slotIndex + 1}:${solo.phase.round.questionId}`, matchId: solo.runId, catalogRevision: solo.catalogRevision, questionId: solo.phase.round.questionId, assignedDifficulty: solo.phase.round.difficulty });
+    } : undefined;
+    if (complaint) return <div className={rootClass}><ComplaintDialog context={complaint} initial={solo.phase.kind === 'reveal' ? solo.phase.complaintDraft : undefined} close={() => { setComplaint(null); dispatchSolo({ type: 'resume' }); }} /></div>;
+    return <div className={rootClass}><ReleaseAction safe={canApplyPwaUpdate(false, solo.phase.kind)} />{pauseSettingsOpen ? <SettingsDialog preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} settings={() => setPauseSettingsOpen(true)} complaint={openComplaint} command={command => { setSoloInput('pointer'); dispatchSolo(command); }} finish={name => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}</div>;
   }
 
   if (!match || !controller.view) {
@@ -800,6 +800,13 @@ export function App() {
   const view = controller.view;
   const titleById = TOPIC_TITLE_BY_ID as Readonly<Record<string, string>>;
   const pauseReason = match.pause?.reasons[0];
+
+  const openComplaint = match.phase.kind === 'reveal' && match.config.collectQuestionFeedback ? () => {
+    if (match.phase.kind !== 'reveal') return;
+    const sequence = match.phase.round.mode === 'tie-break' ? `tie-break-${match.tieBreak?.questionNumber ?? 1}` : `main-${match.mainQuestionIndex + 1}`;
+    setComplaint({ eventId: `feedback-v3:${match.matchId}:${sequence}:${match.phase.round.questionId}`, matchId: match.matchId, catalogRevision: match.catalogRevision, questionId: match.phase.round.questionId, assignedDifficulty: match.phase.round.difficulty });
+  } : undefined;
+  if (complaint) return <div className={rootClass}><ComplaintDialog context={complaint} initial={match.phase.kind === 'reveal' ? match.phase.complaintDraft : undefined} close={() => { setComplaint(null); dispatch([{ type: 'resume' }]); }} /></div>;
 
   if (pauseSettingsOpen) {
     return <div className={rootClass}><SettingsDialog preferences={preferences} setPreferences={(next) => {
@@ -891,6 +898,7 @@ export function App() {
                   ? "Партия восстановлена"
                   : "Игра остановлена"
           }
+          complaint={openComplaint}
           resume={() => dispatch([{ type: "resume" }])}
           settings={() => setPauseSettingsOpen(true)}
           restart={restart}

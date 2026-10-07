@@ -1,3 +1,5 @@
+import { gunzipSync } from 'node:zlib';
+import feedbackCatalogs from './feedbackCatalogs.json' with { type: 'json' };
 import { readResults, interruptedNetworkCheckpoints } from './resultReport.mjs';
 import { createResultStore, createServerResultQueue, validateResult } from './resultStore.mjs';
 import { readFile, readdir } from "node:fs/promises";
@@ -25,7 +27,8 @@ async function loadQuestions() {
   return map;
 }
 
-const store = await createFeedbackStore({ filePath: dataPath, questions: await loadQuestions(), catalogRevision });
+const feedbackManifests = JSON.parse(gunzipSync(Buffer.from(feedbackCatalogs.mapsGzip, 'base64')).toString('utf8'));
+const store = await createFeedbackStore({ filePath: dataPath, questions: await loadQuestions(), catalogRevision, historicalCatalogs: Object.fromEntries(Object.entries(feedbackCatalogs.revisions).map(([revision,key]) => [revision,feedbackManifests[key]])) });
 const resultPath = resolve(projectRoot, process.env.MINDBATTLE_RESULTS_PATH ?? 'data/match-results.ndjson');
 let resultsPromise;
 let resultWrites = Promise.resolve();
@@ -88,10 +91,11 @@ const server = createServer(async (request, response) => {
       return json(response, ack.status === 'created' ? 201 : ack.status === 'duplicate' ? 200 : 409, ack);
     }
     if (url.pathname === "/api/difficulty-feedback" && request.method === "POST") {
-      const result = await store.append(await readJson(request));
+      const event = await readJson(request);
+      const result = await store.append(event);
       if (result.status === "invalid") return json(response, 400, result);
       if (result.status === "conflict") return json(response, 409, result);
-      return json(response, result.status === "created" ? 201 : 200, result);
+      return json(response, result.status === "created" ? 201 : 200, { ...result, eventId: event.eventId });
     }
     if (url.pathname.startsWith("/api/")) return json(response, 404, { error: "Not found" });
     if (vite) return vite.middlewares(request, response, () => json(response, 404, { error: "Not found" }));

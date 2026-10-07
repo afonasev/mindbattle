@@ -1,3 +1,4 @@
+import { openComplaint, pendingComplaints } from './complaintHelpers';
 import { expect, test, type Page } from "@playwright/test";
 
 type Team = "green" | "blue";
@@ -101,13 +102,9 @@ async function answer(page: Page, team: Team, position: Position) {
 
 async function rateDifficulty(page: Page, keepOpen = false) {
   await waitForInputGate(page);
-  await page.keyboard.press("w");
-  await expect(page.getByRole("heading", { name: "Хотите пожаловаться на вопрос?" })).toBeVisible();
-  await expect(page.locator(".difficulty-feedback-stage")).toBeVisible();
-  if (keepOpen) return;
-  await waitForInputGate(page);
-  await page.keyboard.press("Space");
-  await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
+  if (keepOpen) { await openComplaint(page); return; }
+  await page.keyboard.press('w');
+  await expect(page.locator('.difficulty-feedback-stage')).toHaveCount(0);
 }
 
 async function pressVirtualPad(page: Page, padIndex: number, buttonIndex: number) {
@@ -285,34 +282,13 @@ test("menu defaults, offline startup and responsive shell", async ({ context, pa
   await answer(page, "blue", accessibleCorrect);
   await expect(page.locator(".question-stage--reveal")).toBeVisible();
   await waitForInputGate(page);
-  await page.keyboard.press("w");
-  await expect(page.getByRole("heading", { name: "Хотите пожаловаться на вопрос?" })).toBeVisible();
-  const feedbackMetrics = await page.locator(".difficulty-feedback-stage").evaluate((stage) => ({
-    pageFits: document.documentElement.scrollWidth <= innerWidth,
-    stageFits: stage.scrollWidth <= stage.clientWidth,
-    pageHeightFits: document.documentElement.scrollHeight <= innerHeight
-  }));
-  expect(feedbackMetrics).toEqual({ pageFits: true, stageFits: true, pageHeightFits: true });
-  await captureSettled(page, testInfo.outputPath("difficulty-feedback-accessible.png"));
-  await waitForInputGate(page);
-  await page.keyboard.press("a");
-  await page.waitForTimeout(120);
-  await page.keyboard.press("ArrowLeft");
-  await waitForInputGate(page);
-  await page.keyboard.press("Space");
-  await page.waitForTimeout(120);
-  await page.keyboard.press("ShiftRight");
-  for (let index = 0; index < 3; index += 1) {
-    await page.keyboard.press("s");
-    await page.waitForTimeout(80);
-    await page.keyboard.press("ArrowDown");
-    await page.waitForTimeout(80);
-  }
-  await page.keyboard.press("Space");
-  await page.waitForTimeout(120);
-  await page.keyboard.press("ShiftRight");
-  await expect(page.locator(".feedback-status--error")).toBeVisible();
-  await captureSettled(page, testInfo.outputPath("difficulty-feedback-accessible-error.png"));
+  await openComplaint(page);
+  const feedbackMetrics = await page.locator('.complaint-dialog').evaluate(stage => ({ pageFits: document.documentElement.scrollWidth <= innerWidth, stageFits: stage.scrollWidth <= stage.clientWidth, pageHeightFits: document.documentElement.scrollHeight <= innerHeight }));
+  expect(feedbackMetrics).toEqual({pageFits:true,stageFits:true,pageHeightFits:true});
+  await captureSettled(page,testInfo.outputPath('complaint-accessible.png'));
+  await page.getByRole('button',{name:'Фактическая ошибка',exact:true}).click();
+  await page.getByRole('button',{name:'Сохранить жалобу',exact:true}).click();
+  await expect(page.locator('.question-stage--reveal')).toBeVisible();
   expect(errors).toEqual([]);
   expect(externalRequests).toEqual([]);
 });
@@ -361,11 +337,9 @@ test("shows the assigned difficulty on the team question and feedback screens", 
   await answer(page, "blue", correct);
   await expect(page.locator(".question-stage--reveal")).toBeVisible();
   await waitForInputGate(page);
-  await page.keyboard.press("w");
-
-  await expect(page.locator(".difficulty-feedback-stage")).toBeVisible();
-  await expect(page.locator(".feedback-difficulty")).toHaveText("Сложность: Лёгкий");
-  await captureSettled(page, testInfo.outputPath("team-feedback-difficulty.png"));
+  await openComplaint(page);
+  await expect(page.getByText('Сложность: Лёгкий', { exact: true })).toBeVisible();
+  await captureSettled(page, testInfo.outputPath('team-complaint-difficulty.png'));
 });
 
 test("plays a complete keyboard match through bonus veto, restore and sudden death", async ({ page }, testInfo) => {
@@ -448,11 +422,11 @@ test("plays a complete keyboard match through bonus veto, restore and sudden dea
     }
     if (round === 0) {
       await rateDifficulty(page, true);
-      await expect(page.locator(".feedback-difficulty")).toHaveText("Сложность: Лёгкий");
+      await expect(page.getByText("Сложность: Лёгкий", { exact: true })).toBeVisible();
       await captureSettled(page, testInfo.outputPath("difficulty-feedback.png"));
       await waitForInputGate(page);
-      await page.keyboard.press("Space");
-      await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
+      await page.getByRole("button", { name: "Отмена", exact: true }).click();
+      await rateDifficulty(page);
     } else {
       await rateDifficulty(page);
     }
@@ -729,16 +703,17 @@ test("marks a zero-reserve team as no-answer at the base deadline", async ({ pag
   await page.getByRole("button", { name: "Начать игру" }).click();
   await waitForInputGate(page);
   await chooseCurrentTopic(page);
-  await page.evaluate(() => {
-    const key = "mindbattle:data:v1";
-    const data = JSON.parse(localStorage.getItem(key)!);
-    data.lastMatch.state.teams = data.lastMatch.state.teams.map((team: { id: string }) =>
-      team.id === "blue" ? { ...team, reserveMs: 0 } : team
-    );
-    localStorage.setItem(key, JSON.stringify(data));
-    // Reload in the same JS task: a live tick must not overwrite the zero-reserve fixture.
-    location.reload();
+  const fixture = await page.evaluate(() => {
+    const data = JSON.parse(localStorage.getItem('mindbattle:data:v1')!);
+    data.lastMatch.state.teams = data.lastMatch.state.teams.map((team: { id: string }) => team.id === 'blue' ? { ...team, reserveMs: 0 } : team);
+    return data;
   });
+  // Leave the live controller before installing the persisted fixture. Navigation
+  // is asynchronous, so even an inline location.reload can lose a storage race.
+  const origin = new URL(page.url()).origin;
+  await page.goto('about:blank');
+  await page.addInitScript(({ fixture, origin }) => { if (location.origin === origin) localStorage.setItem('mindbattle:data:v1', JSON.stringify(fixture)); }, { fixture, origin });
+  await page.goto(origin + '/?muted=1');
   await page.getByRole("button", { name: "Продолжить игру на одном устройстве" }).click();
   await page.getByRole("button", { name: "Продолжить" }).click();
   await waitForInputGate(page);
@@ -783,118 +758,63 @@ test("shows each unanswered team its timer and switches to red reserve time", as
   await captureSettled(page, testInfo.outputPath("team-timers-reserve.png"));
 });
 
-test("keeps a shared feedback result on screen until the server accepts an idempotent retry", async ({ page }, testInfo) => {
-  let failed = false;
-  let delayed = false;
-  await page.route("**/api/difficulty-feedback", async (route) => {
-    if (!failed) {
-      failed = true;
-      await route.abort("failed");
-      return;
-    }
-    if (!delayed) {
-      delayed = true;
-      await new Promise((resolve) => setTimeout(resolve, 300));
-    }
-    await route.continue();
-  });
-  await page.getByRole("button", { name: "9", exact: true }).click();
-  await page.getByRole("button", { name: "Начать игру" }).click();
-  await waitForInputGate(page);
-  await chooseCurrentTopic(page);
-  const state = await storedState(page);
-  const correct = state.phase.round.correctPosition as Position;
-  await answer(page, "green", correct);
-  await answer(page, "blue", correct);
-  await expect(page.locator(".question-stage--reveal")).toBeVisible();
-  await waitForInputGate(page);
-  await page.keyboard.press("w");
-  await expect(page.locator(".difficulty-feedback-stage")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Хотите пожаловаться на вопрос?" })).toBeVisible();
-  await page.keyboard.press("Space");
-  await expect(page.locator(".feedback-status--error")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Продолжаем игру" })).toBeVisible();
-  await expect(page.locator(".feedback-tag-board")).toHaveCount(0);
-  await captureSettled(page, testInfo.outputPath("difficulty-feedback-error.png"));
-  const pending = await storedState(page);
-  expect(pending.phase.kind).toBe("difficulty-feedback");
-  expect(pending.phase).toMatchObject({ stage: "done", hasComplaint: false, complaintReasons: [] });
+test("keeps a local complaint across restart and sends it after API recovery", async ({ page }, testInfo) => {
+  let offline = true;
+  await page.route('**/api/difficulty-feedback', route => offline ? route.abort('failed') : route.continue());
+  await page.getByRole('button', { name: '9', exact: true }).click();
+  await page.getByRole('button', { name: 'Начать игру' }).click();
+  await waitForInputGate(page); await chooseCurrentTopic(page);
+  const before = await storedState(page); const correct = before.phase.round.correctPosition as Position;
+  await answer(page,'green',correct); await answer(page,'blue',correct);
+  const revealed = await storedState(page);
+  await openComplaint(page);
+  await page.getByRole('button', { name: 'Фактическая ошибка', exact: true }).click();
+  await captureSettled(page, testInfo.outputPath('classic-complaint.png'));
+  await page.getByRole('button', { name: 'Сохранить жалобу', exact: true }).click();
+  await expect(page.locator('.question-stage--reveal')).toBeVisible();
+  expect((await storedState(page)).phase).toEqual(revealed.phase);
+  await expect.poll(async () => (await pendingComplaints(page)).length).toBe(1);
+  const queued = (await pendingComplaints(page))[0];
   await page.reload();
-  await page.getByRole("button", { name: "Продолжить игру на одном устройстве" }).click();
-  await page.getByRole("button", { name: "Продолжить" }).click();
-  await expect(page.locator(".difficulty-feedback-stage")).toBeVisible();
-  await waitForInputGate(page);
-  await page.keyboard.press("Space");
-  await expect(page.locator(".feedback-status")).toContainText("Сохраняем фидбэк");
-  await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
+  await expect.poll(async () => (await pendingComplaints(page)).length).toBe(1);
+  offline=false;
+  await page.evaluate(() => window.dispatchEvent(new Event('online')));
+  await expect.poll(async () => (await pendingComplaints(page)).length, { timeout: 10000 }).toBe(0);
+  const replay = await page.request.post('/api/difficulty-feedback', { data: queued });
+  expect(await replay.json()).toEqual({ status:'duplicate', eventId:queued.eventId });
 });
 
-test("lets keyboard players skip an unavailable feedback submission", async ({ page }, testInfo) => {
-  await page.route("**/api/difficulty-feedback", (route) => route.abort("failed"));
-  await page.getByRole("button", { name: "9", exact: true }).click();
-  await page.getByRole("button", { name: "Начать игру" }).click();
-  await waitForInputGate(page);
-  await chooseCurrentTopic(page);
-  const state = await storedState(page);
-  const correct = state.phase.round.correctPosition as Position;
-  await answer(page, "green", correct);
-  await answer(page, "blue", correct);
-  await expect(page.locator(".question-stage--reveal")).toBeVisible();
-  await rateDifficulty(page, true);
-  await waitForInputGate(page);
-  await page.keyboard.press("Space");
-  const dialog = page.getByRole("dialog", { name: "Отправка фидбэка временно недоступна" });
-  await expect(dialog).toBeVisible({ timeout: 5_000 });
-  await page.screenshot({ path: testInfo.outputPath("shared-feedback-unavailable.png"), fullPage: true });
-  await page.keyboard.press("d");
-  await expect(dialog.getByRole("button", { name: "Пропустить" })).toHaveClass(/feedback-unavailable-selected/);
-  await page.keyboard.press("Space");
-  await expect(dialog).toHaveCount(0);
-  await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
+test("continues without feedback when its API is unavailable", async ({ page }) => {
+  let calls=0; await page.route('**/api/difficulty-feedback', route => { calls++; return route.abort('failed'); });
+  await page.getByRole('button', { name:'9', exact:true }).click(); await page.getByRole('button', { name:'Начать игру' }).click();
+  await waitForInputGate(page); await chooseCurrentTopic(page);
+  const state=await storedState(page); const correct=state.phase.round.correctPosition as Position;
+  await answer(page,'green',correct);await answer(page,'blue',correct);
+  await rateDifficulty(page);
+  expect((await storedState(page)).phase.kind).toBe('normal-topic');expect(calls).toBe(0);
 });
 
-test("moves vertically through the complaint-tag grid", async ({ page }) => {
-  await page.getByRole("button", { name: "9", exact: true }).click();
-  await page.getByRole("button", { name: "Начать игру" }).click();
-  await waitForInputGate(page);
-  await chooseCurrentTopic(page);
-  const state = await storedState(page);
-  const correct = state.phase.round.correctPosition as Position;
-  await answer(page, "green", correct);
-  await answer(page, "blue", correct);
-  await waitForInputGate(page);
-  await page.keyboard.press("w");
-  await page.keyboard.press("a");
-  await page.keyboard.press("Space");
-  await expect(page.getByRole("heading", { name: "Что не так с вопросом?" })).toBeVisible();
-  await waitForInputGate(page);
-  await page.keyboard.press("s");
-  await expect(page.locator(".feedback-tag-board .feedback-tag").nth(3)).toHaveClass(/feedback-tag--cursor/);
-  await page.keyboard.press("w");
-  await expect(page.locator(".feedback-tag-board .feedback-tag").nth(0)).toHaveClass(/feedback-tag--cursor/);
+test("navigates complaint reasons with keyboard and excludes opposite difficulty", async ({ page }) => {
+  await page.getByRole('button', { name:'9', exact:true }).click(); await page.getByRole('button', { name:'Начать игру' }).click();
+  await waitForInputGate(page); await chooseCurrentTopic(page);
+  const state=await storedState(page); const correct=state.phase.round.correctPosition as Position;
+  await answer(page,'green',correct);await answer(page,'blue',correct); await openComplaint(page);
+  const easy=page.getByRole('button', {name:'Слишком лёгкий',exact:true}); const hard=page.getByRole('button', {name:'Слишком сложный',exact:true});
+  await expect(easy).toBeFocused();await page.keyboard.press('Space');await expect(easy).toHaveAttribute('aria-pressed','true');
+  await page.keyboard.press('ArrowDown');await expect(hard).toBeFocused();await page.keyboard.press('Space');
+  await expect(hard).toHaveAttribute('aria-pressed','true');await expect(easy).toHaveAttribute('aria-pressed','false');
+  await page.keyboard.press('Escape');await expect(page.locator('.question-stage--reveal')).toBeVisible();
 });
 
 test("submits a complaint note without requiring a tag", async ({ page }) => {
-  await page.getByRole("button", { name: "9", exact: true }).click();
-  await page.getByRole("button", { name: "Начать игру" }).click();
-  await waitForInputGate(page);
-  await chooseCurrentTopic(page);
-  const state = await storedState(page);
-  const correct = state.phase.round.correctPosition as Position;
-  await answer(page, "green", correct);
-  await answer(page, "blue", correct);
-  await waitForInputGate(page);
-  await page.keyboard.press("w");
-  await page.keyboard.press("a");
-  await page.keyboard.press("Space");
-  const note = page.locator(".feedback-note textarea");
-  await note.fill("Проверить формулировку");
-  await note.blur();
-  await waitForInputGate(page);
-  await page.keyboard.press("s");
-  await page.keyboard.press("s");
-  await page.keyboard.press("d");
-  await expect(page.locator(".feedback-tag-board .feedback-tag").nth(7)).toHaveClass(/feedback-tag--cursor/);
-  await page.keyboard.press("Space");
-  await expect(page.locator(".difficulty-feedback-stage")).toHaveCount(0);
+  await page.route('**/api/difficulty-feedback', route => route.abort('failed'));
+  await page.getByRole('button', { name:'9', exact:true }).click(); await page.getByRole('button', { name:'Начать игру' }).click();
+  await waitForInputGate(page); await chooseCurrentTopic(page);
+  const state=await storedState(page); const correct=state.phase.round.correctPosition as Position;
+  await answer(page,'green',correct);await answer(page,'blue',correct); await openComplaint(page);
+  await page.locator('.feedback-note textarea').fill('Проверить формулировку');
+  await page.getByRole('button', { name:'Сохранить жалобу', exact:true }).click();
+  await expect(page.locator('.question-stage--reveal')).toBeVisible();
+  await expect.poll(async () => (await pendingComplaints(page)).length).toBe(1);
+  expect((await pendingComplaints(page))[0]).toMatchObject({hasComplaint:true,complaintReasons:[],complaintNote:'Проверить формулировку'});
 });

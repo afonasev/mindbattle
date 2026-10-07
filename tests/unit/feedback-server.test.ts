@@ -97,8 +97,8 @@ describe("difficulty feedback server store", () => {
     })}\n`, "utf8");
     const store = await createFeedbackStore({ filePath, questions, catalogRevision: revision });
     expect(store.summary()).toMatchObject({ total: 0, historicalLines: 1, corruptedLines: 0 });
-    expect(await store.append(event)).toEqual({ status: "created" });
-    expect((await readFile(filePath, "utf8")).trim().split("\n")).toHaveLength(2);
+    expect(await store.append(event)).toMatchObject({ status: "conflict" });
+    expect((await readFile(filePath, "utf8")).trim().split("\n")).toHaveLength(1);
   });
 
   it("fails fast when the configured path cannot be created", async () => {

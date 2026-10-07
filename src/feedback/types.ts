@@ -49,3 +49,6 @@ export interface DifficultyFeedbackSink {
 }
 
 export type FeedbackSubmissionStatus = "idle" | "pending" | "error";
+
+/** Revealed question context; no player answers or personal data. */
+export type ComplaintContext = Pick<DifficultyFeedbackEventV3, "eventId" | "matchId" | "catalogRevision" | "questionId" | "assignedDifficulty">;

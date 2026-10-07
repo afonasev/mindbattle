@@ -24,7 +24,7 @@ export function verifyBrowser(report, scope, projects = ['chromium-1280', 'chrom
   for (const spec of specs) for (const t of spec.tests) {
     if (full && t.status === 'skipped') {
       requireValue(t.projectName === 'chromium-1920' && (
-        spec.file.endsWith('solo.spec.ts') && /^(accepts a neutral virtual gamepad|uses D-pad left and right)/.test(spec.title) ||
+        spec.file.endsWith('solo.spec.ts') && /^(accepts a neutral virtual gamepad|uses D-pad navigation)/.test(spec.title) ||
         spec.file.endsWith('game.spec.ts') && /^(supports N\+1 public bonus veto|marks a zero-reserve team|shows each unanswered team)/.test(spec.title) ||
         spec.file.endsWith('desktop-download.spec.ts') && spec.title === 'Windows installer downloads with an active PWA without replacing the game' ||
         spec.file.endsWith('manual-update.spec.ts') && spec.title === 'web/mobile hides current, offers a ready update and applies A→B offline'

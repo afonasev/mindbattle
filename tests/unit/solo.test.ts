@@ -128,7 +128,7 @@ describe("solo-endless-v1", () => {
     expect(state.musicStage).toBe(2);
   });
 
-  it("keeps bonus music progression through reveal and feedback until completion", () => {
+  it("keeps bonus music through reveal and advances music on direct continuation", () => {
     let state = createSoloRun({ profile: "solo-endless-v1" }, "music-feedback", 0, context());
     state = { ...state, slotIndex: 4, phase: { kind: "risk", difficulty: "easy" } };
     state = frame(state, [{ type: "accept-risk" }]);
@@ -136,10 +136,6 @@ describe("solo-endless-v1", () => {
     state = frame(state, [{ type: "answer", position: state.phase.round.correctPosition }]);
     expect(state.musicStage).toBe(0);
     state = frame(state, [{ type: "continue" }]);
-    expect(state.phase.kind).toBe("feedback");
-    expect(state.musicStage).toBe(0);
-    if (state.phase.kind !== "feedback") throw new Error("Expected feedback");
-    state = frame(state, [{ type: "confirm-feedback", eventId: state.phase.eventId }]);
     expect(state).toMatchObject({ slotIndex: 5, musicStage: 1 });
   });
 
@@ -176,7 +172,7 @@ describe("solo-endless-v1", () => {
     expect(state.phase).toMatchObject({ kind: "reveal", result: "wrong", answer: selected });
   });
 
-  it("freezes both clocks while paused and moves correct runs through feedback only when enabled", () => {
+  it("freezes both clocks while paused and continues directly when complaint collection is enabled", () => {
     let state = createSoloRun({ profile: "solo-endless-v1" }, "pause-feedback", 0, context());
     state = frame(state, [{ type: "confirm-topic" }]);
     state = frame(state, [], 10_100);
@@ -190,13 +186,6 @@ describe("solo-endless-v1", () => {
     state = frame(state, [{ type: "answer", position: state.phase.round.correctPosition }]);
     expect(state.phase.kind).toBe("reveal");
     state = frame(state, [{ type: "continue" }]);
-    expect(state.phase.kind).toBe("feedback");
-    if (state.phase.kind !== "feedback") throw new Error("Expected feedback");
-    const eventId = state.phase.eventId;
-    state = frame(state, [{ type: "set-feedback-choice", hasComplaint: false }]);
-    state = frame(state, [{ type: "confirm-feedback", eventId: "wrong" }]);
-    expect(state.phase.kind).toBe("feedback");
-    state = frame(state, [{ type: "confirm-feedback", eventId }]);
     expect(state.phase.kind).toBe("topic");
   });
 

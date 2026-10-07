@@ -141,7 +141,7 @@ function chooseFirstTopic(controller: GameController): MatchState {
 }
 
 describe("GameController", () => {
-  it("persists one shared positive signal before advancing and retries the same event after failure", async () => {
+  it("continues a shared reveal without producing positive feedback even when sink fails", async () => {
     const storage = new MemoryStorage();
     const feedback = new FakeFeedback();
     feedback.fail = true;
@@ -152,20 +152,11 @@ describe("GameController", () => {
     const position = state.phase.round.correctPosition;
     controller.dispatch(CONFIG.teams.map((teamId) => ({ type: "answer" as const, teamId, position })));
     controller.dispatch([{ type: "continue", teamId: "green" }]);
-    expect(controller.state?.phase.kind).toBe("difficulty-feedback");
-    expect(await controller.handleFeedbackConfirmation()).toBe(false);
-    expect(controller.difficultyFeedbackStatus).toBe("error");
-    const failedEventId = feedback.events[0].eventId;
-    expect(feedback.events[0].matchId).toBe("match-v1:feedback-seed");
-    expect(feedback.events[0]).toMatchObject({ schemaVersion: 3, hasComplaint: false, complaintReasons: [] });
-    feedback.fail = false;
-    expect(await controller.handleFeedbackConfirmation()).toBe(true);
-    expect(feedback.events[1].eventId).toBe(failedEventId);
-    expect(feedback.events[1]).toMatchObject({ hasComplaint: false, complaintReasons: [] });
-    expect(controller.state?.phase.kind).toBe("normal-topic");
+    expect(controller.state?.phase.kind).toBe('normal-topic');
+    expect(feedback.events).toEqual([]);
+    expect(controller.difficultyFeedbackStatus).toBe('idle');
   });
-
-  it("lets a shared match skip a failed feedback write without another submission", async () => {
+  it("requires no feedback recovery for ordinary shared continuation", async () => {
     const feedback = new FakeFeedback();
     feedback.fail = true;
     const controller = makeController(new MemoryStorage(), new FakeClock(), new FakeSeeds(["skip-seed"]), feedback);
@@ -175,12 +166,10 @@ describe("GameController", () => {
     const position = state.phase.round.correctPosition;
     controller.dispatch(CONFIG.teams.map((teamId) => ({ type: "answer" as const, teamId, position })));
     controller.dispatch([{ type: "continue", teamId: "green" }]);
-    expect(await controller.handleFeedbackConfirmation()).toBe(false);
-    expect(controller.skipCompletedFeedback()).toBe(true);
-    expect(controller.state?.phase.kind).toBe("normal-topic");
-    expect(feedback.events).toHaveLength(1);
+    expect(controller.state?.phase.kind).toBe('normal-topic');
+    expect(controller.skipCompletedFeedback()).toBe(false);
+    expect(feedback.events).toEqual([]);
   });
-
   it("persists the chosen topic before the question is created", () => {
     const storage = new MemoryStorage();
     const controller = makeController(storage);
@@ -375,7 +364,7 @@ describe("GameController", () => {
 });
 
 describe("SoloController", () => {
-  it("retries one anonymous v3 feedback event before opening the next slot", async () => {
+  it("opens the next solo slot directly without a feedback event", async () => {
     const storage = new MemoryStorage();
     const clock = new FakeClock();
     const feedback = new FakeFeedback();
@@ -395,19 +384,11 @@ describe("SoloController", () => {
     if (!answering || answering.phase.kind !== "answering") throw new Error("Expected solo question");
     controller.dispatch([{ type: "answer", position: answering.phase.round.correctPosition }]);
     controller.dispatch([{ type: "continue" }]);
-    expect(controller.state?.phase.kind).toBe("feedback");
-    controller.setFeedbackChoice(false);
-    expect(await controller.submitFeedback()).toBe(false);
-    expect(controller.state?.phase.kind).toBe("feedback");
-    const eventId = feedback.events[0].eventId;
-    expect(feedback.events[0]).toMatchObject({ schemaVersion: 3, hasComplaint: false, complaintReasons: [] });
-    feedback.fail = false;
-    expect(await controller.submitFeedback()).toBe(true);
-    expect(feedback.events[1].eventId).toBe(eventId);
-    expect(controller.state?.phase.kind).toBe("topic");
+    expect(controller.state?.phase.kind).toBe('topic');
+    expect(feedback.events).toEqual([]);
+    expect(controller.difficultyFeedbackStatus).toBe('idle');
   });
-
-  it("lets a solo run skip a failed feedback write", async () => {
+  it("needs no skip action when solo feedback API is unavailable", async () => {
     const feedback = new FakeFeedback();
     feedback.fail = true;
     const controller = new SoloController({
@@ -420,13 +401,10 @@ describe("SoloController", () => {
     if (answering?.phase.kind !== "answering") throw new Error("Expected solo question");
     controller.dispatch([{ type: "answer", position: answering.phase.round.correctPosition }]);
     controller.dispatch([{ type: "continue" }]);
-    controller.setFeedbackChoice(false);
-    expect(await controller.submitFeedback()).toBe(false);
-    expect(controller.skipFeedback()).toBe(true);
-    expect(controller.state?.phase.kind).toBe("topic");
-    expect(feedback.events).toHaveLength(1);
+    expect(controller.state?.phase.kind).toBe('topic');
+    expect(controller.skipFeedback()).toBe(false);
+    expect(feedback.events).toEqual([]);
   });
-
   it("restores an unfinished solo run paused and saves the finished local result", () => {
     const storage = new MemoryStorage();
     const clock = new FakeClock();
