@@ -1,9 +1,28 @@
 import { expect, test } from '@playwright/test';
 import { snapshot } from './qa-phoneSnapshot';
+import ecology from '../../src/content/topics/ecology-environment.json' with { type: 'json' };
 
-for (const count of [2, 12]) for (const accessible of [false, true]) {
-  test(`network classic layout: ${count} players / accessible=${accessible}`, async ({ page }, info) => {
-    const reveal = snapshot(count);
+const scenarios = [
+  {count:2, accessible:false, longQuestion:false}, {count:2, accessible:true, longQuestion:false},
+  {count:12, accessible:false, longQuestion:false}, {count:12, accessible:true, longQuestion:false},
+  {count:12, accessible:false, longQuestion:true}
+];
+for (const { count, accessible, longQuestion } of scenarios) {
+  test(`network classic layout: ${count} players / accessible=${accessible} / longQuestion=${longQuestion}`, async ({ page }, info) => {
+    let reveal = snapshot(count);
+    if (longQuestion) {
+      const question = ecology.questions.find(q => q.id === 'ecology-environment-protected-area')!;
+      const positions = ['up', 'right', 'down', 'left'] as const;
+      reveal = {...reveal, view:{...reveal.view!, question:{ ...reveal.view!.question!, id:question.id, prompt:question.prompt,
+        options:Object.fromEntries(positions.map((position,i) => [position,question.answers[i].text])) as Record<typeof positions[number],string>,
+        correctPosition:positions[question.correctIndex], explanation:[question.explanation],
+        answerNotes:positions.map((position,i) => ({position,answer:question.answers[i].text,note:question.answers[i].note})) }}};
+    }
+    if (longQuestion) {
+      const name = (id: string) => `Участник ${id.replace('player-', '')}`;
+      reveal = {...reveal, view:{...reveal.view!, teams:reveal.view!.teams.map(card => ({...card,name:name(card.id)}))},
+        revealedChoices:reveal.revealedChoices!.map(card => ({...card,name:name(card.id)}))};
+    }
     const display = { ...reveal, role: 'display', selfId: undefined, isLeader: false,
       view: { ...reveal.view!, teams: reveal.revealedChoices! } };
     let payload: unknown = display;
@@ -16,6 +35,7 @@ for (const count of [2, 12]) for (const accessible of [false, true]) {
     await page.goto('/network?muted=1');
     await expect(page.locator('.network-player-card')).toHaveCount(count);
     await expect(page.locator('.network-cards')).not.toContainText('Запас');
+    if (longQuestion) expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(info.project.use.viewport!.height);
     await expect(page.locator('.network-reserve')).toHaveCount(0);
     await expect(page.locator('.network-player-card--correct')).toHaveCount(count === 2 ? 1 : 3);
     await expect(page.locator('.network-explanation .wrong-answer-notes article')).toHaveCount(3);
@@ -46,6 +66,7 @@ for (const count of [2, 12]) for (const accessible of [false, true]) {
     await expect(page.locator('.network-question-area:not(.revealed)')).toBeVisible();
     await expect(page.locator('.network-player-card')).toHaveCount(count);
     await expect(page.locator('.network-cards')).not.toContainText('Запас');
+    if (longQuestion) expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(info.project.use.viewport!.height);
     await expect(page.locator('.network-reserve')).toHaveCount(0);
     await expect(page.locator('.network-player-card[class*="network-player-card--"]')).toHaveCount(0);
     await expect(page.locator('.network-answers .correct, .network-answers .wrong')).toHaveCount(0);
