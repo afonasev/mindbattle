@@ -5,29 +5,19 @@ import type {
   CommandEnvelope,
 } from "./protocol";
 const key = "mindbattle-network-credentials-v1";
-export function savedCredential(
-  code?: string,
-  role?: Credential["role"],
-): Credential | null {
+export function savedCredentials(): Credential[] {
   try {
-    const list = JSON.parse(localStorage.getItem(key) ?? "[]") as Credential[];
-    return (
-      list.find(
-        (c) => (!code || c.code === code) && (!role || c.role === role),
-      ) ?? null
-    );
-  } catch {
-    return null;
-  }
+    const list: unknown = JSON.parse(localStorage.getItem(key) ?? "[]");
+    if (!Array.isArray(list)) return [];
+    return list.filter((c): c is Credential => c && typeof c.code === "string" && c.code.length <= 64 && typeof c.token === "string" && c.token.length <= 128 && ["player", "display"].includes(c.role)).slice(0, 20);
+  } catch { return []; }
+}
+export function savedCredential(code?: string, role?: Credential["role"]): Credential | null {
+  return savedCredentials().find(c => (!code || c.code === code) && (!role || c.role === role)) ?? null;
 }
 export function saveCredential(value: Credential) {
-  let list: Credential[] = [];
-  try {
-    list = JSON.parse(localStorage.getItem(key) ?? "[]");
-  } catch {
-    /* empty */
-  }
-  localStorage.setItem(
+  const list = savedCredentials();
+  try { localStorage.setItem(
     key,
     JSON.stringify(
       [
@@ -35,11 +25,11 @@ export function saveCredential(value: Credential) {
         ...list.filter((c) => c.code !== value.code || c.role !== value.role),
       ].slice(0, 20),
     ),
-  );
+  ); } catch { /* Optional local persistence. */ }
 }
 export function forgetCredential(value: Credential) {
   try {
-    const list = JSON.parse(localStorage.getItem(key) ?? "[]") as Credential[];
+    const list = savedCredentials();
     localStorage.setItem(
       key,
       JSON.stringify(list.filter((c) => c.token !== value.token)),

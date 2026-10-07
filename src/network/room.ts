@@ -61,6 +61,8 @@ export class NetworkRoom {
     ) => Promise<void>,
     private readonly changed: () => void = () => {},
     results?: ResultSink,
+    readonly title = "Сетевая игра",
+    readonly passwordProtected = false,
   ) { this.results = new ResultObserver(results, context); }
   interruptResults(reason: string) {
     if (this.state && this.state.phase.kind !== "finished") this.results.match(this.state, reason);
@@ -75,6 +77,19 @@ export class NetworkRoom {
         403,
       );
     return seat;
+  }
+  lobbySummary(token?: string) {
+    const actor = token === undefined ? undefined : this.actor(token);
+    if (this.closed || (token === undefined && this.state))
+      throw new RoomError("Комната недоступна в лобби", 404);
+    return {
+      code: this.code, title: this.title,
+      playerCount: this.players.filter(p => !p.departed).length,
+      passwordProtected: this.passwordProtected,
+      phase: this.state ? "playing" as const : "lobby" as const,
+      leaderName: this.players.find(p => p.id === this.leaderId && !p.departed)?.name ?? "",
+      ...(token === undefined ? {} : { role: actor ? "player" as const : "display" as const, selfName: actor?.name }),
+    };
   }
   join(name: string, at: number): { id: TeamId; token: string } {
     if (this.closed) throw new RoomError("Комната закрыта", 410);
@@ -497,6 +512,8 @@ export class NetworkRoom {
     });
     const base: NetworkSnapshot = {
       code: this.code,
+      title: this.title,
+      passwordProtected: this.passwordProtected,
       epoch: this.epoch,
       phaseRevision: this.phaseRevision,
       serverTime: at,

@@ -1,3 +1,4 @@
+import { createNetworkGame, selectNetworkGame } from "./network-lobby-helpers";
 import { test, expect, type Page, type BrowserContext } from '@playwright/test';
 import taxonomy from '../../src/content/taxonomy-manifest.json' with { type: 'json' };
 const groups = Object.fromEntries(taxonomy.topics.map(t => [t.id, t.domain]));
@@ -55,8 +56,7 @@ test('classic ordinary, bonus and final groups remain distinct through a complet
 
 test('network authoritative three and five topic lists agree on display and phones', async ({ browser, page }, info) => {
   test.setTimeout(90_000); const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
-  await page.goto('/network?muted=1'); await page.getByRole('button', { name: 'Создать сетевую игру', exact: true }).click();
-  const code = await page.locator('.network-code').innerText(); const contexts: BrowserContext[] = []; const phones: Page[] = [];
+  await page.goto('/network?muted=1'); const code = await createNetworkGame(page); const contexts: BrowserContext[] = []; const phones: Page[] = [];
   async function titles(p: Page) { return (await p.locator('.network-topics button').allTextContents()).map(text => {
     const t = taxonomy.topics.find(t => text.trim().startsWith(t.title)); expect(t).toBeTruthy(); return t!.id;
   }); }
@@ -64,7 +64,7 @@ test('network authoritative three and five topic lists agree on display and phon
     for (let i = 0; i < 4; i++) {
       const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, baseURL: info.project.use.baseURL }); contexts.push(ctx);
       const phone = await ctx.newPage(); phones.push(phone); phone.on('pageerror', e => errors.push(e.message));
-      await phone.goto('/network?muted=1'); await phone.getByLabel('Код комнаты').fill(code); await phone.getByLabel('Ваше имя').fill(`Тест ${i+1}`); await phone.getByRole('button', { name: 'Подключиться', exact: true }).click();
+      await phone.goto('/network?muted=1'); await selectNetworkGame(phone, code); await phone.getByLabel('Ваше имя').fill(`Тест ${i+1}`); await phone.getByRole('button', { name: 'Подключиться', exact: true }).click();
     }
     await page.getByLabel('Вопросов', { exact: true }).selectOption('9'); await page.getByRole('button', { name: 'Начать игру', exact: true }).click();
     for (let round = 0; round < 3; round++) {

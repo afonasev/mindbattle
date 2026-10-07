@@ -1,3 +1,4 @@
+import { createNetworkGame, selectNetworkGame } from "./network-lobby-helpers";
 import { openComplaint, pendingComplaints } from './complaintHelpers';
 import { test, expect, type Page, type BrowserContext } from "@playwright/test";
 import { readdirSync, readFileSync } from "node:fs";
@@ -6,8 +7,7 @@ const catalogQuestions = readdirSync("src/content/topics").filter(name => name.e
 test("network optional complaint returns to reveal and continuation needs no server write", async ({ browser, page }, testInfo) => {
   test.setTimeout(90000);
   await page.goto("/network?muted=1");
-  await page.getByRole("button", { name: "Создать сетевую игру", exact: true }).click();
-  const code = await page.locator(".network-code").innerText();
+  const code = await createNetworkGame(page);
   const contexts: BrowserContext[] = [];
   const phones: Page[] = [];
   try {
@@ -17,7 +17,7 @@ test("network optional complaint returns to reveal and continuation needs no ser
       const phone = await context.newPage();
       phones.push(phone);
       await phone.goto("/network?muted=1");
-      await phone.getByLabel("Код комнаты").fill(code);
+      await selectNetworkGame(phone, code);
       await phone.getByLabel("Ваше имя").fill(`Участник ${i + 1}`);
       await phone.getByRole("button", { name: "Подключиться", exact: true }).click();
     }
@@ -54,11 +54,8 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/network?muted=1");
-  await page
-    .getByRole("button", { name: "Создать сетевую игру", exact: true })
-    .click();
-  const code = await page.locator(".network-code").innerText();
-  expect(code).toMatch(/^\d{4}$/);
+  const code = await createNetworkGame(page);
+  expect(code).toMatch(/^Тестовая игра /);
   const contexts: BrowserContext[] = [];
   const phones: Page[] = [];
   const phoneAudio: string[] = [];
@@ -79,7 +76,7 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
         if (new URL(request.url()).pathname.startsWith("/audio/")) phoneAudio.push(request.url());
       });
       await phone.goto("/network");
-      await phone.getByLabel("Код комнаты").fill(code);
+      await selectNetworkGame(phone, code);
       await phone.getByLabel("Ваше имя").fill(`Участник ${i + 1}`);
       await phone
         .getByRole("button", { name: "Подключиться", exact: true })
@@ -320,7 +317,7 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
     await expect(
       page.getByRole("heading", { name: "Игроки · 11/12" }),
     ).toBeVisible();
-    await expect(page.locator(".network-code")).toHaveText(code);
+    await expect(page.locator(".network-room-title")).toHaveText(code);
     expect(phoneAudio).toEqual([]);
     expect(errors).toEqual([]);
   } finally {
@@ -335,10 +332,10 @@ test("network display starts the arena sound after create gesture", async ({ pag
     if (path.startsWith("/audio/quiz-v1/")) audioRequests.push(path);
   });
   await page.goto("/network");
-  await expect(page.getByRole("heading", { name: "Соберите свою компанию" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Соберите свою игру." })).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("network-entry.png"), fullPage: true });
-  await page.getByRole("button", { name: "Создать сетевую игру", exact: true }).click();
-  await expect(page.locator(".network-code")).toBeVisible();
+  await createNetworkGame(page);
+  await expect(page.locator(".network-room-title")).toBeVisible();
   await expect.poll(() => audioRequests.includes("/audio/quiz-v1/menu.mp3")).toBe(true);
 });
 
@@ -359,13 +356,13 @@ test("network entry keeps the menu music playing", async ({ page }) => {
   });
   await page.goto("/");
   await page.getByRole("button", { name: "Сетевая игра (2–12)", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Соберите свою компанию" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Соберите свою игру." })).toBeVisible();
   await expect.poll(() => page.evaluate(() => (window as Window & { __musicEvents?: string[] }).__musicEvents ?? [])).toEqual(["play"]);
 });
 
 test("network entry has no sound toggle in its header", async ({ page }, testInfo) => {
   await page.goto("/network?muted=1");
-  await expect(page.getByRole("heading", { name: "Соберите свою компанию" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Соберите свою игру." })).toBeVisible();
   await expect(page.getByRole("button", { name: /Звук (включён|выключен)/ })).toHaveCount(0);
   await page.screenshot({ path: testInfo.outputPath("network-entry-no-sound-toggle.png"), fullPage: true });
 });

@@ -1,3 +1,4 @@
+import { NetworkEntry } from "./NetworkEntry";
 import { ComplaintDialog } from './ComplaintDialog';
 import type { ComplaintContext } from '../feedback/types';
 import { MatchSetupFields } from "./MatchSetupFields";
@@ -83,8 +84,9 @@ export function NetworkApp() {
     savedCredential(undefined, mobile ? "player" : "display"),
   );
   const [snapshot, setSnapshot] = useState<NetworkSnapshot | null>(null);
-  const [code, setCode] = useState("");
-  const [name, setName] = useState("");
+  const [rosterPage, setRosterPage] = useState(0);
+  const [rosterHeight, setRosterHeight] = useState(innerHeight);
+  useEffect(() => { const resize = () => setRosterHeight(window.visualViewport?.height ?? innerHeight); window.addEventListener("resize", resize); return () => window.removeEventListener("resize", resize); }, []);
   const [complaint, setComplaint] = useState<ComplaintContext | null>(null);
   const [feedbackNote, setFeedbackNote] = useState("");
   const [feedbackRecoveryChoice, setFeedbackRecoveryChoice] = useState<FeedbackRecoveryChoice>("retry");
@@ -220,26 +222,13 @@ export function NetworkApp() {
     if (snapshot?.paused) { audio.current?.stopMusic(); audio.current?.stopEvents(); }
   }, [snapshot?.paused]);
   useEffect(() => () => { audio.current?.stopMusic(); audio.current?.stopEvents(); }, []);
-  async function enter(create = false) {
-    setBusy(true);
-    setError("");
-    enableAudio();
+  async function enter(data: { title: string; password: string } | { code: string; name: string; password: string }, create: boolean) {
+    setBusy(true); setError(""); enableAudio();
     try {
-      let next: Credential | null = create
-        ? null
-        : savedCredential(code, "player");
-      if (!next)
-        next = await networkRequest<Credential>(
-          create ? "create" : "join",
-          create ? {} : { code, name },
-        );
-      saveCredential(next);
-      setCredential(next);
-    } catch (e) {
-      setError((e as Error).message);
-    } finally {
-      setBusy(false);
-    }
+      const next = await networkRequest<Credential>(create ? "create" : "join", data);
+      saveCredential(next); setCredential(next);
+    } catch (e) { setError((e as Error).message); }
+    finally { setBusy(false); }
   }
   async function act(action: NetworkAction) {
     if (!snapshot || !connection.current || busy) return false;
@@ -257,10 +246,9 @@ export function NetworkApp() {
     }
   }
   async function exitRoom() {
-    if (await act({ type: "close" })) { reset(); navigate("/"); }
+    if (await act({ type: "close" })) { if (credential) forgetCredential(credential); reset(); navigate("/"); }
   }
   function reset() {
-    if (credential) forgetCredential(credential);
     setCredential(null);
     setSnapshot(null);
     setTerminal(false);
@@ -269,6 +257,7 @@ export function NetworkApp() {
     setLocalMenuOpen(false);
     setPauseSettingsOpen(false);
   }
+  useEffect(() => setRosterPage(0), [snapshot?.players.length, rosterHeight]);
   const locked = busy || !!status || !!snapshot?.paused;
   const view = snapshot?.view;
   const phase = snapshot?.phase;
@@ -356,7 +345,7 @@ export function NetworkApp() {
   ) : null;
   return (
     <ScreenSurface
-      className={`game-shell network-app ${mobile ? "network-mobile" : "network-display"} ${preferences.textSize === "large" ? "network-text-large" : ""} ${preferences.highContrast ? "network-high-contrast" : ""} ${preferences.reducedMotion ? "reduced-motion" : ""}`}
+      className={`game-shell network-app ${!credential || phase === "lobby" ? "network-discovery" : ""} ${mobile ? "network-mobile" : "network-display"} ${preferences.textSize === "large" ? "network-text-large" : ""} ${preferences.highContrast ? "network-high-contrast" : ""} ${preferences.reducedMotion ? "reduced-motion" : ""}`}
       onClick={
         canSkipConfirmation && !localMenuOpen && !pauseSettingsOpen
           ? (event) => {
@@ -367,9 +356,8 @@ export function NetworkApp() {
       }
     >
       <ReleaseAction safe={!credential || terminal} />
-      <ScreenHeader className="network-header" subtitle={mobile && personalCard ? snapshot?.code : <>Сетевая игра{snapshot ? ` · ${snapshot.code}` : ""}</>}
-        back={!credential || terminal ? () => navigate("/") : undefined} menu={credential && !terminal ? openMenu : undefined} disabled={busy} />
-      {error && (
+      {credential && <ScreenHeader className="network-header" subtitle={<><span>{snapshot?.title || "Сетевая игра"}</span>{snapshot && <small className="network-heading-leader">{snapshot.leaderName ? `Ведущий: ${snapshot.leaderName}` : "Ведущий пока не выбран"}</small>}</>} back={terminal ? () => navigate("/") : undefined} menu={!terminal ? openMenu : undefined} disabled={busy} />}
+      {error && credential && (
         <p className="network-error" role="alert">
           {error}
         </p>
@@ -385,61 +373,7 @@ export function NetworkApp() {
           <MenuAction onClick={reset}>Вернуться к подключению</MenuAction>
         </section>
       ) : !credential ? (
-        <section className="network-entry">
-          <span className="network-eyebrow">Один экран. Вся компания.</span>
-          <h1>{mobile ? "Вступить в игру" : "Соберите свою компанию"}</h1>
-          <p>
-            {mobile
-              ? "Введите код с общего экрана и своё имя."
-              : "До 12 игроков отвечают со своих телефонов. Вопросы и результаты — здесь."}
-          </p>
-          {mobile ? (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                void enter();
-              }}
-            >
-              <label>
-                Код комнаты
-                <input
-                  aria-label="Код комнаты"
-                  value={code}
-                  inputMode="numeric"
-                  pattern="[0-9]{4}"
-                  maxLength={4}
-                  required
-                  onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-                />
-              </label>
-              <label>
-                Ваше имя
-                <input
-                  aria-label="Ваше имя"
-                  value={name}
-                  maxLength={24}
-                  required={!savedCredential(code, "player")}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </label>
-              <MenuAction
-                type="submit"
-                variant="primary"
-                disabled={busy || code.length !== 4}
-              >
-                Подключиться
-              </MenuAction>
-            </form>
-          ) : (
-            <MenuAction
-              variant="primary"
-              disabled={busy}
-              onClick={() => void enter(true)}
-            >
-              Создать сетевую игру
-            </MenuAction>
-          )}
-        </section>
+        <NetworkEntry submissionError={error} clearError={() => setError("")} mobile={mobile} busy={busy} enter={enter} restore={next => { enableAudio(); setCredential(next); }} largeText={preferences.textSize === "large"}/>
       ) : !snapshot ? (
         <section className="network-entry">
           <p>Ожидаем состояние комнаты…</p>
@@ -451,22 +385,21 @@ export function NetworkApp() {
           {phase === "lobby" ? (
             <section className="setup-stage network-lobby">
               <div className="network-lobby-intro">
-                <span className="network-eyebrow">Код комнаты</span>
-                <h1 className="network-code">{snapshot.code}</h1>
+                <span className="network-eyebrow">Собираем участников</span>
+                <h1 className="network-room-title">{snapshot.title}</h1>
                 <p>
                   {display
-                    ? "Откройте Mindbattle на телефоне и нажмите «Подключиться к игре»."
+                    ? "Откройте Mindbattle на телефоне и выберите эту игру в лобби."
                     : "Вы в комнате. Ждём начала игры."}
                 </p>
                 <p>
-                  Ведущий:{" "}
-                  <strong>{snapshot.leaderName || "пока не выбран"}</strong>
+                  {snapshot.passwordProtected ? "Вход по паролю" : "Вход свободный"}
                 </p>
               </div>
               <div className="network-lobby-content">
                 <h2>Игроки · {snapshot.players.length}/12</h2>
                 <ul className="network-roster">
-                  {snapshot.players.map((p) => (
+                  {snapshot.players.slice(rosterPage * (rosterHeight < 850 ? 6 : 12), (rosterPage + 1) * (rosterHeight < 850 ? 6 : 12)).map((p) => (
                     <li key={p.id}>
                       <span>
                         <strong>{p.name}</strong>
@@ -498,6 +431,7 @@ export function NetworkApp() {
                     </li>
                   ))}
                 </ul>
+                {snapshot.players.length > (rosterHeight < 850 ? 6 : 12) && <nav className="network-list-pages" aria-label="Страницы участников"><MenuAction aria-label="Предыдущие участники" disabled={rosterPage === 0} onClick={() => setRosterPage(p => p - 1)}>‹</MenuAction><span>{rosterPage + 1} / {Math.ceil(snapshot.players.length / (rosterHeight < 850 ? 6 : 12))}</span><MenuAction aria-label="Следующие участники" disabled={(rosterPage + 1) * (rosterHeight < 850 ? 6 : 12) >= snapshot.players.length} onClick={() => setRosterPage(p => p + 1)}>›</MenuAction></nav>}
                 {display && (
                   <>
                     <MatchSetupFields compact disabled={busy} questionCount={snapshot.settings.questionCount} answerTimeMs={snapshot.settings.answerTimeMs} setQuestionCount={(questionCount) => void act({ type: "settings", ...snapshot.settings, questionCount })} setAnswerTimeMs={(answerTimeMs) => void act({ type: "settings", ...snapshot.settings, answerTimeMs })} />
@@ -907,6 +841,7 @@ export function NetworkApp() {
               exitLabel={(phase === "lobby" ? display : snapshot.isLeader) ? "Завершить игру" : "Выйти в меню"}
               back={!snapshot.paused ? () => setLocalMenuOpen(false) : undefined}
             >
+              <MenuAction disabled={busy} onClick={reset}>Каталог игр</MenuAction>
               {snapshot.paused && <>
                 {!snapshot.displayConnected && <p>Ждём возвращения общего экрана</p>}
                 {display && snapshot.disconnected.map((player) => <div key={player.id}><p>{player.name} отключился</p><MenuAction disabled={busy} onClick={() => void act({ type: "exclude", playerId: player.id })}>Продолжить без {player.name}</MenuAction></div>)}

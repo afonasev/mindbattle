@@ -87,6 +87,9 @@ for(const width of [360,760]) test(`mobile network complete presentation atlas $
   await page.emulateMedia({reducedMotion:'reduce'});
   let current=cases[0];const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
   await page.route('**/api/network/stream?*',route=>route.fulfill({contentType:'text/event-stream',body:current.terminal?`event: ${current.terminal}\ndata: {}\n\n`:`event: connected\ndata: {"generation":1}\n\ndata: ${JSON.stringify(current.s)}\n\n`}));
+  const room={code:'9999',title:'Тестовая компания',playerCount:2,passwordProtected:false,phase:'lobby',leaderName:'Александр'};
+  await page.route('**/api/network/catalog',route=>route.fulfill({json:{rooms:[room],ownRooms:[],invalidIndexes:[]}}));
+  await page.route('**/api/network/room?*',route=>route.fulfill({json:room}));
   await page.route('**/api/network/join',route=>route.fulfill({status:404,json:{error:'Комната не найдена'}}));
   await page.route('**/api/network/heartbeat?*',route=>route.fulfill({json:{ok:true}}));
   const pictures:Array<{id:string;title:string;path:string}>=[];
@@ -99,8 +102,8 @@ for(const width of [360,760]) test(`mobile network complete presentation atlas $
     },{credential:!!item.s,accessible:!!item.accessible});
     await page.reload();
     if(item.s) await expect(page.getByRole('button',{name:item.terminal?'Вернуться к подключению':'Меню',exact:true})).toBeVisible();
-    else await expect(page.getByRole('heading',{name:'Вступить в игру'})).toBeVisible();
-    if(item.overlay==='join-error'){await page.getByLabel('Код комнаты').fill('9999');await page.getByLabel('Ваше имя').fill('Александр');await page.getByRole('button',{name:'Подключиться',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Комната не найдена');}
+    else await expect(page.getByRole('heading',{name:'Выберите игру'})).toBeVisible();
+    if(item.overlay==='join-error'){await page.locator('.network-room-row').filter({has:page.getByText('Тестовая компания',{exact:true})}).click();await page.getByLabel('Ваше имя').fill('Александр');await page.getByRole('button',{name:'Подключиться',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Комната не найдена');}
     if(item.overlay==='scoreboard')await page.getByRole('button',{name:'Показать текущий счёт'}).click();
     if(item.overlay==='menu'||item.overlay==='settings'){
       await page.getByRole('button',{name:'Меню',exact:true}).click();

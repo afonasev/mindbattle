@@ -120,7 +120,7 @@ export function MenuScreen({
           <MenuAction variant="primary" arrow caption="Свой темп. Личный рекорд." onClick={startSolo}>Одиночная игра</MenuAction>
           <MenuAction className="mobile-classic-action" aria-label="На одном устройстве (2–4)" arrow caption="2–4 команды · один общий экран" onClick={() => setClassicSetupOpen(true)}>На одном устройстве</MenuAction>
           <MenuAction className="desktop-network-action" aria-label="Сетевая игра (2–12)" arrow caption="Создать комнату для 2–12 игроков" onClick={enterNetwork}>Сетевая игра</MenuAction>
-          <MenuAction className="mobile-network-action" arrow caption="Войти в сетевую комнату по коду" onClick={enterNetwork}>Подключиться к игре</MenuAction>
+          <MenuAction className="mobile-network-action" arrow caption="Выбрать игру в сетевом лобби" onClick={enterNetwork}>Подключиться к игре</MenuAction>
           {restoreSolo && <MenuAction arrow caption="Вернуться к сохранённому забегу" onClick={restoreSolo}>Продолжить одиночную игру</MenuAction>}
           {restoreLabel && <MenuAction className="mobile-classic-action" arrow onClick={restore}>{restoreLabel}</MenuAction>}
         </div>

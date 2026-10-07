@@ -1,3 +1,4 @@
+import { createNetworkGame, selectNetworkGame } from "./network-lobby-helpers";
 import { expect, test, type BrowserContext, type Page } from "@playwright/test";
 
 for (const width of [360, 390, 760, 1280, 1920]) {
@@ -37,7 +38,8 @@ for (const width of [360, 390, 760, 1280, 1920]) {
     await page.screenshot({ path: info.outputPath(`arena-menu-high-contrast-${width}.png`), fullPage: true, animations: "disabled" });
     await page.getByRole("button", { name: width <= 760 ? "Подключиться к игре" : "Сетевая игра (2–12)", exact: true }).click();
     await expect(page).toHaveURL(/\/network$/);
-    await expect(page.getByRole("button", { name: width <= 760 ? "Подключиться" : "Создать сетевую игру", exact: true })).toBeVisible();
+    if (width <= 760) await expect(page.getByRole("heading", { name: "Выберите игру", exact: true })).toBeVisible();
+    else await expect(page.getByRole("button", { name: "Создать сетевую игру", exact: true })).toBeVisible();
     await page.screenshot({ path: info.outputPath(`arena-network-entry-${width}.png`), fullPage: true, animations: "disabled" });
   });
 }
@@ -96,8 +98,7 @@ test("solo result remains reachable after its final answer reveal", async ({ pag
 test("arena network surfaces support twelve connected phones", async ({ browser, page }, info) => {
   test.setTimeout(90_000);
   await page.goto("/network?muted=1");
-  await page.getByRole("button", { name: "Создать сетевую игру", exact: true }).click();
-  const code = await page.locator(".network-code").innerText();
+  const code = await createNetworkGame(page);
   const contexts: BrowserContext[] = [];
   const phones: Page[] = [];
   try {
@@ -107,7 +108,7 @@ test("arena network surfaces support twelve connected phones", async ({ browser,
       const phone = await context.newPage();
       phones.push(phone);
       await phone.goto("/network?muted=1");
-      await phone.getByLabel("Код комнаты").fill(code);
+      await selectNetworkGame(phone, code);
       await phone.getByLabel("Ваше имя").fill(`Участник ${index + 1}`);
       await phone.getByRole("button", { name: "Подключиться", exact: true }).click();
       await expect(phone.getByText("Вы в комнате. Ждём начала игры.")).toBeVisible();

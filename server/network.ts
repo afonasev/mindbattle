@@ -1,17 +1,33 @@
 import type { ResultSink } from '../src/statistics/events';
-import { randomBytes, randomInt } from "node:crypto";
+import { randomBytes, scrypt, timingSafeEqual } from "node:crypto";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { NetworkRoom, RoomError } from "../src/network/room";
 import { CatalogDomainContext } from "../src/application/contentContext";
 import { catalog } from "../src/content/catalog";
 import { EMPTY_QUESTION_HISTORY } from "../src/content/scheduler";
 import type { DifficultyFeedbackEventV3 } from "../src/feedback/types";
-import type { CommandEnvelope } from "../src/network/protocol";
+import type { CommandEnvelope, LobbyRoom } from "../src/network/protocol";
+import { promisify } from "node:util";
+const deriveKey = promisify(scrypt);
 export function createNetworkApi(
   submit: (event: DifficultyFeedbackEventV3) => Promise<void>,
   results?: ResultSink,
 ) {
   const rooms = new Map<string, NetworkRoom>();
+  const passwords = new Map<NetworkRoom, { salt: Buffer; hash: Buffer }>();
+  let hashing = 0;
+  const hashPassword = async (password: string, salt: Buffer) => {
+    if (hashing >= 16) throw new RoomError("Сервер занят. Попробуйте позже.", 503);
+    hashing++;
+    try { return await deriveKey(password, salt, 32) as Buffer; }
+    finally { hashing--; }
+  };
+  const passwordInput = (value: unknown) => {
+    if (value === undefined) return "";
+    if (typeof value !== "string" || value.length > 128)
+      throw new RoomError("Пароль должен содержать не более 128 символов");
+    return value;
+  };
   const streams = new Map<
     NetworkRoom,
     Set<{ token: string; response: ServerResponse; generation: number }>
@@ -54,6 +70,7 @@ export function createNetworkApi(
         room.interruptResults("expired");
         streams.delete(room);
         rooms.delete(room.code);
+        passwords.delete(room);
       }
     }
     for (const [key, value] of limits)
@@ -95,6 +112,37 @@ export function createNetworkApi(
       )
         throw new RoomError("Другой origin запрещён", 403);
       const path = url.pathname.slice("/api/network/".length);
+      if (path === "catalog" && req.method === "POST") {
+        const data = await body(req);
+        const credentials = data?.credentials ?? [];
+        if (!Array.isArray(credentials) || credentials.length > 20)
+          throw new RoomError("Некорректный список сохранённых игр");
+        const ownRooms: LobbyRoom[] = [];
+        const invalidIndexes: number[] = [];
+        for (const [index, credential] of credentials.entries()) {
+          try {
+            if (!credential || typeof credential.code !== "string" || typeof credential.token !== "string" || credential.token.length > 128)
+              throw new RoomError("Некорректный доступ", 403);
+            const room = rooms.get(credential.code);
+            if (!room) throw new RoomError("Комната закрыта", 404);
+            const summary = room.lobbySummary(credential.token);
+            if (!ownRooms.some(r => r.code === summary.code && r.role === summary.role)) ownRooms.push(summary);
+          } catch { invalidIndexes.push(index); }
+        }
+        json(res, 200, {
+          rooms: [...rooms.values()].filter(room => !room.closed && !room.state).map(room => {
+            const { leaderName: _leader, ...summary } = room.lobbySummary();
+            return summary;
+          }), ownRooms, invalidIndexes,
+        });
+        return true;
+      }
+      if (path === "room" && req.method === "GET") {
+        const room = rooms.get(url.searchParams.get("code") ?? "");
+        if (!room) throw new RoomError("Комната не найдена", 404);
+        json(res, 200, room.lobbySummary());
+        return true;
+      }
       if (req.method === "POST" && (path === "create" || path === "join")) {
         const remote = req.socket.remoteAddress ?? "unknown";
         // Only our loopback Caddy connection may assert the public client IP.
@@ -110,13 +158,20 @@ export function createNetworkApi(
         if (limit.count > 60)
           throw new RoomError("Слишком много попыток. Подождите минуту.", 429);
         const data = await body(req);
+        if (!data || typeof data !== "object") throw new RoomError("Некорректный запрос");
         if (path === "create") {
           if (rooms.size >= 32)
             throw new RoomError("Сервер занят. Попробуйте позже.", 503);
+          if (typeof data.title !== "string") throw new RoomError("Введите название игры");
+          const title = data.title.trim();
+          if (!title || [...title].length > 60 || /[\p{Cc}\p{Cf}]/u.test(title))
+            throw new RoomError("Название должно содержать от 1 до 60 символов");
+          const password = passwordInput(data.password);
+          const salt = randomBytes(16);
+          const hash = password ? await hashPassword(password, salt) : undefined;
+          if (rooms.size >= 32) throw new RoomError("Сервер занят. Попробуйте позже.", 503);
           let code: string;
-          do {
-            code = String(randomInt(10000)).padStart(4, "0");
-          } while (rooms.has(code));
+          do { code = randomBytes(8).toString("hex"); } while (rooms.has(code));
           const room = new NetworkRoom(
             code,
             secret(),
@@ -126,19 +181,28 @@ export function createNetworkApi(
             submit,
             () => broadcast(room),
             results,
+            title,
+            !!hash,
           );
           room.display.lastSeen = now();
           rooms.set(code, room);
+          if (hash) passwords.set(room, { salt, hash });
           json(res, 201, { code, token: room.organizerToken, role: "display" });
         } else {
           if (
             typeof data.code !== "string" ||
-            !/^\d{4}$/.test(data.code) ||
+            data.code.length > 64 ||
             typeof data.name !== "string"
           )
-            throw new RoomError("Введите четыре цифры кода и имя");
+            throw new RoomError("Выберите игру и введите имя");
           const room = rooms.get(data.code);
           if (!room) throw new RoomError("Комната не найдена", 404);
+          room.lobbySummary();
+          const password = passwordInput(data.password);
+          const protection = passwords.get(room);
+          if (protection && !timingSafeEqual(await hashPassword(password, protection.salt), protection.hash))
+            throw new RoomError("Неверный пароль игры", 403);
+          if (rooms.get(data.code) !== room) throw new RoomError("Комната закрыта", 404);
           const seat = room.join(data.name, now());
           json(res, 201, {
             code: room.code,
