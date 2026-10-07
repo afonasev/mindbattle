@@ -8,6 +8,7 @@ export function phoneStatus(snapshot: NetworkSnapshot): { required: boolean; tex
         ? { required: true, text: "Выберите тему вопроса" }
         : { required: false, text: `Выбирает ${snapshot.chooserName ?? "другой игрок"}. Вы ждёте` };
     case "bonus-veto":
+    case "final-veto":
       if (!snapshot.canVeto) return { required: false, text: "Другие игроки исключают темы. Вы ждёте" };
       return snapshot.ownVeto
         ? { required: false, text: `Вы исключили «${snapshot.titles[snapshot.ownVeto] ?? snapshot.ownVeto}». Ждём остальных. Можно заменить или снять запрет` }

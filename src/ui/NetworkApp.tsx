@@ -353,7 +353,12 @@ export function NetworkApp() {
       }
     >
       <ReleaseAction safe={!credential || terminal} />
-      <ScreenHeader className="network-header" subtitle={<>Сетевая игра{snapshot ? ` · ${snapshot.code}` : ""}</>} back={!credential || terminal ? () => navigate("/") : undefined} menu={credential && !terminal ? openMenu : undefined} disabled={busy} />
+      <ScreenHeader className="network-header" subtitle={mobile && personalCard ? snapshot?.code : <>Сетевая игра{snapshot ? ` · ${snapshot.code}` : ""}</>}
+        accessory={!display && personalCard && !terminal ? (
+          <span className="network-reserve" aria-label="Запас времени">
+            <span>Запас</span><strong>{seconds(personalCard.reserveMs)} <small>с</small></strong>
+          </span>
+        ) : undefined} back={!credential || terminal ? () => navigate("/") : undefined} menu={credential && !terminal ? openMenu : undefined} disabled={busy} />
       {error && (
         <p className="network-error" role="alert">
           {error}
@@ -531,16 +536,10 @@ export function NetworkApp() {
                   </div>
                 )}
               </div>
-              {!display && turnStatus && (
+              {!display && turnStatus && phase !== "normal-topic" && (
                 <p role="status" className={`network-turn-status network-turn-status--${turnStatus!.required ? "required" : "waiting"}`}>
                   {turnStatus!.text}
                 </p>
-              )}
-              {!display && personalCard && (
-                <section className="network-reserve" aria-label="Личный запас времени">
-                  <span>Запас времени</span>
-                  <strong>{seconds(personalCard.reserveMs)} <small>с</small></strong>
-                </section>
               )}
               {!display && playerCards}
               {snapshot.spectating && <p>Вы наблюдаете финальную битву за первое место.</p>}
@@ -568,12 +567,12 @@ export function NetworkApp() {
               )}
               {phase === "normal-topic" && (
                 <section className="topic-stage network-topic-stage">
-                  <h1>
+                  <h1 className={!display ? `network-turn-status network-turn-status--${turnStatus?.required ? "required" : "waiting"}` : undefined}>
                     {snapshot.canChoose
                       ? "Выберите тему"
                       : display
                         ? `Выбирает ${snapshot.players.find((p) => p.id === view?.chooser)?.name ?? "игрок"}`
-                        : `Выбирает ${snapshot.chooserName ?? "игрок"}`}
+                        : turnStatus?.text}
                   </h1>
                   <div className={`network-topics ${!display && turnStatus?.required ? "network-action-required" : ""}`}>
                     {view?.topicCandidates?.map((id) => (
@@ -588,16 +587,16 @@ export function NetworkApp() {
                   </div>
                 </section>
               )}
-              {phase === "bonus-veto" && (
+              {(phase === "bonus-veto" || phase === "final-veto") && (
                 <section className="topic-stage network-topic-stage">
-                  <h1>Бонусный вопрос · ×2</h1>
-                  <p>
+                  <h1>{phase === "final-veto" ? "Финальная битва" : "Бонусный вопрос · ×2"}</h1>
+                  {display && <p>
                     {snapshot.canVeto
                       ? snapshot.ownVeto ? "Для замены выберите свободную тему или снимите свой запрет." : "Исключите одну свободную тему."
                       : display
                         ? `Запрещают темы: ${snapshot.vetoParticipants?.join(", ")}`
                         : "Другие игроки исключают темы"}
-                  </p>
+                  </p>}
                   <div className={`network-topics ${!display && turnStatus?.required ? "network-action-required" : ""}`}>
                     {view?.topicCandidates?.map((id) => {
                       const veto = snapshot.vetoes?.find(
