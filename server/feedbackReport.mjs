@@ -64,6 +64,7 @@ export function analyzeProductionFeedback(source, { questions, catalogRevision }
   }
   return {
     schemaVersion: 1,
+    interpretation: { feedbackEventsAreQuestionImpressions: false, noComplaintsAreHistoricalExplicitResponses: true, complaintRateDenominator: 'feedback-events', collection: 'optional-complaints' },
     catalogRevision,
     totals: withRate(total),
     byQuestion: Object.fromEntries([...byQuestion.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([id, aggregate]) => [id, withRate(aggregate)])),

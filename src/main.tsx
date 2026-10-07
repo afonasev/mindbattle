@@ -1,3 +1,4 @@
+import { browserFeedback } from './feedback/outbox';
 import { desktop } from "./desktop";
 import { browserResults } from './statistics/outbox';
 import { StrictMode, Suspense, lazy, useEffect, useState } from "react";
@@ -19,6 +20,7 @@ if (appIcon instanceof HTMLLinkElement) {
 }
 
 browserResults();
+browserFeedback();
 
 const root = document.getElementById("root");
 

@@ -1,8 +1,10 @@
+import { openComplaint, pendingComplaints } from './complaintHelpers';
 import { test, expect, type Page, type BrowserContext } from "@playwright/test";
 import { readdirSync, readFileSync } from "node:fs";
 const catalogQuestions = readdirSync("src/content/topics").filter(name => name.endsWith(".json")).flatMap(name => JSON.parse(readFileSync(`src/content/topics/${name}`, "utf8")).questions) as Array<{ prompt: string; explanation: string }>;
 
-test("network feedback continues after a successful server write", async ({ browser, page }, testInfo) => {
+test("network optional complaint returns to reveal and continuation needs no server write", async ({ browser, page }, testInfo) => {
+  test.setTimeout(90000);
   await page.goto("/network?muted=1");
   await page.getByRole("button", { name: "Создать сетевую игру", exact: true }).click();
   const code = await page.locator(".network-code").innerText();
@@ -20,14 +22,22 @@ test("network feedback continues after a successful server write", async ({ brow
       await phone.getByRole("button", { name: "Подключиться", exact: true }).click();
     }
     await page.getByRole("button", { name: "Начать игру", exact: true }).click();
+    await expect.poll(async () => (await Promise.all(phones.map(phone => phone.getByRole("heading", { name: "Выберите тему", exact: true }).isVisible()))).some(Boolean)).toBe(true);
     const chooser = await phones[0].getByRole("heading", { name: "Выберите тему", exact: true }).isVisible() ? phones[0] : phones[1];
     await chooser.locator(".network-topics button").first().click();
     await phones[0].locator(".network-header").click();
     await expect(phones[0].locator(".network-answers button").first()).toBeVisible();
     await phones[0].locator(".network-answers button").first().click();
     await phones[1].locator(".network-answers button").first().click();
-    await phones[0].getByRole("button", { name: "Дальше", exact: true }).click();
-    await phones[0].getByRole("button", { name: "Нет, дальше", exact: true }).click();
+    await phones[1].getByRole('button',{name:'Меню',exact:true}).click();
+    await expect(phones[1].getByRole('button',{name:'Пожаловаться на вопрос',exact:true})).toHaveCount(0);
+    await phones[1].getByRole('button',{name:'Назад',exact:true}).click();
+    await phones[0].route('**/api/difficulty-feedback',route => route.abort('failed'));
+    await openComplaint(phones[0]);await phones[0].getByRole('button',{name:'Фактическая ошибка',exact:true}).click();
+    await phones[0].getByRole('button',{name:'Сохранить жалобу',exact:true}).click();
+    await expect(phones[0].getByRole('button',{name:'Дальше',exact:true})).toBeVisible();
+    await expect.poll(async () => (await pendingComplaints(phones[0])).length).toBe(1);
+    await phones[0].getByRole('button',{name:'Дальше',exact:true}).click();
     await expect(phones[0].getByRole("dialog", { name: "Отправка фидбэка временно недоступна" })).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /Выбирает Участник/ })).toBeVisible();
   } finally {
@@ -240,9 +250,6 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
       await phones[0]
         .locator(".network-round-heading")
         .getByRole("button", { name: "Дальше", exact: true })
-        .click();
-      await phones[0]
-        .getByRole("button", { name: "Нет, дальше", exact: true })
         .click();
     }
     await expect(

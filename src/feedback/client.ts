@@ -8,8 +8,21 @@ function saveQueue(storage: StorageLike, events: readonly DifficultyFeedbackEven
 
 export class QueuedDifficultyFeedbackSink implements DifficultyFeedbackSink {
   constructor(private readonly sink: DifficultyFeedbackSink, private readonly storage: StorageLike) {}
-  async submit(event: DifficultyFeedbackEvent) { try { await this.sink.submit(event); } catch { const events = queue(this.storage); if (!events.some((item) => item.eventId === event.eventId)) saveQueue(this.storage, [...events, event]); } }
-  async flush() { const remaining: DifficultyFeedbackEvent[] = []; for (const event of queue(this.storage)) { try { await this.sink.submit(event); } catch { remaining.push(event); } } saveQueue(this.storage, remaining); }
+  private flushing?: Promise<void>;
+  async submit(event: DifficultyFeedbackEvent) {
+    const events = queue(this.storage);
+    if (!events.some(item => item.eventId === event.eventId)) saveQueue(this.storage, [...events, event]);
+  }
+  flush() {
+    if (this.flushing) return this.flushing;
+    this.flushing = (async () => {
+      for (const event of queue(this.storage)) {
+        try { await this.sink.submit(event); saveQueue(this.storage, queue(this.storage).filter(item => item.eventId !== event.eventId)); }
+        catch { /* Retain this event until acknowledgement. */ }
+      }
+    })().finally(() => { this.flushing = undefined; });
+    return this.flushing;
+  }
 }
 
 export class HttpDifficultyFeedbackSink implements DifficultyFeedbackSink {
@@ -32,6 +45,8 @@ export class HttpDifficultyFeedbackSink implements DifficultyFeedbackSink {
         const body = await response.json().catch(() => null) as { readonly error?: string } | null;
         throw new Error(body?.error ?? `Сервер отклонил оценку (${response.status})`);
       }
+      const ack = await response.json() as { status?: string; eventId?: string };
+      if (!['created', 'duplicate'].includes(ack.status ?? '') || ack.eventId !== event.eventId) throw new Error('Сервер не подтвердил сохранение жалобы');
     });
   }
 }

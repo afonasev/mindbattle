@@ -33,7 +33,7 @@ export function ScreenHeader({ subtitle, back, menu, disabled = false, hero = fa
   </header>;
 }
 
-export function MenuDialog({ title, label = "Меню", children, back, wide = false }: { readonly wide?: boolean; readonly title: string; readonly label?: string; readonly children: ReactNode; readonly back?: () => void }) {
+export function MenuDialog({ title, label = "Меню", children, back, wide = false, className = "" }: { readonly className?: string; readonly wide?: boolean; readonly title: string; readonly label?: string; readonly children: ReactNode; readonly back?: () => void }) {
   const id = useId();
   const panel = useRef<HTMLElement>(null);
   const backRef = useRef(back);
@@ -41,7 +41,35 @@ export function MenuDialog({ title, label = "Меню", children, back, wide = f
   useEffect(() => {
     const previous = document.activeElement;
     panel.current?.querySelector<HTMLElement>("button:not(:disabled), input, select")?.focus();
+    const move = (delta: number) => {
+      const items = [...(panel.current?.querySelectorAll<HTMLButtonElement>('button:not(:disabled)') ?? [])];
+      const index = items.indexOf(document.activeElement as HTMLButtonElement);
+      items[(index + delta + items.length) % items.length]?.focus();
+    };
+    let frame = 0;
+    const previousButtons = new Map<number, readonly boolean[]>();
+    const poll = () => {
+      for (const pad of (typeof navigator.getGamepads === 'function' ? navigator.getGamepads() : [])) {
+        if (!pad) continue;
+        const buttons = pad.buttons.map(button => button.pressed);
+        const previous = previousButtons.get(pad.index) ?? buttons;
+        previousButtons.set(pad.index, buttons);
+        const pressed = buttons.findIndex((down, index) => down && !previous[index]);
+        if (document.activeElement instanceof HTMLTextAreaElement || document.activeElement instanceof HTMLInputElement) continue;
+        if (pressed === 12 || pressed === 14) move(-1);
+        else if (pressed === 13 || pressed === 15) move(1);
+        else if (pressed === 0 && document.activeElement instanceof HTMLButtonElement && panel.current?.contains(document.activeElement)) document.activeElement.click();
+        else if (pressed === 1 || pressed === 9) backRef.current?.();
+      }
+      frame = requestAnimationFrame(poll);
+    };
+    frame = requestAnimationFrame(poll);
     const keyboard = (event: KeyboardEvent) => {
+      if (event.repeat) return;
+      const text = event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement;
+      if (!text && ['ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'KeyW', 'KeyS'].includes(event.code)) {
+        event.preventDefault(); event.stopImmediatePropagation(); move(['ArrowUp', 'ArrowLeft', 'KeyW'].includes(event.code) ? -1 : 1);
+      }
       if (event.code === "Escape") { event.preventDefault(); event.stopImmediatePropagation(); backRef.current?.(); }
       if (event.code === "Tab") {
         const items = [...(panel.current?.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href]') ?? [])];
@@ -51,16 +79,17 @@ export function MenuDialog({ title, label = "Меню", children, back, wide = f
       }
     };
     window.addEventListener("keydown", keyboard, true);
-    return () => { window.removeEventListener("keydown", keyboard, true); if (previous instanceof HTMLElement && previous.isConnected) previous.focus(); };
+    return () => { cancelAnimationFrame(frame); window.removeEventListener("keydown", keyboard, true); if (previous instanceof HTMLElement && previous.isConnected) previous.focus(); };
   }, []);
-  return <div className="pause-backdrop" role="dialog" aria-modal="true" aria-labelledby={id} onClick={(event) => event.stopPropagation()}><section ref={panel} className={`pause-dialog session-menu ${wide ? "session-menu--wide" : ""}`}><div className="stage-label">{label}</div><h2 id={id}>{title}</h2>{children}</section></div>;
+  return <div className="pause-backdrop" role="dialog" aria-modal="true" aria-labelledby={id} onClick={(event) => event.stopPropagation()}><section ref={panel} className={`pause-dialog session-menu ${wide ? "session-menu--wide" : ""} ${className}`}><div className="stage-label">{label}</div><h2 id={id}>{title}</h2>{children}</section></div>;
 }
 
-export function SessionMenu({ title = "Игра на паузе", children, resume, settings, restart, restartLabel = "Начать заново", exit, exitLabel = "Выйти в меню", back, disabled = false, resumeDisabled = false }: {
-  readonly title?: string; readonly children?: ReactNode; readonly resume?: () => void; readonly settings?: () => void; readonly restart?: () => void; readonly restartLabel?: string; readonly exit?: () => void; readonly exitLabel?: string; readonly back?: () => void; readonly disabled?: boolean; readonly resumeDisabled?: boolean;
+export function SessionMenu({ title = "Игра на паузе", children, resume, settings, complaint, restart, restartLabel = "Начать заново", exit, exitLabel = "Выйти в меню", back, disabled = false, resumeDisabled = false }: {
+  readonly title?: string; readonly children?: ReactNode; readonly resume?: () => void; readonly settings?: () => void; readonly complaint?: () => void; readonly restart?: () => void; readonly restartLabel?: string; readonly exit?: () => void; readonly exitLabel?: string; readonly back?: () => void; readonly disabled?: boolean; readonly resumeDisabled?: boolean;
 }) {
   return <MenuDialog title={title} label="Меню игры" back={back ?? (resume && !disabled && !resumeDisabled ? resume : undefined)}>{children}<div className="menu-actions">
     {resume && <MenuAction variant="primary" disabled={disabled || resumeDisabled} onClick={resume}>Продолжить</MenuAction>}
+    {complaint && <MenuAction disabled={disabled} onClick={complaint}>Пожаловаться на вопрос</MenuAction>}
     {settings && <MenuAction disabled={disabled} onClick={settings}>Настройки</MenuAction>}
     {restart && <MenuAction disabled={disabled} onClick={restart}>{restartLabel}</MenuAction>}
     {exit && <MenuAction disabled={disabled} onClick={exit}>{exitLabel}</MenuAction>}

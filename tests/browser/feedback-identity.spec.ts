@@ -13,10 +13,10 @@ test("real feedback endpoint accepts the current catalog and rejects another rev
   };
   const accepted = await request.post("/api/difficulty-feedback", { data: event });
   expect(accepted.status()).toBe(201);
-  expect(await accepted.json()).toEqual({ status: "created" });
+  expect(await accepted.json()).toEqual({ status: "created", eventId: event.eventId });
   const replay = await request.post("/api/difficulty-feedback", { data: event });
   expect(replay.status()).toBe(200);
-  expect(await replay.json()).toEqual({ status: "duplicate" });
+  expect(await replay.json()).toEqual({ status: "duplicate", eventId: event.eventId });
   const rejected = await request.post("/api/difficulty-feedback", {
     data: { ...event, eventId: randomUUID(), catalogRevision: "unrelated-catalog" },
   });

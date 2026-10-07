@@ -49,6 +49,11 @@ export class SoloController {
     this.context = new CatalogDomainContext(catalog, this.persisted.history);
     this.results = new ResultObserver(results, this.context);
     this.restorableState = this.persisted.lastSolo && this.persisted.lastSolo.status === "in-progress" && validSoloState(this.persisted.lastSolo.state, catalog.revision) ? this.persisted.lastSolo.state : null;
+    if (this.restorableState?.phase.kind === 'feedback') {
+      const old = this.restorableState.phase;
+      this.restorableState = { ...this.restorableState, phase: { kind: 'reveal', round: old.round, result: old.result, answer: old.result === 'correct' ? old.round.correctPosition : null, final: this.restorableState.lives === 0 || undefined,
+        ...(old.hasComplaint === true ? { complaintDraft: { eventId: old.eventId, complaintReasons: old.complaintReasons, complaintNote: old.complaintNote } } : {}) } };
+    }
   }
 
   get state(): SoloState | null { return this.currentState; }
