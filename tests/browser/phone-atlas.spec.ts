@@ -106,15 +106,15 @@ for(const width of [360,760]) test(`mobile network complete presentation atlas $
       await page.getByRole('button',{name:'Меню',exact:true}).click();
       if(item.overlay==='settings')await page.getByRole('button',{name:'Настройки',exact:true}).click();
     }
-    if(item.id==='09-answer'){await expect(page.locator('.network-header .network-reserve strong')).toHaveText('15 с');await expect(page.locator('.network-reserve-balance')).toHaveText('Запас 42 с');}
+    if(item.id==='09-answer'){await expect(page.locator('.network-player-card .network-reserve strong')).toHaveText('15 с');await expect(page.locator('.network-reserve-balance')).toHaveText('Запас 42 с');}
     if(item.s?.phase==='answering')await expect(page.locator('.network-cards')).not.toContainText('Время:');
     if(item.id==='03-topic-choice'){
       await expect(page.getByText('Выберите тему',{exact:true})).toHaveCount(1);
       await expect(page.getByText('Выберите тему вопроса',{exact:true})).toHaveCount(0);
     }
     if(item.s?.view?.teams.length&&!item.terminal){
-      await expect(page.locator('.network-header .network-reserve')).toHaveCount(1);
-      await expect(page.locator('.network-match .network-reserve')).toHaveCount(0);
+      await expect(page.locator('.network-header .network-reserve')).toHaveCount(0);
+      await expect(page.locator('.network-player-card .network-reserve')).toHaveCount(['standings','finished'].includes(item.s.phase)?0:1);
       expect(await page.locator('.network-header').evaluate(e=>e.getBoundingClientRect().height)).toBeLessThanOrEqual(80);
     }
     await page.evaluate(()=>document.fonts.ready);

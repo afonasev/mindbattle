@@ -14,7 +14,7 @@ export function MenuAction({ variant = "secondary", className = "", onClick, chi
   </button>;
 }
 
-export function ScreenHeader({ subtitle, back, menu, disabled = false, hero = false, className = "", accessory }: { readonly accessory?: ReactNode; readonly subtitle?: ReactNode; readonly back?: () => void; readonly menu?: () => void; readonly disabled?: boolean; readonly hero?: boolean; readonly className?: string }) {
+export function ScreenHeader({ subtitle, back, menu, disabled = false, hero = false, className = "" }: { readonly subtitle?: ReactNode; readonly back?: () => void; readonly menu?: () => void; readonly disabled?: boolean; readonly hero?: boolean; readonly className?: string }) {
   useEffect(() => {
     if (!back) return;
     const keyboard = (event: KeyboardEvent) => {
@@ -27,7 +27,6 @@ export function ScreenHeader({ subtitle, back, menu, disabled = false, hero = fa
     {hero ? <h1 className="screen-header-brand">Mindbattle</h1> : <strong className="screen-header-brand">Mindbattle</strong>}
     <span className="screen-header-subtitle">{subtitle}</span>
     <div className="screen-header-actions">
-      {accessory}
       {back && <MenuAction className="navigation-action" onClick={back}>Назад</MenuAction>}
       {menu && <MenuAction className="navigation-action" disabled={disabled} onClick={menu}>Меню</MenuAction>}
     </div>

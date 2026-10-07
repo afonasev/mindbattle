@@ -322,6 +322,13 @@ export function NetworkApp() {
             {display ? card.id.replace("player-", "") : "Я"}
           </span>
           <strong>{card.name}</strong>
+          {!display && !terminal && (
+            <span className="network-reserve" aria-label={personalAnswerTime ? "Время ответа и запас" : "Запас времени"}>
+              <span>{personalAnswerTime ? "Ответ" : "Запас"}</span>
+              <strong>{seconds(personalAnswerTime ? card.remainingMs! : card.reserveMs)} <small>с</small></strong>
+              {personalAnswerTime && <small className="network-reserve-balance">Запас {seconds(card.reserveMs)} с</small>}
+            </span>
+          )}
           <b>{card.score}</b>
           <small>
             {card.departed
@@ -361,13 +368,7 @@ export function NetworkApp() {
     >
       <ReleaseAction safe={!credential || terminal} />
       <ScreenHeader className="network-header" subtitle={mobile && personalCard ? snapshot?.code : <>Сетевая игра{snapshot ? ` · ${snapshot.code}` : ""}</>}
-        accessory={!display && personalCard && !terminal ? (
-          <span className="network-reserve" aria-label={personalAnswerTime ? "Время ответа и запас" : "Запас времени"}>
-            <span>{personalAnswerTime ? "Ответ" : "Запас"}</span>
-            <strong>{seconds(personalAnswerTime ? personalCard.remainingMs! : personalCard.reserveMs)} <small>с</small></strong>
-            {personalAnswerTime && <small className="network-reserve-balance">Запас {seconds(personalCard.reserveMs)} с</small>}
-          </span>
-        ) : undefined} back={!credential || terminal ? () => navigate("/") : undefined} menu={credential && !terminal ? openMenu : undefined} disabled={busy} />
+        back={!credential || terminal ? () => navigate("/") : undefined} menu={credential && !terminal ? openMenu : undefined} disabled={busy} />
       {error && (
         <p className="network-error" role="alert">
           {error}

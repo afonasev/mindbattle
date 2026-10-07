@@ -12,11 +12,18 @@ for (const width of [360,760]) for (const count of [2,12]) {
     await page.route("**/api/network/stream?*", route => route.fulfill({contentType:"text/event-stream", body:`event: connected\ndata: {"generation":1}\n\ndata: ${JSON.stringify(current)}\n\n`}));
     await page.route("**/api/network/heartbeat?*", route => route.fulfill({json:{ok:true}}));
     await page.goto("/network?muted=1");
-    await expect(page.locator(".network-header .network-reserve")).toBeVisible();
-    await expect(page.locator(".network-match .network-reserve")).toHaveCount(0);
+    await expect(page.locator(".network-player-card .network-reserve")).toBeVisible();
+    await expect(page.locator(".network-header .network-reserve")).toHaveCount(0);
     await expect(page.locator(".network-reserve")).toContainText("Запас");
     await expect(page.locator(".network-reserve strong")).toHaveText("60 с");
-    await expect(page.locator(".network-cards")).not.toContainText("Запас");
+    await expect(page.locator(".network-cards")).toContainText("Запас");
+    const placement = await page.locator(".network-player-card").evaluate(card => {
+      const name = card.querySelector(":scope > strong")!.getBoundingClientRect();
+      const clock = card.querySelector(".network-reserve")!.getBoundingClientRect();
+      const score = card.querySelector(":scope > b")!.getBoundingClientRect();
+      return name.right <= clock.left && clock.right <= score.left;
+    });
+    expect(placement).toBe(true);
     expect(await page.locator(".network-reserve strong").evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(20);
     await expect(page.locator(".network-explanation > p")).toHaveCount(1);
     await expect(page.locator(".network-explanation > p")).toContainText("Основное объяснение раскрывается");
