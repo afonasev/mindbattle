@@ -22,6 +22,8 @@ for (const desktop of [false, true]) {
       await route.fulfill({ response, body });
     });
     await page.goto("/");
+    // Wait for the actual lazy-loaded application, then verify the footer contract.
+    await expect(page.getByText("Загружаем Mindbattle…", { exact: true })).toBeHidden({ timeout: 30_000 });
     const footer = page.getByRole("contentinfo", { name: "Версия приложения" });
     await expect(footer).toContainText("Версия 0.1.0");
     await expect(footer).not.toContainText("+published");

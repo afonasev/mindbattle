@@ -133,7 +133,7 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
           const statuses = await Promise.all(
             phones.map((phone) =>
               phone
-                .getByText("Исключите одну свободную тему.")
+                .getByRole("status").filter({ hasText: "Выберите тему, которую хотите исключить" })
                 .isVisible(),
             ),
           );
@@ -142,7 +142,7 @@ test("network: 12 phones, private answers, bonus, display restore and departure"
         const vetoReady = await Promise.all(
           phones.map((phone) =>
             phone
-              .getByText("Исключите одну свободную тему.")
+              .getByRole("status").filter({ hasText: "Выберите тему, которую хотите исключить" })
               .isVisible(),
           ),
         );
