@@ -271,6 +271,7 @@ export function NetworkApp() {
   const phase = snapshot?.phase;
   const display = snapshot?.role === "display";
   const personalCard = view?.teams.find((card) => card.id === snapshot?.selfId);
+  const personalAnswerTime = !display && phase === "answering" && personalCard?.remainingMs !== undefined && (view?.baseRemainingMs ?? 0) > 0;
   const turnStatus = snapshot ? phoneStatus(snapshot) : null;
   const canSkipConfirmation =
     mobile &&
@@ -319,7 +320,7 @@ export function NetworkApp() {
           <small>
             {card.departed
               ? "Выбыл"
-              : card.remainingMs !== undefined
+              : display && card.remainingMs !== undefined
                 ? `Время: ${seconds(card.remainingMs)} с`
                 : card.hasAnswered && phase === "answering"
                   ? "✓ Ответ принят"
@@ -355,8 +356,10 @@ export function NetworkApp() {
       <ReleaseAction safe={!credential || terminal} />
       <ScreenHeader className="network-header" subtitle={mobile && personalCard ? snapshot?.code : <>Сетевая игра{snapshot ? ` · ${snapshot.code}` : ""}</>}
         accessory={!display && personalCard && !terminal ? (
-          <span className="network-reserve" aria-label="Запас времени">
-            <span>Запас</span><strong>{seconds(personalCard.reserveMs)} <small>с</small></strong>
+          <span className="network-reserve" aria-label={personalAnswerTime ? "Время ответа и запас" : "Запас времени"}>
+            <span>{personalAnswerTime ? "Ответ" : "Запас"}</span>
+            <strong>{seconds(personalAnswerTime ? personalCard.remainingMs! : personalCard.reserveMs)} <small>с</small></strong>
+            {personalAnswerTime && <small className="network-reserve-balance">Запас {seconds(personalCard.reserveMs)} с</small>}
           </span>
         ) : undefined} back={!credential || terminal ? () => navigate("/") : undefined} menu={credential && !terminal ? openMenu : undefined} disabled={busy} />
       {error && (

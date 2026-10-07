@@ -9,13 +9,13 @@ const q = quiz.questions.find(q => q.id === 'video-game-history-playstation-japa
 function state(phase: NetworkSnapshot['phase'], leader = true): NetworkSnapshot {
   const s = snapshot(12);
   const players = s.players.map((p,i) => ({...p,name:i === 0 ? 'Александр' : `Игрок ${i+1}`}));
-  const teams = s.view!.teams.map(t => ({...t,name:'Александр',reserveMs:42_000,score:400}));
+  const teams = s.view!.teams.map(t => ({...t,name:'Александр',reserveMs:42_000,score:400,answerPosition:positions[q.correctIndex],result:'correct' as const}));
   return {...s, phase, isLeader:leader, players, leaderName:leader ? 'Александр':'Игрок 2', chooserName:'Игрок 2', difficulty:'medium',
     titles:{topic:'История видеоигр',other:'Океаны и моря',third:'Литература'},
     view:{...s.view!,phase:phase==='lobby'?'reveal':phase,teams,topicCandidates:['topic','other','third'],chooser:s.selfId,
       question:{id:q.id,topicId:'topic',prompt:q.prompt,options:Object.fromEntries(positions.map((p,i)=>[p,q.answers[i].text])) as Record<typeof positions[number],string>,
-        correctPosition:positions[q.correctIndex],explanation:[q.explanation],answerNotes:positions.map((p,i)=>({position:p,answer:q.answers[i].text,note:q.answers[i].note}))}},
-    revealedChoices:s.revealedChoices!.map((t,i)=>({...t,name:players[i].name}))};
+        correctPosition:positions[q.correctIndex],source:q.source,explanation:[q.explanation],answerNotes:positions.map((p,i)=>({position:p,answer:q.answers[i].text,note:q.answers[i].note}))}},
+    revealedChoices:s.revealedChoices!.map((t,i)=>({...t,name:players[i].name,answerPosition:i===11?null:i===0?positions[q.correctIndex]:positions[i%4],result:i===11?'no-answer':i===0||i%4===q.correctIndex?'correct':'wrong'}))};
 }
 function answer(variant:'open'|'accepted'|'expired'|'reserve'|'spectator') {
   const s=state('answering',false); const {correctPosition,explanation,answerNotes,...question}=s.view!.question!;
@@ -71,7 +71,9 @@ const cases:Array<{id:string;title:string;s:NetworkSnapshot|null;overlay?:string
   {id:'35-room-closed',title:'Комната закрыта',s:state('reveal'),terminal:'expired'},
   {id:'36-other-tab',title:'Открыто в другой вкладке',s:state('reveal'),terminal:'replaced'},
   {id:'37-join-error',title:'Неверный код комнаты',s:null,overlay:'join-error'},
-  {id:'38-final-reveal',title:'Раскрытие финального вопроса',s:{...state('reveal'),tieBreakNumber:1}}
+  {id:'38-final-reveal',title:'Раскрытие финального вопроса',s:{...state('reveal'),tieBreakNumber:1}},
+  {id:'39-reveal-wrong',title:'Раскрытие · неверный ответ',s:{...state('reveal',false),view:{...state('reveal').view!,teams:state('reveal').view!.teams.map(t=>({...t,result:'wrong',answerPosition:'up'}))}}},
+  {id:'40-reveal-no-answer',title:'Раскрытие · нет ответа',s:{...state('reveal',false),view:{...state('reveal').view!,teams:state('reveal').view!.teams.map(t=>({...t,result:'no-answer',answerPosition:null,hasAnswered:false,reserveMs:0}))}}}
 ];
 
 for(const width of [360,760]) test(`mobile network complete presentation atlas ${width}`, async ({page},info)=>{
@@ -99,6 +101,8 @@ for(const width of [360,760]) test(`mobile network complete presentation atlas $
       await page.getByRole('button',{name:'Меню',exact:true}).click();
       if(item.overlay==='settings')await page.getByRole('button',{name:'Настройки',exact:true}).click();
     }
+    if(item.id==='09-answer'){await expect(page.locator('.network-header .network-reserve strong')).toHaveText('15 с');await expect(page.locator('.network-reserve-balance')).toHaveText('Запас 42 с');}
+    if(item.s?.phase==='answering')await expect(page.locator('.network-cards')).not.toContainText('Время:');
     if(item.id==='03-topic-choice'){
       await expect(page.getByText('Выберите тему',{exact:true})).toHaveCount(1);
       await expect(page.getByText('Выберите тему вопроса',{exact:true})).toHaveCount(0);
