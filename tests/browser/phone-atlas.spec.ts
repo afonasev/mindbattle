@@ -33,7 +33,7 @@ function feedback(stage:'choice'|'reasons'|'done',leader=true) {
 }
 const topic=state('normal-topic');
 const veto=state('bonus-veto');
-const cases:Array<{id:string;title:string;s:NetworkSnapshot|null;overlay?:string;terminal?:string}> = [
+const cases:Array<{id:string;title:string;s:NetworkSnapshot|null;overlay?:string;terminal?:string;accessible?:boolean}> = [
   {id:'01-entry',title:'Подключение',s:null},
   {id:'02-lobby',title:'Ожидание старта',s:{...state('lobby',false),view:undefined}},
   {id:'03-topic-choice',title:'Вы выбираете тему',s:{...topic,canChoose:true}},
@@ -83,13 +83,13 @@ for(const width of [360,760]) test(`mobile network complete presentation atlas $
   await page.route('**/api/network/join',route=>route.fulfill({status:404,json:{error:'Комната не найдена'}}));
   await page.route('**/api/network/heartbeat?*',route=>route.fulfill({json:{ok:true}}));
   const pictures:Array<{id:string;title:string;path:string}>=[];
-  for (const item of cases) {
+  for (const item of [...cases,...cases.filter(c=>['03-topic-choice','09-answer','13-reveal-leader'].includes(c.id)).map(c=>({...c,id:'a'+c.id,title:c.title+' · крупный текст / контраст',accessible:true}))]) {
     current=item;
     await page.goto('/network?muted=1');
-    await page.evaluate(({credential})=>{
+    await page.evaluate(({credential,accessible})=>{
       if(credential)localStorage.setItem('mindbattle-network-credentials-v1',JSON.stringify([{code:'1234',token:'mobile-atlas',role:'player'}]));else localStorage.removeItem('mindbattle-network-credentials-v1');
-      localStorage.setItem('mindbattle-network-preferences-v1',JSON.stringify({muted:true,musicVolume:0,effectsVolume:0,textSize:'normal',highContrast:false,reducedMotion:true}));
-    },{credential:!!item.s});
+      localStorage.setItem('mindbattle-network-preferences-v1',JSON.stringify({muted:true,musicVolume:0,effectsVolume:0,textSize:accessible?'large':'normal',highContrast:accessible,reducedMotion:true}));
+    },{credential:!!item.s,accessible:!!item.accessible});
     await page.reload();
     if(item.s) await expect(page.getByRole('button',{name:item.terminal?'Вернуться к подключению':'Меню',exact:true})).toBeVisible();
     else await expect(page.getByRole('heading',{name:'Вступить в игру'})).toBeVisible();
