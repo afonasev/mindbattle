@@ -127,10 +127,11 @@ describe('named network lobby API', () => {
     expect([(await first).status, (await last).status].sort()).toEqual([201,503]);
     expect((await request('catalog')).value.rooms).toHaveLength(32);
   });
-  it('bounds pending password work while allowing a twelve-player admission burst', async () => {
+  it('bounds pending password work without blocking lightweight catalog reads', async () => {
     hashGate.blocked = true;
     const pending = Array.from({ length: 16 }, (_, i) => request('create', { title: `В очереди ${i}`, password: 'pw' }));
     await vi.waitFor(() => expect(hashGate.jobs).toHaveLength(16));
+    expect((await request('catalog')).status).toBe(200);
     expect((await request('create', { title: 'Перегрузка', password: 'pw' })).status).toBe(503);
     hashGate.jobs.splice(0).forEach(f => f());
     expect((await Promise.all(pending)).map(r => r.status)).toEqual(Array(16).fill(201));

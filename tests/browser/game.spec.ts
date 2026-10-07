@@ -736,8 +736,9 @@ test("marks a zero-reserve team as no-answer at the base deadline", async ({ pag
       team.id === "blue" ? { ...team, reserveMs: 0 } : team
     );
     localStorage.setItem(key, JSON.stringify(data));
+    // Reload in the same JS task: a live tick must not overwrite the zero-reserve fixture.
+    location.reload();
   });
-  await page.reload();
   await page.getByRole("button", { name: "Продолжить игру на одном устройстве" }).click();
   await page.getByRole("button", { name: "Продолжить" }).click();
   await waitForInputGate(page);

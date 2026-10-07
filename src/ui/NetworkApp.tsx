@@ -259,6 +259,7 @@ export function NetworkApp() {
   const view = snapshot?.view;
   const phase = snapshot?.phase;
   const display = snapshot?.role === "display";
+  const personalCard = view?.teams.find((card) => card.id === snapshot?.selfId);
   const turnStatus = snapshot ? phoneStatus(snapshot) : null;
   const canSkipConfirmation =
     mobile &&
@@ -311,7 +312,7 @@ export function NetworkApp() {
                 ? `Время: ${seconds(card.remainingMs)} с`
                 : card.hasAnswered && phase === "answering"
                   ? "✓ Ответ принят"
-                  : `Запас: ${seconds(card.reserveMs)} с`}
+                  : ""}
           </small>
           {(phase === "reveal" || phase === "difficulty-feedback") && card.result && (
             <small>
@@ -470,6 +471,12 @@ export function NetworkApp() {
                 <p role="status" className={`network-turn-status network-turn-status--${turnStatus!.required ? "required" : "waiting"}`}>
                   {turnStatus!.text}
                 </p>
+              )}
+              {!display && personalCard && (
+                <section className="network-reserve" aria-label="Личный запас времени">
+                  <span>Запас времени</span>
+                  <strong>{seconds(personalCard.reserveMs)} <small>с</small></strong>
+                </section>
               )}
               {!display && playerCards}
               {snapshot.spectating && <p>Вы наблюдаете финальную битву за первое место.</p>}
