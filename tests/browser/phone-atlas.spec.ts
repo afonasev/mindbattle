@@ -27,6 +27,11 @@ function results(finished:boolean,leader:boolean) {
   const s=state(finished?'finished':'standings',leader);
   return {...s,view:{...s.view!,question:undefined,winnerId:finished?s.selfId:undefined,standings:s.players.map((p,i)=>({teamId:p.id,rank:p.departed?0:i+1,score:1200-i*100,correct:4,incorrect:2,noAnswer:1}))}};
 }
+function revealResult(result:'wrong'|'no-answer'): NetworkSnapshot {
+  const s=state('reveal',false);const position=result==='wrong'?'up' as const:null;
+  return {...s,view:{...s.view!,teams:s.view!.teams.map(t=>({...t,result,answerPosition:position,hasAnswered:result==='wrong',reserveMs:result==='no-answer'?0:t.reserveMs}))},
+    revealedChoices:s.revealedChoices!.map((t,i)=>i===0?{...t,result,answerPosition:position}:t)};
+}
 function feedback(stage:'choice'|'reasons'|'done',leader=true) {
   const s=state('difficulty-feedback',leader);
   return {...s,view:{...s.view!,question:undefined,feedback:{eventId:'atlas-feedback',questionId:q.id,assignedDifficulty:'medium' as const,stage,hasComplaint:stage==='choice'?null:true,complaintReasons:stage==='reasons'?['unclear-wording' as const]:[],complaintNote:'',cursor:0}}};
@@ -72,8 +77,8 @@ const cases:Array<{id:string;title:string;s:NetworkSnapshot|null;overlay?:string
   {id:'36-other-tab',title:'Открыто в другой вкладке',s:state('reveal'),terminal:'replaced'},
   {id:'37-join-error',title:'Неверный код комнаты',s:null,overlay:'join-error'},
   {id:'38-final-reveal',title:'Раскрытие финального вопроса',s:{...state('reveal'),tieBreakNumber:1}},
-  {id:'39-reveal-wrong',title:'Раскрытие · неверный ответ',s:{...state('reveal',false),view:{...state('reveal').view!,teams:state('reveal').view!.teams.map(t=>({...t,result:'wrong',answerPosition:'up'}))}}},
-  {id:'40-reveal-no-answer',title:'Раскрытие · нет ответа',s:{...state('reveal',false),view:{...state('reveal').view!,teams:state('reveal').view!.teams.map(t=>({...t,result:'no-answer',answerPosition:null,hasAnswered:false,reserveMs:0}))}}}
+  {id:'39-reveal-wrong',title:'Раскрытие · неверный ответ',s:revealResult('wrong')},
+  {id:'40-reveal-no-answer',title:'Раскрытие · нет ответа',s:revealResult('no-answer')}
 ];
 
 for(const width of [360,760]) test(`mobile network complete presentation atlas ${width}`, async ({page},info)=>{
