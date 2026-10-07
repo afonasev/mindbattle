@@ -25,6 +25,13 @@ for (const width of [360,760]) for (const count of [2,12]) {
     });
     expect(placement).toBe(true);
     expect(await page.locator(".network-reserve strong").evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(20);
+    const badges = await page.locator(".network-answers .menu-action-label").evaluateAll(labels => labels.map(label => {
+      const badge = label.querySelector(".network-answer-letter")!.getBoundingClientRect();
+      const text = label.querySelector(":scope > span:nth-child(2)")!.getBoundingClientRect();
+      return {width:badge.width,height:badge.height,textBeside:text.left >= badge.right + 8};
+    }));
+    expect(badges).toHaveLength(4);
+    for (const badge of badges) expect(badge).toEqual({width:32,height:32,textBeside:true});
     await expect(page.locator(".network-explanation > p")).toHaveCount(1);
     await expect(page.locator(".network-explanation > p")).toContainText("Основное объяснение раскрывается");
     await expect(page.locator(".network-explanation .wrong-answer-notes article")).toHaveCount(3);
