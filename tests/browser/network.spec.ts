@@ -50,7 +50,8 @@ test("network optional complaint returns to reveal and continuation needs no ser
     expect(leader.complaintReasons).toEqual(['suspected-error']);
     expect(Object.keys(other).sort()).toEqual(Object.keys(leader).sort());
     expect(sharedPause).toEqual([]);
-    await openComplaint(phones[1]);
+    await phones[1].getByRole('button',{name:'Меню',exact:true}).click();
+    await phones[1].getByRole('button',{name:'Пожаловаться на вопрос',exact:true}).click();
     await expect(phones[1].getByRole('dialog',{name:'Жалоба сохранена',exact:true})).toBeVisible();
     await phones[0].getByRole('button',{name:'Дальше',exact:true}).click();
     await expect(phones[1].getByRole('dialog')).toHaveCount(0);
