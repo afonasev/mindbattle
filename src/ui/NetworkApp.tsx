@@ -289,6 +289,56 @@ export function NetworkApp() {
     window.addEventListener("keydown", keyboard);
     return () => window.removeEventListener("keydown", keyboard);
   });
+  const playerCards = view && phase !== "standings" && phase !== "finished" ? (
+    <div className={`network-cards ${view.teams.length > 4 ? "network-cards--many" : ""}`}>
+      {view.teams.map((card) => (
+        <article
+          className={`network-player-card ${card.departed ? "departed" : ""} ${card.name.length > 18 ? "network-player-card-long-name" : ""} ${(phase === "reveal" || phase === "difficulty-feedback") && card.result ? `network-player-card--${card.result}` : ""}`}
+          key={card.id}
+          role={mobile ? "button" : undefined}
+          tabIndex={mobile ? 0 : undefined}
+          aria-label={mobile ? "Показать текущий счёт" : undefined}
+          onClick={mobile ? () => setScoreboardOpen(true) : undefined}
+          onKeyDown={
+            mobile
+              ? (event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setScoreboardOpen(true);
+                  }
+                }
+              : undefined
+          }
+        >
+          <span className="network-player-number">
+            {display ? card.id.replace("player-", "") : "Я"}
+          </span>
+          <strong>{card.name}</strong>
+          <b>{card.score}</b>
+          <small>
+            {card.departed
+              ? "Выбыл"
+              : card.remainingMs !== undefined
+                ? `Время: ${seconds(card.remainingMs)} с`
+                : card.hasAnswered && phase === "answering"
+                  ? "✓ Ответ принят"
+                  : `Запас: ${seconds(card.reserveMs)} с`}
+          </small>
+          {(phase === "reveal" || phase === "difficulty-feedback") && card.result && (
+            <small>
+              {card.result === "correct"
+                ? "✓ Верно"
+                : card.result === "spectator"
+                  ? "Наблюдает"
+                  : card.result === "no-answer"
+                    ? "Нет ответа"
+                    : "Неверно"}
+            </small>
+          )}
+        </article>
+      ))}
+    </div>
+  ) : null;
   return (
     <ScreenSurface
       className={`game-shell network-app ${mobile ? "network-mobile" : "network-display"} ${preferences.textSize === "large" ? "network-text-large" : ""} ${preferences.highContrast ? "network-high-contrast" : ""} ${preferences.reducedMotion ? "reduced-motion" : ""}`}
@@ -456,6 +506,7 @@ export function NetworkApp() {
           ) : (
             <section className="network-match">
               <div className="network-round-heading">
+                {display && view?.question && <span className="network-topic-label">{snapshot.titles[view.question.topicId]}</span>}
                 <span>
                   {snapshot.tieBreakNumber
                     ? `Финальная битва · вопрос ${snapshot.tieBreakNumber}`
@@ -484,56 +535,7 @@ export function NetworkApp() {
                   {turnStatus!.text}
                 </p>
               )}
-              {view && phase !== "standings" && phase !== "finished" && (
-                <div className="network-cards">
-                  {view.teams.map((card, i) => (
-                    <article
-                      className={`network-player-card ${card.departed ? "departed" : ""}`}
-                      key={card.id}
-                      role={mobile ? "button" : undefined}
-                      tabIndex={mobile ? 0 : undefined}
-                      aria-label={mobile ? "Показать текущий счёт" : undefined}
-                      onClick={mobile ? () => setScoreboardOpen(true) : undefined}
-                      onKeyDown={
-                        mobile
-                          ? (event) => {
-                              if (event.key === "Enter" || event.key === " ") {
-                                event.preventDefault();
-                                setScoreboardOpen(true);
-                              }
-                            }
-                          : undefined
-                      }
-                    >
-                      <span className="network-player-number">
-                        {display ? card.id.replace("player-", "") : "Я"}
-                      </span>
-                      <strong>{card.name}</strong>
-                      <b>{card.score}</b>
-                      <small>
-                        {card.departed
-                          ? "Выбыл"
-                          : card.remainingMs !== undefined
-                            ? `Время: ${seconds(card.remainingMs)} с`
-                            : card.hasAnswered && phase === "answering"
-                              ? "✓ Ответ принят"
-                              : `Запас: ${seconds(card.reserveMs)} с`}
-                      </small>
-                      {card.result && (
-                        <small>
-                          {card.result === "correct"
-                            ? "✓ Верно"
-                            : card.result === "spectator"
-                              ? "Наблюдает"
-                              : card.result === "no-answer"
-                                ? "Нет ответа"
-                                : "Неверно"}
-                        </small>
-                      )}
-                    </article>
-                  ))}
-                </div>
-              )}
+              {!display && playerCards}
               {snapshot.spectating && <p>Вы наблюдаете финальную битву за первое место.</p>}
               {mobile && scoreboardOpen && (
                 <div
@@ -648,14 +650,14 @@ export function NetworkApp() {
               {(phase === "answering" || phase === "reveal") &&
                 view?.question && (
                   <div
-                    className={`question-stage network-question-area ${phase === "reveal" ? "revealed" : ""}`}
+                    className={`question-stage network-question-area ${phase === "reveal" ? "revealed question-stage--reveal" : ""}`}
                   >
                     <h1 className="network-question">{view.question.prompt}</h1>
                     <div className={`network-answers ${turnStatus?.required ? "network-action-required" : ""}`}>
                       {positions.map((position) => {
                         const question = view.question!;
                         const chosen = snapshot.ownAnswer === position;
-                        const correct = question.correctPosition === position;
+                        const correct = phase === "reveal" && question.correctPosition === position;
                         const wrong =
                           phase === "reveal" &&
                           (snapshot.revealedChoices ?? []).some(
@@ -682,11 +684,16 @@ export function NetworkApp() {
                             <span>{question.options[position]}</span>
                             {phase === "reveal" && (
                               <small>
-                                {correct ? "✓ Правильный ответ · " : wrong ? "✕ Неверный ответ · " : ""}
-                                {(snapshot.revealedChoices ?? [])
-                                  .filter((c) => c.answerPosition === position)
-                                  .map((c) => c.name)
-                                  .join(", ")}
+                                {display ? (
+                                  <span className="network-answer-players" aria-label={correct ? "Правильный ответ" : "Неверный ответ"}>
+                                    {(snapshot.revealedChoices ?? []).filter(c => c.answerPosition === position).map(c => (
+                                      <span key={c.id} className="network-answer-player" title={c.name} aria-label={c.name}>{c.id.replace("player-", "")}</span>
+                                    ))}
+                                  </span>
+                                ) : <>
+                                  {correct ? "✓ Правильный ответ · " : wrong ? "✕ Неверный ответ · " : ""}
+                                  {(snapshot.revealedChoices ?? []).filter(c => c.answerPosition === position).map(c => c.name).join(", ")}
+                                </>}
                               </small>
                             )}
                           </MenuAction>
@@ -694,10 +701,20 @@ export function NetworkApp() {
                       })}
                     </div>
                     {phase === "reveal" && (
-                      <div className="network-explanation">
+                      <div className="network-explanation explanation">
+                        <strong>Почему так?</strong>
                         {view.question.explanation?.map((line, i) => (
                           <p key={i}>{line}</p>
                         ))}
+                        {view.question.source && (
+                          <a
+                            href={view.question.source.url}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Источник: {view.question.source.title} ↗
+                          </a>
+                        )}
                         {view.question.answerNotes?.some((note) => note.position !== view.question?.correctPosition) && (
                           <section className="wrong-answer-notes" aria-label="Справки к неправильным вариантам">
                             {view.question.answerNotes.filter((note) => note.position !== view.question?.correctPosition).map((note) => (
@@ -707,15 +724,6 @@ export function NetworkApp() {
                               </article>
                             ))}
                           </section>
-                        )}
-                        {view.question.source && (
-                          <a
-                            href={view.question.source.url}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            {view.question.source.title}
-                          </a>
                         )}
                       </div>
                     )}
@@ -866,6 +874,7 @@ export function NetworkApp() {
                   </MenuAction>
                 </div>
               )}
+              {display && playerCards}
             </section>
           )}
           {(snapshot.paused || localMenuOpen) && !pauseSettingsOpen && (
