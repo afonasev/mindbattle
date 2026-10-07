@@ -1,0 +1,5 @@
+# Independent semantic-diversity adjudication — revised pair
+
+I reread both complete current cards and the original Stephen Earle *Physical Geology* PDF, printed pp. 43–44 (PDF pp. 52–53). The revised `geology-earth-cleavage-planes` asks for the general diagnostic property of breaking along specific planes and fixed orientations. `geology-earth-mica-sheets` asks which mineral forms thin shiny sheets and keys mica. They share the broader concept of cleavage, but the revised pair no longer asks the same mica↔cleavage fact in opposite directions. Earle’s pages support both the general break-pattern property and the specific mica sheet-plane example.
+
+**Pairwise diversity verdict: PASS_DISTINCT_MAIN_FACTS.** This resolves only the duplicate/diversity gate. It does not give `geology-earth-cleavage-planes` a six-field source/editorial PASS; that remains outside this adjudication until all six current fields are independently bound and read. The source-complete mica field review remains unchanged.

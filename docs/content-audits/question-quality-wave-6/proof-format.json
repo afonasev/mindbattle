@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "scope": "Author and independent receipts; no scripted substantive verdicts",
+  "hashContract": {
+    "wholeCard": "sha256 UTF8 json.dumps(card,ensure_ascii=False,sort_keys=True,separators=(comma,colon))",
+    "prompt-key": "sha256 UTF8 canonical JSON [prompt,correctIndex,answers[correctIndex].text]",
+    "note0..note3,explanation": "sha256 literal UTF8 scalar"
+  },
+  "receiptRequired": [
+    "role",
+    "agentIdentity",
+    "cards"
+  ],
+  "cardRequired": [
+    "questionId",
+    "cardCanonicalSha256",
+    "verdict",
+    "editorialAnalysis",
+    "fields"
+  ],
+  "fieldRequired": [
+    "field",
+    "literalSha256",
+    "verdict",
+    "substantiveRead",
+    "claimAnalysis",
+    "proofs"
+  ],
+  "proofRequired": [
+    "sourceClass",
+    "title",
+    "url",
+    "rawCapture",
+    "rawCaptureSha256",
+    "captureFormat",
+    "captureMethod",
+    "locator",
+    "passage",
+    "passageSha256"
+  ],
+  "captureFormats": [
+    "html original bytes",
+    "pdf original bytes with pdfPage locator",
+    "json original bytes with JSON pointer",
+    "text original full fetched response or fully documented original extracted content",
+    "original institutional image/deck scan with pixel locator and explicit visual observation"
+  ],
+  "notOriginal": [
+    "stitched claim summary",
+    "selected quotes pretending full source",
+    "search snippet",
+    "challenge/HTTP error"
+  ],
+  "sourceRule": "Primary institution/official rules/original research or creator originals; each claim must be supported. Translation and logical computation explicitly analyzed; not fabricated as source quote.",
+  "verdictRule": "PASS requires human-like explicit substantive reading in both distinct roles and exact current facts. HOLD/FIX_REQUIRED not coverage. Mechanical validator checks identity/existence only.",
+  "imageRule": "Save original bytes/hash; passage contains explicitly labeled visual observation (not fake textual quotation), locator specifies inspected object/region; actual image must have been viewed."
+}

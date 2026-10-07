@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "wave": "question-quality-wave-6",
+  "scope": "independent semantic-diversity adjudication only; no topic edits",
+  "role": "independent",
+  "agentIdentity": "/root/independent_pilot",
+  "capturedAt": "2026-10-07",
+  "rubricSource": "/Users/eaafonasev/Projects/mindbattle-planning/docs/GAME_SPEC.md:144",
+  "rubric": "Прямой и обратный вопросы одной связи (Темза–Лондон), а также проверенные человеком почти одинаковые вопросы ... не считаются достаточным разнообразием: одна карточка заменяется независимым фактом.",
+  "reviewedQuestionIds": [
+    "geology-earth-mica-sheets",
+    "geology-earth-cleavage-planes"
+  ],
+  "cards": [
+    {
+      "questionId": "geology-earth-mica-sheets",
+      "difficulty": "easy",
+      "prompt": "Какой минерал можно разделить на тонкие блестящие пластинки?",
+      "correctAnswer": "Слюда",
+      "currentCardCanonicalSha256": "07673a18bb8e8e48e1c8af909d65ae160e3dde9d5726182ae430531a634a38c5",
+      "promptKeySha256": "a6e49876fe1f61afd0e43e98b87ff18b1ec1099341173434314d09db1d713e5a",
+      "fieldSha256": {
+        "prompt-key": "a6e49876fe1f61afd0e43e98b87ff18b1ec1099341173434314d09db1d713e5a",
+        "note0": "d5ddc15ebce48be7b8679577ed73866c643f254d54063904df40fe67f388926a",
+        "note1": "81633e6b23ab8afea8e3d344622a41caf83fd7c2577eb8431b5358a65991a8b4",
+        "note2": "ec3e424298f2a51d76d99fc87fd79291774a5607d5fd50190a1c7952005a0c26",
+        "note3": "321fefeeba4de9660fb46068e382b2b9883f05b9b758cd7dd69e49b8e4d02b16",
+        "explanation": "3e69791371c85dc6c38444132116c88313957fa8445867d24a391786ae9b17ab"
+      }
+    },
+    {
+      "questionId": "geology-earth-cleavage-planes",
+      "difficulty": "medium",
+      "prompt": "Какое свойство создаёт у слюды тонкие ровные листочки?",
+      "correctAnswer": "Спайность",
+      "currentCardCanonicalSha256": "0164648b49e9d42d5b33e761a939ea755f759e91a9b292354b306eb23d9c3694",
+      "promptKeySha256": "de471af09e5d24876f7acca708592085d9779b3398941eaa11497c8e3b2f49c7",
+      "fieldSha256": {
+        "prompt-key": "de471af09e5d24876f7acca708592085d9779b3398941eaa11497c8e3b2f49c7",
+        "note0": "f8182e7a20feab90c61cb5bf510fe500eba654487e2f97692e43fa65543e68a8",
+        "note1": "0a7f4fe9777598bdf3fa92b31208a6b6dd0a2300bebe24df2fca6041d0a863ff",
+        "note2": "3b54c42adee536d5da0cb0ea67a7d126a7c8dc8e6feffdab7fb734e0a97aff14",
+        "note3": "aee33feb461bce65cbb8852882b1287a0cddcdb43a66348c3bf63807fd171937",
+        "explanation": "bec3afc8104c071d65393f85fe161b681f802b53b14a04b6c6221df02a14c933"
+      }
+    }
+  ],
+  "candidateAdjudication": {
+    "verdict": "FIX_REQUIRED",
+    "affectedQuestionId": "geology-earth-mica-sheets",
+    "relation": "Both cards test the same mica-sheet cleavage relation: mica splits into thin, flat sheets because cleavage follows weak interlayer planes. The first asks for the mineral given the cleavage behavior; the second asks for the property given the same behavior in mica. This is the reverse/near-identical relation pattern described by the rubric, despite different answer strings and difficulty labels.",
+    "sourceSupportDoesNotResolveDiversity": "Earle pp. 46–47 and 53 support the cleavage facts in both cards. Verified correctness does not make the second card an independent fact.",
+    "recommendation": "Replace one main prompt/key with an independent mica/mineral fact (for example, a source-supported hardness, composition, or occurrence question) while retaining only if its six fields meet the normal gates. Do not apply a general template ban.",
+    "historicalContext": "The independent-geology-pilot.json records the earlier six-field PASS for mica-sheets before this pairwise diversity adjudication. That field-level source/content PASS remains historical context; this pairwise ruling makes mica-sheets ineligible to count as a distinct item until resolved."
+  }
+}
