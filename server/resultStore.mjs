@@ -76,7 +76,7 @@ export function createServerResultQueue(directory, append) {
       const value = JSON.parse(await readFile(join(directory, hash(id) + '.deny.json'), 'utf8'));
       if (value.matchId !== id) throw Error('Invalid statistics revocation');
       denied.add(id); return true;
-    } catch (e) { if (e.code === 'ENOENT') return false; throw e; }
+    } catch (e) { if (e.code === 'ENOENT') return denied.has(id); throw e; }
   }
   async function durable(path, value) {
     await mkdir(directory, { recursive: true });

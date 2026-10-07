@@ -47,10 +47,10 @@ export class ResultUploader implements ResultSink {
   private wakeRequested = false;
   constructor(private queue: ResultQueue, private send: (event: ResultEvent, signal?: AbortSignal) => Promise<string>, private permitted: () => boolean = () => true, private epoch: () => number = () => 0) {}
   private allowed() { return !this.blocked && this.permitted(); }
-  enqueue(e: ResultEvent): void {
-    if (!this.allowed()) return;
-    e = { ...e, _statisticsGeneration: this.epoch() } as QueuedResult;
-    const epoch = this.epoch();
+  enqueue(e: ResultEvent, observationGeneration = this.epoch()): void {
+    if (!this.allowed() || observationGeneration !== this.epoch()) return;
+    e = { ...e, _statisticsGeneration: observationGeneration } as QueuedResult;
+    const epoch = observationGeneration;
     const generation = this.generation;
     this.pending.set(e.eventId, e);
     this.wakeRequested = true;

@@ -101,7 +101,7 @@ describe('statistics permission', () => {
     observer.solo(createSoloRun({profile:'solo-endless-v1',statisticsGeneration:1},'new',0,ctx),undefined,true);expect(events).toHaveLength(1);
     const q=new Queue();await q.put(event);const sent:ResultEvent[]=[];
     const uploader=new ResultUploader(q,async e=>{sent.push(e);return e.eventId;},()=>true,()=>generation);
-    try {await uploader.flush();expect(sent).toEqual([]);uploader.enqueue({...event,eventId:'new'});await uploader.flush();expect(sent).toHaveLength(1);expect(sent[0]).not.toHaveProperty('_statisticsGeneration');}finally{uploader.stop();}
+    try {await uploader.flush();expect(sent).toEqual([]);uploader.enqueue({...event,eventId:'stale-observation'},0);await uploader.flush();expect(sent).toEqual([]);uploader.enqueue({...event,eventId:'new'});await uploader.flush();expect(sent).toHaveLength(1);expect(sent[0]).not.toHaveProperty('_statisticsGeneration');}finally{uploader.stop();}
   });
   it('revokes backlog after replay and rejects a delayed older enable', async () => {
     const denied:string[]=[];let serial=0;
