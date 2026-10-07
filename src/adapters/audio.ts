@@ -19,6 +19,11 @@ export type AudioCue =
 
 type AudioTrack = "event" | "music";
 
+// Music masters average -21 dBFS; brief cues average -27 to -29 dBFS.
+// Give effects 4-6 dB of space at equal slider levels, including saved settings.
+const MUSIC_MIX_GAIN = 0.25;
+const MUSIC_DUCK_GAIN = 0.28;
+
 export interface AudioCueDefinition {
   readonly track: AudioTrack;
   readonly url: string;
@@ -105,7 +110,9 @@ export class AudioController {
 
   private applyMusicVolume(): void {
     const eventDuck = [...this.events.values()].some(event => event.duckMusic);
-    if (this.activeMusic) this.activeMusic.volume = this.settings.musicVolume * (this.musicDucked || eventDuck ? 0.28 : 1) * this.fadeProgress;
+    const volume = this.settings.musicVolume * MUSIC_MIX_GAIN * (this.musicDucked || eventDuck ? MUSIC_DUCK_GAIN : 1);
+    if (this.activeMusic) this.activeMusic.volume = volume * this.fadeProgress;
+    if (this.retiringMusic) this.retiringMusic.volume = volume * (1 - this.fadeProgress);
   }
 
   private finishEvent(source: AudioSource): void {
@@ -161,7 +168,7 @@ export class AudioController {
     try {
       source = this.sourceFactory.create(definition.url);
       const playingSource = source;
-      source.volume = volume * (definition.track === "music" && this.musicDucked ? 0.28 : 1);
+      source.volume = volume * (definition.track === "music" ? MUSIC_MIX_GAIN : 1);
       source.currentTime = 0;
       source.loop = definition.loop === true;
       if (definition.track === "event") {
@@ -186,13 +193,11 @@ export class AudioController {
         this.activeMusicCue = cue;
         if (previousMusic && this.musicTransitionMs > 0) {
           this.retiringMusic = previousMusic;
-          const previousVolume = previousMusic.volume;
           const startedAt = Date.now();
           this.fadeProgress = 0;
           this.applyMusicVolume();
           this.fadeTimer = setInterval(() => {
             this.fadeProgress = Math.min(1, (Date.now() - startedAt) / this.musicTransitionMs);
-            previousMusic.volume = previousVolume * (1 - this.fadeProgress);
             this.applyMusicVolume();
             if (this.fadeProgress === 1) this.clearTransition();
           }, 25);

@@ -46,6 +46,42 @@ function factory(sources: FakeSource[], options: { reject?: boolean; throwOnCrea
 }
 
 describe("audio controller", () => {
+  it("keeps brief effects above the music at equal saved slider levels", () => {
+    const sources: FakeSource[] = [];
+    const audio = new AudioController(factory(sources), { musicVolume: .7, effectsVolume: .7, muted: false });
+    audio.play("game-theme");
+    audio.play("answer-locked");
+    // The quietest cue is 8 dB below the music master; the mix must reverse that gap.
+    const relativeDb = -8 + 20 * Math.log10(sources[1].volume / sources[0].volume);
+    expect(relativeDb).toBeGreaterThan(4);
+    audio.update({ musicVolume: 1, effectsVolume: 1, muted: false });
+    expect(sources[0].volume).toBeCloseTo(.25);
+    expect(sources[1].volume).toBe(1);
+    audio.stopEvents();
+    audio.stopMusic();
+  });
+
+  it("ducks both sides of a music transition and applies updated sliders to both", () => {
+    vi.useFakeTimers();
+    try {
+      const sources: FakeSource[] = [];
+      const audio = new AudioController(factory(sources), { musicVolume: 1, effectsVolume: 1, muted: false }, 650);
+      audio.play("game-theme");
+      audio.play("game-theme-two");
+      vi.advanceTimersByTime(325);
+      audio.play("reveal-all");
+      expect(sources[0].volume + sources[1].volume).toBeCloseTo(.07);
+      audio.update({ musicVolume: .4, effectsVolume: .8, muted: false });
+      expect(sources[0].volume + sources[1].volume).toBeCloseTo(.028);
+      expect(sources[2].volume).toBe(.8);
+      audio.stopEvents();
+      expect(sources[0].volume + sources[1].volume).toBeCloseTo(.1);
+      vi.advanceTimersByTime(325);
+      expect(sources[0].paused).toBe(true);
+      expect(sources[1].volume).toBeCloseTo(.1);
+      audio.stopMusic();
+    } finally { vi.useRealTimers(); }
+  });
   it("uses stable local URLs, loops themes and does not restart the active music cue", () => {
     expect(Object.values(AUDIO_CUE_MANIFEST).every(({ url }) => url.startsWith("/audio/"))).toBe(true);
     const sources: FakeSource[] = [];
@@ -55,7 +91,7 @@ describe("audio controller", () => {
     expect(audio.play("countdown")).toBe(true);
     expect(audio.play("game-theme")).toBe(true);
     expect(audio.play("game-theme")).toBe(true);
-    expect(sources[0]).toMatchObject({ paused: true, currentTime: 0, volume: 1, loop: true });
+    expect(sources[0]).toMatchObject({ paused: true, currentTime: 0, volume: 0.25, loop: true });
     expect(sources[1]).toMatchObject({ paused: false, playCalls: 1 });
     expect(sources).toHaveLength(3);
   });
@@ -65,11 +101,11 @@ describe("audio controller", () => {
     const audio = new AudioController(factory(sources), { musicVolume: 0.5, effectsVolume: 0.8, muted: false });
     audio.play("game-theme");
     audio.setMusicDucked(true);
-    expect(sources[0].volume).toBeCloseTo(0.14);
+    expect(sources[0].volume).toBeCloseTo(0.035);
     audio.play("timer-last-second");
     expect(sources[1].volume).toBeCloseTo(0.8);
     audio.setMusicDucked(false);
-    expect(sources[0].volume).toBeCloseTo(0.5);
+    expect(sources[0].volume).toBeCloseTo(0.125);
   });
 
   it("keeps music playback alive at zero volume and restores separate levels without restarting", () => {
@@ -83,7 +119,7 @@ describe("audio controller", () => {
     audio.update({ musicVolume: 0.4, effectsVolume: 0.9, muted: false });
     expect(audio.play("game-theme")).toBe(true);
     expect(sources).toHaveLength(2);
-    expect(sources[0]).toMatchObject({ paused: false, volume: 0.4, playCalls: 1 });
+    expect(sources[0]).toMatchObject({ paused: false, volume: 0.1, playCalls: 1 });
   });
 
   it("is silent when muted and survives source failure", async () => {
@@ -176,7 +212,7 @@ describe("stage music and lifecycle", () => {
     audio.stopMusic();
     audio.setMusicDucked(true);
     audio.play("game-theme-two");
-    expect(sources[3].volume).toBeCloseTo(.112);
+    expect(sources[3].volume).toBeCloseTo(.028);
   });
 
   it("crossfades a theme change and stops both sources when muted mid-transition", () => {
@@ -188,11 +224,11 @@ describe("stage music and lifecycle", () => {
       audio.play("game-theme-two");
       expect(sources[1].volume).toBe(0);
       vi.advanceTimersByTime(325);
-      expect(sources[0].volume).toBeCloseTo(.25);
-      expect(sources[1].volume).toBeCloseTo(.25);
+      expect(sources[0].volume).toBeCloseTo(.0625);
+      expect(sources[1].volume).toBeCloseTo(.0625);
       vi.advanceTimersByTime(325);
       expect(sources[0].paused).toBe(true);
-      expect(sources[1].volume).toBeCloseTo(.5);
+      expect(sources[1].volume).toBeCloseTo(.125);
       audio.play("game-theme-three");
       vi.advanceTimersByTime(100);
       audio.update({ musicVolume: .5, effectsVolume: .5, muted: true });
@@ -274,14 +310,14 @@ describe("accepted answer and SFX lifecycle", () => {
       audio.play("reveal-all");
       expect(sources[1].paused).toBe(true);
       expect(sources[2].paused).toBe(false);
-      expect(sources[0].volume).toBeCloseTo(.14);
+      expect(sources[0].volume).toBeCloseTo(.035);
       vi.advanceTimersByTime(3500);
-      expect(sources[0].volume).toBeCloseTo(.5);
+      expect(sources[0].volume).toBeCloseTo(.125);
       audio.play("reveal-none");
       audio.setMusicDucked(true);
       audio.stopEvents();
       expect(sources[4].paused).toBe(true);
-      expect(sources[0].volume).toBeCloseTo(.14);
+      expect(sources[0].volume).toBeCloseTo(.035);
       expect(vi.getTimerCount()).toBe(0);
     } finally { vi.useRealTimers(); }
   });
