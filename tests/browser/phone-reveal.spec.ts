@@ -12,6 +12,11 @@ for (const width of [360,760]) for (const count of [2,12]) {
     await page.route("**/api/network/stream?*", route => route.fulfill({contentType:"text/event-stream", body:`event: connected\ndata: {"generation":1}\n\ndata: ${JSON.stringify(current)}\n\n`}));
     await page.route("**/api/network/heartbeat?*", route => route.fulfill({json:{ok:true}}));
     await page.goto("/network?muted=1");
+    await expect(page.locator(".network-reserve")).toBeVisible();
+    await expect(page.locator(".network-reserve")).toContainText("Запас времени");
+    await expect(page.locator(".network-reserve strong")).toHaveText("60 с");
+    await expect(page.locator(".network-cards")).not.toContainText("Запас");
+    expect(await page.locator(".network-reserve strong").evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(32);
     await expect(page.locator(".network-explanation > p")).toHaveCount(1);
     await expect(page.locator(".network-explanation > p")).toContainText("Основное объяснение раскрывается");
     await expect(page.locator(".network-explanation .wrong-answer-notes article")).toHaveCount(3);
@@ -21,6 +26,9 @@ for (const width of [360,760]) for (const count of [2,12]) {
     await expect(page.locator(".network-answers small").first()).toContainText("Александр 1");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({path:info.outputPath(`${seed}-reveal-${width}-${count}.png`),fullPage:true});
+    current = {...current, view: {...current.view!, teams: current.view!.teams.map(card => ({...card, reserveMs:12_000}))}};
+    await page.reload();
+    await expect(page.locator(".network-reserve strong")).toHaveText("12 с");
     current = {...current, phase:"standings", revealedChoices:undefined, view:{...current.view!,phase:"standings",question:undefined,standings:current.players.map((p,index)=>({teamId:p.id,rank:p.departed ? 0 : 1,score:100,correct:1,incorrect:2,noAnswer:1}))}};
     await page.reload();
     await expect(page.locator(".network-standings tbody > tr")).toHaveCount(count);

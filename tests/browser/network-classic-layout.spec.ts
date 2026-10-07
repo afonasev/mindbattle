@@ -15,6 +15,8 @@ for (const count of [2, 12]) for (const accessible of [false, true]) {
     await page.route('**/api/network/heartbeat?*', route => route.fulfill({ json: { ok: true } }));
     await page.goto('/network?muted=1');
     await expect(page.locator('.network-player-card')).toHaveCount(count);
+    await expect(page.locator('.network-cards')).not.toContainText('Запас');
+    await expect(page.locator('.network-reserve')).toHaveCount(0);
     await expect(page.locator('.network-player-card--correct')).toHaveCount(count === 2 ? 1 : 3);
     await expect(page.locator('.network-explanation .wrong-answer-notes article')).toHaveCount(3);
     await expect(page.locator('.network-player-card strong')).toHaveText(display.view.teams.map(p => p.name));
@@ -43,6 +45,8 @@ for (const count of [2, 12]) for (const accessible of [false, true]) {
     await page.reload();
     await expect(page.locator('.network-question-area:not(.revealed)')).toBeVisible();
     await expect(page.locator('.network-player-card')).toHaveCount(count);
+    await expect(page.locator('.network-cards')).not.toContainText('Запас');
+    await expect(page.locator('.network-reserve')).toHaveCount(0);
     await expect(page.locator('.network-player-card[class*="network-player-card--"]')).toHaveCount(0);
     await expect(page.locator('.network-answers .correct, .network-answers .wrong')).toHaveCount(0);
     await expect(page.locator('.network-answers small, .network-explanation')).toHaveCount(0);
