@@ -5,6 +5,21 @@ export interface Credential {
   token: string;
   role: "display" | "player";
 }
+export interface LobbyRoom {
+  code: string;
+  title: string;
+  playerCount: number;
+  passwordProtected: boolean;
+  phase: "lobby" | "playing";
+  leaderName?: string;
+  role?: Credential["role"];
+  selfName?: string;
+}
+export interface LobbyCatalog {
+  rooms: LobbyRoom[];
+  ownRooms: LobbyRoom[];
+  invalidIndexes: number[];
+}
 export interface NetworkPlayer {
   id: TeamId;
   name: string;
@@ -30,6 +45,8 @@ export interface NetworkVeto {
 }
 export interface NetworkSnapshot {
   code: string;
+  title: string;
+  passwordProtected: boolean;
   epoch: number;
   phaseRevision: number;
   serverTime: number;

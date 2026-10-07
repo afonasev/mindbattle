@@ -1,3 +1,4 @@
+import { createNetworkGame, selectNetworkGame } from "./network-lobby-helpers";
 import { expect, test, type Page } from "@playwright/test";
 
 async function instrument(page: Page) {
@@ -110,8 +111,7 @@ test("network display owns timer/reserve/answer effects while both player browse
   test.setTimeout(60000);
   await instrument(page);
   await page.goto("/network");
-  await page.getByRole("button", { name: "Создать сетевую игру", exact: true }).click();
-  const code = await page.locator(".network-code").innerText();
+  const code = await createNetworkGame(page);
   const contexts = [];
   const phones: Page[] = [];
   try {
@@ -122,7 +122,7 @@ test("network display owns timer/reserve/answer effects while both player browse
       phones.push(phone);
       await instrument(phone);
       await phone.goto("/network");
-      await phone.getByLabel("Код комнаты").fill(code);
+      await selectNetworkGame(phone, code);
       await phone.getByLabel("Ваше имя").fill(`Аудио ${index+1}`);
       await phone.getByRole("button", { name: "Подключиться", exact: true }).click();
     }

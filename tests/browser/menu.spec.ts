@@ -1,3 +1,4 @@
+import { createNetworkGame, selectNetworkGame } from "./network-lobby-helpers";
 import { expect, test } from "@playwright/test";
 
 test("main menu uses one tagline on every viewport", async ({ page }, testInfo) => {
@@ -57,8 +58,7 @@ for (const width of [1280, 390]) {
 
 test("network menu preserves leader authority and pause through settings", async ({ browser, page }, testInfo) => {
   await page.goto("/network?muted=1");
-  await page.getByRole("button", { name: "Создать сетевую игру", exact: true }).click();
-  const code = await page.locator(".network-code").innerText();
+  const code = await createNetworkGame(page);
   const contexts = [];
   const phones = [];
   try {
@@ -67,7 +67,7 @@ test("network menu preserves leader authority and pause through settings", async
       contexts.push(context);
       const phone = await context.newPage(); phones.push(phone);
       await phone.goto("/network?muted=1");
-      await phone.getByLabel("Код комнаты").fill(code);
+      await selectNetworkGame(phone, code);
       await phone.getByLabel("Ваше имя").fill(name);
       await phone.getByRole("button", { name: "Подключиться", exact: true }).click();
       await expect(phone.getByText("Вы в комнате. Ждём начала игры.")).toBeVisible();

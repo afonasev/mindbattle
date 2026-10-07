@@ -8,7 +8,10 @@ async function connect(credential){
 }
 const streams=[];
 try{
- const {response,value:display}=await post("create",{});assert.equal(response.status,201);assert.match(display.code,/^\d{4}$/);
+ const {response,value:display}=await post("create",{title:"API smoke",password:"smoke-test"});assert.equal(response.status,201);assert.match(display.code,/^[a-f0-9]{16}$/);
+ const catalog=await post("catalog",{});assert.ok(catalog.value.rooms.some(r=>r.code===display.code && r.title==="API smoke" && r.passwordProtected));
+ const wrong=await post("join",{code:display.code,name:"API player",password:"wrong"});assert.equal(wrong.response.status,403);
+ const own=await post("catalog",{credentials:[display]});assert.equal(own.value.ownRooms[0].role,"display");
  const first=await connect(display);streams.push(first);assert.match(await first.next(),/event: connected/);let snapshot=JSON.parse((await first.next()).slice(6));assert.equal(snapshot.phase,"lobby");
  const second=await connect(display);streams.push(second);let replaced=false;for(let i=0;i<5;i++){const event=await first.next();if(event?.includes("event: replaced")){replaced=true;break;}}assert.equal(replaced,true,"old stream must be explicitly replaced");
  assert.match(await second.next(),/event: connected/);snapshot=JSON.parse((await second.next()).slice(6));
@@ -16,5 +19,5 @@ try{
  const result=await post("command",{commandId:crypto.randomUUID(),epoch:snapshot.epoch,phaseRevision:snapshot.phaseRevision,action:{type:"close"}},display);assert.equal(result.response.status,200);assert.equal(result.value.closed,true);
  let expired=false;for(let i=0;i<8;i++){const event=await second.next();if(event===null)break;if(event.includes("event: expired"))expired=true;}assert.equal(expired,true);
  await new Promise(r=>setTimeout(r,350));const after=await post("command",{},display);assert.equal(after.response.status,404);
- console.log("PASS: production API code, authorization, stream replacement, close acknowledgement, stream cleanup and room removal");
+ console.log("PASS: production API named lobby, password, membership, authorization, stream replacement, close acknowledgement, stream cleanup and room removal");
 }finally{for(const stream of streams)stream.abort.abort();}
