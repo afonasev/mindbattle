@@ -1,3 +1,5 @@
+import { registerStatisticsRoom } from '../statistics/control';
+import { statisticsEnabled, readStatisticsPreference } from '../statistics/preference';
 import { NetworkEntry } from "./NetworkEntry";
 import { ComplaintDialog } from './ComplaintDialog';
 import type { ComplaintContext } from '../feedback/types';
@@ -225,8 +227,11 @@ export function NetworkApp() {
   async function enter(data: { title: string; password: string } | { code: string; name: string; password: string }, create: boolean) {
     setBusy(true); setError(""); enableAudio();
     try {
-      const next = await networkRequest<Credential>(create ? "create" : "join", data);
-      saveCredential(next); setCredential(next);
+      const permission = readStatisticsPreference(localStorage);
+      const next = await networkRequest<Credential>(create ? "create" : "join", create ? { ...data, collectStatistics: statisticsEnabled(), statisticsRevision: permission.revision ?? 0, statisticsGeneration: permission.generation ?? 0 } : data);
+      saveCredential(next);
+      if (create) await registerStatisticsRoom(next, permission.generation ?? 0);
+      setCredential(next);
     } catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
   }
@@ -266,15 +271,15 @@ export function NetworkApp() {
   const personalAnswerTime = !display && phase === "answering" && personalCard?.remainingMs !== undefined && (view?.baseRemainingMs ?? 0) > 0;
   const turnStatus = snapshot ? phoneStatus(snapshot) : null;
   useEffect(() => {
-    if (complaint && (!snapshot?.isLeader || phase !== 'reveal' || snapshot.complaintContext?.eventId !== complaint.eventId)) setComplaint(null);
-  }, [snapshot?.isLeader, phase, snapshot?.complaintContext?.eventId, complaint]);
+    if (complaint && (snapshot?.role !== 'player' || phase !== 'reveal' || snapshot.complaintContext?.eventId !== complaint.eventId)) { setComplaint(null); setLocalMenuOpen(false); }
+  }, [snapshot?.role, phase, snapshot?.complaintContext?.eventId, complaint]);
   const canSkipConfirmation =
     mobile &&
     !!snapshot?.isLeader &&
     phase === "topic-confirmation" &&
     !locked;
   function openMenu() {
-    if (snapshot?.isLeader && phase !== "lobby" && phase !== "finished" && !snapshot.paused) void act({ type: "pause" });
+    if (snapshot?.isLeader && phase !== "reveal" && phase !== "lobby" && phase !== "finished" && !snapshot.paused) void act({ type: "pause" });
     else setLocalMenuOpen(true);
   }
   useEffect(() => {
@@ -847,12 +852,13 @@ export function NetworkApp() {
                 {display && snapshot.disconnected.map((player) => <div key={player.id}><p>{player.name} отключился</p><MenuAction disabled={busy} onClick={() => void act({ type: "exclude", playerId: player.id })}>Продолжить без {player.name}</MenuAction></div>)}
                 <p>{snapshot.isLeader ? "Когда все вернутся, продолжите игру." : "Ждём подключения игроков и команды ведущего."}</p>
               </>}
+              {!snapshot.paused && snapshot.isLeader && phase === "reveal" && <MenuAction disabled={busy} onClick={() => { setLocalMenuOpen(false); void act({ type: 'pause' }); }}>Пауза для всех</MenuAction>}
               {!snapshot.paused && phase !== "lobby" && phase !== "finished" && <p>Сетевая партия продолжается. Общей паузой управляет ведущий.</p>}
             </SessionMenu>
           )}
         </>
       )}
-      {complaint && snapshot?.complaintContext?.eventId === complaint.eventId && snapshot.isLeader && <ComplaintDialog context={complaint} close={() => { setComplaint(null); if (snapshot.paused) void act({ type: 'resume' }); else setLocalMenuOpen(false); }} />}
+      {complaint && snapshot?.complaintContext?.eventId === complaint.eventId && snapshot.role === 'player' && <ComplaintDialog context={complaint} close={() => { setComplaint(null); setLocalMenuOpen(false); }} />}
       {pauseSettingsOpen && (
         <SettingsDialog preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} />
       )}

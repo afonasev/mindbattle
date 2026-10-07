@@ -45,6 +45,8 @@ export interface GameControllerDependencies {
   readonly seeds: GameSeedSource;
   readonly feedback?: DifficultyFeedbackSink;
   readonly results?: ResultSink;
+  readonly statisticsEnabled?: () => boolean;
+  readonly statisticsGeneration?: () => number;
 }
 
 export type SavedMatchStatus = "in-progress" | "completed" | null;
@@ -78,6 +80,8 @@ function validSavedState(
 
 export class GameController {
   private results: ResultObserver;
+  private readonly statisticsEnabled: () => boolean;
+  private readonly statisticsGeneration: () => number;
   private readonly catalog: ContentCatalog;
   private readonly storage: StorageLike;
   private readonly clock: GameControllerClock;
@@ -104,7 +108,9 @@ export class GameController {
       (history) => migrateQuestionHistory(this.catalog.topics, history)
     ) as PersistedData<MatchState>;
     this.context = new CatalogDomainContext(this.catalog, this.persisted.history);
-    this.results = new ResultObserver(dependencies.results, this.context);
+    this.statisticsGeneration = dependencies.statisticsGeneration ?? (() => 0);
+    this.statisticsEnabled = dependencies.statisticsEnabled ?? (() => true);
+    this.results = new ResultObserver(dependencies.results, this.context, generation => this.statisticsEnabled() && (generation ?? 0) === this.statisticsGeneration());
     this.restorableState = validSavedState(this.persisted.lastMatch, this.catalog.revision);
     if (!this.restorableState && this.persisted.lastMatch) {
       this.persisted = { ...this.persisted, lastMatch: null };
@@ -155,7 +161,7 @@ export class GameController {
     this.context = new CatalogDomainContext(this.catalog, this.persisted.history);
     const seed = this.seeds.nextSeed();
     this.currentState = createMatch(
-      config,
+      { ...config, statisticsGeneration: this.statisticsGeneration(), collectStatistics: this.statisticsEnabled() && config.collectStatistics !== false },
       seed,
       this.clock.now(),
       this.context,
@@ -297,8 +303,15 @@ export class GameController {
     this.saveSucceeded = savePersistedData(this.storage, this.persisted);
   }
 
+  disableStatistics(): void {
+    if (this.currentState) this.currentState = { ...this.currentState, config: { ...this.currentState.config, collectStatistics: false } };
+    if (this.restorableState) this.restorableState = { ...this.restorableState, config: { ...this.restorableState.config, collectStatistics: false } };
+    if (this.currentState) this.persistCurrent();
+  }
+
   private persistCurrent(): void {
     if (!this.currentState) return;
+    if (!this.statisticsEnabled()) this.currentState = { ...this.currentState, config: { ...this.currentState.config, collectStatistics: false } };
     this.results.match(this.currentState);
     const lastMatch: LastMatchSnapshot<MatchState> = {
       status: snapshotStatus(this.currentState),

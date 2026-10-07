@@ -23,6 +23,8 @@ export const SOLO_ENDLESS_V1 = Object.freeze({
 export interface SoloConfig {
   readonly profile: "solo-endless-v1";
   readonly collectQuestionFeedback?: boolean;
+  readonly collectStatistics?: boolean;
+  readonly statisticsGeneration?: number;
 }
 
 export interface SoloSlot {
@@ -178,7 +180,7 @@ export function createSoloRun(config: SoloConfig, seed: string, atMs: number, co
     runId,
     seed,
     random: seedRandom(seed),
-    config: { profile: config.profile, collectQuestionFeedback: config.collectQuestionFeedback ?? true },
+    config: { profile: config.profile, collectQuestionFeedback: config.collectQuestionFeedback ?? true, statisticsGeneration: config.statisticsGeneration ?? 0, collectStatistics: config.collectStatistics ?? true },
     slotIndex: 0,
     musicStage: 0,
     score: 0,

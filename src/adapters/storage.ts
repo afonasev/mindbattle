@@ -280,9 +280,21 @@ export function loadPersistedData(
 
 export function savePersistedData(storage: StorageLike, data: PersistedData): boolean {
   try {
-    const pending = legacySnapshotFeedback(storage.getItem(STORAGE_KEY));
+    const raw = storage.getItem(STORAGE_KEY);
+    const pending = legacySnapshotFeedback(raw);
     for (const event of data.pendingFeedback ?? []) if (!pending.some(item => item.eventId === event.eventId)) pending.push(event);
-    storage.setItem(STORAGE_KEY, JSON.stringify({ ...data, ...(pending.length ? { pendingFeedback: pending } : {}) }));
+    // Older controller instances must not restore a revoked statistics permission.
+    let latest: any;
+    try { latest = JSON.parse(raw ?? 'null'); } catch { /* unrelated corrupt snapshot */ }
+    const next: any = { ...data, ...(pending.length ? { pendingFeedback: pending } : {}) };
+    for (const key of ['lastMatch', 'lastSolo']) {
+      const previous = latest?.[key]?.state; const current = next[key]?.state;
+      const id = key === 'lastMatch' ? 'matchId' : 'runId';
+      if (previous?.config?.collectStatistics === false && previous?.[id] && previous[id] === current?.[id]) {
+        next[key] = { ...next[key], state: { ...current, config: { ...current.config, collectStatistics: false } } };
+      }
+    }
+    storage.setItem(STORAGE_KEY, JSON.stringify(next));
     return true;
   } catch {
     return false;

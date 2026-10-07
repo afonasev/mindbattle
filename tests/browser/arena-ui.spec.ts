@@ -67,7 +67,6 @@ test("solo result remains reachable after its final answer reveal", async ({ pag
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/?muted=1");
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
-  await page.getByLabel("Собирать обратную связь по вопросам").uncheck();
   await page.getByRole("button", { name: "Назад", exact: true }).click();
   await page.getByRole("button", { name: "Одиночная игра", exact: true }).click();
   for (let round = 0; round < 3; round++) {

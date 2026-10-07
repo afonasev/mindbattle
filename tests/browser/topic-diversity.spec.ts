@@ -8,7 +8,6 @@ async function settings(page: Page) {
   await page.getByRole('button', { name: 'Настройки', exact: true }).click();
   const sound = page.getByRole('button', { name: 'Звук включён', exact: true });
   if (await sound.count()) await sound.click();
-  await page.getByLabel('Собирать обратную связь по вопросам').uncheck();
   await page.getByRole('button', { name: 'Назад', exact: true }).click();
 }
 function distinct(ids: string[]) { expect(ids.every(id => groups[id])).toBe(true); expect(new Set(ids.map(id => groups[id])).size).toBe(ids.length); }

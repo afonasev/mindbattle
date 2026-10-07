@@ -57,7 +57,7 @@ export async function networkRequest<T>(
     },
   );
   const value = await response.json();
-  if (!response.ok) throw new Error(value.error ?? "Ошибка соединения");
+  if (!response.ok) throw Object.assign(new Error(value.error ?? "Ошибка соединения"), { status: response.status });
   return value as T;
 }
 export class NetworkConnection {

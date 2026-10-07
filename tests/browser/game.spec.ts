@@ -293,7 +293,7 @@ test("menu defaults, offline startup and responsive shell", async ({ context, pa
   expect(externalRequests).toEqual([]);
 });
 
-test("skips question feedback without calling its API when the match setting is disabled", async ({ page }) => {
+test("continues without a complaint when anonymous statistics is disabled", async ({ page }) => {
   let feedbackRequests = 0;
   page.on("request", (request) => {
     if (new URL(request.url()).pathname === "/api/difficulty-feedback") feedbackRequests += 1;
@@ -301,12 +301,12 @@ test("skips question feedback without calling its API when the match setting is 
 
   await page.getByRole("button", { name: "Назад", exact: true }).click();
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
-  await page.getByLabel("Собирать обратную связь по вопросам").uncheck();
+  await page.getByLabel("Отправлять анонимную статистику", { exact: true }).uncheck();
   await page.getByRole("button", { name: "Назад", exact: true }).click();
   await openClassicSetup(page);
   await page.getByRole("button", { name: "9", exact: true }).click();
   await page.getByRole("button", { name: "Начать игру" }).click();
-  expect((await storedState(page)).config.collectQuestionFeedback).toBe(false);
+  expect((await storedState(page)).config.collectStatistics).toBe(false);
   await chooseCurrentTopic(page);
   const answering = await storedState(page);
   if (answering.phase.kind !== "answering") throw new Error("Expected answering phase");
@@ -624,7 +624,6 @@ test("supports N+1 public bonus veto for three and four assigned teams", async (
     await openClassicSetup(page);
     await page.getByRole("button", { name: "Назад", exact: true }).click();
     await page.getByRole("button", { name: "Настройки", exact: true }).click();
-    await page.getByLabel("Собирать обратную связь по вопросам").uncheck();
     await page.getByRole("button", { name: "Назад", exact: true }).click();
     await openClassicSetup(page);
     await page.getByRole("button", { name: String(teamCount), exact: true }).click();

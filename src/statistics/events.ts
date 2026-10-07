@@ -13,7 +13,7 @@ export interface ResultEvent {
   units?: { id: string; score: number; correct: number; incorrect: number; noAnswer: number }[];
   score?: number; lives?: number; winnerId?: string;
 }
-export interface ResultSink { enqueue(event: ResultEvent): void }
+export interface ResultSink { enqueue(event: ResultEvent): void; disableMatch?(matchId: string): Promise<void> }
 // Content fingerprint of the complete domain question; not a cryptographic signature.
 export function questionVersion(context: DomainContext, id: string): string {
   let hash = 14695981039346656037n;
@@ -29,13 +29,14 @@ export function metrics(e: ResultEvent) {
 }
 export class ResultObserver {
   private seen = new Set<string>();
-  constructor(private sink: ResultSink | undefined, private context: DomainContext) {}
+  constructor(private sink: ResultSink | undefined, private context: DomainContext, private permitted: (generation?: number) => boolean = () => true) {}
   private emit(e: ResultEvent) {
     if (!this.sink || this.seen.has(e.eventId)) return;
     this.seen.add(e.eventId);
     try { this.sink.enqueue(e); } catch { /* diagnostics must never break play */ }
   }
   match(state: MatchState, interrupted?: string, starting = false) {
+    if (!this.permitted(state.config.statisticsGeneration) || state.config.collectStatistics === false) return;
     try { this.captureMatch(state, interrupted, starting); } catch { /* isolated diagnostics */ }
   }
   private captureMatch(state: MatchState, interrupted?: string, starting: boolean = false) {
@@ -62,6 +63,7 @@ export class ResultObserver {
     }
   }
   solo(state: SoloState, interrupted?: string, starting = false) {
+    if (!this.permitted(state.config.statisticsGeneration) || state.config.collectStatistics === false) return;
     try { this.captureSolo(state, interrupted, starting); } catch { /* isolated diagnostics */ }
   }
   private captureSolo(state: SoloState, interrupted?: string, starting: boolean = false) {

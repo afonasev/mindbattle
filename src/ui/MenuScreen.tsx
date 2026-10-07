@@ -19,14 +19,12 @@ export interface MenuSettings {
   readonly answerTimeMs: MatchConfig["answerTimeMs"];
   readonly teamCount: 2 | 3 | 4;
   readonly assignments: readonly TeamControlAssignment[];
-  readonly collectQuestionFeedback: boolean;
 }
 
 export const DEFAULT_MENU_SETTINGS: MenuSettings = {
   questionCount: 15,
   answerTimeMs: 20_000,
   teamCount: 2,
-  collectQuestionFeedback: true,
   assignments: [
     { teamId: "green", source: { kind: "keyboard", layout: "wasd" } },
     { teamId: "blue", source: { kind: "keyboard", layout: "arrows" } }
@@ -180,7 +178,7 @@ export function MenuScreen({
       </section>
       )}
 
-      {settingsOpen && <PresentationSettings preferences={preferences} setPreferences={setPreferences} session={{ collectQuestionFeedback: settings.collectQuestionFeedback, setCollectQuestionFeedback: (value) => setSettings({ ...settings, collectQuestionFeedback: value }), resetHistory }} />}
+      {settingsOpen && <PresentationSettings preferences={preferences} setPreferences={setPreferences} session={{ resetHistory }} />}
     </ScreenSurface>
   );
 }

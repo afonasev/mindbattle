@@ -29,15 +29,31 @@ test("network optional complaint returns to reveal and continuation needs no ser
     await expect(phones[0].locator(".network-answers button").first()).toBeVisible();
     await phones[0].locator(".network-answers button").first().click();
     await phones[1].locator(".network-answers button").first().click();
-    await phones[1].getByRole('button',{name:'Меню',exact:true}).click();
-    await expect(phones[1].getByRole('button',{name:'Пожаловаться на вопрос',exact:true})).toHaveCount(0);
-    await phones[1].getByRole('button',{name:'Назад',exact:true}).click();
+    const sharedPause: string[] = [];
+    for (const phone of phones) {
+      phone.on('request', request => { if (new URL(request.url()).pathname === '/api/network/command' && ['pause','resume'].includes(request.postDataJSON()?.action?.type)) sharedPause.push(request.postDataJSON().action.type); });
+      await phone.route('**/api/difficulty-feedback',route => route.abort('failed'));
+    }
+    await openComplaint(phones[1]);
+    await phones[1].getByRole('button',{name:'Неоднозначный ответ',exact:true}).click();
+    await phones[1].getByRole('button',{name:'Сохранить жалобу',exact:true}).click();
+    await expect.poll(async () => (await pendingComplaints(phones[1])).length).toBe(1);
+    const other = (await pendingComplaints(phones[1]))[0];
     await phones[0].route('**/api/difficulty-feedback',route => route.abort('failed'));
     await openComplaint(phones[0]);await phones[0].getByRole('button',{name:'Фактическая ошибка',exact:true}).click();
     await phones[0].getByRole('button',{name:'Сохранить жалобу',exact:true}).click();
     await expect(phones[0].getByRole('button',{name:'Дальше',exact:true})).toBeVisible();
     await expect.poll(async () => (await pendingComplaints(phones[0])).length).toBe(1);
+    const leader = (await pendingComplaints(phones[0]))[0];
+    expect(leader.eventId).not.toBe(other.eventId);
+    expect(other.complaintReasons).toEqual(['ambiguous-answer']);
+    expect(leader.complaintReasons).toEqual(['suspected-error']);
+    expect(Object.keys(other).sort()).toEqual(Object.keys(leader).sort());
+    expect(sharedPause).toEqual([]);
+    await openComplaint(phones[1]);
+    await expect(phones[1].getByRole('dialog',{name:'Жалоба сохранена',exact:true})).toBeVisible();
     await phones[0].getByRole('button',{name:'Дальше',exact:true}).click();
+    await expect(phones[1].getByRole('dialog')).toHaveCount(0);
     await expect(phones[0].getByRole("dialog", { name: "Отправка фидбэка временно недоступна" })).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /Выбирает Участник/ })).toBeVisible();
   } finally {

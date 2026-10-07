@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { ResultObserver, type ResultSink } from '../statistics/events';
 import {
   activeTeams,
@@ -47,6 +48,9 @@ export class NetworkRoom {
   closed = false;
   feedbackError = "";
   private readonly results: ResultObserver;
+  private complaintIds = new Map<string, string>();
+  private statisticsMatches = new Set<string>();
+  private statisticsChanges: Promise<void> = Promise.resolve();
   private sequence = 0;
   private processed = new Map<string, Set<string>>();
   private feedbackPending = false;
@@ -63,7 +67,36 @@ export class NetworkRoom {
     results?: ResultSink,
     readonly title = "Сетевая игра",
     readonly passwordProtected = false,
-  ) { this.results = new ResultObserver(results, context); }
+    public statisticsEnabled = true,
+    private readonly resultSink?: ResultSink,
+    private statisticsRevision = 0,
+    private statisticsGeneration = 0,
+  ) { this.resultSink = resultSink ?? results; this.results = new ResultObserver(results, context, () => this.statisticsEnabled); }
+  setStatistics(token: string, enabled: boolean, revision?: number, generation?: number): Promise<void> {
+    if (token !== this.organizerToken) return Promise.reject(new RoomError('Это действие доступно устройству-создателю', 403));
+    if (typeof enabled !== 'boolean') return Promise.reject(new RoomError('Некорректная настройка статистики'));
+    if ([revision, generation].some(value => value !== undefined && (!Number.isSafeInteger(value) || value < 0))) return Promise.reject(new RoomError('Некорректная версия настройки статистики'));
+    const work = this.statisticsChanges.then(async () => {
+      if (revision !== undefined && revision < this.statisticsRevision) return;
+      const revoke = !enabled || (generation ?? this.statisticsGeneration) > this.statisticsGeneration;
+      this.statisticsEnabled = revoke ? false : enabled;
+      if (revoke) {
+        if (this.state) this.state = { ...this.state, config: { ...this.state.config, collectStatistics: false } };
+        await Promise.all([...this.statisticsMatches].map(id => this.resultSink?.disableMatch?.(id)));
+      }
+      this.statisticsRevision = revision ?? this.statisticsRevision;
+      this.statisticsGeneration = generation ?? this.statisticsGeneration;
+      this.statisticsEnabled = enabled;
+      this.changed();
+    });
+    this.statisticsChanges = work.catch(() => {});
+    return work;
+  }
+  private complaintId(key: string): string {
+    let id = this.complaintIds.get(key);
+    if (!id) { id = `feedback-v3:${randomUUID()}`; this.complaintIds.set(key, id); }
+    return id;
+  }
   interruptResults(reason: string) {
     if (this.state && this.state.phase.kind !== "finished") this.results.match(this.state, reason);
   }
@@ -285,6 +318,7 @@ export class NetworkRoom {
         {
           profile: "network-v1",
           ...this.settings,
+          collectStatistics: this.statisticsEnabled,
           teams: this.players.map((p) => p.id),
         },
         seed,
@@ -292,6 +326,7 @@ export class NetworkRoom {
         this.context,
         `network:${this.code}:${seed}`,
       );
+      this.statisticsMatches.add(this.state.matchId);
       this.results.match(this.state, undefined, true);
     } else if (action.type === "replay") {
       requireLeader();
@@ -662,8 +697,8 @@ export class NetworkRoom {
       difficulty: "round" in phase ? phase.round.difficulty : undefined,
       endReason: state.endReason,
       feedbackError: base.isLeader ? this.feedbackError : undefined,
-      complaintContext: base.isLeader && phase.kind === 'reveal' && state.config.collectQuestionFeedback ? {
-        eventId: `feedback-v3:${state.matchId}:${phase.round.mode === 'tie-break' ? `tie-break-${state.tieBreak?.questionNumber ?? 1}` : `main-${state.mainQuestionIndex + 1}`}:${phase.round.questionId}`,
+      complaintContext: actor && phase.kind === 'reveal' && !actor.departed ? {
+        eventId: this.complaintId(`${state.matchId}:${state.tieBreak ? `tie-${state.tieBreak.questionNumber}` : state.mainQuestionIndex}:${actor?.id}`),
         matchId: state.matchId, catalogRevision: state.catalogRevision, questionId: phase.round.questionId, assignedDifficulty: phase.round.difficulty
       } : undefined,
     };

@@ -10,7 +10,6 @@ async function start(page: Page) {
   await page.goto('/?muted=1');
   await page.getByRole('button', { name: 'Настройки', exact: true }).click();
   await page.getByRole('button', { name: 'Звук включён', exact: true }).click();
-  await page.getByLabel('Собирать обратную связь по вопросам').uncheck();
   await page.getByRole('button', { name: 'Назад', exact: true }).click();
   await page.getByRole('button', { name: 'Одиночная игра' }).click();
   await page.keyboard.press('Enter');
@@ -79,7 +78,6 @@ test('complete local two-team match persists nine questions, bonuses, tie-break 
   await page.goto('/?muted=1');
   await page.getByRole('button', { name: 'Настройки', exact: true }).click();
   await page.getByRole('button', { name: 'Звук включён', exact: true }).click();
-  await page.getByLabel('Собирать обратную связь по вопросам').uncheck();
   await page.getByRole('button', { name: 'Назад', exact: true }).click();
   await page.getByRole('button', { name: 'На одном устройстве (2–4)', exact: true }).click();
   await page.getByRole('button', { name: '9', exact: true }).click();
