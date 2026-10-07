@@ -20,6 +20,7 @@ test("network feedback continues after a successful server write", async ({ brow
       await phone.getByRole("button", { name: "Подключиться", exact: true }).click();
     }
     await page.getByRole("button", { name: "Начать игру", exact: true }).click();
+    await expect.poll(async () => (await Promise.all(phones.map(phone => phone.getByRole("heading", { name: "Выберите тему", exact: true }).isVisible()))).some(Boolean)).toBe(true);
     const chooser = await phones[0].getByRole("heading", { name: "Выберите тему", exact: true }).isVisible() ? phones[0] : phones[1];
     await chooser.locator(".network-topics button").first().click();
     await phones[0].locator(".network-header").click();

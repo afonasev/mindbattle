@@ -753,7 +753,7 @@ html:has(.network-discovery)::-webkit-scrollbar, body:has(.network-discovery)::-
 .network-catalog-heading > span { font-size: .7rem; color: var(--text-muted); }
 .network-app .network-catalog-heading button { padding: 6px; width: 44px; height: 44px; min-height: 44px; background: none; border: 0; }
 .network-room-list { display: grid; gap: 7px; }
-.network-app .network-room-row { display: flex; align-items: center; justify-content: space-between; gap: .7rem; width: 100%; min-height: 57px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 8px; background: linear-gradient(120deg, #142634b8, #0c1926d9); text-align: left; font-weight: 400; }
+.network-app .network-room-row, .network-app .network-room-measure-row { display: flex; align-items: center; justify-content: space-between; gap: .7rem; width: 100%; min-height: 57px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 8px; background: linear-gradient(120deg, #142634b8, #0c1926d9); text-align: left; font-weight: 400; }
 .network-room-row .network-room-description { min-width: 0; flex: 1; }
 .network-room-description strong { display: block; font-size: .9rem; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
 .network-room-description small { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; font-size: .65rem; color: var(--text-muted); margin-top: 5px; }
@@ -772,7 +772,6 @@ html:has(.network-discovery)::-webkit-scrollbar, body:has(.network-discovery)::-
 .network-current-leader strong { color: var(--accent); }
 .network-catalog-error { display: flex; align-items: center; gap: .5rem; margin-top: .5rem; color: #ffe6ee; }
 .network-empty-catalog { padding: 1.5rem; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
-.network-catalog-return { position: absolute; right: 1.5rem; top: 5.5rem; font-size: .75rem; }
 .network-discovery .network-lobby { max-width: 1120px; margin: 3rem auto 0; gap: 3rem; align-items: center; }
 .network-discovery .network-roster { margin: .7rem 0; gap: .5rem; }
 .network-discovery .network-roster li { padding: .7rem; }
@@ -799,11 +798,10 @@ html:has(.network-discovery)::-webkit-scrollbar, body:has(.network-discovery)::-
   .network-join-layout { margin-top: 1.6rem; }
   .network-join-layout h1 { font-size: 2rem; }
   .network-discovery .network-lobby { display: block; margin-top: 2rem; }
-  .network-catalog-return { position: static; float: right; margin-top: .5rem; }
   .network-discovery .network-roster { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .network-roster-actions { flex-wrap: wrap; }
 }
-.network-room-row > .menu-action-label { display: flex; align-items: center; justify-content: space-between; gap: .7rem; width: 100%; }
+.network-room-row > .menu-action-label, .network-room-measure-row > .menu-action-label { display: flex; align-items: center; justify-content: space-between; gap: .7rem; width: 100%; }
 .network-header .screen-header-actions { margin-left: auto; }
 
 .network-header .screen-header-actions { grid-column: 3; }
@@ -813,7 +811,7 @@ html:has(.network-discovery)::-webkit-scrollbar, body:has(.network-discovery)::-
   .network-catalog-layout h1 { margin: .3rem 0; }
   .network-catalog-layout > p { margin-bottom: .3rem; }
   .network-app .network-catalog-layout .network-list-label { margin-top: .5rem; margin-bottom: .4rem; }
-  .network-app .network-catalog-layout .network-room-row { min-height: 52px; padding-block: 7px; }
+  .network-app .network-catalog-layout .network-room-row, .network-app .network-catalog-layout .network-room-measure-row { min-height: 52px; padding-block: 7px; }
   .network-catalog-layout .network-room-list { gap: 5px; }
   .network-catalog-layout .network-catalog-heading { margin-top: .25rem; }
 }
@@ -853,3 +851,8 @@ html:has(.network-discovery)::-webkit-scrollbar, body:has(.network-discovery)::-
 
 .network-text-large .network-form-panel label { font-size: 1rem; }
 .network-text-large .network-form-panel input { font-size: 1.15rem; }
+
+.network-room-list { position: relative; }
+.network-room-measure { position: absolute; inset: 0 0 auto; height: 0; visibility: hidden; overflow: hidden; pointer-events: none; }
+.network-discovery .network-lobby { padding: 0; border: 0; background: transparent; box-shadow: none; }
+.network-discovery .network-lobby-intro { text-align: left; }

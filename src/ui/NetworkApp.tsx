@@ -343,7 +343,6 @@ export function NetworkApp() {
     >
       <ReleaseAction safe={!credential || terminal} />
       {credential && <ScreenHeader className="network-header" subtitle={<><span>{snapshot?.title || "Сетевая игра"}</span>{snapshot && <small className="network-heading-leader">{snapshot.leaderName ? `Ведущий: ${snapshot.leaderName}` : "Ведущий пока не выбран"}</small>}</>} back={terminal ? () => navigate("/") : undefined} menu={!terminal ? openMenu : undefined} disabled={busy} />}
-      {credential && !terminal && phase === "lobby" && <MenuAction className="network-catalog-return" onClick={reset}>Каталог игр</MenuAction>}
       {error && credential && (
         <p className="network-error" role="alert">
           {error}
@@ -360,7 +359,7 @@ export function NetworkApp() {
           <MenuAction onClick={reset}>Вернуться к подключению</MenuAction>
         </section>
       ) : !credential ? (
-        <NetworkEntry submissionError={error} mobile={mobile} busy={busy} enter={enter} restore={next => { enableAudio(); setCredential(next); }} largeText={preferences.textSize === "large"}/>
+        <NetworkEntry submissionError={error} clearError={() => setError("")} mobile={mobile} busy={busy} enter={enter} restore={next => { enableAudio(); setCredential(next); }} largeText={preferences.textSize === "large"}/>
       ) : !snapshot ? (
         <section className="network-entry">
           <p>Ожидаем состояние комнаты…</p>

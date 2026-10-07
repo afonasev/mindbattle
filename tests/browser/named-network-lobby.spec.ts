@@ -20,6 +20,9 @@ test('named lobby: protected admission, server privacy, own return, leader and r
         await phone.getByLabel('Пароль игры', { exact: true }).fill('wrong'); await phone.getByRole('button', { name: 'Подключиться', exact: true }).click();
         await expect(phone.getByRole('alert')).toHaveText('Неверный пароль игры');
         expect(await phone.evaluate(() => localStorage.getItem('mindbattle-network-credentials-v1'))).toBeNull();
+        await phone.getByRole('button', { name: 'Назад', exact: true }).click();
+        await selectNetworkGame(phone, title);
+        await expect(phone.getByRole('alert')).toHaveCount(0);
       } else await expect(phone.locator('.network-current-leader')).toHaveText('Ведущий: Анна');
       await phone.getByLabel('Пароль игры', { exact: true }).fill('секрет'); await phone.getByRole('button', { name: 'Подключиться', exact: true }).click();
       await expect(phone.getByText('Вы в комнате. Ждём начала игры.')).toBeVisible();
@@ -64,6 +67,40 @@ for (const [width, height, minimum] of [[390,844,6], [360,720,5]]) {
     for (let i = 0; i < 12; i++) {
       const next = page.getByRole('button', { name: 'Следующая страница', exact: true }); if (!await next.isEnabled()) break; await next.click();
     }
-    await expect(page.locator('.network-room-list').getByText('Вечер эрудитов 12', { exact: true })).toBeVisible();
+    await expect(page.locator('.network-room-list > button').getByText('Вечер эрудитов 12', { exact: true })).toBeVisible();
   });
 }
+
+test('large text and long room titles retain every room and reachable keyboard-size form', async ({ page }, info) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => localStorage.setItem('mindbattle-network-preferences-v1', JSON.stringify({ muted: true, textSize: 'large', highContrast: true, reducedMotion: true })));
+  const rooms = Array.from({ length: 12 }, (_, i) => ({ code: `long-${i}`, title: i % 3 === 0 ? `Интеллектуальный вечер друзей с длинным названием ${i + 1}` : `Комната ${i + 1}`, playerCount: i % 11, passwordProtected: true, phase: 'lobby' }));
+  await page.route('**/api/network/catalog', route => route.fulfill({ json: { rooms, ownRooms: [], invalidIndexes: [] } }));
+  await page.route('**/api/network/room?*', route => route.fulfill({ json: { ...rooms[9], leaderName: 'Анна' } }));
+  await page.goto('/network?muted=1');
+  await expect(page.locator('.network-room-list')).toBeVisible();
+  const seen = new Set<string>();
+  for (let i = 0; i < 12; i++) {
+    for (const title of await page.locator('.network-room-list > button .network-room-description strong').allTextContents()) seen.add(title);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    const next = page.getByRole('button', { name: 'Следующая страница', exact: true }); if (!await next.isEnabled()) break; await next.click();
+  }
+  expect([...seen].sort()).toEqual(rooms.map(r => r.title).sort());
+  await page.screenshot({ path: info.outputPath('catalog-large-contrast.png'), fullPage: true });
+  const row = page.locator('.network-room-row').filter({ has: page.getByText(rooms[9].title, { exact: true }) });
+  // Find the selected long title without assuming a fixed page size.
+  for (let i = 0; i < 12 && !await row.count(); i++) {
+    const prev = page.getByRole('button', { name: 'Предыдущая страница', exact: true }); if (await prev.isEnabled()) await prev.click(); else break;
+  }
+  await row.click();
+  await page.getByLabel('Ваше имя', { exact: true }).fill('Александр');
+  await page.setViewportSize({ width: 390, height: 430 });
+  await page.getByLabel('Пароль игры', { exact: true }).fill('demo');
+  await page.getByLabel('Пароль игры', { exact: true }).press('Tab');
+  await page.getByRole('button', { name: 'Показать пароль', exact: true }).press('Tab');
+  const submit = page.getByRole('button', { name: 'Подключиться', exact: true });
+  await expect(submit).toBeFocused();
+  const bounds = await submit.boundingBox(); expect(bounds).toBeTruthy(); expect(bounds!.y).toBeGreaterThanOrEqual(0); expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(430);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: info.outputPath('join-reduced-height-large.png'), fullPage: false });
+});
