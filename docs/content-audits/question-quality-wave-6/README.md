@@ -1,19 +1,9 @@
 # Wave 6 source checkpoint — incomplete
 
-Current explicit coordinator decisions: **75 new cards / 450 fields**. Exact IDs and current hashes are in root-certified-source-checkpoint.json. 425 wave6 cards and500 wave7 cards remain. No fully completed new topic; the prior25 topics are preserved.
+85 new unique cards / 510 fields have genuine current author and independent source/editorial decisions and explicit root approval. Exact IDs/hashes/receipts: root-certified-source-checkpoint.json. 415 wave6 + 500 wave7 = 915 cards remain. No whole topic completed; prior25 topics preserved.
 
-Completion means all six current fields received actual author and independent source/editorial reads plus explicit coordinator approval. Mechanical hashes/quoted-passage matching, partial reads and source downloads add no completed cards.
+Geology35, middle13 and card-games37 certified. Man-at-arms remains uncounted on Easy difficulty HOLD. Architecture/winter-sports and wave7 unstarted. Literal read counts (middle35, cardgames100, geology35) do not equal full source completion. Hash/quote validation creates no substantive verdicts.
 
-Active certified receipts are listed in root-certified-source-checkpoint.json. Geology first30, middle13 and card-games32 current cards are covered. Middle man-at-arms remains an explicit Easy difficulty HOLD. Card-games current10 and geology unconform4+cubic1 completed both roles and coordinator approval after indexed-proof repairs. Historical HOLD/pre-fix/superseded receipts and original captures are preserved and never treated as current certificates.
+Historical wrong-index claims, provisional revoked decisions and their corrections remain in Git. Current last10 fixed War total6 wording, Crazy Eights answer leak, Gin Rummy turn-mechanic wording and transform note3 proof analysis. Independent corrected current indexed receipts were inspected before root approval.
 
-Author literal reads recorded by prior and current authors: middle35/100, card-games100/100, geology30/100; architecture and winter-sports not started. Literal reading is distinct from full original proof and independent completion.
-
-Focused QA passes24/25 tests; remaining whole-topic review stamp is intentionally unset until full100-card audit. Typecheck passes. checkpoint-qa-binding.json will bind the stable current content hashes and exact fresh test report. No runtime/UI/audio/tests changed. Main integration, spec sync, human acceptance and deployment remain pending; production deployment is not authorized.
-
-Continuation session01a11741 restored the externally removed worktree at exact saved a67dc301, then retained original evidence and resumed the authorized audit. checkpoint-continuation-first-slice.md records this partial work. verify-proof-format.py validates identity and passage existence only and always emits0 substantive verdicts/0 completed cards.
-
-Two provisional middle certifications (squire/barbican) were revoked after actual index-to-claim proof mismatch was caught. Pre-rework counters/decisions are retained; new current indexed independent reread is required.
-
-The two revoked middle decisions were explicitly restored only after indexed independent reread and root proof inspection; source checkpoint75 is current. Pre-rework count50/48 artifacts retain the decision history.
-
-Next ten source/editorial closures (Earth/rock5 and UNO/GoFish5) completed after genuine both-role reads. UNO Skip overlapping Draw2 was narrowed to3plus players/no drawpenalty; explanations remain2–4sentences. Exact customglyph originalMattel extraction and sourcebytes checked independently and byroot.
+Focused QA and exact content hashes: checkpoint-qa-binding.json. Whole-topic review stamp remains unset until genuine100-card closure. Main integration, spec sync, human acceptance and deployment are pending; production is not authorized. Current executor stops at second compaction; see handoff-second-compaction-current-executor.md. Source originals and historical receipts remain preserved.
