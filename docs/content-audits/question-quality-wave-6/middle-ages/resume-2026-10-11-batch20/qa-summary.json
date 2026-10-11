@@ -1,0 +1,49 @@
+{
+  "scope": "20 owned content cards and their original field proof; no runtime/gameplay changes",
+  "baselineCommit": "3a9ec78cdbe727cf836af87a57e5112f14bfc73f",
+  "checks": [
+    {
+      "command": "python3 bind-receipt.py",
+      "purpose": "Bind already written manual decisions to exact current fields and raw original proof metadata, never produce a substantive verdict",
+      "exit": 0
+    },
+    {
+      "command": "bundled-python verify-proof-format.py author-current.json --repo . --output current-format.json",
+      "purpose": "20 cards/120 fields/raw original hashes and exact passages",
+      "exit": 0
+    },
+    {
+      "command": "bundled-python verify-proof-format.py pilot-current.json --repo . --output pilot-current-format.json",
+      "purpose": "Reworked five-card pilot roundtrip against current literals",
+      "exit": 0
+    },
+    {
+      "command": "node verify-owned-content.mjs",
+      "purpose": "Execute actual validateTopicPack on current middle-ages JSON, preserve outside80, order,20IDs/difficulty/index, JSON roundtrip,40/40/20 and10/10/5 quotas",
+      "exit": 0,
+      "note": "Standalone Vite dependency scanner warned on virtual:pwa-register with app plugins omitted; content SSR validation succeeded and server closed. No app build or browser smoke claimed."
+    },
+    {
+      "command": "npm run typecheck",
+      "purpose": "Existing script is tsc --noEmit, no build/test chaining",
+      "exit": 0
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run tests/unit/content-answer-notes.test.ts --reporter=json --outputFile=focused-notes-result.json",
+      "purpose": "Existing focused9 answer-note contracts: scalar roundtrip, note sizes/HTML, content placeholder detection, required shape",
+      "exit": 0,
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "deferred": [
+    "Full test suite (not authorised)",
+    "Whole-topic stamp update (only after100 independent cards)",
+    "Independent120-field read",
+    "Human/product acceptance",
+    "Build/browser/device/audio acceptance",
+    "Integration/push/deploy/release/archive"
+  ],
+  "newCertifiedCards": 0
+}
