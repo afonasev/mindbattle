@@ -67,9 +67,17 @@ for group in config['explicitGroups']:
             for key, field in fields.items():
                 assert field['verdict'] == 'PASS' and field['substantiveRead'], (qid, key, 'recorded read/verdict')
                 if 'literal' in field:
-                    assert field['literal'] == literals[key], (qid, key, 'indexed literal')
+                    stored_format = reading.get('promptKeyStoredLiteralFormat', 'native-value')
+                    assert stored_format in ('native-value', 'canonical-json-text')
+                    expected_literal = (json.dumps(literals[key], ensure_ascii=False, sort_keys=True,
+                                                   separators=(',', ':'))
+                                        if key == 'prompt-key' and stored_format == 'canonical-json-text'
+                                        else literals[key])
+                    assert field['literal'] == expected_literal, (qid, key, 'indexed literal')
                 assert field['literalSha256'] == literal_hash(literals[key], reading['literalHashAlgorithm']), (qid, key, 'literal hash')
-                assert field['claimAnalysis'] and field['proofs'], (qid, key, 'recorded analysis/proof')
+                analysis_field = reading.get('analysisField', 'claimAnalysis')
+                assert analysis_field in ('claimAnalysis', 'manualAnalysis')
+                assert field[analysis_field] and field['proofs'], (qid, key, 'recorded analysis/proof')
                 for proof in field['proofs']:
                     if 'reader' in proof:
                         assert proof['reader'] == identity, (qid, key, 'proof role')
