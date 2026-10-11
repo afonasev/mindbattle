@@ -1,0 +1,20 @@
+# Architecture continuation30 — author handoff
+
+Author: `01a12bdb-15ef-7eb1-ad85-ec011cab7bf7`. Worktree `/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle`, branch `codex/question-quality-wave-6`.
+
+Scope restored from prior `resume-2026-10-11-author100/READY.json`: exact remaining25 plus five named independent FIX. `scope.json` records those IDs and all frozen70 hashes. No prior70 full-card re-review or acceptance is claimed; targeted prompt/key duplicate comparisons are separately recorded. No other topic, planning/claim/lease/ledger/root certification changed by this author.
+
+Current author result: 30 cards / 180 fields, actual AUTHOR PASS 30, FIX_REQUIRED 0, HOLD 0. This is **not independent acceptance and not new root coverage**. READY and the two freeze files identify exact hashes. Five fixes were committed in `bf76186`; the easy25 freeze is in the commit containing this handoff.
+
+- `fix5-receipt.json`: removes country/material clues in Chartres, Potala, Zimbabwe and Ponte Vecchio; changes Lalibela to St George church's cruciform plan, independently distinct from the landmarks question. Original independent FIX receipts remain untouched. A new independent read of all six current fields is required.
+- `easy25-receipt.json`: replaces the 25 prior unchecked cards, preserving ID/order/assigned difficulty/key slot. New easy facts concern familiar buildings, spaces and construction elements. The first five fix cards passed mechanical roundtrip before this expansion. Initial easy draft and final changes are preserved, including replacement of material/category giveaways and a non-additive correct note.
+- Both roundtrips report zero mechanical errors; they do not generate substantive PASS. Handwritten field analyses and card decisions are in the receipts/decisions files. `bind.py` only binds explicitly authored decisions to bytes.
+- ID/order/difficulty/correctIndex, 40/40/20 and per-slot10/10/5, frozen70 and raw working/Git byte checks are in `preservation.json`; final current run is committed separately after source preservation. `focused-checks.json` covers owned30 note/explanation limits and four unique options. No full suite/npm check/browser/build/deploy/release/archive ran. Coordinator owns separate catalog and certification gates.
+
+Sources: previously committed UNESCO original JSON reused read-only for fix5. New originals are complete web.run rendered source responses with every original line number checked; Lehman/DOB complete extracts are reconstructed without content selection from retained complete response slices, with overlap/gap verification and only tool citation-wrapper removal. Metadata lists constituent original response SHA256. This is full original extraction, not an assembled claim summary. Each field includes raw SHA, passage SHA, literal SHA, locator and source class, bound to the current whole-card hash and actual author identity.
+
+Failed direct HTTP/PDF captures and metadata remain as failed-fetch history, never factual proof. PDF retry ended with exit28 and invalid/incomplete Pages tree. Access Board partial HTMLs have exit28; only the separately saved complete rendered originals are used. The author did not view or claim image-based evidence.
+
+Next step: coordinator arranges an independent six-field read of the frozen30, then performs root checks. If any card changes, make a new receipt/freeze and preserve history. Do not turn the old independent five FIX records into PASS by hash adaptation.
+
+Cleanup: no chats, subagents, worktrees, branches, browser tabs or servers were created. Owned fetch processes finished; no owned test/build process is left. Source originals, failed fetch history, decisions, receipts and proof checks are intentionally retained in Git. Shared worktree and unrelated contributors' files remain intact. No continuation depends on transient scripts or chat-only context; decisions are durable JSON. This author session can be archived without losing data after the preservation/cleanup commit. The wave itself is not declared complete.
