@@ -1,0 +1,15 @@
+# Durable handoff — independent current30
+
+Native reader `01a12c06-f6ed-7891-ad08-bb87e2ee326a`; branch `codex/question-quality-wave-6`. This handoff and all evidence are saved by the commit containing this file. Original author freeze is fix5 + easy25 in `architecture/resume-2026-10-11-continuation30` (author commits bf76186/0d3217d/7c0b329). Canonical spec read: `/Users/eaafonasev/Projects/mindbattle-planning/docs/GAME_SPEC.md`, Content questions, including the allowed overlap of an additional correct-note fact with explanation.
+
+**Independent review performed on all30 current cards /180 fields:22 PASS,8 FIX_REQUIRED,0 HOLD.** Whole-card eligible independent PASS is22/132;172 individual field PASS does not make the eight failed cards covered. Root certification remains0. Wave6 is not declared complete.
+
+Start with `REVIEW.md` for the eight actionable findings, including subjective difficulty assessments clearly distinguished from factual errors. Exact current cards are in `current30-snapshot.json`. Decisions, receipts and format reports are `pilot-*` and `easy25-*`. Frozen hashes/current literal hashes bind to these exact cards. The five-card pilot roundtrip passed before the25-card expansion.
+
+All24 referenced source originals remain in committed author source directories, byte-identical in working tree and Git with -text. They include full JSON and documented complete original rendered text extraction, not source snippets or authored summaries. `binding-and-source-bytes.json` records hashes, frozen-card identity, quotas and key slots; all100 ID/order/difficulty/correctIndex and protected70 canonical bytes are preserved. Independent did not edit the catalogue, protected receipts, planning or ledgers. Existing erroneous/older records remain history.
+
+Next step: **coordinator** reads these independent receipts via its existing wait/read workflow, compares22 PASS hashes with the author role and its retained70 audit evidence, and sends the eight findings for authorized author revision. **Author** revises only assigned current cards while preserving ID/order/level/key slots and then requests fresh exact-hash independent review. This reader has no further queued work and sends no outgoing message. No automatic certification, merge, build, deploy or archive follows.
+
+Cleanup: task-cleanup reference read. This reader launched only short foreground Python/read/Git commands; no background process, local server, browser, build, temp directory, cloned source or render was created. No own ignored/cache/temp outputs exist. Durable receipts, explicit decisions, source bindings, snapshot, serializer and duplicate retrieval evidence are retained in Git. Foreign middle-ages/winter-sports work and processes were left untouched. Worktree/branch stay active for coordinator and concurrent authors, so they were not removed.
+
+The independent session may be archived after the commit: continued work depends on the saved files, not this chat or running resources. Human acceptance and all wave-level gates remain separate.
