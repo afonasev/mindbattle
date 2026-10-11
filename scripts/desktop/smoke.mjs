@@ -5,6 +5,7 @@ import { createPrivateKey, sign } from "node:crypto";
 import os from "node:os";
 import path from "node:path";
 import { digest } from "../../desktop/content.mjs";
+import { releaseBase } from "../../desktop/updateTransport.mjs";
 const evidence =
   process.env.MINDBATTLE_DESKTOP_EVIDENCE || "/tmp/mindbattle-desktop-evidence";
 await mkdir(evidence, { recursive: true });
@@ -18,6 +19,7 @@ const envelope = JSON.parse(
 );
 const manifest = JSON.parse(envelope.payload);
 manifest.sequence++;
+manifest.objectBaseUrl = releaseBase("content", manifest.sequence);
 manifest.version = "0.1.0+smoke-new";
 const html = manifest.files.find((f) => f.path === "index.html");
 const changed = Buffer.from(
@@ -188,17 +190,17 @@ try {
   assert.deepEqual(await app.evaluate(() => globalThis.testNetwork.events), [
     "offline-smoke",
   ]);
-  // Simulate background discovery through trusted IPC before offering apply.
-  await page.evaluate(() => window.mindbattleDesktop.checkUpdate());
-  await page.getByRole("button", { name: "Появилось новое обновление", exact: true }).waitFor();
+  // Connectivity restoration triggers automatic discovery; no manual check action.
+  await page.evaluate(() => window.dispatchEvent(new Event("online")));
+  await page.getByRole("button", { name: "Обновить", exact: true }).waitFor();
   assert.equal(await footer().innerText(), currentRelease);
   assert.equal((await page.evaluate(() => window.mindbattleDesktop.status())).updateVersion, "0.1.0+smoke-new");
-  assert.match(await page.getByRole("button", { name: "Появилось новое обновление", exact: true }).innerText(), /Версия 0\.1\.0(?:\s|$)/);
-  assert.doesNotMatch(await page.getByRole("button", { name: "Появилось новое обновление", exact: true }).innerText(), /\+smoke-new/);
+  assert.match(await page.getByRole("button", { name: "Обновить", exact: true }).innerText(), /Версия 0\.1\.0(?:\s|$)/);
+  assert.doesNotMatch(await page.getByRole("button", { name: "Обновить", exact: true }).innerText(), /\+smoke-new/);
   await page.screenshot({ path: path.join(evidence, "desktop-update.png") });
   await page
     .getByRole("button", {
-      name: "Появилось новое обновление",
+      name: "Обновить",
       exact: true,
     })
     .click();
