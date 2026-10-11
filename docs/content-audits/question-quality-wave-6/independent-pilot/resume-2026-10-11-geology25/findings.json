@@ -1,0 +1,55 @@
+{
+  "role": "independent",
+  "scope": "25 frozen cards only",
+  "findings": [
+    {
+      "questionId": "geology-earth-pumice-floats",
+      "verdict": "FIX_REQUIRED",
+      "field": "prompt-key",
+      "indexedTargets": [
+        "answers[1].text=Магма",
+        "answers[2].text=Лава",
+        "answers[3].text=Тефра"
+      ],
+      "ruleSource": "docs/content-audits/question-authoring-guide-2026-09-02.md / Формулировка и варианты",
+      "literalRule": "Варианты относятся к одной смысловой категории, сопоставимы по детализации и не выдают ответ длиной, регистром или пунктуацией.",
+      "evidence": "Prompt asks «Какая вулканическая порода». Магма/лава are melts in the independently read USGS definitions. Тефра is an umbrella for all airborne ejecta; it can include pumice fragments. Key fact floats is true, but options mix states and taxonomic levels.",
+      "action": "Автору заменить неподходящие варианты конкретными сопоставимыми породами, проверив notes; easy/index0/ID preserve."
+    },
+    {
+      "questionId": "geology-earth-earthquake-epicenter",
+      "verdict": "FIX_REQUIRED",
+      "field": "prompt-key",
+      "indexedTargets": [
+        "answers[3].text=Сейсмограмма"
+      ],
+      "ruleSource": "docs/content-audits/question-authoring-guide-2026-09-02.md / Формулировка и варианты",
+      "literalRule": "Варианты относятся к одной смысловой категории, сопоставимы по детализации и не выдают ответ длиной, регистром или пунктуацией.",
+      "evidence": "Prompt asks point on Earth surface. USGS Measures Earthquakes defines seismogram as recorded line reflecting ground motion. It is a record, cannot be a spatial point. Correct index1 is true.",
+      "action": "Автору заменить сейсмограмму подходящим пространственным геологическим термином и проверить новую note; easy/index1/ID preserve."
+    },
+    {
+      "questionId": "geology-earth-gypsum-plaster",
+      "verdict": "FIX_REQUIRED",
+      "field": "prompt-key",
+      "indexedTargets": [
+        "prompt + answers[1].text=Гипс"
+      ],
+      "ruleSource": "canonical GAME_SPEC.md / Контент вопросов; authoring guide / Идентификаторы и дубликаты",
+      "literalRule": "Прямой и обратный вопросы одной связи (Темза–Лондон) ... не считаются достаточным разнообразием: одна карточка заменяется независимым фактом.",
+      "additionalLiteralRule": "Перефразирование уже существующего вопроса не считается новым фактом.",
+      "otherCardId": "materials-gypsum-board",
+      "otherPrompt": "Какой листовой материал с гипсовым сердечником применяют для внутренних перегородок?",
+      "otherKey": "Гипсокартон",
+      "evidence": "Both main questions select one endpoint of gypsum-core/drywall relationship. Card now asks mineral in cardboard-covered panels; other asks sheet material given gypsum core. The extra partition use in other prompt does not make current mineral→core fact independent.",
+      "action": "Автору выбрать независимый mineral fact в прежнем easy/index1 slot; не менять соседнюю чужую тему в этой сессии."
+    }
+  ],
+  "notDefects": [
+    "Useful correct-note fact may repeat explanation; no blanket no-overlap.",
+    "Three colour cards have different gem→colour prompt/key relations and per-index notes correctly describe selected colours through other gems.",
+    "Bowen cards ask different steps; mineral entity repetition alone not a duplicate.",
+    "Magma/lava inverse pair removed by current bauxite→aluminium replacement."
+  ],
+  "rootCertifiedCardsAdded": 0
+}

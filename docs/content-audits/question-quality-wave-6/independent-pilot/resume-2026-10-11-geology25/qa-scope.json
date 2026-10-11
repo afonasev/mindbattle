@@ -1,0 +1,42 @@
+{
+  "scope": "Independent evidence documents, no content or validator changes",
+  "reason": "Substantive reading of150 fields plus exact receipt binding; technical author tests already done and not repeated.",
+  "commands": [
+    "python3 assemble.py pilot-decisions.json pilot5-current.json",
+    "python3 verify-proof-format.py pilot5-current.json --repo . --output pilot5-format.json",
+    "python3 assemble.py all-decisions.json independent-current.json",
+    "python3 verify-proof-format.py independent-current.json --repo . --output full-format.json",
+    "PYTHONDONTWRITEBYTECODE=1 python3 check-binding.py"
+  ],
+  "results": {
+    "pilotCards": 5,
+    "pilotFields": 30,
+    "pilotBinding": "PASS",
+    "fullCards": 25,
+    "fullFields": 150,
+    "fullBinding": "PASS",
+    "negativeCasesRejected": 6,
+    "frozenCardsMatch": 25,
+    "independentCardVerdicts": {
+      "PASS": 22,
+      "HOLD": 0,
+      "FIX_REQUIRED": 3
+    },
+    "independentFieldVerdicts": {
+      "PASS": 147,
+      "HOLD": 0,
+      "FIX_REQUIRED": 3
+    }
+  },
+  "notRun": [
+    "full suite",
+    "npm run check",
+    "npm run qa",
+    "test:browser",
+    "build",
+    "deploy",
+    "release",
+    "archive"
+  ],
+  "visualVerification": "Four original-source renders manually viewed. One temporary headless browser for offline HTML table closed in finally; no game browser QA."
+}
