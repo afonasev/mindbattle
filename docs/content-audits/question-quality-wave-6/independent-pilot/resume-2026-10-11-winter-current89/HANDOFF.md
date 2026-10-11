@@ -7,3 +7,7 @@ Completed revised READY14 and bounded author100 packages `026–050` and `051–
 Package receipts: `batch01-026-050-receipt.json`, `batch02-051-075-receipt.json`.
 
 Next package: `winter-sports-076–100` (25 cards). Never revisit certified009/011/012/013/014/025 or author HOLD007/008/017/023/024.
+
+## Repeated editorial review of nine cards
+
+A separate manual editorial re-review of `028, 029, 030, 031, 032, 036, 038, 039, 042` is recorded in `batch01-026-050-repeat9-editorial-review.json`. Historical PASS decisions in `batch01-026-050-receipt.json` were preserved unchanged. Supplemental result: 1 PASS (`028`, because each metric is a coherent and plausible winter-sport result distractor) and 8 FIX for the remaining eight editorial/category or Olympic-topic boundary issues. These are repeat-review findings, not additional unique cards or coordinator certification.
