@@ -1,26 +1,25 @@
-# Winter-sports repair14 author slice — 2026-10-11
+# Winter-sports repair14 author freeze — 2026-10-11
 
-Six assigned cards were revised: `winter-sports-007`, `008`, `017`, `019`, `023`, and `024`. The active reader receipts were not edited. The complete current-byte field literals and canonical hashes are in `author-receipt.json`; every card and all six fields remain **HOLD**, with no independent certification and no READY designation.
+Six assigned cards are revised and frozen for independent reading: `winter-sports-007`, `008`, `017`, `019`, `023`, and `024`. All six cards and all 36 audited fields have manual author PASS decisions. Current canonical card hashes, literal hashes, source passages, locators, and full-source SHA256 values are in `author-receipt.json`. `source-manifest.json` identifies the 11 full HTML/PDF originals used; two new full HTML captures (Maine ropeway definitions and NPS snowshoeing guidance) are retained under `sources/`.
 
-## Scope preservation
+## Editorial results
 
-The winter topic remains at 100 cards. IDs and order are unchanged; all six cards retain their difficulty and correct answer index. A canonical comparison against the worktree HEAD found all 94 non-owned cards byte-semantically identical after JSON canonicalization. No other topics were changed by this slice.
+- 007 asks which ski equipment helps maintain balance; FIS defines the function of ski poles.
+- 008 asks what is worn to glide on ice, with sourced winter-equipment distractors.
+- 017 asks for the winter sport performed on one board; alternatives are alpine skiing, bobsleigh, and cross-country skiing.
+- 019 asks which venue hosts ice hockey; all alternatives are venues for other winter sports.
+- 023 asks which longitudinal ski surface contacts snow and supports glide; alternatives are other ski components, supported by FIS equipment specifications.
+- 024 distinguishes a chairlift from a T-bar, gondola, and skimobile. All four alternatives are actual mountain-lift types under the cited state definitions.
 
-## Editorial changes
+## Preservation and limits
 
-- 007 replaces a host-city question with a basic ski-pole function question.
-- 008 replaces a host-country question with identifying skates for moving over ice.
-- 017 replaces Wayne Gretzky recognition with the basic snowboard definition.
-- 019 replaces a specialized Zamboni mechanism question with the venue for ice hockey.
-- 023 asks which ski surface contacts snow, keeping four ski components as alternatives.
-- 024 describes open seats suspended from a cable; the four choices are types of ski lifts. The prior out-of-category funicular option was replaced with a magic carpet.
+The winter catalog remains at 100 cards with 40/40/20 difficulty quotas and 10/10/5 correct-answer positions per slot. IDs and order are unchanged; the six cards retain difficulty and `correctIndex`. All 94 non-owned cards are canonically identical to the baseline at `d244e6f7a888aba058f002781f095b4e73847c8c`. No active reader receipt or other topic was changed in this slice.
 
-## Evidence and open work
+This is an author freeze only. Independent reading of these six exact hashes and coordinator certification remain pending. The author PASS is not human/product acceptance. No full test suite, build, browser QA, deployment, release, or archive was performed.
 
-No new complete source capture was successfully saved in this slice. Existing full originals in the earlier `winter-sports/resume-2026-10-11-fix19/originals/` folder were consulted for context, but this handoff does not claim fresh field-level passage proofs. `author-receipt.json` records each literal, current canonical card hash, the author HOLD, and the specific evidence gap. The next author pass should attach full original captures, exact passages and hashes to all six fields, then make a fresh author decision. A separate reader must review the six current hashes afterward.
+## Checks
 
-## Verification
-
-- `npm run content-check`: one test passed; `catalog-full.test.ts` failed because the existing `architecture` review stamp does not match the current architecture file. This is outside this slice and was not altered.
-- `npm run typecheck`: passed (`tsc --noEmit`).
-- No full suite, build, browser QA, deploy, or release was run.
+- `npm run typecheck`: passed.
+- Focused `npx vitest run tests/unit/catalog-topics.test.ts`: blocked by the current foreign `middle-ages` working-tree file (39 medium / 21 hard versus its 40/20 quota); that file was preserved untouched, so the loop fails before it validates winter-sports.
+- For winter-sports, the author preservation check confirms 100 cards, 40/40/20 quotas, correct-key slots 10/10/5, stable ID order and non-owned card hashes. All 36 receipt literals and 65 proof locators were re-read and checked against the exact raw captures.
+- The broader `content-check` and build are not repeated; full-suite/build/deploy/release remain outside this author slice.
