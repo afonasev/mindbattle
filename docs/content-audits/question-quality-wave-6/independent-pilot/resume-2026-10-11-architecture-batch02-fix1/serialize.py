@@ -24,7 +24,9 @@ for qid,d in D.items():
    p=copy.deepcopy(proofs[0]);p.update(rawCapture=f'sources/unesco-{num}.json',rawCaptureSha256=hash(raw.read_bytes()),locator={'jsonPointer':'/results/0/'+key},passage=decoded,decodedPassage=decoded,passageSha256=hash(decoded.encode()))
    proofs.append(p)
   for proof in proofs:
-   raw=A/proof['rawCapture']; assert hash(raw.read_bytes())==proof['rawCaptureSha256'];proof['rawCapture']=os.path.relpath(raw,P)
+   raw=A/proof['rawCapture']
+   if proof['rawCapture']=='sources/pitt-apse.htm': raw=P/'originals/pitt-apse.htm'
+   assert hash(raw.read_bytes())==proof['rawCaptureSha256'];proof['rawCapture']=os.path.relpath(raw,P)
    proof['independentRead']='Original file opened in this native reader session; JSON scalar decoded at pointer / HTML parsed from original bytes; source context read with literal. Proof metadata reused, author verdict not reused.'
   row['fields'].append({'field':name,'literalSha256':hash(literals[name]),'verdict':fd['verdict'],'substantiveRead':True,'claimAnalysis':fd['claimAnalysis'],'proofs':proofs})
  out.append(row)
