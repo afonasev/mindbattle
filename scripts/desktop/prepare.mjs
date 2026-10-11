@@ -2,6 +2,7 @@ import { readdir, readFile, writeFile, mkdir, cp, rm } from "node:fs/promises";
 import { createPrivateKey, createPublicKey, sign } from "node:crypto";
 import path from "node:path";
 import { digest } from "../../desktop/content.mjs";
+import { releaseBase } from '../../desktop/updateTransport.mjs';
 const keyPath = process.env.MINDBATTLE_CONTENT_KEY;
 if (!keyPath)
   throw new Error(
@@ -46,6 +47,7 @@ const payload = JSON.stringify({
   version: JSON.parse(await readFile("dist/game-version.json", "utf8")).version,
   bridge: 1,
   shellMajor: Number(config.shellVersion.split(".")[0]),
+  objectBaseUrl: releaseBase('content', sequence),
   files,
 });
 const envelope = {

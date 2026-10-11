@@ -7,7 +7,7 @@
 | Изменение | Подготовка | Публикация |
 |---|---|---|
 | Сайт / PWA | `npm run build` (включён в deploy) | `make deploy` |
-| Игра, вопросы, JS/CSS, музыка и другие content-ассеты для установленной игры | `npm run desktop:content` | `bash scripts/desktop/publish.sh content` |
+| Игра, вопросы, JS/CSS, музыка и другие content-ассеты для установленной игры | `npm run desktop:content` | `bash scripts/desktop/publish.sh content` (GitHub Releases + Pages) |
 | Electron, main/preload, native updater или другие файлы оболочки | Новая `shellVersion`, content, оба установщика и `npm run desktop:shell` | `publish.sh content`, `publish.sh shell`, `publish.sh installers` |
 | Только оформление / поведение установщика | Новая `shellVersion`, content, оба установщика и `npm run desktop:catalog` | `publish.sh installers`; shell/content отдельно, если они входят в разрешённую поставку |
 
@@ -20,12 +20,12 @@
 - Windows: `Mindbattle-<shellVersion>.exe`; macOS: `Mindbattle-<shellVersion>-mac-universal.dmg` (Intel + Apple Silicon).
 - `desktop-release/installers/downloads.json`: каталог с версиями, HTTPS GitHub URLs, размерами и SHA-256 для обеих ОС.
 - GitHub Releases хранит версионные установщики. На VPS `/var/lib/mindbattle-desktop/installers/current` хранится только каталог; EXE/DMG туда больше не загружаются.
-- Подписанные content и shell обновления остаются на VPS в `/var/lib/mindbattle-desktop/{content,shell}/current`. Их нельзя удалять при очистке установщиков. Эти данные находятся вне `/opt/mindbattle` и области `rsync --delete` web-deploy.
+- Новые подписанные content и shell обновления хранятся в GitHub Releases (`content-<sequence>`, `shell-<sequence>`); публичные manifests — на `https://afonasev.github.io/mindbattle/desktop/{content,shell}/...`. Ветка `desktop-updates` хранит только manifests и является source GitHub Pages (`/`, branch deployment). Старые VPS feeds нельзя удалять до завершения перехода установленных клиентов.
 
 ## Подготовка выпуска
 
 1. Работай в worktree/ветке своей задачи. Обнови нужную версию, проверь согласованный scope, текущие Git refs и опубликованные каталоги. Сохрани чужие изменения.
-2. Нужны Node из `package.json`, `npm ci`, SSH-профиль `gfe`, `rsync` и авторизованный `gh` с правом писать Releases в `afonasev/mindbattle`. Для сборки обоих установщиков на macOS нужны Go и `lipo` (native helper), несколько ГБ свободного места.
+2. Нужны Node из `package.json`, `npm ci` и авторизованный `gh` с правом писать Releases/Pages в `afonasev/mindbattle`, Git push в `origin`. Для web, каталога установщиков и однократной legacy-публикации нужны SSH-профиль `gfe` и `rsync`. Для сборки обоих установщиков на macOS нужны Go и `lipo` (native helper), несколько ГБ свободного места.
 3. Используй существующий Ed25519 private key вне репозитория, совпадающий с `desktop/content-public.pem`. Не выводи ключ и не клади его в Git, артефакты или VPS web-root. `npm run desktop:key` предназначен только для первого создания ключа; новый ключ не заменяет pin существующих установок.
 4. Задай один UTC timestamp для всего выпуска **до** `desktop:content` и повторно используй его при web-deploy. Иначе offline-игра покажет «Ещё не опубликована» или даты сайта и установщика разойдутся.
 
@@ -37,8 +37,8 @@ export MINDBATTLE_PUBLISHED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 gh auth status
 ssh -o BatchMode=yes "${DEPLOY_HOST:-gfe}" true
 npm ci
-npm run check
-npm run test:desktop
+npm run typecheck
+# Выполните affected tests по diff; полный прогон — только по отдельной команде человека.
 ```
 
 `MINDBATTLE_CONTENT_SEQUENCE` и `MINDBATTLE_SHELL_SEQUENCE` по умолчанию берутся из текущего времени. Новая sequence должна быть выше опубликованной; проверяй часы и актуальный manifest перед публикацией. Явное значение задавай только при необходимости, не откатывай счётчик.
@@ -88,9 +88,30 @@ make deploy
 4. Передаёт на VPS только `downloads.json`. VPS скачивает публичные GitHub assets и проверяет размер и SHA-256 ещё раз.
 5. Под lock атомарно переключает `current`, затем удаляет предыдущие installer-каталоги и payloads. Лендинг выбирает ссылку своей ОС из `/desktop/downloads.json`.
 
-Публикация content/shell отдельно проверяет объекты и монотонность sequence, переключает `current` под lock и удаляет предыдущий завершённый релиз этого канала. Клиентская last-good/rollback копия независима от retention сервера.
+Публикация content/shell не использует SSH/VPS. `publish-updates.mjs`:
 
-Для каждого выпуска подготовь актуальные release notes с его изменениями и ограничениями приёмки. Сейчас `publish-github.mjs` использует фиксированный текст про Windows-установщик; он не описывает автоматически будущие изменения. После успешной публикации обнови описание из подготовленного файла:
+1. Требует чистую ревизию, совпадающую с `origin/main`, проверяет подписи и каждый локальный объект. Обе shell-платформы имеют одну sequence. Подписанный `objectBaseUrl` привязан к своему каналу/sequence в `afonasev/mindbattle`.
+2. Читает ветку `desktop-updates`, проверяет предыдущие manifests и sequence. Равная sequence допустима только для идентичных payload при повторе; меньшая и изменённая равная запрещены. Другая существующая конфигурация Pages останавливает публикацию до изменения Releases.
+3. Создаёт draft/prerelease `content-<sequence>` или `shell-<sequence>` на текущем commit. Загружает объекты по SHA-256 и копии подписанных manifests. Проверяет digest/size GitHub каждого asset. Не перезаписывает assets и не дополняет уже опубликованный неполный релиз. Превышение лимита GitHub 1000 assets останавливает публикацию.
+4. Публикует проверенный релиз, не меняя latest установщиков. Коммитит только metadata в `desktop-updates`, отправляет без force; конкурентное изменение ветки вызывает безопасный отказ. При первом выпуске создаёт Pages с этой веткой, не заменяя чужой source/domain.
+5. Ожидает точного публичного readback manifests на Pages (до пяти минут). Timeout означает pending publication/readback, а не успешную поставку. Повтор использует те же подготовленные bytes.
+
+Старые Releases/объекты сохраняются для last-good/rollback и клиентов, скачивающих прежний manifest. Автоматической очистки этих объектов нет. Private key никогда не загружается в GitHub; Pages содержит только подписанные metadata. GitHub redirects разрешены только HTTPS в этом репозитории и на разрешённых release CDN; подпись и hash/size остаются обязательными.
+
+### Переход существующих установок
+
+`desktop/config.json` разделяет `origin` сетевой игры и `updateOrigin` обновлений. Начиная с подготовленной оболочки 1.0.5 проверки идут на Pages. **Content-обновление не меняет main/preload старой оболочки**.
+
+После отдельной команды собрать/опубликовать переход:
+
+1. Соберите content и оба установщика с 1.0.5, затем shell; выполняйте affected проверки и настоящую N→N+1 приёмку.
+2. Опубликуйте content и shell через обычные GitHub команды и дождитесь readback обоих каналов.
+3. Явно выполните `bash scripts/desktop/publish.sh legacy-shell`: тот же подписанный shell и его объекты однократно публикуются на старый VPS feed. Legacy клиенты игнорируют дополнительное подписанное поле objectBaseUrl и скачивают переходную оболочку по своему старому маршруту. Новая оболочка после перезапуска использует GitHub.
+4. Опубликуйте установщики обычной командой. Если старый клиент вообще не может достучаться до VPS, установите новую версию поверх существующей с сохранением профиля.
+
+Новые content/shell выпуски после перехода требуют только GitHub. VPS остаётся для сайта, сетевых комнат/статистики и каталога скачивания на старом лендинге; его старые feeds пока сохраняются для ещё не обновившихся установок.
+
+Content/shell Releases получают channel/version/source commit notes и не становятся latest. Для каждого installer выпуска подготовь актуальные release notes с его изменениями и ограничениями приёмки. Сейчас `publish-github.mjs` использует фиксированный текст про Windows-установщик; он не описывает автоматически будущие изменения. После успешной публикации обнови описание из подготовленного файла:
 
 ```sh
 # Подставь существующий файл с описанием именно этого выпуска.
@@ -104,7 +125,7 @@ gh release edit "v${version}" --repo afonasev/mindbattle --notes-file /absolute/
 - Несовпадение хэша/размера останавливает публикацию; скрипт не перезаписывает существующий asset. Не обходи проверку и не удаляй рабочие VPS-файлы вручную.
 - Если пришлось пересобрать ещё не опубликованный **собственный draft**, проверь его статус/владение и удали только его устаревшие assets, затем заново создай каталог и повтори публикацию. Опубликованный релиз сохраняй; для изменённых бинарников увеличь версию.
 - GitHub и VPS не являются одной транзакцией: при сбое серверной проверки релиз может уже быть публичным, а VPS продолжит отдавать прежний каталог. Исправь причину и повтори публикацию тех же проверенных файлов. До переключения `current` старый каталог и дистрибутивы сохраняются.
-- Для content/shell после уже успешной активации та же sequence не принимается повторно. Сначала прочитай текущий manifest; новый выпуск требует большей sequence.
+- Для GitHub content/shell повтор тех же payload/sequence идемпотентен, опубликованные assets неизменяемы. Новый payload требует большей sequence; shell требует также большей shellVersion для существующих клиентов. Legacy VPS activation по-прежнему не принимает ту же sequence повторно.
 
 ## Проверки после публикации
 
@@ -120,7 +141,7 @@ MINDBATTLE_TEST_ORIGIN=https://mindbattle.afonasev.tech node scripts/testNetwork
 
 Для web-deploy проверь совпадение локального и серверного bundle через `checkReleaseIdentity.sh`, опубликованную дату в HTML и загрузку меню. Эта hash-проверка относится только к `server-dist/network.js`; она не доказывает целостность установщиков или всех web-ассетов.
 
-Для desktop-релиза прочитай каталог обратно, сравни версию/URLs/размеры/SHA-256 с локальным, проверь публичное скачивание обеих ОС и отсутствие EXE/DMG в VPS installer-каталоге. После content/shell публикации отдельно проверь соответствующие `/desktop/content/latest.json` и `/desktop/shell/{darwin-universal,win32-x64}/latest.json`. В браузере проверь ссылку своей ОС; уже открытая PWA может сначала предложить применить загруженное обновление. Мобильная PWA не показывает desktop-download.
+Для desktop-релиза прочитай каталог обратно, сравни версию/URLs/размеры/SHA-256 с локальным, проверь публичное скачивание обеих ОС и отсутствие EXE/DMG в VPS installer-каталоге. После content/shell публикации отдельно проверь соответствующие `https://afonasev.github.io/mindbattle/desktop/content/latest.json` и `https://afonasev.github.io/mindbattle/desktop/shell/{darwin-universal,win32-x64}/latest.json`, а также подписанные объекты GitHub Releases. При legacy-shell отдельно прочитайте старый VPS feed. В браузере проверь ссылку своей ОС; уже открытая PWA может сначала предложить применить загруженное обновление. Мобильная PWA не показывает desktop-download.
 
 ## Установка и ручная приёмка
 

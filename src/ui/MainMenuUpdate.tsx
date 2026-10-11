@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { onPwaUpdate, updateGame } from "../main";
+import { onPwaUpdate, onDesktopUpdateStatus, updateGame } from "../main";
+import { type DesktopUpdateStatus } from "../desktop";
 import { MenuAction } from "./menuUi";
 
 export function MainMenuUpdate() {
@@ -11,7 +12,9 @@ export function MainMenuUpdate() {
   const [error, setError] = useState(false);
   const [ready, setReady] = useState(false);
   const [version, setVersion] = useState<string>();
+  const [status, setStatus] = useState<DesktopUpdateStatus>({ phase: "idle" });
   useEffect(() => onPwaUpdate((available, nextVersion) => { setReady(available); setVersion(nextVersion); }), []);
+  useEffect(() => onDesktopUpdateStatus(setStatus), []);
   useEffect(() => { active.current = true; return () => { active.current = false; clearTimeout(restartTimer.current); }; }, []);
   async function update() {
     if (pending.current) return;
@@ -46,11 +49,18 @@ export function MainMenuUpdate() {
       }
     }
   }
-  if (!ready) return null;
+  const downloading = status.phase === "downloading";
+  const backgroundBusy = status.phase === "checking" || downloading;
+  const failed = status.phase === "error";
+  if (!ready && !backgroundBusy && !failed) return null;
+  const progress = downloading && status.total ? Math.floor(100 * (status.completed ?? 0) / status.total) : undefined;
+  const label = phase === "applying" ? "Обновляем…" : downloading ? "Скачиваем обновление…" : phase === "checking" || backgroundBusy ? "Проверяем…" : ready ? "Появилось новое обновление" : "Повторить проверку";
+  const nextVersion = version ?? status.version;
   return <div className="menu-update">
-    <MenuAction arrow caption={version ? `Версия ${version.split("+")[0]}` : "Обновить игру"} disabled={phase !== "idle"} aria-busy={phase !== "idle"} onClick={() => void update()}>
-      {phase === "checking" ? "Проверяем…" : phase === "applying" ? "Обновляем…" : "Появилось новое обновление"}
+    <MenuAction arrow caption={nextVersion ? `Версия ${nextVersion.split("+")[0]}` : "Обновить игру"} disabled={phase !== "idle" || backgroundBusy} aria-busy={phase !== "idle" || backgroundBusy} onClick={() => void update()}>
+      {label}
     </MenuAction>
-    {message && <p className="menu-update-message" role={error ? "alert" : "status"}>{message}</p>}
+    {downloading && <p className="menu-update-message" role="status">{progress === 100 ? "Проверяем скачанные файлы…" : `Скачано ${progress ?? 0}% файлов`}</p>}
+    {(message || failed) && <p className="menu-update-message" role={error || failed ? "alert" : "status"}>{message || status.message}</p>}
   </div>;
 }

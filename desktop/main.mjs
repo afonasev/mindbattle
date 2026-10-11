@@ -47,10 +47,10 @@ else {
             bundle: path.join(here, "bundle"),
             publicKey,
             shellVersion: config.shellVersion,
-            origin: config.origin,
+            origin: config.updateOrigin || config.origin,
         });
         const platform = process.platform === "darwin" ? "darwin-universal" : "win32-x64";
-        const shellStore = new ShellStore({ root: path.join(userRoot, "shell"), key: publicKey, version: config.shellVersion, platform, origin: config.origin });
+        const shellStore = new ShellStore({ root: path.join(userRoot, "shell"), key: publicKey, version: config.shellVersion, platform, origin: config.updateOrigin || config.origin });
         await shellStore.initialize();
         let servedDirectory = await store.initialize();
         let display = { width: 1280, height: 720, fullscreen: false };
@@ -137,6 +137,7 @@ else {
             ready: Boolean(shellStore.state.pending || store.state.pending),
             shellVersion: config.shellVersion,
             updateVersion: await pendingUpdateVersion(shellStore, store),
+            updateStatus: check.status(),
         }));
         handle("desktop:apply", async () => {
             if (!safe)
@@ -196,6 +197,8 @@ else {
         const check = createUpdateCheck(shellStore, store, async () => {
             const version = await pendingUpdateVersion(shellStore, store);
             if (!window.isDestroyed()) window.webContents.send("desktop:update", true, version);
+        }, status => {
+            if (!window.isDestroyed()) window.webContents.send("desktop:update-status", status);
         });
         handle("desktop:check-update", check);
         const backgroundCheck = () => void check().catch(error => console.warn("Update unavailable:", error.message));

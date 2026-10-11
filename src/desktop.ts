@@ -3,10 +3,18 @@ export interface DisplaySettings {
   height: number;
   fullscreen: boolean;
 }
+export interface DesktopUpdateStatus {
+  phase: "idle" | "checking" | "downloading" | "ready" | "current" | "error";
+  version?: string;
+  completed?: number;
+  total?: number;
+  message?: string;
+}
 export interface DesktopBridge {
   version: 1;
-  status(): Promise<{ ready: boolean; shellVersion: string; updateVersion?: string }>;
+  status(): Promise<{ ready: boolean; shellVersion: string; updateVersion?: string; updateStatus?: DesktopUpdateStatus }>;
   checkUpdate?(): Promise<{ ready: boolean }>;
+  onUpdateStatus?(listener: (status: DesktopUpdateStatus) => void): () => void;
   onUpdate(listener: (ready: boolean, version?: string) => void): () => void;
   applyUpdate(): Promise<boolean>;
   safeToUpdate(safe: boolean): void;

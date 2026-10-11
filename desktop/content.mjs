@@ -8,6 +8,7 @@ import {
   access,
 } from "node:fs/promises";
 import path from "node:path";
+import { objectBase, fetchUpdate } from './updateTransport.mjs';
 
 export const digest = (bytes) =>
   createHash("sha256").update(bytes).digest("hex");
@@ -185,7 +186,7 @@ export class ContentStore {
   currentDirectory() {
     return this.state.active ? this.directory(this.state.active) : this.bundle;
   }
-  async check() {
+  async check(onProgress = () => {}) {
     if (this.busy) return Boolean(this.state.pending);
     this.busy = true;
     let staging;
@@ -207,6 +208,9 @@ export class ContentStore {
       );
       if (manifest.sequence <= this.state.highWater)
         return Boolean(this.state.pending);
+      const base = objectBase(manifest, 'content', this.origin);
+      let completed = 0;
+      onProgress({ phase: 'downloading', version: manifest.version, completed, total: manifest.files.length });
       const id = digest(Buffer.from(envelope.payload));
       staging = path.join(this.root, "staging");
       await rm(staging, { recursive: true, force: true });
@@ -224,8 +228,8 @@ export class ContentStore {
         }
         if (!bytes)
           bytes = await boundedBytes(
-            await this.fetcher(
-              `${this.origin}/desktop/content/objects/${file.sha256}`,
+            await fetchUpdate(this.fetcher,
+              `${base}/${file.sha256}`,
               { redirect: "error", signal: AbortSignal.timeout(60000) },
             ),
             file.size,
@@ -235,6 +239,7 @@ export class ContentStore {
         const target = path.join(staging, file.path);
         await mkdir(path.dirname(target), { recursive: true });
         await writeFile(target, bytes);
+        onProgress({ phase: 'downloading', version: manifest.version, completed: ++completed, total: manifest.files.length });
       }
       await writeFile(path.join(staging, "release.json"), raw);
       const destination = this.directory(id);

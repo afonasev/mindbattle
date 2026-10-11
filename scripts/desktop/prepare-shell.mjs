@@ -3,6 +3,7 @@ import { readdir, readFile, writeFile, mkdir, rm, stat, readlink, cp, link } fro
 import { createPrivateKey, createPublicKey, sign } from 'node:crypto';
 import path from 'node:path';
 import { fileHash, shellManifest } from '../../desktop/shell.mjs';
+import { releaseBase } from '../../desktop/updateTransport.mjs';
 const key = createPrivateKey(await readFile(process.env.MINDBATTLE_CONTENT_KEY));
 const publicKey = await readFile('desktop/content-public.pem', 'utf8');
 if (createPublicKey(key).export({ type: 'spki', format: 'pem' }).toString() !== publicKey)
@@ -38,7 +39,7 @@ for (const platform of ['darwin-universal', 'win32-x64']) {
         }
     }
     await walk(root);
-    const payload = JSON.stringify({ format: 1, product: 'tech.afonasev.mindbattle', sequence, version: config.shellVersion, platform, helper: 1, entry: platform === 'darwin-universal' ? 'Contents/MacOS/Mindbattle' : 'Mindbattle.exe', files, links });
+    const payload = JSON.stringify({ format: 1, product: 'tech.afonasev.mindbattle', sequence, version: config.shellVersion, platform, helper: 1, objectBaseUrl: releaseBase('shell', sequence), entry: platform === 'darwin-universal' ? 'Contents/MacOS/Mindbattle' : 'Mindbattle.exe', files, links });
     const envelope = { payload, signature: sign(null, Buffer.from(payload), key).toString('base64') };
     shellManifest(envelope, publicKey, platform);
     await mkdir(path.join(output, platform));

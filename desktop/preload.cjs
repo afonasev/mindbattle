@@ -3,6 +3,11 @@ contextBridge.exposeInMainWorld("mindbattleDesktop", {
   version: 1,
   status: () => ipcRenderer.invoke("desktop:status"),
   checkUpdate: () => ipcRenderer.invoke("desktop:check-update"),
+  onUpdateStatus: (listener) => {
+    const handler = (_event, status) => listener(status);
+    ipcRenderer.on("desktop:update-status", handler);
+    return () => ipcRenderer.removeListener("desktop:update-status", handler);
+  },
   onUpdate: (listener) => {
     const handler = (_event, ready, version) => listener(ready, version);
     ipcRenderer.on("desktop:update", handler);

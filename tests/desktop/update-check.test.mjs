@@ -29,11 +29,30 @@ test("a ready cached update is available offline and shell keeps priority", asyn
   let contentChecked = false;
   const shell = store(async () => { throw Error("offline"); });
   shell.state.pending = "ready";
+  shell.pendingManifest = async () => ({ version: '1.0.5' });
   assert.deepEqual(await createUpdateCheck(shell, store(async () => { contentChecked = true; return false; }), () => {})(), { ready: true });
   assert.equal(contentChecked, false);
 });
 test("current requires both channels to succeed", async () => {
   assert.deepEqual(await createUpdateCheck(store(async () => false), store(async () => false), () => {})(), { ready: false });
+});
+
+test("background progress/error survives status reads and manual retry recovers", async () => {
+  let offline = true;
+  const shell = store(async () => false);
+  const content = store(async emit => {
+    emit({ phase: 'downloading', version: '1.2.3', completed: 1, total: 2 });
+    if (offline) throw Error('offline');
+    return true;
+  });
+  const statuses = [];
+  const check = createUpdateCheck(shell, content, () => {}, s => statuses.push(s));
+  await assert.rejects(check(), /Не удалось проверить/);
+  assert.equal(check.status().phase, 'error');
+  assert.deepEqual(statuses.map(s => s.phase), ['checking', 'downloading', 'error']);
+  offline = false;
+  assert.deepEqual(await check(), { ready: true });
+  assert.equal(check.status().phase, 'ready');
 });
 
 test("pending version follows apply priority and never uses current shell version", async () => {

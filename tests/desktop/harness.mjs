@@ -14,10 +14,12 @@ try {
 } catch {}
 const originalFetch = globalThis.fetch;
 globalThis.fetch = async (url, options = {}) => {
-  if (String(url).startsWith("https://mindbattle.afonasev.tech/")) {
+  if (String(url).startsWith("https://mindbattle.afonasev.tech/") || String(url).startsWith("https://afonasev.github.io/mindbattle/") || String(url).startsWith("https://github.com/afonasev/mindbattle/releases/download/")) {
     const state = globalThis.testNetwork;
     if (!state.online) throw new Error("Fixture offline");
     const u = new URL(url);
+    if (u.hostname === "afonasev.github.io") u.pathname = u.pathname.slice("/mindbattle".length);
+    if (u.hostname === "github.com") u.pathname = `/desktop/content/objects/${u.pathname.split("/").at(-1)}`;
     if (
       u.pathname.startsWith("/api/network/") &&
       process.env.MINDBATTLE_DESKTOP_TEST_API

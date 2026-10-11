@@ -30,4 +30,4 @@
 ## Публикация релизов
 
 - Перед релизом читай [docs/desktop/RELEASE.md](../../docs/desktop/RELEASE.md): там версии, timestamp, порядок сборки, каналы публикации и проверки.
-- Установщики публикуются через `bash scripts/desktop/publish.sh installers` в GitHub Releases `afonasev/mindbattle`; VPS хранит только каталог загрузок. Content/shell обновления остаются отдельными подписанными каналами VPS. `make deploy` публикует сайт, но не desktop-релиз.
+- Установщики публикуются через `bash scripts/desktop/publish.sh installers` в GitHub Releases `afonasev/mindbattle`; VPS хранит только каталог загрузок. Content/shell обновления публикуются отдельными подписанными каналами GitHub Releases + Pages; legacy-shell на VPS используется только для явного перехода старых установок. `make deploy` публикует сайт, но не desktop-релиз.

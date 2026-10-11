@@ -1,5 +1,5 @@
 import { browserFeedback } from './feedback/outbox';
-import { desktop } from "./desktop";
+import { desktop, type DesktopUpdateStatus } from "./desktop";
 import { initializeStatistics } from './statistics/control';
 import { StrictMode, Suspense, lazy, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
@@ -28,6 +28,18 @@ let applyUpdate: (() => Promise<void>) | undefined;
 let updateReady = false;
 let updateVersion: string | undefined;
 const updateListeners = new Set<(ready: boolean, version?: string) => void>();
+let desktopUpdateStatus: DesktopUpdateStatus = { phase: "idle" };
+let desktopStatusRevision = 0;
+const desktopStatusListeners = new Set<(status: DesktopUpdateStatus) => void>();
+function desktopStatusChanged(status: DesktopUpdateStatus) {
+  desktopStatusRevision++;
+  desktopUpdateStatus = status;
+  desktopStatusListeners.forEach(listener => listener(status));
+}
+export const onDesktopUpdateStatus = (listener: (status: DesktopUpdateStatus) => void) => {
+  desktopStatusListeners.add(listener); listener(desktopUpdateStatus);
+  return () => { desktopStatusListeners.delete(listener); };
+};
 export const onPwaUpdate = (listener: (ready: boolean, version?: string) => void) => { updateListeners.add(listener); listener(updateReady, updateVersion); return () => { updateListeners.delete(listener); }; };
 export const applyPwaUpdate = () => applyUpdate?.() ?? Promise.reject(new Error("Обновление пока недоступно. Попробуйте ещё раз."));
 let registrationError: unknown;
@@ -76,8 +88,17 @@ function RoutedApp() {
 function updateAvailable(ready: boolean, version?: string) { updateReady = ready; updateVersion = ready ? version : undefined; updateListeners.forEach(listener => listener(ready, updateVersion)); }
 if (desktop) {
   applyUpdate = async () => { if (!await desktop!.applyUpdate()) throw new Error("Update not applied"); };
-  desktop.onUpdate(updateAvailable);
-  void desktop.status().then(state => updateAvailable(state.ready, state.updateVersion));
+  desktop.onUpdate((ready, version) => { desktopStatusRevision++; updateAvailable(ready, version); });
+  desktop.onUpdateStatus?.(desktopStatusChanged);
+  const revision = desktopStatusRevision;
+  void desktop.status().then(state => {
+    // A delayed initial snapshot must not erase a newer IPC download/error.
+    if (revision !== desktopStatusRevision) return;
+    updateAvailable(state.ready, state.updateVersion);
+    if (state.updateStatus) desktopStatusChanged(state.updateStatus);
+  }).catch(() => {
+    if (revision === desktopStatusRevision) desktopStatusChanged({ phase: "error", message: "Не удалось проверить обновления. Попробуйте ещё раз." });
+  });
 } else if ("serviceWorker" in navigator) {
   applyUpdate = registerSW({
     immediate: true,

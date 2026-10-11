@@ -8,6 +8,7 @@ const { createReadStream } = fs;
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { digest, atomicJson, boundedBytes } from './content.mjs';
+import { objectBase, fetchUpdate } from './updateTransport.mjs';
 export const shellPath = value => typeof value === 'string' && value.length > 0 && !/[\\:\x00\r\n\t]/.test(value) && !value.startsWith('/') && value.split('/').every(p => p && p !== '.' && p !== '..' && !/[. ]$/.test(p));
 export async function fileHash(file) { const h = createHash('sha256'); for await (const bytes of createReadStream(file))
     h.update(bytes); return h.digest('hex'); }
@@ -126,7 +127,7 @@ export class ShellStore {
     releaseDir(id = this.state.pending) { if (!/^[a-f0-9]{64}$/.test(id || ''))
         throw Error('Invalid shell release'); return path.join(this.root, 'releases', id); }
     async pendingManifest() { return shellManifest(JSON.parse(await readFile(path.join(this.releaseDir(), 'release.json'), 'utf8')), this.key, this.platform); }
-    async check() {
+    async check(onProgress = () => {}) {
         if (this.busy)
             return Boolean(this.state.pending);
         this.busy = true;
@@ -137,12 +138,17 @@ export class ShellStore {
             const m = shellManifest(env, this.key, this.platform);
             if (m.sequence <= this.state.highWater || !newerVersion(m.version, this.version))
                 return Boolean(this.state.pending);
+            const base = objectBase(m, 'shell', this.origin);
+            let completed = 0;
+            onProgress({ phase: 'downloading', version: m.version, completed, total: m.files.length });
             const id = digest(Buffer.from(env.payload));
             stage = path.join(this.root, 'staging');
             await rm(stage, { recursive: true, force: true });
             await mkdir(stage, { recursive: true });
-            for (const f of m.files)
-                await downloadFile(await this.fetcher(`${this.origin}/desktop/shell/objects/${f.sha256}`, { redirect: 'error', signal: AbortSignal.timeout(120000) }), path.join(stage, 'runtime', f.path), f);
+            for (const f of m.files) {
+                await downloadFile(await fetchUpdate(this.fetcher, `${base}/${f.sha256}`, { signal: AbortSignal.timeout(120000) }), path.join(stage, 'runtime', f.path), f);
+                onProgress({ phase: 'downloading', version: m.version, completed: ++completed, total: m.files.length });
+            }
 
             for (const l of m.links) {
                 const file = path.join(stage, 'runtime', l.path);

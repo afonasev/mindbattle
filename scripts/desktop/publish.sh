@@ -2,7 +2,13 @@
 # Explicit release operation. Requires production authorization; never called by build/deploy.
 set -euo pipefail
 kind="${1:-}"
-case "$kind" in content|shell|installers) ;; *) echo 'Usage: publish.sh content|shell|installers' >&2; exit 2;; esac
+case "$kind" in content|shell|installers|legacy-shell) ;; *) echo 'Usage: publish.sh content|shell|installers|legacy-shell' >&2; exit 2;; esac
+if [ "$kind" = content ] || [ "$kind" = shell ]; then
+  node scripts/desktop/verify-release.mjs "$kind"
+  exec node scripts/desktop/publish-updates.mjs "$kind"
+fi
+# Explicit one-time migration for clients whose installed shell knows only the VPS.
+if [ "$kind" = legacy-shell ]; then kind=shell; fi
 node scripts/desktop/verify-release.mjs "$kind"
 if [ "$kind" = installers ]; then
   node scripts/desktop/publish-github.mjs

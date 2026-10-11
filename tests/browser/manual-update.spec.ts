@@ -115,3 +115,61 @@ for (const legacy of [false, true]) {
     await expect(update).toBeHidden();
   });
 }
+
+test('desktop background download is visible and a failed check can be retried', async ({ page }, info) => {
+  await page.addInitScript(() => {
+    HTMLMediaElement.prototype.play = async () => {};
+    (window as any).updateCalls = 0;
+    (window as any).applyCalls = 0;
+    (window as any).mindbattleDesktop = {
+      version: 1, status: async () => ({ ready: false, shellVersion: '1.0.5', updateStatus: { phase: 'checking' } }),
+      onUpdate: (notify: unknown) => { (window as any).notifyUpdate = notify; return () => {}; },
+      onUpdateStatus: (notify: unknown) => { (window as any).notifyStatus = notify; return () => {}; },
+      checkUpdate: async () => { (window as any).updateCalls++; (window as any).notifyStatus({ phase: 'current' }); return { ready: false }; },
+      applyUpdate: async () => { (window as any).applyCalls++; return false; },
+      safeToUpdate: () => {}, ready: async () => {}, quit: async () => {},
+    };
+  });
+  await page.goto('/');
+  await expect(page.getByRole('button', { name: 'Проверяем…', exact: true })).toBeDisabled();
+  await page.evaluate(() => (window as any).notifyStatus({ phase: 'downloading', version: '0.2.0+abcdef12', completed: 2, total: 4 }));
+  const download = page.getByRole('button', { name: 'Скачиваем обновление…', exact: true });
+  await expect(download).toBeDisabled();
+  await expect(download).toContainText('Версия 0.2.0');
+  await expect(download).not.toContainText('abcdef12');
+  await expect(page.getByRole('status')).toContainText('Скачано 50% файлов');
+  await page.screenshot({ path: info.outputPath('desktop-download-progress.png'), fullPage: true });
+  await page.evaluate(() => (window as any).notifyStatus({ phase: 'error', message: 'Не удалось проверить обновления. Проверьте подключение и попробуйте ещё раз.' }));
+  const retry = page.getByRole('button', { name: 'Повторить проверку', exact: true });
+  await expect(retry).toBeEnabled();
+  await expect(page.getByRole('alert')).toContainText('Не удалось проверить');
+  await page.screenshot({ path: info.outputPath('desktop-update-retry.png'), fullPage: true });
+  await page.evaluate(() => localStorage.setItem('update-preserved', 'saved'));
+  await retry.click();
+  await expect(retry).toBeHidden();
+  expect(await page.evaluate(() => (window as any).updateCalls)).toBe(1);
+  expect(await page.evaluate(() => (window as any).applyCalls)).toBe(0);
+  expect(await page.evaluate(() => localStorage.getItem('update-preserved'))).toBe('saved');
+});
+
+for (const rejected of [false, true]) {
+test(`desktop delayed startup ${rejected ? 'error' : 'snapshot'} cannot hide a newer update event`, async ({ page }) => {
+  await page.addInitScript(rejected => {
+    HTMLMediaElement.prototype.play = async () => {};
+    (window as any).mindbattleDesktop = {
+      version: 1, status: () => new Promise((resolve, reject) => { (window as any).finishStatus = rejected ? () => reject(new Error('Late failure')) : resolve; }),
+      onUpdate: (notify: unknown) => { (window as any).notifyUpdate = notify; return () => {}; },
+      checkUpdate: async () => ({ ready: true }), applyUpdate: async () => false,
+      safeToUpdate: () => {}, ready: async () => {}, quit: async () => {},
+    };
+  }, rejected);
+  await page.goto('/');
+  await expect(page.getByRole('button', { name: 'Одиночная игра', exact: true })).toBeVisible();
+  await page.evaluate(() => {
+    (window as any).notifyUpdate(true, '1.0.5');
+    (window as any).finishStatus({ ready: false, shellVersion: '1.0.4' });
+  });
+  await expect(page.getByRole('button', { name: 'Появилось новое обновление', exact: true })).toBeVisible();
+  await expect(page.getByRole('alert')).toBeHidden();
+});
+}
