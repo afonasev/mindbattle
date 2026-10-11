@@ -19,7 +19,7 @@ class Text(HTMLParser):
   if not self.hidden and d.strip():self.parts.append(' '.join(d.split()))
 def extract(b,p):
  if p.suffix=='.pdf':return [x.extract_text() for x in PdfReader(io.BytesIO(b)).pages]
- if p.suffix=='.json':return b.decode()
+ if p.suffix in ('.json','.txt'):return b.decode()
  t=Text();t.feed(b.decode());return t.parts
 
 def bind(topic,ids,authorDir,receiptMap,label):
@@ -37,8 +37,14 @@ def bind(topic,ids,authorDir,receiptMap,label):
     if rawrel not in captures:
      gb=blob(raw,head);assert b==gb and sha(b)==p['rawCaptureSha256'];captures[rawrel]=(extract(b,raw),extract(gb,raw))
     dn,gn=captures[rawrel];loc=p['locator'];quote=p['passage'];assert sha(quote.encode())==p['passageSha256']
-    if 'pdfPage' in loc:actual=dn[loc['pdfPage']-1];actualgit=gn[loc['pdfPage']-1]
-    elif isinstance(dn,list):actual=' '.join(dn[loc['textNodeStart']:loc['textNodeEnd']+1]);actualgit=' '.join(gn[loc['textNodeStart']:loc['textNodeEnd']+1])
+    if isinstance(loc,dict) and 'jsonPointer' in loc:
+     actual=json.loads(dn);actualgit=json.loads(gn)
+     for part in loc['jsonPointer'].split('/')[1:]:
+      actual=actual[int(part)] if isinstance(actual,list) else actual[part];actualgit=actualgit[int(part)] if isinstance(actualgit,list) else actualgit[part]
+     quote=p.get('decodedPassage',quote)
+    elif isinstance(loc,dict) and 'pdfPage' in loc:actual=dn[loc['pdfPage']-1];actualgit=gn[loc['pdfPage']-1]
+    elif isinstance(dn,list) and isinstance(loc,dict) and 'textNodeStart' in loc:actual=' '.join(dn[loc['textNodeStart']:loc['textNodeEnd']+1]);actualgit=' '.join(gn[loc['textNodeStart']:loc['textNodeEnd']+1])
+    elif isinstance(dn,list):actual=' '.join(dn);actualgit=' '.join(gn)
     else:actual=dn;actualgit=gn
     assert actual==actualgit and (quote in actual or ' '.join(quote.split()) in ' '.join(actual.split())),(qid,f['field'],rawrel)
     pp={**p,'rawCapture':os.path.relpath(raw,ROOT/label),'diskGitRawMatch':True,'diskGitExtractMatch':True};proofs.append(pp)
