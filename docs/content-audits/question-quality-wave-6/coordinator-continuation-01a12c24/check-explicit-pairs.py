@@ -27,8 +27,25 @@ for group in config['explicitGroups']:
     identities = []
     for reading in group['pairedReceipts']:
         path = ROOT / reading['path']
-        receipt = json.loads(subprocess.check_output(['git', 'show', reading['commit'] + ':' + reading['path']]))
-        identity = receipt['agentIdentity']
+        receipt_bytes = subprocess.check_output(['git', 'show', reading['commit'] + ':' + reading['path']])
+        receipt = json.loads(receipt_bytes)
+        if 'nativeIdentityBinding' in reading:
+            # Missing original metadata is witnessed separately; original bytes stay frozen.
+            witness_ref = reading['nativeIdentityBinding']
+            witness = json.loads(subprocess.check_output([
+                'git', 'show', witness_ref['commit'] + ':' + witness_ref['path']]))
+            assert reading['actualRole'] == 'author'
+            assert witness['recordType'] == 'native-author-provenance-binding-not-new-reading'
+            assert witness['authorReceipt'] == reading['path']
+            assert witness['authorReceiptSha256'] == sha(receipt_bytes)
+            assert witness['frozenCommit'] == reading['commit']
+            assert witness['nativeCompletion']['status'] == 'completed'
+            identity = witness['actualAuthorIdentity']
+            assert witness['nativeCompletion']['threadId'] == identity
+            if 'agentIdentity' in receipt:
+                assert receipt['agentIdentity'] == identity
+        else:
+            identity = receipt['agentIdentity']
         assert identity == reading['actualNativeIdentity'], 'actual role identity'
         identities.append(identity)
         by_id = {c['questionId']: c for c in receipt['cards']}
