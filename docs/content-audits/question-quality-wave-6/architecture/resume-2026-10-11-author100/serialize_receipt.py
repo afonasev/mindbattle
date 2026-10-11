@@ -14,7 +14,7 @@ for authored in data:
   field=f['field'];scalar=canon([q['prompt'],q['correctIndex'],q['answers'][q['correctIndex']]['text']]) if field=='prompt-key' else (q['explanation'] if field=='explanation' else q['answers'][int(field[-1])]['note']).encode()
   out={k:f[k] for k in ['field','verdict','substantiveRead','claimAnalysis']};out['literalSha256']=sha(scalar);out['proofs']=[]
   for item in f['proofs']:
-   raw=P/item['rawCapture'];body=raw.read_bytes();m=json.loads(pathlib.Path(str(raw)+'.http.json').read_text());assert m['exitCode']==0 and str(m.get('status',m.get('curlResult',''))).startswith('200')
+   raw=P/item['rawCapture'];body=raw.read_bytes();m=json.loads(pathlib.Path(str(raw)+'.http.json').read_text());assert m['exitCode']==0 and (str(m.get('status',m.get('curlResult',''))).startswith('200') or (m.get('status')=='EXTRACTED_ORIGINAL_COMPLETE' and m.get('completeOriginalExtract') is True))
    if raw.suffix=='.json':
     document=json.loads(body);pointer=item['locator']['jsonPointer'];value=document
     for part in pointer.strip('/').split('/'):value=value[int(part)] if isinstance(value,list) else value[part]
@@ -22,9 +22,11 @@ for authored in data:
     rawPassage=json.dumps(item['passage'],ensure_ascii=True)[1:-1]
     assert rawPassage in body.decode()
     item={**item,'decodedPassage':item['passage'],'passage':rawPassage,'passageEncoding':'Original JSON string encoding; decodedPassage is the reader-inspected scalar'}
+   elif raw.suffix=='.txt':
+    assert item['passage'] in body.decode()
    else:
     t=v.Text();t.feed(body.decode());assert ' '.join(item['passage'].split()) in ' '.join(' '.join(t.parts).split())
-   out['proofs'].append({**item,'sourceClass':item.get('sourceClass','primary university authored educational reference'),'title':item.get('title','University of Pittsburgh: Glossary of Medieval Art and Architecture'),'url':m['url'],'rawCaptureSha256':sha(body),'captureFormat':'json original bytes with JSON pointer' if raw.suffix=='.json' else 'html original bytes','captureMethod':m['captureMethod'],'passageSha256':sha(item['passage'].encode())})
+   out['proofs'].append({**item,'sourceClass':item.get('sourceClass','primary university authored educational reference'),'title':item.get('title','University of Pittsburgh: Glossary of Medieval Art and Architecture'),'url':m['url'],'rawCaptureSha256':sha(body),'captureFormat':'json original bytes with JSON pointer' if raw.suffix=='.json' else ('text fully documented original extracted content' if raw.suffix=='.txt' else 'html original bytes'),'captureMethod':m['captureMethod'],'passageSha256':sha(item['passage'].encode())})
   row['fields'].append(out)
  rows.append(row)
 assert [(q['id'],q['difficulty'],q['correctIndex']) for q in topic['questions']]==[(q['id'],q['difficulty'],q['correctIndex']) for q in baseline['questions']]
