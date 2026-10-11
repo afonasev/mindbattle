@@ -1,0 +1,38 @@
+{
+  "baseline": "9fbbe9e0a28cb00d19c906febf46ed067b9f3b8d",
+  "ownedChanges": "independent proof receipts only; no runtime/content/test/validator changes",
+  "selectedBeforeExpansion": "pilot5 unchanged proof-format checker and30 literal roundtrip; then all20 exact hashes, unchanged full-receipt checker and120 literal roundtrip",
+  "reason": "Audit changes affect receipt/source/literal identity only. Existing author typecheck not repeated; user forbids full/broad routes. Mechanical checks cannot certify meaning.",
+  "commands": [
+    "python3 assemble.py",
+    "python3 verify-proof-format.py independent-pilot5.json --repo REPO --output pilot5-mechanical.json",
+    "python3 assemble.py --full",
+    "python3 verify-proof-format.py independent-current20.json --repo REPO --output full20-mechanical.json",
+    "independent direct frozen/literal roundtrip and source-hash checks",
+    "git diff --cached --check -- OWNED_PATH"
+  ],
+  "outcome": {
+    "pilotCards": 5,
+    "pilotFields": 30,
+    "pilotMechanicalErrors": 0,
+    "fullCards": 20,
+    "fullFields": 120,
+    "fullMechanicalErrors": 0,
+    "independentPassCards": 19,
+    "independentFixCards": 1,
+    "newCertifiedCards": 0
+  },
+  "deferred": [
+    "full suite",
+    "browser/runtime/device/visual/audio product acceptance",
+    "build/release",
+    "merge/push/deploy",
+    "coordinator certification"
+  ],
+  "gitWhitespace": {
+    "structuredEvidenceAndAdapterExitCode": 0,
+    "allOwnedExitCode": 2,
+    "sourceCaptureException": "Exact complete pypdf extraction retains original trailing spaces on bilingual consumer-information lines. No source bytes/hash were stripped for whitespace green. Full warnings saved in git-whitespace-source-capture.txt.",
+    "excludedPath": "docs/content-audits/question-quality-wave-6/independent-pilot/resume-2026-10-11-standard-skat20/uno-complete-independent-extraction.txt"
+  }
+}

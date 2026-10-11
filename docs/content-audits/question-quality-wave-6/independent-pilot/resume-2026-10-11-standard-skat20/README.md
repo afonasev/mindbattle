@@ -1,0 +1,17 @@
+# Independent exact Skat20 reading — 2026-10-11
+
+Reader `01a12b13-a24c-7ae2-9c1c-3a7952b3076c` is independent of author `01a12b13-9e51-76e2-b0aa-6f0e03f539f1`. Frozen author code/proofs: `9fbbe9e0a28cb00d19c906febf46ed067b9f3b8d`; QA metadata: `3f4a1891f930d0e4b3dbbe59a52cc613b3be3768`. Exact target is the twenty `batch-standard-skat20/before.json.batchIds`, with current hashes in the author's `freeze-for-independent.json` and this folder's `full20-roundtrip-and-summary.json`.
+
+The reader independently read all 120 current fields (prompt/key, indexed note0–3, explanation), relevant original raw source passages, Skat rule tables, both deck specimen images, and the actual Mattel PDF page1 OBJECT/SCORING. The 100 current card-game prompt/key pairs were compared for repeated targets. Previously certified165 card bodies and historical HOLD receipts were not edited. Author judgments/analysis were not used as independent decisions.
+
+`independent-current20.json` contains **19 PASS / 1 FIX_REQUIRED**, and **119 PASS / 1 FIX_REQUIRED fields**. These are independent substantive decisions, not coordinator certification. `newCertifiedCards=0`.
+
+The exact defect is `card-games-goal-war-cards/note0`: answer “Первым избавиться от всех карт” has a note about War ties. That note is factually supported, but does not describe this shedding-goal distractor. `defects.json` binds the exact literal/card hashes, rule and remedy. The author should revise only that note with a checked fact about a shedding-game goal, freeze the changed hash and request another independent current-card read. No card was edited by this reader.
+
+Pilot5 was read and assembled before expansion, with 30-literal roundtrip and zero mechanical errors. Full20 subsequently passed the unchanged proof-format checker and 120-literal roundtrip. `assemble.py` only binds explicitly written per-field reader verdicts and analyses to frozen literals, selected original passages and hashes. It does not infer any PASS from source existence or matching text. No author receipt/analysis is loaded by this adapter.
+
+The first full-format attempt failed because a quoted Rummy phrase omitted the rendered whitespace before a comma. Both failed receipt and report remain intact; only the excerpt whitespace was corrected. `history.json` also retains the preflight HOLD issues and an optional PIL-import failure. Old history remains unchanged.
+
+ISkO provenance was independently refreshed via the corrected `...4474ce066ef.pdf` URL: HTTP200,352124 bytes, SHA256 `9a8abd99fa1f61559868ef2578c3dc29e60b079fa4bebad3dd41869a644e18e5`, identical to retained raw. The old `...4474e066ef.pdf` URL returns404. Mattel's complete original two-page `/Kxx` extraction was independently decoded and reproduced, then the cited English claims were read from the actual page image. Its original and extraction hashes, visual locator and PNG are retained. Challenge HTML and truncated PDF download attempts are not proofs. The fresh French specimen was actually viewed; its different bytes are bound directly.
+
+Checks were limited to unchanged proof-format validation, exact frozen/literal identity, original/extraction hash checks, and scoped Git whitespace checks. Full suite, typecheck repetition, browser QA, builds, push, merge, deploy, release, planning/claim/ledger edits and archive were not run. The coordinator owns the final two-role comparison and count.
