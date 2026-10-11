@@ -21,8 +21,14 @@ def content(raw):
   return '\n'.join(p.extract_text() for p in PdfReader(raw).pages)
  s=b.decode()
  if s.lstrip().startswith('{'):
-  return html.unescape(s)+ '\n' + '\n'.join(str(x) for x in json.loads(s).values())
- t=Text();t.feed(s);return ''.join(t.data)
+  
+  def strings(x):
+   if isinstance(x,str):return [x]
+   if isinstance(x,list):return [s for v in x for s in strings(v)]
+   if isinstance(x,dict):return [s for v in x.values() for s in strings(v)]
+   return []
+  s=' '.join(strings(json.loads(s)))
+ t=Text();t.feed(s);return ' '.join(t.data)
 manual=json.loads((OUT/'manual.json').read_text())
 for group,spec in manual.items():
  receipt=ROOT/spec['receipt']; author=json.loads(receipt.read_text());topic=ROOT/spec['topic'];working=json.loads(topic.read_text());frozen=json.loads(subprocess.check_output(['git','show',spec['freeze']+':'+spec['topic']]))
@@ -40,7 +46,9 @@ for group,spec in manual.items():
    else:
     for p in entry.get('proofs',[]):
      p=dict(p);raw=OUT/p['rawCapture'];b=raw.read_bytes();assert '</html>' in b.decode().lower();assert norm(p['passage']) in norm(content(raw)),(q['id'],name,p['passage']);p['rawCapture']=str(raw.relative_to(ROOT));p['rawCaptureSha256']=sha(b);p['passageSha256']=sha(p['passage'].encode());p['captureFormat']='complete original HTML, curl --compressed successful response';p['independentOriginalRead']=True;proofs.append(p)
-   fields.append({'field':name,'literal':literals[index],'literalSha256':sha(canon(literals[index])),'verdict':entry['verdict'],'claimAnalysis':entry['analysis'],'substantiveRead':True,'proofs':proofs,**({'rule':entry['rule']} if 'rule' in entry else {})})
+   for extra in entry.get('additionalQuotes',[]):
+    p=dict(extra);raw=ROOT/p['rawCapture'];b=raw.read_bytes();git=subprocess.check_output(['git','show',spec['freeze']+':'+p['rawCapture']]);assert b==git;assert norm(p['passage']) in norm(content(raw));p['rawCaptureSha256']=sha(b);p['passageSha256']=sha(p['passage'].encode());p['gitFreeze']=spec['freeze'];p['independentOriginalRead']=True;proofs.append(p)
+   fields.append({'field':name,'literal':literals[index],'literalSha256':sha(literals[index].encode() if isinstance(literals[index],str) else canon(literals[index])),'verdict':entry['verdict'],'claimAnalysis':entry['analysis'],'substantiveRead':True,'proofs':proofs,**({'rule':entry['rule']} if 'rule' in entry else {})})
   assert len(fields)==6
   records.append({'questionId':q['id'],'cardCanonicalSha256':sha(canon(q)),'sourceUrl':q['source']['url'],'verdict':decision['verdict'],'editorialAnalysis':decision['analysis'],'fields':fields,'sourceRole':'independent-reader','authorIdentity':spec['author'],'currentCard':q})
  result={'role':'independent-reader','agentIdentity':'01a12c38-65ee-75d0-bec1-05ae39103798','date':'2026-10-11','decisionMethod':'Manual original and literal reading; serializer supplies no substantive verdicts. No root certification.','freeze':spec['freeze'],'cards':records}
