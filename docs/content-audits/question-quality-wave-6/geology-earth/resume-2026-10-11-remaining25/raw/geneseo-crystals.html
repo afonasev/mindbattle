@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+<title>Crystal Graphics Research Project : The Structure of Individual Crystals</title>
+<link rel="stylesheet" href="cgstyles.css" type="text/css">
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+
+
+<nav class="navbar" style="width: 18em">
+<ul class="navbar">
+  <li class="navbar"><a href="#top" class="navbar">Top</a></li>
+  <li class="navbar"><a href="#symmop" class="navbar">Symmetry Operations</a></li>
+  <li class="navbar"><a href="#notation" class="navbar">Notation for Symmetry Elements</a></li>
+  <li class="navbar"><a href="#systems" class="navbar">Crystal Systems and Classes</a></li>
+  <li class="navbar"><a href="#form" class="navbar">Crystal Forms</a></li>
+  <li class="navbar"><a href="#lattice" class="navbar">Lattice Structures and Unit Cells</a></li>
+  <li class="navbar"><a href="#miller" class="navbar">Miller Indices</a></li>
+  <li class="navbar"><a href="#conclusion" class="navbar">Conclusion</a></li>
+  <li class="navbar"><a href="#references" class="navbar">References</a></li>
+</ul>
+</nav>
+
+
+<div style="margin-left: 20em">
+
+<header>
+<p class="page-note" id="top">
+<a href="index.html">Crystal Graphics Research</a>: The Structure of Individual Crystals
+</p>
+</header>
+
+<main>
+
+<h1 class="centered">The Structure of Individual Crystals</h1>
+
+<p>
+A crystal aggregate is a collection of crystals. Thus, even though the crystals in an
+aggregate aren&rsquo;t necessarily ideal, or even distinct, understanding how to
+mathematically and algorithmically model individual crystals is a reasonable place to
+start the study of aggregates. Our work being ultimately directed to the appearance of
+crystals, their symmetry is a key property we need to capture. Crystallography has a rich
+nomenclature for categorizing and describing crystal symmetry, and mathematics has
+powerful tools for describing and discussing symmetry. This page explains
+crystallography&rsquo;s description of symmetry and explores how it relates to
+mathematical descriptions. The overarching question is whether a crystal&rsquo;s symmetry
+distills into a few pieces of primitive information from which its complete geometry
+follows mathematically and algorithmically.
+</p>
+
+
+<h2 id="symmop">Symmetry Operations</h2>
+
+<p>
+Symmetry in crystals is described by the mathematical operations of rotation about an
+axis, reflection across a plane, and inversion through a point applied to vertices, edges,
+or faces of the crystal. In particular, applying one of these operations to a vertex,
+edge, or face of a crystal produces another vertex, edge, or face of the same crystal, and
+relative to this new vertex, edge, or face the crystal &ldquo;looks&rdquo; the same as it
+did relative to the original one. Operations that preserve appearance in this way are
+called <dfn>symmetry operations</dfn>. However, not every rotation, reflection, or
+inversion that can be defined mathematically is a symmetry operation for a physically
+realizable crystal; the actual symmetry operations for a crystal follow from its
+<a href="#systems">crystal system</a>.
+</p>
+
+<p>
+Mathematically, the symmetry operations for crystals form algebraic groups. In algebra, a
+<dfn>group</dfn> is a set of values with an associative operator that acts on those
+values; the set of values is closed with respect to the operator, includes an identity
+element for the operator, and every value in the set also has an inverse in the set. The
+(positive and negative) integers with addition is an example of a group. Pertinent to
+crystals, symmetry operations can also form groups, with the operations being the values
+and function composition being the operator. For now, we are concerned only with
+<dfn>point groups</dfn>, i.e., groups in which every symmetry operation maps at
+least one point to itself.
+</p>
+
+<p>
+For more information on crystal symmetry operations, see crystallography texts such as
+<a href="#okeefe">O&rsquo;Keefe et al. 1996</a> or <a href="#megaw">Megaw 1973</a>.
+</p>
+
+<p>
+Rotations, reflections, and inversions have well-known matrix forms, which can be found in
+most linear algebra texts (or can easily be derived). To apply an operation represented by
+matrix \(M\) to point \(p = (x, y, z)\), compute the product \(M \vec{p}\) where vector
+\(\vec{p}\) is point \(p\) treated as a column vector. Typical matrix forms for crystal
+symmetry operations include&hellip;
+</p>
+
+<h3>Inversion through the Origin</h3>
+
+<p>
+This symmetry transforms point \((x, y, z)\) to point \((-x, -y, -z)\). Its matrix form is
+simply
+</p>
+\[\begin{pmatrix}-1 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & -1\end{pmatrix}\]
+
+<h3>Mirror Plane</h3>
+
+<p>This symmetry transforms point \((x, y, z)\) to its reflection across some plane. For
+example, considering the mirror plane \(z = 0\), the transformation maps point
+\((x, y, z)\)to \((x, y, -z)\). The matrix form for such a reflection about the \(z = 0\)
+plane is
+</p>
+\[\begin{pmatrix}1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & -1\end{pmatrix}\]
+
+<h3>Rotation Axes</h3>
+
+<p>
+Rotational symmetry in crystals always involves rotation through an angle whose measure in
+degrees is of the form \( \tfrac{360}{n}\), for \(n = 2, 3, 4\), or 6. These symmetries
+are <var>n</var>-fold, meaning that applying the rotation once, twice (i.e., rotating the
+result of the rotation), three times, and so forth up to \(n-1\) times are all symmetry
+operations (applying the rotation \(n\) times is the identity operation). Axes of
+rotational symmetry for \(n = 2, 3, 4\), and 6 are sometimes called <dfn>diad</dfn>,
+<dfn>triad</dfn>, <dfn>tetrad</dfn>, and <dfn>hexad</dfn> axes, respectively. The
+matrix form for a rotation through angle \(\Theta\); counterclockwise about the \(z\) axis
+is
+</p>
+\[\begin{pmatrix}\cos\Theta & -\sin\Theta & 0 \\ \sin\Theta & \cos\Theta & 0 \\ 0 & 0 & 1\end{pmatrix}\]
+
+<h3>Rotoinversion</h3>
+
+<p>
+This is a rotation followed by an inversion, i.e., a &ldquo;turn + flip.&rdquo; Its matrix
+form is therefore simply the product of an inversion and a rotation. For example, rotating
+about the z axis and inverting through the origin again&hellip;
+</p>
+\[
+\begin{pmatrix}-1 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & -1\end{pmatrix}
+\begin{pmatrix}\cos\Theta & -\sin\Theta & 0 \\ \sin\Theta & \cos\Theta & 0 \\ 0 & 0 & 1\end{pmatrix}
+= \begin{pmatrix}-\cos\Theta & \sin\Theta & 0 \\ -\sin\Theta & -\cos\Theta & 0 \\ 0 & 0 & -1\end{pmatrix}
+\]
+
+<p>
+The above examples give a sense for what crystal symmetry operations look like for certain
+convenient points, planes, or axes, but they are not a complete catalog. In actual
+practice, one would either use similar transformations derived for a different axis (e.g.,
+if the relevant axis were the \(x\) or \(y\) axis rather than the \(z\)), or would first
+transform points in a crystal&rsquo;s coordinate system to a coordinate system in which
+the above transformations can be used, apply the transformation, and finally transform
+back into the crystal system (e.g., if the symmetry axis were a diagonal or edge of the
+crystal).
+</p>
+
+
+<h2 id="notation">Notation for Symmetry Elements</h2>
+
+<p>
+A concise notation exists to describe symmetries about an axis through a point (adapted
+from <a href="#neese">Neese, 2000</a>):
+</p>
+
+<ul>
+  <li>If the symmetry is <var>n</var>-fold rotation about the axis, simply write \(n\) as
+    a single digit, i.e., 2, 3, 4, or 6.</li>
+  <li>As an extension of this notation, a complete absence of symmetry can be denoted by
+    the digit 1 (i.e., the only way to transform points on the object into
+    &ldquo;symmetrical&rdquo; points on the same object is to rotate 360 degrees).</li>
+  <li>If the axis is in fact the normal to a mirror plane through the point, write the
+    letter m.</li>
+  <li>A rotation axis that is also normal to a mirror plane is notated as <var>n</var>/m,
+    where \(n\) is the degree of rotational symmetry. For example, 2/m, 4/m.</li>
+  <li>Rotoinversion is indicated by a number with a bar over it (sometimes pronounced
+    bar-<var>n</var> where \(n\) is the number), the number being the degree of rotational
+    symmetry. For example \(\overline{2}, \overline{3}, \overline{4}, \overline{6}\)</li>
+  <li>As a special case, bar-1 denotes simple inversion through the point.</li>
+</ul>
+
+<p>
+<dfn>Hermann-Mauguin notation</dfn> is an extension of these conventions to describe
+symmetries with respect to multiple axes. Specifically, Hermann-Mauguin notation joins
+symbols from the above list into strings, one symbol per axis (or group of axes equivalent
+in terms of symmetry behavior). For example, the Hermann-Mauguin description of a system
+with two symmetry axes, the first of which is a diad axis with a mirror plane and the
+second of which is a triad rotoinversion axis is \(2\mathrm{/m}\overline{3}\).
+</p>
+
+<p>
+See any crystallography text (e.g., <a href="#megaw">Megaw, 1973</a>) for more information
+on Hermann-Mauguin notation.
+</p>
+
+
+<h2 id="systems">Crystal Systems and Classes</h2>
+
+<p>
+The symmetries present in crystals are described by a two-level hierarchy. The top level
+consists of six <dfn>crystal systems</dfn>, defined by the relationships between the
+natural axes for describing the crystal (its <dfn>crystallographic axes</dfn>). These
+relationships in turn give rise to a characteristic symmetry for the system. Crystal
+systems are further refined into <dfn>crystal classes</dfn>, whose members display
+additional symmetries beyond the characteristic one of the system as a whole. For more on
+crystal systems and classes, see (<a href="#megaw">Megaw, 1973</a>; <a href="#neese">Neese,
+2000</a>).
+</p>
+
+<p>
+Crystallographic axes are not necessarily simple Cartesian coordinate systems. In
+particular, the unit distance for each axis (loosely called the axis&rsquo;s
+&ldquo;length&rdquo;) may be different along different axes, and axes needn&rsquo;t be
+mutually perpendicular. Crystallographers commonly use the letters \(a\), \(b\), and \(c\)
+to identify crystallographic axes. Axes that are interchangeable, e.g., because they have
+the same length and angular relationships to other axes, may be labeled with a common
+letter and a subscript, e.g., \(a_1\), \(a_2\). The same labels are used for the lengths
+of the axes, leaving readers to tell from context whether a letter stands for a length or
+an axis. Angles between axes are identified by Greek letters \(\alpha\), \(\beta\), and
+\(\gamma\) (alpha, beta, and gamma), as follows:
+</p>
+<ul>
+  <li>Angle between \(a\) and \(b = \gamma\)</li>
+  <li>Angle between \(a\) and \(c = \beta\)</li>
+  <li>Angle between \(b\) and \(c = \alpha\)</li>
+</ul>
+
+<p>
+As with axes and their lengths, a Greek letter may mean either an angle or its measure,
+depending on context.
+</p>
+
+<h3>Systems</h3>
+
+<p>
+Crystal systems are defined by the angles at which the crystallographic axes meet and
+whether the axes have the same length or not. The following table lists the crystal
+systems with their defining axis relationships and characteristic symmetry. The table
+describes relationships between axes in terms of how the \(a\), \(b\), and \(c\) measures
+of axis length do or do not equal each other, and which of the \(\alpha\), \(\beta\), and
+\(\gamma\) angle measures are or are not 90 degrees. Symmetries are described in the
+notation introduced above, with a note about the axis or axes relative to which that
+symmetry appears. This table is based on information from (<a href="#megaw">Megaw, 1973</a>;
+<a href="#neese">Neese, 2000</a>). Note that the symmetry often appears relative to
+multiple axes, and these axes are not necessarily crystallographic axes. This is common in
+crystal symmetry, and means that concise descriptions may not be possible &mdash; it
+isn&rsquo;t enough to describe a crystal&rsquo;s symmetry, you also have to describe a
+possibly long list of symmetry axes.
+</p>
+
+<table>
+<caption>Crystal Systems</caption>
+<colgroup>
+  <col width="10%">
+  <col width="30%">
+  <col>
+</colgroup>
+<tbody>
+<tr><th scope="col">Name</th> <th scope="col">Axes</th> <th scope="col">Symmetry</th></tr>
+<tr> <td class="spacious" style="vertical-align: top">Isometric aka Cubic</td>
+    <td class="spacious" style="vertical-align: top">\(a = b = c\), \(\alpha = \beta = \gamma = 90^\circ\)</td>
+    <td class="spacious" style="vertical-align: top">3 (4 axes, through diagonally opposite corners of a cube centered on the
+      crystallographic origin)</td></tr>
+<tr> <td class="spacious" style="vertical-align: top">Tetragonal</td>
+    <td class="spacious" style="vertical-align: top">\(a = b \ne c\), \(\alpha = \beta = \gamma = 90^\circ\)</td>
+    <td class="spacious" style="vertical-align: top">4 or \(\overline{4}\) (1 axis, along crystallographic axis c)</td></tr>
+<tr> <td class="spacious" style="vertical-align: top">Orthorhombic</td>
+    <td class="spacious" style="vertical-align: top">\(a \ne b \ne c\),\(\alpha = \beta = \gamma = 90^\circ\)</td>
+    <td class="spacious" style="vertical-align: top">2 or \(\overline{2}\) aka m (3 mutually perpendicular axes)</td></tr>
+<tr> <td class="spacious" style="vertical-align: top">Hexagonal</td>
+    <td class="spacious" style="padding-top: 1em; vertical-align: top">This system has 4
+      axes, \(a_1, a_2, a_3\), and \(c\). Axes \(a_1, a_2\), and \(a_3\) all lie in a
+      single plane, with \(120^\circ\) angles between them. The \(c\) axis is
+      perpendicular to this plane. Axis lengths are \(a_1 = a_2 = a_3 \ne c\).</td>
+    <td class="spacious" style="vertical-align: top">This system has 2 sub-systems, the
+      hexagonal and trigonal divisions. Each has a slightly different symmetry from the
+      other: 6 or \(\overline{6}\) (hexagonal division; 1 axis along the vertical
+      crystallographic axis); 3 or \(\overline{3}\) (trigonal division; 1 axis along the
+      vertical crystallographic axis)</td></tr>
+<tr> <td class="spacious" style="vertical-align: top">Monoclinic</td>
+    <td class="spacious" style="vertical-align: top">\(a \ne b \ne c\),
+      \(\alpha = \beta = 90^\circ; \gamma \ne 90^\circ\)</td>
+    <td class="spacious" style="vertical-align: top">2 or \(\overline{2}\) (1 axis)</td></tr>
+<tr> <td class="spacious" style="vertical-align: top">Triclinic</td>
+    <td class="spacious" style="vertical-align: top">\(a \ne b \ne c\),
+      \(\alpha \ne \beta \ne \gamma \ne 90^\circ\) or \(120^\circ\)</td>
+    <td class="spacious" style="vertical-align: top">1 or \(\overline{1}\)</td></tr>
+</tbody>
+</table>
+
+<h3>Classes</h3>
+
+<p>
+Crystal classes capture the full set of symmetries present (or potentially present) in a
+crystal. Each crystal class corresponds to a point group of crystal symmetry operations,
+and it turns out that only 32 such point groups exist. Thus there are 32 crystal classes.
+</p>
+
+<p>
+The following table, adapted from <a href="http://webmineral.com/crystall.shtml" target="_blank">webmineral.com</a>,
+describes the crystal classes. The table identifies each class by its name and the crystal
+system it lies in (with the hexagonal system split into its hexagonal and trigonal
+divisions). The table then gives the number of diad, triad, tetrad, and hexad axes the
+class has, the number of mirror planes it has, whether the class also has inversion
+symmetry, and the Hermann-Mauguin notation for its symmetry. In a slight departure from
+normal Hermann-Mauguin notation, we put spaces between the components for clarity in Web
+browsers.
+</p>
+
+<table style="margin-left: auto; margin-right: auto">
+<colgroup>
+  <col width="5%">
+  <col>
+  <col>
+  <col width="5%">
+  <col width="5%">
+  <col width="5%">
+  <col width="5%">
+  <col>
+  <col>
+  <col>
+</colgroup>
+<caption>Crystal Classes</caption>
+<tbody>
+<tr> <th scope="col">Number</th> <th scope="col">System</th> <th scope="col">Class name</th> <th scope="col">Diads</th> <th scope="col">Triads</th> <th scope="col">Tetrads</th> <th scope="col">Hexads</th> <th scope="col">Mirror Planes</th> <th scope=col">Inversion</th> <th scope="col">Hermann-Mauguin</th> </tr>
+<tr class="centered"> <td>1</td> <td>Isometric</td> <td>Tetartoidal</td> <td>3</td> <td>4</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>2 3</td> </tr>
+<tr class="centered"> <td>2</td> <td>Isometric</td> <td>Diploidal</td> <td>3</td> <td>4</td> <td>-</td> <td>-</td> <td>3</td> <td>Yes</td> <td>2/m \(\overline{3}\)</td> </tr>
+<tr class="centered"> <td>3</td> <td>Isometric</td> <td>Hextetrahedral</td> <td>3</td> <td>4</td> <td>-</td> <td>-</td> <td>6</td> <td>-</td> <td>\(\overline{4}\) 3 m</td> </tr>
+<tr class="centered"> <td>4</td> <td>Isometric</td> <td>Gyroidal</td> <td>6</td> <td>4</td> <td>3</td> <td>-</td> <td>-</td> <td>-</td> <td>4 3 2</td> </tr>
+<tr class="centered"> <td>5</td> <td>Isometric</td> <td>Hexoctahedral</td> <td>6</td> <td>4</td> <td>3</td> <td>-</td> <td>9</td> <td>Yes</td> <td>4/m \(\overline{3}\) 2/m</td> </tr>
+<tr class="centered"> <td>6</td> <td>Tetragonal</td> <td>Disphenoidal</td> <td>1</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>\(\overline{4}\)</td></tr>
+<tr class="centered"> <td>7</td> <td>Tetragonal</td> <td>Pyramidal</td> <td>-</td> <td>-</td> <td>1</td> <td>-</td> <td>-</td> <td>-</td> <td>4</td></tr>
+<tr class="centered"> <td>8</td> <td>Tetragonal</td> <td>Dipyramidal</td> <td>-</td> <td>-</td> <td>1</td> <td>-</td> <td>1</td> <td>Yes</td> <td>4/m</td></tr>
+<tr class="centered"> <td>9</td> <td>Tetragonal</td> <td>Scalenohedral</td> <td>3</td> <td>-</td> <td>-</td> <td>-</td> <td>2</td> <td>-</td> <td>\(\overline{4}\) 2 m</td></tr>
+<tr class="centered"> <td>10</td> <td>Tetragonal</td> <td>Ditetragonal pyramidal</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>4</td> <td>-</td> <td>4 m m</td></tr>
+<tr class="centered"> <td>11</td> <td>Tetragonal</td> <td>Trapezohedral</td> <td>4</td> <td>-</td> <td>1</td> <td>-</td> <td>-</td> <td>-</td> <td>4 2 2</td></tr>
+<tr class="centered"> <td>12</td> <td>Tetragonal</td> <td>Ditetragonal-Dipyramidal</td> <td>4</td> <td>-</td> <td>1</td> <td>-</td> <td>5</td> <td>Yes</td> <td>4/m 2/m 2/m</td></tr>
+<tr class="centered"> <td>13</td> <td>Orthorhombic</td> <td>Pyramidal</td> <td>1</td> <td>-</td> <td>-</td> <td>-</td> <td>2</td> <td>-</td> <td>m m 2</td></tr>
+<tr class="centered"> <td>14</td> <td>Orthorhombic</td> <td>Disphenoidal</td> <td>3</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>2 2 2</td></tr>
+<tr class="centered"> <td>15</td> <td>Orthorhombic</td> <td>Dipyramidal</td> <td>3</td> <td>-</td> <td>-</td> <td>-</td> <td>3</td> <td>Yes</td> <td>2/m 2/m 2/m</td></tr>
+<tr class="centered"> <td>16</td> <td>Hexagonal</td> <td>Trigonal Dipyramidal</td> <td>-</td> <td>1</td> <td>-</td> <td>-</td> <td>1</td> <td>-</td> <td>\(\overline{6}\)</td></tr>
+<tr class="centered"> <td>17</td> <td>Hexagonal</td> <td>Pyramidal</td> <td>-</td> <td>-</td> <td>-</td> <td>1</td> <td>-</td> <td>-</td> <td>6</td></tr>
+<tr class="centered"> <td>18</td> <td>Hexagonal</td> <td>Dipyramidal</td> <td>-</td> <td>-</td> <td>-</td> <td>1</td> <td>1</td> <td>Yes</td> <td>6/m</td></tr>
+<tr class="centered"> <td>19</td> <td>Hexagonal</td> <td>Ditrigonal Dipyramidal</td> <td>3</td> <td>1</td> <td>-</td> <td>-</td> <td>4</td> <td>-</td> <td>6 m 2</td></tr>
+<tr class="centered"> <td>20</td> <td>Hexagonal</td> <td>Dihexagonal Pyramidal</td> <td>-</td> <td>-</td> <td>-</td> <td>1</td> <td>6</td> <td>-</td> <td>6 m m</td></tr>
+<tr class="centered"> <td>21</td> <td>Hexagonal</td> <td>Trapezohedral</td> <td>6</td> <td>-</td> <td>-</td> <td>1</td> <td>-</td> <td>-</td> <td>6 2 2</td></tr>
+<tr class="centered"> <td>22</td> <td>Hexagonal</td> <td>Dihexagonal Dipyramidal</td> <td>6</td> <td>-</td> <td>-</td> <td>1</td> <td>7</td> <td>Yes</td> <td>6/m 2/m 2/m</td></tr>
+<tr class="centered"> <td>23</td> <td>Trigonal</td> <td>Pyramidal</td> <td>-</td> <td>1</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>3</td></tr>
+<tr class="centered"> <td>24</td> <td>Trigonal</td> <td>Rhombohedral</td> <td>-</td> <td>1</td> <td>-</td> <td>-</td> <td>-</td> <td>Yes</td> <td>\(\overline{3}\)</td></tr>
+<tr class="centered"> <td>25</td> <td>Trigonal</td> <td>Ditrigonal pyramidal</td> <td>-</td> <td>1</td> <td>-</td> <td>-</td> <td>3</td> <td>-</td> <td>3 m</td></tr>
+<tr class="centered"> <td>26</td> <td>Trigonal</td> <td>Trapezohedral</td> <td>3</td> <td>1</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>3 2</td></tr>
+<tr class="centered"> <td>27</td> <td>Trigonal</td> <td>Hexagonal Scalenohedral</td> <td>3</td> <td>1</td> <td>-</td> <td>-</td> <td>3</td> <td>Yes</td> <td>\(\overline{3}\) 2/m</td></tr>
+<tr class="centered"> <td>28</td> <td>Monoclinic</td> <td>Domatic</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>1</td> <td>-</td> <td>m</td></tr>
+<tr class="centered"> <td>29</td> <td>Monoclinic</td> <td>Sphenoidal</td> <td>1</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>2</td></tr>
+<tr class="centered"> <td>30</td> <td>Monoclinic</td> <td>Prismatic</td> <td>1</td> <td>-</td> <td>-</td> <td>-</td> <td>1</td> <td>Yes</td> <td>2/m</td></tr>
+<tr class="centered"> <td>31</td> <td>Triclinic</td> <td>Pedial</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>1</td></tr>
+<tr class="centered"> <td>32</td> <td>Triclinic</td> <td>Pinacoidal</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>Yes</td> <td>\(\overline{1}\)</td></tr>
+</tbody>
+</table>
+
+
+<h2 id="form">Crystal Forms</h2>
+
+<p>
+A crystal <dfn>form</dfn> is a group of faces that can be generated from each other by the
+crystal&rsquo;s symmetry. Unfortunately, a form is not always a complete description of a
+crystal shape. Crystals often contain several forms, and there are even forms &mdash;
+so-called <dfn>open</dfn> forms &mdash; that don&rsquo;t completely enclose a volume of
+space. Forms that do fully enclose a volume are called <dfn>closed</dfn> forms. For more
+on crystal forms, see (<a href="#neese">Neese, 2000</a>).
+</p>
+
+<p>
+Shapes in which crystals or groups of crystals commonly occur in nature are
+called crystal <dfn>habits</dfn>. Crystal habits tend to look different from
+ideal crystal forms, although they may be distortions of ideal forms. For a
+summary of some common habits and their names, see (<a href="#plante">Plante,
+2003</a>).
+</p>
+
+<p>
+The fact that forms don&rsquo;t correspond to complete crystal shapes is another reason
+why simple ways of generating crystals from compact descriptions may not exist: while
+applying a crystal&rsquo;s symmetry operations, relative to the right axes, to a single
+face may generate all the other faces in one form, those faces are not necessarily the
+whole crystal. One needs information about every form present in a crystal to generate the
+complete crystal.
+</p>
+
+<p>
+Some terms used to describe forms include the following (from <a href="#neese">Neese,
+2000</a>):
+</p>
+<ul>
+  <li><dfn>Pinacoid</dfn> &mdash; Two parallel faces on opposite sides of a crystal. The
+    two faces are related by either a mirror or inversion. Open.</li>
+  <li><dfn>Prism</dfn> &mdash; A collection of 3, 4, 6, 8, or 12 faces that intersect at
+    parallel edges to form a tube. Faces that close the ends are not part of the form.
+    Cross sections at the base determine the prism&rsquo;s specific name. Open.</li>
+  <li><dfn>Dipyramid</dfn> &mdash; Two pyramids, one being the reflection of the other
+    across a mirror plane, for a total of 6, 8, 12, 16, or 24 faces. Exact name depends on
+    the cross section of the pyramids.</li>
+</ul>
+
+<p>
+Because form depends on symmetry, which in turn depends on crystal system, there is a
+connection between crystal system and the forms that crystals in that system can assume.
+The following table (adapted from <a href="#bloss">Bloss, 1985</a>) lists the possibilities:
+</p>
+
+<table>
+<caption>Crystal systems and the forms they permit</caption>
+<tbody>
+<tr> <th scope="col">Crystal System</th> <th scope="col">Possible Forms</th> </tr>
+<tr> <td class="spacious" style="vertical-align: top">Isometric</td>
+     <td class="spacious" style="vertical-align: top">Tetrahedron, cube, octahedron,
+     rhombic dodecahedron, pentagonal dodecahedron, deltoid dodecahedron, tristetrahedron,
+     tetartoid, hextetrahedron, tetrahexahedron, trapezohedron, trisoctahedron, diploid,
+     gyroid, hexoctahedron. (List from <a href="#neese">Neese, 2000</a>, pg 25; see that
+     source for diagrams of these shapes.)</td> </tr>
+<tr> <td class="spacious" style="vertical-align: top">Hexagonal</td>
+     <td class="spacious" style="vertical-align: top">Pinacoid, hexagonal prism, hexagonal
+     dipyramid, dihexagonal prisms, dihexagonal dipyramid.</td> </tr>
+<tr> <td class="spacious" style="vertical-align: top">Tetragonal</td>
+     <td class="spacious" style="vertical-align: top">Basal pinacoid, tetragonal prism, tetragonal dipyramid, ditetragonal prism</td> </tr>
+<tr> <td class="spacious" style="vertical-align: top">Orthorhombic</td>
+	 <td class="spacious" style="vertical-align: top">Pinacoid, prism, dipyramid</td> </tr>
+<tr> <td class="spacious" style="vertical-align: top">Monoclinic</td>
+	 <td class="spacious" style="vertical-align: top">Pinacoid, prism</td> </tr>
+<tr> <td class="spacious" style="vertical-align: top">Triclinic</td>
+	 <td class="spacious" style="vertical-align: top">Pinacoid</td> </tr>
+</tbody>
+</table>
+
+
+<h2 id="lattice">Lattice Structures and Unit Cells</h2>
+
+<p>
+Symmetry in crystals arises from the fact that the atoms composing the crystal lie in a
+lattice. (<a href="#megaw">Megaw, 1973</a>) gives a good presentation of crystal lattices,
+on which the following is based.
+</p>
+
+<p>
+A <dfn>lattice</dfn> is a set of points, defined by an origin and a set of 3 basis
+vectors <strong>i</strong>, <strong>j</strong>, <strong>k</strong>; the lattice is exactly
+those points whose position relative to the origin is of the form
+<em>a</em> <strong>i</strong> + <em>b</em> <strong>j</strong> + <em>c</em> <strong>k</strong>
+where <em>a</em>, <em>b</em>, and <em>c</em> are all integers. In crystals, each point in
+a lattice is a reference point relative to which one repeating unit of the crystal&rsquo;s
+atoms is positioned. Note, however, that atoms don&rsquo;t have to lie on lattice points,
+and some atoms can be shared between repeating units. The combination of a lattice and a
+set of atoms positioned relative to it is called a <dfn>lattice complex</dfn>.
+</p>
+
+<p>
+Lattices exhibit symmetry. At the very least, for any lattice point <em>a</em>
+<strong>i</strong> + <em>b</em> <strong>j</strong> + <em>c</em> <strong>k</strong>,
+<em>-a</em> <strong>i</strong> - <em>b</em> <strong>j</strong> - <em>c</em> <strong>k</strong>
+is also a lattice point, and so the lattice has inversion symmetry. Since any lattice
+point can be chosen as the origin, the lattice in fact exhibits inversion symmetry about
+each lattice point. Lattices may also have rotational symmetry and mirror symmetry,
+although only 2-, 3-, 4-, and 6-fold rotational symmetries respect the regular spacing of
+lattice points.
+</p>
+
+<p>A <dfn>unit cell</dfn> is a block within a lattice whose edges are the lattice&rsquo;s
+basis vectors. Put more formally, this means that diagonally opposite corners of a unit
+cell have positions <em>a</em> <strong>i</strong> + <em>b</em> <strong>j</strong> +
+<em>c</em> <strong>k</strong> and (<em>a</em>+1)<strong>i</strong> +
+(<em>b</em>+1)<strong>j</strong> + (<em>c</em>+1)<strong>k</strong>. The choice of basis
+vectors for the lattice thus determines what the unit cells look like and many different
+choices are possible. Crystallographic conventions favor certain choices of basis over
+others, for example shorter rather than longer basis vectors, or basis vectors that meet
+at less rather than more oblique angles. Crystallographers classify unit cells according
+to whether the basis vectors they imply are or are not of equal length, the angles between
+the basis vectors, and whether the cells are centered or not (geometrically,
+<dfn>centering</dfn> means that some lattice points are inside unit cells). Because of the
+limited set of symmetry operators that can apply in lattices, 3-dimensional lattices only
+exhibit 14 distinct classes of unit cell. There are only 6 distinct combinations of axis
+length and angle relationships, corresponding exactly to the six crystal systems described
+<a href="#systems">elsewhere</a>.
+</p>
+
+<p>
+Unit cells define crystallographic axes. Specifically, each crystallographic axis is
+parallel to a basis vector, and its length (i.e, unit distance) is the length of that
+basis vector (in arbitrary units). As a result, the angles between crystallographic axes
+are the angles between basis vectors.
+</p>
+
+
+<h2 id="miller">Miller Indices</h2>
+
+<p>
+A <dfn>Miller index</dfn> is a sequence of numbers that describes the orientation of a
+crystal face. Specifically, consider a face and the set of planes parallel to it. An
+empirical property of crystals, known as &quot;the law of rational indices,&quot; says
+that one of these planes will intersect the crystallographic axes at points 
+(1/<em>h</em>,0,0), (0,1/<em>k</em>,0) and (0,0,1/<em>l</em>), where <em>h,</em>
+<em>k</em>, and <em>l</em> are small integers with no common factors. If the face is
+parallel to an axis, the corresponding <em>h</em>, <em>k</em>, or <em>l</em> is taken to
+be 0. Trusting that <em>h</em>, <em>k</em>, and <em>l</em> are small enough to be written
+in one digit, the symbol (<em>hkl</em>) is the face&rsquo;s Miller index.
+</p>
+
+<p>
+Miller indices encode normals to faces, as follows: the plane that intersects the axes at
+(1/<em>h</em>,0,0), (0,1/<em>k</em>,0) and (0,0,1/<em>l</em>) has a plane equation of the
+form
+</p>
+\[Ax + By + Cz = 1\]
+<p>
+for suitable values of \(A\), \(B\), and \(C\); a standard result in analytic geometry
+says that vector \((A, B, C)\) is normal to the plane. Plugging the plane&rsquo;s
+intersections with the axes into this equation gives
+</p>
+
+<p style="text-align: center;"><em>A × </em>1/<em>h</em> = 1, i.e., <em>A</em> = <em>h</em></p>
+<p style="text-align: center;"><em>B</em> <em> × </em>1/<em>k</em> = 1, i.e., <em>B</em> = <em>k</em></p>
+<p style="text-align: center;"><em>C</em> <em> × </em>1/<em>l </em>= 1, i.e., <em>C</em> = <em>l</em></p>
+
+<p>
+Since (<em>A</em>,<em>B</em>,<em>C</em>) = (<em>h</em>,<em>k</em>,<em>l)</em> is normal to
+the plane, and the plane is parallel to the face, (<em>h</em>,<em>k</em>,<em>l</em>) is a
+normal for the face. Beware though that &ldquo;normal&rdquo; doesn&rsquo;t necessarily
+mean &quot;visually perpendicular&quot; in a coordinate frame whose axes don&rsquo;t have
+to be perpendicular or of equal length.
+</p>
+
+<p>
+Normals to faces are good things to perform symmetry operations on. Specifically, applying
+a symmetry operation to a face&rsquo;s normal gives the normal to the symmetrically
+related face. For this reason, Miller indices are also used to describe crystal forms: the
+symbol {<em>hkl</em>} denotes the form containing the faces derived by symmetry from the
+face with Miller index (<em>hkl</em>). Transforming normals taken from Miller indices thus
+seems a promising way to generate forms, if not entire crystals.
+</p>
+
+<p>
+For more information on Miller indices, see crystallography texts such as
+(<a href="#megaw">Megaw, 1973</a>; <a href="#okeefe">O'Keefe et al., 1996</a>).
+</p>
+
+<p>
+Miller indices for some common forms, modified from (<a href="#okeefe">O'Keefe et. al,
+1996</a>):
+</p>
+
+<table style="margin-left: auto; margin-right: auto">
+<caption>Miller indices for some common crystal forms</caption>
+<tbody>
+<tr style="vertical-align: top"> <th>System<br>(Unit Cell Symmetry)</th> <th>Form</th> <th>Miller Index</th> </tr>
+<tr> <td rowspan="4" style="vertical-align: top">Isometric</td> <td class="spacious">Cube</td> <td class="spacious">{100}</td> </tr>
+<tr> 								<td class="spacious">Octahedron</td> <td class="spacious">{111}</td> </tr>
+<tr> 								<td class="spacious">Dodecahedron</td> <td class="spacious">{110}</td> </tr>
+<tr> 								<td class="spacious">Tetrahedron</td> <td class="spacious">{111}</td> </tr>
+<tr> <td>Tetragonal</td> <td></td> <td class="spacious">{001}</td> </tr>
+<tr> <td>Orthorhombic</td> <td></td> <td class="spacious">{111}, {113}</td> </tr>
+<tr> <td>Hexagonal</td> <td></td> <td></td> </tr>
+<tr> <td>Monoclinic</td> <td></td> <td></td> </tr>
+<tr> <td>Triclinic</td> <td></td> <td></td> </tr>
+</tbody>
+</table>
+
+<h3>Note on Transforming Normals</h3>
+
+<p>
+When representing transformations as matrices and using matrix-vector multiplication to
+apply transformations, one cannot apply transformation T to normal <strong>n</strong> by
+computing the product T<strong>n</strong>. A standard result from computer graphics is
+that the product that produces the correctly transformed normal is
+(T<sup>-1</sup>)<sup>T</sup><strong>n</strong>, i.e., multiply by the transpose of the
+inverse of the regular transformation matrix.
+</p>
+
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>
+From the ideas discussed above, the shape of a crystal depends on two things: the forms it
+exhibits and its class. Crystal class in turn encapsulates two additional kinds of
+information: what symmetries the crystal has, and what axes, points, or planes they are
+relative to. On the one hand it should therefore be possible to write software functions
+that draw arbitrary crystals but still have short parameter lists (e.g., two parameters, a
+class identifier and a list of forms, should be sufficient). However, at a deeper level,
+the information actually needed to specify the crystal&rsquo;s shape seems inherently
+pretty bulky: a set of symmetry operations, a set of axes, and a set of forms.
+Furthermore, each of these items has its own internal information, e.g., an axis contains
+information about origin and direction, a form contains information about at least one
+plane, etc. It therefore seems that individual crystals do not have as elegantly compact a
+mathematical description as we initially hoped.
+</p>
+
+
+<h2 id="references">References</h2>
+
+<p>
+Sources used to produce the above, plus additional reading for students or visitors
+interested in learning more about crystal symmetry.
+</p>
+
+<ul>
+  <li id="megaw">Helen D. Megaw. <cite>Crystal Structures: A Working Approach</cite>, W.
+    B. Saunders Co., 1973.</li>
+
+  <li id="neese">William D. Neese. <cite>Introduction to Mineralogy.</cite> Oxford University Press,
+    2000.</li>
+
+  <li id="bloss">F. Donald Bloss. <cite>Crystallography and Crystal Chemistry</cite>
+    Mineralogical Society of America, 1985</li>
+    
+  <li id="okeefe">M. O&rsquo;Keefe and B.G. Hyde. <cite>Crystal Structures I. Patterns and
+    Symmetry</cite> Mineralogical Society of America, 1996.</li>
+
+  <li id="plante">Alan Plante, Donald Peck, &amp; David Von Bargan.
+    &ldquo;<a href="http://www.minsocam.org/msa/collectors_corner/id/mineral_id_keyi8.htm" target="_blank">Mineral
+    Identification Key II: Habit</a>,&rdquo; Mineralogical Society of America, 2003.
+    http://www.minsocam.org/msa/collectors_corner/id/mineral_id_keyi8.htm,
+    accessed Mar. 20, 2026.</li>
+
+  <li>David Barthelmy, <a href="http://webmineral.com/crystall.shtml" target="_blank">http://webmineral.com/crystall.shtml</a></li>
+</ul>
+
+</main>
+
+
+<footer style="margin-top: 2em">
+<hr style="width: 33%; text-align: center">
+<p class="page-note">
+Last modified March 20, 2026 by Doug Baldwin.
+</p>
+</footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "checks": [
+    {
+      "command": "python3 docs/content-audits/question-quality-wave-6/verify-proof-format.py .../author-current.json --repo . --output .../author-current-format.json",
+      "purpose": "Current literal/card identity and actual original passage binding only",
+      "exit": 0,
+      "recordedCards": 25,
+      "fields": 150,
+      "certifiedByScript": 0
+    },
+    {
+      "command": "vitest run tests/unit/catalog-topics.test.ts tests/unit/content-answer-notes.test.ts --reporter=json --outputFile=.../focused-final.json",
+      "purpose": "Affected content schema/notes/balance/uniqueness contract, no build or full suite",
+      "exit": 0,
+      "passed": 10,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "command": "npm run typecheck",
+      "purpose": "Type contract for changed JSON content",
+      "exit": 0
+    },
+    {
+      "command": "git diff --check -- src/content/topics/geology-earth.json docs/content-audits/question-quality-wave-6/geology-earth/resume-2026-10-11-remaining25",
+      "purpose": "Owned diff whitespace check",
+      "exit": 0
+    }
+  ],
+  "deferred": [
+    "independent substantive150field read",
+    "coordinator certification",
+    "full100 current-byte review stamps",
+    "catalog-full stamp gate",
+    "full suite/browser/build/deploy/release/archive"
+  ],
+  "authorPASS": 25,
+  "authorHOLD": 0,
+  "newCertifiedCards": 0
+}
