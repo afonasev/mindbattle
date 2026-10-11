@@ -1,0 +1,217 @@
+{
+  "role": "independent",
+  "agentIdentity": "01a12c25-6aa3-70c0-b7b7-8f4b588dacf4",
+  "authorIdentity": "01a12c14-c625-70d2-b5e0-aaa87aefedf9",
+  "reviewedDate": "2026-10-11",
+  "authorFreezeCommits": ["ec9a91d", "36e35b7"],
+  "reviewMethod": "Independent manual substantive reading of all six current fields, the full current card, all three complete original HTML response bodies, and targeted matching catalog cards. The author receipt and duplicate-review conclusions were treated as context only, not as this reader's verdicts. Mechanical SHA, field-binding and committed-byte checks are separate from editorial decisions.",
+  "cards": [
+    {
+      "questionId": "geology-earth-gypsum-plaster",
+      "cardCanonicalSha256": "bc41d292aef03dc0cb86c7756d0f8030952f392ccc37b56e3af814e3235d3d44",
+      "verdict": "FIX_REQUIRED",
+      "editorialAnalysis": "Текущий вопрос о медицинском применении гипса отличен от geology-earth-mohs-gypsum-two, все четыре ответа — минералы, правильный ответ не подсказан текстом, а традиционная гипсовая повязка — достаточно знакомая взрослому игроку связь для easy. NPS и NHS совместно подтверждают ответ и объяснение. Однако единственная видимая source.url карточки ведёт на страницу NPS о минерале, получении Paris plaster и его отвердевании; полная страница не содержит применения в медицинской повязке или при переломе. NHS-пассаж о применении backslab находится только в авторском evidence capture и не открывается ссылкой карточки. Поэтому prompt-key получает FIX_REQUIRED только по привязке источника; текст prompt/key, сложность и правильность ответа проходят. Четыре notes фактически верны и дают проверенные сведения о каждом минерале. Note1 повторяет факт Mohs 2 из отдельного вопроса geology-earth-mohs-gypsum-two, но это дополнительная справка, а основной факт текущего вопроса — медицинское применение; не применялся запрет на любое пересечение notes и каталога. Кандидаты про стеновую панель, гипсовую рубашку ископаемого, дюны Чиуауа и минералы Уюни относятся к другим применениям или местам. Scope geology-earth допускает вопросы о минералах; его antiOverlap исключает географические горы/вулканы и палеонтологию, а не данный минералогический вопрос.",
+      "cardSourceBindingFinding": {
+        "verdict": "FIX_REQUIRED",
+        "exactRule": "source.url ведёт на точную HTTPS-страницу, которая подтверждает именно заданный факт; страницы поиска и главные страницы без нужного материала не принимаются.",
+        "concreteDefect": "В текущем src/content/topics/geology-earth.json source.url указан https://www.nps.gov/whsa/learn/gypsum.htm. Полностью прочитанная страница NPS объясняет превращение гипса в plaster of Paris и его повторное затвердевание, но не утверждает, что материал применяют для медицинской фиксации после перелома. Такое применение подтверждает отдельная страница Hull University Teaching Hospitals NHS Trust, сохранённая в авторском evidence capture, однако карточка на неё не ссылается. NPS-ссылка поэтому не подтверждает ключевой медицинский факт, по которому игрок выбирает гипс.",
+        "currentCardUrl": "https://www.nps.gov/whsa/learn/gypsum.htm",
+        "supportingButUnlinkedProofUrl": "https://www.hey.nhs.uk/patient-leaflet/plaster-cast-instructions/"
+      },
+      "catalogScopeReview": {
+        "taxonomy": "geology-earth scope: Минералы, горные породы, тектоника и строение Земли; antiOverlap: Не включает горы и вулканы как географические объекты или палеонтологию.",
+        "reviewedCards": [
+          {
+            "questionId": "geology-earth-mohs-gypsum-two",
+            "overlap": "Текущая note1 указывает твёрдость гипса 2; эта карточка спрашивает именно эталон твёрдости 2.",
+            "decision": "MAIN_FACT_DISTINCT_NOTE_OVERLAP_ACCEPTED",
+            "reason": "Нынешний prompt спрашивает медицинское применение гипса, не твёрдость. Корректная дополнительная справка о свойствах ключевого минерала не делает основной вопрос перефразированием уже существующего вопроса."
+          },
+          {
+            "questionId": "materials-gypsum-board",
+            "overlap": "Гипсовый сердечник внутренней стеновой панели.",
+            "decision": "DISTINCT_USE_AND_PRODUCT"
+          },
+          {
+            "questionId": "dinosaurs-paleontology-plaster-jacket-transport",
+            "overlap": "Гипсовая рубашка удерживает блок с окаменелостью при подъёме и перевозке.",
+            "decision": "DISTINCT_DOMAIN_AND_PURPOSE"
+          },
+          {
+            "questionId": "world-geography-cabinda-exclave",
+            "overlap": "Справка упоминает гипсовые дюны пустыни Чиуауа.",
+            "decision": "DISTINCT_PLACE_AND_OCCURRENCE_FACT"
+          },
+          {
+            "questionId": "landmarks-wonders-salar-uyuni",
+            "overlap": "Справка перечисляет гипс среди минералов солончака Уюни.",
+            "decision": "DISTINCT_PLACE_AND_OCCURRENCE_FACT"
+          }
+        ],
+        "result": "No duplicate main fact or antiOverlap conflict identified. Reuse of Mohs facts in notes is recorded rather than treated as a blanket duplication failure."
+      },
+      "fields": [
+        {
+          "field": "prompt-key",
+          "literal": [
+            "Какой минерал используют для изготовления традиционной жёсткой повязки, фиксирующей конечность после перелома?",
+            1,
+            "Гипс"
+          ],
+          "literalSha256": "9d3513483787f6dff2985ec9375ff8fdb5dc223c4dd5958f5fb01b978a7ce10d",
+          "verdict": "FIX_REQUIRED",
+          "substantiveRead": true,
+          "claimAnalysis": "Сам вопрос задаёт устойчивый факт и грамматически сочетается со всеми четырьмя вариантами. Все варианты — разные минералы; кальцит, топаз и кварц не выглядят невозможными объектами минерального применения, и ответ не указан в prompt. Из повседневного выражения «гипсовая повязка» можно вывести ответ, но слово «гипс» в условии не встречается. NPS подтверждает получение и повторное твердение plaster of Paris; NHS Trust сообщает о применении такого backslab после перелома. Эти два оригинала совместно подтверждают ключ. FIX касается того, что текущая публичная ссылка карточки ведёт только на NPS и не показывает медицинскую часть доказательства.",
+          "proofs": [
+            {
+              "sourceClass": "Primary institutional educational page, U.S. National Park Service",
+              "title": "Gypsum | White Sands National Park, National Park Service",
+              "url": "https://www.nps.gov/whsa/learn/gypsum.htm",
+              "rawCapture": "../../geology-earth/resume-2026-10-11-gypsum-final1/sources/nps-white-sands-gypsum.html",
+              "rawCaptureSha256": "840ff92c5ef0b3ec061515e89c279605bd8b6f5efcd9c2acfda1b34a23d82cf5",
+              "captureFormat": "complete original HTML response bytes",
+              "captureMethod": "Complete locally retained original body was read in full for this independent review; disk bytes and committed Git blob were independently SHA-256 checked.",
+              "locator": "What is Gypsum?, first body paragraph, sentences beginning 'When gypsum is heated' and 'When water is re-added'.",
+              "passage": "When gypsum is heated and the water within the mineral is evaporated out, gypsum turns into a chalk or plaster, known as plaster of Paris. When water is re-added to this chalky gypsum powder, it rehydrates and becomes gypsum again, forming a hard substance.",
+              "passageSha256": "a8068fcb69c9a641a93b081e56dc203cc0f0d62a9d20d2b1853b7a8a91c8367e"
+            },
+            {
+              "sourceClass": "NHS Trust patient information, Hull University Teaching Hospitals NHS Trust",
+              "title": "Plaster Cast Instructions | Hull University Teaching Hospitals NHS Trust",
+              "url": "https://www.hey.nhs.uk/patient-leaflet/plaster-cast-instructions/",
+              "rawCapture": "../../geology-earth/resume-2026-10-11-gypsum-final1/sources/hull-nhs-plaster-cast.html",
+              "rawCaptureSha256": "753394f4103f1701a3b8d3822b18b596f5706838dc7e3f0c9b729d6ab9dc0cd2",
+              "captureFormat": "complete original HTML response bytes",
+              "captureMethod": "Complete locally retained original body was read in full for this independent review; disk bytes and committed Git blob were independently SHA-256 checked.",
+              "locator": "Introduction, paragraph 2, first two sentences.",
+              "passage": "Following an examination and assessment of your injury we have applied a “Plaster of Paris” backslab to the affected area. This is a partial plaster to allow for swelling which often occurs following a bone fracture (break) injury of this nature.",
+              "passageSha256": "4dca5cb4b6e74daa6d58e0b304c9c3af615583f82a7ea8b8cd8b78645f5b553a"
+            }
+          ]
+        },
+        {
+          "field": "note0",
+          "literal": "Твёрдость кальцита по шкале Мооса — 3.",
+          "literalSha256": "cb7ba605a2fd1b20a98c1023ebf259cfd4888e648fcf65d424e0e7320c154963",
+          "verdict": "PASS",
+          "substantiveRead": true,
+          "claimAnalysis": "Самостоятельное короткое фактологическое утверждение относится именно к кальциту и буквально подтверждается NPS-подписью к таблице: Calcite, 3. Оно не присваивает дистрактору медицинское применение гипса.",
+          "proofs": [
+            {
+              "sourceClass": "Primary institutional source, NPS-authored accessible description for the original Mohs Hardness Scale infographic",
+              "title": "Mohs Hardness Scale | National Park Service",
+              "url": "https://www.nps.gov/articles/mohs-hardness-scale.htm",
+              "rawCapture": "../../geology-earth/resume-2026-10-11-gypsum-final1/sources/nps-mohs-hardness.html",
+              "rawCaptureSha256": "173821fd81f3a2b8eee2bdd59bd127f67d9ce91f0b16b3c7017a6622551f5c6d",
+              "captureFormat": "complete original HTML response bytes",
+              "captureMethod": "Complete locally retained original body was read in full, including page context and accessible image text; disk bytes and committed Git blob were independently SHA-256 checked.",
+              "locator": "Alt Text for Image Above, NPS-authored mineral list.",
+              "passage": "The minerals are listed from hardest to softest with their hardness scale number as follows: Diamond, 10; Corundum, 9; Topaz, 8; Quartz, 7; Orthoclase, 6; Apatite, 5; Flourite, 4; Calcite, 3; Gypsum, 2; and Talc, 1.",
+              "passageSha256": "efea79851ebd765e348c0abd33fa5a63073b667288c252099ceb6c81ec5d76fa"
+            }
+          ]
+        },
+        {
+          "field": "note1",
+          "literal": "Твёрдость гипса по шкале Мооса — 2; он мягче ногтя, чья твёрдость равна 2,5.",
+          "literalSha256": "6950a449e002493a48345447181ea62d5188517503eff20833cf7eb2f1e4a9c3",
+          "verdict": "PASS",
+          "substantiveRead": true,
+          "claimAnalysis": "NPS даёт гипсу 2, ногтю 2,5 и описывает твёрдость как относительное сопротивление царапанию. Сравнение чисел поддерживает «мягче ногтя»; формулировка не утверждает более сильный неподтверждённый механизм. Это полезное дополнительное свойство правильного варианта. Оно совпадает с фактом, спрашиваемым в geology-earth-mohs-gypsum-two, но не превращает отдельный вопрос о медицинском применении в повтор того вопроса.",
+          "proofs": [
+            {
+              "sourceClass": "Primary institutional source, NPS-authored accessible description for the original Mohs Hardness Scale infographic",
+              "title": "Mohs Hardness Scale | National Park Service",
+              "url": "https://www.nps.gov/articles/mohs-hardness-scale.htm",
+              "rawCapture": "../../geology-earth/resume-2026-10-11-gypsum-final1/sources/nps-mohs-hardness.html",
+              "rawCaptureSha256": "173821fd81f3a2b8eee2bdd59bd127f67d9ce91f0b16b3c7017a6622551f5c6d",
+              "captureFormat": "complete original HTML response bytes",
+              "captureMethod": "Complete locally retained original body was read in full, including page context and accessible image text; disk bytes and committed Git blob were independently SHA-256 checked.",
+              "locator": "Alt Text for Image Above, mineral list and common-object list; explanatory body paragraph defines Mohs hardness as relative resistance to scratching.",
+              "passage": "The minerals are listed from hardest to softest with their hardness scale number as follows: Diamond, 10; Corundum, 9; Topaz, 8; Quartz, 7; Orthoclase, 6; Apatite, 5; Flourite, 4; Calcite, 3; Gypsum, 2; and Talc, 1. The Common Objects for hardness comparisons are listed a column to the left as: Masonry Drill Bit, 8.5; Steel Nail, 6.5; Knife/Glass Plate, 5.5; Copper Penny, 3.5; and Fingernail, 2.5.",
+              "passageSha256": "2ad182fb54e75d3787fdf54653a40f679e67ec5d6090ac53039f0687c972053d"
+            }
+          ]
+        },
+        {
+          "field": "note2",
+          "literal": "Твёрдость топаза по шкале Мооса — 8.",
+          "literalSha256": "cef425af3b8fd6c18716cab73a5cc11dbc5f5f1c28e839159eb98409520d79d1",
+          "verdict": "PASS",
+          "substantiveRead": true,
+          "claimAnalysis": "Самостоятельное числовое утверждение о топазе совпадает с NPS-перечнем Topaz, 8. Фраза краткая и не добавляет неподтверждённого следствия.",
+          "proofs": [
+            {
+              "sourceClass": "Primary institutional source, NPS-authored accessible description for the original Mohs Hardness Scale infographic",
+              "title": "Mohs Hardness Scale | National Park Service",
+              "url": "https://www.nps.gov/articles/mohs-hardness-scale.htm",
+              "rawCapture": "../../geology-earth/resume-2026-10-11-gypsum-final1/sources/nps-mohs-hardness.html",
+              "rawCaptureSha256": "173821fd81f3a2b8eee2bdd59bd127f67d9ce91f0b16b3c7017a6622551f5c6d",
+              "captureFormat": "complete original HTML response bytes",
+              "captureMethod": "Complete locally retained original body was read in full, including page context and accessible image text; disk bytes and committed Git blob were independently SHA-256 checked.",
+              "locator": "Alt Text for Image Above, NPS-authored mineral list.",
+              "passage": "The minerals are listed from hardest to softest with their hardness scale number as follows: Diamond, 10; Corundum, 9; Topaz, 8; Quartz, 7; Orthoclase, 6; Apatite, 5; Flourite, 4; Calcite, 3; Gypsum, 2; and Talc, 1.",
+              "passageSha256": "efea79851ebd765e348c0abd33fa5a63073b667288c252099ceb6c81ec5d76fa"
+            }
+          ]
+        },
+        {
+          "field": "note3",
+          "literal": "Твёрдость кварца по шкале Мооса — 7.",
+          "literalSha256": "eaf4e3a03420a7ab6f862eaf7017bc1dc8c1b4e381b635fb9fac9156997349e1",
+          "verdict": "PASS",
+          "substantiveRead": true,
+          "claimAnalysis": "Самостоятельное числовое утверждение о кварце совпадает с NPS-перечнем Quartz, 7. Фраза краткая и не добавляет неподтверждённого следствия.",
+          "proofs": [
+            {
+              "sourceClass": "Primary institutional source, NPS-authored accessible description for the original Mohs Hardness Scale infographic",
+              "title": "Mohs Hardness Scale | National Park Service",
+              "url": "https://www.nps.gov/articles/mohs-hardness-scale.htm",
+              "rawCapture": "../../geology-earth/resume-2026-10-11-gypsum-final1/sources/nps-mohs-hardness.html",
+              "rawCaptureSha256": "173821fd81f3a2b8eee2bdd59bd127f67d9ce91f0b16b3c7017a6622551f5c6d",
+              "captureFormat": "complete original HTML response bytes",
+              "captureMethod": "Complete locally retained original body was read in full, including page context and accessible image text; disk bytes and committed Git blob were independently SHA-256 checked.",
+              "locator": "Alt Text for Image Above, NPS-authored mineral list.",
+              "passage": "The minerals are listed from hardest to softest with their hardness scale number as follows: Diamond, 10; Corundum, 9; Topaz, 8; Quartz, 7; Orthoclase, 6; Apatite, 5; Flourite, 4; Calcite, 3; Gypsum, 2; and Talc, 1.",
+              "passageSha256": "efea79851ebd765e348c0abd33fa5a63073b667288c252099ceb6c81ec5d76fa"
+            }
+          ]
+        },
+        {
+          "field": "explanation",
+          "literal": "При нагревании гипса из него удаляется вода, и получается парижский гипс (Plaster of Paris), который затвердевает при добавлении воды. Его применяют в медицинских повязках для фиксации конечности после перелома.",
+          "literalSha256": "e788e12db3729c01b98a365f6ce80cef63dec872dababc52de7fc5c0bbc5e15d",
+          "verdict": "PASS",
+          "substantiveRead": true,
+          "claimAnalysis": "Первое предложение следует точно из NPS: при нагревании из гипса уходит вода, образуется powder/plaster of Paris, а добавление воды создаёт твёрдое вещество. Второе предложение подтверждается медицинским источником NHS Trust, где Plaster of Paris backslab applied to an injury following fracture. Explanation короткое, состоит из двух предложений и связывает происхождение правильного материала с его применением.",
+          "proofs": [
+            {
+              "sourceClass": "Primary institutional educational page, U.S. National Park Service",
+              "title": "Gypsum | White Sands National Park, National Park Service",
+              "url": "https://www.nps.gov/whsa/learn/gypsum.htm",
+              "rawCapture": "../../geology-earth/resume-2026-10-11-gypsum-final1/sources/nps-white-sands-gypsum.html",
+              "rawCaptureSha256": "840ff92c5ef0b3ec061515e89c279605bd8b6f5efcd9c2acfda1b34a23d82cf5",
+              "captureFormat": "complete original HTML response bytes",
+              "captureMethod": "Complete locally retained original body was read in full for this independent review; disk bytes and committed Git blob were independently SHA-256 checked.",
+              "locator": "What is Gypsum?, first body paragraph, sentences beginning 'When gypsum is heated' and 'When water is re-added'.",
+              "passage": "When gypsum is heated and the water within the mineral is evaporated out, gypsum turns into a chalk or plaster, known as plaster of Paris. When water is re-added to this chalky gypsum powder, it rehydrates and becomes gypsum again, forming a hard substance.",
+              "passageSha256": "a8068fcb69c9a641a93b081e56dc203cc0f0d62a9d20d2b1853b7a8a91c8367e"
+            },
+            {
+              "sourceClass": "NHS Trust patient information, Hull University Teaching Hospitals NHS Trust",
+              "title": "Plaster Cast Instructions | Hull University Teaching Hospitals NHS Trust",
+              "url": "https://www.hey.nhs.uk/patient-leaflet/plaster-cast-instructions/",
+              "rawCapture": "../../geology-earth/resume-2026-10-11-gypsum-final1/sources/hull-nhs-plaster-cast.html",
+              "rawCaptureSha256": "753394f4103f1701a3b8d3822b18b596f5706838dc7e3f0c9b729d6ab9dc0cd2",
+              "captureFormat": "complete original HTML response bytes",
+              "captureMethod": "Complete locally retained original body was read in full for this independent review; disk bytes and committed Git blob were independently SHA-256 checked.",
+              "locator": "Introduction, paragraph 2, first two sentences.",
+              "passage": "Following an examination and assessment of your injury we have applied a “Plaster of Paris” backslab to the affected area. This is a partial plaster to allow for swelling which often occurs following a bone fracture (break) injury of this nature.",
+              "passageSha256": "4dca5cb4b6e74daa6d58e0b304c9c3af615583f82a7ea8b8cd8b78645f5b553a"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
