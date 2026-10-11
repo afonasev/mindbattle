@@ -41,7 +41,9 @@ def main():
       else: parser=Visible();parser.feed(raw.decode('utf-8',errors='replace'));nodes=parser.nodes;fmt='html'
       sources[rel]={'url':s['url'],'rawCaptureSha256':sha(raw),'gitBlobSha256':sha(gitraw),'format':fmt,'nodes':nodes,'lastCommit':git(['log','-1','--format=%H','--',rel]).decode().strip()}
      nodes=sources[rel]['nodes'];loc=s['locator']
-     extracted=nodes[loc['pdfPage']-1] if 'pdfPage' in loc else ' '.join(nodes[loc['textNodeStart']:loc['textNodeEnd']+1])
+     joiner='\n' if path.name=='maine-ropeway-statute.html' else ' '
+     s['passageLiteralRecipe']='pypdf extract_text() exact UTF-8 page' if 'pdfPage' in loc else ('UTF-8 newline-joined whitespace-collapsed visible text nodes' if joiner=='\n' else 'UTF-8 space-joined whitespace-collapsed visible text nodes')
+     extracted=nodes[loc['pdfPage']-1] if 'pdfPage' in loc else joiner.join(nodes[loc['textNodeStart']:loc['textNodeEnd']+1])
      assert sha(s['passage'].encode())==s['passageSha256']
      s['independentLocatorMatches']=extracted==s['passage'];s['independentExtractedPassage']=extracted
      proofs.append(s)
