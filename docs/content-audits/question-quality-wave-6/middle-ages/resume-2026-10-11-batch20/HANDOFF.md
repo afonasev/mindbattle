@@ -2,7 +2,7 @@
 
 AUTHOR only: 20 PASS, 0 HOLD, 0 FIX_REQUIRED at the current hashes in `current-card-hashes.json`. All20 cards were revised;120 current fields read and bound to primary original passages. This is not independent acceptance, root certification, or completion of wave6. New certified coverage from this author receipt is0.
 
-Worktree: `/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle`; branch `codex/question-quality-wave-6`. The commit containing this file is the freeze point; no push/integration performed. Exact scope and original full cards: `before.json`. Current receipt: `author-current.json`; explicit authored decisions: `manual-final-decisions.txt`/`manual-review.json`; binding script copies decisions and adds identity only. It does not derive PASS. Every proof binds reader role/identity, current card hash, field literal hash, raw capture hash, exact passage/hash and locator.
+Worktree: `/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle`; branch `codex/question-quality-wave-6`. Source/cards/proofs freeze commit: `73d7174355b93fdc40b18ad79eb00027339be32a`; a following evidence-only commit records whitespace-check scope. No push/integration performed. Exact scope and original full cards: `before.json`. Current receipt: `author-current.json`; explicit authored decisions: `manual-final-decisions.txt`/`manual-review.json`; binding script copies decisions and adds identity only. It does not derive PASS. Every proof binds reader role/identity, current card hash, field literal hash, raw capture hash, exact passage/hash and locator.
 
 ## Important replacements
 
@@ -28,3 +28,5 @@ Failed/incomplete captures never served as proofs. Oxford old PDF failed EOF and
 A distinct INDEPENDENT reader must actually re-read these exact20 current cards, all120 literals and original passages, and calibrate edits/distractors/difficulty/duplicates. Author PASS cannot substitute for that role. Coordinator alone certifies paired current hashes and updates coverage. Keep whole-topic stamp pending100 independent cards. The author chat can be archived without losing data; continuation is in this Git commit and receipt directory, not unsaved chat state.
 
 Topic current byte SHA256: `0aa8afcdb1289625a24636328c594e4c26a09fc432979f824eeff905854237ac`.
+
+Git whitespace check: original captured source whitespace remains byte-for-byte intact; it is not normalized to obtain green. Authored content/decisions/binders/reports pass a separate whitespace check excluding only `sources/**`. Typecheck output trailing blank line removed; command text/result unchanged.
