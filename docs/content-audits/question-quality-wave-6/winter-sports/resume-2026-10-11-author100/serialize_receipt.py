@@ -14,8 +14,9 @@ def run(name):
   for i,f in enumerate(fields):
    assert f['verdict'] in ('PASS','HOLD','FIX_REQUIRED') and f['substantiveRead'] is True
    namefield=['prompt-key','note0','note1','note2','note3','explanation'][i];literal=canonical([c['prompt'],c['correctIndex'],c['answers'][c['correctIndex']]['text']]) if i==0 else f['literal'].encode();proofs=[]
-   for src,first,last in f['proofRefs']:
-    s=index[src];passage=s['nodes'][first] if s.get('format')=='pdf' else ' '.join(s['nodes'][first:last+1]);assert passage
+   for ref in f['proofRefs']:
+    src,first,last=ref[:3]
+    s=index[src];passage=s['nodes'][first] if s.get('format')=='pdf' else ' '.join(s['nodes'][first:last+1]);passage=ref[3] if len(ref)>3 else passage;assert passage
     proofs.append({'sourceClass':'primary sports governing institution','title':src+' — institutional original','url':s['http']['url'],'rawCapture':s['rawCapture'],'rawCaptureSha256':s['rawCaptureSha256'],'captureFormat':'pdf original bytes with pdfPage locator' if s.get('format')=='pdf' else 'html original bytes','captureMethod':s['http']['method']+'; text locator uses '+s['extraction'],'locator':{'pdfPage':first+1} if s.get('format')=='pdf' else {'textNodeStart':first,'textNodeEnd':last,'index':'source-index.json/'+src},'passage':passage,'passageSha256':sha(passage.encode())})
    frows.append({'field':namefield,'literalSha256':sha(literal),'verdict':f['verdict'],'substantiveRead':f['substantiveRead'],'claimAnalysis':f['claimAnalysis'],'proofs':proofs})
   rows.append({'questionId':c['id'],'cardCanonicalSha256':sha(canonical(c)),'verdict':d['verdict'],'editorialAnalysis':d['editorialAnalysis'],'fields':frows})

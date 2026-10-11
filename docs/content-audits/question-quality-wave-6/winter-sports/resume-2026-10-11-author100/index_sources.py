@@ -13,7 +13,7 @@ class Text(HTMLParser):
 if __name__=='__main__':
  index={}
  for raw in sorted((ROOT/'sources').glob('*.html')):
-  if 'failed-partial' in raw.name:continue
+  if 'failed-partial' in raw.name or not raw.with_suffix('.http.json').exists():continue
   parser=Text();parser.feed(raw.read_text());index[raw.stem]={'rawCapture':'sources/'+raw.name,'rawCaptureSha256':hashlib.sha256(raw.read_bytes()).hexdigest(),'http':json.loads(raw.with_suffix('.http.json').read_text()),'extraction':'HTMLParser visible text nodes excluding script/style, whitespace collapsed in each node; node index is zero-based; full raw HTML retained','nodes':parser.parts}
  from pypdf import PdfReader
  for raw in sorted((ROOT/'sources').glob('*.pdf')):
