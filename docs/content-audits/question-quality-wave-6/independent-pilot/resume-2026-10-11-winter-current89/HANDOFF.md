@@ -11,3 +11,7 @@ Next package: `winter-sports-076–100` (25 cards). Never revisit certified009/0
 ## Repeated editorial review of nine cards
 
 A separate manual editorial re-review of `028, 029, 030, 031, 032, 036, 038, 039, 042` is recorded in `batch01-026-050-repeat9-editorial-review.json`. Historical PASS decisions in `batch01-026-050-receipt.json` were preserved unchanged. Supplemental result: 1 PASS (`028`, because each metric is a coherent and plausible winter-sport result distractor) and 8 FIX for the remaining eight editorial/category or Olympic-topic boundary issues. These are repeat-review findings, not additional unique cards or coordinator certification.
+
+## Additional three-card repeat review
+
+The coordinator’s additional follow-up on `026`, `035`, and `043` was manually reviewed across all six fields per card and is included in `batch01-026-050-repeat12-editorial-review.json`. Each changed from historical PASS to supplemental FIX because one answer choice is logically impossible/self-excluded; all source facts remain supported. Combined twelve-card repeat result: 1 PASS (`028`), 11 FIX, 0 HOLD. The first-pass receipt remains unchanged. Considering the supplemental reviews with the 64 unique first-pass cards gives 48 PASS, 11 FIX, 5 HOLD; remaining unique assigned IDs are `076–100`.
