@@ -55,7 +55,13 @@ for group in config['explicitGroups']:
             assert read['cardCanonicalSha256'] == digest, (qid, 'whole card hash')
             assert read['verdict'] == 'PASS', (qid, 'explicit paired verdict')
             fields = {f['field']: f for f in read['fields']}
-            literals = {'prompt-key': [card['prompt'], card['correctIndex'], card['answers'][card['correctIndex']]['text']],
+            prompt_format = reading.get('promptKeyLiteralFormat', 'canonical-array')
+            assert prompt_format in ('canonical-array', 'prompt-newline-key')
+            key_text = card['answers'][card['correctIndex']]['text']
+            prompt_literal = ([card['prompt'], card['correctIndex'], key_text]
+                              if prompt_format == 'canonical-array'
+                              else card['prompt'] + '\n' + key_text)
+            literals = {'prompt-key': prompt_literal,
                         **{f'note{n}': a['note'] for n, a in enumerate(card['answers'])}, 'explanation': card['explanation']}
             assert set(fields) == set(literals), (qid, 'six indexed fields')
             for key, field in fields.items():
