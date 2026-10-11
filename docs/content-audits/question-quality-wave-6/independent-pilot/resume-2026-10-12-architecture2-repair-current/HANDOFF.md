@@ -14,3 +14,5 @@ Duplicate report records known partner main-fact distinctions and flags the auth
 Checks: frozen/current equality, canonical/literal/passage/source SHA bindings and committed original byte roundtrip. Fullsuite, builds, deploy, integration, root certification and human acceptance were not performed. Only this evidence directory is owned by this reader; concurrent winter edits and other actors' resources are preserved.
 
 Next step: coordinator `01a12cda-2625-7c23-afec-132db866c172` reads this exact receipt and combines it with the three existing pilot certifications before deciding pilot closure and remaining16 work. These are independent reader verdicts, not the coordinator certificate.
+
+Evidence commit: `daf2b0a`. All eight sources passed committed-byte readback; source/card/literal/passage hashes passed. Original HTML whitespace warnings are preserved and documented in cleanup.json; authored evidence diff check passes with immutable raw originals excluded. No owned processes, temporary external files or cleanup debt remain. Сессию можно архивировать без потери данных; координатор продолжает из этого сохранённого каталога.
