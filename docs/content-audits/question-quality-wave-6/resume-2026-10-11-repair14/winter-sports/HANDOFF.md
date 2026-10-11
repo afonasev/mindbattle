@@ -13,7 +13,7 @@ Six assigned cards are revised and frozen for independent reading: `winter-sport
 
 ## Preservation and limits
 
-The winter catalog remains at 100 cards with 40/40/20 difficulty quotas and 10/10/5 correct-answer positions per slot. IDs and order are unchanged; the six cards retain difficulty and `correctIndex`. All 94 non-owned cards are canonically identical to the baseline at `d244e6f7a888aba058f002781f095b4e73847c8c`. No active reader receipt or other topic was changed in this slice.
+The winter catalog remains at 100 cards with 40/40/20 difficulty quotas and 10/10/5 correct-answer positions per slot. IDs and order are unchanged; the six cards retain difficulty and `correctIndex`. All 94 non-owned cards are canonically identical to the baseline at `35fad8e4ef690de8b1048dc99e7f083fa4af0f8d`. No active reader receipt or other topic was changed in this slice.
 
 This is an author freeze only. Independent reading of these six exact hashes and coordinator certification remain pending. The author PASS is not human/product acceptance. No full test suite, build, browser QA, deployment, release, or archive was performed.
 
