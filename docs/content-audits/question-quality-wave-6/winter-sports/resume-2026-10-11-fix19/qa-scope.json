@@ -1,0 +1,18 @@
+{
+  "scope": "19winter-sports content cards + author evidence; no runtime behavior or validators changed",
+  "commands": [
+    {
+      "command": "npm run typecheck",
+      "reason": "JSON imports remain compatible with catalog types; no build invoked"
+    },
+    {
+      "command": "npx vitest run tests/unit/catalog-topics.test.ts tests/unit/catalog-full.test.ts tests/unit/content.test.ts tests/unit/content-answer-notes.test.ts --reporter=json --outputFile=<owned>/focused-tests.json",
+      "reason": "Only catalog shape/quota/global-ID/review-byte and indexed-note serialization consumers. catalog-full is one focused content test, not full unit suite; no npm check/qa/browser/build route."
+    },
+    {
+      "command": "python3 verify-proof-format.py receipt.json --repo . --output roundtrip-final19.json",
+      "reason": "Exact current card/literal/raw/passages only, creates zero substantive verdicts."
+    }
+  ],
+  "noFullSuiteAuthorized": true
+}
