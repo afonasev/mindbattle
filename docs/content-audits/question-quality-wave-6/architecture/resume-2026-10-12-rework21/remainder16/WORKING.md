@@ -1,15 +1,16 @@
-# Architecture remainder16 authoring checkpoint
+# Architecture remainder16 authoring handoff
 
-Baseline: `afef4bf51c04b961fa149aad23b25019fcd3c35d`; scope is frozen in `remainder16-freeze.json` from the committed coordinator continuation manifest. Author identity: `01a12cc1-a1d0-75e1-9145-70e564a68e5b`.
+Baseline: `afef4bf51c04b961fa149aad23b25019fcd3c35d`; committed scope is `coordinator-continuation-01a12cda/architecture-remaining16-scope.json`. Author identity: `01a12cc1-a1d0-75e1-9145-70e564a68e5b`.
 
-## Current state
+## Author stage complete
 
-- Fifteen scoped cards have editorial candidate changes in `src/content/topics/architecture.json`; the Mont-Saint-Michel card is unchanged pending a source-quality decision.
-- The intended changes preserve all 16 IDs, order, difficulty, and correct-answer indexes. A focused invariant check passed for four options and nonempty notes.
-- Existing raw source captures referenced by the earlier findings were copied byte-for-byte into `sources/`; `source-copies-git-roundtrip.json` records lengths, SHA-256 and Git blob IDs.
-- This is **not ready for independent review**. A fresh author receipt with the required 96 field-level reads, exact passages and claim analyses has not been completed. Do not treat previous author or reader receipts as evidence of my own current-field review.
-- Mont-Saint-Michel remains a specific evidence blocker: the complete original source for the gazebo/belvedere/veranda/follies claims was unavailable in captured Git bytes. IFAS web material was readable in the browser/search result, but direct raw capture failed with DNS resolution errors; it cannot satisfy the raw-source requirement. Keep its existing card untouched and do not certify it. If it remains HOLD, cite the canonical Easy criterion exactly and name this unresolved source defect.
+- All 16 scoped cards were read against complete Git-tracked source captures, including each current prompt/key, four option notes, and explanation. The new `author-receipt.json` binds all 96 fields to literal hashes, full-card canonical hashes, exact passages, raw SHA-256, source URL/locator, manual analysis, and this author identity.
+- Reworked nearby distractors and notes, removed the giveaway geographic cue from Durham, changed Hagia Sophia to an architectural-period question, changed the entasis-ID card to a source-backed archivolt question, and made Samarkand test the underlying masonry. IDs, order, difficulty, and correct-answer indexes remain fixed.
+- The previous garden-structure fact for Mont-Saint-Michel could not be supported from captured complete originals. That question was replaced by the easy, source-backed facade definition from the complete NYC LPC original; the card is not held or excluded. The failed DNS attempts remain documented in `mont-source-attempt.json`; the resolution is in `mont-source-replacement.json`.
+- `source-copies-git-roundtrip.json` records the byte-identical copies, source metadata, Git blob IDs, and which captures are used by the receipt. Incomplete/failed historic captures are marked and are not cited as proof.
+- Focused invariant check confirmed only the exact 16 target cards changed, all fixed difficulty/key slots and order are preserved, and the protected 84 cards are byte/canonical unchanged.
+- `proof-format-check.json` passed all 96 raw-byte, passage, literal-binding, and card-hash checks. This is mechanical evidence only.
 
-## Next required work
+## Review boundary
 
-Read every current field directly against complete source bytes, establish field-level exact-byte receipts and analyses, repair source-backed issues, then run the authorized minimal source/invariant checks. Only after a complete honest author receipt exists should the candidate be frozen for a distinct independent reader. No reader certification, commit, build, deployment, or full-suite run has occurred in this checkpoint.
+This is an author receipt, not independent certification or human acceptance. The authored slice is frozen for a distinct independent reader to open and read all six fields on every card. No full suite, build, deployment, merge, or publication was run.
