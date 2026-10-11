@@ -4,7 +4,7 @@ import { initializeStatistics } from './statistics/control';
 import { StrictMode, Suspense, lazy, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { registerSW } from "virtual:pwa-register";
-import { checkForPwaUpdate, findPwaUpdate, waitingUpdateVersion } from "./pwaUpdate";
+import { checkForPwaUpdate, findPwaUpdate, waitingUpdateVersion, waitingUpdateInfo } from "./pwaUpdate";
 import { runManualUpdate, withUpdateTimeout } from "./gameUpdate";
 import "@fontsource-variable/onest/wght.css";
 const App = lazy(() => import("./ui/App").then(module => ({ default: module.App })));
@@ -27,7 +27,8 @@ const root = document.getElementById("root");
 let applyUpdate: (() => Promise<void>) | undefined;
 let updateReady = false;
 let updateVersion: string | undefined;
-const updateListeners = new Set<(ready: boolean, version?: string) => void>();
+let updatePublishedAt: string | undefined;
+const updateListeners = new Set<(ready: boolean, version?: string, publishedAt?: string) => void>();
 let desktopUpdateStatus: DesktopUpdateStatus = { phase: "idle" };
 let desktopStatusRevision = 0;
 const desktopStatusListeners = new Set<(status: DesktopUpdateStatus) => void>();
@@ -40,7 +41,7 @@ export const onDesktopUpdateStatus = (listener: (status: DesktopUpdateStatus) =>
   desktopStatusListeners.add(listener); listener(desktopUpdateStatus);
   return () => { desktopStatusListeners.delete(listener); };
 };
-export const onPwaUpdate = (listener: (ready: boolean, version?: string) => void) => { updateListeners.add(listener); listener(updateReady, updateVersion); return () => { updateListeners.delete(listener); }; };
+export const onPwaUpdate = (listener: (ready: boolean, version?: string, publishedAt?: string) => void) => { updateListeners.add(listener); listener(updateReady, updateVersion, updatePublishedAt); return () => { updateListeners.delete(listener); }; };
 export const applyPwaUpdate = () => applyUpdate?.() ?? Promise.reject(new Error("Обновление пока недоступно. Попробуйте ещё раз."));
 let registrationError: unknown;
 let registered: (registration: ServiceWorkerRegistration | undefined) => void;
@@ -85,16 +86,17 @@ function RoutedApp() {
   }, []);
   return <>{path === "/network" ? <NetworkApp /> : <App />}<AppFooter /></>;
 }
-function updateAvailable(ready: boolean, version?: string) { updateReady = ready; updateVersion = ready ? version : undefined; updateListeners.forEach(listener => listener(ready, updateVersion)); }
+function updateAvailable(ready: boolean, version?: string, publishedAt?: string) { updateReady = ready; updateVersion = ready ? version : undefined; updatePublishedAt = ready ? publishedAt : undefined; updateListeners.forEach(listener => listener(ready, updateVersion, updatePublishedAt)); }
 if (desktop) {
   applyUpdate = async () => { if (!await desktop!.applyUpdate()) throw new Error("Update not applied"); };
-  desktop.onUpdate((ready, version) => { desktopStatusRevision++; updateAvailable(ready, version); });
+  desktop.onUpdate((ready, version, publishedAt) => { desktopStatusRevision++; updateAvailable(ready, version, publishedAt); });
+  window.addEventListener('online', () => { void desktop?.checkUpdate?.().catch(() => {}); });
   desktop.onUpdateStatus?.(desktopStatusChanged);
   const revision = desktopStatusRevision;
   void desktop.status().then(state => {
     // A delayed initial snapshot must not erase a newer IPC download/error.
     if (revision !== desktopStatusRevision) return;
-    updateAvailable(state.ready, state.updateVersion);
+    updateAvailable(state.ready, state.updateVersion, state.updatePublishedAt);
     if (state.updateStatus) desktopStatusChanged(state.updateStatus);
   }).catch(() => {
     if (revision === desktopStatusRevision) desktopStatusChanged({ phase: "error", message: "Не удалось проверить обновления. Попробуйте ещё раз." });
@@ -107,8 +109,11 @@ if (desktop) {
       void registrationReady.then(async registration => {
         const worker = registration?.waiting;
         if (!worker) return;
+        const infoRequest = waitingUpdateInfo(worker);
         const version = await waitingUpdateVersion(worker);
         if (registration.waiting === worker && updateReady) updateAvailable(true, version);
+        const info = await infoRequest;
+        if (info && registration.waiting === worker && updateReady) updateAvailable(true, info.version, info.publishedAt);
       });
     },
     onRegisteredSW: (_swScriptUrl, registration) => {

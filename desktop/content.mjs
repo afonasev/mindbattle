@@ -8,7 +8,7 @@ import {
   access,
 } from "node:fs/promises";
 import path from "node:path";
-import { objectBase, fetchUpdate } from './updateTransport.mjs';
+import { objectBase, fetchUpdate, validPublishedAt } from './updateTransport.mjs';
 
 export const digest = (bytes) =>
   createHash("sha256").update(bytes).digest("hex");
@@ -36,6 +36,7 @@ export function checkManifest(envelope, publicKey, shellVersion) {
   )
     throw new Error("Invalid content signature");
   const m = JSON.parse(envelope.payload);
+  if (m.publishedAt != null && !validPublishedAt(m.publishedAt)) throw Error('Invalid publication date');
   if (m.version !== undefined && (typeof m.version !== "string" || !/^[0-9][a-zA-Z0-9.+_-]{0,63}$/.test(m.version))) throw new Error("Invalid content version");
   if (
     m.format !== 1 ||

@@ -22,7 +22,7 @@ const updateVersionPlugin: Plugin = {
     const version = `${packageVersion}+${hash.digest("hex").slice(0, 8)}`;
     releaseVersion = version;
     this.emitFile({ type: "asset", fileName: "game-version.json", source: JSON.stringify({ version, publishedAt }) });
-    this.emitFile({ type: "asset", fileName: "update-version.js", source: `self.addEventListener("message", event => { if (event.data === "mindbattle:update-version") event.ports[0]?.postMessage(${JSON.stringify(version)}); });` });
+    this.emitFile({ type: "asset", fileName: "update-version.js", source: `self.addEventListener("message", event => { if (event.data === "mindbattle:update-version") event.ports[0]?.postMessage(${JSON.stringify(version)}); if (event.data === "mindbattle:update-info") event.ports[0]?.postMessage(${JSON.stringify({ version, publishedAt })}); });` });
   },
   writeBundle(options) {
     // Stamp the loaded document before Workbox precaches it. No latest-version fetch.

@@ -6,7 +6,7 @@ import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { checkManifest } from '../../desktop/content.mjs';
 import { shellManifest, fileHash } from '../../desktop/shell.mjs';
-import { objectBase, updateOrigin } from '../../desktop/updateTransport.mjs';
+import { objectBase, updateOrigin, validPublishedAt } from '../../desktop/updateTransport.mjs';
 
 const repo = 'afonasev/mindbattle';
 const branch = 'desktop-updates';
@@ -46,6 +46,7 @@ export async function publishUpdates(kind, { cwd = process.cwd(), run = execute,
     const envelope = JSON.parse(await readFile(source, 'utf8'));
     const m = kind === 'content' ? checkManifest(envelope, key, config.shellVersion) : shellManifest(envelope, key, name.split('/')[0]);
     objectBase(m, kind, updateOrigin);
+    if (!validPublishedAt(m.publishedAt)) throw Error('Publication requires MINDBATTLE_PUBLISHED_AT in the signed manifest');
     if (kind === 'shell' && m.version !== config.shellVersion) throw Error('Shell version mismatch');
     manifests.push({ name, source, envelope, manifest: m });
     for (const f of m.files) {

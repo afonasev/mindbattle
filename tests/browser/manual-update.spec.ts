@@ -20,7 +20,7 @@ test.describe("real PWA update", () => {
       if (offline) { response.writeHead(503); response.end(); return; }
       if (request.url === "/update-version.js") {
         response.writeHead(200, { "content-type": "text/javascript", "cache-control": "no-store" });
-        response.end(`self.addEventListener('message', event => { if (event.data === 'mindbattle:update-version') event.ports[0].postMessage('2.0.0-${tag}'); });`);
+        response.end(`self.addEventListener('message', event => { if (event.data === 'mindbattle:update-version') event.ports[0].postMessage('2.0.0-${tag}'); if (event.data === 'mindbattle:update-info') event.ports[0].postMessage({version:'2.0.0-${tag}',publishedAt:'${tag === 'B' ? '2026-10-10T07:15:00.000Z' : '2026-10-11T09:00:00.000Z'}'}); });`);
       } else if (request.url === "/sw.js") {
         response.writeHead(200, { "content-type": "text/javascript", "cache-control": "no-store" });
         response.end(`${original}\nself.addEventListener('message', event => { if (event.data === 'update-test-tag') event.ports[0].postMessage('${tag}'); });\n`);
@@ -47,7 +47,7 @@ test.describe("real PWA update", () => {
     await page.evaluate(async () => { await navigator.serviceWorker.ready; });
     await page.reload();
     await expect(page.getByRole("button", { name: "Одиночная игра", exact: true })).toBeVisible();
-    const update = page.getByRole("button", { name: "Появилось новое обновление", exact: true });
+    const update = page.getByRole("button", { name: "Обновить", exact: true });
     await expect(update).toBeHidden();
     const footer = page.getByRole("contentinfo", { name: "Версия приложения" });
     const currentVersion = await footer.innerText();
@@ -60,6 +60,7 @@ test.describe("real PWA update", () => {
     await page.evaluate(async () => { await (await navigator.serviceWorker.getRegistration())!.update(); });
     await expect(update).toBeVisible();
     await expect(update).toContainText("Версия 2.0.0-B");
+    await expect(update.locator("time")).toHaveAttribute("datetime", "2026-10-10T07:15:00.000Z");
     expect(await footer.innerText()).toBe(currentVersion);
     await page.screenshot({ path: info.outputPath("update-web.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
@@ -72,6 +73,7 @@ test.describe("real PWA update", () => {
     tag = "C"; // The server advanced, but the button must still describe waiting B.
     await context.setOffline(true);
     await expect(update).toContainText("Версия 2.0.0-B");
+    await expect(update.locator("time")).toHaveAttribute("datetime", "2026-10-10T07:15:00.000Z");
     const reloaded = page.waitForEvent("load");
     await update.click();
     await reloaded;
@@ -101,7 +103,7 @@ for (const legacy of [false, true]) {
       };
     }, legacy);
     await page.goto("/");
-    const update = page.getByRole("button", { name: "Появилось новое обновление", exact: true });
+    const update = page.getByRole("button", { name: "Обновить", exact: true });
     await expect(page.getByRole("button", { name: "Одиночная игра", exact: true })).toBeVisible();
     await expect(update).toBeHidden();
     await page.evaluate(() => (window as any).notifyUpdate(true, "1.2.3+abcdef12"));
@@ -116,7 +118,7 @@ for (const legacy of [false, true]) {
   });
 }
 
-test('desktop background download is visible and a failed check can be retried', async ({ page }, info) => {
+test('desktop checks automatically, hides manual checking and highlights the verified update', async ({ page }, info) => {
   await page.addInitScript(() => {
     HTMLMediaElement.prototype.play = async () => {};
     (window as any).updateCalls = 0;
@@ -125,31 +127,54 @@ test('desktop background download is visible and a failed check can be retried',
       version: 1, status: async () => ({ ready: false, shellVersion: '1.0.5', updateStatus: { phase: 'checking' } }),
       onUpdate: (notify: unknown) => { (window as any).notifyUpdate = notify; return () => {}; },
       onUpdateStatus: (notify: unknown) => { (window as any).notifyStatus = notify; return () => {}; },
-      checkUpdate: async () => { (window as any).updateCalls++; (window as any).notifyStatus({ phase: 'current' }); return { ready: false }; },
+      checkUpdate: async () => {
+        (window as any).updateCalls++;
+        (window as any).notifyUpdate(true, '0.2.0+abcdef12', '2026-10-10T07:15:00.000Z');
+        (window as any).notifyStatus({ phase: 'ready' });
+        return { ready: true };
+      },
       applyUpdate: async () => { (window as any).applyCalls++; return false; },
+      display: async () => ({ width: 1280, height: 720, fullscreen: false }),
+      setDisplay: async (settings: unknown) => settings,
       safeToUpdate: () => {}, ready: async () => {}, quit: async () => {},
     };
   });
   await page.goto('/');
-  await expect(page.getByRole('button', { name: 'Проверяем…', exact: true })).toBeDisabled();
+  const update = page.getByRole('button', { name: 'Обновить', exact: true });
+  await expect(update).toBeHidden();
+  await expect(page.getByRole('status')).toContainText('Проверяем обновления');
   await page.evaluate(() => (window as any).notifyStatus({ phase: 'downloading', version: '0.2.0+abcdef12', completed: 2, total: 4 }));
-  const download = page.getByRole('button', { name: 'Скачиваем обновление…', exact: true });
-  await expect(download).toBeDisabled();
-  await expect(download).toContainText('Версия 0.2.0');
-  await expect(download).not.toContainText('abcdef12');
-  await expect(page.getByRole('status')).toContainText('Скачано 50% файлов');
-  await page.screenshot({ path: info.outputPath('desktop-download-progress.png'), fullPage: true });
-  await page.evaluate(() => (window as any).notifyStatus({ phase: 'error', message: 'Не удалось проверить обновления. Проверьте подключение и попробуйте ещё раз.' }));
-  const retry = page.getByRole('button', { name: 'Повторить проверку', exact: true });
-  await expect(retry).toBeEnabled();
-  await expect(page.getByRole('alert')).toContainText('Не удалось проверить');
-  await page.screenshot({ path: info.outputPath('desktop-update-retry.png'), fullPage: true });
-  await page.evaluate(() => localStorage.setItem('update-preserved', 'saved'));
-  await retry.click();
-  await expect(retry).toBeHidden();
+  await expect(update).toBeHidden();
+  await expect(page.getByRole('status')).toContainText('50% файлов');
+  await page.evaluate(() => (window as any).notifyStatus({ phase: 'error', message: 'offline' }));
+  await expect(page.getByRole('button', { name: 'Повторить проверку' })).toBeHidden();
+  await expect(page.getByRole('status')).toContainText('Повторим автоматически');
+  await page.evaluate(() => {
+    localStorage.setItem('update-preserved', 'saved');
+    window.dispatchEvent(new Event('online'));
+  });
+  await expect(update).toBeVisible();
+  await expect(update).toContainText('Версия 0.2.0');
+  await expect(update).not.toContainText('abcdef12');
+  await expect(update.locator('time')).toHaveAttribute('datetime', '2026-10-10T07:15:00.000Z');
+  expect(await update.evaluate(element => getComputedStyle(element).backgroundColor)).not.toBe(await page.getByRole('button', { name: 'Настройки', exact: true }).evaluate(element => getComputedStyle(element).backgroundColor));
+  await page.screenshot({ path: info.outputPath('automatic-update-ready.png'), fullPage: true });
+  await page.getByRole('button', { name: 'Настройки', exact: true }).click();
+  await page.getByRole('checkbox', { name: 'Высокий контраст', exact: true }).check();
+  await page.getByRole('button', { name: 'Назад', exact: true }).click();
+  await expect(update).toBeVisible();
+  await page.screenshot({ path: info.outputPath('automatic-update-high-contrast.png'), fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  expect(await update.evaluate(element => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+  await expect(update.locator('time')).toBeVisible();
+  await page.screenshot({ path: info.outputPath('automatic-update-mobile.png'), fullPage: true });
   expect(await page.evaluate(() => (window as any).updateCalls)).toBe(1);
   expect(await page.evaluate(() => (window as any).applyCalls)).toBe(0);
   expect(await page.evaluate(() => localStorage.getItem('update-preserved'))).toBe('saved');
+  await update.click();
+  await expect(page.getByRole('alert')).toContainText('Не удалось обновить');
+  await expect(update).toBeEnabled();
 });
 
 for (const rejected of [false, true]) {
@@ -169,7 +194,7 @@ test(`desktop delayed startup ${rejected ? 'error' : 'snapshot'} cannot hide a n
     (window as any).notifyUpdate(true, '1.0.5');
     (window as any).finishStatus({ ready: false, shellVersion: '1.0.4' });
   });
-  await expect(page.getByRole('button', { name: 'Появилось новое обновление', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Обновить', exact: true })).toBeVisible();
   await expect(page.getByRole('alert')).toBeHidden();
 });
 }

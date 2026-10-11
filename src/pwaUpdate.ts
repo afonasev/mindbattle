@@ -62,3 +62,19 @@ export function waitingUpdateVersion(worker: ServiceWorker, timeoutMs = 3_000): 
     try { worker.postMessage("mindbattle:update-version", [channel.port2]); } catch { finish(); }
   });
 }
+
+export function waitingUpdateInfo(worker: ServiceWorker, timeoutMs = 3_000): Promise<{ version: string; publishedAt?: string } | undefined> {
+  return new Promise(resolve => {
+    const channel = new MessageChannel();
+    const finish = (value?: { version: string; publishedAt?: string }) => {
+      clearTimeout(timer); channel.port1.close(); channel.port2.close(); resolve(value);
+    };
+    const timer = setTimeout(() => finish(), timeoutMs);
+    channel.port1.onmessage = event => {
+      const info = event.data;
+      if (!info || typeof info.version !== 'string' || !/^[0-9][a-zA-Z0-9.+_-]{0,63}$/.test(info.version)) return finish();
+      finish({ version: info.version, publishedAt: typeof info.publishedAt === 'string' && /^\d{4}-\d{2}-\d{2}T.*Z$/.test(info.publishedAt) && Number.isFinite(Date.parse(info.publishedAt)) ? info.publishedAt : undefined });
+    };
+    try { worker.postMessage('mindbattle:update-info', [channel.port2]); } catch { finish(); }
+  });
+}

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { createUpdateCheck, pendingUpdateVersion } from "../../desktop/updateCheck.mjs";
+import { createUpdateCheck, pendingUpdateVersion, pendingUpdateInfo, startAutomaticUpdateChecks } from "../../desktop/updateCheck.mjs";
 const store = (check) => ({ state: { pending: null }, check });
 test("background and manual callers await one download", async () => {
   let release;
@@ -65,4 +65,28 @@ test("pending version follows apply priority and never uses current shell versio
   assert.equal(await pendingUpdateVersion(shell, content), undefined);
   content.state.pending = null;
   assert.equal(await pendingUpdateVersion(shell, content), undefined);
+});
+
+test('publication date follows the verified pending release and shell apply priority', async () => {
+  const shell = { state: { pending: 's' }, pendingManifest: async () => ({ version: '1.0.5', publishedAt: '2026-10-11T07:00:00.000Z' }) };
+  const content = { state: { pending: 'c' }, directory: id => id, manifestAt: async () => ({ version: '0.2.0', publishedAt: '2026-10-10T07:15:00.000Z' }) };
+  assert.deepEqual(await pendingUpdateInfo(shell, content), { version: '1.0.5', publishedAt: '2026-10-11T07:00:00.000Z' });
+  shell.state.pending = null;
+  assert.deepEqual(await pendingUpdateInfo(shell, content), { version: '0.2.0', publishedAt: '2026-10-10T07:15:00.000Z' });
+});
+
+test('startup and five-minute retries discover updates after failure without a manual action', async () => {
+  let tick; let stopped; let failures = 0; let attempts = 0;
+  const stop = startAutomaticUpdateChecks(async () => {
+    attempts++;
+    if (attempts === 1) throw Error('offline');
+  }, () => failures++, {
+    setInterval: (callback, delay) => { assert.equal(delay, 300_000); tick = callback; return 42; },
+    clearInterval: id => { stopped = id; },
+  });
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(attempts, 1); assert.equal(failures, 1);
+  tick(); await new Promise(resolve => setImmediate(resolve));
+  assert.equal(attempts, 2); assert.equal(failures, 1);
+  stop(); assert.equal(stopped, 42);
 });

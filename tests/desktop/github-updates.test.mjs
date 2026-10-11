@@ -6,8 +6,8 @@ import { execFileSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 import { fetchUpdate, objectBase, releaseBase, updateOrigin } from '../../desktop/updateTransport.mjs';
-import { ContentStore, digest } from '../../desktop/content.mjs';
-import { ShellStore } from '../../desktop/shell.mjs';
+import { ContentStore, checkManifest, digest } from '../../desktop/content.mjs';
+import { ShellStore, shellManifest } from '../../desktop/shell.mjs';
 import { publishUpdates } from '../../scripts/desktop/publish-updates.mjs';
 
 test('GitHub redirects permit the release CDN but refuse other hosts, credentials, downgrade and loops', async () => {
@@ -35,10 +35,15 @@ for (const kind of ['content', 'shell']) {
     const { privateKey, publicKey } = generateKeyPairSync('ed25519');
     const bytes = Buffer.from('game data');
     const file = kind === 'content' ? 'index.html' : 'Contents/MacOS/Mindbattle';
-    const payload = JSON.stringify({ format: 1, sequence: 2, version: '1.0.5', bridge: 1, shellMajor: 1,
+    const payload = JSON.stringify({ format: 1, sequence: 2, version: '1.0.5', publishedAt: '2026-10-11T07:00:00.000Z', bridge: 1, shellMajor: 1,
       product: 'tech.afonasev.mindbattle', platform: 'darwin-universal', helper: 1, entry: file, links: [],
       objectBaseUrl: releaseBase(kind, 2), files: [{ path: file, size: bytes.length, sha256: digest(bytes), mode: 0o755 }] });
     const envelope = { payload, signature: sign(null, Buffer.from(payload), privateKey).toString('base64') };
+    const validate = env => kind === 'content' ? checkManifest(env, publicKey, '1.0.4') : shellManifest(env, publicKey, 'darwin-universal');
+    assert.equal(validate(envelope).publishedAt, '2026-10-11T07:00:00.000Z');
+    assert.throws(() => validate({ ...envelope, payload: payload.replace('07:00:00', '08:00:00') }), /signature/);
+    const invalid = JSON.stringify({ ...JSON.parse(payload), publishedAt: '2026-02-30T07:00:00.000Z' });
+    assert.throws(() => validate({ payload: invalid, signature: sign(null, Buffer.from(invalid), privateKey).toString('base64') }), /publication date/);
     const requests = [];
     const fetcher = async address => {
       requests.push(address);
@@ -75,9 +80,9 @@ test('publication uploads and verifies before switching Pages, resumes safely an
   await writeFile(path.join(cwd, 'desktop/content-public.pem'), publicKey.export({ type: 'spki', format: 'pem' }));
   git('add', '.'); git('commit', '-m', 'fixture'); git('remote', 'add', 'origin', remote); git('push', 'origin', 'main');
   let envelope; let bytes;
-  const stage = async (sequence, body) => {
+  const stage = async (sequence, body, publishedAt = '2026-10-11T07:00:00.000Z') => {
     bytes = Buffer.from(body);
-    const payload = JSON.stringify({ format: 1, sequence, version: '0.1.0', bridge: 1, shellMajor: 1, objectBaseUrl: releaseBase('content', sequence), files: [{ path: 'index.html', size: bytes.length, sha256: digest(bytes) }] });
+    const payload = JSON.stringify({ format: 1, sequence, version: '0.1.0', publishedAt, bridge: 1, shellMajor: 1, objectBaseUrl: releaseBase('content', sequence), files: [{ path: 'index.html', size: bytes.length, sha256: digest(bytes) }] });
     envelope = { payload, signature: sign(null, Buffer.from(payload), privateKey).toString('base64') };
     await mkdir(path.join(cwd, 'desktop-release/content/objects'), { recursive: true });
     await writeFile(path.join(cwd, 'desktop-release/content/latest.json'), JSON.stringify(envelope));
@@ -136,7 +141,7 @@ test('publication uploads and verifies before switching Pages, resumes safely an
   await writeFile(path.join(cwd, 'desktop-release/shell/objects', digest(runtime)), runtime);
   async function stageShell(platform, sequence) {
     const entry = platform === 'darwin-universal' ? 'Contents/MacOS/Mindbattle' : 'Mindbattle.exe';
-    const payload = JSON.stringify({ format: 1, product: 'tech.afonasev.mindbattle', version: '1.0.5', sequence, platform, helper: 1, entry, links: [], objectBaseUrl: releaseBase('shell', sequence), files: [{ path: entry, size: runtime.length, sha256: digest(runtime), mode: 0o755 }] });
+    const payload = JSON.stringify({ format: 1, product: 'tech.afonasev.mindbattle', version: '1.0.5', publishedAt: '2026-10-11T07:00:00.000Z', sequence, platform, helper: 1, entry, links: [], objectBaseUrl: releaseBase('shell', sequence), files: [{ path: entry, size: runtime.length, sha256: digest(runtime), mode: 0o755 }] });
     const env = { payload, signature: sign(null, Buffer.from(payload), privateKey).toString('base64') };
     shellEnvelopes[platform] = env;
     await mkdir(path.join(cwd, 'desktop-release/shell', platform), { recursive: true });
@@ -154,4 +159,8 @@ test('publication uploads and verifies before switching Pages, resumes safely an
     const active = git('--git-dir', remote, 'show', `desktop-updates:desktop/shell/${platform}/latest.json`);
     assert.deepEqual(JSON.parse(active), shellEnvelopes[platform]);
   }
+  await stage(7, 'unpublished', null);
+  const finalCount = mutations.length;
+  await assert.rejects(publishUpdates('content', { cwd, run, fetcher }), /Publication requires/);
+  assert.equal(mutations.length, finalCount);
 });

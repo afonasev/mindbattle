@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { ShellStore, acknowledgeShell } from "./shell.mjs";
 import { ContentStore, atomicJson } from "./content.mjs";
 import { createHandler, APP_ORIGIN } from "./protocol.mjs";
-import { createUpdateCheck, pendingUpdateVersion } from "./updateCheck.mjs";
+import { createUpdateCheck, pendingUpdateInfo, startAutomaticUpdateChecks } from "./updateCheck.mjs";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const config = JSON.parse(await readFile(path.join(here, "config.json"), "utf8"));
 if (process.platform === "win32") app.setAppUserModelId("tech.afonasev.mindbattle");
@@ -26,7 +26,7 @@ if (!app.requestSingleInstanceLock())
 else {
     let window;
     let safe = false;
-    let checkTimer;
+    let stopUpdateChecks;
     app.on("second-instance", () => {
         if (window) {
             if (window.isMinimized())
@@ -35,7 +35,7 @@ else {
         }
     });
     app.on("window-all-closed", () => app.quit());
-    app.on("before-quit", () => clearInterval(checkTimer));
+    app.on("before-quit", () => stopUpdateChecks?.());
     app
         .whenReady()
         .then(async () => {
@@ -133,12 +133,15 @@ else {
             if (trusted(event))
                 safe = value === true;
         });
-        handle("desktop:status", async () => ({
+        handle("desktop:status", async () => {
+            const info = await pendingUpdateInfo(shellStore, store);
+            return {
             ready: Boolean(shellStore.state.pending || store.state.pending),
             shellVersion: config.shellVersion,
-            updateVersion: await pendingUpdateVersion(shellStore, store),
+            updateVersion: info?.version,
+            updatePublishedAt: info?.publishedAt,
             updateStatus: check.status(),
-        }));
+        }; });
         handle("desktop:apply", async () => {
             if (!safe)
                 return false;
@@ -195,16 +198,14 @@ else {
             app.quit();
         });
         const check = createUpdateCheck(shellStore, store, async () => {
-            const version = await pendingUpdateVersion(shellStore, store);
-            if (!window.isDestroyed()) window.webContents.send("desktop:update", true, version);
+            const info = await pendingUpdateInfo(shellStore, store);
+            if (!window.isDestroyed()) window.webContents.send("desktop:update", true, info?.version, info?.publishedAt);
         }, status => {
             if (!window.isDestroyed()) window.webContents.send("desktop:update-status", status);
         });
         handle("desktop:check-update", check);
-        const backgroundCheck = () => void check().catch(error => console.warn("Update unavailable:", error.message));
         await window.loadURL(`${APP_ORIGIN}/`);
-        backgroundCheck();
-        checkTimer = setInterval(backgroundCheck, 5 * 60 * 1000);
+        stopUpdateChecks = startAutomaticUpdateChecks(check, error => console.warn("Update unavailable:", error.message));
     })
         .catch((error) => {
         console.error(error);

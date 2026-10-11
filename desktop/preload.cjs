@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld("mindbattleDesktop", {
     return () => ipcRenderer.removeListener("desktop:update-status", handler);
   },
   onUpdate: (listener) => {
-    const handler = (_event, ready, version) => listener(ready, version);
+    const handler = (_event, ready, version, publishedAt) => listener(ready, version, publishedAt);
     ipcRenderer.on("desktop:update", handler);
     return () => ipcRenderer.removeListener("desktop:update", handler);
   },

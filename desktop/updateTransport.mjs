@@ -1,5 +1,10 @@
 export const updateOrigin = 'https://afonasev.github.io/mindbattle';
 export const releaseBase = (kind, sequence) => `https://github.com/afonasev/mindbattle/releases/download/${kind}-${sequence}`;
+export function validPublishedAt(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(value) || !Number.isFinite(Date.parse(value))) return false;
+  const canonical = new Date(value).toISOString();
+  return canonical === value || canonical.replace('.000Z', 'Z') === value;
+}
 
 // This field is inside the signed payload. A feed cannot select another repository,
 // channel or release, even when its metadata is otherwise valid.

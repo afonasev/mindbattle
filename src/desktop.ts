@@ -6,16 +6,17 @@ export interface DisplaySettings {
 export interface DesktopUpdateStatus {
   phase: "idle" | "checking" | "downloading" | "ready" | "current" | "error";
   version?: string;
+  publishedAt?: string;
   completed?: number;
   total?: number;
   message?: string;
 }
 export interface DesktopBridge {
   version: 1;
-  status(): Promise<{ ready: boolean; shellVersion: string; updateVersion?: string; updateStatus?: DesktopUpdateStatus }>;
+  status(): Promise<{ ready: boolean; shellVersion: string; updateVersion?: string; updatePublishedAt?: string; updateStatus?: DesktopUpdateStatus }>;
   checkUpdate?(): Promise<{ ready: boolean }>;
   onUpdateStatus?(listener: (status: DesktopUpdateStatus) => void): () => void;
-  onUpdate(listener: (ready: boolean, version?: string) => void): () => void;
+  onUpdate(listener: (ready: boolean, version?: string, publishedAt?: string) => void): () => void;
   applyUpdate(): Promise<boolean>;
   safeToUpdate(safe: boolean): void;
   ready(): Promise<void>;

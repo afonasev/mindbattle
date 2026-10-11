@@ -8,7 +8,7 @@ const { createReadStream } = fs;
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { digest, atomicJson, boundedBytes } from './content.mjs';
-import { objectBase, fetchUpdate } from './updateTransport.mjs';
+import { objectBase, fetchUpdate, validPublishedAt } from './updateTransport.mjs';
 export const shellPath = value => typeof value === 'string' && value.length > 0 && !/[\\:\x00\r\n\t]/.test(value) && !value.startsWith('/') && value.split('/').every(p => p && p !== '.' && p !== '..' && !/[. ]$/.test(p));
 export async function fileHash(file) { const h = createHash('sha256'); for await (const bytes of createReadStream(file))
     h.update(bytes); return h.digest('hex'); }
@@ -22,6 +22,7 @@ export function shellManifest(envelope, key, platform) {
     if (typeof envelope?.payload !== 'string' || envelope.payload.length > 8 * 1024 ** 2 || typeof envelope.signature !== 'string' || !verify(null, Buffer.from(envelope.payload), key, Buffer.from(envelope.signature, 'base64')))
         throw Error('Invalid shell signature');
     const m = JSON.parse(envelope.payload);
+    if (m.publishedAt != null && !validPublishedAt(m.publishedAt)) throw Error('Invalid publication date');
     versionNumber(m.version);
     if (m.format !== 1 || m.product !== 'tech.afonasev.mindbattle' || m.platform !== platform || m.helper !== 1 || !Number.isSafeInteger(m.sequence) || m.sequence < 1 || !shellPath(m.entry) || !Array.isArray(m.files) || !m.files.length || m.files.length > 20000 || !Array.isArray(m.links))
         throw Error('Incompatible shell');

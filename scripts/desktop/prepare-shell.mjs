@@ -3,7 +3,7 @@ import { readdir, readFile, writeFile, mkdir, rm, stat, readlink, cp, link } fro
 import { createPrivateKey, createPublicKey, sign } from 'node:crypto';
 import path from 'node:path';
 import { fileHash, shellManifest } from '../../desktop/shell.mjs';
-import { releaseBase } from '../../desktop/updateTransport.mjs';
+import { releaseBase, validPublishedAt } from '../../desktop/updateTransport.mjs';
 const key = createPrivateKey(await readFile(process.env.MINDBATTLE_CONTENT_KEY));
 const publicKey = await readFile('desktop/content-public.pem', 'utf8');
 if (createPublicKey(key).export({ type: 'spki', format: 'pem' }).toString() !== publicKey)
@@ -13,6 +13,8 @@ const output = path.resolve('desktop-release/shell');
 await rm(output, { recursive: true, force: true });
 await mkdir(path.join(output, 'objects'), { recursive: true });
 const sequence = Number(process.env.MINDBATTLE_SHELL_SEQUENCE || Date.now());
+const publishedAt = process.env.MINDBATTLE_PUBLISHED_AT || JSON.parse(await readFile('desktop/bundle/game-version.json', 'utf8')).publishedAt;
+if (publishedAt != null && !validPublishedAt(publishedAt)) throw Error('Invalid publication date');
 for (const platform of ['darwin-universal', 'win32-x64']) {
     const root = platform === 'darwin-universal' ? 'desktop-installers/mac-universal/Mindbattle.app' : 'desktop-installers/win-unpacked';
     const files = [], links = [];
@@ -39,7 +41,7 @@ for (const platform of ['darwin-universal', 'win32-x64']) {
         }
     }
     await walk(root);
-    const payload = JSON.stringify({ format: 1, product: 'tech.afonasev.mindbattle', sequence, version: config.shellVersion, platform, helper: 1, objectBaseUrl: releaseBase('shell', sequence), entry: platform === 'darwin-universal' ? 'Contents/MacOS/Mindbattle' : 'Mindbattle.exe', files, links });
+    const payload = JSON.stringify({ format: 1, product: 'tech.afonasev.mindbattle', sequence, version: config.shellVersion, publishedAt, platform, helper: 1, objectBaseUrl: releaseBase('shell', sequence), entry: platform === 'darwin-universal' ? 'Contents/MacOS/Mindbattle' : 'Mindbattle.exe', files, links });
     const envelope = { payload, signature: sign(null, Buffer.from(payload), key).toString('base64') };
     shellManifest(envelope, publicKey, platform);
     await mkdir(path.join(output, platform));

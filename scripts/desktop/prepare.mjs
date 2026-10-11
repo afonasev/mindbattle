@@ -23,6 +23,7 @@ const output = path.resolve("desktop-release");
 await rm(path.join(output, "content"), { recursive: true, force: true });
 await mkdir(path.join(output, "content", "objects"), { recursive: true });
 const files = [];
+const publication = JSON.parse(await readFile('dist/game-version.json', 'utf8'));
 async function walk(dir, relative = "") {
   for (const entry of (await readdir(dir, { withFileTypes: true })).sort(
     (a, b) => a.name.localeCompare(b.name),
@@ -44,7 +45,8 @@ await walk("dist");
 const payload = JSON.stringify({
   format: 1,
   sequence,
-  version: JSON.parse(await readFile("dist/game-version.json", "utf8")).version,
+  version: publication.version,
+  publishedAt: publication.publishedAt,
   bridge: 1,
   shellMajor: Number(config.shellVersion.split(".")[0]),
   objectBaseUrl: releaseBase('content', sequence),
