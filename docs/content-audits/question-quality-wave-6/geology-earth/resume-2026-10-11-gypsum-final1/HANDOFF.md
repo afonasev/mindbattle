@@ -9,4 +9,4 @@ This folder contains the author's fresh reading and replacement for `geology-ear
 - The previous independent FIX_REQUIRED receipt remains historical and unchanged. This author receipt does not certify the card independently or certify the wave. A different reader must review all six current fields, sources, and editorial decisions.
 - `preservation.json` records that this edit kept the topic's 100-card order and all other 99 canonical card hashes unchanged, while preserving ID, difficulty, and correct index for this card.
 
-The single-card `git-roundtrip.json` should be added after committing, using the committed blob as the readback source.
+`git-roundtrip.json` records the committed topic blob SHA, byte hash, and matching canonical card hash read back from Git.
