@@ -8,7 +8,9 @@ assert A['authorIdentity']=='01a12fdb-8151-7890-9f51-8232f5f56bc2'
 sc=pathlib.Path(A['scopePath']);assert sc.read_bytes()==git(A['scopeGitCommit'],sc)==git('HEAD',sc);S=json.loads(sc.read_text());assert S['actualAuthor']==A['authorIdentity']
 qp=pathlib.Path(A['runtimePath']);assert qp.read_bytes()==git('3b33ae4',qp)==git('6b60a7b',qp);assert sha(qp.read_bytes())==A['runtimeCurrentSha256']
 Q={q['id']:q for q in json.loads(qp.read_text())['questions']};before={q['id']:q for q in json.loads(git(A['runtimeBaselineCommit'],qp))['questions']}
-assert set(Q)==set(before);assert [id for id in Q if Q[id]!=before[id]]==A['scopeIds']
+assert list(Q)==list(before);assert {k:v for k,v in json.loads(qp.read_text()).items() if k!='questions'}=={k:v for k,v in json.loads(git(A['runtimeBaselineCommit'],qp)).items() if k!='questions'}
+for id in A['scopeIds']:assert Q[id]['difficulty']==before[id]['difficulty'] and Q[id]['correctIndex']==before[id]['correctIndex']
+assert [id for id in Q if Q[id]!=before[id]]==A['scopeIds']
 for id,h in S['protected98'].items():assert sha(cj(Q[id]))==h
 raws={}
 for name,s in A['originalSourceCaptures'].items():
@@ -26,6 +28,7 @@ for id,c in A['cards'].items():
   assert len(f['sourceQuoteIDs'])==len(f['sourceQuoteBindings'])
   for key,p in zip(f['sourceQuoteIDs'],f['sourceQuoteBindings']):
    raw=raws[p['rawPath']];assert key==p['quoteId'];quote=p['quote'];assert raw[p['rawByteOffsetZeroBased']:p['rawByteOffsetZeroBased']+p['rawByteLength']]==quote.encode()
+   assert raw[:p['rawByteOffsetZeroBased']].count(b'\n')+1==p['HTMLLineOneBased'];assert p['originalCaptureURL']==next(s['url'] for s in A['originalSourceCaptures'].values() if s['path']==p['rawPath'])
    assert sha(quote.encode())==p['quoteSha256Unchanged'];assert sha(raw)==p['sourceSha256Unchanged'];assert subprocess.check_output(['git','rev-parse','HEAD:'+p['rawPath']],text=True).strip()==p['sourceGitBlobSha1Unchanged'];unique.add((p['rawPath'],p['quoteSha256Unchanged']));bindings+=1
   fields+=1
 out={'author':A['authorIdentity'],'receipt':str(P),'authorFreeze':'6b60a7b','runtimeFreeze':'3b33ae4','scopeDefinition':'7e3ea65','scopeAuthorityCorrectedHistoryPreserved':True,'currentCards':2,'nativeWhole6Fields':fields,'sourceQuoteBindings':bindings,'uniqueQuotes':len(unique),'fullOriginals':len(raws),'protected98':True,'errors':0,'qualityPASS':False,'readerPending':True,'counterIncrement':0,'receiptSHA256':sha(P.read_bytes())}
