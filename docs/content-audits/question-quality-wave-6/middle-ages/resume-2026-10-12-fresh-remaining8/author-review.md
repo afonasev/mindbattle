@@ -1,3 +1,5 @@
+> Historical snapshot from commit `486e29e0b2d5af32306c46c43bcfbc3b8b9c13f8`. It records the earlier wording and earlier sources; it is superseded as the current review by [followup-review.md](followup-review.md) and [native-per-field.json](native-per-field.json). Retained for provenance.
+
 # Author source and editorial review — remaining 8
 
 Author thread: `01a12f79-f58e-7a22-8a2d-1878fec08d26`
