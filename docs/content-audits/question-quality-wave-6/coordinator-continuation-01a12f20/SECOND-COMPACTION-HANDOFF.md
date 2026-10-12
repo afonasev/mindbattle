@@ -1,0 +1,36 @@
+# Second actual compaction: durable handoff 01a12f20
+
+STOP boundary: own rollout has exactly 2 `type=compacted` records. No further batches, source adjudication or actor dispatch from this coordinator. Root 01a12b0a-acb9-78b1-9b8b-823fc535ddd9 has authorized continuation and fresh coordinator creation; parent 01a12b0d-0896-7961-a46d-a43fefe709fd.
+
+## Saved state
+
+Exact shared worktree: `/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle`; branch `codex/question-quality-wave-6`. Literal `wave6` directory must not be derived from changeId `wave-6`. Source HEAD before this handoff: 06c5ea94eb6fc7dcdb2aaa6a13cb36e2d6ae9dd0. Last actual paired certificate e50a675: 472 historical / 472 current eligible / 2832 fields. Card Games100, Geology100, Architecture100, Middle90, Winter82. Remaining28 in wave6 plus future1500 =1528. No increment for pending author/reader results below. Current certification registry and ledger remain authoritative. Our coordinator added24 unique cards and rebound2 historical cards since448historical/446eligible. The three feature full topics are not integrated or human accepted; prior25 integrated topic hashes preserved.
+
+## Native actors at handoff
+
+- Middle source pilot2 `01a12fb5-bb2b-7882-a38f-ef1061441573`, cursor `ede375e2-8af0-42a1-9daa-d9f1ae7969cf:16`: completed idle; author source result 7645e2c/86565a2; shrine HOLD ambiguity; indulgence candidate; independent actual whole12 not yet assigned.
+- Winter author `01a12f7f-61a0-7062-904d-bbbb787deefc`, cursor `3c4accf3-6d73-4457-b6e4-305547edc8aa:31`: completed idle; new031 whole6 freeze06c5ea9; different reader needed; remaining15 held.
+- Middle/Winter independent reader `01a12f3d-8ec1-78b3-b153-5f2a62967421`, cursor `84dc9ced-3f5e-4b08-b927-d3eb0f1c6f94:14`: completed idle62b7d5a:057whole6PASS/058explanationFIX; manual coordinator certificate pending.
+- Winter independent reader `01a12f52-6e07-7ac3-a9e1-d063b8afd3cf`, cursor `4888067b-86e4-46ae-9a93-3c5e1816b40c:22`: idle available; actual current3 reader300c723; 030032certified,031oldFIX.
+
+Fresh Middle pilot author incorrectly derived a nonexistent directory in its first turn. Root corrected the SAME actor to the literal existing WT; this technical failure is not a compaction. 7645e2c/86565a2 are genuine subsequent source-only work. Runtime100 frozen. Inspect actual whole12 receipts and native field bindings before assigning independent reader; Author used12 units per card (prompt/4options/4notes/key/explanation/mainSource),24total, rather than grouped six-field native bindings. Root inspected author-review.md: actual grouped6literal/hash/proof/manual source+editorial mappings need repair before independent review. Shrine wrong-note book negates images vs books but lacks useful own book fact. Author claim "Full316-page PDF captured and read" conflicts with specified selected pp13/17: reconcile actual read extent; full capture/extraction is not whole-book reading. Shrine HOLD is concrete broad-Christian-shrine ambiguity (relics vs images), not a reclassification. Remaining6 source-only cards held until first2 actual paired gate. Original fresh8 author01a12f79 archived after2actual, ecc2fe27 all48 source candidates explicitly NOT_VERIFIED; retain19.6MB evidence but do not inherit PASS.
+
+Winter031 latest06c5ea9 author scope9dd7d61 changes ONLY031 to ski-goggle ventilation fact, Easy/keyslot2 preserved,99othercards frozen. Different actual reader whole6 required. Old meaningful duplicate partners recordedf05dc16: laboratories-measurement-goggles-eye-protection outside2000 and engineering-machines-safety-goggles insidefuture2000; no partner edits. Last15 IDs059060067068073076082089090091092095097098100 held until031 paired gate.
+
+Winter057058 authorfc2e8ff source preservation482ac91; different reader62b7d5a current057 six PASS,058 five PASS plus explanation FIX: "международного катка" needs precise "катка международного размера". Root independently checked preservation12rolefields/30readerquotes/2completeHTML0errors (not editorial certificate). Fresh coordinator can manually adjudicate057 before certificate; narrowly authorize ONLY058 explanation translation and actual author whole6 source reread/rebind, newfreeze then different whole6 reader. 058 note1 already exact111.12m; preserve other058fields/99cards. No new scope issued by stopped coordinator.
+
+Separate Middle Reconquista/Jihad currentd30a633: independent2002883/bfa2d1d and manual2fd0941 established journal vs letter notes FIX and Jihad Medium obvious wrong-option elimination HOLD under exact Spec139. Fresh bounded repair2 required; old author01a12f31 archived after2actual. No reclass/exclusion. Source-only Middle pilot actor may not edit these2.
+
+## Continuation and limits
+
+Root/fresh Sol6.1 medium coordinator must supported-claim question-quality-wave-6 under own planning lease after this owner's supported release. Reuse current WT, max3 active source actors, Luna medium bounded authors, Sol6.1 medium independent readers; existing actor models unchanged. Refresh native status and actual rollout compaction counts before new dispatch. No new actor creation/dispatch done after this owner's second boundary. Root owns scheduling after handoff.
+
+Before any increment, ACTUAL author and DIFFERENT actual reader must read CURRENT whole6, full raw originals/context and per-field source/editorial reasons; coordinator manually adjudicates exact literals/identity/extra facts/duplicate and difficulty rules. Hash helpers only preservation, never quality PASS. Preserve IDs/order/difficulty/keyslots40/40/20,10/10/5. Correct-note adds information beyond current prompt/key, wrong-notes each useful own fact. Current472 source count must not be inflated by candidate author/reader PASS.
+
+PRIMARY `/Users/eaafonasev/Projects/mindbattle` is strictly read-only due root6bea788 foreign WinterWIP exact preimage not recovered. Human owner/backup pending, MAIN integration BLOCKED. Never guessedHEAD restore. Shared Git index incident4bfb030: commit `--only` exact OWNED paths with explicit WT cwd. Foreign modified middle-ages/resume-2026-10-12-fresh-rework19/sources/newadvent-rule-benedict.html remains untouched and truncated, not complete source proof. Planning foreign untracked evidence directories untouched.
+
+After current500 source gate ONLY, update five topic hashes and affected QA: npm run typecheck; direct Vitest catalog-topics.test.ts/catalog-full.test.ts/content-answer-notes.test.ts/content-audit-tools.test.ts/content.test.ts; preserved previous25/pilot baselines. No full tests/npmcheck/composite QA/browser/build/Player/release/deploy/installers/OpenSpec archive/human acceptance authorized. Our slice did not run finalQA. Future1500 sequential parent after actualwave6 closure. This handoff is not completion of500/2000.
+
+## Cleanup
+
+All own pre-handoff proof files equal committed Git blobs (inventory second-compaction-preservation.json). Own untracked/ignored and owned build/test/server processes zero. Required originals/proofs and active shared worktree retained for unfinished work; no own obsolete outputs to remove. Foreign files/processes untouched. Supported claim release and planning checkpoint handoff committed separately. Chat may archive once root has durable handoff; worktree and actors must remain available.
