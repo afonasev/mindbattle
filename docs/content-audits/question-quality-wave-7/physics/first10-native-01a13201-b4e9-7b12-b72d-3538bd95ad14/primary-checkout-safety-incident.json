@@ -1,0 +1,12 @@
+{
+  "event": "Accidental read-only violation corrected immediately",
+  "primaryCheckout": "/Users/eaafonasev/Projects/mindbattle",
+  "worktree": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle",
+  "cause": "One correction command was issued with the primary checkout as cwd instead of the owned worktree. It reordered answer objects for two IDs before failing to find the frozen scope file in the primary checkout.",
+  "affectedPath": "src/content/topics/physics.json",
+  "observedDiff": "Only answer-array order changed for physics-current-si-unit and physics-density-definition; no prompt/note/card content changes.",
+  "restoreCommand": "git restore --worktree -- src/content/topics/physics.json",
+  "restoreVerification": "After restore, worktree file SHA-1 from git hash-object matched git rev-parse HEAD:path: 03ccfe6b93a853736c075ea62b09c15bc55cdc4a. git status and git diff for that path were empty.",
+  "precondition": "At task start, primary git status showed no modification to this path; it was clean before the accidental command.",
+  "remainingAction": "No primary checkout edits remain. Do not run further commands there."
+}
