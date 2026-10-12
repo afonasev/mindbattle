@@ -10,9 +10,9 @@
     "idsOrderDifficultyCorrectIndexPreserved": true,
     "fullCatalogDifficultyAndKeyslotQuotasPreserved": true,
     "rawJSONRoundtripByteIdentical": true,
-    "gitDiffCheck": null,
+    "gitDiffCheck": "PASS after final author changes",
     "affectedCatalogUnitCommand": "npm run content-check",
-    "affectedCatalogUnitResult": "FAILED on both frozen runs (cc90be7 and 134cb42) only for winter-sports-007/008 explanation length. The second run was after final Architecture content edits; no Architecture error was emitted. The coordinator will handle the exact related Winter fix."
+    "affectedCatalogUnitResult": "FAILED on three frozen runs (cc90be7, 134cb42, and current branch HEAD) only for winter-sports-007/008 explanation length; no Architecture issue was emitted."
   },
   "notRun": [
     "full suite",
@@ -38,6 +38,15 @@
       "exitCode": 1,
       "testedWorkingTree": "Winter source clean at HEAD 134cb42 after Winter28 commit; Architecture working content still uncommitted; no Architecture issue reported.",
       "result": "Same two pre-existing Winter explanation-format failures remained: winter-sports-007 and winter-sports-008 each have one sentence. Winter is foreign to this slice and was not edited."
+    },
+    {
+      "command": "npm run content-check",
+      "frozenHead": "4bfb0306805b77cb63b550a04b1be429ad89d265",
+      "runTime": "2026-10-12 11:04:36 Asia/Yekaterinburg",
+      "exitCode": 1,
+      "testedWorkingTree": "Architecture16 current author edits present; Winter source untouched; only the same two Winter explanation-length failures reported.",
+      "stdoutAndFailure": "> mindbattle@0.1.0 content-check\n> vitest run tests/unit/catalog-topics.test.ts tests/unit/catalog-full.test.ts\n\nRUN v4.1.11 /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\n\nFAIL tests/unit/catalog-full.test.ts: winter-sports/winter-sports-007 and winter-sports-008 explanation должен содержать 2–4 предложения\nFAIL tests/unit/catalog-topics.test.ts: winter-sports package has the same two validation issues\n\nTest Files 2 failed (2); Tests 2 failed (2).",
+      "role": "fresh targeted validation after final Architecture author edits"
     }
   ]
 }

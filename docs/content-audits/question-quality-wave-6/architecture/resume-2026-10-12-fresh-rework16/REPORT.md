@@ -39,3 +39,5 @@ Scope: exactly 16 approved Architecture IDs in `src/content/topics/architecture.
 ## Remaining review
 
 The coordinator and a different independent reader must re-read all 16 current cards / 96 fields and decide whether each repair resolves its historical HOLD. Until then, all 16 remain whole-card HOLD and all 38 historical field HOLD remain in history.
+
+Author record: native author `01a12e95-b8fd-7430-8c4b-e7117a71a378` reviewed 16 cards / 96 fields. The field-level author source/editorial verdicts are recorded in `author-review.json`; these do not replace the preserved independent historical HOLD labels or coordinator/different-reader closure.
