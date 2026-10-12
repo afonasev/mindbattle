@@ -1,0 +1,166 @@
+{
+  "schema": "mindbattle-winter-repair8-catalogue-dedup-addendum-v1",
+  "purpose": "Read-only whole-catalogue cross-topic/inverse candidate closure for the exact repair8 cards; does not certify editorial quality.",
+  "baseline": {
+    "commit": "8941ff84845a357f060738a150b8b4900a4fd3c6",
+    "tree": "a2c35008af9278fb7f9519f830c88ccb3ba75ab2",
+    "topicFiles": 110,
+    "questions": 11000,
+    "scopeIds": [
+      "winter-sports-076",
+      "winter-sports-082",
+      "winter-sports-089",
+      "winter-sports-090",
+      "winter-sports-091",
+      "winter-sports-095",
+      "winter-sports-097",
+      "winter-sports-100"
+    ],
+    "targetSnapshotMatch": "All eight freeze cards matched author-review-v1 snapshots during the prior author audit."
+  },
+  "method": {
+    "universe": "All 110 tracked src/content/topics/*.json files read from frozen commit 8941ff8, not current working tree. Canonical cards are in each topic JSON questions array; reviews metadata excluded.",
+    "passes": [
+      "Whole-catalogue forward candidate ranking over prompt+key and full-card text; inspect candidate prompts, keyed answers, and factual proposition for each target.",
+      "Inverse check: search the full frozen catalogue for each target factual proposition/answer terms, including cards whose prompt uses a different wording.",
+      "Within-topic candidates also reviewed for near-neighbor collision."
+    ],
+    "limitations": "Lexical similarity is a candidate generator, not a semantic proof. This addendum records examined likely candidates surfaced in the available run; it does not claim every low-scoring lexical pair was manually read."
+  },
+  "crossTopicCandidates": [
+    {
+      "target": "winter-sports-076",
+      "candidates": [
+        {
+          "id": "television-media-composite-interface",
+          "disposition": "False positive: video luma/chroma/sync interface; shared interface terminology, distinct domain and proposition."
+        },
+        {
+          "id": "government-politics-ballot",
+          "disposition": "False positive: ballot as voting instrument/interface; shared generic interface idea only."
+        }
+      ],
+      "withinWinter": [
+        "winter-sports-073 (boot-binding connection/release)",
+        "winter-sports-023 (ski edge lateral force)",
+        "winter-sports-007 (boot)"
+      ],
+      "disposition": "Distinct component facts; no inverse factual duplicate identified."
+    },
+    {
+      "target": "winter-sports-082",
+      "candidates": [
+        {
+          "id": "history-spain-easy-01-07",
+          "disposition": "False positive: Inquisition/persecution wording; unrelated institution and historical fact."
+        },
+        {
+          "id": "racket-sports-07-2",
+          "disposition": "False positive: squash serve rotation after rally; unrelated winner/next generic terms."
+        }
+      ],
+      "withinWinter": [
+        "winter-sports-083",
+        "winter-sports-017",
+        "winter-sports-081",
+        "winter-sports-084",
+        "winter-sports-037",
+        "winter-sports-018",
+        "winter-sports-033",
+        "winter-sports-041"
+      ],
+      "disposition": "Distinct biathlon identity, penalty, range, relay ammunition, start/race format rules; no same proposition identified."
+    },
+    {
+      "target": "winter-sports-089",
+      "candidates": [
+        {
+          "id": "winter-sports-092",
+          "disposition": "Same FIS homologation topic but asks validity duration, while target concerns course-length requirement; distinct property."
+        }
+      ],
+      "disposition": "Other nearest measure/length candidates concern unrelated thresholds and measurement concepts."
+    },
+    {
+      "target": "winter-sports-090",
+      "candidates": [
+        {
+          "id": "history-united-kingdom-medium-04a-05",
+          "disposition": "False positive: Combination Acts in labor history; “combination” only."
+        },
+        {
+          "id": "energy-power-converter-station-ac-dc",
+          "disposition": "False positive: converter combination; shared generic term."
+        },
+        {
+          "id": "winter-sports-041",
+          "disposition": "Olympic slalom result totals two runs; target distinguishes the Slalom component within Alpine Combined from standalone event result."
+        }
+      ],
+      "withinWinter": [
+        "winter-sports-091",
+        "winter-sports-089",
+        "winter-sports-034",
+        "winter-sports-041",
+        "winter-sports-010",
+        "winter-sports-043",
+        "winter-sports-092",
+        "winter-sports-001"
+      ],
+      "disposition": "Related discipline/event terms, distinct rules or facts; no duplicate."
+    },
+    {
+      "target": "winter-sports-091",
+      "candidates": [
+        {
+          "id": "football-01-3",
+          "disposition": "False positive: what crosses a goal line for a goal; similar rule-locator form, different sport, object, and rule."
+        },
+        {
+          "id": "winter-sports-092",
+          "disposition": "Homologation validity duration, distinct from start-gate placement."
+        }
+      ],
+      "disposition": "Other nearby ski/event cards ask different discipline facts."
+    },
+    {
+      "target": "winter-sports-095",
+      "candidates": [
+        {
+          "id": "combat-sports-046",
+          "disposition": "False positive: block/guard receives a strike on gloves/forearms; lexical overlap only, no factual overlap."
+        }
+      ],
+      "disposition": "No cross-topic semantic duplicate found among candidates."
+    },
+    {
+      "target": "winter-sports-097",
+      "candidates": [],
+      "disposition": "No cross-topic semantic duplicate identified in candidate review."
+    },
+    {
+      "target": "winter-sports-100",
+      "candidates": [],
+      "disposition": "No cross-topic semantic duplicate identified in candidate review."
+    }
+  ],
+  "qaFormatGate": {
+    "status": "MANDATORY_LATER_REPAIR_AND_REREAD",
+    "card": "winter-sports-076",
+    "finding": "Current explanation is one sentence; src/content/validator.ts sentenceCount and explanation validator require 2–4 sentences and at most 70 words.",
+    "handling": "Do not edit while independent reader8 freeze is active. After reader freeze, repair the explanation and reread all six card groups/fields for this ID.",
+    "separateFinding": "winter-sports-098 has a one-sentence explanation and remains a separate late QA item; it is not part of repair8."
+  },
+  "readerAndQualityBoundary": {
+    "independentReader": "Active during this audit; baseline protected.",
+    "authorQuality": "This closes author-side whole-catalogue candidate audit only. The eight-card personal reread was structurally reviewed, but content quality is not certified until independent reader returns."
+  },
+  "processInventory": {
+    "tests": 0,
+    "builds": 0,
+    "deploys": 0,
+    "otherCardsEdited": 0,
+    "primaryChanges": 0,
+    "candidateScan": "Completed read-only; no persistent scan process remains."
+  }
+}
