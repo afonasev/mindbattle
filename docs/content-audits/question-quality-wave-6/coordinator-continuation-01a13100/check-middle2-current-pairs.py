@@ -8,7 +8,10 @@ sha=lambda b:hashlib.sha256(b).hexdigest();H=lambda v:sha(json.dumps(v,ensure_as
 def frozen(rev,p):return subprocess.check_output(['git','show',rev+':'+str(p.relative_to(ROOT))],cwd=ROOT)
 m=json.loads((RF/'manifest.json').read_text());assert sha((RF/'manifest.json').read_bytes())=='38932c1bea10e9267ed155265e0656d2760d28fce254c2c38952479df75d8406'
 for f in m['files']:
- p=ROOT/f['intendedRepositoryPath'];b=p.read_bytes();assert b==frozen('b8527c1',p)==frozen('HEAD',p) and sha(b)==f['SHA256'] and len(b)==f['bytes'];assert b==(Path(m['sourceDirectory'])/f['relativePath']).read_bytes()
+ p=ROOT/f['intendedRepositoryPath'];b=p.read_bytes();assert b==frozen('b8527c1',p)==frozen('HEAD',p) and sha(b)==f['SHA256'] and len(b)==f['bytes'];tmp=Path(m['sourceDirectory'])/f['relativePath']
+ if tmp.exists():assert b==tmp.read_bytes()
+ else:
+  cleanup=json.loads((OUT/'middle2-reader-v2-owned-tmp-after-preservation-cleanup.json').read_text());entry=next(x for x in cleanup['deletedOnlyExactManifestFiles'] if x['path']==str(tmp));assert entry['SHA256']==f['SHA256'] and entry['bytes']==f['bytes'] and cleanup['nativeOpaqueGitCommit']=='b8527c1'
 st=runpy.run_path(str(OUT/'check-middle2-v3-author.py'));a=st['a'];r=json.loads((RF/'reader-receipt-v2.json').read_text());sp=json.loads((RF/'source-proofs-v2.json').read_text())
 assert r['readerNativeId']==sp['readerNativeId']=='01a131c5-edfb-7b82-8ddf-bd88a8b95597'!=a['authorNativeId'] and r['authorNativeId']==a['authorNativeId']
 assert r['authorReceiptSHA256']==sha(st['AP'].read_bytes()) and r['wholeCardHashes']==a['wholeCardHashes'] and r['actualCompactions']==0 and r['counterDelta']==0
