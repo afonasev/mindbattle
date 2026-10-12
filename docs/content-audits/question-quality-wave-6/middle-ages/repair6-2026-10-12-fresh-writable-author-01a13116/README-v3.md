@@ -1,0 +1,9 @@
+# Wave 6 author reread v3
+
+Fresh author freeze for native author `01a13116-9ab1-7062-9219-08765b2ab65e`, superseding v2 for current review. It preserves both earlier frozen hash sets and qualification history; v1/v2 files remain unchanged. The v2 mismatch came from omitting the inherited `sort_keys=True` canonical JSON recipe. V3 declares that exact recipe and hashes each complete current group literal and whole card.
+
+The six in-scope cards were reread field by field against their saved source captures and relevant passages. The toll stem supplies the rare term’s gloss and asks for the complete set of fee bases; its correct note adds the ca. 1150 “paage” attestation. The market customs note uses CNRTL douane, and its pilgrimage note adds Haberlin’s poverty observation. The pilgrimage question expressly attributes its working criterion to the thesis. The dancing distractors now compare movement and chronology from the account, while the correct note adds the group size. Crusade options and notes distinguish the Iberian, Islamic-law, and devotional alternatives with their own source-backed facts. Notes and source/editorial reasons align with current ordered answers.
+
+The full 11,000-card corpus was scanned for normalized prompt duplicates, target-key prompt echoes, weighted trigram candidates, and direct topical neighbors. All returned pairs were individually inspected and dispositions recorded. Candidate retrieval is not a proof of exhaustive semantic uniqueness.
+
+IDs, order, difficulty labels, correct-index slots, quota, and the 94 protected Middle Ages cards remain unchanged against baseline `c506101`. No source originals or original expected hashes were edited. No tests, build, publication, push, merge, or deployment were performed. This is an author freeze only; independent reader review remains pending and no certification is claimed.
