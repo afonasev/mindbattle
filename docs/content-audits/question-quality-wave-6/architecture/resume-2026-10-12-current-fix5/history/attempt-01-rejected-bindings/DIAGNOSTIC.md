@@ -1,0 +1,3 @@
+# Rejected author attempt 01
+
+This snapshot is preserved byte for byte for audit history and must not be used for current review or certification. Inspection against the frozen `0ff03b5` card literals found stale source bindings: `architecture-skyscraper-definition` is the gutter-to-ground/Leade card, not the historical Maryland addition card; its four option notes bind to LPC Cornice, Gutter, Flashing, and Leade. `architecture-samarkand` current note2 is the Registan mosque/madrasah mud-brick fact, and note3 is the limestone fact backed by the complete USGS original, not the stale Sukhothai/Kilwa facts. No expected source hash was changed. The current receipts below were rebuilt from frozen card literals and directly reopened raw originals.
