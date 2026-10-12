@@ -1,0 +1,34 @@
+{
+  "schema": "mindbattle.author30.validation-attempts.v1",
+  "attempts": [
+    {
+      "attempt": 1,
+      "status": "FAILED",
+      "scope": "5 cards / 30 field proof locators and field/card hashes",
+      "findings": [
+        "winter-sports-023 note3 locator used p35 instead of ski-poles p27",
+        "winter-sports-026 explanation excerpt spanned nodes but bound only node 66",
+        "winter-sports-030 Hockey Canada facial-protector locator used physical p81 instead of p80",
+        "winter-sports-031 note1 combined two disjoint HTML text nodes as one quote",
+        "winter-sports-031 note3 quote included a period not present in native node"
+      ],
+      "correctiveAction": "Rebound each quote to exact physical PDF page or exact HTML text node(s); no verdict/literal changed."
+    },
+    {
+      "attempt": 2,
+      "status": "FAILED",
+      "scope": "same preflight",
+      "findings": [
+        "Hockey Canada PDF physical page 80 contains exact text but its extracted full-face and eye-protector passages are line-wrapped; first normalized quote omitted the source line-break hyphenation."
+      ],
+      "correctiveAction": "Retain exact pypdf page text including line wraps in quote literal and quote SHA; no field verdict changed."
+    },
+    {
+      "attempt": 3,
+      "status": "PASSED",
+      "scope": "5 current cards / 30 field proofs",
+      "result": "all field hashes and 5 canonical card hashes matched current scope; each raw source SHA matched; exact quotes matched their current PDF physical page or HTML text node; all five explanations contained 2-4 sentences.",
+      "humanEditorialFinding": "winter-sports-026 note0 repeats note2 meaning; remains FIX_REQUIRED and is not counted as a clean PASS."
+    }
+  ]
+}
