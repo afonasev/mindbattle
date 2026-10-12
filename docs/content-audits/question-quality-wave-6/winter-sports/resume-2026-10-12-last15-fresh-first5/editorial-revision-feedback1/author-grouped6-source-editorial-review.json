@@ -2826,5 +2826,201 @@
     "counterAfter": 0,
     "remaining10": "HELD",
     "qualityStatus": "AUTHOR_SOURCE_EDITORIAL_EVIDENCE_ONLY_NOT_PASS"
+  },
+  "pdfLocatorProvenanceCorrection": {
+    "recordType": "additive provenance correction; prior locator strings and expected quote hashes retained unchanged",
+    "observedMethod": "The numeric offsets in the historical PDF locators match the zero-based Python string indexes in whitespace-collapsed derived page text, not exact slices of raw page.extract_text() output.",
+    "pdfRawBytesChanged": false,
+    "locatorRecipe": "For each physical page, call pypdf.PdfReader(path).pages[physicalPageNumber-1].extract_text(); derive text with \" \".join(rawText.split()); hash UTF-8 bytes of derived text with SHA-256; locate exact quote via unique str.find; record zero-based Unicode-code-point offset and len(quote) Unicode-code-point length. The PDF page text is derived; this does not alter captured PDF bytes.",
+    "htmlLocatorRecipe": "HTML locators remain a separate raw-byte method: zero-based byte offset and byte length into the unchanged captured source bytes; no PDF whitespace normalization applies.",
+    "pdfSources": {
+      "docs/content-audits/question-quality-wave-6/winter-sports/resume-2026-10-12-last15-fresh-first5/sources/isu-sys-rules-2026.pdf": {
+        "rawSourceSha256Unchanged": "538268e9fbf239c3c4380584a994d28021fc290dd6a02cfb54e22d64bcc4ed00",
+        "sourceGitBlobSha1Unchanged": "356098dd060b7e94a9c98eb47137bd2347422775",
+        "extractor": {
+          "package": "pypdf",
+          "version": "6.19.0",
+          "api": "pypdf.PdfReader(path); page.extract_text()",
+          "pythonVersion": "3.13.0rc2",
+          "strict": "PdfReader default (False)"
+        },
+        "rawPdfBytesMutated": false,
+        "pageTextRecords": {
+          "43": {
+            "physicalPageNumbering": "1-based index into PdfReader.pages; does not use printed page labels",
+            "rawExtractTextLengthUnicodeCodePoints": 2401,
+            "rawExtractTextSha256Utf8": "74a11fa4b029e7db6ba459ee6075e8ccca150d7b6b9ed10b1b98e3d4be64dfa7",
+            "derivedTextRecipe": "derivedPageText = \" \".join(page.extract_text().split()) using Python str.split() default Unicode-whitespace semantics, then str.join() with one ASCII space",
+            "derivedPageTextLengthUnicodeCodePoints": 2292,
+            "derivedPageTextSha256Utf8": "1031815273a31cbcab13cad3bc35c23cd1c493beb42679a3d548a142de84acb8",
+            "rawBytesUnchanged": true
+          },
+          "44": {
+            "physicalPageNumbering": "1-based index into PdfReader.pages; does not use printed page labels",
+            "rawExtractTextLengthUnicodeCodePoints": 1156,
+            "rawExtractTextSha256Utf8": "e6e1060c9feb37542e1badad8f3dfac2f73048d1d2d916bfe22f498361885f8c",
+            "derivedTextRecipe": "derivedPageText = \" \".join(page.extract_text().split()) using Python str.split() default Unicode-whitespace semantics, then str.join() with one ASCII space",
+            "derivedPageTextLengthUnicodeCodePoints": 1059,
+            "derivedPageTextSha256Utf8": "88d2d661e5a0a542a780eda7953f33131f1fb3a04f795cdded3901411b6f5af1",
+            "rawBytesUnchanged": true
+          }
+        },
+        "quoteLocators": {
+          "isu-block": {
+            "historicalLocatorAsDeclared": "PDF page 43, extracted-text offset 1639",
+            "quote": "A block has a shape (closed or open) with all Skaters forming one block configuration with a minimum of three lines.",
+            "quoteSha256Unchanged": "9d55a8ee9a2915931e60e4a1aeb80c0099bbe09072dfbbbd4bf90a8e32ef9125",
+            "physicalPage": 43,
+            "derivedPageTextOffsetZeroBasedUnicodeCodePoints": 1639,
+            "quoteLengthUnicodeCodePoints": 116,
+            "offsetLengthRecipe": "offset is Python str.find(quote) in derivedPageText; length is len(quote); selected occurrence is unique",
+            "rawExtractTextContainsExactQuoteAtSameOffset": false
+          },
+          "isu-closed": {
+            "historicalLocatorAsDeclared": "PDF page 43, extracted-text offset 1771",
+            "quote": "A block shape that is outlined and filled in with Skaters.",
+            "quoteSha256Unchanged": "37ab5d0d4c678c50393615f857b8e93680045def9e12f08e313c401f375847a9",
+            "physicalPage": 43,
+            "derivedPageTextOffsetZeroBasedUnicodeCodePoints": 1771,
+            "quoteLengthUnicodeCodePoints": 58,
+            "offsetLengthRecipe": "offset is Python str.find(quote) in derivedPageText; length is len(quote); selected occurrence is unique",
+            "rawExtractTextContainsExactQuoteAtSameOffset": false
+          },
+          "isu-open": {
+            "historicalLocatorAsDeclared": "PDF page 43, extracted-text offset 1843",
+            "quote": "A block shape that is only outlined with Skaters.",
+            "quoteSha256Unchanged": "b361fcbefc5506cbbd4d7b40c372b75797b49e025c4749708066f267cdc1f2a7",
+            "physicalPage": 43,
+            "derivedPageTextOffsetZeroBasedUnicodeCodePoints": 1843,
+            "quoteLengthUnicodeCodePoints": 49,
+            "offsetLengthRecipe": "offset is Python str.find(quote) in derivedPageText; length is len(quote); selected occurrence is unique",
+            "rawExtractTextContainsExactQuoteAtSameOffset": false
+          },
+          "isu-circle": {
+            "historicalLocatorAsDeclared": "PDF page 44, extracted-text offset 134",
+            "quote": "A Circle has a minimum of three Skaters.",
+            "quoteSha256Unchanged": "d0bd80d8727cdec1e8eff00a61cb628cbc85ad93696ceb2704b9286e4e44356a",
+            "physicalPage": 44,
+            "derivedPageTextOffsetZeroBasedUnicodeCodePoints": 134,
+            "quoteLengthUnicodeCodePoints": 40,
+            "offsetLengthRecipe": "offset is Python str.find(quote) in derivedPageText; length is len(quote); selected occurrence is unique",
+            "rawExtractTextContainsExactQuoteAtSameOffset": false
+          },
+          "isu-line": {
+            "historicalLocatorAsDeclared": "PDF page 44, extracted-text offset 388",
+            "quote": "A Line must have a maximum of two lines.",
+            "quoteSha256Unchanged": "b54bbdbf60593dff0cc8b277d9bd4d0e121db63abd15cf3073d4f32e5ab8cfbc",
+            "physicalPage": 44,
+            "derivedPageTextOffsetZeroBasedUnicodeCodePoints": 388,
+            "quoteLengthUnicodeCodePoints": 40,
+            "offsetLengthRecipe": "offset is Python str.find(quote) in derivedPageText; length is len(quote); selected occurrence is unique",
+            "rawExtractTextContainsExactQuoteAtSameOffset": false
+          },
+          "isu-wheel": {
+            "historicalLocatorAsDeclared": "PDF page 44, extracted-text offset 494",
+            "quote": "A spoke must have a minimum of two Skaters.",
+            "quoteSha256Unchanged": "85076bb364b2a380edc6249df8d97de97e12624f84c43a5cba27778554d910a3",
+            "physicalPage": 44,
+            "derivedPageTextOffsetZeroBasedUnicodeCodePoints": 494,
+            "quoteLengthUnicodeCodePoints": 43,
+            "offsetLengthRecipe": "offset is Python str.find(quote) in derivedPageText; length is len(quote); selected occurrence is unique",
+            "rawExtractTextContainsExactQuoteAtSameOffset": false
+          }
+        }
+      },
+      "docs/content-audits/question-quality-wave-6/winter-sports/resume-2026-10-12-last15-fresh-first5/sources/fis-equipment-2026.pdf": {
+        "rawSourceSha256Unchanged": "c5f0b4aa2be02bc52d54bd24782912d056a772824447d0e22f028d247d2c30be",
+        "sourceGitBlobSha1Unchanged": "a3291d244e7ec39d515e4f171261ce10aa4531d2",
+        "extractor": {
+          "package": "pypdf",
+          "version": "6.19.0",
+          "api": "pypdf.PdfReader(path); page.extract_text()",
+          "pythonVersion": "3.13.0rc2",
+          "strict": "PdfReader default (False)"
+        },
+        "rawPdfBytesMutated": false,
+        "pageTextRecords": {
+          "16": {
+            "physicalPageNumbering": "1-based index into PdfReader.pages; does not use printed page labels",
+            "rawExtractTextLengthUnicodeCodePoints": 1230,
+            "rawExtractTextSha256Utf8": "bbbc7a0b31e135565ff1cb5e54e8624d4aefddbc8fda821de80f46ecb8d00bc5",
+            "derivedTextRecipe": "derivedPageText = \" \".join(page.extract_text().split()) using Python str.split() default Unicode-whitespace semantics, then str.join() with one ASCII space",
+            "derivedPageTextLengthUnicodeCodePoints": 1174,
+            "derivedPageTextSha256Utf8": "568332fffbbc80a8a042ac36d80190087c1afc49e7b52eafb382d5d15f0545d8",
+            "rawBytesUnchanged": true
+          },
+          "24": {
+            "physicalPageNumbering": "1-based index into PdfReader.pages; does not use printed page labels",
+            "rawExtractTextLengthUnicodeCodePoints": 1203,
+            "rawExtractTextSha256Utf8": "a02666698aad276d2ee77f24bc6a7331df59679f25ecae937e086281d8ffd015",
+            "derivedTextRecipe": "derivedPageText = \" \".join(page.extract_text().split()) using Python str.split() default Unicode-whitespace semantics, then str.join() with one ASCII space",
+            "derivedPageTextLengthUnicodeCodePoints": 1168,
+            "derivedPageTextSha256Utf8": "8b2f7ca8fd1c77b09263f24544e903b4f72acd168756f94eff06cbe38aed624c",
+            "rawBytesUnchanged": true
+          },
+          "25": {
+            "physicalPageNumbering": "1-based index into PdfReader.pages; does not use printed page labels",
+            "rawExtractTextLengthUnicodeCodePoints": 1440,
+            "rawExtractTextSha256Utf8": "9365d8cd2a14602af3e84c6cb864bdf04bf1d04e80c18edb8b4e3745bb3ed7e1",
+            "derivedTextRecipe": "derivedPageText = \" \".join(page.extract_text().split()) using Python str.split() default Unicode-whitespace semantics, then str.join() with one ASCII space",
+            "derivedPageTextLengthUnicodeCodePoints": 1397,
+            "derivedPageTextSha256Utf8": "22deb90cb7cb5eef3f30eedfc0fe78855b615076c32a7080ebd0721c50b8ae78",
+            "rawBytesUnchanged": true
+          }
+        },
+        "quoteLocators": {
+          "fis-binding": {
+            "historicalLocatorAsDeclared": "PDF page 24, extracted-text offset 1040",
+            "quote": "Ski binding, which releases the boot from the ski , when during alpine ski racing conditions certain loads reach pre-set values.",
+            "quoteSha256Unchanged": "ac00cacfff4655e2fc0fe53a07ef7fb6fbbd07ddfe642890be6bfc17b84174c4",
+            "physicalPage": 24,
+            "derivedPageTextOffsetZeroBasedUnicodeCodePoints": 1040,
+            "quoteLengthUnicodeCodePoints": 128,
+            "offsetLengthRecipe": "offset is Python str.find(quote) in derivedPageText; length is len(quote); selected occurrence is unique",
+            "rawExtractTextContainsExactQuoteAtSameOffset": false
+          },
+          "fis-mount": {
+            "historicalLocatorAsDeclared": "PDF page 25, extracted-text offset 351",
+            "quote": "The functioning of the binding’s release mechanism must not be compromised by the method of its mounting.",
+            "quoteSha256Unchanged": "f368e2dfc22916b7eb750e15b683dcf672b220e93a008bd179eb4e1c48bf2677",
+            "physicalPage": 25,
+            "derivedPageTextOffsetZeroBasedUnicodeCodePoints": 351,
+            "quoteLengthUnicodeCodePoints": 105,
+            "offsetLengthRecipe": "offset is Python str.find(quote) in derivedPageText; length is len(quote); selected occurrence is unique",
+            "rawExtractTextContainsExactQuoteAtSameOffset": false
+          },
+          "fis-interface": {
+            "historicalLocatorAsDeclared": "PDF page 24, extracted-text offset 684",
+            "quote": "Functional component, mounted between skis and release bindings.",
+            "quoteSha256Unchanged": "4649a40cecf00a02ade2875c478410bec66a261f30001c8e6e4a8dc6697f4826",
+            "physicalPage": 24,
+            "derivedPageTextOffsetZeroBasedUnicodeCodePoints": 684,
+            "quoteLengthUnicodeCodePoints": 64,
+            "offsetLengthRecipe": "offset is Python str.find(quote) in derivedPageText; length is len(quote); selected occurrence is unique",
+            "rawExtractTextContainsExactQuoteAtSameOffset": false
+          },
+          "fis-ski-edges": {
+            "historicalLocatorAsDeclared": "PDF page 16, extracted-text offset 396",
+            "quote": "In order to allow transmission of lateral forces, the edges of the running surface of the ski are made mainly of a hard material resistant to wear and tear.",
+            "quoteSha256Unchanged": "9275b67355bc1eedfc336d93173782fd53e5733772bf66cd3b58647b8c790774",
+            "physicalPage": 16,
+            "derivedPageTextOffsetZeroBasedUnicodeCodePoints": 396,
+            "quoteLengthUnicodeCodePoints": 156,
+            "offsetLengthRecipe": "offset is Python str.find(quote) in derivedPageText; length is len(quote); selected occurrence is unique",
+            "rawExtractTextContainsExactQuoteAtSameOffset": false
+          },
+          "fis-brake": {
+            "historicalLocatorAsDeclared": "PDF page 25, extracted-text offset 114",
+            "quote": "Retention device for alpine skiing is a ski brake which is designed to slow down a ski which has come off after the release of a ski binding.",
+            "quoteSha256Unchanged": "2755c5f0e6751baddb00dc258ab2827aced0907cce1c06c1226e07bbbb3a3eb7",
+            "physicalPage": 25,
+            "derivedPageTextOffsetZeroBasedUnicodeCodePoints": 114,
+            "quoteLengthUnicodeCodePoints": 141,
+            "offsetLengthRecipe": "offset is Python str.find(quote) in derivedPageText; length is len(quote); selected occurrence is unique",
+            "rawExtractTextContainsExactQuoteAtSameOffset": false
+          }
+        }
+      }
+    }
   }
 }
