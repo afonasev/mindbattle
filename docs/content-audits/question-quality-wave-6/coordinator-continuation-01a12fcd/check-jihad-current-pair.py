@@ -1,0 +1,22 @@
+import pathlib,json,hashlib,subprocess
+from pypdf import PdfReader
+assert subprocess.check_output(['git','rev-parse','--show-toplevel'],text=True).strip()=='/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle'
+B=pathlib.Path('docs/content-audits/question-quality-wave-6');O=B/'coordinator-continuation-01a12fcd';AP=B/'middle-ages/resume-2026-10-12-jihad-unique-alternative-repair/author-freeze-01a12fe9.json';MP=AP.parent/'author-scope-metadata-correction-01a12fe9.json';D=B/'independent-pilot/resume-2026-10-12-middle-current15-pilot5/jihad-current-f00a60e';RP=D/'reader-receipt.json'
+sha=lambda b:hashlib.sha256(b).hexdigest();cj=lambda x:json.dumps(x,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode();ij=lambda x:json.dumps(x,ensure_ascii=False,sort_keys=False,separators=(',',':')).encode();git=lambda r,p:subprocess.check_output(['git','show',r+':'+str(p)])
+A=json.loads(AP.read_text());R=json.loads(RP.read_text());assert AP.read_bytes()==git('f00a60e',AP)==git('HEAD',AP);assert RP.read_bytes()==git('8c6b7a0',RP)==git('HEAD',RP);assert sha(AP.read_bytes())==R['authorReceiptSHA256']
+assert A['actualAuthorIdentity']==R['authorIdentity']=='01a12fe9-74d9-7272-a1d2-f26317e06001';assert R['readerIdentity']=='01a12f3d-8ec1-78b3-b153-5f2a62967421' and R['readerIdentity']!=R['authorIdentity']
+assert MP.read_bytes()==git('d1d2929',MP)==git('HEAD',MP) and sha(MP.read_bytes())==R['scopeMetadataCorrection']['SHA256']
+Q={q['id']:q for q in json.loads(pathlib.Path(A['runtimePath']).read_text())['questions']};q=Q['middle-ages-jihad'];c=R['card'];assert q==A['currentRecord']['record'];assert sha(cj(q))==c['canonicalCardSHA256'] and sha(ij(q))==c['insertionCardSHA256'];assert c['wholeSourceVerdict']==c['wholeEditorialVerdict']==c['wholeVerdict']=='PASS'
+pdfs={}
+for s in R['sourceOriginals']:
+ p=pathlib.Path(s['path']);raw=p.read_bytes();assert raw==git(s['durableAt'],p)==git('HEAD',p);assert sha(raw)==s['rawSHA256'] and len(raw)==s['rawBytes'];assert subprocess.check_output(['git','rev-parse','HEAD:'+str(p)],text=True).strip()==s['gitBlob'];pdfs[str(p)]=PdfReader(p);assert len(pdfs[str(p)].pages)==s['physicalPageCount']
+vals={'prompt-key':dict(prompt=q['prompt'],orderedAnswerTexts=[v['text'] for v in q['answers']],correctIndex=q['correctIndex'],correctAnswerText=q['answers'][q['correctIndex']]['text']),'explanation':q['explanation'],**{f'answers[{i}].note':v['note'] for i,v in enumerate(q['answers'])}};af={f['field']:f for f in A['fieldReviews']};records=[];bindings=0;pages=set();quotes=set()
+assert {f['field'] for f in c['fields']}==set(vals)
+for rf in c['fields']:
+ name=rf['field'];f=af[name];assert rf['currentLiteral']==f['literal']==vals[name];assert sha(ij(vals[name]))==rf['insertionJSONSHA256']==f['literalSHA256'] and sha(cj(vals[name]))==rf['canonicalJSONSHA256'];assert rf['sourceVerdict']==rf['editorialVerdict']=='PASS';assert f['sourceAnalysis'] and f['editorialAnalysis'] and rf['manualSourceReason'] and rf['manualEditorialReason'];assert len(f['sourceBindings'])==len(rf['sourceBindings'])
+ for ab,rb in zip(f['sourceBindings'],rf['sourceBindings']):
+  assert rb['completeOriginal']==ab['completeOriginal'] and rb['sourceURL']==ab['sourceURL'];quote=rb['historicalCitation']['exactQuote'];assert quote==ab['historicalHumanCitationQuote'] and sha(quote.encode())==rb['historicalCitation']['SHA256']==ab['historicalCitationQuoteSHA256']
+  p=rb['nativeProof'];path=rb['completeOriginal']['path'];text=pdfs[path].pages[p['physicalPage1']-1].extract_text();assert sha(text.encode())==p['originalPageTextUTF8SHA256'];start,end=p['UnicodeCodePointRange0HalfOpen'];actual=p['exactNativeFragment'];assert text[start:end]==actual and sha(actual.encode())==p['nativeFragmentUTF8SHA256'];assert actual==ab['nativePDFDerivation']['exactActualDerivedQuote'];pages.add((path,p['physicalPage1']));quotes.add((path,p['nativeFragmentUTF8SHA256']));bindings+=1
+ records.append(dict(field=name,author=f,reader=rf))
+out=dict(purpose='Strict current actual pair preservation; separatemanualdecision',id=q['id'],authorReceipt=str(AP),readerReceipt=str(RP),authorFreeze='f00a60e',scopeCorrection='d1d2929',readerFreeze='8c6b7a0',roleFields=12,readerQuoteBindings=bindings,exactPDFPages=len(pages),uniqueNativeQuotes=len(quotes),fullOriginals=len(pdfs),errors=0,cardCanonicalSha256=sha(cj(q)),records=records)
+(O/'jihad-current-pair-bindings.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n');print({k:v for k,v in out.items() if k!='records'})
