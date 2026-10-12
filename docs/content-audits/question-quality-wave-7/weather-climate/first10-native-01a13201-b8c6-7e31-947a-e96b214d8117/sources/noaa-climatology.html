@@ -1,0 +1,2060 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta charset="ISO-8859-1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="US Department of Commerce, NOAA, Physical Sciences Laboratory">
+    <meta name="author" content="PSL Web Team">
+
+	<meta name="keywords" content='El Nino ENSO La Nina'>
+	<title>
+	  Climate Glossary: NOAA Physical Sciences Laboratory
+	</title>
+
+	<!-- Favicon -->
+	<link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+
+    <link href="/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/css/psd.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/css/font-awesome/css/all.min.css" rel="stylesheet" type="text/css">
+	  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+	  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700" rel="stylesheet">
+	  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+
+    <link href="/css/weather-icons/css/weather-icons.css" rel="stylesheet" type="text/css">
+    <link href="/css/weather-icons/css/weather-icons-wind.css" rel="stylesheet" type="text/css">
+    
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load fater -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- script src="/jquery/js/jquery-1.12.4.min.js"></script -->
+    <script
+  src="https://code.jquery.com/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
+  <script
+  src="https://code.jquery.com/jquery-migrate-3.3.1.min.js"
+  crossorigin="anonymous"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- script src="/js/bootstrap.min.js"></script -->
+    <!-- Latest compiled and minified JavaScript -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <script src="/js/bootstrap-hover-dropdown.js"></script>
+
+	 <!--jQuery core JavaScript
+     ================================================== -->
+	<script type="text/javascript" src="/jquery/js/jquery.cookie.js"></script>
+
+	<script type="text/javascript" src="/js/highslide/highslide-full.js"></script>
+  <link rel="stylesheet" type="text/css" href="/js/highslide/highslide.css" />
+  <script type="text/javascript">
+    hs.registerOverlay({
+	    html: '<div class="closebutton" onclick="return hs.close(this)" title="Close"></div>',
+	    position: 'top right',
+	    fade: 2 // fading the semi-transparent overlay looks bad in IE
+    });
+
+    hs.graphicsDir = '/js/highslide/graphics/';
+    hs.showCredits = 0;
+    hs.align = 'center';
+    hs.dimmingOpacity = .75;
+  </script>
+
+<script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+
+  <script>
+
+  function toggleNav() {
+    $('#mySidenav').animate({width:'toggle'},350);
+  }
+
+  function responsiveTabs(e) {
+    console.log("tabs stuff");
+    console.log(e);
+    e.addClass('responsive-tabs');
+    e.append($('<i class="fa fa-caret-down"> </i>'));
+    e.append($('<i class="fa fa-caret-up"> </i>'));
+
+    e.on('click', 'li.active > a, i.fa', function() {
+      e.toggleClass('open');
+    }.bind(this));
+
+    e.on('click', 'li:not(.active) > a', function() {
+      e.removeClass('open');
+    }.bind(e));
+  };
+
+  $(function() {
+    responsiveTabs($('.nav.nav-tabs'));
+    $('[data-toggle="tooltip"]').tooltip()
+  });
+
+  $(function() {
+    $( "a.scrollLink" ).click(function( event ) {
+        event.preventDefault();
+        console.log("scroll link")
+        $("html, body").animate({ scrollTop: $($(this).attr("href")).offset().top-100 }, 500);
+    });
+  });
+
+  $(function() {
+    $( ".page_nav a" ).click(function( event ) {
+        event.preventDefault();
+        console.log("scroll link page")
+        $("html, body").animate({ scrollTop: $($(this).attr("href")).offset().top-100 }, 500);
+    });
+  });
+
+  $(function() {
+    if (
+  "IntersectionObserver" in window &&
+  "IntersectionObserverEntry" in window &&
+  "intersectionRatio" in window.IntersectionObserverEntry.prototype
+) {
+let observer = new IntersectionObserver(entries => {
+  if (entries[0].boundingClientRect.y < 0) {
+    document.body.classList.add("header-not-at-top");
+  } else {
+    document.body.classList.remove("header-not-at-top");
+  }
+});
+observer.observe(document.querySelector("#banner"));
+}
+  })
+</script>
+
+	
+
+<style>
+
+@media( max-width:1358px) {
+	.search {
+		width:100%;
+		height:40px;
+		margin-top:0px;
+		padding-top:3px;
+		float:none!important;
+	}
+}
+
+@media( max-width:768px) {
+	.search {
+		width:auto;
+		height:40px;
+		margin-top:-9px;
+		padding-top:3px;
+		float:none!important;
+	}
+	.search-query  {
+		width:200px;
+		display:inline-block;
+	}
+}
+
+.navbar, .navbar a {
+   -webkit-transition: all 0.4s ease;
+   transition: all 0.4s ease;
+}
+
+nav.navbar.shrink {
+  height:40px;
+}
+
+nav.shrink a {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  font-size: 15px;
+}
+
+nav.shrink .navbar-brand  {
+  height: 40px;
+}
+nav.shrink .navbar-brand .group a {
+  font-size: 24px;
+}
+
+nav.shrink .navbar-brand .org a {
+  font-size: 16px;
+}
+
+nav.shrink .navbar-toggle {
+  padding: 4px 5px;
+  margin: 8px 15px 8px 0;
+}
+
+body.header-not-at-top .navbar-inverse {
+  background: rgba(52, 58, 64, 0.80);
+}
+body.header-not-at-top .navbar-inverse:before {
+  content:"";
+  position: absolute;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  height:72px;
+  width:100%;
+  z-index:-1;
+}
+
+body.header-not-at-top .navbar-inverse:before {
+ height: 72px;
+}
+
+body.header-not-at-top .dropdown-menu {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background-color: rgba(52, 58, 64, 0.80);
+  border-bottom: 1px solid rgb(64,64,64);
+}
+
+body.header-not-at-top .navbar-collapse:before {
+  content:"";
+  position: absolute;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  height:100%;
+  width:100%;
+  z-index:-1;
+}
+
+.navbar .container {
+  padding-top: 10px;
+}
+
+
+.mainNewsContainer {
+	margin-top:-50px;
+}
+
+.mainsection {
+	margin-top:-10px;
+}
+
+
+</style>
+<link rel="stylesheet" href='/css/sidebarnav.css' type="text/css">
+
+<script>
+  $(function() {
+      if($("div.container .longTitle:first").length) {
+        console.log('title fix');
+        $("div.container .longTitle:first").hide();
+        var title = $("<h1></h1>").text($("div.container  .longTitle:first").text());
+        var titleColumn = $('<div class="col-sm-12 col-xs-12"></div>').html(title);
+        var titleBar = $("<div class='row'></div>").append(titleColumn);
+        $("#mainWrapper").before(titleBar);
+        $("#minor_nav").addClass('longTitleFix');
+      }
+  });
+  
+  </script>
+
+
+ 
+<script async type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=DOC&subagency=NOAA"  id="_fed_an_ua_tag"></script>
+
+
+ 
+    
+ 
+
+<!-- Matomo -->
+<script>
+  var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="/analytics/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '1']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+ 
+</head>
+
+<body>
+<div id="banner">
+	 
+
+<style>
+
+  .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+  background-color: transparent;
+  color:#73c779 !important;
+}
+
+.dropdown-header {
+  font-size:18px;
+  color:#73c779;
+  margin-left:-25px;
+}
+
+.dropdown-intranet {
+  width: 400px;
+}
+
+.mega-menu a {
+  display: block;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: #333333;
+  white-space: nowrap;
+}
+
+@media(min-width:991px) {
+  .mega-menu {
+    min-width:965px;
+    margin-left:-485px;
+    padding-top:15px;
+  }
+
+  .mega-menu .col-md-3 {
+    border-left:1px solid;
+    border-color: #73c779;
+  }
+
+  .mega-menu .col-md-3:first-child {
+    border-left:0px;
+    padding-left:16px;
+    margin-left:-1px
+  }
+
+  .mega-menu ul {
+    list-style:none;
+    padding-left:5px;
+  }
+
+  .mega-menu .col-md-3:last-child>ul {
+      margin-right:4px;
+  }
+
+  .mega-menu a {
+    padding:3px 0px 3px 20px;
+  }
+
+  .mega-menu a:hover {
+    background: #888;
+  }
+
+  .dropdown-header {
+    padding:0px 0px 0px 18px;
+    margin-left:0px;
+  }
+}
+
+@media(min-width:1200px) {
+  .mega-menu {
+    min-width:1170px;
+    margin-left:-690px;
+    padding-top:15px;
+  }
+
+  .mega-menu ul {
+    list-style:none;
+    padding-left:0px;
+  }
+}
+
+.mega-menu div {
+  padding-left: 0px;
+  padding-right: 2px;
+}
+
+.dropdown-intranet>li>ul {
+  position: relative;
+  display:block;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  float: left;
+  width:100%;
+  padding: 0px 0;
+  margin: 2px 0 0;
+  list-style: none;
+  font-size: 14px;
+  text-align: left;
+  border-left:1px solid;
+  border-color: #73c779;
+}
+
+.about-menu{
+  border-left:0px !important;
+}
+
+@media(min-width:991px) {
+  .dropdown-intranet a:hover {
+    background: #888;
+  }
+}
+
+.dropdown-intranet>li>ul>li>a {
+  display: block;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: #333333;
+  white-space: nowrap;
+  padding:3px 0px 3px 10px;
+}
+
+.dropdown-intranet>li>ul>li {
+  display:block;
+}
+
+.dropdown a:hover {
+  background: #888;
+}
+
+
+.tooltip-inner {
+  font-size:15px;
+  box-shadow: 0px 1px 3px 3px rgba(150,150,150, 0.175);
+  background: #0f0f0f;
+  border: 1px solid #888;
+}
+
+.alert-major-nav {
+  color: white;/* #1c1d1f;#a94442;*/
+  background-color:  rgb(146, 9, 32); /*#eb1a3d; or #f2dede;*/
+  text-align:left;
+  margin-top:0px;
+  margin-bottom:-5px;
+  border-radius: 0px;
+  font-size:14px;
+  font-weight: 300;
+  padding-left:25px;
+}
+
+.alert-major-nav i {
+  /* margin-left:-72px; */
+}
+
+.alert-major-nav a:visited, .alert-major-nav a {
+  color:#e3e6f0 !important;
+  text-decoration: underline !important;
+}
+
+.navbar {
+  padding-left: 0px;
+}
+
+.dropdown-menu ul {
+  list-style: none;
+}
+
+</style>
+
+<script>
+  // This sets the focus when the search field shows.
+$(function() {
+  $('#query-field').mouseover(function() {
+      $(this).focus();
+  })
+});
+</script>
+
+<nav class="navbar navbar-fixed-top  navbar-inverse" role="navigation" >
+
+<link rel="stylesheet" href="/css/uswds.css" />
+
+
+<style> 
+    .usa-banner__inner, .usa-banner__header--expanded .usa-banner__inner  {
+        margin-left: 0px;
+    }
+    body.header-not-at-top .usa-banner {
+        display: none;
+    }
+    
+</style>
+<section
+  class="usa-banner"
+  aria-label="Official website of the United States government"
+>
+  <div class="usa-accordion">
+    <header class="usa-banner__header">
+      <div class="usa-banner__inner">
+        <div class="grid-col-auto">
+          <img
+            aria-hidden="true"
+            class="usa-banner__header-flag"
+            src="/img/icons/us_flag_small.png"
+            alt=""
+          />
+        </div>
+        <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+          <p class="usa-banner__header-text">
+            An official website of the United States government
+          </p>
+          <p class="usa-banner__header-action">Here's how you know</p>
+        </div>
+        <button
+          type="button"
+          class="usa-accordion__button usa-banner__button"
+          aria-expanded="false"
+          aria-controls="gov-banner-default"
+        >
+          <span class="usa-banner__button-text">Here's how you know</span>
+        </button>
+      </div>
+    </header>
+    <div
+      class="usa-banner__content usa-accordion__content"
+      id="gov-banner-default"
+    >
+      <div class="grid-row grid-gap-lg">
+        <div class="usa-banner__guidance tablet:grid-col-6">
+          <img
+            class="usa-banner__icon usa-media-block__img"
+            src="/img/icons/icon-dot-gov.svg"
+            role="img"
+            alt=""
+            aria-hidden="true"
+          />
+          <div class="usa-media-block__body">
+            <p>
+              <strong>Official websites use .gov</strong><br />A
+              <strong>.gov</strong> website belongs to an official government
+              organization in the United States.
+            </p>
+          </div>
+        </div>
+        <div class="usa-banner__guidance tablet:grid-col-6">
+          <img
+            class="usa-banner__icon usa-media-block__img"
+            src="/img/icons/icon-https.svg"
+            role="img"
+            alt=""
+            aria-hidden="true"
+          />
+          <div class="usa-media-block__body">
+            <p>
+              <strong>Secure .gov websites use HTTPS</strong><br />A
+              <strong>lock</strong> (
+              <span class="icon-lock"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="52"
+                  height="64"
+                  viewBox="0 0 52 64"
+                  class="usa-banner__lock-image"
+                  role="img"
+                  aria-labelledby="banner-lock-description-default"
+                  focusable="false"
+                >
+                  <title id="banner-lock-title-default">Lock</title>
+                  <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                  <path
+                    fill="#000000"
+                    fill-rule="evenodd"
+                    d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z"
+                  />
+                </svg> </span
+              >) or <strong>https://</strong> means you've safely connected to
+              the .gov website. Share sensitive information only on official,
+              secure websites.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uswds/3.8.0/js/uswds.min.js" integrity="sha512-V/eNPuqU6gTDHwQsFL5X12i0TzX5lwVvON6VuEeTXDoSnAeA5nnc53TUEhiUdT16s0nj4MXo6OcUBAvwhdFOAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+  <div class="container">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <div class="navbar-brand">
+        <div class="hidden-xs" style="float: left;">
+          <a href="https://www.noaa.gov" title="Link to NOAA"><img src="/img/logos/noaa-logo.svg"
+           class="header_logo" style="margin-right: 12px; width: 50px; " alt="NOAA Logo" /></a>
+        </div>
+        <div class="visible-xs" style="float: left;">
+          <a href="http://www.noaa.gov" title="Link to NOAA"><img src="/img/logos/noaa-logo.svg"
+           class="header_logo" style="margin: 8px; width: 32px;  " alt="NOAA Logo" /></a>
+        </div>
+        <div style="float: left;">
+          <div style="margin: 14px 0 0 0;"><a href="/" title="PSL">Physical Sciences Laboratory</a>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="navbar-toggle align-right" style="padding-right:10px;"
+        data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">About</a>
+          
+                <ul class="dropdown-menu  dropdown-menu-left">
+                  <li>
+                    
+                  <li><a href="/about/">About Us</a></li>
+                  <li><a href="/about/org.html">Organization At-A-Glance</a></li>
+                  <li><a href="/research/divisions/">Research Divisions</a></li>
+                  <li><a href="/reviews/">Science Reviews</a></li>
+				          <li><a href="https://www.boulder.noaa.gov/outreach/tour-noaa-boulder/">Visiting NOAA Boulder</a></li>
+                  <li><a href="/about/opportunities/">Opportunities</a></li>
+                  
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">People</a>
+          <ul class="dropdown-menu dropdown-menu-left">
+            <li><a href="/about/contacts.html">Contact Us</a></li>
+            <li><a href="/staff/index.html">Staff List</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">Research</a>
+          <ul class="dropdown-menu dropdown-menu-left mega-menu">
+            <div class="row is-flex">
+              <div class=" col-xs-12 col-md-3">
+                <ul class="">
+                  <li class="hidden-xs hidden-sm"><span class="dropdown-header">Research</span></li>
+                  <li><a href="/research/">Overview</a></li>
+                  <li><a href="/research/divisions/">Research Divisions</a></li>
+                  <li><a href="/pubs/">Publications</a></li>
+                  <li><a href="/assessments/">Assessments</a></li>
+                  <li><a href="https://research.noaa.gov/science-priorities/" target="_blank">NOAA Research Priorities</a></li>
+                </ul>
+        	  </div>
+              <div class=" col-xs-12 col-md-3">
+                <ul class="">
+                  <li><span class="dropdown-header">Selected Topics</span></li>
+                  <li><a href="/arportal/index.html">Atmospheric River Portal</a></li>
+                  <li><a href="/drought/">Drought</a></li>
+                  <li><a href="/enso/">El Ni&ntilde;o and La Ni&ntilde;a</a></li>
+                  <li><a href="/fire_weather/">Fire Weather</a></li>
+                  <li><a href="/mjo/">Madden-Julian Oscilation (MJO)</a></li>
+                  <li><a href="/marine-heatwaves/">Marine Heatwaves</a></li>
+                  <li><a href="/precip/pmp/">Probable Maximum Precipitation</a></li>
+                  <li><a href="/ufs/">Unified Forecast System</a></li>
+                  
+                </ul>
+              </div>
+              <div class=" col-xs-12 col-md-3">
+                <ul class="">
+                  <li><span class="dropdown-header">In the Field</span></li>
+                  <li><a href="/aqpi/" data-toggle="tooltip" data-placement="left"
+                      title="Advanced Quantitative Precipitation Information">AQPI</a></li>
+                  <li><a href="/atomic/" data-toggle="tooltip"
+                      data-placement="left" title="Atlantic Tradewind Ocean-Atmosphere Mesoscale Interaction Campaign">ATOMIC</a></li>
+                  <li><a href="/enso/rapid_response/" data-toggle="tooltip"
+                      data-placement="left" title="El Ni&ntilde;o Rapid Response Field Campaign">ENRR</a></li>
+                  <li><a href="/mosaic/" data-toggle="tooltip"
+                      data-placement="left" title="Multidisciplinary Drifting Observatory for the Study of Arctic Climate">MOSAiC</a></li>
+                  <li><a href="/splash/" data-toggle="tooltip"
+                      data-placement="left" title="Study of Precipitation, the Lower Atmosphere and Surface for Hydrometeorology">SPLASH</a></li>
+                      <li><a href="/renewable_energy/wfip3/" data-toggle="tooltip"
+                        data-placement="left" title="3rd Wind Forecast Improvement Project">WFIP3</a></li>    
+                </ul>
+              </div>
+              <div class=" col-xs-12 col-md-3">
+                <ul class="">
+                  <li><span class="dropdown-header">Observations</span></li>
+                  <li><a href="/arctic/observatories/">Arctic Climate</a></li>
+                  <li><a href="/psd3/air-sea/oceanobs/">Shipboard</a></li>
+                  <li><a href="/technology/">Technology</a></li>
+                </ul>
+              </div>
+            </div>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">Data</a>
+          <ul class="dropdown-menu dropdown-menu-left">
+            <li><a href="/data/index.html">All</a></li>
+            <li><a href="/data/gridded/index.html">Gridded Climate</a></li>
+            <li><a href="/data/obs/">PSL Observation Network</a></li>
+            <li><a href="/data/cruises/">Research Cruises</a></li>
+            <li><a href="/arctic/data/">Arctic</a></li>
+            <li><a href="/psd2/coastal/satres/">Satellite</a></li>
+            <li><a href="/boulder/">Boulder Climate &amp; Weather</a></li>
+            <li><a href="/data/getpage/">Plotting &amp; Analysis Tools</a></li>
+            <li><a href="/data/notices/">Data Notices</a></li>
+            <li><a href="/data/help/">Help</a></li>
+
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">Products</a>
+          <ul class="dropdown-menu dropdown-menu-left">
+            <li><a href="/products/">All</a></li>
+            <li><a href="/products/monitor/">Monitoring</a></li>
+            <li><a href="/forecasts/">Forecasts</a></li>
+            <li><a href="/map/">Map Room</a></li>
+            <li><a href="/data/getpage">Plotting &amp; Analysis Tools</a></li>
+            
+            <li><a href="/data/20thC_Rean/" data-toggle="tooltip"
+                data-placement="left" data-html="true" title="The 20th Century Reanalysis Project">20th Century Reanalysis</a></li>
+            <li><a href="/data/writ/" data-toggle="tooltip"
+                data-placement="left" data-html="true" title="<strong>W</strong>eb-based <strong>R</strong>eanalyses <strong>I</strong>ntercomparison <strong>T</strong>ools">WRIT</a></li>
+                
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">News
+            | Events</a>
+          <ul class="dropdown-menu dropdown-menu-left">
+            <li><a href="/news/">News</a></li>
+            <li><a href="/events/">Events</a></li>
+            <li><a href="/seminars/">Seminars</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">Learn</a>
+          <ul class="dropdown-menu dropdown-menu-left">
+            <li><a href="/outreach/resources/">Fact Sheets</a></li>
+            <li><a href="/outreach/education/">Education Resources</a></li>
+          </ul>
+        </li>
+        <li class="dropdown hidden-sm hidden-xs">
+          <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"><i
+              class="fa fa-search"></i></a>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li>
+              <div id="custom-search-input" style="padding: 10px;">
+                <div class="input-group">
+                  <form action="//search.usa.gov/search">
+                    <input type="hidden" name="affiliate" value="psl.noaa.gov">
+                    <span class="input-group-btn">
+                      <input type="text" name="query" id="query-field" size="20"
+                        class="search-query form-control" placeholder="Search PSL...">
+                      <button class="btn btn-success" type="submit" name="search"><i
+                          class="fa fa-search" style="color:#679b6c"></i></button>
+                    </span>
+                  </form>
+                </div><!-- /input-group -->
+              </div>
+            </li>
+          </ul><!-- /.dropdown-menu -->
+        </li><!-- /.dropdown -->
+        <li class="visible-sm visible-xs">
+          <div id="custom-search-input" style="margin: 0 0 20px 0;">
+            <div class="input-group">
+              <form action="//search.usa.gov/search">
+                <input type="hidden" name="affiliate" value="etl.noaa.gov">
+                <span class="input-group-btn">
+                  <input type="text" name="query" id="query-field" size="20"
+                    class="search-query form-control" placeholder="Search PSL...">
+                  <button class="btn btn-success" type="submit" name="search"><i
+                      class="fa fa-search" style="color:#679b6c"></i></button>
+                </span>
+              </form>
+            </div><!-- /input-group -->
+          </div>
+        </li>
+      </ul><!-- /.navbar-nav -->
+    </div><!-- /.navbar-collapse -->
+  </div>
+  <!--/.container -->
+</nav>
+
+</div><!--/.banner-->
+
+<!-- Page Content -->
+<div class="mainsection" role="main" id="top">
+<div class="container">
+  <div class="row">
+	
+		
+
+
+
+	<div class="col-xs-9 col-sm-9 col-md-12">
+		 	<ul class="breadcrumb"> 
+		 		<li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i> Home</a></li>
+				
+				
+				<li class="breadcrumb-item"><span id="breadCrumbParent"><a href="/enso/">ENSO</a></span></li>
+			
+				<li class="breadcrumb-item active"><span id="breadCrumb">Climate Glossary</span></li>
+			
+			</ul>
+	</div>
+
+
+
+	
+  
+  </div>
+  
+
+	<div class="row" id="mainWrapper">
+	<!-- minor navigation -->
+	
+    <div class="col-md-12">
+  
+
+
+
+<style>
+#panel h3 {
+	color: #2b477d; 		
+}
+
+.alphaSection {
+	margin-bottom: 1.5em;
+	border-bottom: 1px solid #EEE;
+}
+
+.alphaSection > dl > dd {
+	padding: 10px 10px 15px 10px;
+}
+
+.odd {
+	background: #f8f8f8;
+}
+</style>
+
+<div id="panel">
+
+<h2>Glossary of Climate-Related Terms</h2>
+<center>
+<div style="margin: 2em 0 1em 0; font-size: 1.2em;">Jump to: &nbsp;| <a href="#a">A</a> | <a href="#b">B</a> | <a href="#c">C</a> | <a href="#d">D</a> | <a href="#e">E</a> | <a href="#f">F</a> | <a href="#g">G</a> | <a href="#h">H</a> | <a href="#i">I</a> | <a href="#j">J</a> | <a href="#k">K</a> | <a href="#l">L</a> | <a href="#m">M</a> | <a href="#n">N</a> | <a href="#o">O</a> | <a href="#p">P</a> | <a href="#q">Q</a> | <a href="#r">R</a> | <a href="#s">S</a> | <a href="#t">T</a> | <a href="#u">U</a> | <a href="#v">V</a> | <a href="#w">W</a> | <a href="#z">Z</a> |</div>
+</center>
+
+
+<div class="alphaSection">
+<h2><a name="a">A</a></h2>
+<dl>
+<dd class="odd"><h5>Absolute Humidity</h5>
+The actual amount of moisture in a given quantity of air.  More specifically, it is the ratio of
+the mass of water vapor to the total mass of dry and water vapor in a volume of the air/water
+vapor mixture. Usually has units of grams per cubic meter.
+</dd>
+
+<dd><h5>Adiabatic Lapse Rate</h5>
+The temperature curve a parcel of air would follow if it were raised or lowered adiabatically
+(no heat added or subtracted) due to the change in ambient air pressure. This can be calculated
+from the ideal gas law and the hydrostatic equation and is 9.76K/kilometer on Earth (dry rate).
+</dd>
+
+<dd class="odd"><h5>Air-Sea Interaction</h5>
+Both the ocean and the atmosphere affect each other at the oceans surface. The ocean affects the
+atmosphere through heat and moisture fluxes and the atmosphere affects the ocean through wind,
+moisture and heat fluxes. Researchers try to determine precisely what these affects are using
+data, theory and numerical coupled-climate models.
+</dd>
+
+<dd><h5>Albedo</h5>
+The ratio of a specific band of radiation reflected by a body to that incident on it. Often
+expressed as a percentage.
+</dd>
+
+<dd class="odd"><h5>Aleutian Low</h5>
+An area of time-averaged low pressure in the North Pacific centered around 180&#176;W and 50&#176;N. 
+It's strongest in winter; in summer it is displaced northward and is almost nonexistent. It reflects
+the daily highs and lows moving through the region and is not a stationary low. It's position in
+a particular year can be affected by ENSO events.
+</dd>
+
+<dd><h5>Angular Momentum</h5>
+The product of mass times the rotation velocity times the perpendicular distance from the axis
+of rotation.  A rotating object will conserve its angular momentum unless a force acts to change
+its rotation. To conserve angular momentum, skaters and divers spin faster as their arms and
+legs are moved closer to the axis of rotation.  As a parcel of air moves north or south, its
+distance from the Earth's spin axis changes; the parcel's angular velocity must change to
+conserve angular momentum. This means that the air must travel faster as it moves poleward.
+</dd>
+
+<dd class="odd"><h5>Annual cycle</h5>
+Same as seasonal cycle. The typical course of a variable throughout the year.
+</dd>
+
+<dd><h5>Anomaly</h5>
+The difference between the value of a variable (for example temperature) at a given location and
+its "normal" or long term time average at that location. The anomaly may vary depending on what
+is used to define the mean.
+</dd>
+
+<dd class="odd"><h5>Anticyclonic</h5>
+The direction of rotation about high pressure center. It is clockwise in the Northern Hemisphere
+and counterclockwise in the Southern.
+</dd>
+
+<dd><h5>AO</h5>
+Arctic Oscillation. A "mode" of variance in the northern hemisphere that is largely annular
+(circular) and somewhat zonally symmetric. It represents a negative relationship in variables
+(e.g. air temperature) between the polar region and the region just to the south. It has a
+strong relationship with the NAO.
+</dd>
+
+<dd class="odd"><h5>Asian Monsoon</h5>
+The monsoon that occurs over Southeast Asia and India. 
+</dd>
+
+<dd><h5>Autocorrelation</h5>
+Autocorrelation is the correlation (usually linear-squared correlation) between members of a
+time series of observations, and the same values at a fixed time interval later.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="b">B</a></h2>
+<dl>
+<dd class="odd"><h5>Band Pass Filter</h5>
+A construct (mathematical or physical) that only allows for ("passes") only frequencies between
+a specified high and low value.
+</dd>
+
+<dd><h5>Baroclinic</h5>
+The atmospheric state in which there are temperature gradients (and hence density gradients) on
+constant pressure surfaces. It can be contrasted with a "barotropic" atmosphere which has no
+temperature gradients on constant pressure surfaces.
+</dd>
+
+<dd class="odd"><h5>Bermuda high</h5>
+The semi-permanent, subtropical anticyclone located over the western North Atlantic Ocean at
+about 30&#176;N. 
+</dd>
+
+<dd><h5>Blocking</h5>
+A phenomenon, most often associated with stationary high pressure systems in the mid-latitudes
+of the northern hemisphere, which produces periods of abnormal weather. The normal eastward
+movement of depressions, troughs, anticyclones and ridges is stalled for periods ranging from a
+few days to as long as over a month. 
+</dd>
+
+<dd class="odd"><h5>Buoyancy</h5>
+The upward force that a fluid exerts on an object less dense than itself. 
+</dd>
+</dl>
+</div>
+
+
+<div class="alphaSection">
+<h2><a name="c">C</a></h2>
+<dl>
+<dd class="odd"><h5>Circulation</h5>
+The flow or motion of a fluid.
+</dd>
+
+<dd><h5>Clausius-Clapeyron Equation </h5>
+This equation describes the relationship between the vapor pressure and the absolute temperature
+of a liquid.  It is expressed as: 
+<div class="psl-blockquote-replace">
+ln (P<sub>2</sub>/P<sub>1</sub>) = -<font face="symbol">&#68;H<sub>vap</sub>/R * (1/T<sub>2</sub> &#8211; 1/T<sub>1</sub>)</font>
+</div>
+In other words, the relationship between vapor pressure and temperature is non-linear and warm
+air can "hold" much more water vapor than cold air.
+</dd>
+
+<dd class="odd"><h5>CCA</h5>
+<strong>Canonical Correlation Analysis</strong>. Statistical technique that returns paired time-series from two different fields that are maximally correlated (subject to orthogonality constraints).
+</dd>
+<dd><h5>Climate Drift</h5>
+In a climate mode, the unforced trend away from some initial state, with the trend not being
+part of normally occurring variability about a constant mean state.
+</dd>
+
+<dd class="odd"><h5>Climate Lag</h5>
+The delay in climate response caused by a particular forcing factor. 
+</dd>
+
+<dd><h5>Climate Model</h5>
+A representation of climate. Models make certain assumptions. They can be statistical (relaying
+on past data), numerical or theoretical.
+</dd>
+
+<dd class="odd"><h5>Climate Modeling</h5>
+A representation of climate processes using a theoretical mode, statistical model or numerical
+model. Climate models can be simple or very complex.
+</dd>
+
+<dd><h5>Climate Variability</h5>
+How climate deviates from normal or "mean" conditions. The variability is w/respect to a
+particular time-period (say, 1950-1979) and w/respect to a particular time-scale (e.g. weekly).
+</dd>
+
+<dd class="odd"><h5>Climatology</h5>
+A quantitative description of climate showing the characteristic values of climate variables
+over a region. Climate refers to the statistical collection of weather conditions over a
+specified period of time. Note that the climate taken over different periods of time (30 years,
+1000 years) may be different.
+</dd>
+
+<dd><h5>Cold Event</h5>
+A common term used which is synonymous with a La Ni&ntilde;a event. Cold refers to below average
+sea surface temperatures in the tropical Eastern Pacific.
+</dd>
+
+<dd class="odd"><h5>Cold Tongue</h5>
+Climatological region of cold surface water that extends westward from the eastern boundary of
+the tropical Pacific ocean. It is due to Ekman induced upwelling by the surface easterlies along
+the equator. This tongue can go away during El Ni&ntilde;o events due to the decrease or even
+reversal of the surface winds to westerly. 
+</dd>
+
+<dd><h5>Composite</h5>
+An average that is done according to a specific criteria. For example, one could produce a
+composite of the rainfall at a station for all years where the temperature was much above
+average. 
+</dd>
+
+<dd class="odd"><h5>Confidence Interval</h5>
+A confidence interval is a range of values that has a specified probability of containing the
+parameter being estimated. For example, a true mean value might have a 95% probability of being
+between X1 and X2 where X1 and X2 are determined from sampled values:  P(X1 le X leX2)=95%
+</dd>
+
+<dd><h5>Contour</h5>
+A line that connects equal values of a variable on as plot (or as a verb, the process of
+connecting points of equal value on a plot). For example, topography plots show elevation
+contours.
+</dd>
+
+<dd class="odd"><h5>Convection</h5>
+Mass motions in a field resulting in transport and mixing of the field. More specifically, it
+refers to motion associated with a rising current of air.
+</dd>
+
+<dd><h5>Convergence</h5>
+The convergence of the flux of a quantity expresses the time rate of accretion of the quantity
+per unit volume.  Convergent air moves towards from a point.
+</dd>
+
+<dd class="odd"><h5>Correlation</h5>
+Generally refers to a  measure of the <em>linear</em> relationship between two populations. In
+climate, it most often refers to the relationship between two time-series.
+</dd>
+
+<dd><h5>Coriolis Effect</h5>
+The apparent affect on parcels of moving air of the Earth's rotation. A parcel of air that moves
+poleward will be moving into a region with less angular momentum (the Earth spins fastest at the
+equator and has no spin at the pole). The greater angular momentum of the air will cause it to
+move faster eastward and hence it will appear to curve to the right relative to the ground. This
+apparent force is call the coriolis force. 
+</dd>
+
+<dd class="odd"><h5>Coupled model (or coupled atmosphere-ocean model)</h5> 
+In the context of climate modeling this usually refers to a numerical model which simulates both
+atmospheric and oceanic motions and temperatures and which takes into account the effects of
+each component on the other.
+</dd>
+
+<dd><h5>Cumulonimbus</h5>
+A cloud type that is dense and vertically developed and is associated with rain (particularly of
+a convective nature).
+</dd>
+
+<dd class="odd"><h5>Cyclogenesis</h5>
+Any development or strengthening of cyclonic circulation in the atmosphere.
+</dd>
+
+<dd><h5>Cyclonic</h5>
+The direction of rotation about low pressure center. It is counter-clockwise in the Norther
+Hemisphere and clockwise in the Southern.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="d">D</a></h2>
+<dl>
+<dd class="odd"><h5>Darwin</h5>
+A coastal city in north central Australia. The sea level pressure there is used alone or in
+conjunction with that from Tahiti to represent the strength of the Southern Oscillation. Both
+Darwin and Tahiti have long periods of record.
+</dd>
+
+<dd><h5>Delayed Oscillator</h5>
+A possible mechanism for ENSO. Disturbances in the eastern tropical Pacific basin drive westward
+Rossby Waves, which reflect at the western boundary and become eastward traveling equatorial
+Kelvin Waves. These eastward waves act to produce upwelling in the eastern Pacific, which cool
+and damp the original perturbation. 
+</dd>
+
+<dd class="odd"><h5>Dependent Variable</h5> 
+As opposed to a independent variable. For a linear regression equation y=B +B1X1+B2X2+..., the
+X's are the independent variables and are commonly called the or "predicated" or "regressors". Y
+is the independent variable and is commonly called a "predictand" or "regressand". 
+</dd>
+
+<dd><h5>Detrending </h5>
+From a time series, removing the part of the signal that represents the long-term movement.
+Often, the time series obtained from a linear fit of the data is removed but there are other
+methods including removing trend curves or trend segments.
+</dd>
+
+<dd class="odd"><h5>Divergence</h5>
+The divergence of the flux of a quantity expresses the time rate of depletion of the quantity
+per unit volume. Divergent air moves away from a point.
+</dd>
+
+<dd><h5>Downscaling</h5>
+Interpolating the results of large spatial scale fields, generally obtained from climate model
+to higher resolution spatial scales. Downscaling can be done statistically or through the use of
+high-resolution models that use the coarser data as a boundary condition.
+</dd>
+
+<dd class="odd"><h5>Dynamical Climate Models</h5>
+Climate Models that use explicit physics (mechanisms). The physics can be simple or complex.
+Sometimes it is possible to model processes exactly; more often parameterizations are needed to
+describe processes that are too detailed, not well understood or too small scale for the model
+to resolve.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="e">E</a></h2>
+<dl>
+<dd class="odd"><h5>Easterlies</h5>
+In meteorology, winds that come from the east.
+</dd>
+
+<dd><h5>Ekman Pumping</h5>
+Wind stress will drive a relatively shallow upper ocean flow and transport water to the
+left/right and the southern/northern hemisphere in a process known as Ekman Dynamics. Horizontal
+variations in the wind stress results in changes in convergence and divergence of the surface
+flow. This forces vertical water motion and is called Ekman pumping. 
+</dd>
+
+<dd class="odd"><h5>EL Ni&ntilde;o</h5>
+Spanish for "The Boy". The phase of ENSO which is associated with warmer than normal 
+sea surface temperatures (SSTs) in the eastern Pacific and warmer than normal SSTs in the west. 
+Convection in the western Pacific tends to be further west than the climatological average. 
+It is opposite to La Ni&ntilde;a.
+</dd>
+
+<dd><h5>Energy balance model**</h5>
+A simple class of climate models (abbreviated as EBM) that focuses on the required balance
+between incoming and outgoing radiation at the top of the atmosphere. EBMs are solely
+thermodynamic and include no dynamics or moisture processes and as such calculate only one
+dependent variable, the temperature. Nonetheless, the temperature fields calculated using 2-D
+EBMs agree well with both observations and fields calculated using more complex general
+circulation model. 
+</dd>
+
+<dd class="odd"><h5>Ensemble Forecasts</h5>
+Instead of running a numerical weather model once, they can be run multiple times using slightly
+different initial conditions and the average of the runs used as a forecast. This method tried
+to correct for the fact the initial conditions cannot be entirely known and that this relatively
+small uncertainty can grow into large forecast errors. By repeating the runs, it is hoped the
+most probable future state of the atmosphere can be determined.
+</dd>
+
+<dd><h5>ENSO</h5>
+Originally, it referred to El Ni&ntilde;o/ Southern Oscillation or the combined atmosphere/ocean
+system during an warm event. Currently, it generally refers to both the La Ni&ntilde;a and El
+Ni&ntilde;o phases of the coupled atmosphere/ocean system though sometimes it's still used as
+originally defined.
+</dd>
+
+<dd class="odd"><h5>EOF</h5>
+Empirical Orthogonal Function. A mathematical technique that attempts to rearranges a set of
+predictors into a new set of predictors which are orthogonal with each other and which maximizes
+the variance of the full set that can be explained by each predictor, in turn. The technique is
+useful for reducing the size of a dataset since the EOFs retained can be truncated and only
+those explaining large portions of the variance kept. It is also useful for studying
+relationships within a dataset by, for example, showing characteristic spatial patterns that
+describe most of the variance.
+</dd>
+
+<dd><h5>EPO</h5>
+Eastern Pacific Oscillation. A teleconnection pattern representing a N/S dipole of geopotential 
+height anomalies in the eastern North Pacific. A positive phase represents a northeastward 
+extension of the Jet Stream towards western North America while a negative phase indicates a split
+flow over the eastern North Pacific.
+</dd>
+
+<dd class="odd"><h5>Equatorial low (trough)</h5>
+A region of lower pressure located between the subtropical highs on each side of the equator.
+Within this zone the trade winds from either the Southern and Northern hemisphere meet causing
+upward motion and large amounts of precipitation. It constitutes the equatorward, ascending
+portions of the Hadley mean meridional circulation cells of both hemispheres. 
+</dd>
+
+<dd><h5>Equatorial Undercurrent</h5>
+A subsurface eastward flow centered approximately on the equator whose core lies just beneath
+the base of the mixed layer in the top of the equatorial thermocline. The flow generally ranges
+from 100-200 m thick and 200-300 km wide and varies seasonally.
+</dd>
+
+<dd class="odd"><h5>Equinox</h5>
+A time of the year when the sun shines directly over the equator (generally Mar 21 and Sep 21).
+</dd>
+
+<dd><h5>Extratropics</h5>
+Region of the globe away from the Tropics; that is 20&#176;N to the North Pole and 20&#176;S to
+the South Pole.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="f">F</a></h2>
+<dl>
+<dd class="odd"><h5>F-test</h5>
+Statistical test that examines the standard deviation of two populations. The test statistic is
+<div class="psl-blockquote-replace">sigma1**2/sigma2**2</div> 
+where sigma is a sample variance. The statistical significance is determined from an F
+distribution, which is the ratio of two chi-squared distributions with degrees of freedom eta1
+and eta2.
+</dd>
+<dd><h5>Forecasts</h5>
+Predictions. Forecasts can be made statistically (based entirely on past data), numerically
+(using computer models that represent the atmosphere ocean system) or a combination of the two.
+The resources available, timescales of interest and quantity being forecasted will determine how
+a forecast is made.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="g">G</a></h2>
+<dl>
+<dd class="odd"><h5>Gaussian Distribution</h5>
+See Normal Distribution.
+</dd>
+
+<dd><h5>GCM</h5>
+General Circulation Model. A numerical climate model that tries to incorporate as much of the
+atmosphere and ocean processes as possible. Used for both making forecasts and for analyzing the
+dynamics of the atmosphere. Generally a three-dimensional time-dependent model of the atmosphere
+and/or ocean circulation. The solution to a set of mathematical equations governing the motions
+of a layer of fluid on a spherical planet is numerically approximated on a three-dimensional
+discrete grid of points to obtain temperatures, velocities, rainfall, pressure and any of
+several other dependent variables that collectively comprise the state of the climate. Often
+abbreviated as GCM. See Washington and Parkinson (1986). 
+</dd>
+
+<dd class="odd"><h5>Geopotential</h5>
+The amount of work required to raise a unit mass to a height z from sea level.
+</dd>
+
+<dd><h5>Geopotential Height</h5>
+See geopotential. The geopotential of a parcel of air divided by the global average gravity at
+mean sea level (9.80665). 
+</dd>
+
+<dd class="odd"><h5>Geostrophic Balance</h5>
+In the absence of atmospheric motion, the force of gravity is exactly balanced by the vertical
+pressure gradient force. Or, dp/dz=rho g
+</dd>
+
+<dd><h5>Gulf Stream</h5>
+An Atlantic Ocean eastern boundary current that parallels the eastern coast of North America and
+turns eastward towards Europe at about 50-55N. It carries warm water and has a strong influence
+on the climate of Eurasia.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="h">H</a></h2>
+<dl>
+<dd class="odd"><h5>Hadley Cell</h5>
+A north-south circulation consisting of upward air motion at the ITCZ, poleward motion
+to both 30N and 30S, sinking motion at 30 degrees and a equatorward flow to the ITCZ. 
+It is driven by the strong solar heating in the tropics. The circulation of the Hadley cell
+can be affected by ENSO events.
+</dd>
+
+<dd><h5>High Pass Filter</h5>
+A construct (mathematical or physical) that only allows for ("passes") only frequencies above a specified value.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="I">I</a></h2>
+<dl>
+<dd class="odd"><h5>Icelandic low </h5>
+  A semi-permanent center of low sea-level pressure near Iceland (mainly
+between Iceland and southern Greenland). It is a principal center of action in the
+atmosphere circulation of the Northern Hemisphere. Decrease Icelandic low intensity is associated
+with the negative phase of the NAO.
+</dd>
+
+<dd><h5>Ideal gas law </h5>
+Relates the pressure, volume and temperature of an air parcel. Specifically, pV=rhoRT. 
+</dd>
+
+<dd class="odd"><h5>Independent variable</h5> 
+ As opposed to a dependent variable.  For a linear regression equation y=B +B1X1+B2X2+..., the 
+X's are the independent variables an care commonly called the or "predicated" or "regressors".
+Y is the "predictand" or "regressand".
+</dd>
+
+<dd><h5>Insolation</h5>
+The incoming solar radiation received at the Earth's surface. It is what ultimately drives the Earth's climate and weather.
+</dd>
+
+<dd class="odd"><h5>ITCZ</h5>
+Intertropical Convergence Zone. It is associated with upward motion and subsequent convection where 
+the equatorial trades from the two hemispheres collide and is the ascending branch of the Hadley Cell. 
+It tends to be located about 5N but it's location varies.
+</dd>
+
+<dd><h5>Interannual</h5>
+Referring to variations <em>from year to year</em>. 
+</dd>
+
+<dd class="odd"><h5>Interdecadal</h5>
+Referring to variations from decade to decade.
+</dd>
+
+<dd><h5>Intrannual</h5>
+Referring to variations <em>within a year</em>.
+</dd>
+
+<dd class="odd"><h5>isobar </h5>
+A contour of constant pressure.
+</dd>
+
+<dd><h5>isotherm </h5>
+A contour of constant temperature.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="j">J</a></h2>
+<dl>
+<dd class="odd"><h5>Jet Stream</h5>
+Strong winds concentrated within a narrow zone in the atmosphere.  Often used in reference to
+the axis of maximum mid-latitude westerlies located in the high troposphere.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="k">K</a></h2>
+<dl>
+<dd class="odd"><h2>Kelvin Waves</h2>
+Oceanic waves of a certain type. An equatorially trapped wave similar in character to coastally
+trapped Kelvin waves. The motion is unidirectional and parallel to the equator everywhere, and
+in each vertical plane parallel to the equator the motion is the same as for a nonrotating
+fluid. A required geostrophic balance between the east-west velocity and the north-south
+pressure gradient leads to solutions that decay away from either side of the equator on a length
+scale called the equatorial radius of deformation. These dispersionless waves propagate eastward
+at the same speed as they would in a nonrotating fluid, with the dispersion relation being. The
+magnitude of c for the first baroclinic mode for typical ocean values is around 2.8 m/s, which
+would take a Kelvin wave across the Pacific in about 2 months. See Gill (1982).  A type of
+coastally trapped wave motion where the velocity normal to the coast vanishes everywhere. The
+wave is nondispersive and propagates parallel to the shore with the speed of shallow water
+gravity waves, i.e. sqrt (gH). The profile perpendicular to shore either decays or grows
+exponentially seaward depending on whether the wave propagates with the coast to its right or
+left (in the northern hemisphere). For vanishing rotation, the decay or growth scale becomes
+infinite and the Kelvin wave reduces to an ordinary gravity wave propagating parallel to the
+coast. The dynamics of a Kelvin wave are such that it is exactly a linearized shallow water
+gravity wave in the longshore direction and exactly geostrophic in the cross-shore
+direction.</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="l">L</a></h2>
+<dl>
+<dd class="odd"><h2>La Ni&ntilde;a</h2>
+Spanish for "The Girl". The phase of ENSO which is associated with colder than normal sea surface
+temperatures in the eastern Pacific and warmer than normal SST's in the west. Convection in the western 
+Pacific tends to be further west than the climatological average. It is opposite to El Ni&ntilde;o.
+</dd>
+
+<dd><h2>Lapse Rate</h2>
+Generally refers to the change in temperature of the atmosphere(ocean) with height(depth). The
+lapse rate is related to the stability of the atmosphere(ocean). If the lapse rate is high
+meaning that the temperature decreases quickly with height above the surface, then an air parcel
+given an initial "push" will continue to move upwards as it will be warmer and therefore less
+dense than the surrounding air. The atmosphere would then be referred to as "unstable". In
+contrast, a low lapse rate is associated with greater stability.
+</dd>
+
+<dd class="odd"><h2>Latent Heat Release</h2>
+As water changes from gaseous to liquid form, there is a release in heat proportion to the
+latent heat of vaporization of water. This process can occur over large regions in the
+atmosphere when moist air rises and subsequently condenses at high altitudes. The heat released
+in the manner can be substantial and is one of the ways that the tropics can affect midlatitudes.
+</dd>
+
+<dd><h2>Linear</h2>
+Functions that have the property <em>f(x+y) =f(x)+f(y)</em> and <em>f(ax) = af(x)</em>. In other
+words, if precipitation were a linear function of temperature, then doubling the temperature
+would double the precipitation.
+</dd>
+
+<dd class="odd"><h2>Linear Inverse Modeling (LIM)</h2>
+A type of statistical forecast which makes the assumption that the atmosphere can be
+statistically modeled as a linear system that is stochastically forced with white noise. This
+type of forecasting can produce results comparable with GCM's in certain situations.
+</dd>
+
+<dd><h2>Low Frequency</h2>
+Concerned with variations of climate over long timescales of seasons and longer.
+</dd>
+
+<dd class="odd"><h2>Low Latitudes</h2>
+Near the equator. Generally ~30S-30N.
+</dd>
+
+<dd><h2>Low Pass Filter</h2>
+A construct (mathematical or physical) that only allows for ("passes") only low frequency/long
+wavelength "signals". 
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="m"></dd>M</a></h2>
+<dl>
+<dd class="odd"><h5>Madden-Julian Oscillation</h5>
+A tropical wave of convection that travels eastward around the Tropical oceans
+(20&#176;S&#8211;20&#176;N) with a characteristic speed of 30-70 days. The wave is associated
+with the passage of downward moving air associated with surface easterlies and upward moving air
+associated with surface westerlies. The upward moving air forces increased convection. The wave
+speed changes as a function of longitude as does the intensity of the perturbation with a
+greater affect over the Indian Ocean and western Pacific and a weaker effect over the Amazon and
+Congo River Basins. The MJO is the main source of intraseasonal variability in the tropics.
+</dd>
+
+<dd><h5>Mean</h5>
+Arithmetic average. Mean is one possible statistical measure of the "average" of a population.
+Others include the median (50% of values above the median and 50% are below) and mode (the most
+common value). The population for which the mean is calculated must be specified.  
+</dd>
+
+<dd class="odd"><h5>Medium Range Forecast</h5>
+A forecast made for a time period of 2-6 weeks from the time of the forecast. 
+</dd>
+
+<dd><h5>Meridional</h5>
+In a north/south direction or parallel to lines of longitude. The meridional wind (v-wind) is
+the component of the wind that blows north/south. Positive values refer to winds from the south.
+</dd>
+
+<dd class="odd"><h5>Mesosphere</h5>
+The atmospheric region between the stratosphere and the thermosphere (from the stratopause and
+the thermopause). It tends to occur from 50 to 80km above the Earth's surface and has decreasing
+temperatures with height.
+</dd>
+
+<dd><h5>Mid-Latitudes</h5>
+Region of the globe between 30&#176;S&#8211;50&#176;S or 30&#176;N&#8211;50&#176;N. 
+</dd>
+
+<dd class="odd"><h5>Mixed Layer Depth</h5>
+In oceanography, a nearly isothermal surface layer of around 40 to 150 m depth caused by wind
+stirring and convection. 
+</dd>
+
+<dd><h5>MJO</h5>
+See "Madden-Julian Oscillation". 
+</dd>
+
+<dd class="odd"><h5>Model</h5>
+A representation of a process. Models make certain assumptions. They can be statistical
+(relaying on past data), numerical or theoretical.
+</dd>
+
+<dd><h5>Monsoons</h5>
+Seasonal winds. They are caused primarily by the greater annual variation in air temperature
+over large land surfaces compared to ocean surfaces though other factors like land-relief are
+important. They are related to the seasonal cycle of rain. Some notable monsoons are the Asian
+monsoon and the Arizona monsoon.
+</dd>
+
+<dd class="odd"><h5>MRF</h5>
+See Medium Range Forecast.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="n">N</a></h2>
+<dl>
+<dd class="odd"><h5>NAO</h5>
+See "North Atlantic Oscillation".
+</dd>
+
+<dd><h5>Ni&ntilde;o 1+2</h5>
+Extreme Eastern Tropical Pacific SST (0&#8211;10&#176;S, 90&#176;W&#8211;80&#176;W) 
+</dd>
+
+<dd class="odd"><h5>Ni&ntilde;o 3</h5>
+Eastern Tropical Pacific SST (5&#176;N&#8211;5&#176;S, 150&#176;W&#8211;90&#176;W)
+</dd>
+
+<dd><h5>Ni&ntilde;o 4</h5>
+Central Tropical Pacific SST (5&#176;N&#8211;5&#176;S) (160&#176;E&#8211;150&#176;W) 
+</dd>
+
+<dd class="odd"><h5>Ni&ntilde;o 3.4</h5>
+East Central Tropical Pacific SST (5&#176;N&#8211;5&#176;S) (170&#8211;120&#176;W)
+</dd>
+
+<dd><h5>Noise, Red</h5>
+Red noise is often used to refer to any linear stochastic process in which power declines
+monotonically with increasing frequency. More commonly it refers specifically to a first-order
+auto-regressive, or AR(1), process  whose value at a time t depends on the value at time t-1
+only 
+<div class="psl-blockquote-replace">x(t)=gamma*(x(t-1)-x0)+alpha*eta</div>
+where eta is a Gaussian-distributed white-noise process, for which each value is independent of
+all previous values, x0 is the process mean and  gamma and alpha are constant coefficients.  A
+value in a red noise time-series is correlated with values around it. It's spectrum shows
+increased power at lower frequencies, Many time-series in meteorology are "red" and statistical
+tests must be performed to see if a particular time-series has variability that isn't just due
+to red noise. Noise with relatively enhanced low frequency power that results simply from serial
+correlation. The resulting power spectrum will have a negative slope. This is usually a good
+model for the noise component in a variety of climatic time series including proxy records,     
+historical sea and air surface temperatures, and precipitation records. This type of noise can
+be explained in terms of the slow-response components of the climate system, such as the thermal
+inertia of the oceans, providing a memory that effectively integrates the forcing of such
+fast-response and more white noise-like components such as the weather. The produces a temporal
+persistence that leads to great noise energy at lower frequencies. Contrast with white noise. 
+</dd>
+
+<dd class="odd"><h5>Noise, White</h5>
+A time series in which the values are serially independent (gamma=0 for an aR(1) process.). It's
+spectrum will be flat with no difference in power at any time-scale. 
+</dd>
+
+<dd><h5>Noise, Climate</h5>
+The inherently unpredictable portion of the climate. Researchers try to separate the
+(potentially) predictable part of the climate signal from the noise.
+</dd>
+
+<dd class="odd"><h5>Nonlinear</h5>
+Not linear. In other words, functions that lack either of the properties: f(x+y) = f(x)+f(y) and
+f(ax) = af(x). 
+</dd>
+
+<dd><h5>Normal Modes</h5>
+A decomposition solution procedure based on the eigenvectors of the linearized dynamical equations
+</dd>
+
+<dd class="odd"><h5>North Atlantic Oscillation</h5>
+It is an atmospheric pattern which consists of a north-south dipole of anomalies, with one
+center located over Greenland and the other center of opposite sign spanning the central
+latitudes of the North Atlantic between 35&#176;N and 40&#176;N. It is most prominent in the 
+Norther Hemisphere winter months. Most indices of its strength are calculated from surface pressure 
+records *long) though it is evident in air temperature, winds and heights. 
+</dd>
+
+<dd><h5>Numerical Prediction Models</h5>
+Models that represent atmospheric and/or ocean processes mathematically. They can be simple or
+complex and can be used for forecasting and studying weather and climate.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="o">O</a></h2>
+<dl>
+<dd class="odd"><h5>Orography</h5>
+The term used to describe the height of the surface in climate and weather models.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="p">P</a></h2>
+<dl>
+<dd class="odd"><h5>Pacific North American Pattern</h5>
+A teleconnection pattern related to ENSO in which surface pressures are anomalously low over the
+north Pacific and the southeastern US and high over northwestern America. The pattern
+extends upwards in the atmosphere. Positive values of the PNA index are associated with El
+Ni&ntilde;o and a negative SOI. Its cause is related to the location of tropical heat sources,
+which moves westward during El Ni&ntilde;o events. 
+</dd>
+
+<dd><h5>Pacific Decadal Oscillation</h5>
+The time series that represents the first mode of variability of SST in the North Pacific. It
+has a time scale of oscillation 10-20 years and is associated with climate anomalies along the
+west coast of North America. 
+</dd>
+
+<dd class="odd"><h5>Periodic</h5>
+Occurring at regular intervals. 
+</dd>
+
+<dd><h5>Peru Current</h5>
+One of the world's western boundary currents. It is a cold ocean current and flows north 
+along the coasts of Chile and Peru. 
+</dd>
+
+<dd class="odd"><h5>Potential Temperature</h5>
+The temperature a dry parcel of air would have it were compressed or expanded adiabatically (no
+heat added/subtracted) to a standard pressure (usually 1000mb).
+<div class="psl-blockquote-replace">theta=T*(Pstand/P)**R/cp</div>
+</dd>
+
+<dd><h5>Pressure gradient</h5>
+The change in pressure over some distance (e.g., 5 millibar/kilometer). Pressure gradients drive
+winds and vertical motions in the atmosphere.
+</dd>
+
+<dd class="odd"><h5>Pressure, Air</h5>
+The weight of the air above a point location. Usually reported in units of millibars or Pascals.
+</dd>
+
+<dd><h5>PNA</h5>
+See Pacific North American Pattern. 
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="q">Q</a></h2>
+<dl>
+<dd class="odd"><h5>QBO</h5>
+See "Quasi-Biennial Oscillation".
+</dd>
+<dd><h5>Quasi-Biennial Oscillation</h5>
+The name for the regular alternation of the mean zonal winds of the equatorial stratosphere
+between easterlies and westerlies, which occurs every 24-30 months; that is, about every 2 years.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="r">R</a></h2>
+<dl>
+<dd class="odd"><h5>Re-Emergence</h5>
+Ocean temperature (and salinity) anomalies that form at the surface and spread throughout the
+deep winter mixed layer are sequestered beneath the mixed layer when it shoals in spring and are
+then re-entrained into the surface layer in the following fall and winter 
+</dd>
+
+<dd><h5>Relative Humidity</h5>
+A ratio of the amount of water vapor in a volume of air to the amount that air could hold (at
+the same temperature and pressure). Expressed as a percentage.
+</dd>
+
+<dd class="odd"><h5>Rossby Waves</h5>
+Waves which have their restoring force due to the latitudinal variation of the Coriolis
+parameter. For example, if air is forced northward from the equator, it will have more "spin"
+than the ground beneath it and hence will tend to curve anticyclonically (clockwise in the 
+Northern Hemisphere) to conserve momentum.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="s">S</a></h2>
+<dl>
+<dd class="odd"><h5>Seasonal Cycle</h5>
+The typical or "mean" variation of a variable throughout a year. 
+</dd>
+
+<dd><h5>Seasonal Thermocline</h5>
+The ocean layer below the mixed layer, which is a zone of rapid transition in
+temperature/salinity. It generally starts between 50-150m below the ocean's surface and is
+shallow in spring and summer, deep in autumn, and disappears in winter in regions other than the
+tropics (where winter cooling isn't strong enough to destroy the layer). 
+</dd>
+
+<dd class="odd"><h5>SOI</h5>
+Southern Oscillation Index. A time-series that represents the strength of Southern Oscillation.
+Typically, it is taken as the normalized SLP at Tahiti minus Darwin though other definitions can
+be used. It tends to be highly correlated with time-series of ENSO though not 100%.
+</dd>
+
+<dd><h5>Southern Oscillation</h5>
+The Southern Oscillation is a seesaw of atmospheric mass (pressure) between the Pacific and
+Indo-Australian areas. The pressure difference result in circulation changes.
+</dd>
+
+<dd class="odd"><h5>Specific Humidity</h5>
+The amount of water vapor in unit volume of air. It is specified as the ratio of the weight of
+vapor/weight of air in a volume or as in grams/kilogram.
+</dd>
+
+<dd><h5>SST</h5>
+Sea Surface Temperature.
+</dd>
+
+<dd class="odd"><h5>Stability</h5>
+A measure of the tendency for a parcel of air or water to move when displaced. Unstable air
+(water)will continue to move in the direction of the displacement. Stable air(water). will
+remain in place. The stability of air and the ocean is related to the temperature lapse rate.
+Air stability is also affected by moisture content of the parcel and the surrounding air.
+</dd>
+
+<dd><h5>Staggered Grid</h5>
+In a gridded model, one (or more) variable is moved a distance of d/2 from the others. This
+results in the model calculating for twice the number of grid points and a near doubled
+computation time. However, certain processes like geostrophic adjustment are represented more
+accurately.
+</dd>
+
+<dd class="odd"><h5>Stationary Waves</h5>
+Waves (flow patterns with periodicity in time and/or space) that are fixed relative to Earth.
+</dd>
+
+<dd><h5>Storm Track</h5>
+The path followed by the left of a low (of atmospheric pressure). Or, paths over which vigorous
+mid-latitude cyclones are most frequently observed. ENSO events can affect the position of the
+Strom track due to the change in the location of convection in the tropics.
+</dd>
+
+<dd class="odd"><h5>Stratosphere</h5>
+The stratosphere is the layer of the earth's atmosphere that exists between approximately 15 and
+50 kilometers above the earth's surface. The stratosphere is between the troposphere and the
+mesosphere. It is very stable with a positive temperature lapse rate. There is little mixing
+between the troposphere and stratosphere.
+</dd>
+
+<dd><h5>Subsidence</h5>
+The descending motion of air. Since air is a compressible fluid, sinking air becomes compressed
+and therefore warmer according to the ideal gas law PV=RT.
+</dd>
+
+<dd class="odd"><h5>Subtropical High</h5>
+Surface zone of atmospheric high pressure located at about 35 degrees north and south latitude.
+These high-pressure systems produced by vertically descending air currents from the Hadley cell.
+ They move northward and are most intense in the summer season. Over the oceans, the subsiding
+air warmed by compression aloft and cooled at the surface by the cold ocean currents normally
+found off the west coasts of the continents, forms a pronounced temperature inversion (cold air
+over warm), called the trade-wind inversion. This inversion blocks convection is responsible for
+the frequent fog on the west coast during summer as well as the generally dry air.
+</dd>
+
+<dd><h5>Subtropical Jet</h5>
+An area of strong winds concentrated within a narrow region around 30&#176;N, which is more
+intense exiting out of Asia. The subtropical jet over the US is intensified during El
+Ni&ntilde;o springs.
+</dd>
+
+<dd class="odd"><h5>SVD</h5>
+Singular Value Decomposition. Statistical technique that returns paired patterns that explain
+the maximum cross covariance (subject to orthogonality constraints).
+</dd>
+
+<dd><h5>Synoptic</h5>
+In meteorology, the use of meteorological data to give a snapshot of the weather at different
+locations at the same time. Also, the study of weather on short (hour to daily) timescales.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="t">T</a></h2>
+<dl>
+<dd class="odd"><h5>Tahiti</h5>
+A group of islands in the South Pacific near 20&#176;N and 150&#176;W. The time series of sea
+level pressure there is used in conjunction with that from Darwin to form the most common
+definition of the Southern Oscillation Index.
+</dd>
+
+<dd><h5>Teleconnection</h5>
+A strong statistical relationship between weather in different parts of the globe. More
+specifically, "teleconnection pattern" refers to a recurring and persistent, large-scale pattern
+of pressure and circulation anomalies that spans vast geographical areas. Teleconnection
+patterns are also referred to as preferred modes of low-frequency variability. These patterns
+can exist from time periods of several weeks to years and thus can explain large portions of the
+variability. For example, there appears to be a teleconnection between the tropics and North
+America during El Ni&ntilde;o.
+</dd>
+
+<dd class="odd"><h5>Temperature Gradient</h5>
+The change in temperature over a distance (e.g. 5K/kilometer). The thermal wind is caused by
+horizontal temperature gradients.
+</dd>
+
+<dd><h5>Thermal Wind Equation</h5>
+This says that the difference in wind velocity between two heights is proportional to horizontal
+temperature gradient perpendicular to the wind. In other words, the u component of the thermal
+wind is proportional to the  meridional temperature gradient and the v to the zonal temperature
+gradient. The relationship is derived  hydrostatic relationship, the ideal gas law and the
+geostrophic relationship.
+</dd>
+
+<dd class="odd"><h5>Thermocline</h5>  
+Specifically the depth at which the temperature gradient is a maximum. As one descends from the
+surface of the ocean the temperature remains nearly the same as it was at the surface.  Soon,
+however, one encounters a zone in which temperature starts decreasing rapidly with depth. This
+zone is called the thermocline. The thermocline is important because it can support large-scale
+waves which play a major role in ENSO.  In studying the tropical Pacific Ocean, the depth of 20&#176;C
+water ("the 20&#176;C isotherm") is often used as a proxy for the depth of the thermocline.  Along the
+equator, the 20&#176;C isotherm is typically located at about 50m depth in the eastern pacific,
+sloping downwards to about 150m in the western Pacific. 
+</dd>
+
+<dd><h5>Thunderstorms</h5>
+Convective events occur with lightning. They are responsible for much of the latent heat release
+in the upper atmosphere of the tropics.
+</dd>
+
+<dd class="odd"><h5>Time Series</h5>
+An evenly spaced set of values of a variable at one location.
+</dd>
+
+<dd><h5>Trade Winds</h5>
+Often call "trades". Climatological winds that blow from the subtropical highs (30-35degrees)
+towards the equatorial trough (slightly north of the equator). Winds are northeasterly in the
+northern hemisphere and southeasterly in the southern. The winds are the surface portion of the
+Hadley circulation. 
+</dd>
+
+<dd class="odd"><h5>Tropic of Cancer</h5>
+The latitude line 23.5&#176;N. It is the maximum latitude in the NH where the sun is directly
+overhead at noon (due to the 23.5&#176; tilt of the Earth relative to the sun).
+</dd>
+
+<dd><h5>Tropic of Capricorn</h5>
+The latitude line 23.5&#176;S. It is the maximum latitude in the Southern Hemisphere where the
+sun is directly overhead at noon (due to the 23.5&#176; tilt of the Earth relative to the sun).
+</dd>
+
+<dd class="odd"><h5>Tropics</h5>
+The near-equatorial region between the Tropic of Cancer and the Tropic of Capricorn
+(23&#176;N-23&#176;S).
+</dd>
+
+<dd><h5>Tropopause</h5>
+The boundary between the troposphere and the stratosphere. It is defined by the temperature
+minimum between the two layers. It varies between 16km near the equator and 9km near the poles.
+</dd>
+
+<dd class="odd"><h5>Troposphere</h5>
+The region from the Earth's surface to the tropopause boundary at the stratosphere. Almost all
+of the Earth's weather occurs here. 
+</dd>
+
+<dd><h5>T-Test</h5>
+A t-test is a statistical test used to determine of the means of two populations are equal. The
+variances may be assumed to be equal or unequal. The general equation is:
+<div class="psl-blockquote-replace">T=(Y1-Y2)/sqrt((S1**2/N1)+(S2**2/N2))</div>
+The statistical significance is determined from values of the t distribution.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="u">U</a></h2>
+<dl>
+<dd class="odd"><h5>Upwelling</h5>
+In ocean dynamics, the upward motion of sub-surface water toward the surface of the ocean.  This
+is often a source of cold, nutrient-rich water.  Strong upwelling occurs along the equator where
+easterly winds are present.  Upwelling also can occur along coastlines, and is important to
+fisheries in California and Peru. 
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="v">V</a></h2>
+<dl>
+<dd class="odd"><h5>Variance</h5>
+A measure of the spread about the mean. Mathematically it is the
+sum(X<sub>i</sub>-X<sub>m</sub>)**2, where X<sub>m</sub> is the total mean and X<sub>i</sub> 
+are the observations. 
+</dd>
+
+<dd><h5>Variability</h5>
+The spread of observations about a mean.
+</dd>
+
+<dd class="odd"><h5>Vorticity</h5>
+A fluid property that is defined as twice the local rate of rotation of a fluid element or the
+curl of the velocity field. It is (generally) negligible except for the component in the
+horizontal plane.
+</dd>
+
+<dd><h5>Vorticity Equation</h5>
+The equation that relates the rate of change of the vertical component of vorticity to the
+horizontal divergence. 
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="w">W</a></h2>
+<dl> 
+<dd class="odd"><h5>Walker Cell</h5>
+See Walker Circulation.
+</dd>
+
+<dd><h5>Walker Circulation</h5>
+A name coined by Bjerknes for two circulation cells in the equatorial atmosphere, one over the
+Pacific and one over the Indian Ocean. Schematically these are longitudinal cells where, on one
+side of the ocean, convection and the associated release of latent heat in the air above lifts
+isobaric surfaces upward in the upper troposphere and creates a high pressure region there. The
+lack or lesser degree of the same process on the other side of the ocean results in lower
+pressure there, and a longitudinal pressure gradient is established which, being on the equator,
+cannot be balanced by the Coriolis force. Thus a direct zonal circulation is driven in the
+equatorial plane with countervailing winds at the surface and in the upper troposphere, with
+concomitant rising and sinking branches on the appropriate sides of the ocean. 
+</dd>
+
+<dd class="odd"><h5>Warm event</h5>
+A common term used for to refer to El Ni&ntilde;o events. Warm refers to above average sea
+surface temperatures in the Eastern Tropical Pacific.
+</dd>
+
+<dd><h5>Wave</h5>
+A disturbance traveling through a medium by which energy is transferred from one particle of the
+medium to another without causing any permanent displacement of the medium itself.  
+</dd>
+
+<dd class="odd"><h5>Wave, Reflection</h5>
+A change in direction that a wave experiences when it bounces off of a barrier between two kinds
+of media.
+</dd>
+
+<dd><h5>Wave, Refraction</h5>
+The change in direction and change in velocity that a wave experiences when it leaves one medium
+and goes into another.
+</dd>
+
+<dd class="odd"><h5>Westerlies</h5>
+In meteorology, westerlies are winds that come from the west (oceanographers use the opposite
+convention).
+</dd>
+
+<dd><h5>Wind Stress</h5>
+The force of the atmosphere per unit area on the ocean. Wind stress acts to transfer energy and
+momentum from the atmosphere to the ocean.
+</dd>
+</dl>
+</div>
+
+<div class="alphaSection">
+<h2><a name="z">Z</a></h2>      
+<dl>
+<dd class="odd"><h5>Zonal</h5>
+In an east/west direction (parallel to lines of latitude) Zonal winds (u-wind) can be easterly
+or westerly with positive values being from the west.
+</dd>
+</dl>
+</div>
+
+<center><a class="btn btn-aqua" href="#">Back to Top <i class="fas fa-angle-double-up"></i></a></center>
+
+</div><!--end panel-->
+
+			</div> <!-- end main content col -->
+
+
+
+		</div> <!-- end main content row  -->
+		
+
+		<div class="row">
+			<div class="col-md-12 reviewed">
+			
+			
+			</div>
+		</div>
+	</div> <!--  end main container -->
+</div> <!--  end mainsection -->
+<!-- Footer -->
+<footer class="footer">
+	<div class="container">
+		<div style="padding-bottom: 25px;">
+			<div class="row">
+				<div class="col-md-4 col-sm-4">
+					<h4>Mailing Address</h4>
+					<p>
+						NOAA PSL<br />
+						325 Broadway<br />
+						Boulder, CO 80305-3328
+					</p>
+
+					<h4>External Links</h4>
+					<p style="width:75%">
+						Links to external, non-government Web sites are annotated with an icon: <a href="https://www.noaa.gov/disclaimer" target="_blank" style="font-weight: 900;"><i class="fas fa-external-link-alt"></i>&nbsp;External links disclaimer</a>
+					</p>
+				</div>
+				<div class="col-md-5 col-sm-5" >
+				<h4>Physical Sciences Laboratory</h4>
+					<p><a href="/about/">About</a></p>
+					<p><a href="/about/contacts.html">Contact Us</a></p>
+					<p><a href="https://www.boulder.noaa.gov/public-affairs/" target="_blank">Public Affairs</a></p>
+					<p><a href="/site_index.html">Site Index</a></p>
+					<p><a href="/survey/">Take Our Survey</a></p>
+					<p><a href="mailto:webmaster.psl&#64;noaa.gov">Webmaster</a></p>
+				</div>
+				<div class="col-md-3 col-sm-3">
+				<h4>More</h4>
+					
+					<p><a href="https://www.noaa.gov/protecting-your-privacy">Privacy Policy</a></p>
+					<p><a href="/disclaimer/">Disclaimer</a></p>
+					<p><a href="https://www.noaa.gov/accessibility">Accessibility</a></p>
+					<p><a href="https://www.usa.gov/">USA.gov</a></p>
+					<p><a href="https://www.linkedin.com/showcase/noaa-psl/" target="_blank" class="no-link-icon">Follow PSL on <i class="fab fa-linkedin" aria-label="LinkedIn"></i></a></p>
+					<p><a href="psl/news/signup" target="_blank">Sign up for PSL News <i class="fas fa-envelope" aria-hidden="true"></i></a></p>
+				</div>
+			</div><!--/.row-->
+		</div>
+	</div><!--/.container-->
+	<div class="subFooter">
+
+		<div class="col-md-12">
+			<a href="https://www.commerce.gov">DOC</a> &nbsp;|&nbsp; <a href="https://www.noaa.gov">NOAA</a> &nbsp;|&nbsp; <a href="https://research.noaa.gov">OAR</a> &nbsp;|&nbsp; <a href="https://boulder.noaa.gov">NOAA Boulder</a
+		</div>
+		
+	</div>
+</footer>
+<script>
+
+	const allLinks = document.querySelectorAll('a');
+
+	allLinks.forEach(link => {
+			
+		  
+		if (link.href && (! link.href.includes('.gov'))  ) {
+
+			console.log(link.href);
+			noLinkIcon = link.classList.contains('no-link-icon');
+
+			if (! noLinkIcon) {
+				link.classList.add('external-link');
+			}
+		}
+	});
+	
+</script>
+</body>
+</html>
+
