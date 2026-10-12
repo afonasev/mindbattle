@@ -1,0 +1,726 @@
+{
+  "method": "Targeted retrieval from prompt and answer texts across the full 11,000-card catalog using manually expanded weather concept families; then manually read each full current card below. No automated semantic verdict was produced.",
+  "catalogScan": {
+    "topicFiles": 110,
+    "questionCards": 11000,
+    "fields": "prompt and ordered answer texts only",
+    "method": "targeted literal/synonym regex retrieval across all topic JSON cards; candidate generation only, no editorial verdict or automated duplicate determination",
+    "topicFilesSHA256": "d24f4fbfeb8c91e225ffa68064daf93c6d6eb9efb4c46b3fb9bf60cabe454fea"
+  },
+  "manualFullNeighborCount": 18,
+  "manualFullNeighbors": [
+    {
+      "id": "weather-climate-rain-gauge",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [
+        "rain_liquid",
+        "thermometer_air_temperature",
+        "barometer_atmospheric_pressure"
+      ],
+      "manualRelationshipJudgment": "Measures rain quantity with a gauge; this is a measurement-instrument fact, unlike identifying a precipitation type.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-rain-gauge",
+        "difficulty": "easy",
+        "prompt": "Каким прибором измеряют количество дождя?",
+        "answers": [
+          {
+            "text": "Осадкомер",
+            "note": "Осадкомер собирает и измеряет количество выпавших жидких осадков."
+          },
+          {
+            "text": "Термометр",
+            "note": "Термометр измеряет температуру воздуха или другого тела."
+          },
+          {
+            "text": "Барометр",
+            "note": "Барометр измеряет атмосферное давление."
+          },
+          {
+            "text": "Анемометр",
+            "note": "Анемометр измеряет скорость ветра."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Осадкомер собирает и измеряет количество выпавших жидких осадков. Результат обычно выражают высотой слоя воды в миллиметрах.",
+        "source": {
+          "title": "Britannica: Осадкомер",
+          "url": "https://www.britannica.com/technology/rain-gauge",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "13057b5b0fc8755b034dcc3abac792b7fdac534abcc4db6c2d3110d4a550a414"
+    },
+    {
+      "id": "weather-climate-wet-bulb-evaporation",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [
+        "dew_condensation",
+        "thermometer_air_temperature"
+      ],
+      "manualRelationshipJudgment": "Tests psychrometric humidity using a wet and dry thermometer; it does not ask what air-temperature instrument or surface condensation phenomenon is present.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-wet-bulb-evaporation",
+        "difficulty": "medium",
+        "prompt": "Какой показатель используют вместе с сухим термометром для определения влажности?",
+        "answers": [
+          {
+            "text": "Температура мокрого термометра",
+            "note": "Температура мокрого термометра понижается из-за испарения воды с влажной оболочки датчика."
+          },
+          {
+            "text": "Точка росы",
+            "note": "Точка росы — температура, до которой воздух нужно охладить для насыщения водяным паром."
+          },
+          {
+            "text": "Относительная влажность",
+            "note": "Относительная влажность сравнивает фактическое содержание пара с максимально возможным при данной температуре."
+          },
+          {
+            "text": "Индекс жары",
+            "note": "Индекс жары оценивает ощущаемую температуру по сочетанию жары и влажности."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Температура мокрого термометра понижается из-за испарения воды с влажной оболочки датчика. Во влажном воздухе разность показаний двух термометров мала.",
+        "source": {
+          "title": "Britannica: Температура мокрого термометра",
+          "url": "https://www.britannica.com/technology/psychrometer",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "dbc9ab51373bf9477974af4705d5a8020765c8c17c3e98609a5a7006e4d169b4"
+    },
+    {
+      "id": "weather-climate-dew-point-saturation",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [
+        "dew_condensation",
+        "thermometer_air_temperature"
+      ],
+      "manualRelationshipJudgment": "Tests an atmospheric moisture indicator; dew itself is condensed water on a surface, so this is adjacent terminology rather than a direct/inverse duplicate.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-dew-point-saturation",
+        "difficulty": "medium",
+        "prompt": "Какой показатель прямо отражает абсолютное содержание влаги в воздухе?",
+        "answers": [
+          {
+            "text": "Точка росы",
+            "note": "Точка росы — температура, до которой воздух нужно охладить для насыщения водяным паром."
+          },
+          {
+            "text": "Относительная влажность",
+            "note": "Относительная влажность сравнивает фактическое содержание пара с максимально возможным при данной температуре."
+          },
+          {
+            "text": "Температура мокрого термометра",
+            "note": "Температура мокрого термометра понижается из-за испарения воды с влажной оболочки датчика."
+          },
+          {
+            "text": "Индекс жары",
+            "note": "Индекс жары оценивает ощущаемую температуру по сочетанию жары и влажности."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Точка росы — температура, до которой воздух нужно охладить для насыщения водяным паром. Чем она ближе к температуре воздуха, тем выше относительная влажность.",
+        "source": {
+          "title": "dew point - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/dew_point",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "63d34eb2ab780beead6ac290e0fe467080d19df0fd437a7ad05e61263c051b18"
+    },
+    {
+      "id": "weather-climate-relative-humidity-ratio",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [
+        "dew_condensation",
+        "thermometer_air_temperature"
+      ],
+      "manualRelationshipJudgment": "Tests a percentage ratio of moisture at a temperature; none of the selected prompts asks this relationship.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-relative-humidity-ratio",
+        "difficulty": "medium",
+        "prompt": "Какой показатель выражают в процентах от насыщения?",
+        "answers": [
+          {
+            "text": "Относительная влажность",
+            "note": "Относительная влажность сравнивает фактическое содержание пара с максимально возможным при данной температуре."
+          },
+          {
+            "text": "Точка росы",
+            "note": "Точка росы — температура, до которой воздух нужно охладить для насыщения водяным паром."
+          },
+          {
+            "text": "Температура мокрого термометра",
+            "note": "Температура мокрого термометра понижается из-за испарения воды с влажной оболочки датчика."
+          },
+          {
+            "text": "Индекс жары",
+            "note": "Индекс жары оценивает ощущаемую температуру по сочетанию жары и влажности."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Относительная влажность сравнивает фактическое содержание пара с максимально возможным при данной температуре. При охлаждении воздуха без потери влаги он возрастает.",
+        "source": {
+          "title": "Britannica: Относительная влажность",
+          "url": "https://www.britannica.com/science/relative-humidity",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "b14925b2f1280881cc586cc9b253291ccbe87e4ca09e13d6e3077928aa2ab80e"
+    },
+    {
+      "id": "weather-climate-cyclone-low",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [
+        "cloud_formation"
+      ],
+      "manualRelationshipJudgment": "Tests the pressure system that can produce clouds and precipitation; the selected questions classify a specific phenomenon or instrument.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-cyclone-low",
+        "difficulty": "easy",
+        "prompt": "Какая система давления чаще приносит облака и осадки в умеренных широтах?",
+        "answers": [
+          {
+            "text": "Антициклон",
+            "note": "Антициклон — область высокого давления с опускающимся воздухом и расходящимися ветрами."
+          },
+          {
+            "text": "Ложбина",
+            "note": "Барическая ложбина — вытянутая область сравнительно низкого давления."
+          },
+          {
+            "text": "Гребень",
+            "note": "Барический гребень — вытянутая область сравнительно высокого давления."
+          },
+          {
+            "text": "Циклон",
+            "note": "Циклон — область пониженного давления с восходящим воздухом и сходящимися у поверхности ветрами."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Циклон — область пониженного давления с восходящим воздухом и сходящимися у поверхности ветрами. В Северном полушарии ветры вокруг неё закручиваются против часовой стрелки.",
+        "source": {
+          "title": "Britannica: Циклон",
+          "url": "https://www.britannica.com/science/cyclone-meteorology",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "dda0392ca588c7610b50a71f80d1d2d256bd8258cc821a5557780ab8072ef1d2"
+    },
+    {
+      "id": "weather-climate-cumulus-puffy",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [
+        "rain_liquid",
+        "hail_ice_pellets",
+        "cloud_formation"
+      ],
+      "manualRelationshipJudgment": "Tests a named cloud form by shape; the selected cloud question asks about formation after rising air cools.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-cumulus-puffy",
+        "difficulty": "easy",
+        "prompt": "Какие облака напоминают белые хлопья или башни?",
+        "answers": [
+          {
+            "text": "Слоистые облака",
+            "note": "Слоистые облака образуют низкий ровный серый слой."
+          },
+          {
+            "text": "Перистые облака",
+            "note": "Перистые облака — высокие тонкие волокнистые облака из ледяных кристаллов."
+          },
+          {
+            "text": "Кучево-дождевые облака",
+            "note": "Кучево-дождевые облака развиваются вертикально и несут ливни, грозы и иногда град."
+          },
+          {
+            "text": "Кучевые облака",
+            "note": "Кучевые облака имеют отдельные плотные белые вершины и относительно плоское основание."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Кучевые облака имеют отдельные плотные белые вершины и относительно плоское основание. При слабом развитии они часто сопровождают хорошую погоду.",
+        "source": {
+          "title": "Britannica: Кучевые облака",
+          "url": "https://www.britannica.com/science/cumulus-cloud",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "b2188f16f3a836cd5c0068fd0fc9d7acc2fbb10a3995fdfc986b3d0133f52be6"
+    },
+    {
+      "id": "weather-climate-stratus-layer",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [
+        "rain_liquid",
+        "hail_ice_pellets",
+        "cloud_formation"
+      ],
+      "manualRelationshipJudgment": "Tests a named cloud form by layer appearance; no selected card asks cloud taxonomy.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-stratus-layer",
+        "difficulty": "easy",
+        "prompt": "Какие облака закрывают небо сплошной низкой пеленой?",
+        "answers": [
+          {
+            "text": "Кучевые облака",
+            "note": "Кучевые облака имеют отдельные плотные белые вершины и относительно плоское основание."
+          },
+          {
+            "text": "Перистые облака",
+            "note": "Перистые облака — высокие тонкие волокнистые облака из ледяных кристаллов."
+          },
+          {
+            "text": "Кучево-дождевые облака",
+            "note": "Кучево-дождевые облака развиваются вертикально и несут ливни, грозы и иногда град."
+          },
+          {
+            "text": "Слоистые облака",
+            "note": "Слоистые облака образуют низкий ровный серый слой."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Слоистые облака образуют низкий ровный серый слой. Из них может выпадать морось.",
+        "source": {
+          "title": "Stratus cloud - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Stratus_cloud",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "1ee53542292d7a3073ac04ae99e0b52e642ef464cf9143d2c131c694fca2a614"
+    },
+    {
+      "id": "weather-climate-cumulonimbus-storm",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [
+        "rain_liquid",
+        "hail_ice_pellets",
+        "cloud_formation"
+      ],
+      "manualRelationshipJudgment": "Tests which cloud type produces thunderstorms. Hail is associated with this cloud, but its question tests the precipitation particles and size, not storm-cloud identification.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-cumulonimbus-storm",
+        "difficulty": "easy",
+        "prompt": "Из каких облаков обычно развивается гроза?",
+        "answers": [
+          {
+            "text": "Кучево-дождевые облака",
+            "note": "Кучево-дождевые облака развиваются вертикально и несут ливни, грозы и иногда град."
+          },
+          {
+            "text": "Кучевые облака",
+            "note": "Кучевые облака имеют отдельные плотные белые вершины и относительно плоское основание."
+          },
+          {
+            "text": "Слоистые облака",
+            "note": "Слоистые облака образуют низкий ровный серый слой."
+          },
+          {
+            "text": "Перистые облака",
+            "note": "Перистые облака — высокие тонкие волокнистые облака из ледяных кристаллов."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Кучево-дождевые облака развиваются вертикально и несут ливни, грозы и иногда град. Их вершина часто распластывается в форме наковальни.",
+        "source": {
+          "title": "NOAA NESDIS — What Are the Different Types of Clouds?",
+          "url": "https://www.nesdis.noaa.gov/about/k-12-education/atmosphere/what-are-the-different-types-of-clouds",
+          "verifiedAt": "2026-09-04"
+        }
+      },
+      "neighborCardSha256": "6bf9e4b790594465d6eea0fd5054c5edd86ff63be95cae57e5f0e9109794c311"
+    },
+    {
+      "id": "weather-climate-warm-cloud-collision",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [
+        "rain_liquid",
+        "cloud_formation"
+      ],
+      "manualRelationshipJudgment": "Tests collision/coalescence as a microphysical process that forms warm-cloud rain, not rain as a named precipitation type.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-warm-cloud-collision",
+        "difficulty": "hard",
+        "prompt": "Какой процесс создаёт дождь в тёплом облаке без ледяной фазы?",
+        "answers": [
+          {
+            "text": "Процесс Бержерона",
+            "note": "Процесс Бержерона переносит водяной пар от переохлаждённых капель к ледяным кристаллам."
+          },
+          {
+            "text": "Аккреция",
+            "note": "Аккреция — рост ледяной частицы при намерзании столкнувшихся с ней переохлаждённых капель."
+          },
+          {
+            "text": "Коалесценция капель",
+            "note": "Коалесценция — рост облачных капель при столкновениях и слиянии."
+          },
+          {
+            "text": "Агрегация кристаллов",
+            "note": "Агрегация — слипание отдельных ледяных кристаллов в крупные снежинки."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Коалесценция — рост облачных капель при столкновениях и слиянии. Крупные капли падают быстрее и собирают мелкие.",
+        "source": {
+          "title": "Clouds and Precipitation",
+          "url": "https://www.weather.gov/media/zhu/ZHU_Training_Page/clouds/cloud_precipitation/cloud_precipitation.pdf",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "a82742b1e1b4ebb737cf20cd053e3bef3214e81946003d358d386f55b83462b0"
+    },
+    {
+      "id": "weather-climate-bergeron-ice",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [
+        "cloud_formation"
+      ],
+      "manualRelationshipJudgment": "Tests ice-phase growth of precipitation, not snowfall or mixed precipitation as an observed type.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-bergeron-ice",
+        "difficulty": "hard",
+        "prompt": "Какой процесс роста осадков действует в смешанном облаке ниже 0 °C?",
+        "answers": [
+          {
+            "text": "Коалесценция капель",
+            "note": "Коалесценция — рост облачных капель при столкновениях и слиянии."
+          },
+          {
+            "text": "Аккреция",
+            "note": "Аккреция — рост ледяной частицы при намерзании столкнувшихся с ней переохлаждённых капель."
+          },
+          {
+            "text": "Агрегация кристаллов",
+            "note": "Агрегация — слипание отдельных ледяных кристаллов в крупные снежинки."
+          },
+          {
+            "text": "Процесс Бержерона",
+            "note": "Процесс Бержерона переносит водяной пар от переохлаждённых капель к ледяным кристаллам."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Процесс Бержерона переносит водяной пар от переохлаждённых капель к ледяным кристаллам. Давление насыщенного пара над льдом ниже, чем над водой.",
+        "source": {
+          "title": "Bergeron process - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Bergeron_process",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "a06504d781bdd01d2eabcf4345e7692258901556e0a184bf25e1abe5ee603544"
+    },
+    {
+      "id": "weather-climate-visibility-distance",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [
+        "fog_visibility"
+      ],
+      "manualRelationshipJudgment": "Tests a measured distance for seeing objects through fog or precipitation; the fog card tests a weather phenomenon and its formation context.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-visibility-distance",
+        "difficulty": "easy",
+        "prompt": "Как называется расстояние, на котором можно различить объект сквозь туман или осадки?",
+        "answers": [
+          {
+            "text": "Влажность",
+            "note": "Влажность характеризует содержание водяного пара в воздухе."
+          },
+          {
+            "text": "Атмосферное давление",
+            "note": "Атмосферное давление создаётся весом столба воздуха над поверхностью."
+          },
+          {
+            "text": "Видимость",
+            "note": "Метеорологическая видимость — наибольшее расстояние уверенного распознавания объектов."
+          },
+          {
+            "text": "Температура воздуха",
+            "note": "Температура воздуха показывает степень его нагретости."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Метеорологическая видимость — наибольшее расстояние уверенного распознавания объектов. Её ухудшают капли, кристаллы, пыль и дым.",
+        "source": {
+          "title": "Britannica: Видимость",
+          "url": "https://www.britannica.com/science/visibility-meteorology",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "6212a64d178361c8cc9c20b4ca63373de0a65e385a197a5b0752d02e721935af"
+    },
+    {
+      "id": "weather-climate-weather-current",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [],
+      "manualRelationshipJudgment": "Tests the composite present state of the atmosphere; no selected question asks for the general term weather.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-weather-current",
+        "difficulty": "easy",
+        "prompt": "Как называется состояние воздуха сегодня: температура, ветер, облачность и осадки?",
+        "answers": [
+          {
+            "text": "Прогноз погоды",
+            "note": "Прогноз погоды — научно обоснованное предсказание будущего состояния атмосферы."
+          },
+          {
+            "text": "Климат",
+            "note": "Климат — многолетний характер погоды и её изменчивости в определённом регионе."
+          },
+          {
+            "text": "Сезон",
+            "note": "Сезон — часть года с характерными условиями освещения и погоды."
+          },
+          {
+            "text": "Погода",
+            "note": "Погода — текущее состояние атмосферы в конкретном месте и времени."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Погода — текущее состояние атмосферы в конкретном месте и времени. Она может заметно меняться в течение часов.",
+        "source": {
+          "title": "Britannica: Погода",
+          "url": "https://www.britannica.com/science/weather-state-of-atmosphere",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "b3dc744ce6a5ce62af5cdd710af4aff5f6d0749f8b692d8933cad78fecc84426"
+    },
+    {
+      "id": "weather-climate-convectional-rain",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [
+        "rain_liquid"
+      ],
+      "manualRelationshipJudgment": "Tests a short summer shower mechanism after surface heating; selected precipitation items distinguish forms, while cloud formation is a separate output.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-convectional-rain",
+        "difficulty": "medium",
+        "prompt": "Какой тип осадков часто даёт короткий летний ливень после жаркого дня?",
+        "answers": [
+          {
+            "text": "Конвективные осадки",
+            "note": "Конвективные осадки возникают при быстром подъёме локально нагретого влажного воздуха."
+          },
+          {
+            "text": "Орографические осадки",
+            "note": "Орографические осадки выпадают при подъёме влажного воздуха по склону горы."
+          },
+          {
+            "text": "Дождевая тень",
+            "note": "Дождевая тень — сухая область за горным хребтом на подветренной стороне."
+          },
+          {
+            "text": "Фронтальные осадки",
+            "note": "Фронтальные осадки возникают при подъёме тёплого воздуха над более холодной воздушной массой."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Конвективные осадки возникают при быстром подъёме локально нагретого влажного воздуха. Они связаны с кучево-дождевыми облаками.",
+        "source": {
+          "title": "Precipitation types - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Precipitation_types#Convectional",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "570e3b49a91573d522bf581093d605aeec8284d9f626f975e4df30c936cdf127"
+    },
+    {
+      "id": "weather-climate-frontal-rain",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [
+        "rain_liquid"
+      ],
+      "manualRelationshipJudgment": "Tests precipitation associated with an atmospheric boundary; it does not invert a selected precipitation-form question.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-frontal-rain",
+        "difficulty": "medium",
+        "prompt": "Какие осадки сопровождают прохождение атмосферного фронта?",
+        "answers": [
+          {
+            "text": "Фронтальные осадки",
+            "note": "Фронтальные осадки возникают при подъёме тёплого воздуха над более холодной воздушной массой."
+          },
+          {
+            "text": "Орографические осадки",
+            "note": "Орографические осадки выпадают при подъёме влажного воздуха по склону горы."
+          },
+          {
+            "text": "Дождевая тень",
+            "note": "Дождевая тень — сухая область за горным хребтом на подветренной стороне."
+          },
+          {
+            "text": "Конвективные осадки",
+            "note": "Конвективные осадки возникают при быстром подъёме локально нагретого влажного воздуха."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Фронтальные осадки возникают при подъёме тёплого воздуха над более холодной воздушной массой. Их длительность зависит от типа и скорости фронта.",
+        "source": {
+          "title": "Rain",
+          "url": "https://weather.metoffice.gov.uk/learn-about/weather/types-of-weather/rain",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "81e62e1be393e6c1fa7b697e7c2e7ef47202470dd7f4ce35fbf62b799c448f24"
+    },
+    {
+      "id": "weather-climate-orographic-rain",
+      "file": "src/content/topics/weather-climate.json",
+      "retrievalFamilies": [
+        "rain_liquid"
+      ],
+      "manualRelationshipJudgment": "Tests uplift by terrain and a windward slope; selected questions do not ask precipitation cause by topography.",
+      "fullCurrentNeighborCard": {
+        "id": "weather-climate-orographic-rain",
+        "difficulty": "medium",
+        "prompt": "Какие осадки усиливаются на наветренном склоне горного хребта?",
+        "answers": [
+          {
+            "text": "Дождевая тень",
+            "note": "Дождевая тень — сухая область за горным хребтом на подветренной стороне."
+          },
+          {
+            "text": "Конвективные осадки",
+            "note": "Конвективные осадки возникают при быстром подъёме локально нагретого влажного воздуха."
+          },
+          {
+            "text": "Фронтальные осадки",
+            "note": "Фронтальные осадки возникают при подъёме тёплого воздуха над более холодной воздушной массой."
+          },
+          {
+            "text": "Орографические осадки",
+            "note": "Орографические осадки выпадают при подъёме влажного воздуха по склону горы."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Орографические осадки выпадают при подъёме влажного воздуха по склону горы. Подъём охлаждает воздух до насыщения.",
+        "source": {
+          "title": "Britannica: Орографические осадки",
+          "url": "https://www.britannica.com/science/orographic-precipitation",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "d0fdcbd1a017490753958a16b3db8633d39af38bd52bf1a71a849a4a10970504"
+    },
+    {
+      "id": "oceans-seas-precipitation-fall",
+      "file": "src/content/topics/oceans-seas.json",
+      "retrievalFamilies": [
+        "rain_liquid",
+        "snow_crystals",
+        "cloud_formation"
+      ],
+      "manualRelationshipJudgment": "Tests the generic hydrological category for water falling from clouds as rain or snow; rain-liquid asks for a particular liquid type, so it is a broader genus rather than the same tested fact.",
+      "fullCurrentNeighborCard": {
+        "id": "oceans-seas-precipitation-fall",
+        "difficulty": "easy",
+        "prompt": "Как называется выпадение воды из облаков дождём или снегом?",
+        "answers": [
+          {
+            "text": "Поверхностный сток",
+            "note": "Поверхностный сток движется по земле в ручьи, реки, озёра и океан."
+          },
+          {
+            "text": "Замерзание",
+            "note": "Замерзание переводит жидкую воду в твёрдый лёд."
+          },
+          {
+            "text": "Испарение",
+            "note": "Испарение превращает жидкую воду в водяной пар."
+          },
+          {
+            "text": "Осадки",
+            "note": "Осадки возвращают воду из атмосферы на поверхность Земли."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Осадки возвращают воду из атмосферы на поверхность Земли. Они выпадают в виде дождя, снега, града или мороси.",
+        "source": {
+          "title": "NOAA: The Water Cycle",
+          "url": "https://www.noaa.gov/education/resource-collections/freshwater/water-cycle",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "284f820ff900f0fe4ba99421977882b35d9f578b0a4bfd053aa71af2de83b4e4"
+    },
+    {
+      "id": "ecology-environment-acid-rain",
+      "file": "src/content/topics/ecology-environment.json",
+      "retrievalFamilies": [],
+      "manualRelationshipJudgment": "Tests chemical acidity caused by sulfur and nitrogen compounds, not the physical precipitation type rain.",
+      "fullCurrentNeighborCard": {
+        "id": "ecology-environment-acid-rain",
+        "difficulty": "easy",
+        "prompt": "Как называют осадки с повышенной кислотностью из-за оксидов серы и азота?",
+        "answers": [
+          {
+            "text": "Световое загрязнение",
+            "note": "Световое загрязнение изменяет естественную темноту ночи."
+          },
+          {
+            "text": "Тепловое загрязнение",
+            "note": "Тепловое загрязнение изменяет температурный режим водоёма."
+          },
+          {
+            "text": "Кислотные осадки",
+            "note": "Кислотные осадки образуются, когда соединения серы и азота превращаются в атмосфере в кислоты."
+          },
+          {
+            "text": "Загрязнение воздуха",
+            "note": "Загрязнение воздуха возникает, когда вредные вещества попадают в атмосферу в опасных концентрациях."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Кислотные осадки образуются, когда соединения серы и азота превращаются в атмосфере в кислоты. Они подкисляют воды и почвы.",
+        "source": {
+          "title": "EPA: Кислотные осадки",
+          "url": "https://www.epa.gov/acidrain/what-acid-rain",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "d242e4e5f158e07ee1bad525029fd1e159e4916f64493cab6a6d3026f504d0cb"
+    },
+    {
+      "id": "ecology-environment-stormwater-runoff",
+      "file": "src/content/topics/ecology-environment.json",
+      "retrievalFamilies": [
+        "rain_liquid"
+      ],
+      "manualRelationshipJudgment": "Tests water flowing across land after rainfall and carrying pollutants, not rain or another falling precipitation type.",
+      "fullCurrentNeighborCard": {
+        "id": "ecology-environment-stormwater-runoff",
+        "difficulty": "medium",
+        "prompt": "Как называется вода, стекающая по поверхности после дождя и переносящая загрязнители?",
+        "answers": [
+          {
+            "text": "Сточные воды",
+            "note": "Сточные воды образуются после бытового, промышленного или другого использования воды."
+          },
+          {
+            "text": "Ливневый сток",
+            "note": "Ливневый сток течёт по крышам, дорогам и почве после осадков."
+          },
+          {
+            "text": "Сельскохозяйственный сток",
+            "note": "Сельскохозяйственный сток переносит с полей питательные вещества, осадки и микроорганизмы."
+          },
+          {
+            "text": "Приземный озон",
+            "note": "Приземный озон — вторичный загрязнитель, образующийся в фотохимических реакциях."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Ливневый сток течёт по крышам, дорогам и почве после осадков. Он может переносить масло, мусор и питательные вещества в водоёмы.",
+        "source": {
+          "title": "EPA: Ливневый сток",
+          "url": "https://www.epa.gov/npdes/stormwater-discharges-municipal-sources",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "neighborCardSha256": "7de4efb25043153dd0872e97ab107259f2be518721b0ee8573d2c25d2543cdde"
+    }
+  ],
+  "scopeLimit": "Only these relevant retrieved neighbors were manually read in full; no claim that all 11,000 cards were manually read."
+}
