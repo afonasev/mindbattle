@@ -1,0 +1,229 @@
+```json
+{
+  "schema": "mindbattle-physics-same-exact7-native-proof-supplement-v1",
+  "supersedes": {
+    "preservePriorPacket": true,
+    "change": "This supplement corrects the OpenStax headers digest and replaces the previous current-direction candidate with a revised current-carrier candidate. It does not rewrite the earlier packet."
+  },
+  "identity": {
+    "nativeThreadId": "01a13281-553f-7a12-a494-469f909fd04b",
+    "coordinatorRootId": "01a13294-7d84-7583-930d-02eb1c80eb45",
+    "actualCompactions": 1,
+    "worktree": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle",
+    "branch": "codex/question-quality-wave-6",
+    "sourceBaseline": "663ea03"
+  },
+  "status": "ATOMIC_CURRENT_CARD_AUTHOR_PACKET; SIX_OTHER_TARGETS_PENDING",
+  "candidateV2": {
+    "card": {
+      "id": "physics-current-si-unit",
+      "difficulty": "easy",
+      "prompt": "Какие частицы переносят электрический ток в металлическом проводнике?",
+      "answers": [
+        {
+          "text": "Нейтральные атомы металла",
+          "note": "В металлическом проводе ток переносят электроны, а не атомы металла как целые частицы."
+        },
+        {
+          "text": "Электроны",
+          "note": "В металлических проводах ток переносят электроны; это отрицательно заряженные частицы."
+        },
+        {
+          "text": "Положительные ионы",
+          "note": "Положительные и отрицательные заряды могут двигаться в ионном растворе, например в солёной воде; в металлическом проводе ток переносят электроны."
+        },
+        {
+          "text": "Протоны",
+          "note": "Устройство Ван де Граафа может создавать ток из положительных зарядов, например протонов; в металлическом проводе носители тока — электроны."
+        }
+      ],
+      "correctIndex": 1,
+      "explanation": "В металлических проводниках электрический ток переносится электронами. В других средах носители могут быть другими: например, в растворах перемещаются положительные и отрицательные заряды, а в некоторых генераторах возможен ток протонов.",
+      "source": {
+        "title": "OpenStax, College Physics 2e 20.1 Current",
+        "url": "https://openstax.org/books/college-physics-2e/pages/20-1-current",
+        "verifiedAt": "2026-10-13"
+      }
+    },
+    "canonicalCardSha256": "40132722abe78357ac37206d39c53b17b4af5e6d483398e2e6ad439a57386da3",
+    "hashRecipe": "For every group below, serialize its literal as JSON with sort_keys=true, ensure_ascii=false, separators=(\",\", \":\"), UTF-8 encode, then SHA256. Scalar literals are hashed as canonical JSON strings, not as raw UTF-8 text.",
+    "exactPromptAnswerKeyLiteral": {
+      "prompt": "Какие частицы переносят электрический ток в металлическом проводнике?",
+      "answers": [
+        "Нейтральные атомы металла",
+        "Электроны",
+        "Положительные ионы",
+        "Протоны"
+      ],
+      "correctIndex": 1
+    },
+    "exactPromptAnswerKeySha256": "2d4c887f05099637302b61ff5e48a5bba6238a60b70bab1ac6bb4cda51aa6bba",
+    "sixGroupReceipt": [
+      {
+        "group": "prompt+ordered-answer-texts+correctIndex",
+        "verdict": "AUTHOR_PASS",
+        "sha256": "2d4c887f05099637302b61ff5e48a5bba6238a60b70bab1ac6bb4cda51aa6bba",
+        "editorialReason": "All four choices name plausible charge-carrier classes from familiar science contexts. The question tests which carrier conducts in metal specifically, rather than asking for a unit or the charge-per-time definition. The distractors distinguish neutral matter, ionic conduction, and proton current."
+      },
+      {
+        "group": "explanation",
+        "verdict": "AUTHOR_PASS",
+        "sha256": "e43ee343163fe66e74694448f97f1b8af4c9a09a34d79b984e24f136465396ee",
+        "editorialReason": "Answers the metal-conductor question, then adds sourced contrasts from ionic solutions and proton currents."
+      },
+      {
+        "group": "note0",
+        "verdict": "AUTHOR_PASS",
+        "sha256": "eed106976f47f7f803434e980ed61cf9b26e69bef24864241d984020a6e4e515",
+        "editorialReason": "Explains that the source identifies electrons as current carriers in metal wires, rather than whole metal atoms."
+      },
+      {
+        "group": "note1",
+        "verdict": "AUTHOR_PASS",
+        "sha256": "c5551bb4f0904d480897f70c4662e1f3bdbcbb2d739d2634ec31c141887cb398",
+        "editorialReason": "Adds the electron charge sign, a useful fact beyond the answer label."
+      },
+      {
+        "group": "note2",
+        "verdict": "AUTHOR_PASS",
+        "sha256": "2caca73fe27233bcdb2378319408cf5567e5f66e1565fb927cf25551ac144d0f",
+        "editorialReason": "Adds the distinct example that both positive and negative charges move in ionic solutions, while contrasting that medium with metal."
+      },
+      {
+        "group": "note3",
+        "verdict": "AUTHOR_PASS",
+        "sha256": "d7b48dea882275e9a5a28754c16445b209474efc17564bdef0e1e696579a3d8e",
+        "editorialReason": "Adds the distinct sourced example of proton current in a Van de Graaff generator, contrasting it with electron conduction in metal."
+      }
+    ],
+    "difficultyAndMetadata": {
+      "difficulty": {
+        "literal": "easy",
+        "sha256": "3ed870088e7410ee05d36e4fc20bf73104130ef98000b268b11378d0800d1703",
+        "verdict": "AUTHOR_PASS",
+        "rationale": "Identifying electron conduction in metal is a basic school-physics fact. The wording asks one direct recognition question and avoids specialized terminology or calculation. This is an editorial classification, not a claim based on an adult survey."
+      },
+      "sourceMetadata": {
+        "literal": {
+          "title": "OpenStax, College Physics 2e 20.1 Current",
+          "url": "https://openstax.org/books/college-physics-2e/pages/20-1-current",
+          "verifiedAt": "2026-10-13"
+        },
+        "sha256": "2baeff153a04db7c3206c684318c72e5276571d640e91d628988663e76eefb2d",
+        "verdict": "AUTHOR_PASS"
+      },
+      "difficultyPolicy": "GAME_SPEC.md § «Контент вопросов»: Easy is for a widely known adult-audience fact, including facts common within a large demographic or cultural group; it avoids rare terminology and trivia. This item tests the elementary metal-conduction fact."
+    }
+  },
+  "sourceTransport": {
+    "body": {
+      "path": "docs/content-audits/question-quality-wave-7/physics/first10-native-01a13201-b4e9-7b12-b72d-3538bd95ad14/originals/openstax-m42341-index.cnxml",
+      "bytes": 79843,
+      "readBytesSha256": "aea3ce841c221934d07f022163311c178cab50b6480de398744838c890539e76",
+      "gitShowHeadBytes": 79843,
+      "gitShowHeadSha256": "aea3ce841c221934d07f022163311c178cab50b6480de398744838c890539e76",
+      "byteEqual": true,
+      "gitBlobSha1": "10ef2f3e78e7ef0b5d915a3f18929bcc843be887",
+      "pinnedOpenStaxCommit": "fd1b25dfd5d8c6580c6e2b2b34a19e29cc69ada9"
+    },
+    "headers": {
+      "path": "docs/content-audits/question-quality-wave-7/physics/first10-native-01a13201-b4e9-7b12-b72d-3538bd95ad14/originals/openstax-m42341.headers.txt",
+      "bytes": 897,
+      "readBytesSha256": "1a6d11daf19637f3f85298de28700475a93838266ca5a3279162abf295e885b7",
+      "gitShowHeadBytes": 897,
+      "gitShowHeadSha256": "1a6d11daf19637f3f85298de28700475a93838266ca5a3279162abf295e885b7",
+      "byteEqual": true,
+      "historicalManifestExpectedSha256": "357ed1f2b5de3850509b51890cfc9369cc58a1afbedc0f434b335a47c84301e8",
+      "handling": "The prior packet's reported actual hash was wrong. This is the corrected read_bytes and git-show digest. The older manifest expectation remains a separate mismatch and is not rewritten."
+    },
+    "parserAndRawContextRecipe": {
+      "encoding": "UTF-8 source bytes",
+      "selection": "Find the literal opening tag <para id=\"import-auto-id1207319\"> and the next closing tag </para>; retain markup and hash the entire source file separately.",
+      "rawByteOffsets": [13063, 14267],
+      "contextId": "OpenStax-conventional-current",
+      "literal": "<para id=\"import-auto-id1207319\">Note that the direction of current flow in <link target-id=\"import-auto-id2931325\"/> is from positive to negative. <emphasis effect=\"italics\">The direction of conventional current is the direction that positive charge would flow</emphasis>. Depending on the situation, positive charges, negative charges, or both may move. In metal wires, for example, current is carried by electrons—that is, negative charges move. In ionic solutions, such as salt water, both positive and negative charges move. This is also true in nerve cells. A Van de Graaff generator used for nuclear research can produce a current of pure positive charges, such as protons. <link target-id=\"import-auto-id1575921\"/> illustrates the movement of charged particles that compose a current. The fact that conventional current is taken to be in the direction that positive charge would flow can be traced back to American politician and scientist Benjamin Franklin in the 1700s. He named the type of charge associated with electrons negative, long before they were known to carry current in so many situations. Franklin, in fact, was totally unaware of the small-scale structure of electricity.</para>",
+      "support": {
+        "prompt+key+explanation": "The paragraph says metal-wire current is carried by electrons and that electrons are negative charges.",
+        "note0": "The metal-wire sentence identifies electrons as the current carriers.",
+        "note1": "The same sentence identifies those electrons as negative charges.",
+        "note2": "The ionic-solution example says both positive and negative charges move in salt water.",
+        "note3": "The Van de Graaff example explicitly names positive charges such as protons."
+      }
+    }
+  },
+  "deduplication": {
+    "catalogGuard": {
+      "catalogCardsScanned": 11000,
+      "retrieval": "Searches of current, electron, metal-wire, particle-carrier, ion, and proton wording produced the two unrelated lexical hits listed in the previous query results; the broader semantic shortlist was manually checked for current-related cards.",
+      "closeRelatedCard": {
+        "id": "chemistry-graphite-conductivity",
+        "canonicalCardSha256": "d1ddf8bf8e5446612749de9c88eceb870ced19eb790eaf54212f7b26c771cde7",
+        "review": "Related because both involve electron conduction. The existing card tests delocalized electrons and conductivity along graphite layers; this candidate tests the carrier in a metallic conductor. Different material and tested relation; retained as a close neighbor for independent review."
+      },
+      "candidateNeighborCanonicalBindings": [
+        {
+          "id": "physics-ext-electric-current-charge-flow",
+          "canonicalCardSha256": "2d9f01a50ea5a526b76462c48e1137b2c5b8c638a5f7872e14ecf1ad608fd3d4",
+          "review": "Defines current as charge per time; it does not identify metal-wire carrier particles."
+        },
+        {
+          "id": "laboratories-measurement-ammeter-current",
+          "canonicalCardSha256": "ba1308d6ddc66775cba1d899d3de9a1b3e4a347b504b13577df9ffe5c8046def",
+          "review": "Tests the ammeter and its series connection, not microscopic charge carriers."
+        },
+        {
+          "id": "physics-closed-circuit",
+          "canonicalCardSha256": "0cab79c2799eccf1944c7142207069701419bc818b04671ad68314b871ab67f5",
+          "review": "Tests the closed-path condition for steady current, not carrier identity."
+        },
+        {
+          "id": "physics-metal-conductor",
+          "canonicalCardSha256": "5947ad5ff7af612d56aa670d85ed2cb20192b692989db2a42e74d922f18c5a31",
+          "review": "Names copper as a conductive material; it does not ask which microscopic particles carry current."
+        },
+        {
+          "id": "physics-lenz-law-direction",
+          "canonicalCardSha256": "02707d9900d510d6e84f17fa5ab9472d1d0216558581b18ce325c0106a642aa6",
+          "review": "Tests induced-current direction under changing magnetic flux, not conduction carriers in metal."
+        }
+      ],
+      "receiptBasis": "Canonical bindings are SHA256 of each complete current card using the stated canonical-card recipe. The ext-current, ammeter, Lenz-law and related cards were fully read in this task; graphite and metal-conductor cards were also fully read."
+    }
+  },
+  "current100Guard": {
+    "currentPhysicsQuestionCount": 100,
+    "currentOrderEquals663ea03": true,
+    "targetCount": 7,
+    "protectedOther93": {
+      "count": 93,
+      "scopeCanonicalHashesMatched": 93,
+      "mismatches": []
+    },
+    "certifiedProtectedCards": {
+      "physics-light-speed-vacuum": "60164eebfcbec0345d6be6b7b6dd5879585fd72af11708f80932dc6a03f98cd8",
+      "physics-newton-third-law": "dd43aa436dbbc3d527ed4298be5ef617747096b129c166cfa50e7778c0bf9008",
+      "physics-water-boiling-standard-pressure": "11e64060311b5faf700b468fa517ef6eb7db9fa803ccf48663a380d6ad9471ee"
+    },
+    "note": "The current candidate is not in the source file, so the seven target source literals and key slots remain as read. This guard confirms order and the protected-93 scope hashes only."
+  },
+  "otherSixTargets": {
+    "status": "PENDING",
+    "ids": [
+      "physics-force-si-unit",
+      "physics-heat-spontaneous-direction",
+      "physics-rainbow-color-separation",
+      "physics-sound-vacuum",
+      "physics-mass-weight-distinction",
+      "physics-density-definition"
+    ]
+  },
+  "execution": {
+    "readOnly": true,
+    "writesThisTurn": false,
+    "testsRun": false,
+    "buildsRun": false,
+    "commitsMade": false,
+    "stopAfterThisAtomicSupplement": true
+  }
+}
+```
