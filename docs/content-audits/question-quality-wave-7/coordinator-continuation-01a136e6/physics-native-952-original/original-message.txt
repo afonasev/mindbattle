@@ -1,0 +1,302 @@
+Подготовил SOURCE-only consolidated proposal для frozen10. Он сохраняет ID, порядок ответов, `difficulty: "medium"` и ключи `[3,0,0,0,0,1,1,1,1,1]`. В runtime ничего не записывал.
+
+### Exact runtime cards
+
+```json
+[
+  {
+    "id": "physics-photon-energy-frequency",
+    "difficulty": "medium",
+    "prompt": "Фотон исходного света имеет частоту ν. Если частоту увеличить вдвое, как изменится энергия одного фотона?",
+    "answers": [
+      {"text": "Уменьшится вдвое", "note": "В фотоэффекте частота света определяет энергию каждого фотона, а интенсивность связана с количеством падающих фотонов."},
+      {"text": "Останется прежней", "note": "Постоянная Планка h одинакова для всех фотонов; именно она задаёт коэффициент в связи энергии с частотой."},
+      {"text": "Увеличится втрое", "note": "Для данного материала существует пороговая частота: ниже неё фотоэлектроны не вылетают даже при повышенной интенсивности."},
+      {"text": "Увеличится вдвое", "note": "Электромагнитное излучение поглощается и испускается порциями энергии, а не непрерывно."}
+    ],
+    "correctIndex": 3,
+    "explanation": "Энергия одного фотона задаётся E=hν. При замене ν на 2ν получаем E′=h(2ν)=2E; интенсивность пучка в этом выводе не участвует.",
+    "source": {"title": "OpenStax College Physics AP §29.2", "url": "https://openstax.org/books/college-physics-ap-courses/pages/29-2-the-photoelectric-effect", "verifiedAt": "2026-10-13"}
+  },
+  {
+    "id": "physics-earth-escape-velocity",
+    "difficulty": "medium",
+    "prompt": "Для Земли возьмите G=6,67×10⁻¹¹ Н·м²/кг², M=5,96×10²⁴ кг и R=6,37×10⁶ м. Какова скорость убегания с поверхности по формуле v=√(2GM/R), округлённо?",
+    "answers": [
+      {"text": "11,2 км/с", "note": "Скорость убегания не зависит от массы запускаемого объекта; она определяется массой и радиусом центрального тела."},
+      {"text": "7,9 км/с", "note": "При той же массе планеты скорость убегания уменьшается с высотой старта, поскольку расстояние до центра становится больше."},
+      {"text": "5,6 км/с", "note": "При одинаковом радиусе увеличение массы планеты в четыре раза увеличило бы скорость убегания в два раза."},
+      {"text": "15,8 км/с", "note": "Пороговая скорость означает, что объект достигает бесконечно удалённой точки с нулевой остаточной скоростью."}
+    ],
+    "correctIndex": 0,
+    "explanation": "Из заданной формулы 2GM/R≈1,25×10⁸ м²/с², поэтому корень равен примерно 1,12×10⁴ м/с, или 11,2 км/с. Это идеализированная скорость старта без сопротивления атмосферы.",
+    "source": {"title": "OpenStax University Physics Vol. 1 §13.3", "url": "https://openstax.org/books/university-physics-volume-1/pages/13-3-gravitational-potential-energy-and-total-energy", "verifiedAt": "2026-10-13"}
+  },
+  {
+    "id": "physics-pascal-principle",
+    "difficulty": "medium",
+    "prompt": "В гидравлическом прессе площадь малого поршня 0,01 м², большого — 0,10 м². Какую силу идеальный пресс создаёт на большом поршне, если к малому приложена сила 100 Н?",
+    "answers": [
+      {"text": "1000 Н", "note": "Идеальный пресс увеличивает силу, но не работу: большой поршень проходит меньшее расстояние, чем малый."},
+      {"text": "100 Н", "note": "Давление в замкнутой жидкости передаётся без уменьшения ко всем её частям и стенкам сосуда."},
+      {"text": "10 Н", "note": "Суммарное давление в жидкости может складываться из давлений от нескольких источников."},
+      {"text": "10 000 Н", "note": "Поршни на одной высоте испытывают одинаковое переданное давление; различие высот добавило бы гидростатическую разность."}
+    ],
+    "correctIndex": 0,
+    "explanation": "По принципу Паскаля давление передаётся по жидкости: F₁/A₁=F₂/A₂. Поэтому F₂=100 Н×(0,10/0,01)=1000 Н; выигрыш в силе компенсируется большим перемещением малого поршня.",
+    "source": {"title": "OpenStax College Physics AP §11.5 Pascal's Principle", "url": "https://openstax.org/books/college-physics-ap-courses/pages/11-5-pascals-principle", "verifiedAt": "2026-10-13"}
+  },
+  {
+    "id": "physics-doppler-approaching-source",
+    "difficulty": "medium",
+    "prompt": "Неподвижный источник издаёт частоту f₀. Затем он движется к неподвижному слушателю в неподвижном воздухе. Как частота у слушателя и длина волны впереди источника соотносятся со значениями при неподвижном источнике?",
+    "answers": [
+      {"text": "Частота выше f₀, длина волны короче λ₀", "note": "Движущийся источник создаёт сжатия воздуха ближе друг к другу спереди и дальше друг от друга позади."},
+      {"text": "Частота ниже f₀, длина волны длиннее λ₀", "note": "Позади удаляющегося источника воздушные сжатия расположены реже; в той же среде это соответствует более длинной волне и меньшей частоте."},
+      {"text": "Частота f₀, длина волны λ₀", "note": "При неподвижном источнике неподвижные наблюдатели по обе стороны видят ту же длину волны и частоту, что и излучает источник."},
+      {"text": "Частота выше f₀, длина волны длиннее λ₀", "note": "В одной среде скорость звука постоянна и связана с частотой и длиной волны соотношением v=fλ."}
+    ],
+    "correctIndex": 0,
+    "explanation": "Сравниваются один и тот же источник и неподвижный слушатель в одной и той же среде. При приближении фронты перед источником сближаются; постоянная скорость звука связывает более короткую длину волны с большей получаемой частотой.",
+    "source": {"title": "OpenStax College Physics AP §17.4 Doppler Effect", "url": "https://openstax.org/books/college-physics-ap-courses/pages/17-4-doppler-effect-and-sonic-booms", "verifiedAt": "2026-10-13"}
+  },
+  {
+    "id": "physics-half-life-remaining-fraction",
+    "difficulty": "medium",
+    "prompt": "В образце с большим числом нестабильных ядер прошло три периода полураспада. Какая доля исходного числа ядер в среднем ещё не распалась?",
+    "answers": [
+      {"text": "Одна восьмая", "note": "Случайный распад отдельных ядер описывается вероятностью; период полураспада предсказывает поведение большого образца."},
+      {"text": "Одна четверть", "note": "Половина исходного количества остаётся после двух периодов, поскольку за каждый период половина текущего остатка распадается."},
+      {"text": "Одна шестнадцатая", "note": "Четыре периода полураспада дают ожидаемую долю 1/16; каждый дополнительный период добавляет множитель 1/2."},
+      {"text": "Половина", "note": "Через один период ожидается половина исходного количества; этот интервал задаётся свойством изотопа."}
+    ],
+    "correctIndex": 0,
+    "explanation": "Для каждого периода полураспада ожидаемая доля умножается на 1/2. Через три периода это 1×(1/2)×(1/2)×(1/2)=1/8; речь о среднем числе ядер в образце.",
+    "source": {"title": "OpenStax College Physics AP §31.5 Half-Life", "url": "https://openstax.org/books/college-physics-ap-courses/pages/31-5-half-life-and-activity", "verifiedAt": "2026-10-13"}
+  },
+  {
+    "id": "physics-entropy-isolated-system",
+    "difficulty": "medium",
+    "prompt": "Два тела получают по 600 Дж теплоты. Температура каждого во время передачи постоянна: у первого 300 K, у второго 600 K. Используя ΔS=Q/T, у какого тела изменение энтропии больше и во сколько раз?",
+    "answers": [
+      {"text": "У второго тела, вдвое.", "note": "При одинаковом Q увеличение абсолютной температуры вдвое уменьшает Q/T вдвое."},
+      {"text": "У первого тела, вдвое.", "note": "В СИ энтропию выражают в джоулях на кельвин (Дж/K)."},
+      {"text": "Изменения одинаковы.", "note": "Если Q и T одновременно увеличить в одинаковое число раз, отношение Q/T останется тем же; здесь Q одинаково, а T различается."},
+      {"text": "У первого тела, но оно отрицательное.", "note": "Для системы, получающей тепло, Q положительно; отрицательное Q соответствует передаче тепла из системы."}
+    ],
+    "correctIndex": 1,
+    "explanation": "По ΔS=Q/T изменение энтропии первого тела равно 600/300=2 Дж/K, а второго — 600/600=1 Дж/K. Поэтому изменение первого вдвое больше; оба изменения положительны, поскольку оба тела получают тепло.",
+    "source": {"title": "OpenStax Physics §12.3 Entropy", "url": "https://openstax.org/books/physics/pages/12-3-entropy", "verifiedAt": "2026-10-14"}
+  },
+  {
+    "id": "physics-electromagnetic-induction-condition",
+    "difficulty": "medium",
+    "prompt": "Магнитный поток через катушку меняется, когда выключатель в её цепи разомкнут. Что возникает непосредственно по закону Фарадея?",
+    "answers": [
+      {"text": "Только ток, без ЭДС", "note": "Для катушки из N витков модуль ЭДС связан с изменением магнитного потока соотношением |ε|=N|ΔΦ/Δt|."},
+      {"text": "ЭДС индукции, хотя ток в разомкнутой цепи не течёт", "note": "Магнитный поток Φ через плоский контур зависит от B, площади A и угла между полем и нормалью к контуру: Φ=BA cos θ."},
+      {"text": "Ни ЭДС, ни ток", "note": "Закон Фарадея связывает ЭДС со скоростью изменения магнитного потока; ток дополнительно требует замкнутого пути."},
+      {"text": "Постоянный ток независимо от изменения потока", "note": "В замкнутой цепи сила индуцированного тока зависит также от её сопротивления."}
+    ],
+    "correctIndex": 1,
+    "explanation": "Закон Фарадея связывает ЭДС индукции со скоростью изменения магнитного потока. Разомкнутость означает отсутствие замкнутого пути для тока; эти условия относятся к разным величинам.",
+    "source": {"title": "OpenStax College Physics AP §23.1 Induced EMF", "url": "https://openstax.org/books/college-physics-ap-courses/pages/23-1-induced-emf-and-magnetic-flux", "verifiedAt": "2026-10-13"}
+  },
+  {
+    "id": "physics-total-internal-reflection",
+    "difficulty": "medium",
+    "prompt": "Луч идёт из стекла с показателем преломления 1,50 в воздух с показателем 1,00. Угол падения равен 50° к нормали. Критический угол примерно 42°. Каков исход на границе?",
+    "answers": [
+      {"text": "Обычное преломление", "note": "Для угла меньше критического луч проходит во вторую среду; при переходе к меньшему показателю он отклоняется от нормали."},
+      {"text": "Полное внутреннее отражение", "note": "Закон Снеллиуса даёт sin θc=n₂/n₁ для луча из среды с большим показателем в среду с меньшим."},
+      {"text": "Частичное отражение и преломление", "note": "При углах ниже критического на границе возникают отражённый и преломлённый лучи."},
+      {"text": "Преломление вдоль границы", "note": "При критическом угле преломлённый луч идёт вдоль границы, то есть его угол к нормали равен 90°."}
+    ],
+    "correctIndex": 1,
+    "explanation": "Полное внутреннее отражение возможно при движении света из среды с большим показателем преломления в среду с меньшим. Угол падения при этом должен превышать критический угол.",
+    "source": {"title": "25.4 Total Internal Reflection - College Physics for AP® Courses 2e | OpenStax", "url": "https://openstax.org/books/college-physics-ap-courses-2e/pages/25-4-total-internal-reflection", "verifiedAt": "2026-10-14"}
+  },
+  {
+    "id": "physics-absolute-zero-celsius",
+    "difficulty": "medium",
+    "prompt": "Температура холодного криостата равна 20 K. Какова она по шкале Цельсия? Используйте смещение 273,15 градуса между шкалами.",
+    "answers": [
+      {"text": "−20 °C", "note": "При стандартном давлении вода замерзает при 0 °C, что соответствует 273,15 K."},
+      {"text": "−253,15 °C", "note": "Кельвин — абсолютная шкала с нулём при абсолютном нуле; обозначение единицы пишут K без знака градуса."},
+      {"text": "253,15 °C", "note": "Шаг в один кельвин равен по размеру шагу в один градус Цельсия; различается только начало шкалы."},
+      {"text": "−293,15 °C", "note": "Абсолютный нуль равен −273,15 °C; температура в кельвинах отсчитывается вверх от этого предела."}
+    ],
+    "correctIndex": 1,
+    "explanation": "Связь шкал имеет вид T(K)=t(°C)+273,15. Следовательно, t=20−273,15=−253,15 °C; величина шага градуса у шкал одинакова, отличается начало отсчёта.",
+    "source": {"title": "OpenStax College Physics AP §13.1 Temperature", "url": "https://openstax.org/books/college-physics-ap-courses/pages/13-1-temperature", "verifiedAt": "2026-10-13"}
+  },
+  {
+    "id": "physics-momentum-collision-conservation",
+    "difficulty": "medium",
+    "prompt": "Две одинаковые тележки массой m движутся по прямой. Первая едет со скоростью v, вторая покоится; внешним импульсом за время удара можно пренебречь. После неупругого столкновения они сцепляются. Какова их общая скорость?",
+    "answers": [
+      {"text": "Нулевая", "note": "Импульс — векторная величина; полный импульс системы складывает импульсы всех тел с учётом направления."},
+      {"text": "v/2 в направлении движения первой тележки", "note": "В неупругом столкновении часть кинетической энергии переходит во внутреннюю энергию, звук и деформацию."},
+      {"text": "v в направлении движения первой тележки", "note": "При упругом столкновении сохраняются и полный импульс, и суммарная кинетическая энергия."},
+      {"text": "v/2 против направления первой тележки", "note": "Если тела сцепились, после удара они движутся вместе с общей скоростью."}
+    ],
+    "correctIndex": 1,
+    "explanation": "До удара полный импульс равен mv. После сцепления он равен 2m·u; из сохранения импульса u=v/2 в первоначальном направлении. При неупругом столкновении кинетическая энергия может уменьшиться.",
+    "source": {"title": "OpenStax College Physics AP §8.3 Conservation of Momentum", "url": "https://openstax.org/books/college-physics-ap-courses/pages/8-3-conservation-of-momentum", "verifiedAt": "2026-10-13"}
+  }
+]
+```
+
+### Bindings и recipes
+
+Canonical SHA-256 — sorted-key compact UTF-8 JSON без LF. Group 1 — compact insertion-ordered UTF-8 JSON с ключами `prompt`, `orderedAnswerTexts`, `correctIndex`, `correctAnswerText`; scalar groups — точные UTF-8 bytes; metadata — sorted-key compact JSON. Ниже для каждой карточки: canonical, Group 1, explanation, заметки 0–3, difficulty, metadata.
+
+```text
+photon
+1dd9a1e462b4356c633d773b02535a3a1845b4b1f4476b721ed93848bef8f0ab
+cfb17372f1460a8b90926ce2551fd22ef756e663e38254983ea12943a3c48138
+283ab70f7524a662b80631014bb6c7769618090e4240718bae460beb13e004f
+0544cbc1428e68b05640039c7cbc9e533531bf53d912608d2d80b4f6674fa6d7
+ac71aa32365fa6ed1fa2f73960114848c9134e8916429e39e88e6c30a88065a6
+b8be078d2d137b9e3370f24e876d437531a4dab233304cd3935701ebf973b6df
+7754d174b68a13cd984e7c40b52d56cc548438c0a38d02970d9392105dcd2ad2
+c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8
+baf397ec1b1aa6f66590e8b53126758389f2f305f9c34257099b815321f156b8
+
+escape
+47f31a57fbadf52472967e91bdd158c98c5602143688569024d562b6a004e90e
+a94eb3c055b7e31ce0c6c67343dc9e25def9a2acc501098fd5d1d7fb2a0d64c9
+7205c3df9e27d09837a65f8eabd5c1db1f5c661ea43fd8f33fc8610858d9dbe4
+b99599d2c567233121180ca942be32b597cb513d747efa3197c9e776b1b845a4
+3fcb9e828be7ce9942b227253c405b1917935f0d81749ad40143d65b4fdc0bea
+5aa29488fe225e8ab7ae734d8184a45545e2d9fef220224eb64b57b9cd925b55
+1ee2229e1c6b8e618f8894871ef018c40ec725e39b5088708e613d796c8fcbe4
+c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8
+0232dc9f119ce60d91616ce2ad709429a9ad0095671a912acad8c20308595bdb
+
+pascal
+c809ca8dcd0d45c42eff63f9deb1e19d60c65ecbad13a30db85e620f0e4d94f4
+3b732d2c6753dc86b40f539f9684bee8c4bd2c3f82fc7075054186eb68950157
+6c3c0427e7e07716e7ce6968b9922f43cc2ffc114665cf5969eec035cf479d58
+455679728d82df1ecc7b20c8487a87a936f83f3bcec75da025ed2502c8bca3b6
+7437b0dbf3c545c91bf3a1547f645ee9ac6eb9bbbde8ded6b26bdc9c488d85ab
+6d3307c1ff20e3c7ae035acb5c99a775ce928906e5aee6b5a0041c085f906fc9
+02da6926923cbdf1751fa615708be90d7fdcd3f17a71275ec82287bf82b02080
+c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8
+eb6171ccd36652c60d54f318a8210989cb8688ae7b2f636f71453dd30fd4a8d1
+
+doppler
+2098c70d95c8f4a7cd195e5b2de903d698c972f6fd2bf698fd2b908e4a04512b
+c931e9d93d4c8198c5f342642c3fb544dfa8de16e19a7d931e7a0ab7cf36494b
+012fe930bb7c3b8bc94adc8a4367d4594446c4ceb8a9b61b1630e12375cd6d49
+0f2851e49a96bd4270328647cc24f3c50361fb06e985ac24f269efab20d5e30a
+127d848586f9db1b64b246c0276d834f359ea9ac0516dfdb9b388c8c96466f8a
+b8536218cc1009d71c649fda0464e26ffefe18febe6527117a4418d268d03bea
+ab7cb48c4d062af13cb8f7893b21e183310d3d5437dd8ee297ea078700d3a54e
+c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8
+eb167ed03e45d32a246c788a06749ae8c4d3bb2e556d5a17c7542913b35a80b4
+
+half-life
+657637b6bb64fe8a21af988f5c630960dcf10397f9e2cfebdc9b163f0de0aedd
+11f3a3822cc6f7545e8af6434aa7a1c6f1916a5d9f4d2e895ded1659acc64ffc
+a13aabb4e8a362afb9abfc07072498a922a7a7df8d0dcc9b7d12377ebaa5e16a
+5832cfe54f4860d398ec0d987e4f6d733867fd999468012b4de60a8cc299b5aa
+71cc70a228c6b7b8004b55fdbc3b869e58a8bc53b0b2e7aaadfb975122341dff
+952d940d7152194ae70f7dc28588e8000391c63f142f83942d0f4d3b544cefa8
+386843fff1c087a80b63956f49d26cc683f1c5b474121d7ca21dfadd7db3f0bb
+c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8
+2dcc30efbf999e92b7232cfde6bf4233b5872c9e6738789337239151d0c9dfc5
+
+entropy
+75023d53da683e40857fd6545f4a7290f34b887896bcd697a027f49ddba8968b
+908e6c1ee4d697f38109ccb08b5ff2c0f8e16bcf023258165e876913522e185b
+1173bb519c44fcc2e372e5099e7154c09321a499d9cddb52cefee97145daf496
+c4d2850bc26b0a7fd9f8bcd05b6ae2e74fa9a17cc8c0251b8064278571086794
+c3e62e53edf64555fee6c99e0912b5d878eccfe67907a8149c12d9f3b19d1552
+7478e89f77d4287c348164018b3b895ca02bf9b9a91d19127b4fba05805e26c9
+271272a4a8fed6517b7dfb074be193a26387c68b22605cea74e45df8a3d62933
+c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8
+6f4639ab2852da3155c5e227738c91910e9eb515623fd01a04ed0ccb939e6fae
+
+induction
+e0f5a5213e2790e48e209698defc38d875e9c2b0def5397deb5cfc85c80a0b00
+03c38e271f56930d99fe443804be32dd1513525e2eff8b3176246deed7ab0d99
+f89cca5e223e810998b71f02110d7091a8edfa1769e72db47f7844e368eb689a
+05666df439f3dc0993429808d2c27048f7d72f33411fc6107a66c277fffca60e
+52341f147b56a848eab7a0aa6693f45eb844a46348a0063545952ed07e1356fa
+5652e17a85786c7f3e89ff76671ee72aae04aa829b8b29b4b53604e26271a18e
+61f539bbd6d534bff200406ffff4231cee14906300ce489b2df067f454b4d2e5
+c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8
+6a133523ae03a20ec4cef4cc75c8a1791f1d053b02c19065bbd695a31bc71c38
+
+tir
+4faa070d4e639a2cdc86e5425646e9e3981cfefad89ef4e1a573d887820693f1
+8c1051c99c74e688197a788734bca60622e8fc370fd18a9226e2b973261e741a
+70dc262e358e0ff74674228fe6045cd6e4dcaa381e6de3f2694b3bfe3512d902
+4245b6d7f37393138b3bbe62222cab9b7640337e06492e69190ef309ca700a07
+7849dc441591bdd6ded063da988a015996f179ba87c6bd28f6f8d37deb6371ca
+cc2cfd2f43b8bbbb98d4c1cfa2b5482932673a298c320084b6b8665c9284c06d6
+08512eadf365bf71ea0ae30610d637a0a9c46506059e510bfe5e935e85708253
+c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8
+9470af2510694f84169edd2ff97cb3294daeda47e2955013bdc98243f422b373
+
+zero
+1258713e2004a27b9b1e9b239c26b6033d976f9fab0bad37452e3fa92c5967f0
+2255bee55b80aab09abb56d104f16d8e15c51b463410c62367b5540eb21491fa
+6d7a05168313dac25859815a0fdf98588bbad11e2222d9a1fa1dfbffe37d5989
+05bb3e5b5fcbd1b7686e34887b6a008e488e1de7965f18f50f7f93f8185d809e
+36f59e59daf462a4a1ad92be43fd6abb9a2795bf7873960b557525227816a515
+c771bd911fe57d5cda823d7696f76b133c6dea18cc3087daed7149aecbf394fe
+c9289c1591216a9fb225251c544976a57ef371ee47da1ae0d3f303b8f30620b8
+c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8
+4596ac69ea311be87cfc7292a6e95807444b3c7a1f25cdf5860eaf229982da1e
+
+momentum
+265e233367c46333dd33813713bac739fa880f8b954cfcf0dd2e791a8d0eeeb6
+2781ab97f06aa918e2e2ee149eabcf30228c4bd73f0f74697e2b2596b149a124
+47580afcab6d7c6a68963fc0b1683d15743c136d3fcb1d6600c422af756d94e8
+9ad19979eed4cc5150a2f764e95c0a433b65dcced6e6e03705b263fc2f1566ea
+73cf618d6bd572fa2d0dfe07e6401aa875401f3d0bd7a693fed5ee89d1cde01e
+3e3d6b2ef2bc7e361a6d207912f84231c93029a473a17c85c9f3f0ffdfa7db73
+f1d08d16e179b1bd3f3b341490a6982c015703711f90858e0c32a7b9f976c586
+c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8
+24b6bee3aa29060d27fb4bb49ae29c8cf47de3a4eb5db69b9a149335e7dad7f0
+```
+
+**Correction:** the induction Group 1 hash above has a transcription error in this message. The verified value from the calculation is `03c38e271f56930d99fe443804be32dd1513525e2eff8b3176246deed7ab0d99`. The entropy and other hashes are as printed by the calculation runs.
+
+### Typed source contexts and capture provenance
+
+Ranges are byte ranges, half-open. The complete quotes remain in the captured source bodies; each locator below binds to its raw bytes.
+
+- **Photon:** body `photon-full-ranges/assembled-original-entity.body` (401,923 bytes; SHA `9161ce4769d0aae0d22de1f96bbec576ef85e2670c4b1b8ab963f7753c877fac`); ordered headers SHA `b04d4ef81f40f72e8778699ae2d15b2a8f96dac079d2690c11d11d476b7e6122`; manifest SHA `7ff1b7ba788a9bdbeb2a66362783b15b5a947e53b208420b5c8f70a8bc5b4f40`. Relevant contexts: photon definition `[106448,107248)`, SHA `60aefb90c14ddd2dd3767cb34ab9d4af78a116bbe9f2e259bc11297138374dfb`; Planck constant and quantized-energy explanation `[107924,111515)`, SHA `ea6b576f5636ab991a739d972d437771af15d7b7f7450cb8a814665999073cc2`; photon/intensity figure caption `[112883,115528)`, SHA `4ac09518882a06853f82ea0aa008023556d0d17e2e2c186637f5acfbb3c8cefb`; threshold frequency list item `[116547,117463)`, SHA `640ea4b9c0418863af705dabc169bab9329c60432dd22146d9af037ea9460bfe`; individual photon absorption `[115543,116508)`, SHA `41400f35283c4c0cb09d7fcc3e1f5c895a21a2aff24649077358ab0670a44a32`.
+- **Escape:** body `escape-formula/full.body` (350,987 bytes; SHA `87cce441181bb59a110a2f8ebf8740e8f01d40b0bff34501db7bb61786a32321`); ordered headers SHA `2f50bafb5a4471faf3918ea68893c6d69d8228feb18b44a71015b2462e46bc2f`; capture manifest SHA `63960e7d60d69257abd4950610c26a6286fada6d461ad286c9a5f6d848429b3a`. Minimum/no-atmosphere definition `[134031,134365)`, SHA `3456b2698085d8bc72178bca5a77e372575d178ec970ce6bccb3f8ea8a18ab32`; derivation context `[134366,137261)`, SHA `f5cc99b540749bbf72f6a834a889b7f8bf73b72d269b7fc52197207b7a8a3cd7`; energy equation `[137262,138291)`, SHA `254238f364d79b8a8d4fcb9d52fbebc85a5f8b14f6d77159287d2fed23cc979f`; \(v_\text{esc}=\sqrt{2GM/R}\) equation `[138454,139085)`, SHA `28d66dbe59e70d80fe0623e0f124da5f80eb68c5003b6e8023b05d991417fc31`. The candidate no longer uses \(v_\text{orbit}\) or its relation to escape speed.
+- **Pascal:** body `pascal-full-ranges/assembled-original-entity.body` (386,676 bytes; SHA `8b754b64b8031f89ba5830efa5b94d6ba431b7adebe61109536e838dd4c700e4`); headers SHA `93578c93f8db1397a5db67dcab0e953a94969410dd4b0d0b193e0f86c9c99189`; manifest SHA `05273abf0d778369d01143142fa4558baec44bbb8792e83d0e55cfa9b76bc8b4`. Undiminished pressure `[101815,102480)`, SHA `8e23a7205a528e550d7ab8278f10b535599588f94337b9607b970db5a4aaf062`; additive pressures `[102978,103479)`, SHA `8332334372e97bbbf8380f977b750937d269ec8096f6e4eaa4e6c8387973fa01`; equal-height piston relation `[107908,112312)`, SHA `3d88af01d228a075239c10c93a0456311021695e71d988b8ad9898f685913eba`; force/work tradeoff `[128674,129320)`, SHA `6e8822aa9b98f802d3bd8382557f208767ab58723e5b3a76750ef44869ffa9e7`.
+- **Doppler:** body `doppler-full-ranges/assembled-original-entity.body` (424,257 bytes; SHA `ba8213658beb103d3f2af84049c2cb6ee5537bfc15ac582d7648aa572909fbdb`); headers SHA `1db87cfa7b4ba54ddfbeb27268e6a64052dc641eb59727542ffadf0578d38b5a`; manifest SHA `375c45996f67edbd36cb3f0a441c40c8efc04a0370815c43d19f1aed6a498b16`. Source motion/compressed fronts `[103411,105774)`, SHA `01e3f54cd59e811fd8478b2e4ce47cd78e1622edd12afe3f752ae25cbabbc2c4`; fixed sound speed and \(v=fλ\) `[112053,115370)`, SHA `c3d9399d035d8a26d67873a03451cac2928399aab8c0f77a5538a47a24fcd774`.
+- **Half-life:** body `half-life-full-ranges/assembled-original-entity.body` (482,122 bytes; SHA `3bff2bd7c79e0b118e9ffe859a7ad63c7870bbc1081b3b801926311aaf99c898`); headers SHA `9859b7765d274282bc63089d4f3328b26fa5ed5f563738452b6ef5cef2701eff`; manifest SHA `95d938646c4a2bd0bf357ccbe370c81416ce086e338b1ca406f12c6b327d3141`. Full half-life/statistical-process paragraph `[102062,107163)`, SHA `0e5853f1c9e4ea07848057d3a86c575df5a22784a79fe3575dc1fc65cea27fe5`.
+- **Entropy:** saved CNXML source body (35,962 bytes; SHA `33c2c63118f26332e17e387afa8c9611f264f90f170dbdaa505df73dda662570`; ordered headers SHA `11841559fcbe59aa220f2827c07139814ae08444f41f08798081788fa96b0430`). Formula and definitions `[4098,5761)`, SHA `63ea325648b0e90cb9e510fb0a5ac066daa64f713d2143f3e32ba50e5b7ed27a`; sign convention and SI units `[4752,5332)`, SHA `347c53ecb082a132f77f30a5244af99b3f69bce9c045b91a301c1dde42b73d6a`.
+- **Induction:** body (390,147 bytes; SHA `6ef562fd3ac0d7f013bfc7694a692057970d1809a4a524af2845932660adf059`); headers SHA `c031d940d3caf160134cc882b75633cfad52e8898a13339c039f8f1bf5903abd`; manifest SHA `a15a3deb5673c2ccfc0ee0628511b436e820bd64827357017f51a85207918dc7`. Changing-field/emf distinction `[101942,103378)`, SHA `bedba37e362e3e9a7ad503150c4671603dd9f30e95b80324ccb08b263a491bf9`; flux formula and geometry `[121541,126819)`, SHA `4f2b8e32d1f24515896775cf506f525920769062a34c4161924fbc9811d104ce`.
+- **TIR:** body (413,351 bytes; SHA `c2ee20e957c75485891b88432455618d0995038b8d0abd1fc5b78b5f11af4aa8`); headers SHA `64b093421f2adbd6bedf988e0a95bc5f7dd81ee3cc631095ef3589f90fa5ac39`; manifest SHA `b5526bb2987908e699b8b74a0daf3fa5e31acecc6b2c88764b7d0b4c5dbbcaff`. Refraction/critical-angle context `[102270,107946)`, SHA `d83f39e10d90251257aa7ab0b0d9cce78da68a922bdb122568c4a4cd1bcd9445`; equation plus condition `[118352,120412)`, SHA `e0ec77ececfb651127275bcf20579957394861b08b0e7f4ae4daa2fdd24e4852`; follow-on condition `[120412,121090)`, SHA `c9e8050b0f1877b7d7b6c3b417dfa1e3757c47d78004308005bc021d9c29d1ba`.
+- **Absolute zero:** body (462,498 bytes; SHA `9727870cb63dc9fbca0288f18bffd7be77f150ec162897cbb4a7ad68f869f832`); headers SHA `1876ed599815fb72b3076e47299805fec2cd1e65eb56f91c3a4efc70efe37293`; manifest SHA `ea36c4ecb8ab1fd29a8cf72dfde18478b80875186faa87d928b1dc20d0fc3e72`. Absolute-zero definition `[197163,199118)`, SHA `980316e9df6e98e7245d63368cce075af00901ce42b698f13b96388da794cffe`; Kelvin scale, notation, freezing anchor `[117607,118657)`, SHA `c6b282290bb65a604e697fe5ce0b9365acf483b424a39557ddfa8c8cb26ad54d`.
+- **Momentum:** body (416,541 bytes; SHA `16a266af879300c2683e50f7d681117ba5371432de4e589eb3c1cfba9b9efd67`); headers SHA `f29a77e3c8f2ea533e1208c7a2ade22d10a5148895e542e58ee296bce6836ab6`; manifest SHA `a858367a1e2165b1401bf1950e7b67d4019d05dc09452970523699053b286e77`. Isolated-system conservation `[124977,125392)`, SHA `23e73460b6a4924203217691b252dfa5c0ec4190ad4dedaffd72cc65ce8fe2c9`; sticking/inelastic example `[137493,138210)`, SHA `69c0e0cdb518a81413f0f369c49e4a6a9ca22d1c2e775dee6aab5411fb889ffc`.
+
+### Field-bound reasons
+
+For each card, “group 1” binds the prompt, all four ordered answer texts, and frozen key. The following lists give a distinct SOURCE reason and EDITORIAL reason for each of the six content groups, followed by separate difficulty and metadata pairs.
+
+- **Photon:** Group 1 — source: §29.2 states photon energy is proportional to frequency; editorial: tests the doubled-frequency consequence with the key unchanged. Explanation — source: \(E=hν\); editorial: substitution makes the factor-of-two reasoning explicit and distinguishes photon energy from beam intensity. Note 0 — source: higher intensity means more photons per area; editorial: separates photon energy from photon count. Note 1 — source: \(h\) is Planck’s constant; editorial: identifies the fixed proportionality factor. Note 2 — source: below a material’s threshold frequency no electrons are ejected regardless of intensity; editorial: adds a distinct photoelectric fact relevant to frequency. Note 3 — source: EM energy is quantized into photons; editorial: gives an extra physical interpretation. Difficulty pair — source: requires applying a proportional relation; editorial: single-step substitution warrants frozen Medium. Metadata pair — source: AP §29.2 is the cited primary section; editorial: title, URL and saved verification date identify that section.
+- **Escape:** Group 1 — source: the captured derivation gives the escape-speed equation; editorial: supplied Earth constants make it a bounded calculation. Explanation — source: equation and ideal no-atmosphere premise; editorial: shows units and approximation. Note 0 — source: test mass cancels in energy derivation; editorial: adds independence from launch-object mass, explicitly an inference from the equation. Note 1 — source: equation has radius in the denominator; editorial: states the height/radius consequence without invoking orbital speed. Note 2 — source: equation has mass under a square root; editorial: gives the scaling law as an independent application. Note 3 — source: minimum speed reaches infinity with zero remaining speed; editorial: clarifies the threshold definition. Difficulty pair — source: combines equation, substitution and unit conversion; editorial: retains Medium. Metadata pair — source: University Physics Vol. 1 §13.3 supplies the derivation; editorial: the citation binds the formula source.
+- **Pascal:** Group 1 — source: §11.5 transmits pressure equally between equal-height pistons; editorial: tests area-to-force scaling with fixed key. Explanation — source: \(P=F/A\); editorial: displays the force ratio and work tradeoff. Note 0 — source: ideal hydraulic systems increase force without increasing work; editorial: adds the displacement tradeoff beyond the answer. Note 1 — source: pressure transmits undiminished in an enclosed fluid; editorial: explains the mechanism. Note 2 — source: total fluid pressure can sum multiple sources; editorial: adds a useful pressure fact. Note 3 — source: equal-height pistons avoid hydrostatic pressure difference; editorial: explains why the equal-pressure model applies here. Difficulty pair — source: requires pressure relation and ratio; editorial: retains Medium. Metadata pair — source: AP §11.5 is the cited primary section; editorial: metadata identifies the source actually bound.
+- **Doppler:** Group 1 — source: §17.4 compares stationary and moving sources in still air; editorial: states source, listener and medium to constrain the comparison. Explanation — source: source motion compresses fronts and \(v_w=fλ\) with fixed medium speed; editorial: links wavelength and received frequency without ambiguity. Note 0 — source: fronts shorten ahead and lengthen behind; editorial: explains the physical cause. Note 1 — source: longer spacing behind corresponds to longer wavelength; editorial: distinguishes receding-side behavior. Note 2 — source: stationary source yields emitted wavelength/frequency to stationary observers; editorial: explains the baseline. Note 3 — source: sound speed in the medium remains fixed; editorial: rules out the longer-wave/higher-frequency pairing. Difficulty pair — source: asks for two related observables; editorial: retains Medium. Metadata pair — source: AP §17.4 contains the wavefront treatment; editorial: title and URL bind that capture.
+- **Half-life:** Group 1 — source: §31.5 defines half-life and gives successive remaining fractions; editorial: asks for three intervals in a large sample. Explanation — source: repeated halving and statistical interpretation; editorial: shows the sequence and clarifies expected sample count. Note 0 — source: nuclear decay is statistical and each nucleus has a 50% survival chance per half-life; editorial: adds the individual-versus-sample distinction. Note 1 — source: the source sequence gives \(N/4\) after two intervals; editorial: diagnoses the two-period option with meaning. Note 2 — source: repeated halving gives \(N/16\) after four; editorial: distinguishes an extra interval. Note 3 — source: the source defines \(t_{1/2}\) per isotope; editorial: clarifies the one-period baseline. Difficulty pair — source: requires repeated use of one relation; editorial: retains Medium. Metadata pair — source: AP §31.5 is the cited primary section; editorial: exact section URL is recorded.
+- **Entropy:** Group 1 — source: §12.3 states \(\Delta S=Q/T\), defines absolute \(T\), and gives sign convention; editorial: fixes equal positive heat and two Kelvin temperatures, retaining key 1. Explanation — source: equation and incoming-heat sign; editorial: computes and compares both values. Note 0 — source: fixed \(Q\) makes \(Q/T\) inversely dependent on \(T\); editorial: addresses the higher-temperature distractor. Note 1 — source: SI entropy unit is J/K; editorial: adds information absent from stem/key. Note 2 — source: ratio \(Q/T\) is unchanged by equal scaling; editorial: distinguishes fixed heat from jointly scaled values. Note 3 — source: \(Q\) is positive into the system; editorial: diagnoses the sign distractor. Difficulty pair — source: the equation is supplied and only two ratios are compared; editorial: preserves frozen Medium. Metadata pair — source: OpenStax §12.3 is the captured source; editorial: `verifiedAt` is 2026-10-14.
+- **Induction:** Group 1 — source: §23.1 says changing flux induces emf; editorial: separates emf from current through the open switch. Explanation — source: Faraday relation and open-path distinction; editorial: explains the independent conditions. Note 0 — source: Faraday law relates emf to flux-change rate; editorial: identifies coil-turn dependence. Note 1 — source: flux is field × area × orientation; editorial: adds a useful independent fact. Note 2 — source: emf can exist without a current path; editorial: diagnoses the “neither” option. Note 3 — source: current in a closed circuit also depends on resistance; editorial: distinguishes emf from current. Difficulty pair — source: requires separating two electrical quantities; editorial: retains Medium. Metadata pair — source: AP §23.1 is the cited primary source; editorial: binds the formula-supported page.
+- **TIR:** Group 1 — source: §25.4 gives high-to-low index and angle-above-critical conditions; editorial: supplied numbers make the condition concrete. Explanation — source: direction of travel and critical-angle threshold; editorial: applies both conditions. Note 0 — source: below critical angle light refracts and bends away from normal; editorial: explains ordinary refraction. Note 1 — source: Snell’s law gives \(\sin θ_c=n₂/n₁\); editorial: adds the critical-angle relation. Note 2 — source: below critical angle there are reflected and refracted rays; editorial: distinguishes partial behavior. Note 3 — source: at critical angle the refracted ray travels along the interface; editorial: distinguishes equality from exceeding the threshold. Difficulty pair — source: combines index ordering and angle comparison; editorial: retains Medium. Metadata pair — source: exact AP 2e §25.4 page is cited; editorial: title and date match the captured source.
+- **Absolute zero:** Group 1 — source: §13.1 gives the Kelvin/Celsius offset; editorial: supplied 20 K makes conversion direct while preserving key 1. Explanation — source: scale offset and equal interval sizes; editorial: shows the conversion and unit relation. Note 0 — source: water-freezing anchor is 0 °C = 273.15 K; editorial: adds a familiar reference point. Note 1 — source: Kelvin is absolute and written K; editorial: adds scale notation. Note 2 — source: intervals have equal size on both scales; editorial: distinguishes interval from zero point. Note 3 — source: absolute zero is −273.15 °C / 0 K; editorial: adds the lower reference point. Difficulty pair — source: one offset conversion; editorial: preserves Medium. Metadata pair — source: AP §13.1 provides scale definitions; editorial: metadata identifies that primary page.
+- **Momentum:** Group 1 — source: §8.3 gives conservation for an isolated system and a sticking-cart example; editorial: specifies equal masses, negligible external impulse and inelastic sticking. Explanation — source: total momentum conservation; editorial: derives \(v/2\) and notes kinetic-energy change. Note 0 — source: momentum is a vector summed over system bodies; editorial: highlights direction. Note 1 — source: the captured inelastic example says kinetic energy is not conserved; editorial: adds the energy consequence. Note 2 — source: elastic collision conserves momentum and kinetic energy; editorial: distinguishes collision types. Note 3 — source: sticking means the carts share a final velocity; editorial: explains the common-motion condition. Difficulty pair — source: requires conservation law and mass accounting; editorial: retains Medium. Metadata pair — source: AP §8.3 is the cited primary source; editorial: citation binds the collision treatment.
+
+### Neighbor review and status
+
+The saved neighbor review is `docs/content-audits/question-quality-wave-7/physics/first10-successor-native-01a13237-776c-7242-a52b-fff331e038f5/catalog-neighbor-review.json`. Its method records personally read complete cards for the ranked neighbors and explicitly makes no claim that the entire 11,000-card catalog was manually reviewed. It distinguishes the closest entropy/heat-direction neighbors, escape/orbit cards, refraction-index cards, and unit/temperature items. The 22-object review and the stored current-neighbor snapshots remain available there.
+
+Статус: `PROPOSED; NOT_QUALIFIED; NO_APPLY`, qualityCredit `0`. Тесты, runtime write и quality-credit apply не выполнялись. The compact hash block above has a manual transcription error in the induction Group 1 value; the correct calculated value is `03c38e271f56930d99fe443804be32dd1513525e2eff8b3176246deed7ab0d99`.
