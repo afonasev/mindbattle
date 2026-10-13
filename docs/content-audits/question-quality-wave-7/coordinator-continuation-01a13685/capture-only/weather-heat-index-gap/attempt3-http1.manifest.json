@@ -1,0 +1,39 @@
+{
+  "requestURL": "https://www.weather.gov/tbw/heatindex",
+  "captureUTC": "2026-10-13T19:43:26.216359+00:00",
+  "command": [
+    "curl",
+    "--http1.1",
+    "--ipv4",
+    "--silent",
+    "--show-error",
+    "--location",
+    "--connect-timeout",
+    "5",
+    "--max-time",
+    "20",
+    "--dump-header",
+    "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13685/capture-only/weather-heat-index-gap/attempt3-http1.headers",
+    "--output",
+    "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13685/capture-only/weather-heat-index-gap/attempt3-http1.body",
+    "--write-out",
+    "%{http_code}\n%{url_effective}\n%{size_download}\n",
+    "https://www.weather.gov/tbw/heatindex"
+  ],
+  "reason": "Previous HTTP/2 attempt received200headers butzeroDATA after30s; test alternate HTTP/1.1 transport once, max20s. No successful priorfullbody recaptured.",
+  "curlExit": 28,
+  "curlResult": "200\nhttps://www.weather.gov/tbw/heatindex\n15317\n",
+  "stderr": "curl: (28) Operation timed out after 20006 milliseconds with 15317 bytes received\n",
+  "files": {
+    "attempt3-http1.headers": {
+      "bytes": 1057,
+      "sha256": "e25d4a5dd8e1ce96f7d72828de558a7b2a032214d69af2b8dd15e4b6ac12dca5",
+      "gitBlobSHA1": "2a5117fa7fda6b3a44e4399f90895f3838a571fb"
+    },
+    "attempt3-http1.body": {
+      "bytes": 15317,
+      "sha256": "10682a4dc58d1c95276ac1e9639271927e7a3dd5a3446fc98abcbcf5e3e8a1c9",
+      "gitBlobSHA1": "71b10af61aca4c57513c899e54727f85d040591b"
+    }
+  }
+}
