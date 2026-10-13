@@ -1,0 +1,200 @@
+**Дополнение к пакету по `weather-climate-barometer-pressure`**  
+Обе пропущенные группы теперь включены. Текущая карточка и её поля сверены в целевом worktree; файлов не менял.
+
+```json
+{
+  "canonicalRecipe": "SHA-256 от UTF-8 json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(',', ':')); без завершающего перевода строки",
+  "twoMissingGroups": [
+    {
+      "group": "difficulty",
+      "currentLiteral": "easy",
+      "canonicalSha256": "3ed870088e7410ee05d36e4fc20bf73104130ef98000b268b11378d0800d1703",
+      "editorialReason": "Зафиксированный scope оставляет эту позицию easy. Карточка проверяет одно прямое соответствие знакомого прибора его функции — без промежуточных вычислений или цепочки вывода. Это соответствует лёгкому уровню распознавания, при этом пользователь должен отличить функцию флюгера от функций соседних приборов.",
+      "scopeReference": "weather-climate-first10-successor-exact-scope.json; SHA-256 файла c7afad5c9ec23eeb75694d9cd82ad36acd24eb08db2ab39cccf2bc5122aa142b"
+    },
+    {
+      "group": "source metadata",
+      "currentLiteral": {
+        "title": "NOAA JetStream: Origin of Wind",
+        "url": "https://www.noaa.gov/jetstream/synoptic/origin-of-wind",
+        "verifiedAt": "2026-10-13"
+      },
+      "canonicalSha256": "91cecdb634ce48951920708f72928b2c33eee6efb6d572c7ca554b7d395e47c4",
+      "editorialReason": "Название и URL текущей карточки соответствуют странице NOAA, из полного захвата которой взяты сведения о функции wind vane и о том, что направление ветра называют по стороне его происхождения. Дата отражает проведённую проверку. URL карточки совпадает с URL в манифесте захвата.",
+      "captureManifest": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13294/capture-only/weather-origin-wind-full-range-manifest.json",
+      "captureManifestSha256": "f4b54e63b874f3431006fa80be06f34f1be493830402fd2eb90264b988da4656",
+      "manifestCorrespondence": {
+        "url": "https://www.noaa.gov/jetstream/synoptic/origin-of-wind",
+        "assembledBody": "weather-origin-wind-full-range-assembled.body",
+        "assembledBodyBytes": 120647,
+        "assembledBodySha256": "f2b563bc770505e59b8726990598c38335c094dc4a4a3f03e8674351f54565e1",
+        "httpStatus": 206,
+        "rangeCaptureCount": 15,
+        "etag": "\"1791886232\""
+      }
+    }
+  ],
+  "neighborBinding": {
+    "method": "Шесть полных текущих объектов карточек прочитаны в целевом worktree. Для каждой записи ниже literal — весь объект карточки, включая id, difficulty, prompt, упорядоченные ответы с notes, correctIndex, explanation и source. Projection literal совпадает с fullCurrentCard целиком; проекция не сокращена. Поэтому оба canonical-хеша одной записи совпадают.",
+    "cards": [
+      {
+        "id": "weather-climate-thermometer-temperature",
+        "file": "src/content/topics/weather-climate.json",
+        "fullCurrentCard": {
+          "id": "weather-climate-thermometer-temperature",
+          "difficulty": "easy",
+          "prompt": "Какой прибор на метеостанции защищают от прямого солнечного нагрева, чтобы его показания не искажались?",
+          "answers": [
+            {"text": "Барометр", "note": "Барометр измеряет атмосферное давление, а не степень нагрева воздуха."},
+            {"text": "Анемометр", "note": "Анемометр измеряет скорость ветра."},
+            {"text": "Осадкомер", "note": "Осадкомер собирает и измеряет количество выпавших осадков."},
+            {"text": "Термометр", "note": "На метеостанции термометр защищают от прямого солнца, осадков и конденсата, сохраняя вентиляцию воздуха."}
+          ],
+          "correctIndex": 3,
+          "explanation": "Термометр измеряет температуру воздуха. На метеостанции его размещают так, чтобы солнечное излучение не нагревало прибор напрямую.",
+          "source": {
+            "title": "NOAA National Weather Service Glossary: Thermometer",
+            "url": "https://forecast.weather.gov/glossary.php?word=THERMOMETER",
+            "verifiedAt": "2026-10-13"
+          }
+        },
+        "fullCurrentCardCanonicalSha256": "76722c4575400409809cffea041b267a274c416f7d3d3793b8ba775977aac6cd",
+        "projectionCanonicalSha256": "76722c4575400409809cffea041b267a274c416f7d3d3793b8ba775977aac6cd",
+        "comparison": "Соседняя карточка о станции, но она спрашивает о защите термометра и температуре, а не о направлении ветра."
+      },
+      {
+        "id": "weather-climate-anemometer-speed",
+        "file": "src/content/topics/weather-climate.json",
+        "fullCurrentCard": {
+          "id": "weather-climate-anemometer-speed",
+          "difficulty": "easy",
+          "prompt": "Каким прибором измеряют скорость ветра?",
+          "answers": [
+            {"text": "Анемометр", "note": "Анемометр измеряет скорость ветра."},
+            {"text": "Термометр", "note": "Термометр измеряет температуру воздуха или другого тела."},
+            {"text": "Барометр", "note": "Барометр измеряет атмосферное давление."},
+            {"text": "Осадкомер", "note": "Осадкомер собирает и измеряет количество выпавших жидких осадков."}
+          ],
+          "correctIndex": 0,
+          "explanation": "Анемометр измеряет скорость ветра. Чашечный прибор вращается тем быстрее, чем сильнее ветер.",
+          "source": {
+            "title": "Britannica: Анемометр",
+            "url": "https://www.britannica.com/technology/anemometer",
+            "verifiedAt": "2026-09-02"
+          }
+        },
+        "fullCurrentCardCanonicalSha256": "f9024dce586858daf301a291c3c9ad531169a234d40a0a416154ed21e0766ec4",
+        "projectionCanonicalSha256": "f9024dce586858daf301a291c3c9ad531169a234d40a0a416154ed21e0766ec4",
+        "comparison": "Смежная функция прибора: анемометр измеряет скорость, флюгер показывает направление. Это различимые, дополняющие друг друга измерения."
+      },
+      {
+        "id": "weather-climate-rain-gauge",
+        "file": "src/content/topics/weather-climate.json",
+        "fullCurrentCard": {
+          "id": "weather-climate-rain-gauge",
+          "difficulty": "easy",
+          "prompt": "Каким прибором измеряют количество дождя?",
+          "answers": [
+            {"text": "Осадкомер", "note": "Осадкомер собирает и измеряет количество выпавших жидких осадков."},
+            {"text": "Термометр", "note": "Термометр измеряет температуру воздуха или другого тела."},
+            {"text": "Барометр", "note": "Барометр измеряет атмосферное давление."},
+            {"text": "Анемометр", "note": "Анемометр измеряет скорость ветра."}
+          ],
+          "correctIndex": 0,
+          "explanation": "Осадкомер собирает и измеряет количество выпавших жидких осадков. Результат обычно выражают высотой слоя воды в миллиметрах.",
+          "source": {
+            "title": "Britannica: Осадкомер",
+            "url": "https://www.britannica.com/technology/rain-gauge",
+            "verifiedAt": "2026-09-02"
+          }
+        },
+        "fullCurrentCardCanonicalSha256": "13057b5b0fc8755b034dcc3abac792b7fdac534abcc4db6c2d3110d4a550a414",
+        "projectionCanonicalSha256": "13057b5b0fc8755b034dcc3abac792b7fdac534abcc4db6c2d3110d4a550a414",
+        "comparison": "Соседний метеорологический прибор, но факт в карточке — измерение количества дождя."
+      },
+      {
+        "id": "weather-climate-breeze-gentle",
+        "file": "src/content/topics/weather-climate.json",
+        "fullCurrentCard": {
+          "id": "weather-climate-breeze-gentle",
+          "difficulty": "easy",
+          "prompt": "Как называется слабый местный ветер между морем и сушей?",
+          "answers": [
+            {"text": "Ураган", "note": "Ураган — мощный тропический циклон Атлантики или восточной части Тихого океана."},
+            {"text": "Торнадо", "note": "Торнадо — быстро вращающийся столб воздуха, связанный с грозовым облаком и землёй."},
+            {"text": "Бриз", "note": "Бриз — местный ветер; морской бриз днём дует с воды на сушу."},
+            {"text": "Муссон", "note": "Муссон — сезонная система ветров, меняющая направление между летом и зимой."}
+          ],
+          "correctIndex": 2,
+          "explanation": "Бриз — местный ветер; морской бриз днём дует с воды на сушу. Направление меняется из-за разной скорости нагрева воды и земли.",
+          "source": {
+            "title": "Britannica: Бриз",
+            "url": "https://www.britannica.com/science/breeze",
+            "verifiedAt": "2026-09-02"
+          }
+        },
+        "fullCurrentCardCanonicalSha256": "8d5a3117ad20c2c631b2c34004646f98fea7bb1bda136ac3dce156355eabf822",
+        "projectionCanonicalSha256": "8d5a3117ad20c2c631b2c34004646f98fea7bb1bda136ac3dce156355eabf822",
+        "comparison": "Карточка называет слабый местный ветер; она не спрашивает прибор или направление его происхождения."
+      },
+      {
+        "id": "weather-climate-pressure-air-weight",
+        "file": "src/content/topics/weather-climate.json",
+        "fullCurrentCard": {
+          "id": "weather-climate-pressure-air-weight",
+          "difficulty": "easy",
+          "prompt": "Как называется сила, с которой воздух давит на единицу площади?",
+          "answers": [
+            {"text": "Влажность", "note": "Влажность характеризует содержание водяного пара в воздухе."},
+            {"text": "Атмосферное давление", "note": "Атмосферное давление создаётся весом столба воздуха над поверхностью."},
+            {"text": "Температура воздуха", "note": "Температура воздуха показывает степень его нагретости."},
+            {"text": "Видимость", "note": "Метеорологическая видимость — наибольшее расстояние уверенного распознавания объектов."}
+          ],
+          "correctIndex": 1,
+          "explanation": "Атмосферное давление создаётся весом столба воздуха над поверхностью. С высотой оно обычно уменьшается.",
+          "source": {
+            "title": "Britannica: Атмосферное давление",
+            "url": "https://www.britannica.com/science/atmospheric-pressure",
+            "verifiedAt": "2026-09-02"
+          }
+        },
+        "fullCurrentCardCanonicalSha256": "ffe459f7a0dcdd72ede2a6a15ee9b68243e69678ab35eaaa6fc9b05cc426e544",
+        "projectionCanonicalSha256": "ffe459f7a0dcdd72ede2a6a15ee9b68243e69678ab35eaaa6fc9b05cc426e544",
+        "comparison": "Объясняет понятие атмосферного давления, но не выбор прибора для направления ветра."
+      },
+      {
+        "id": "energy-power-yaw-turns-nacelle",
+        "file": "src/content/topics/energy-power.json",
+        "fullCurrentCard": {
+          "id": "energy-power-yaw-turns-nacelle",
+          "difficulty": "medium",
+          "prompt": "Какой механизм ориентирует турбину по изменившемуся направлению ветра?",
+          "answers": [
+            {"text": "Ротор", "note": "Ротор ветротурбины включает ступицу и лопасти, забирающие энергию потока."},
+            {"text": "Гондола", "note": "Гондола на вершине башни содержит вал, генератор и другое оборудование."},
+            {"text": "Система рыскания", "note": "Система рыскания поворачивает гондолу горизонтально, направляя ротор навстречу ветру."},
+            {"text": "Башня", "note": "Башня поднимает ротор в более сильный и ровный воздушный поток."}
+          ],
+          "correctIndex": 2,
+          "explanation": "Система рыскания поворачивает гондолу горизонтально, направляя ротор навстречу ветру. Датчик направления подаёт сигнал приводам.",
+          "source": {
+            "title": "U.S. Department of Energy",
+            "url": "https://www.energy.gov/cmei/systems/explore-wind-turbine-text-version",
+            "verifiedAt": "2026-09-02"
+          }
+        },
+        "fullCurrentCardCanonicalSha256": "6af2b7f8d85d2a8528a250a6aeda01d2bfd0a10ebebe8e01fba757fa4410eae6",
+        "projectionCanonicalSha256": "6af2b7f8d85d2a8528a250a6aeda01d2bfd0a10ebebe8e01fba757fa4410eae6",
+        "comparison": "Семантически близка по упоминанию направления ветра, но описывает механизм, который поворачивает гондолу, а не прибор, который указывает направление."
+      }
+    ]
+  },
+  "independentReview": {
+    "status": "not yet dispatched",
+    "qualityCredit": "none",
+    "nextStep": "После добавления этих двух групп координатор может передать текущую карточку независимому читателю."
+  }
+}
+```
+
+Хеши соседей рассчитаны по полным объектам карточек; в этом наборе указанная проекция включает те же поля и литералы, поэтому её хеш совпадает с хешем полного объекта. Независимый вердикт ещё не получен.
