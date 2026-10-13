@@ -1,0 +1,409 @@
+{
+  "status": "author_complete_pending_independent_review",
+  "qualityCredit": "none",
+  "independentReaderVerdict": "pending",
+  "scope": {
+    "selectedIds": [
+      "weather-climate-rain-liquid",
+      "weather-climate-snow-crystals",
+      "weather-climate-hail-ice-balls",
+      "weather-climate-sleet-mix",
+      "weather-climate-fog-ground-cloud",
+      "weather-climate-dew-condensation",
+      "weather-climate-frost-ice",
+      "weather-climate-cloud-droplets",
+      "weather-climate-thermometer-temperature"
+    ],
+    "frozenExcludedCard": {
+      "id": "weather-climate-barometer-pressure",
+      "content": "wind vane",
+      "sha256": "6d6ab1fbacb53b3b90a95c8c889383bf3e17a968d21c831633a87e9aed171970"
+    },
+    "selectedOrderMatchesScope": true,
+    "difficultyDistribution": {"easy": 40, "medium": 40, "hard": 20}
+  },
+  "hashRecipe": "SHA-256 over UTF-8 bytes of json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(',', ':')); no trailing newline.",
+  "rainAdjudication": {
+    "id": "weather-climate-rain-liquid",
+    "currentCardSha256": "665b125caaf703bd62c34234d65f7b44ee1f8f2408b6769f27cdb2413f6bd834",
+    "judgment": "supported among the actual four choices",
+    "reason": "The prompt describes liquid drops without snowflakes or ice. Of the offered options, only rain matches. Drizzle is not an offered choice and therefore does not create a competing key. The rain-drop threshold is useful added information in the key note.",
+    "changeMade": false
+  },
+  "cards": [
+    {
+      "literal": {
+        "id": "weather-climate-snow-crystals",
+        "difficulty": "easy",
+        "prompt": "Какие осадки выпадают в виде разветвлённых ледяных кристаллов, часто соединённых в снежинки?",
+        "answers": [
+          {"text": "Снег", "note": "Снег образуется непосредственно из водяного пара; отдельные кристаллы имеют разветвлённую форму."},
+          {"text": "Дождь", "note": "По определениям NWS, дождевые капли имеют диаметр более 0,5 мм, а капли мороси — менее 0,5 мм."},
+          {"text": "Град", "note": "Градины обычно представляют собой ледяные шарики или неправильные кусочки льда."},
+          {"text": "Мокрый снег", "note": "Мокрый снег — снег и дождь одновременно, причём преобладает снег."}
+        ],
+        "correctIndex": 0,
+        "explanation": "Снег состоит из ледяных кристаллов, которые часто срастаются в снежинки. Их форма зависит от условий роста в облаке.",
+        "source": {"title": "NOAA National Weather Service Glossary: Snow", "url": "https://forecast.weather.gov/glossary.php?word=SNOW", "verifiedAt": "2026-10-13"}
+      },
+      "hashes": {
+        "wholeCard": "d04ce9ec980b9f7537eaccb63aa5db600bfef3e32043566496aaaca94ff4e9ee",
+        "compositePromptOrderedAnswerTextsAndKey": "2f33fa46f112bfa918b97cfe0374e1a8047cefb558c2d33a88177f79b71defbf",
+        "explanation": "8529c59d6ad892e0e0da68dd95edeca86f46fd2ad95298139fdf162ac00803f0",
+        "orderedNotes": [
+          "1b46b4985f038349dc169b9b0215063b026abba48e5e5071443f589672d1074a",
+          "f492e27205917acd87f1b1c028192a20f9406c7f09ff7b9a90ca5e525e7f19b1",
+          "3ebc47162e7434db1a2f4e1f187bd2e50ed3698cf676a847d2d09b81b0a9383f",
+          "72f966328e74969d81ded8127ae939f8eb15573b547b23f3b7569bd3eb06a3a0"
+        ],
+        "difficulty": "3ed870088e7410ee05d36e4fc20bf73104130ef98000b268b11378d0800d1703",
+        "sourceMetadata": "41a4a524449535462df3124c95e8b3a9b4ca0bb58cda12d84798fea933eb35af"
+      },
+      "sixGroups": [
+        {"group": "prompt + ordered answers + key", "reason": "Branched ice crystals and snowflakes identify snow among the four precipitation choices.", "sources": ["snow", "hail", "russian-wet-snow-definition"]},
+        {"group": "explanation", "reason": "The sources support snow’s ice crystals, branching, aggregation into snowflakes, and variation with cloud growth conditions.", "sources": ["snow", "snow-crystal-growth"]},
+        {"group": "note 0, keyed Snow", "reason": "Adds the useful facts that snow crystals form directly from vapor and branch during growth.", "sources": ["snow", "snow-crystal-growth"]},
+        {"group": "note 1, Rain", "reason": "Gives both NWS size cutoffs, distinguishing rain drops from drizzle drops.", "sources": ["rain", "drizzle-size-threshold"]},
+        {"group": "note 2, Hail", "reason": "Ice balls or irregular ice lumps distinguish hail from snowflakes made of crystals.", "sources": ["hail"]},
+        {"group": "note 3, Wet snow", "reason": "Matches the Russian terminology for simultaneous rain and snow with snow predominating.", "sources": ["russian-wet-snow-definition"]}
+      ],
+      "difficultyDecision": {"value": "easy", "reason": "Snow, snowflakes, and ice crystals are familiar facts; this is direct identification without calculation or rare terminology.", "spec": "GAME_SPEC.md:138-144"},
+      "sourceMetadataDecision": {"literal": {"title": "NOAA National Weather Service Glossary: Snow", "url": "https://forecast.weather.gov/glossary.php?word=SNOW", "verifiedAt": "2026-10-13"}, "reason": "The captured NWS Snow page supports the key concept. Other cited captures support growth details and distractor facts."}
+    },
+    {
+      "literal": {
+        "id": "weather-climate-hail-ice-balls",
+        "difficulty": "easy",
+        "prompt": "После грозы на земле нашли твёрдые ледяные шарики и комочки. Как называются такие осадки?",
+        "answers": [
+          {"text": "Град", "note": "NWS определяет град как ледяные шарики или комки диаметром более 5 мм."},
+          {"text": "Дождь", "note": "Дождь достигает земли каплями воды диаметром больше 0,5 мм."},
+          {"text": "Снег", "note": "Снежинки состоят из ледяных кристаллов, а не из сплошных ледяных комков."},
+          {"text": "Мокрый снег", "note": "Мокрый снег — снег и дождь одновременно, причём преобладает снег."}
+        ],
+        "correctIndex": 0,
+        "explanation": "Град — твёрдые ледяные частицы, выпадающие из кучево-дождевого облака. NWS определяет град как ледяные частицы диаметром более 5 мм.",
+        "source": {"title": "NOAA National Weather Service Glossary: Hail", "url": "https://forecast.weather.gov/glossary.php?word=HAIL", "verifiedAt": "2026-10-13"}
+      },
+      "hashes": {
+        "wholeCard": "7fd98ec0d15e716d252b1ecffb91c6c59ebd1ff471ac0abbd0f27ca57de1ee9b",
+        "compositePromptOrderedAnswerTextsAndKey": "4f4e447610a1a3afa4853e61d39ad2f4456b390014204f32e9bf0ae1181dc9d4",
+        "explanation": "66e8c901eb9dea8df98a2e2c052346d2b1cd46ffbf77fd7ace3733d3905a14f7",
+        "orderedNotes": [
+          "73e45a126c00bab6c6b133154b4dc3c01882ff841669b7dd948c40ae29284c10",
+          "0fc0ab98b7da46ecf1ed766e91e1b1eb25d075c80b327b3bde95f8d9628ea120",
+          "53eb3b5e495f89c69f40bec17cf334337c07ef5331316c784de5d5def849221b",
+          "72f966328e74969d81ded8127ae939f8eb15573b547b23f3b7569bd3eb06a3a0"
+        ],
+        "difficulty": "3ed870088e7410ee05d36e4fc20bf73104130ef98000b268b11378d0800d1703",
+        "sourceMetadata": "5a943db9e6823b2adec39540cccc6330e15f091b9d006f3118e970f71844dcd4"
+      },
+      "sixGroups": [
+        {"group": "prompt + ordered answers + key", "reason": "Hard ice balls after a thunderstorm identify hail; the other options are liquid rain, ice-crystal snow, and mixed precipitation.", "sources": ["hail", "snow", "russian-wet-snow-definition"]},
+        {"group": "explanation", "reason": "Accurately names hail as solid precipitation from cumulonimbus and gives the NWS size threshold.", "sources": ["hail"]},
+        {"group": "note 0, keyed Hail", "reason": "Supplies the useful NWS threshold above 5 mm.", "sources": ["hail"]},
+        {"group": "note 1, Rain", "reason": "Gives the distinct rain-drop threshold above 0.5 mm.", "sources": ["rain"]},
+        {"group": "note 2, Snow", "reason": "Distinguishes snowflakes made of ice crystals from solid hailstones.", "sources": ["snow", "snowflake"]},
+        {"group": "note 3, Wet snow", "reason": "Defines the rain-snow mixture, unlike hail’s solid ice pellets.", "sources": ["russian-wet-snow-definition"]}
+      ],
+      "difficultyDecision": {"value": "easy", "reason": "Hail as hard ice balls after a thunderstorm is recognizable; the technical size cutoff is supplemental note content.", "spec": "GAME_SPEC.md:138-144"},
+      "sourceMetadataDecision": {"literal": {"title": "NOAA National Weather Service Glossary: Hail", "url": "https://forecast.weather.gov/glossary.php?word=HAIL", "verifiedAt": "2026-10-13"}, "reason": "The captured NWS Hail glossary supports the main fact; cited snow and rain entries support contrast notes."}
+    },
+    {
+      "literal": {
+        "id": "weather-climate-sleet-mix",
+        "difficulty": "easy",
+        "prompt": "В осадках одновременно присутствуют дождь и снег, причём снег преобладает. Как называется такой вид осадков?",
+        "answers": [
+          {"text": "Дождь", "note": "Дождь — жидкие осадки; по определению NWS, дождевые капли крупнее 0,5 мм."},
+          {"text": "Мокрый снег", "note": "В метеосводке так называют одновременное выпадение снега и дождя, когда преобладает снег."},
+          {"text": "Снег", "note": "Снег выпадает в виде ледяных кристаллов, которые часто соединяются в снежинки."},
+          {"text": "Град", "note": "Град — ледяные шарики или неправильные кусочки льда, образующиеся в кучево-дождевых облаках."}
+        ],
+        "correctIndex": 1,
+        "explanation": "Росгидромет описывает мокрый снег как одновременное выпадение снега и дождя с преобладанием снега. Если дождь и снег чередуются, применяется отдельная формулировка «снег с дождём».",
+        "source": {"title": "Росгидромет / Метеоинфо: Терминология прогнозов и штормовых предупреждений", "url": "https://meteoinfo.ru/forcabout/3891-nast-kpp", "verifiedAt": "2026-10-13"}
+      },
+      "hashes": {
+        "wholeCard": "264d169b6d60aa5afeb45a70594db835db0a9a40f09faf494f10eefb923dd285",
+        "compositePromptOrderedAnswerTextsAndKey": "fd9700273ea8efb44f93f938fdfe9728c1b65a9a90ed887928e1b0a043e35c3a",
+        "explanation": "a3bfda36c31038f729f0de818c670ea11bbe02ae8c99082e74b0bb0599a2dfb5",
+        "orderedNotes": [
+          "b60b374d7594ec269a6a6839d42957b23967981eaed64070d656b000ca0c26bb",
+          "3af5b9413ef7cec9a246839f89d57c4eaa9099f871e7de252965997461413d04",
+          "4f1c24c4586c8d951b6a70c8b364984f97bfce0b3141f5253fb223f3c1a92257",
+          "98ea1059c525d4488a97ae54066219d2d64046d1447421c951b9234d3ee95d7e"
+        ],
+        "difficulty": "3ed870088e7410ee05d36e4fc20bf73104130ef98000b268b11378d0800d1703",
+        "sourceMetadata": "c42d2a41d94af6a4598a812f376953f4e101225f0930ce9a0ba663cb0ef41d59"
+      },
+      "sixGroups": [
+        {"group": "prompt + ordered answers + key", "reason": "The stated simultaneous phases and snow predominance match the Meteoinfo definition; none of the other choices describes that mixture.", "sources": ["russian-wet-snow-definition", "russian-snow-rain-definition", "rain", "snow", "hail"]},
+        {"group": "explanation", "reason": "Correctly distinguishes simultaneous wet snow from alternating snow and rain using separate official table entries.", "sources": ["russian-wet-snow-definition", "russian-snow-rain-definition"]},
+        {"group": "note 0, Rain", "reason": "Defines rain as liquid precipitation and adds the NWS drop-size criterion.", "sources": ["rain"]},
+        {"group": "note 1, keyed Wet snow", "reason": "Restates simultaneous rain and snow with snow predominating.", "sources": ["russian-wet-snow-definition"]},
+        {"group": "note 2, Snow", "reason": "Gives the ice-crystal form of snow.", "sources": ["snow"]},
+        {"group": "note 3, Hail", "reason": "Separates hail as ice pellets or irregular ice from mixed rain-snow precipitation.", "sources": ["hail"]}
+      ],
+      "difficultyDecision": {"value": "easy", "reason": "The prompt gives the phase mixture and predominance directly in plain Russian. It asks for recognition of a familiar forecast term, without calculation or hidden clue.", "spec": "GAME_SPEC.md:138-144"},
+      "sourceMetadataDecision": {"literal": {"title": "Росгидромет / Метеоинфо: Терминология прогнозов и штормовых предупреждений", "url": "https://meteoinfo.ru/forcabout/3891-nast-kpp", "verifiedAt": "2026-10-13"}, "reason": "The captured Russian forecast-terminology page directly supports the term and the distinction used in the explanation."}
+    },
+    {
+      "literal": {
+        "id": "weather-climate-fog-ground-cloud",
+        "difficulty": "easy",
+        "prompt": "После ясной прохладной ночи воздух у земли помутнел, а предметы вдали стали плохо различимы. Как называется это явление?",
+        "answers": [
+          {"text": "Роса", "note": "Роса оседает жидкими каплями на предметах у земли, а не остаётся взвешенной в воздухе."},
+          {"text": "Туман", "note": "При тумане капли взвешены у поверхности; NWS отмечает опасное снижение видимости до четверти мили и менее."},
+          {"text": "Иней", "note": "Иней — кристаллы льда на охлаждённых предметах, а не взвесь жидких капель."},
+          {"text": "Облако", "note": "Облако состоит из водяных капель или ледяных частиц выше земной поверхности."}
+        ],
+        "correctIndex": 1,
+        "explanation": "Ночью земля теряет тепло и охлаждает прилегающий влажный воздух. Когда он достигает точки росы, в нём образуются капли тумана.",
+        "source": {"title": "NOAA National Weather Service Glossary: Fog", "url": "https://forecast.weather.gov/glossary.php?word=FOG", "verifiedAt": "2026-10-13"}
+      },
+      "hashes": {
+        "wholeCard": "a2325a7fe401ec810ab6db5677630148b1021c39fc3734b2e5f83b43d4c77916",
+        "compositePromptOrderedAnswerTextsAndKey": "84bf55e92f19ab1db7ae3f835c59f93f2a9ce01d7d18e2b2903805a827e71994",
+        "explanation": "3fda16b216ed25c7fb7b3e94bfac96a27c88e2431a6661c601d03dcb94aaed02",
+        "orderedNotes": [
+          "6e4c3ba9d5e6a49a335c026f6adeb9a7e54b95993f4a736c9be811cc5f1fdb52",
+          "bb5d025d3003c997bd252eabbe4e5724e7550d2e2a546f1efcfe3b94c1e924a1",
+          "cc75e671dcc8e9e8392e55de7a6bd502291d2b00a98360e359ba85a3e74cfce4",
+          "bc9f761cc21199689f7f106e8c5097ff3c995513f9bd853d3db0539888b42408"
+        ],
+        "difficulty": "3ed870088e7410ee05d36e4fc20bf73104130ef98000b268b11378d0800d1703",
+        "sourceMetadata": "9037ae86528a022459d5a9137786a06e2e6816590427482e2ace1b10518c61d3"
+      },
+      "sixGroups": [
+        {"group": "prompt + ordered answers + key", "reason": "Near-ground obscuration and poor visibility after a cool clear night describe radiation fog; dew and frost form on surfaces and cloud is aloft.", "sources": ["fog", "radiation-fog", "radiation-fog-context", "fog-cloud-altitude-context", "cloud"]},
+        {"group": "explanation", "reason": "NWS describes nighttime surface cooling, cooling of moist near-surface air, saturation, and visible droplets forming ground fog.", "sources": ["radiation-fog-context", "radiation-fog"]},
+        {"group": "note 0, Dew", "reason": "Dew is condensed moisture deposited on objects, unlike suspended droplets.", "sources": ["dew"]},
+        {"group": "note 1, keyed Fog", "reason": "Fog is suspended droplets at Earth’s surface; the NWS glossary supports the visibility threshold stated.", "sources": ["fog", "fog-visibility-threshold"]},
+        {"group": "note 2, Frost", "reason": "Frost deposits ice crystals on cold surfaces rather than suspending liquid droplets.", "sources": ["frost", "hoar-frost"]},
+        {"group": "note 3, Cloud", "reason": "The glossary places cloud particles in the atmosphere above Earth’s surface, which distinguishes cloud from ground fog.", "sources": ["cloud", "fog-cloud-altitude-context"]}
+      ],
+      "difficultyDecision": {"value": "easy", "reason": "Fog and reduced visibility near the ground are familiar observations; the question calls for direct identification.", "spec": "GAME_SPEC.md:138-144"},
+      "sourceMetadataDecision": {"literal": {"title": "NOAA National Weather Service Glossary: Fog", "url": "https://forecast.weather.gov/glossary.php?word=FOG", "verifiedAt": "2026-10-13"}, "reason": "The captured NWS Fog glossary supports the phenomenon and visibility detail; the NWS cloud-development capture supports fog formation."}
+    },
+    {
+      "literal": {
+        "id": "weather-climate-dew-condensation",
+        "difficulty": "easy",
+        "prompt": "После ясной ночи на листьях появились жидкие капли, хотя дождя не было. Как называется эта влага?",
+        "answers": [
+          {"text": "Туман", "note": "Туман — капли воды, остающиеся во взвешенном состоянии в приземном воздухе."},
+          {"text": "Роса", "note": "Роса конденсируется на предметах у земли, когда их поверхность охлаждается ниже точки росы."},
+          {"text": "Иней", "note": "Иней образуется на достаточно холодных поверхностях в виде кристаллов льда, а не жидких капель."},
+          {"text": "Облако", "note": "Облако — капли воды или частицы льда, находящиеся в атмосфере выше земной поверхности."}
+        ],
+        "correctIndex": 1,
+        "explanation": "Роса — влага, сконденсировавшаяся на предметах у поверхности земли. Она появляется, когда поверхность охлаждается до точки росы.",
+        "source": {"title": "NOAA National Weather Service Glossary: Dew", "url": "https://forecast.weather.gov/glossary.php?word=DEW", "verifiedAt": "2026-10-13"}
+      },
+      "hashes": {
+        "wholeCard": "a276d1e499db720aa52551c21d7da55cc5cc4b75d55f7adddacbf3b42e2c943d",
+        "compositePromptOrderedAnswerTextsAndKey": "e2f0bdd98de3c2e1f0c0404424653d328157764c6c0e71d003b95f9460069ce9",
+        "explanation": "3396c2014261c6afed10d7ce06cfe371e86ecbc034ec759e6cace4e11068fa61",
+        "orderedNotes": [
+          "0511ab0a4560ae3d7c8757184ba9951eed9b8574bffa7f40d6194b584878cda4",
+          "c12b35af1cb00b9c6678658249692efbe8ef2a2b8aa08edf90b5aae4d45ccdbb",
+          "8f45533bbc501ecabca0d52d9f7045769bddf4e9b8d5dfdcdb69272649e7bbec",
+          "5076da821e1bbe8e7f5c91448b2fe2537e73b8b89cf3e36026008c18e07967d1"
+        ],
+        "difficulty": "3ed870088e7410ee05d36e4fc20bf73104130ef98000b268b11378d0800d1703",
+        "sourceMetadata": "8557a9bd816f5fe26784e5a1d7fe4e3fe44f272dbd5c0163ce0eb90396a17f89"
+      },
+      "sixGroups": [
+        {"group": "prompt + ordered answers + key", "reason": "Liquid drops on leaves after a rainless night are surface condensation; fog and cloud are suspended droplets and frost is ice.", "sources": ["dew", "fog", "frost", "cloud"]},
+        {"group": "explanation", "reason": "NWS defines dew as moisture condensed on near-ground objects after their temperatures fall below dewpoint.", "sources": ["dew"]},
+        {"group": "note 0, Fog", "reason": "Fog droplets remain suspended in near-surface air, unlike dew on leaves.", "sources": ["fog"]},
+        {"group": "note 1, keyed Dew", "reason": "Adds the surface-cooling condition associated with condensation below dewpoint.", "sources": ["dew"]},
+        {"group": "note 2, Frost", "reason": "Frost forms as ice crystals on cold surfaces, distinguishing it from liquid dew.", "sources": ["frost"]},
+        {"group": "note 3, Cloud", "reason": "Clouds are visible atmospheric aggregates above the surface, unlike drops deposited on leaves.", "sources": ["cloud"]}
+      ],
+      "difficultyDecision": {"value": "easy", "reason": "Drops on leaves after a rainless night are a familiar dew example and require direct recognition.", "spec": "GAME_SPEC.md:138-144"},
+      "sourceMetadataDecision": {"literal": {"title": "NOAA National Weather Service Glossary: Dew", "url": "https://forecast.weather.gov/glossary.php?word=DEW", "verifiedAt": "2026-10-13"}, "reason": "The captured NWS Dew glossary supports the key and explanation; Fog, Frost, and Cloud entries support the contrasts."}
+    },
+    {
+      "literal": {
+        "id": "weather-climate-frost-ice",
+        "difficulty": "easy",
+        "prompt": "На траве после холодной ночи видны тонкие белые кристаллы льда. Как называется такой налёт?",
+        "answers": [
+          {"text": "Туман", "note": "Туман — взвесь водяных капель у поверхности; при низкой температуре он может состоять из ледяных частиц."},
+          {"text": "Роса", "note": "Роса — влага, сконденсировавшаяся на предметах у земли ниже точки росы."},
+          {"text": "Иней", "note": "Иней может выглядеть как чешуйки, иглы, перья или веера; поверхность при этом охлаждается ниже 0 °C."},
+          {"text": "Облако", "note": "Облако — видимая совокупность капель воды или частиц льда, удерживающихся в атмосфере."}
+        ],
+        "correctIndex": 2,
+        "explanation": "Иней — тонкие кристаллы льда на траве и других поверхностях. Для его образования поверхность должна охладиться ниже точки замерзания.",
+        "source": {"title": "NOAA National Weather Service Glossary: Frost", "url": "https://forecast.weather.gov/glossary.php?word=FROST", "verifiedAt": "2026-10-13"}
+      },
+      "hashes": {
+        "wholeCard": "03241147bc1d7290e63504901fa1178d27cc1282b25f64e68380f85a97fdd28f",
+        "compositePromptOrderedAnswerTextsAndKey": "fcd6563ec6bdea2770128d7e689467d9dddb3f72bcab7017228e96f362ee683f",
+        "explanation": "1693c67ea1c6ffe1135c86cd9326584e400dd542e9e12c93c8dda0533a7786cb",
+        "orderedNotes": [
+          "d1d81413d9613931505ca26a4aae180e497acab22caa2bc8e8615948a7a4ae0c",
+          "a9ecb768c440147f7679d239d3e2a4e5dba0fe277dbcb6250c9be20c8ae25dad",
+          "1e4720a7936c707850a842c24c8846d6b97d63b7ad0d6a7297d4535862a41f06",
+          "3b4f01acfae929a001705b23de9539a8c60e798187a71ce2978268727661736d"
+        ],
+        "difficulty": "3ed870088e7410ee05d36e4fc20bf73104130ef98000b268b11378d0800d1703",
+        "sourceMetadata": "8207ed525b8803af3d0b4f26f6109010e9e6da48aa37bfc333a8296bbd79a774"
+      },
+      "sixGroups": [
+        {"group": "prompt + ordered answers + key", "reason": "Thin white ice crystals deposited on grass after a cold night identify frost; the other options are airborne moisture or liquid surface dew.", "sources": ["frost", "hoar-frost", "dew", "fog", "cloud"]},
+        {"group": "explanation", "reason": "NWS describes thin ice crystals on ground and other surfaces when surface objects fall below freezing.", "sources": ["frost", "hoar-frost"]},
+        {"group": "note 0, Fog", "reason": "The note correctly allows for ice fog in very cold air rather than treating all fog as liquid droplets.", "sources": ["fog", "ice-fog"]},
+        {"group": "note 1, Dew", "reason": "Dew is condensed liquid moisture on near-ground objects, unlike frost crystals.", "sources": ["dew"]},
+        {"group": "note 2, keyed Frost", "reason": "The source lists scales, needles, feathers, and fans and gives a below-freezing surface condition.", "sources": ["frost", "hoar-frost"]},
+        {"group": "note 3, Cloud", "reason": "Cloud particles form an atmospheric aggregate; frost is deposited on a cold surface.", "sources": ["cloud"]}
+      ],
+      "difficultyDecision": {"value": "easy", "reason": "White ice crystals on grass after a cold night are a familiar direct frost cue.", "spec": "GAME_SPEC.md:138-144"},
+      "sourceMetadataDecision": {"literal": {"title": "NOAA National Weather Service Glossary: Frost", "url": "https://forecast.weather.gov/glossary.php?word=FROST", "verifiedAt": "2026-10-13"}, "reason": "The captured NWS Frost glossary supports frost; Fog and Dew entries support the contrast notes."}
+    },
+    {
+      "literal": {
+        "id": "weather-climate-cloud-droplets",
+        "difficulty": "easy",
+        "prompt": "После подъёма влажного воздуха в небе на высоте появились видимые капли воды или кристаллы льда. Как называется это скопление?",
+        "answers": [
+          {"text": "Туман", "note": "Туман — капли воды или льда в воздухе у самой земной поверхности; основное различие с облаком — высота."},
+          {"text": "Роса", "note": "Роса оседает на близких к земле предметах, а не образует взвесь в свободном воздухе."},
+          {"text": "Облако", "note": "Облачные капли настолько малы, что восходящие потоки воздуха могут долго удерживать их во взвешенном состоянии."},
+          {"text": "Иней", "note": "Иней — кристаллы, осевшие непосредственно на холодную поверхность."}
+        ],
+        "correctIndex": 2,
+        "explanation": "Капли облака настолько малы, что долго остаются во взвешенном состоянии в воздухе. Восходящие потоки помогают удерживать их над землёй.",
+        "source": {"title": "NOAA National Weather Service: Cloud Development", "url": "https://www.weather.gov/source/zhu/ZHU_Training_Page/clouds/cloud_development/clouds.htm", "verifiedAt": "2026-10-13"}
+      },
+      "hashes": {
+        "wholeCard": "559c3430a6bf702bd429c95cf6eefa5af6d2d3248931efbcdb9aaabee8e1c626",
+        "compositePromptOrderedAnswerTextsAndKey": "bd8978afa2a001ce4cc6227cb3fcb1f52da26c118f8453ee0876cb3e1ca1672b",
+        "explanation": "c2ac19bda720a42888a213cb5422961d6dd7ed06f668dcae47b13cfb768c9755",
+        "orderedNotes": [
+          "ae76df1cc175560b0c008f2ce4455bea85f40e1d938dcc6d5ecdfec6fe32162d",
+          "5f2a50f6c83b2defde7e5b03cbfc6a9b1e3dd6d0f315276a6726d68f6c772bf1",
+          "e9e7a85cdd013460c84bacfbd580df392498bbf806ef85f2d61dba785f35753b",
+          "144c0000387930b70dc35d85ff020869cc015a1fbad13b8e43c784ede485bf9b"
+        ],
+        "difficulty": "3ed870088e7410ee05d36e4fc20bf73104130ef98000b268b11378d0800d1703",
+        "sourceMetadata": "630fc0f709c0a901fb5c83c8716c99defee5e12abf718dc800b87d457de876eb"
+      },
+      "sixGroups": [
+        {"group": "prompt + ordered answers + key", "reason": "Visible water or ice particles aloft identify a cloud; fog is near the ground, and dew and frost are surface deposits.", "sources": ["cloud", "cloud-definition-context", "cloud-formation-context", "fog-cloud-altitude-context"]},
+        {"group": "explanation", "reason": "NOAA says cloud droplets are small enough to remain suspended, especially in ascending air currents.", "sources": ["cloud-suspension-context"]},
+        {"group": "note 0, Fog", "reason": "Fog is near-surface visible moisture; the NOAA context distinguishes fog and cloud by altitude.", "sources": ["fog", "fog-cloud-altitude-context"]},
+        {"group": "note 1, Dew", "reason": "Dew deposits on objects near the ground rather than remaining suspended in free air.", "sources": ["dew"]},
+        {"group": "note 2, keyed Cloud", "reason": "Small droplets and the role of ascending currents are stated in the NOAA cloud-development passage.", "sources": ["cloud-suspension-context"]},
+        {"group": "note 3, Frost", "reason": "Frost crystals are deposited directly on cold surfaces.", "sources": ["hoar-frost"]}
+      ],
+      "difficultyDecision": {"value": "easy", "reason": "The prompt gives a familiar cloud scene and explicitly distinguishes altitude from ground fog and surface deposits.", "spec": "GAME_SPEC.md:138-144"},
+      "sourceMetadataDecision": {"literal": {"title": "NOAA National Weather Service: Cloud Development", "url": "https://www.weather.gov/source/zhu/ZHU_Training_Page/clouds/cloud_development/clouds.htm", "verifiedAt": "2026-10-13"}, "reason": "The captured NWS training page supports cloud formation and suspension; glossary entries support contrasts."}
+    },
+    {
+      "literal": {
+        "id": "weather-climate-thermometer-temperature",
+        "difficulty": "easy",
+        "prompt": "Какой прибор на метеостанции защищают от прямого солнечного нагрева, чтобы его показания не искажались?",
+        "answers": [
+          {"text": "Барометр", "note": "Барометр измеряет атмосферное давление, а не степень нагрева воздуха."},
+          {"text": "Анемометр", "note": "Анемометр измеряет скорость ветра."},
+          {"text": "Осадкомер", "note": "Осадкомер собирает и измеряет количество выпавших осадков."},
+          {"text": "Термометр", "note": "На метеостанции термометр защищают от прямого солнца, осадков и конденсата, сохраняя вентиляцию воздуха."}
+        ],
+        "correctIndex": 3,
+        "explanation": "Термометр измеряет температуру воздуха. На метеостанции его размещают так, чтобы солнечное излучение не нагревало прибор напрямую.",
+        "source": {"title": "NOAA National Weather Service Glossary: Thermometer", "url": "https://forecast.weather.gov/glossary.php?word=THERMOMETER", "verifiedAt": "2026-10-13"}
+      },
+      "hashes": {
+        "wholeCard": "76722c4575400409809cffea041b267a274c416f7d3d3793b8ba775977aac6cd",
+        "compositePromptOrderedAnswerTextsAndKey": "ae44f1df3a57ee7d0830b88ffc42f904a372cbb43a8533e95507f4efd936389a",
+        "explanation": "0e3bce7c4d81b376e0270f556526782c4c6301a2e505ca6624ec16eb9e714303",
+        "orderedNotes": [
+          "5678225c7da637a294fb3258c39d8bef11346f656cd85678f48d8d23da75e92e",
+          "8ea8ea2f1b6f374b5ea3a753c625b8b61de6bc1dffa9664bd5336eba83338ba0",
+          "73273a54056ed8ae0dff7ae6e2ff91f390f641842733576d1aa216dd1f6f0646",
+          "9c1b8e5ed437a4b8d1254a913bdf291eb771ded2eeb85a96dfd7b1efb70ae631"
+        ],
+        "difficulty": "3ed870088e7410ee05d36e4fc20bf73104130ef98000b268b11378d0800d1703",
+        "sourceMetadata": "8663b22f98825aba6ddbde3ca68d87cae6511f47d701d8c26ceea1df5f737511"
+      },
+      "sixGroups": [
+        {"group": "prompt + ordered answers + key", "reason": "The prompt describes the station shelter’s purpose: shielding temperature measurements from direct sun. Among these station instruments, that identifies the thermometer.", "sources": ["instrument-shelter", "thermometer", "barometer", "anemometer", "rain-gauge"]},
+        {"group": "explanation", "reason": "Thermometers measure air temperature; direct sunlight can heat the instrument and distort the reading. The shelter source confirms the protection purpose and ventilation.", "sources": ["thermometer", "instrument-shelter"]},
+        {"group": "note 0, Barometer", "reason": "A barometer measures pressure, a separate atmospheric quantity.", "sources": ["barometer"]},
+        {"group": "note 1, Anemometer", "reason": "An anemometer measures wind speed.", "sources": ["anemometer"]},
+        {"group": "note 2, Rain gauge", "reason": "A rain gauge measures collected rainfall, a separate station observation.", "sources": ["rain-gauge"]},
+        {"group": "note 3, keyed Thermometer", "reason": "The shelter definition states protection from sunshine, precipitation, and condensation while allowing ventilation.", "sources": ["instrument-shelter"]}
+      ],
+      "difficultyDecision": {"value": "easy", "reason": "This is a direct use of a familiar measurement instrument. The stem states the practical clue plainly: protect the temperature reading from solar heating.", "spec": "GAME_SPEC.md:138-144"},
+      "sourceMetadataDecision": {"literal": {"title": "NOAA National Weather Service Glossary: Thermometer", "url": "https://forecast.weather.gov/glossary.php?word=THERMOMETER", "verifiedAt": "2026-10-13"}, "reason": "The NWS glossary supports the measured quantity; the separately captured NWS Instrument Shelter definition supports protection detail."}
+    }
+  ],
+  "evidence": {
+    "sourcePassagesFile": {
+      "path": "docs/content-audits/question-quality-wave-7/weather-climate/first10-native-01a13201-b8c6-7e31-947a-e96b214d8117/source-passages-v2.json",
+      "bytes": 95950,
+      "sha256": "c4ed39b332476ba84f4fbce1c237834604756dfc429922f2a125d18e7d395ec3",
+      "containsRawByteRangesAndHashes": true,
+      "containsEnclosingContextRangesAndHashes": true
+    },
+    "sourceManifestFile": {
+      "path": "docs/content-audits/question-quality-wave-7/weather-climate/first10-native-01a13201-b8c6-7e31-947a-e96b214d8117/source-manifest-v2.json",
+      "bytes": 23138,
+      "sha256": "c5d8b97ca5adf3a8a38fb71270e6134169381cbf1a3ec578e580eeb96ee830ea",
+      "containsRawBodyAndHTTPHeaderHashes": true
+    },
+    "originalSourceManifest": {
+      "path": "docs/content-audits/question-quality-wave-7/weather-climate/first10-native-01a12b0a-acb9-78b1-9b8b-823fc535ddd9/source-manifest.json",
+      "bytes": 14668,
+      "sha256": "443001980de47c6f916d2483028d5ed056b2984a4522b0c284cf75b2cfb880f1"
+    },
+    "sourceBodyAndResponseHeaderHashes": {
+      "NWS_RAIN": ["69efbae454a31f30fcc240d43e8fe4bb3c1261efb80f2953d8dd24e52c69f246", "3f65237803caa15d20c7345652f0fc62ef9311b5044e90b24b377d14a2f34ca7"],
+      "NWS_SNOW": ["55f252aa2e7060357d8f7c87d78bfa0f65d7a2410ce780ff424154216c29ed6f", "fbc3123389b959f2421d4e4635ba4df6e40dc914adc5acb252a77ad5daf990d8"],
+      "NWS_HAIL": ["baa563a27c65783316ff4bdc6eae9b85e0d9a9166ca8cbecb73e8af522792499", "f8847469bc3ddbfcf333905dc186118323945c982b5ba0be3a3573e1b23d7e2e"],
+      "NWS_FOG": ["54ea1f171112f0966f01de788289903b0b08c279b16a78ac12cbb494b524ff12", "fda4eabf63d8bc4668a017cdf2355017799f1399dc94d2cef4b08af4ac9420ea"],
+      "NWS_DEW": ["d35f3cf581e1d556dbb3e9319674528e1383d7d928081649784e8ad4cb8210e3", "a6fdb374de62d62af829e0b825dc8e2a301cce556407b208a032c356180cadde"],
+      "NWS_FROST": ["f10ff11f4b19f31155ec323ca06cc2b92183a23317757dd03a881fee2e71e8d3", "146706243ae6861f2f85937845e3a0bc52dfc0c34b09758a35076b26921fe7cb"],
+      "NWS_CLOUD": ["b9cca63aa1dbab0fc28b913c9bc8b72dd7857da173025beb3fc3ce0187b78be1", "b684c96ad0c6c24c8fced6759079c2cd7fdbfd2960d8ea32b55b6c47375daa8f"],
+      "NWS_CLOUD_DEVELOPMENT": ["e1bc3c932198a78331ce8b54352109d47d0cc0e1decd155a474be392ba06beda", "1aa07a4b75bd660ee16b27ccdc7b97614a740a20d3105ee86ec49ec005078efb"],
+      "NWS_THERMOMETER": ["9e87f77f36f662b5eb022afef680a72571c38d4c2cda9e2655331959412a426b", "072f79517b64d3d7bfdbf5e1241187220ba8fdc56af27771250bee64f461fe83"],
+      "NWS_BAROMETER": ["9939f7960cdeab4dbd7775282cbac7d52cd9fb9b9d67181b3ee8cc6bd08bbbbc", "e3d73fdb00982c4fff4a78adf8a4c5f551bf7f511b00d3d5e86cd6a129d3e789"],
+      "NWS_ANEMOMETER": ["40993360925e0dd6bb4e3302a1579f310e39247c44fc11ae2c835e3c22bb3b84", "d8ce4ab853441742ef2f7ff1c27e903a6bd9a78fcf2b451f957530b89e987bc9"],
+      "NWS_INSTRUMENT_SHELTER": ["e9112eca1594c11843118b07fb63749e11d6949f1fcb651f6d296dcab9201fde", "aac7ffcd9abf0ac7de224651c2c92221fbf9833e0e93ddf949bf11c9cec08e10"],
+      "METEINFO_PRECIP": ["2011bcaeffd8e3dc8270da507479a8bdc37d7f37b67b95bd6b5706a1c12f52da", "0729337617d637de4dddad120481b2fddaf9130291414cc3270440525dd3f38f"],
+      "NWS_DRIZZLE": ["c42aad8a435a1ef55c0b633740cf7652e41c2e2465f33ff793f8c46941d61733", "a920de6468675da69e85797b06b752308ffe6b1421dd6689f4f1a3abd781e877"]
+    },
+    "rangeBindingRecipe": "Each source reference in the sixGroups points into source-passages-v2.json. Its passageId binds exact half-open body offsets, raw-range SHA-256, full-context offsets and context SHA-256. source-manifest-v2.json binds the same sourceId to its URL and complete raw body and response-header hashes."
+  },
+  "neighbors": {
+    "catalogRetrieval": {
+      "file": "docs/content-audits/question-quality-wave-7/weather-climate/first10-native-01a12b0a-acb9-78b1-9b8b-823fc535ddd9/whole-catalog-retrieval.json",
+      "sha256": "89b8307d846330bc070ac9841e3195053a118d8f74479663c9fe175bf2ccb722",
+      "basis": "110 topic files and 11000 cards, prompt and ordered answer texts only; candidate generation only"
+    },
+    "manualFullCurrentNeighbors": {
+      "file": "docs/content-audits/question-quality-wave-7/weather-climate/first10-native-01a13201-b8c6-7e31-947a-e96b214d8117/manual-neighbor-review-v2.json",
+      "sha256": "fe64a7a760aaecb2f51b7b37d02fd0270585635ee7b0b19517a13b60ae23bbdc",
+      "count": 29,
+      "all29StoredCardLiteralsEqualCurrentCatalog": true,
+      "all29CanonicalHashesMatch": true
+    },
+    "comparisonSummary": "Rain gauge asks quantity; warm-cloud, convective, frontal, and orographic rain cards ask about formation mechanisms; rain-shadow, rainbow, acid rain, runoff, and water-cycle cards ask about separate phenomena. Snow, hail, mixed precipitation, fog, dew, frost, and cloud neighbors ask distinct phase, location, or process facts. No exact, inverse, or direct semantic duplicate found in reviewed full neighbors."
+  },
+  "preservation": {
+    "worktreeWrites": "none in this pass",
+    "newSourceCaptures": "none; saved primary captures sufficed",
+    "tests": "not run",
+    "fullTestSuite": "not run",
+    "build": "not run",
+    "commit": "not created",
+    "deploy": "not performed",
+    "nextStep": "Coordinator may dispatch independent review. Reviewer verdict and quality credit remain separate from this author packet."
+  }
+}
