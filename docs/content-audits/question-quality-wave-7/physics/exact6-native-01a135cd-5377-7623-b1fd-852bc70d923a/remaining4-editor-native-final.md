@@ -1,0 +1,5 @@
+Opaque apply четырёх карточек выполнен: heat, rainbow, mass/weight и density. Полный receipt — [native-remaining4-opaque-apply.json](/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/physics/exact6-native-01a135cd-5377-7623-b1fd-852bc70d923a/native-remaining4-opaque-apply.json).
+
+Raw SHA-256 `physics.json`: `467cef5f39935905447879e88c4572c06dafc1fea75a842ed460b0e22ff0a123` → `fbb983ce5751b6675b0a4be59f65552e030b9b55fef4601685151530c392cad1`. Все четыре canonical SHA совпали с packet. Все остальные 96 карточек сохранены в прежнем порядке; их canonical hash до и после одинаковый: `872380c8047f7bf5ebf034dca196b58a212ba2bc630865fcf6a1dc69d06afdbd`. Quality credit — 0; тесты, commit и сборки не запускал.
+
+**Следующий шаг:** независимое чтение текущих карточек координатором.
