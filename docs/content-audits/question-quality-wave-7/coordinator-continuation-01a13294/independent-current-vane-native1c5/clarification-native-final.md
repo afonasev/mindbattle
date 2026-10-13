@@ -1,0 +1,28 @@
+Подтверждено: это разные рецепты хеширования, а не расхождение данных. Дополнение к предыдущему отчёту:
+
+```json
+{
+  "schema": "mindbattle.weather-vane.native-independent-clarification.v1",
+  "nativeReaderId": "01a131c5-edfb-7b82-8ddf-bd88a8b95597",
+  "actualCompactions": 1,
+  "scope": ["weather-climate-barometer-pressure"],
+  "appendOnly": true,
+  "previousReceiptUnchanged": true,
+  "initialAmbiguityPreserved": "Launch topicSHA was not labeled as canonical JSON; the reader initially compared it with raw-file SHA.",
+  "independentlyVerified": {
+    "rawFileSHA256": "29ba8f76ed2065eb33a85358b65369f01cc0791ecb48f059bf2a7525f1737a2d",
+    "canonicalWholeTopicSHA256": "82f4c291ee1b8aaddcb1bf1fdc0b0a6168b431b2ba5c1e98308d5d3939ec135b",
+    "canonicalQuestionArraySHA256": "72c2d9c4eb5bf69dd0b1bb6c594e3decbac170a5f6c5302dfb3f877670cf41bd",
+    "canonicalCurrentCardSHA256": "6d6ab1fbacb53b3b90a95c8c889383bf3e17a968d21c831633a87e9aed171970"
+  },
+  "recipes": {
+    "rawFile": "SHA256 of exact file bytes.",
+    "canonicalJSON": "SHA256 of UTF8 json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(',', ':')); no newline."
+  },
+  "interpretation": "The launch canonical whole-topic digest and intake raw-file digest both match current data under their declared recipes. No source-data mismatch or restoration is required.",
+  "previousQualityVerdict": "PASS_CURRENT_ONE_CARD unchanged",
+  "qualityCredit": 0,
+  "filesWritten": [],
+  "nextStep": "Coordinator preserves original receipt plus this clarification and performs manual adjudication."
+}
+```
