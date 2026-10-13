@@ -1,0 +1,317 @@
+OpenStax Chemistry 2e states that a neutral atom has equal numbers of protons and electrons, and explains that an imbalance makes it an ion. This gives the neutral-atom option its own useful fact; the page still needs a byte-exact capture before that note has a complete raw-source receipt. [OpenStax, “Atomic Structure and Symbolism”](https://openstax.org/books/chemistry-2e/pages/2-3-atomic-structure-and-symbolism)
+
+```json
+{
+  "schema": "mindbattle-physics-same-exact7-native-proof-supplement-v2",
+  "supersedes": {
+    "preservePriorPackets": true,
+    "candidateRevision": "V3 replaces only the candidate card body from V2. It does not rewrite either earlier packet.",
+    "transportCorrection": "The corrected actual OpenStax headers digest from the previous supplement remains valid."
+  },
+  "identity": {
+    "nativeThreadId": "01a13281-553f-7a12-a494-469f909fd04b",
+    "coordinatorRootId": "01a13294-7d84-7583-930d-02eb1c80eb45",
+    "actualCompactions": 1,
+    "worktree": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle",
+    "branch": "codex/question-quality-wave-6",
+    "sourceBaseline": "663ea03"
+  },
+  "status": "ATOMIC_CURRENT_CARD_PACKET_WITH_NOTE0_CAPTURE_HOLD; SIX_OTHER_TARGETS_PENDING",
+  "candidateV3": {
+    "card": {
+      "id": "physics-current-si-unit",
+      "difficulty": "easy",
+      "prompt": "Какие частицы переносят электрический ток в металлическом проводнике?",
+      "answers": [
+        {
+          "text": "Нейтральные атомы металла",
+          "note": "У нейтрального атома число электронов равно числу протонов, поэтому суммарный заряд равен нулю; атом в целом не является носителем проводящего тока."
+        },
+        {
+          "text": "Электроны",
+          "note": "В металлических проводах ток переносят электроны; это отрицательно заряженные частицы."
+        },
+        {
+          "text": "Положительные ионы",
+          "note": "Положительные и отрицательные заряды могут двигаться в ионном растворе, например в солёной воде; металлические провода проводят ток за счёт электронов."
+        },
+        {
+          "text": "Протоны",
+          "note": "Устройство Ван де Граафа может создавать ток из положительных зарядов, например протонов; в металлическом проводе носители тока — электроны."
+        }
+      ],
+      "correctIndex": 1,
+      "explanation": "В металлических проводниках электрический ток переносится электронами. В других средах носители могут быть другими: например, в растворах перемещаются положительные и отрицательные заряды, а в некоторых генераторах возможен ток протонов.",
+      "source": {
+        "title": "OpenStax, College Physics 2e 20.1 Current",
+        "url": "https://openstax.org/books/college-physics-2e/pages/20-1-current",
+        "verifiedAt": "2026-10-13"
+      }
+    },
+    "canonicalCardSha256": "34278427fe4b45bb62d492ca860c0ff88cee6add92bc8376aa5e9e6f221eca43",
+    "canonicalHashRecipe": "SHA256(UTF-8 json.dumps(card, sort_keys=True, ensure_ascii=False, separators=(\",\", \":\"))); no trailing LF.",
+    "exactPromptAnswerKeyLiteral": {
+      "prompt": "Какие частицы переносят электрический ток в металлическом проводнике?",
+      "answers": [
+        "Нейтральные атомы металла",
+        "Электроны",
+        "Положительные ионы",
+        "Протоны"
+      ],
+      "correctIndex": 1
+    },
+    "exactPromptAnswerKeySha256": "2d4c887f05099637302b61ff5e48a5bba6238a60b70bab1ac6bb4cda51aa6bba",
+    "groupHashRecipe": "Each group literal is canonical-JSON serialized with sort_keys=true, ensure_ascii=false, separators=(\",\", \":\"), UTF-8 encoded, then SHA256 hashed. Scalar literals are hashed as canonical JSON strings, not raw UTF-8.",
+    "sixGroupReceipt": [
+      {
+        "group": "prompt+ordered-answer-texts+correctIndex",
+        "verdict": "AUTHOR_PASS",
+        "sha256": "2d4c887f05099637302b61ff5e48a5bba6238a60b70bab1ac6bb4cda51aa6bba",
+        "editorialReason": "All choices identify plausible types of particles or carriers discussed in basic science. The metal-wire condition distinguishes electron conduction from ionic movement in solutions and proton current in a generator. This is a distinct primary fact from current-as-charge-per-time and from SI-unit symbol recall."
+      },
+      {
+        "group": "explanation",
+        "verdict": "AUTHOR_PASS",
+        "sha256": "e43ee343163fe66e74694448f97f1b8af4c9a09a34d79b984e24f136465396ee",
+        "editorialReason": "Directly answers for metal, then gives separately sourced examples of other charge carriers in other media."
+      },
+      {
+        "group": "note0",
+        "verdict": "AUTHOR_HOLD_RAW_CAPTURE_PENDING",
+        "sha256": "dd3be101759ca49c2dfe21104f03aebb11088c94fe6fbaf74500cf5a6d4e8e01",
+        "editorialReason": "Now states a useful fact about the selected neutral-atom distractor: equal proton and electron counts make the atom neutral. OpenStax Chemistry supports this in the browsed primary page context below. The exact source page has not been captured as raw bytes in this worktree, so no byte-bound source PASS is claimed."
+      },
+      {
+        "group": "note1",
+        "verdict": "AUTHOR_PASS",
+        "sha256": "c5551bb4f0904d480897f70c4662e1f3bdbcbb2d739d2634ec31c141887cb398",
+        "editorialReason": "Adds the useful charge sign of the actual metal-wire carriers."
+      },
+      {
+        "group": "note2",
+        "verdict": "AUTHOR_PASS",
+        "sha256": "81c6c15ddd9f07f21b59633cb60c714b7f0b10d75dde794e92a39f6705ea877f",
+        "editorialReason": "Adds the distinct contrast that both charge signs move in ionic solutions such as salt water."
+      },
+      {
+        "group": "note3",
+        "verdict": "AUTHOR_PASS",
+        "sha256": "d7b48dea882275e9a5a28754c16445b209474efc17564bdef0e1e696579a3d8e",
+        "editorialReason": "Adds the distinct example of proton current in a Van de Graaff generator."
+      }
+    ],
+    "difficultyAndMetadata": {
+      "difficulty": {
+        "literal": "easy",
+        "sha256": "3ed870088e7410ee05d36e4fc20bf73104130ef98000b268b11378d0800d1703",
+        "verdict": "AUTHOR_PASS",
+        "rationale": "Electron conduction in metal is a basic school-physics fact. The prompt asks for direct recognition without calculation or a rare term. This is an editorial Easy classification, not survey evidence."
+      },
+      "sourceMetadata": {
+        "literal": {
+          "title": "OpenStax, College Physics 2e 20.1 Current",
+          "url": "https://openstax.org/books/college-physics-2e/pages/20-1-current",
+          "verifiedAt": "2026-10-13"
+        },
+        "sha256": "2baeff153a04db7c3206c684318c72e5276571d640e91d628988663e76eefb2d",
+        "verdict": "AUTHOR_PASS"
+      },
+      "difficultyPolicy": "GAME_SPEC.md § «Контент вопросов»: Easy tests a widely known adult-audience fact, including a fact common within a large demographic or cultural group, and avoids rare terminology and trivia."
+    }
+  },
+  "sourceContexts": {
+    "physicsCurrentCapture": {
+      "path": "docs/content-audits/question-quality-wave-7/physics/first10-native-01a13201-b4e9-7b12-b72d-3538bd95ad14/originals/openstax-m42341-index.cnxml",
+      "captureUrl": "https://raw.githubusercontent.com/openstax/osbooks-college-physics-bundle/fd1b25dfd5d8c6580c6e2b2b34a19e29cc69ada9/modules/m42341/index.cnxml",
+      "bodyBytes": 79843,
+      "bodySha256": "aea3ce841c221934d07f022163311c178cab50b6480de398744838c890539e76",
+      "bodyGitBlobSha1": "10ef2f3e78e7ef0b5d915a3f18929bcc843be887",
+      "bodyReadBytesEqualsGitShowHead": true,
+      "headersPath": "docs/content-audits/question-quality-wave-7/physics/first10-native-01a13201-b4e9-7b12-b72d-3538bd95ad14/originals/openstax-m42341.headers.txt",
+      "headersBytes": 897,
+      "headersSha256": "1a6d11daf19637f3f85298de28700475a93838266ca5a3279162abf295e885b7",
+      "headersReadBytesEqualsGitShowHead": true,
+      "historicalManifestHeadersSha256": "357ed1f2b5de3850509b51890cfc9369cc58a1afbedc0f434b335a47c84301e8",
+      "headersHandling": "Correct actual digest is the read_bytes/git-show value above. Preserve the differing historical manifest value without rewriting it.",
+      "parserAndLocatorRecipe": {
+        "encoding": "UTF-8 bytes",
+        "method": "Locate exact opening <para id=\"import-auto-id1207319\"> and subsequent </para>; retain raw markup.",
+        "rawByteOffsets": [13063, 14267]
+      },
+      "fullRelevantParagraph": "<para id=\"import-auto-id1207319\">Note that the direction of current flow in <link target-id=\"import-auto-id2931325\"/> is from positive to negative. <emphasis effect=\"italics\">The direction of conventional current is the direction that positive charge would flow</emphasis>. Depending on the situation, positive charges, negative charges, or both may move. In metal wires, for example, current is carried by electrons—that is, negative charges move. In ionic solutions, such as salt water, both positive and negative charges move. This is also true in nerve cells. A Van de Graaff generator used for nuclear research can produce a current of pure positive charges, such as protons. <link target-id=\"import-auto-id1575921\"/> illustrates the movement of charged particles that compose a current. The fact that conventional current is taken to be in the direction that positive charge would flow can be traced back to American politician and scientist Benjamin Franklin in the 1700s. He named the type of charge associated with electrons negative, long before they were known to carry current in so many situations. Franklin, in fact, was totally unaware of the small-scale structure of electricity.</para>",
+      "supportMap": {
+        "candidateAnswerAndNote1": "Metal wires carry current via electrons, identified as negative charges.",
+        "note2": "The paragraph says positive and negative charges move in ionic solutions such as salt water.",
+        "note3": "The paragraph says a Van de Graaff generator can produce pure positive-charge current, such as protons."
+      }
+    },
+    "neutralAtomPrimaryContext": {
+      "source": "OpenStax Chemistry 2e, §2.3 Atomic Structure and Symbolism",
+      "url": "https://openstax.org/books/chemistry-2e/pages/2-3-atomic-structure-and-symbolism",
+      "access": "Read from the official OpenStax page in browser; lines shown are page-rendered text, not a raw byte capture.",
+      "contextLocator": "Page lines 47–55, Table 2.2 followed by paragraphs on atomic number, neutrality, and ions.",
+      "fullRelevantContext": "The number of protons in the nucleus of an atom is its atomic number (Z). This is the defining trait of an element: Its value determines the identity of the atom. For example, any atom that contains six protons is the element carbon and has the atomic number 6, regardless of how many neutrons or electrons it may have. A neutral atom must contain the same number of positive and negative charges, so the number of protons equals the number of electrons. Therefore, the atomic number also indicates the number of electrons in an atom. The total number of protons and neutrons in an atom is called its mass number (A). The number of neutrons is therefore the difference between the mass number and the atomic number: A – Z = number of neutrons. Atoms are electrically neutral if they contain the same number of positively charged protons and negatively charged electrons. When the numbers of these subatomic particles are not equal, the atom is electrically charged and is called an ion. The charge of an atom is defined as follows: Atomic charge = number of protons − number of electrons. As will be discussed in more detail later in this chapter, atoms (and molecules) typically acquire charge by gaining or losing electrons. An atom that gains one or more electrons will exhibit a negative charge and is called an anion. Positively charged atoms called cations are formed when an atom loses one or more electrons.",
+      "captureStatus": "NOT_CAPTURED_AS_RAW_BYTES",
+      "rawSha256": null,
+      "rawByteOffsets": null,
+      "captureRequest": {
+        "method": "Safe read-only capture of the official OpenStax page, preserving response headers and body bytes.",
+        "url": "https://openstax.org/books/chemistry-2e/pages/2-3-atomic-structure-and-symbolism",
+        "purpose": "Bind note0's neutral-atom charge fact to a byte-exact primary-source receipt.",
+        "authorizationBoundary": "No capture file was written in this read-only turn."
+      }
+    }
+  },
+  "currentNearestNeighborCards": [
+    {
+      "id": "chemistry-graphite-conductivity",
+      "canonicalSha256": "d1ddf8bf8e5446612749de9c88eceb870ced19eb790eaf54212f7b26c771cde7",
+      "fullCurrentCard": {
+        "id": "chemistry-graphite-conductivity",
+        "difficulty": "medium",
+        "prompt": "Почему графит проводит электрический ток вдоль своих углеродных слоёв?",
+        "answers": [
+          {"text": "В нём свободно перемещаются протоны", "note": "Протон несёт положительный элементарный заряд."},
+          {"text": "В слоях есть делокализованные электроны", "note": "Каждый атом углерода в графитовом слое образует три прочные ковалентные связи с соседями."},
+          {"text": "Он содержит ионы металлов", "note": "Ионы металлов обычно являются катионами, образующимися при потере атомами электронов."},
+          {"text": "Между слоями непрерывно течёт расплав", "note": "Расплавы солей могут проводить ток благодаря подвижным ионам."}
+        ],
+        "correctIndex": 1,
+        "explanation": "Каждый атом углерода в слое графита образует три связи, а оставшиеся электроны делокализованы по слою. Их подвижность обеспечивает электрическую проводимость вдоль графитовых плоскостей.",
+        "source": {
+          "title": "LibreTexts / Oregon Institute of Technology: Structure and General Properties of the Metalloids",
+          "url": "https://chem.libretexts.org/Courses/Oregon_Institute_of_Technology/OIT%3A_CHE_202_-_General_Chemistry_II/Unit_9%3A_Semiconductors/9.3%3A_Structure_and_General_Properties_of_the_Metalloids",
+          "verifiedAt": "2026-10-03"
+        }
+      },
+      "predicateComparison": "Graphite card tests delocalized electrons and directional conductivity in carbon layers; candidate tests the carrier species in a metal conductor. Related electron-conduction domain, distinct material and predicate."
+    },
+    {
+      "id": "physics-ext-electric-current-charge-flow",
+      "canonicalSha256": "2d9f01a50ea5a526b76462c48e1137b2c5b8c638a5f7872e14ecf1ad608fd3d4",
+      "fullCurrentCard": {
+        "id": "physics-ext-electric-current-charge-flow",
+        "difficulty": "easy",
+        "prompt": "Какая электрическая величина измеряется в амперах и равна заряду, проходящему за единицу времени?",
+        "answers": [
+          {"text": "Напряжение", "note": "Напряжение равно изменению электрической потенциальной энергии на единицу заряда."},
+          {"text": "Сила тока", "note": "Сила тока равна заряду, проходящему через сечение проводника за единицу времени."},
+          {"text": "Частота", "note": "Частота равна числу циклов, происходящих за секунду."},
+          {"text": "Длина волны", "note": "Длина волны — расстояние между соседними гребнями или другими однофазными точками."}
+        ],
+        "correctIndex": 1,
+        "explanation": "Сила тока равна заряду, проходящему через сечение проводника за единицу времени. Её измеряют в амперах.",
+        "source": {
+          "title": "OpenStax Physics: Ohm’s Law",
+          "url": "https://openstax.org/books/physics/pages/19-1-ohms-law",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "predicateComparison": "Defines current quantitatively as charge per time; candidate asks which carriers conduct in metal. No direct or inverse predicate match."
+    },
+    {
+      "id": "laboratories-measurement-ammeter-current",
+      "canonicalSha256": "ba1308d6ddc66775cba1d899d3de9a1b3e4a347b504b13577df9ffe5c8046def",
+      "fullCurrentCard": {
+        "id": "laboratories-measurement-ammeter-current",
+        "difficulty": "easy",
+        "prompt": "Какой прибор включают последовательно для измерения силы тока?",
+        "answers": [
+          {"text": "Амперметр", "note": "Амперметр измеряет электрический ток и включается последовательно в цепь."},
+          {"text": "Вольтметр", "note": "Вольтметр измеряет разность потенциалов и подключается параллельно участку."},
+          {"text": "Омметр", "note": "Омметр измеряет электрическое сопротивление, используя собственный источник питания."},
+          {"text": "Осциллограф", "note": "Осциллограф отображает изменение электрического сигнала во времени."}
+        ],
+        "correctIndex": 0,
+        "explanation": "Амперметр измеряет электрический ток и включается последовательно в цепь. Малое внутреннее сопротивление уменьшает влияние на цепь.",
+        "source": {
+          "title": "Encyclopaedia Britannica",
+          "url": "https://www.britannica.com/technology/ammeter",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "predicateComparison": "Tests instrument choice and circuit connection, not microscopic carrier identity."
+    },
+    {
+      "id": "physics-closed-circuit",
+      "canonicalSha256": "0cab79c2799eccf1944c7142207069701419bc818b04671ad68314b871ab67f5",
+      "fullCurrentCard": {
+        "id": "physics-closed-circuit",
+        "difficulty": "easy",
+        "prompt": "Какое условие обычно нужно, чтобы электрический ток шёл по простой цепи?",
+        "answers": [
+          {"text": "Проводники заменяют изоляторами", "note": "Изоляторы препятствуют движению зарядов, поэтому ими покрывают проводники для безопасности."},
+          {"text": "Цепь должна иметь разрыв", "note": "Разрыв делает электрическую цепь разомкнутой и прекращает непрерывный ток."},
+          {"text": "Источник нужно отключить", "note": "Отключённый источник не поддерживает разность потенциалов, необходимую для устойчивого тока."},
+          {"text": "Цепь должна быть замкнута", "note": "Для устойчивого тока нужен замкнутый проводящий путь."}
+        ],
+        "correctIndex": 3,
+        "explanation": "Для устойчивого тока нужен замкнутый проводящий путь. Разрыв цепи прекращает движение заряда по всему контуру.",
+        "source": {
+          "title": "OpenStax Physics: Ohm's Law",
+          "url": "https://openstax.org/books/physics/pages/19-1-ohms-law",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "predicateComparison": "Tests the closed-path condition for current, not which particle carries it in a metal."
+    },
+    {
+      "id": "physics-metal-conductor",
+      "canonicalSha256": "5947ad5ff7af612d56aa670d85ed2cb20192b692989db2a42e74d922f18c5a31",
+      "fullCurrentCard": {
+        "id": "physics-metal-conductor",
+        "difficulty": "easy",
+        "prompt": "Какой из этих материалов обычно хорошо проводит электрический ток?",
+        "answers": [
+          {"text": "Резина", "note": "Резина — эластичный материал, получаемый вулканизацией натурального или синтетических каучука — смешиванием с вулканизирующим веществом с последующим нагревом."},
+          {"text": "Сухое дерево", "note": "Сухая древесина обладает высоким электрическим сопротивлением и обычно служит изолятором."},
+          {"text": "Стекло", "note": "Стекло — вещество, один из самых древних материалов, обладающее разнообразием свойств, что делает его универсальным в практике человека."},
+          {"text": "Медь", "note": "Медь хорошо проводит электрический ток и широко используется в проводах."}
+        ],
+        "correctIndex": 3,
+        "explanation": "Медь хорошо проводит электрический ток и широко используется в проводах. Резина и стекло относятся к изоляционным материалам.",
+        "source": {
+          "title": "OpenStax Physics: Electrical Charges, Conservation of Charge, and Transfer of Charge",
+          "url": "https://openstax.org/books/physics/pages/18-1-electrical-charges-conservation-of-charge-and-transfer-of-charge",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "predicateComparison": "Identifies copper as a conductive material; it does not test the microscopic current carrier."
+    }
+  ],
+  "catalogAndScopeGuard": {
+    "catalogCardsScanned": 11000,
+    "retrievalMatchesForCurrentCarrierTerms": 2,
+    "manualCurrentNeighborCoverage": "The five complete cards above were personally read. The exact old current-direction retrieval is not being reused as evidence for this carrier-identity predicate.",
+    "currentPhysicsQuestionCount": 100,
+    "currentOrderEquals663ea03": true,
+    "protectedOther93": {
+      "scopeCanonicalHashesMatched": 93,
+      "mismatches": []
+    },
+    "certifiedProtectedCards": {
+      "physics-light-speed-vacuum": "60164eebfcbec0345d6be6b7b6dd5879585fd72af11708f80932dc6a03f98cd8",
+      "physics-newton-third-law": "dd43aa436dbbc3d527ed4298be5ef617747096b129c166cfa50e7778c0bf9008",
+      "physics-water-boiling-standard-pressure": "11e64060311b5faf700b468fa517ef6eb7db9fa803ccf48663a380d6ad9471ee"
+    },
+    "remainingSixTargets": [
+      "physics-force-si-unit",
+      "physics-heat-spontaneous-direction",
+      "physics-rainbow-color-separation",
+      "physics-sound-vacuum",
+      "physics-mass-weight-distinction",
+      "physics-density-definition"
+    ]
+  },
+  "execution": {
+    "readOnly": true,
+    "writesThisTurn": false,
+    "testsRun": false,
+    "buildsRun": false,
+    "commitsMade": false,
+    "nextRequiredEvidence": "Coordinator captures the OpenStax Chemistry 2e page at the specified URL with response headers and raw body bytes, then binds note0 to its body/header hashes and precise byte locator. No other target was advanced in this supplement."
+  }
+}
+```
+
+`note0` теперь проверяет факт именно о нейтральном атоме, а ближайшие карточки перечитаны и привязаны по полным canonical-хешам. Поле `note0` остаётся на HOLD до byte-exact захвата страницы OpenStax Chemistry; захват не выполнял и файлы не изменял.
