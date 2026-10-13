@@ -1,0 +1,81 @@
+## SOURCE proposal: frozen10, только supersession энтропии
+
+Сохраняю frozen order, ключи, difficulty `medium` и остальные карточки из предыдущего full10. Новый entropy candidate заменяет только карточку `physics-entropy-isolated-system`. Для induction сохраняется уже внесённая source-supported правка `Φ=BA cos θ`; для остальных карточек предыдущие source proposals остаются без изменений.
+
+```json
+{
+  "id": "physics-entropy-isolated-system",
+  "difficulty": "medium",
+  "prompt": "Два тела получают по 600 Дж теплоты. Температура каждого во время передачи постоянна: у первого 300 K, у второго 600 K. Используя ΔS=Q/T, у какого тела изменение энтропии больше и во сколько раз?",
+  "answers": [
+    {
+      "text": "У второго тела, вдвое.",
+      "note": "При одинаковом Q увеличение абсолютной температуры вдвое уменьшает Q/T вдвое."
+    },
+    {
+      "text": "У первого тела, вдвое.",
+      "note": "В СИ энтропию выражают в джоулях на кельвин (Дж/K)."
+    },
+    {
+      "text": "Изменения одинаковы.",
+      "note": "Если Q и T одновременно увеличить в одинаковое число раз, отношение Q/T останется тем же; здесь Q одинаково, а T различается."
+    },
+    {
+      "text": "У первого тела, но оно отрицательное.",
+      "note": "Для системы, получающей тепло, Q положительно; отрицательное Q соответствует передаче тепла из системы."
+    }
+  ],
+  "correctIndex": 1,
+  "explanation": "По ΔS=Q/T изменение энтропии первого тела равно 600/300=2 Дж/K, а второго — 600/600=1 Дж/K. Поэтому изменение первого вдвое больше; оба изменения положительны, поскольку оба тела получают тепло.",
+  "source": {
+    "title": "OpenStax Physics §12.3 Entropy",
+    "url": "https://openstax.org/books/physics/pages/12-3-entropy",
+    "verifiedAt": "2026-10-14"
+  }
+}
+```
+
+**Frozen10:** IDs в порядке scope — `physics-photon-energy-frequency`, `physics-earth-escape-velocity`, `physics-pascal-principle`, `physics-doppler-approaching-source`, `physics-half-life-remaining-fraction`, `physics-entropy-isolated-system`, `physics-electromagnetic-induction-condition`, `physics-total-internal-reflection`, `physics-absolute-zero-celsius`, `physics-momentum-collision-conservation`. Difficulty у всех `medium`; correct indices `[3,0,0,0,0,1,1,1,1,1]`. Protected other90 остаются вне предложения, включая MassWeight.
+
+### Primary source: typed context и byte bindings
+
+Файл захвата: `docs/content-audits/question-quality-wave-7/physics/first10-native-01a13201-b4e9-7b12-b72d-3538bd95ad14/originals/openstax-m54306-index.cnxml`; 35 962 байта; SHA-256 `33c2c63118f26332e17e387afa8c9611f264f90f170dbdaa505df73dda662570`; Git blob `2b995f1d71ed6ccf244cb21e53309bee1b9acbde`.
+
+- Полная формула и определение \(Q,T\): байты `[4098,5761)`, 1663 байта, SHA-256 `63ea325648b0e90cb9e510fb0a5ac066daa64f713d2143f3e32ba50e5b7ed27a`. Фрагмент содержит `ΔS=Q/T`, определяет \(Q\) как тепло, передающее энергию в процессе и \(T\) как абсолютную температуру, при которой процесс происходит.
+- Знак \(Q\), SI-единица и оговорка про среднюю температуру: `[4752,5332)`, 580 байт, SHA-256 `347c53ecb082a132f77f30a5244af99b3f69bce9c045b91a301c1dde42b73d6a`. В нём прямо сказано, что \(Q\) положительно для энергии, передаваемой в систему, отрицательно — из системы; энтропия выражается в J/K.
+- Дополнительное определение абсолютной температуры в кельвинах: `[5390,5761)`, 371 байт, SHA-256 `aafefa976fe24f06e626d37295d08205cd408bb6cc0f3a92b65d7afa970d5f0e`.
+
+Raw bytes сохранены. Для извлечения видимого текста используется HTMLParser character data enclosing `para`, с декодированием HTML entities, удалением дочерней разметки и свёрткой Unicode whitespace в ASCII-пробелы. В candidate не использованы прежние неподтверждённые утверждения об обратимости, необратимости или изолированной системе.
+
+### Literal hash recipes и значения
+
+Canonical recipe: SHA-256 от sorted-key compact UTF-8 JSON без завершающего LF. Для группы 1: compact insertion-ordered UTF-8 JSON с ключами в порядке `prompt`, `orderedAnswerTexts`, `correctIndex`, `correctAnswerText`; scalar groups — точные UTF-8 байты; metadata — sorted-key compact UTF-8 JSON.
+
+- Canonical card: `75023d53da683e40857fd6545f4a7290f34b887896bcd697a027f49ddba8968b`
+- Group 1 literal: `908e6c1ee4d697f38109ccb08b5ff2c0f8e16bcf023258165e876913522e185b`
+- Explanation: `1173bb519c44fcc2e372e5099e7154c09321a499d9cddb52cefee97145daf496`
+- Note 0: `c4d2850bc26b0a7fd9f8bcd05b6ae2e74fa9a17cc8c0251b8064278571086794`
+- Note 1: `c3e62e53edf64555fee6c99e0912b5d878eccfe67907a8149c12d9f3b19d1552`
+- Note 2: `7478e89f77d4287c348164018b3b895ca02bf9b9a91d19127b4fba05805e26c9`
+- Note 3: `271272a4a8fed6517b7dfb074be193a26387c68b22605cea74e45df8a3d62933`
+- Difficulty: `c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8`
+- Metadata: `6f4639ab2852da3155c5e227738c91910e9eb515623fd01a04ed0ccb939e6fae`
+
+Metadata literal: `{"title":"OpenStax Physics §12.3 Entropy","url":"https://openstax.org/books/physics/pages/12-3-entropy","verifiedAt":"2026-10-14"}`.
+
+### Bound reasons
+
+1. **Prompt and ordered answers/key** — Source: §12.3 gives \(\Delta S=Q/T\), defines \(Q\) and absolute \(T\), and the sign convention needed for the scenario. Editorial: supplies equal \(Q\) and two Kelvin temperatures so the learner compares the ratio; retains frozen key index 1 and answer order.
+2. **Explanation** — Source: the equation and sign convention support both computed changes and their positive signs. Editorial: shows the two divisions and comparison without introducing the unsupported isolated-system claim.
+3. **Note 0** — Source: the equation supports inverse dependence on \(T\) when \(Q\) is fixed. Editorial: diagnoses the higher-temperature distractor directly.
+4. **Note 1** — Source: the passage explicitly gives J/K as the SI unit. Editorial: adds a useful fact absent from the stem and answer key instead of repeating the calculation.
+5. **Note 2** — Source: \(Q/T\) supports invariance when numerator and denominator scale together. Editorial: distinguishes that case from the fixed-\(Q\) scenario.
+6. **Note 3** — Source: the sign convention says heat into the system makes \(Q\) positive. Editorial: diagnoses the negative-sign distractor.
+7. **Metadata, source binding** — The title and URL identify the captured primary §12.3 source for the formula and sign convention.
+8. **Metadata, editorial binding** — `verifiedAt: 2026-10-14` records the stated verification date; metadata does not claim additional scientific support.
+
+**Difficulty rationale:** `medium` is retained as frozen; the task requires applying a supplied relation and comparing two ratios, without changing the concept or key.
+
+Escape-velocity proposal does not use an orbital-speed formula or \(v_\text{orbit}\) relationship; it compares the 7.9 km/s distractor directly with the cited escape threshold. Therefore no orbital-formula locator is invoked.
+
+Статус всего набора: `PROPOSED; NOT_QUALIFIED; NO_APPLY`; qualityCredit `0`. Это SOURCE proposal; runtime не изменялся, квалификация и применение не выполнялись.
