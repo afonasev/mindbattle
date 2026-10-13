@@ -1,0 +1,205 @@
+{
+  "schema": "mindbattle-question-quality-final10-author-consolidation-v2",
+  "status": "PROPOSED; NOT_QUALIFIED; NO_APPLY",
+  "qualityCredit": 0,
+  "scope": {
+    "baselineHEAD": "bb96006ce803d0583d84eee946d6009647bb240c",
+    "topicRawSha256": "b118907de24e49f6d924c7106d17fefec895eaf6380ea9c5382ed8c145ba38d5",
+    "ids": ["physics-photon-energy-frequency","physics-earth-escape-velocity","physics-pascal-principle","physics-doppler-approaching-source","physics-half-life-remaining-fraction","physics-entropy-isolated-system","physics-electromagnetic-induction-condition","physics-total-internal-reflection","physics-absolute-zero-celsius","physics-momentum-collision-conservation"],
+    "frozenDifficulty": "medium",
+    "frozenCorrectIndices": [3,0,0,0,0,1,1,1,1,1],
+    "protectedOther90": "Unchanged under frozen per-ID bindings in the current scope file, including the accepted MassWeight canonical SHA 56863…",
+    "canonicalRecipe": "SHA256 sorted-key compact UTF-8 JSON, no LF",
+    "group1Recipe": "Compact insertion-ordered UTF-8 JSON with fields in this exact order: prompt, orderedAnswerTexts, correctIndex, correctAnswerText. orderedAnswerTexts contains the four answer text literals in order; correctAnswerText is the literal at correctIndex. The group SHA is SHA256 of those compact JSON bytes.",
+    "otherGroupRecipes": "Explanation and each answer note: exact UTF-8 scalar SHA256. Difficulty: exact UTF-8 scalar SHA256. Metadata: sorted-key compact UTF-8 JSON SHA256."
+  },
+  "derivation": [
+    {"stage":"v1","nativePayloadSha256":"eaed85932409090407506e9d7cb637fad8a86e9134d2babc83e3f321504e3a02"},
+    {"stage":"v2","nativePayloadSha256":"f7a4a805457dabe9123032d63ababc8ff2cfbee84d69cb6d74bf319f3c2ce686"},
+    {"stage":"v3 / native294","nativePayloadSha256":"3a8cb518b057d5570dd4597d30198e18415b75d3224ee643942b492849389760","preservedAt":"continuation-01a13685/physics-author90-v5-original"},
+    {"stage":"native312","change":"Bound separate source/editorial reasons to all four Doppler note literals; explicitly selected TIR verifiedAt 2026-10-14."},
+    {"stage":"native335","change":"Bound the complete TIR explanatory paragraph and following MathML equation block, raw bytes [118352,120412)."},
+    {"stage":"native353","change":"This consolidation fixes transcription errors in three scalar group hashes and the induction full-card hash; card wording is unchanged."}
+  ],
+  "cards": [
+    {
+      "id":"physics-photon-energy-frequency","difficulty":"medium",
+      "prompt":"Фотон исходного света имеет частоту ν. Если частоту увеличить вдвое, как изменится энергия одного фотона?",
+      "answers":[
+        {"text":"Уменьшится вдвое","note":"Энергия фотона пропорциональна частоте: при переходе к ν/2 энергия тоже становится вдвое меньше."},
+        {"text":"Останется прежней","note":"При той же энергии частота должна остаться прежней, поскольку E=hν связывает эти величины."},
+        {"text":"Увеличится втрое","note":"При частоте 3ν энергия стала бы втрое больше; здесь новая частота равна 2ν."},
+        {"text":"Увеличится вдвое","note":"В формуле E=hν постоянная Планка не меняется, поэтому множитель 2 у частоты даёт множитель 2 у энергии."}
+      ],
+      "correctIndex":3,
+      "explanation":"Энергия одного фотона задаётся E=hν. При замене ν на 2ν получаем E′=h(2ν)=2E; интенсивность пучка в этом выводе не участвует.",
+      "source":{"title":"OpenStax College Physics AP §29.2","url":"https://openstax.org/books/college-physics-ap-courses/pages/29-2-the-photoelectric-effect","verifiedAt":"2026-10-13"}
+    },
+    {
+      "id":"physics-earth-escape-velocity","difficulty":"medium",
+      "prompt":"Для Земли возьмите G=6,67×10⁻¹¹ Н·м²/кг², M=5,96×10²⁴ кг и R=6,37×10⁶ м. Какова скорость убегания с поверхности по формуле v=√(2GM/R), округлённо?",
+      "answers":[
+        {"text":"11,2 км/с","note":"Подстановка земных M и R даёт около 1,12×10⁴ м/с; деление на 1000 переводит результат в км/с."},
+        {"text":"7,9 км/с","note":"Эта оценка соответствует круговой орбитальной скорости у поверхности, v≈√(GM/R), без множителя 2 под корнем."},
+        {"text":"5,6 км/с","note":"При одинаковом радиусе скорость убегания в √2 раза больше круговой орбитальной скорости; 5,6 км/с — лишь половина скорости убегания."},
+        {"text":"15,8 км/с","note":"Такой результат получается, если вместо земного радиуса ошибочно подставить примерно половину R: v зависит от 1/√R."}
+      ],
+      "correctIndex":0,
+      "explanation":"Из заданной формулы 2GM/R≈1,25×10⁸ м²/с², поэтому корень равен примерно 1,12×10⁴ м/с, или 11,2 км/с. Это идеализированная скорость старта без сопротивления атмосферы.",
+      "source":{"title":"OpenStax University Physics Vol. 1 §13.3","url":"https://openstax.org/books/university-physics-volume-1/pages/13-3-gravitational-potential-energy-and-total-energy","verifiedAt":"2026-10-13"}
+    },
+    {
+      "id":"physics-pascal-principle","difficulty":"medium",
+      "prompt":"В гидравлическом прессе площадь малого поршня 0,01 м², большого — 0,10 м². Какую силу идеальный пресс создаёт на большом поршне, если к малому приложена сила 100 Н?",
+      "answers":[
+        {"text":"1000 Н","note":"Давление на поршнях одинаково: отношение площадей 10 даёт на выходе силу в 10 раз больше входной."},
+        {"text":"100 Н","note":"Равные силы получились бы при равных площадях; здесь большой поршень имеет площадь в десять раз больше."},
+        {"text":"10 Н","note":"Сила уменьшилась бы в десять раз при передаче того же давления на поршень с площадью в десять раз меньше."},
+        {"text":"10 000 Н","note":"В идеальном прессе выигрыш в силе компенсируется ходом: большой поршень проходит меньшее расстояние, чем малый."}
+      ],
+      "correctIndex":0,
+      "explanation":"По принципу Паскаля давление передаётся по жидкости: F₁/A₁=F₂/A₂. Поэтому F₂=100 Н×(0,10/0,01)=1000 Н; выигрыш в силе компенсируется большим перемещением малого поршня.",
+      "source":{"title":"OpenStax College Physics AP §11.5 Pascal's Principle","url":"https://openstax.org/books/college-physics-ap-courses/pages/11-5-pascals-principle","verifiedAt":"2026-10-13"}
+    },
+    {
+      "id":"physics-doppler-approaching-source","difficulty":"medium",
+      "prompt":"Неподвижный источник издаёт частоту f₀. Затем он движется к неподвижному слушателю в неподвижном воздухе. Как частота у слушателя и длина волны впереди источника соотносятся со значениями при неподвижном источнике?",
+      "answers":[
+        {"text":"Частота выше f₀, длина волны короче λ₀","note":"Спереди движущегося источника фронты расположены ближе; при той же скорости звука слушатель получает их чаще, а длина волны меньше."},
+        {"text":"Частота ниже f₀, длина волны длиннее λ₀","note":"За удаляющимся источником фронты разнесены дальше; в той же среде это соответствует меньшей частоте."},
+        {"text":"Частота f₀, длина волны λ₀","note":"Если источник неподвижен относительно воздуха, соседние фронты разделены на λ₀, и неподвижный слушатель слышит f₀."},
+        {"text":"Частота выше f₀, длина волны длиннее λ₀","note":"В неподвижной среде скорость звука постоянна, поэтому произведение fλ фиксировано: повышение частоты связано с уменьшением длины волны."}
+      ],
+      "correctIndex":0,
+      "explanation":"Сравниваются один и тот же источник и неподвижный слушатель в одной и той же среде. При приближении фронты перед источником сближаются; постоянная скорость звука связывает более короткую длину волны с большей получаемой частотой.",
+      "source":{"title":"OpenStax College Physics AP §17.4 Doppler Effect","url":"https://openstax.org/books/college-physics-ap-courses/pages/17-4-doppler-effect-and-sonic-booms","verifiedAt":"2026-10-13"}
+    },
+    {
+      "id":"physics-half-life-remaining-fraction","difficulty":"medium",
+      "prompt":"В образце с большим числом нестабильных ядер прошло три периода полураспада. Какая доля исходного числа ядер в среднем ещё не распалась?",
+      "answers":[
+        {"text":"Одна восьмая","note":"После каждого интервала остаётся половина предыдущего количества: три интервала дают (1/2)³."},
+        {"text":"Одна четверть","note":"Доля 1/4 получается после двух последовательных периодов: (1/2)²."},
+        {"text":"Одна шестнадцатая","note":"Доля 1/16 соответствует четырём периодам полураспада, поскольку каждый добавляет ещё один множитель 1/2."},
+        {"text":"Половина","note":"Половина исходного количества — ожидаемый результат после одного периода, а не трёх."}
+      ],
+      "correctIndex":0,
+      "explanation":"Для каждого периода полураспада ожидаемая доля умножается на 1/2. Через три периода это 1×(1/2)×(1/2)×(1/2)=1/8; речь о среднем числе ядер в образце.",
+      "source":{"title":"OpenStax College Physics AP §31.5 Half-Life","url":"https://openstax.org/books/college-physics-ap-courses/pages/31-5-half-life-and-activity","verifiedAt":"2026-10-13"}
+    },
+    {
+      "id":"physics-entropy-isolated-system","difficulty":"medium",
+      "prompt":"В изолированной системе протекает необратимый самопроизвольный процесс. Как согласно второму началу меняется полная энтропия системы?",
+      "answers":[
+        {"text":"Уменьшается","note":"Уменьшение энтропии подсистемы возможно при обмене с окружением, которое принимает больше энтропии."},
+        {"text":"Возрастает","note":"Для необратимого процесса энтропия изолированной системы увеличивается; при обратимом предельном случае она постоянна."},
+        {"text":"Остаётся постоянной","note":"Постоянная энтропия соответствует обратимому процессу; необратимость даёт положительное изменение."},
+        {"text":"Становится равной нулю","note":"Тепло самопроизвольно переходит от более горячих объектов к более холодным, а не в противоположном направлении."}
+      ],
+      "correctIndex":1,
+      "explanation":"В изолированной системе нет обмена энтропией с окружением. Второе начало требует, чтобы при необратимом процессе её полная энтропия возрастала; равенство относится к обратимому пределу.",
+      "source":{"title":"OpenStax Physics §12.3 Entropy","url":"https://openstax.org/books/physics/pages/12-3-entropy","verifiedAt":"2026-10-13"}
+    },
+    {
+      "id":"physics-electromagnetic-induction-condition","difficulty":"medium",
+      "prompt":"Магнитный поток через катушку меняется, когда выключатель в её цепи разомкнут. Что возникает непосредственно по закону Фарадея?",
+      "answers":[
+        {"text":"Только ток, без ЭДС","note":"Ток требует замкнутого пути для движения зарядов; при разрыве цепи непрерывный ток не течёт."},
+        {"text":"ЭДС индукции, хотя ток в разомкнутой цепи не течёт","note":"Для катушки из N витков модуль ЭДС равен N|ΔΦ/Δt|: чем быстрее меняется поток, тем больше ЭДС."},
+        {"text":"Ни ЭДС, ни ток","note":"Разомкнутый контур исключает ток, но закон Фарадея связывает ЭДС с изменением магнитного потока."},
+        {"text":"Постоянный ток независимо от изменения потока","note":"Индуцированный ток зависит от ЭДС и сопротивления замкнутой цепи, а не возникает как постоянный ток сам по себе."}
+      ],
+      "correctIndex":1,
+      "explanation":"Закон Фарадея связывает ЭДС индукции со скоростью изменения магнитного потока. Разомкнутость означает отсутствие замкнутого пути для тока; эти условия относятся к разным величинам.",
+      "source":{"title":"OpenStax College Physics AP §23.1 Induced EMF","url":"https://openstax.org/books/college-physics-ap-courses/pages/23-1-induced-emf-and-magnetic-flux","verifiedAt":"2026-10-13"}
+    },
+    {
+      "id":"physics-total-internal-reflection","difficulty":"medium",
+      "prompt":"Луч идёт из стекла с показателем преломления 1,50 в воздух с показателем 1,00. Угол падения равен 50° к нормали. Критический угол примерно 42°. Каков исход на границе?",
+      "answers":[
+        {"text":"Обычное преломление","note":"Если угол ниже критического, часть света проходит во вторую среду; при n₂<n₁ направление луча меняется от нормали."},
+        {"text":"Полное внутреннее отражение","note":"Критический угол задаётся законом Снеллиуса: sin θc=n₂/n₁; для этих показателей это около 42°."},
+        {"text":"Частичное отражение и преломление","note":"Ниже критического угла на границе обычно есть и отражённый, и преломлённый луч."},
+        {"text":"Преломление вдоль границы","note":"Преломлённый луч идёт вдоль границы при угле, равном критическому; 50° больше указанного порога."}
+      ],
+      "correctIndex":1,
+      "explanation":"Полное внутреннее отражение возможно при движении света из среды с большим показателем преломления в среду с меньшим. Угол падения при этом должен превышать критический угол.",
+      "source":{"title":"25.4 Total Internal Reflection - College Physics for AP® Courses 2e | OpenStax","url":"https://openstax.org/books/college-physics-ap-courses-2e/pages/25-4-total-internal-reflection","verifiedAt":"2026-10-14"}
+    },
+    {
+      "id":"physics-absolute-zero-celsius","difficulty":"medium",
+      "prompt":"Температура холодного криостата равна 20 K. Какова она по шкале Цельсия? Используйте смещение 273,15 градуса между шкалами.",
+      "answers":[
+        {"text":"−20 °C","note":"Значение −20 °C соответствует примерно 253,15 K, если прибавить 273,15."},
+        {"text":"−253,15 °C","note":"Из показания в кельвинах вычитают 273,15: 20−273,15=−253,15; шаг одного градуса одинаков на обеих шкалах."},
+        {"text":"253,15 °C","note":"253,15 — разность между нулём Цельсия и заданной температурой в кельвинах; знак должен быть отрицательным."},
+        {"text":"−293,15 °C","note":"Это получилось бы при ошибочном сложении модулей 20 и 273,15 вместо перевода T(K)=t(°C)+273,15."}
+      ],
+      "correctIndex":1,
+      "explanation":"Связь шкал имеет вид T(K)=t(°C)+273,15. Следовательно, t=20−273,15=−253,15 °C; величина шага градуса у шкал одинакова, отличается начало отсчёта.",
+      "source":{"title":"OpenStax College Physics AP §13.1 Temperature","url":"https://openstax.org/books/college-physics-ap-courses/pages/13-1-temperature","verifiedAt":"2026-10-13"}
+    },
+    {
+      "id":"physics-momentum-collision-conservation","difficulty":"medium",
+      "prompt":"Две одинаковые тележки массой m движутся по прямой. Первая едет со скоростью v, вторая покоится; внешним импульсом за время удара можно пренебречь. После неупругого столкновения они сцепляются. Какова их общая скорость?",
+      "answers":[
+        {"text":"Нулевая","note":"Нулевой итоговый импульс требовал бы равных встречных начальных импульсов; здесь до столкновения движется только первая тележка."},
+        {"text":"v/2 в направлении движения первой тележки","note":"Начальный импульс mv сохраняется; после сцепления масса 2m, значит общая скорость равна mv/(2m)=v/2. Кинетическая энергия при таком неупругом ударе может уменьшиться."},
+        {"text":"v в направлении движения первой тележки","note":"Скорость v получилась бы при передаче импульса телу той же массы без присоединения второй тележки."},
+        {"text":"v/2 против направления первой тележки","note":"Импульс системы задаёт направление результирующей скорости; единственный начальный импульс направлен вперёд."}
+      ],
+      "correctIndex":1,
+      "explanation":"До удара полный импульс равен mv. После сцепления он равен 2m·u; из сохранения импульса u=v/2 в первоначальном направлении. При неупругом столкновении кинетическая энергия может уменьшиться.",
+      "source":{"title":"OpenStax College Physics AP §8.3 Conservation of Momentum","url":"https://openstax.org/books/college-physics-ap-courses/pages/8-3-conservation-of-momentum","verifiedAt":"2026-10-13"}
+    }
+  ],
+  "cardAndGroupHashes": {
+    "photon":{"card":"1fcbe7da6d7e283f1a027d7bf0b4f10a4195e24d6c3160fcd3566754d4cc78bb","group1":"cfb17372f1460a8b90926ce2551fd22ef756e663e38254983ea12943a3c48138","explanation":"283ab70f7524a662b80631014bb6c7769618090e4240718bae460beb13e004f","note0":"3ea8324997ec65bb61d5aa5d813581c66e9d39335bbde6f3b94b4624548dfe17","note1":"22d8f5cd1aa080f7bdc422e6cc6ff66276474852dc65e75e5f77373f8e4dcf9a","note2":"cf89b66055839d13777a5a9ef66b1e4d0d27e323ac33d48f19fc6bf4e6dac592","note3":"6735e45d72f75ea72d5025323b3fbe45c5f7b6c44d1ee42ba6a54e6f71cea7df","difficulty":"c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8","metadata":"baf397ec1b1aa6f66590e8b53126758389f2f305f9c34257099b815321f156b8"},
+    "escape":{"card":"5967f990a2b3cc3d18304ffa6d084eecc01935dceb835ab02cc33c869152b93a","group1":"a94eb3c055b7e31ce0c6c67343dc9e25def9a2acc501098fd5d1d7fb2a0d64c9","explanation":"7205c3df9e27d09837a65f8eabd5c1db1f5c661ea43fd8f33fc8610858d9dbe4","note0":"343c21b362483c5940117a210460a7f03d8f8bfc28edfbc2d418b7d3255409d5","note1":"24df4b164a541beedcdb1acbee7cb98ab838661d906501ad2fad54f2dff2ea44","note2":"8044bbde6a2e9de8936258b42e58ac056e5c2b6d2d93f917f17edef7218884e7","note3":"d4bcb8acc47b155b3aae38b063aadf752d33694a6788f5e4650689518d1f0b7b","difficulty":"c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8","metadata":"0232dc9f119ce60d91616ce2ad709429a9ad0095671a912acad8c20308595bdb"},
+    "pascal":{"card":"7e437db02c57a568b19480fcd822168efd3c7f5e54fd6b4877bb030d5df48bc6","group1":"3b732d2c6753dc86b40f539f9684bee8c4bd2c3f82fc7075054186eb68950157","explanation":"6c3c0427e7e07716e7ce6968b9922f43cc2ffc114665cf5969eec035cf479d58","note0":"419b1afe4516b3e44131ab6f40fd36cb28969a20c58c7f073bb08858b4860766","note1":"8e6e3f1703a41c4a91925d23ad00aceb4f54392105876969411153dd3b46232a","note2":"e1e21571ebb739d9a880d46185c1fe5137b33064873b9cc17a1dc5b77a9433f5","note3":"1451a3b7851aec3221680e62ab7e3b91e2490b705e70d56ef0f436b733f1c678","difficulty":"c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8","metadata":"eb6171ccd36652c60d54f318a8210989cb8688ae7b2f636f71453dd30fd4a8d1"},
+    "doppler":{"card":"80aa6f7d583abe8ae6883e180fc258f7e0ab49174fef378b6ca22f0acbf44462","group1":"c931e9d93d4c8198c5f342642c3fb544dfa8de16e19a7d931e7a0ab7cf36494b","explanation":"012fe930bb7c3b8bc94adc8a4367d4594446c4ceb8a9b61b1630e12375cd6d49","note0":"aa90df01ec19f8801fe0cd9e6f14a25461e3aa3e7f4d5e3df096310e9383920a","note1":"7936fdfb5a5e5a3a21684f9ef7c1b2c8850dc63e645ef07b40c3a500cfeac173","note2":"760610ae2570399b15dbc2e5970a5db377cdd5a6e2991660e310305cfcedeca9","note3":"9130f221b65bfc4215bcb55b0448e7103da0ff5771c159aa6bd88a13fea3a962","difficulty":"c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8","metadata":"eb167ed03e45d32a246c788a06749ae8c4d3bb2e556d5a17c7542913b35a80b4"},
+    "half-life":{"card":"c2b2b018f4407b9e71799e828896b284e0cf4b77c0c6b6a8bb9b559c6c470b7e","group1":"11f3a3822cc6f7545e8af6434aa7a1c6f1916a5d9f4d2e895ded1659acc64ffc","explanation":"a13aabb4e8a362afb9abfc07072498a922a7a7df8d0dcc9b7d12377ebaa5e16a","note0":"f3157a83808dc343e259e30ed47818fef3ad2ece9d171c418483738283da43c6","note1":"e1be149081a61d97ea926fe86ff59a1f8037d0327156329aa75b41369ca7e77f","note2":"5b569951b1b7dbfd846f3d0f2ada0fd62a73ea47070ef9390d1feeba44ca6ae3","note3":"b011ee25478eb8ef16df7a4834ae77d727cf9cf3b39dbf488f0dd2d6f8916648","difficulty":"c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8","metadata":"2dcc30efbf999e92b7232cfde6bf4233b5872c9e6738789337239151d0c9dfc5"},
+    "entropy":{"card":"8d4c457b48e834fc86f5e650f7272cf81eed708ce405b9fae30ebeb7e59d58e6","group1":"910fdad9ce435d06ee4d5d901d571705cbf081aa605e078d3781c27cd73d110e","explanation":"6375d06844e187118c294b0b3960107ea225dc26c73b44f05ce2c11bb866c6c2","note0":"cfeab426651ad5cffebfbcd1c27fc84890831b0670f1e0ef6925892c0990ab5e","note1":"12b9e9391ea24f59a6038aee8cb2c4044a117123030b8a7a827c4c835c725eb3","note2":"08367bef5c2d11bae56bd74a3604b18ae62f4b82648a6234f80c774cf2ef20de","note3":"e53fdcb3881704240111d6c553f6ba3503f01d0528fec3d7fb3ca905bb0d2e96","difficulty":"c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8","metadata":"c2ae197b7cd2b084f0aab22dccf3b0db5f5bd5b474789dfaf07493af8886114e"},
+    "induction":{"card":"7f946fd8081a73e3d5a1dbde13f9a4e91ca88a188391c949ea959c2b9ff539d1","group1":"03c38e271f56930d99fe443804be32dd1513525e2eff8b3171246deed7ab0d99","explanation":"f89cca5e223e810998b71f02110d7091a8edfa1769e72db47f7844e368eb689a","note0":"089d42e3ec4ae7d0f250e7e134b34a9b3ed08eee6dc1182db2839d2d6e2a8035","note1":"c23be799e95753a885cb67e0aea27fe9884fd0e76ccd931b4ceb36359e3d4872","note2":"f629612c5fd1664d2043189ba5e7e5e589a4f6dc812e280d73365885b6caa015","note3":"e44f33014f416fc5a5f415d50e2b0901caa2c67814acb8b243274657a1ae8f82","difficulty":"c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8","metadata":"6a133523ae03a20ec4cef4cc75c8a1791f1d053b02c19065bbd695a31bc71c38"},
+    "tir":{"card":"bdc904046a98c9b131340f04e067e898406243eb3a3b7201f7c301b048773133","group1":"8c1051c99c74e688197a788734bca60622e8fc370fd18a9226e2b973261e741a","explanation":"70dc262e358e0ff74674228fe6045cd6e4dcaa381e6de3f2694b3bfe3512d902","note0":"4be94ffc1949c1026738ca49d845af25ef8e6f69df3b7fe844b964e8aac65353","note1":"93a521c2dafc0d7af14a3386b0bfdeee1e031f0db5a10a18359e77f72ca5cf0b","note2":"628a031425e48b410392d5f24e70cce5df768fdff51cb7b9ca5c7b14b86815e8","note3":"95c6360bfc1be3bec31da688471ed38ab49f1868968d9e0183e77766c1303dac","difficulty":"c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8","metadata":"9470af2510694f84169edd2ff97cb3294daeda47e2955013bdc98243f422b373"},
+    "absolute-zero":{"card":"8578171cced28ed5d7528f3a634716d92bb5f313172b833525fdc0a05907ebbe","group1":"2255bee55b80aab09abb56d104f16d8e15c51b463410c62367b5540eb21491fa","explanation":"6d7a05168313dac25859815a0fdf98588bbad11e2222d9a1fa1dfbffe37d5989","note0":"aa4512c2b12e5b876d9c0f306041c9bc25c25b54111c3bcab0e3aaa387ed2e3","note1":"5d16bceb56c2aa030a9aef853128a21ba5d43e2debf6aebe8f19ec834785f08c","note2":"820929e3301f49630a5780b707ce843aeef90025413c8a59f7e86c227f4d3913","note3":"4f3552329fbc47bfa71fc074f56b6253ca74eac1688ae67f68ae79c4fd8e012d","difficulty":"c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8","metadata":"4596ac69ea311be87cfc7292a6e95807444b3c7a1f25cdf5860eaf229982da1e"},
+    "momentum":{"card":"fc3ca8d3af6046d15ce37dc2ccf12038639bce3a111953fce72bb2c15c1db3fd","group1":"2781ab97f06aa918e2e2ee149eabcf30228c4bd73f0f74697e2b2596b149a124","explanation":"47580afcab6d7c6a68963fc0b1683d15743c136d3fcb1d6600c422af756d94e8","note0":"4a97483e7891c91b86ce0ef22a2b6eb2a6f0c2cf02cdef5ac55a2284c84d1b0e","note1":"906c2ae6cdd03a8a3f567743bf18ae229b3d0930dd7ec7ea17cf3e5530e0654f","note2":"f066bb329ad19dcb4b4e7d9cb7d52f528caf92e24b911a8e70c2c91495e40ee9","note3":"16d52dd7b7b6816a247b54648fd04a87542d5dc21ebb933a85f084b2c3d8f0e7","difficulty":"c082456a7766e23a18db084cd34b6ff510baef506548b897cc80e9b7d3e121c8","metadata":"24b6bee3aa29060d27fb4bb49ae29c8cf47de3a4eb5db69b9a149335e7dad7f0"}
+  },
+  "difficultyAndMetadataPairs": {
+    "difficultySourceReason": "Difficulty is frozen by the authorized scope; no external-source claim is made for the label.",
+    "difficultyEditorialReason": "All ten tasks retain Medium and their original correct-index slots; each uses application, comparison, or bounded multi-step reasoning.",
+    "metadataSourceReason": "Each metadata literal uses the exact title and URL in its named saved sourceTable row; TIR title matches the captured HTML title.",
+    "metadataEditorialReason": "Metadata identifies the cited captured source; verifiedAt records the author review date, with TIR explicitly set to 2026-10-14."
+  },
+  "sourceEvidenceRefs": {
+    "sourceTable":"docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13685/physics-author-composite-original/original-native-payload.json#/sourceTable",
+    "typedSourcePassages":"docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13685/physics-author-composite-original/original-native-payload.json#/typedSourcePassages",
+    "TIRCompleteContext":{"bodyPath":"docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13294/capture-only/physics-cd-next10-pages/tir-full-ranges/assembled-original-entity.body","bodySha256":"c2ee20e957c75485891b88432455618d0995038b8d0abd1fc5b78b5f11af4aa8","byteRangeHalfOpen":[118352,120412],"bytes":2060,"rawSha256":"e0ec77ececfb651127275bcf20579957394861b08b0e7f4ae4daa2fdd24e4852","normalization":"Preserve raw UTF-8. Read the complete MathML Content annotation as θc=sin⁻¹(n₂/n₁), n₁>n₂."},
+    "DopplerContexts":{"first":[103411,105774],"firstSha256":"01e3f54cd59e811fd8478b2e4ce47cd78e1622edd12afe3f752ae25cbabbc2c4","second":[112053,115370],"secondSha256":"c3d9399d035d8a26d67873a03451cac2928399aab8c0f77a5538a47a24fcd774"}
+  },
+  "neighborReferencesAndComparisons": {
+    "reviewFile":"docs/content-audits/question-quality-wave-7/physics/first10-successor-native-01a13237-776c-7242-a52b-fff331e038f5/catalog-neighbor-review.json",
+    "semanticRetrievalSha256":"94e0d52ca7da3e927f7a1679d62153f7a9ff4f4086ecc67f52c8a75e6700ce84",
+    "directInverseRetrievalSha256":"5af632b0f18ba5a83604fff8280c2ef1f33c08c8912527431c09c6a53e1d1f11",
+    "fullNeighborSnapshotsRef":"physics-author-composite-original/original-native-payload.json#/fullRelevantCurrentNeighborObjects",
+    "comparisonFindings":{
+      "photon":"Threshold-frequency item asks electron emission below threshold; this asks photon energy scaling. Photoelectric-effect item names emission; work-function item asks minimum removal energy.",
+      "escape":"Gravity-direction item asks force direction; this asks escape-speed magnitude from M and R.",
+      "pascal":"Pressure-force-area item defines pressure; this applies equal pressure across piston areas. Bernoulli item concerns flowing-fluid energy, unlike the static press.",
+      "doppler":"Generic Doppler item names the phenomenon; this compares f and λ against a stationary-source baseline.",
+      "half-life":"Neighbor defines one half-life interval; this applies three successive intervals.",
+      "entropy":"Entropy-disorder item concerns microstates; heat-direction item asks transfer direction. This asks total entropy change in an isolated irreversible process.",
+      "induction":"Induction item names the phenomenon; Lenz item asks direction; magnetic-flux item defines flux. This asks EMF under open-switch conditions and uses the rate relation.",
+      "tir":"Critical-angle item names the threshold; refraction item names refraction; refractive-index item defines n. This applies both TIR conditions to a numeric glass-air case.",
+      "absolute-zero":"Freezing and boiling items ask phase references; temperature-warmth defines temperature. This applies a Kelvin-Celsius conversion.",
+      "momentum":"p=mv item defines momentum; impulse item defines force-time impulse; angular-momentum item concerns rotation. This applies linear momentum conservation to sticking carts."
+    },
+    "manualReviewBoundary":"22 complete relevant neighbor objects were personally read. The saved catalog review covers 31 cards, not the entire catalog."
+  },
+  "acceptance": {
+    "independentCurrentReader":"PENDING",
+    "manualSourceQualification":"PENDING",
+    "apply":"NOT_AUTHORIZED",
+    "qualityCredit":0
+  }
+}
