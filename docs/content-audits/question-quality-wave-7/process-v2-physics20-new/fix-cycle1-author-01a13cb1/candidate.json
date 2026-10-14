@@ -1,0 +1,1826 @@
+{
+  "schema": "fresh-author-fix-cycle1-v1",
+  "task": "process-v2-physics20-new/fix-request.json",
+  "baselineCommit": "eba5b6fd10ffe3cda5bc6b3a2799c1b1a9aee0d9",
+  "branch": "codex/question-quality-wave-6",
+  "cycle": 1,
+  "sourceCapture": "process-v2-physics20-new/author/sources/alternate/curl-captures/capture-manifest.json",
+  "candidateCanonicalization": "SHA-256 UTF-8 json.dumps ensure_ascii=False sort_keys=True separators=(\",\", \":\"); no BOM or trailing newline",
+  "frozen": [
+    "id",
+    "topic",
+    "order",
+    "difficulty",
+    "correctIndex"
+  ],
+  "qualityCredit": 0,
+  "peerReview": "process-v2-physics20-new/reviewer/review.json and reviewer/report.md; 9 FIX findings reviewed; refraction-medium PASS intentionally outside scope.",
+  "scopeIds": [
+    "physics-ext-torque-rotation",
+    "physics-ext-angular-velocity",
+    "physics-ext-capacitance-charge-voltage",
+    "physics-ext-resistance-current-opposition",
+    "physics-ext-induction-current-field",
+    "physics-ext-diffraction-obstacle",
+    "physics-ext-electric-flux",
+    "physics-ext-magnetic-flux",
+    "physics-ext-coriolis-force"
+  ],
+  "entries": [
+    {
+      "id": "physics-ext-torque-rotation",
+      "status": "READY",
+      "beforeHash": "562153acd12f25484ec97470f51c123ab759bb25a776fd31bb9a23e6509d5f00",
+      "beforeCard": {
+        "id": "physics-ext-torque-rotation",
+        "difficulty": "medium",
+        "prompt": "Какая величина характеризует вращательное действие силы относительно оси?",
+        "answers": [
+          {
+            "text": "Угловая скорость",
+            "note": "Угловая скорость описывает темп вращения тела."
+          },
+          {
+            "text": "Момент силы",
+            "note": "Момент силы зависит от силы и плеча её приложения."
+          },
+          {
+            "text": "Электроёмкость",
+            "note": "Электроёмкость показывает способность системы накапливать электрический заряд."
+          },
+          {
+            "text": "Сопротивление",
+            "note": "Электрическое сопротивление препятствует движению зарядов в проводнике."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Момент силы зависит от силы и плеча её приложения. Он определяет способность силы вызывать угловое ускорение.",
+        "source": {
+          "title": "MIT OCW 8.01L Physics I formula sheet",
+          "url": "https://ocw.mit.edu/courses/8-01l-physics-i-classical-mechanics-fall-2005/7939838239ae7b383d409960bca41512_final_exam_formu.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "physics-ext-torque-rotation",
+        "difficulty": "medium",
+        "prompt": "При перпендикулярном приложении неизменной силы плечо рычага увеличили вдвое. Во сколько раз изменится модуль момента силы?",
+        "answers": [
+          {
+            "text": "Увеличится в четыре раза",
+            "note": "Квадратичная зависимость возникла бы, если бы одновременно с плечом вдвое увеличить и силу."
+          },
+          {
+            "text": "Увеличится вдвое",
+            "note": "Для перпендикулярной силы момент равен произведению силы на плечо."
+          },
+          {
+            "text": "Не изменится",
+            "note": "При неизменной силе момент меняется линейно с плечом её приложения."
+          },
+          {
+            "text": "Уменьшится вдвое",
+            "note": "Удвоение плеча не уменьшает его: модуль момента растёт вместе с плечом."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Модуль момента силы равен произведению силы на перпендикулярное плечо, поэтому удвоение плеча при неизменной силе удваивает момент. Момент силы задаёт изменение углового импульса.",
+        "source": {
+          "title": "MIT OCW 8.01L Physics I formula sheet",
+          "url": "https://ocw.mit.edu/courses/8-01l-physics-i-classical-mechanics-fall-2005/7939838239ae7b383d409960bca41512_final_exam_formu.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "ce8c7f470b96f66a59c834220212bbe6408c9e1346522fbbd27d686a51a98f8d",
+      "sixGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "sha256": "4f96a42fd07f4bff13e611bb6ae7cafecf10bf352713ce932421fa6524f002d1",
+          "reason": "Четыре результата масштабирования плеча сохранены одной измеряемой величиной; фактор 2 является единственным, который следует из τ=rF⊥ при неизменной F.",
+          "locator": "p.2, rotational table and τ=rF sin θ",
+          "literal": {
+            "prompt": "При перпендикулярном приложении неизменной силы плечо рычага увеличили вдвое. Во сколько раз изменится модуль момента силы?",
+            "answers": [
+              "Увеличится в четыре раза",
+              "Увеличится вдвое",
+              "Не изменится",
+              "Уменьшится вдвое"
+            ],
+            "correctIndex": 1
+          },
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "group": "explanation",
+          "sha256": "4d56a58b4a5b8ae2fe57329946274ea7abdadf7cc2e7624bc848a2570ca589f1",
+          "reason": "MIT определяет момент как r×F и связывает его с изменением углового импульса; при перпендикулярном приложении удвоение r удваивает τ.",
+          "locator": "p.2, rotational table and τ=rF sin θ",
+          "literal": "Модуль момента силы равен произведению силы на перпендикулярное плечо, поэтому удвоение плеча при неизменной силе удваивает момент. Момент силы задаёт изменение углового импульса.",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "group": "note0",
+          "sha256": "935b463803396904cdb37df54a4adecd53df1648982ec9821ce795e3cd2e9958",
+          "reason": "Фраза о четырёхкратном росте верна лишь при удвоении и силы, и плеча; в prompt сила зафиксирована.",
+          "locator": "p.2, rotational table and τ=rF sin θ",
+          "literal": "Квадратичная зависимость возникла бы, если бы одновременно с плечом вдвое увеличить и силу.",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "group": "note1",
+          "sha256": "732cedcdd300af9249b84bf31e259961651b835a355a445ee436af486b880f8b",
+          "reason": "Ответ 2 следует непосредственно из τ=rF при θ=90°; формула даёт нужную единицу момента.",
+          "locator": "p.2, rotational table and τ=rF sin θ",
+          "literal": "Для перпендикулярной силы момент равен произведению силы на плечо.",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "group": "note2",
+          "sha256": "705ecfb6d317da51e11ab3e53f188d3460ce53f08853865de829ee063e4df749",
+          "reason": "При фиксированной силе момент пропорционален плечу, поэтому он не остаётся неизменным при удвоении r.",
+          "locator": "p.2, τ=dL/dt and rotational table",
+          "literal": "При неизменной силе момент меняется линейно с плечом её приложения.",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "group": "note3",
+          "sha256": "4f0a2c19d877ed85925f7e6679e80dfe048b6323224d220937931bb1626b51f0",
+          "reason": "Плечо увеличено, а не уменьшено; из линейной зависимости следует рост момента вдвое, а не его уменьшение.",
+          "locator": "p.2, rotational kinetic energy equation",
+          "literal": "Удвоение плеча не уменьшает его: модуль момента растёт вместе с плечом.",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        }
+      ],
+      "variantAndNoteReview": [
+        {
+          "index": 0,
+          "text": "Увеличится в четыре раза",
+          "correct": false,
+          "substitution": "Четырёхкратный рост требовал бы удвоить также силу; условие фиксирует её.",
+          "noteReview": "Квадратичная зависимость возникла бы, если бы одновременно с плечом вдвое увеличить и силу.",
+          "noteUseful": true,
+          "sourceLocator": "p.2, rotational table and τ=rF sin θ",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "index": 1,
+          "text": "Увеличится вдвое",
+          "correct": true,
+          "substitution": "τ=rF⊥: при r→2r модуль момента удваивается.",
+          "noteReview": "Для перпендикулярной силы момент равен произведению силы на плечо.",
+          "noteUseful": true,
+          "sourceLocator": "p.2, rotational table and τ=rF sin θ",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "index": 2,
+          "text": "Не изменится",
+          "correct": false,
+          "substitution": "Из τ∝r следует изменение, поэтому «не изменится» не следует.",
+          "noteReview": "При неизменной силе момент меняется линейно с плечом её приложения.",
+          "noteUseful": true,
+          "sourceLocator": "p.2, τ=dL/dt and rotational table",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "index": 3,
+          "text": "Уменьшится вдвое",
+          "correct": false,
+          "substitution": "Уменьшение противоречит увеличению r при неизменном F.",
+          "noteReview": "Удвоение плеча не уменьшает его: модуль момента растёт вместе с плечом.",
+          "noteUseful": true,
+          "sourceLocator": "p.2, rotational kinetic energy equation",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "review": "Card-level validation",
+          "uniqueCorrectAnswer": true,
+          "allFourTextsDistinct": true,
+          "grammaticalSubstitutionChecked": true,
+          "difficulty": "Medium retained; solver applies linear dependence τ=rF⊥.",
+          "neighborEvidence": "See neighborReview."
+        }
+      ],
+      "neighborReview": {
+        "neighbors": [
+          "physics-ext-angular-velocity (кинематический темп ω отделён от динамического момента τ)",
+          "physics-ext-angular-momentum (момент импульса — другая вращательная величина)",
+          "physics-ext-power (мощность — скорость передачи энергии, не момент силы)"
+        ],
+        "assessment": "Проверены реальные близкие карточки каталога; факты и навыки различаются, прямого дубля нет."
+      },
+      "reasonCodes": [
+        "distractors"
+      ],
+      "unresolved": null
+    },
+    {
+      "id": "physics-ext-angular-velocity",
+      "status": "READY",
+      "beforeHash": "513415c143d1a6b7561b04b1bdf72498d322775675e6e17c8ee536084b5c701a",
+      "beforeCard": {
+        "id": "physics-ext-angular-velocity",
+        "difficulty": "medium",
+        "prompt": "Какая величина показывает изменение угла поворота за единицу времени?",
+        "answers": [
+          {
+            "text": "Электроёмкость",
+            "note": "Электроёмкость показывает способность системы накапливать электрический заряд."
+          },
+          {
+            "text": "Угловая скорость",
+            "note": "Угловая скорость описывает темп вращения тела."
+          },
+          {
+            "text": "Сопротивление",
+            "note": "Электрическое сопротивление препятствует движению зарядов в проводнике."
+          },
+          {
+            "text": "Выталкивающая сила",
+            "note": "Выталкивающая сила возникает из-за разности давлений на разных глубинах."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Угловая скорость описывает темп вращения тела. В СИ её измеряют в радианах в секунду.",
+        "source": {
+          "title": "MIT OCW 8.01L Physics I formula sheet",
+          "url": "https://ocw.mit.edu/courses/8-01l-physics-i-classical-mechanics-fall-2005/7939838239ae7b383d409960bca41512_final_exam_formu.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "physics-ext-angular-velocity",
+        "difficulty": "medium",
+        "prompt": "Тело совершает один полный оборот за период T. Какова его угловая скорость?",
+        "answers": [
+          {
+            "text": "4π/T",
+            "note": "Это угловая скорость для двух полных оборотов за время T."
+          },
+          {
+            "text": "2π/T",
+            "note": "За один оборот угол меняется на 2π радиан, а угловая скорость равна изменению угла за время."
+          },
+          {
+            "text": "π/T",
+            "note": "Такое значение соответствовало бы повороту на половину оборота за время T."
+          },
+          {
+            "text": "T/(2π)",
+            "note": "Это время на один радиан; величина обратна угловой скорости."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "За период тело проходит угол 2π радиан, поэтому угловая скорость равна 2π/T. В формулах равномерного движения по окружности она также связана с линейной скоростью соотношением v=ωr.",
+        "source": {
+          "title": "MIT OCW 8.01L Physics I formula sheet",
+          "url": "https://ocw.mit.edu/courses/8-01l-physics-i-classical-mechanics-fall-2005/7939838239ae7b383d409960bca41512_final_exam_formu.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "9bfbd85df4c32f8330ccf569ad1bcbbd12f230045f4b694ae4574250405f66d8",
+      "sixGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "sha256": "49d8d6e13496f1e151e71ce7ae0e7a627321b57612d0043382160bc424a96239",
+          "reason": "Варианты проверяют угловую скорость одного оборота формулой изменения угла за период; все ответы имеют одну и ту же размерность или её обратную для distractor 3.",
+          "locator": "p.1, constant-speed circular motion; ω in radians per second",
+          "literal": {
+            "prompt": "Тело совершает один полный оборот за период T. Какова его угловая скорость?",
+            "answers": [
+              "4π/T",
+              "2π/T",
+              "π/T",
+              "T/(2π)"
+            ],
+            "correctIndex": 1
+          },
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "group": "explanation",
+          "sha256": "7e5ae49f08b1a6d845f66036808827662f110319855fbda1a1e14e82a515a9a4",
+          "reason": "В одном периоде тело проходит 2π радиан, так что ω=2π/T; источник также обозначает ω как угловую скорость кругового движения.",
+          "locator": "p.1, angular speed and circular motion",
+          "literal": "За период тело проходит угол 2π радиан, поэтому угловая скорость равна 2π/T. В формулах равномерного движения по окружности она также связана с линейной скоростью соотношением v=ωr.",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "group": "note0",
+          "sha256": "2a40a37165447290fd1876e57b29cbef190a64bc4d0b18c61ff9ba18be8fcfdd",
+          "reason": "4π/T означало бы 4π радиан за T, то есть два оборота за этот период.",
+          "locator": "p.1, constant-speed circular motion; ω in radians per second",
+          "literal": "Это угловая скорость для двух полных оборотов за время T.",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "group": "note1",
+          "sha256": "1909360fb5584a12dbfe3a9a3252185a4026a47a87e052088cc7ac2dfd607e01",
+          "reason": "Это значение отвечает половине оборота за период, а не полному обороту.",
+          "locator": "p.1, angular speed and circular motion",
+          "literal": "За один оборот угол меняется на 2π радиан, а угловая скорость равна изменению угла за время.",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "group": "note2",
+          "sha256": "5dc92fbf17df75177a5e6a32eedb676eb397a51ed496afab255e91d3b75b0c41",
+          "reason": "Поворот за один период равен 2π; деление угла на T даёт ω.",
+          "locator": "p.1, π radians = 180 degrees",
+          "literal": "Такое значение соответствовало бы повороту на половину оборота за время T.",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "group": "note3",
+          "sha256": "7e649fa32f3c3b5d11d26ac3ba490acf74fd6127e4328f21e80a8d4c809e1af3",
+          "reason": "T/(2π) — обратное отношение времени к углу, тогда как спрашивается угол на единицу времени.",
+          "locator": "p.1, SHM period T=2π/ω",
+          "literal": "Это время на один радиан; величина обратна угловой скорости.",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        }
+      ],
+      "variantAndNoteReview": [
+        {
+          "index": 0,
+          "text": "4π/T",
+          "correct": false,
+          "substitution": "4π/T — два оборота за тот же T, а задан один.",
+          "noteReview": "Это угловая скорость для двух полных оборотов за время T.",
+          "noteUseful": true,
+          "sourceLocator": "p.1, constant-speed circular motion; ω in radians per second",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "index": 1,
+          "text": "2π/T",
+          "correct": true,
+          "substitution": "2π/T — один оборот (2π рад), разделённый на T.",
+          "noteReview": "За один оборот угол меняется на 2π радиан, а угловая скорость равна изменению угла за время.",
+          "noteUseful": true,
+          "sourceLocator": "p.1, angular speed and circular motion",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "index": 2,
+          "text": "π/T",
+          "correct": false,
+          "substitution": "π/T описывает лишь половину полного оборота за T.",
+          "noteReview": "Такое значение соответствовало бы повороту на половину оборота за время T.",
+          "noteUseful": true,
+          "sourceLocator": "p.1, π radians = 180 degrees",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "index": 3,
+          "text": "T/(2π)",
+          "correct": false,
+          "substitution": "T/(2π) — обратная величина: время на радиан.",
+          "noteReview": "Это время на один радиан; величина обратна угловой скорости.",
+          "noteUseful": true,
+          "sourceLocator": "p.1, SHM period T=2π/ω",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "review": "Card-level validation",
+          "uniqueCorrectAnswer": true,
+          "allFourTextsDistinct": true,
+          "grammaticalSubstitutionChecked": true,
+          "difficulty": "Frozen level retained; no downgrade. Medium uses close physics concepts; hard requires applying a law or calculation.",
+          "neighborEvidence": "See neighborReview."
+        }
+      ],
+      "neighborReview": {
+        "neighbors": [
+          "physics-ext-torque-rotation (момент силы — динамика, здесь кинематика вращения)",
+          "physics-ext-angular-momentum (L=Iω, не определение ω через период)"
+        ],
+        "assessment": "Проверены реальные близкие карточки каталога; факты и навыки различаются, прямого дубля нет."
+      },
+      "reasonCodes": [
+        "correct_note_repeats_prompt",
+        "distractors"
+      ],
+      "unresolved": null
+    },
+    {
+      "id": "physics-ext-capacitance-charge-voltage",
+      "status": "READY",
+      "beforeHash": "c67497af5c7902ee0c07f23572a40a36e4ae50a91c85acf9bd436f112f8f9b7a",
+      "beforeCard": {
+        "id": "physics-ext-capacitance-charge-voltage",
+        "difficulty": "medium",
+        "prompt": "Какая характеристика конденсатора равна отношению накопленного заряда к напряжению?",
+        "answers": [
+          {
+            "text": "Сопротивление",
+            "note": "Электрическое сопротивление препятствует движению зарядов в проводнике."
+          },
+          {
+            "text": "Электроёмкость",
+            "note": "Электроёмкость показывает способность системы накапливать электрический заряд."
+          },
+          {
+            "text": "Выталкивающая сила",
+            "note": "Выталкивающая сила возникает из-за разности давлений на разных глубинах."
+          },
+          {
+            "text": "Вязкость",
+            "note": "Вязкость характеризует внутреннее трение в текучей среде."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Электроёмкость показывает способность системы накапливать электрический заряд. Единица электроёмкости — фарад.",
+        "source": {
+          "title": "MIT OCW 8.02X Electric Current and Capacitance lecture slides",
+          "url": "https://ocw.mit.edu/courses/8-02x-physics-ii-electricity-magnetism-with-an-experimental-focus-spring-2005/e33598c4e6385783c8ca716f87f2f107_quiz2_review.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "physics-ext-capacitance-charge-voltage",
+        "difficulty": "medium",
+        "prompt": "В формуле конденсатора Q=CU какой параметр C связывает накопленный заряд с напряжением?",
+        "answers": [
+          {
+            "text": "Электрическое сопротивление",
+            "note": "Сопротивление участка цепи определяется отношением напряжения к току, R=V/I."
+          },
+          {
+            "text": "Электроёмкость",
+            "note": "Для заданной геометрии заряд конденсатора пропорционален напряжению: Q=CV; единица C — фарад."
+          },
+          {
+            "text": "Диэлектрическая проницаемость",
+            "note": "Диэлектрик ослабляет поле внутри конденсатора и может увеличить его ёмкость."
+          },
+          {
+            "text": "Энергия электрического поля",
+            "note": "Энергия заряженного конденсатора равна Q²/(2C), а не самому коэффициенту C."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Электроёмкость — коэффициент пропорциональности между зарядом и напряжением конденсатора: Q=CV. Фарад равен кулону на вольт.",
+        "source": {
+          "title": "MIT OCW 8.02X Electric Current and Capacitance lecture slides",
+          "url": "https://ocw.mit.edu/courses/8-02x-physics-ii-electricity-magnetism-with-an-experimental-focus-spring-2005/e33598c4e6385783c8ca716f87f2f107_quiz2_review.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "010386c664a0f9d3010c8e5c01b87505738e76cde72de8734a67460c97d18733",
+      "sixGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "sha256": "3cb5869b35e4aff7712a526a769a8e2d373fcea395261c05be54f4249fca9ade",
+          "reason": "Параметры выбраны как реальные свойства/характеристики электрической системы; ключ определяется уравнением Q=CU, а не заметным по категории словом.",
+          "locator": "p.6, resistance R=V/I",
+          "literal": {
+            "prompt": "В формуле конденсатора Q=CU какой параметр C связывает накопленный заряд с напряжением?",
+            "answers": [
+              "Электрическое сопротивление",
+              "Электроёмкость",
+              "Диэлектрическая проницаемость",
+              "Энергия электрического поля"
+            ],
+            "correctIndex": 1
+          },
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "group": "explanation",
+          "sha256": "238c1d76f088891b7eb3ad479ebef3f224532c91d98e2a362343434c6c8a1a69",
+          "reason": "MIT задаёт для конденсатора Q=CV и единицу F=C/V, напрямую подтверждая ключ и note.",
+          "locator": "p.1, Q=CV and farad=C/V",
+          "literal": "Электроёмкость — коэффициент пропорциональности между зарядом и напряжением конденсатора: Q=CV. Фарад равен кулону на вольт.",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "group": "note0",
+          "sha256": "3ba953d7aba833cae5fa47559b63a5c443c10a87989d5da1bd4f124f2f937eb7",
+          "reason": "MIT определяет R=V/I, что отличает сопротивление от коэффициента C в Q=CU.",
+          "locator": "p.6, resistance R=V/I",
+          "literal": "Сопротивление участка цепи определяется отношением напряжения к току, R=V/I.",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "group": "note1",
+          "sha256": "50b0790f1af92d1ff6a65799504d528b6428f231840b6b4ed272838c33526c08",
+          "reason": "Слайды описывают влияние диэлектрика: он ослабляет поле и увеличивает ёмкость; это самостоятельное свойство дистрактора.",
+          "locator": "p.1, Q=CV and farad=C/V",
+          "literal": "Для заданной геометрии заряд конденсатора пропорционален напряжению: Q=CV; единица C — фарад.",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "group": "note2",
+          "sha256": "b637b814c080ee98bafa8d4ee1d52519d0c2bea34fd35f85d6c6ad80a6702063",
+          "reason": "Источник приводит энергию конденсатора Q²/(2C), отдельную от ёмкости как коэффициента Q/V.",
+          "locator": "pp.3–4, dielectric reduces E and increases capacitance",
+          "literal": "Диэлектрик ослабляет поле внутри конденсатора и может увеличить его ёмкость.",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "group": "note3",
+          "sha256": "2dd497331a0c64c24b1773d178b3c41a95d61c2afbd0ec0d817c0b35deae5656",
+          "reason": "Текст варианта и note описывают определение ёмкости и единицу фарад; это дополняет условие, а не повторяет только название.",
+          "locator": "p.2, stored capacitor energy W=Q²/(2C)=CV²/2",
+          "literal": "Энергия заряженного конденсатора равна Q²/(2C), а не самому коэффициенту C.",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        }
+      ],
+      "variantAndNoteReview": [
+        {
+          "index": 0,
+          "text": "Электрическое сопротивление",
+          "correct": false,
+          "substitution": "R=V/I связывает напряжение с током, не заряд с напряжением.",
+          "noteReview": "Сопротивление участка цепи определяется отношением напряжения к току, R=V/I.",
+          "noteUseful": true,
+          "sourceLocator": "p.6, resistance R=V/I",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "index": 1,
+          "text": "Электроёмкость",
+          "correct": true,
+          "substitution": "C=Q/V и единица F=C/V совпадают с заданной формой Q=CU.",
+          "noteReview": "Для заданной геометрии заряд конденсатора пропорционален напряжению: Q=CV; единица C — фарад.",
+          "noteUseful": true,
+          "sourceLocator": "p.1, Q=CV and farad=C/V",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "index": 2,
+          "text": "Диэлектрическая проницаемость",
+          "correct": false,
+          "substitution": "Диэлектрик меняет поле и значение capacitance, но сам не является коэффициентом C в уравнении.",
+          "noteReview": "Диэлектрик ослабляет поле внутри конденсатора и может увеличить его ёмкость.",
+          "noteUseful": true,
+          "sourceLocator": "pp.3–4, dielectric reduces E and increases capacitance",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "index": 3,
+          "text": "Энергия электрического поля",
+          "correct": false,
+          "substitution": "Q²/(2C) — энергия, измеряемая в джоулях, а не capacitance.",
+          "noteReview": "Энергия заряженного конденсатора равна Q²/(2C), а не самому коэффициенту C.",
+          "noteUseful": true,
+          "sourceLocator": "p.2, stored capacitor energy W=Q²/(2C)=CV²/2",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "review": "Card-level validation",
+          "uniqueCorrectAnswer": true,
+          "allFourTextsDistinct": true,
+          "grammaticalSubstitutionChecked": true,
+          "difficulty": "Frozen level retained; no downgrade. Medium uses close physics concepts; hard requires applying a law or calculation.",
+          "neighborEvidence": "See neighborReview."
+        }
+      ],
+      "neighborReview": {
+        "neighbors": [
+          "physics-ext-resistance-current-opposition (R=V/I отличается от C=Q/V)",
+          "physics-ext-voltage-energy-charge (энергия конденсатора отличается от ёмкости)"
+        ],
+        "assessment": "Проверены реальные близкие карточки каталога; факты и навыки различаются, прямого дубля нет."
+      },
+      "reasonCodes": [
+        "distractors"
+      ],
+      "unresolved": null
+    },
+    {
+      "id": "physics-ext-resistance-current-opposition",
+      "status": "READY",
+      "beforeHash": "cc84aa6f54cdd5467e4fbbc5d136de49d2882221322fe93798d543456b8ba7b1",
+      "beforeCard": {
+        "id": "physics-ext-resistance-current-opposition",
+        "difficulty": "medium",
+        "prompt": "Какая величина характеризует противодействие проводника электрическому току?",
+        "answers": [
+          {
+            "text": "Выталкивающая сила",
+            "note": "Выталкивающая сила возникает из-за разности давлений на разных глубинах."
+          },
+          {
+            "text": "Вязкость",
+            "note": "Вязкость характеризует внутреннее трение в текучей среде."
+          },
+          {
+            "text": "Сопротивление",
+            "note": "Электрическое сопротивление препятствует движению зарядов в проводнике."
+          },
+          {
+            "text": "Удельная теплоёмкость",
+            "note": "Удельная теплоёмкость показывает, сколько теплоты нужно для нагревания единицы массы вещества на один градус."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Электрическое сопротивление препятствует движению зарядов в проводнике. По закону Ома оно связано с напряжением и током.",
+        "source": {
+          "title": "MIT OCW 8.02X Electric Current and Resistance lecture slides",
+          "url": "https://ocw.mit.edu/courses/8-02x-physics-ii-electricity-magnetism-with-an-experimental-focus-spring-2005/e33598c4e6385783c8ca716f87f2f107_quiz2_review.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "physics-ext-resistance-current-opposition",
+        "difficulty": "medium",
+        "prompt": "Для омического участка цепи отношение напряжения к силе тока задаёт какой параметр?",
+        "answers": [
+          {
+            "text": "Удельное сопротивление",
+            "note": "Удельное сопротивление — свойство материала; для проводника оно связано с R через длину и площадь сечения."
+          },
+          {
+            "text": "Проводимость",
+            "note": "Проводимость обратна сопротивлению и связывает ток с напряжением как I/V."
+          },
+          {
+            "text": "Электрическое сопротивление",
+            "note": "В омическом участке R=V/I; для проводника постоянного сечения R зависит от материала, длины и площади."
+          },
+          {
+            "text": "Электроёмкость",
+            "note": "Электроёмкость связывает заряд с напряжением и измеряется в фарадах."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "По закону Ома сопротивление омического участка равно отношению напряжения к току. Для проводника постоянного сечения оно зависит от удельного сопротивления материала и геометрии.",
+        "source": {
+          "title": "MIT OCW 8.02X Electric Current and Capacitance lecture slides",
+          "url": "https://ocw.mit.edu/courses/8-02x-physics-ii-electricity-magnetism-with-an-experimental-focus-spring-2005/e33598c4e6385783c8ca716f87f2f107_quiz2_review.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "da49003170a975a9242e914d9fe6a2a3ca86561572d8d3f49dba6c04196640c9",
+      "sixGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "sha256": "cdf691f322766aa031be9ef43436d340fbc1226dace99352c19fa67b8fd40606",
+          "reason": "Варианты — различимые электрические параметры; формула для омического участка задаёт только R=V/I.",
+          "locator": "p.6, R=ρL/A; resistivity is a material property",
+          "literal": {
+            "prompt": "Для омического участка цепи отношение напряжения к силе тока задаёт какой параметр?",
+            "answers": [
+              "Удельное сопротивление",
+              "Проводимость",
+              "Электрическое сопротивление",
+              "Электроёмкость"
+            ],
+            "correctIndex": 2
+          },
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "group": "explanation",
+          "sha256": "2bb9fa57137fdbaaf9f35476fbf7091528bbc01f48f0f6888c7b95d4c9564ac9",
+          "reason": "MIT отличает удельное сопротивление материала от R и даёт R=ρL/A, зависящее от геометрии проводника.",
+          "locator": "HTML line 1188 identifies siemens as unit of electrical conductance; MIT-CURRENT-CHARGE p.6 gives R=V/I; inverse relation is asserted in candidate note.",
+          "literal": "По закону Ома сопротивление омического участка равно отношению напряжения к току. Для проводника постоянного сечения оно зависит от удельного сопротивления материала и геометрии.",
+          "sourceRef": "NIST-APPX-ELECTRIC",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/NIST-APPX-ELECTRIC.body"
+        },
+        {
+          "group": "note0",
+          "sha256": "df927ef72180550921a892358120f235ea329a203e0f223030d305e53844aed9",
+          "reason": "NIST называет сименс единицей conductance; note дополнительно применяет определение G=I/V как обратное R=V/I.",
+          "locator": "p.6, R=ρL/A; resistivity is a material property",
+          "literal": "Удельное сопротивление — свойство материала; для проводника оно связано с R через длину и площадь сечения.",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "group": "note1",
+          "sha256": "91c454bf513868da90fb87bc0ebe90e1cdedac3bcf43d1bfc15362cf2d941ddd",
+          "reason": "MIT напрямую определяет сопротивление через напряжение и ток и объясняет его зависимость от материала и геометрии.",
+          "locator": "HTML line 1188 identifies siemens as unit of electrical conductance; MIT-CURRENT-CHARGE p.6 gives R=V/I; inverse relation is asserted in candidate note.",
+          "literal": "Проводимость обратна сопротивлению и связывает ток с напряжением как I/V.",
+          "sourceRef": "NIST-APPX-ELECTRIC",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/NIST-APPX-ELECTRIC.body"
+        },
+        {
+          "group": "note2",
+          "sha256": "4f6808159283916f01f1913ae69238b801e50d7f9efaeb334d91aebbce3e9e62",
+          "reason": "MIT задаёт электроёмкость как Q/V и измеряет её в фарадах; это иная связь, чем V/I.",
+          "locator": "p.6, R=V/I and R=ρL/A",
+          "literal": "В омическом участке R=V/I; для проводника постоянного сечения R зависит от материала, длины и площади.",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "group": "note3",
+          "sha256": "d0bb3f7318a8a3a62d009d6f4e39bab5621f305e5c77ec55e610a95f1496e525",
+          "reason": "Пояснение называет закон Ома и отдельную геометрическую зависимость, обе поддержаны MIT p.6.",
+          "locator": "p.1, capacitance Q=CV and farad=C/V",
+          "literal": "Электроёмкость связывает заряд с напряжением и измеряется в фарадах.",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        }
+      ],
+      "variantAndNoteReview": [
+        {
+          "index": 0,
+          "text": "Удельное сопротивление",
+          "correct": false,
+          "substitution": "ρ — свойство материала; R дополнительно зависит от длины и сечения.",
+          "noteReview": "Удельное сопротивление — свойство материала; для проводника оно связано с R через длину и площадь сечения.",
+          "noteUseful": true,
+          "sourceLocator": "p.6, R=ρL/A; resistivity is a material property",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "index": 1,
+          "text": "Проводимость",
+          "correct": false,
+          "substitution": "G=I/V — обратное отношение к R=V/I.",
+          "noteReview": "Проводимость обратна сопротивлению и связывает ток с напряжением как I/V.",
+          "noteUseful": true,
+          "sourceLocator": "HTML line 1188 identifies siemens as unit of electrical conductance; MIT-CURRENT-CHARGE p.6 gives R=V/I; inverse relation is asserted in candidate note.",
+          "sourceRef": "NIST-APPX-ELECTRIC",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/NIST-APPX-ELECTRIC.body"
+        },
+        {
+          "index": 2,
+          "text": "Электрическое сопротивление",
+          "correct": true,
+          "substitution": "R=V/I — ровно искомое отношение для омического участка.",
+          "noteReview": "В омическом участке R=V/I; для проводника постоянного сечения R зависит от материала, длины и площади.",
+          "noteUseful": true,
+          "sourceLocator": "p.6, R=V/I and R=ρL/A",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "index": 3,
+          "text": "Электроёмкость",
+          "correct": false,
+          "substitution": "C=Q/V описывает заряд и напряжение конденсатора.",
+          "noteReview": "Электроёмкость связывает заряд с напряжением и измеряется в фарадах.",
+          "noteUseful": true,
+          "sourceLocator": "p.1, capacitance Q=CV and farad=C/V",
+          "sourceRef": "MIT-CURRENT-CHARGE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-CURRENT-CHARGE.body"
+        },
+        {
+          "review": "Card-level validation",
+          "uniqueCorrectAnswer": true,
+          "allFourTextsDistinct": true,
+          "grammaticalSubstitutionChecked": true,
+          "difficulty": "Frozen level retained; no downgrade. Medium uses close physics concepts; hard requires applying a law or calculation.",
+          "neighborEvidence": "See neighborReview."
+        }
+      ],
+      "neighborReview": {
+        "neighbors": [
+          "physics-ext-capacitance-charge-voltage (ёмкость связывает Q и V, не V и I)",
+          "physics-ext-electric-current-charge-flow (ток I=dQ/dt, отдельная величина)"
+        ],
+        "assessment": "Проверены реальные близкие карточки каталога; факты и навыки различаются, прямого дубля нет."
+      },
+      "reasonCodes": [
+        "correct_note_repeats_prompt",
+        "distractors"
+      ],
+      "unresolved": null
+    },
+    {
+      "id": "physics-ext-induction-current-field",
+      "status": "HOLD",
+      "beforeHash": "63655315747b6c327d338dc1dbcd7ce879912b8386a58b426294d3569a5a11f0",
+      "beforeCard": {
+        "id": "physics-ext-induction-current-field",
+        "difficulty": "medium",
+        "prompt": "Как называется возникновение ЭДС при изменении магнитного потока?",
+        "answers": [
+          {
+            "text": "Преломление",
+            "note": "Преломление возникает из-за изменения скорости волны на границе сред."
+          },
+          {
+            "text": "Дифракция",
+            "note": "Дифракция — отклонение волн от прямолинейного распространения у краёв и щелей."
+          },
+          {
+            "text": "Электромагнитная индукция",
+            "note": "Электромагнитная индукция создаёт ЭДС при изменении магнитного потока."
+          },
+          {
+            "text": "Интерференция",
+            "note": "Интерференция возникает при наложении волн согласно принципу суперпозиции."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Электромагнитная индукция создаёт ЭДС при изменении магнитного потока. На этом явлении работают генераторы и трансформаторы.",
+        "source": {
+          "title": "MIT OCW 8.02 Chapter 10: Faraday’s Law and AC Generator",
+          "url": "https://ocw.mit.edu/courses/8-02-physics-ii-electricity-and-magnetism-spring-2007/ce1720fd4b21def8c2189ff4779f27f7_cha10faraday_law.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "physics-ext-induction-current-field",
+        "difficulty": "medium",
+        "prompt": "В одной катушке меняют ток, из-за чего меняющийся магнитный поток создаёт ЭДС в соседней катушке. Как называется это явление?",
+        "answers": [
+          {
+            "text": "Самоиндукция",
+            "note": "При самоиндукции изменение тока в контуре создаёт ЭДС в том же контуре."
+          },
+          {
+            "text": "Электростатическая индукция",
+            "note": "Внешнее электрическое поле вызывает перераспределение зарядов в проводнике."
+          },
+          {
+            "text": "Взаимная индукция",
+            "note": "Изменение тока в одной катушке меняет магнитный поток через соседнюю и индуцирует в ней ЭДС."
+          },
+          {
+            "text": "Поляризация диэлектрика",
+            "note": "В диэлектрике смещаются связанные заряды под действием электрического поля."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Переменный ток в первой катушке меняет магнитный поток через соседнюю катушку, и по закону Фарадея в ней возникает ЭДС. Направление индуцированного тока противодействует изменению потока согласно правилу Ленца.",
+        "source": {
+          "title": "MIT OCW 8.02 Chapter 10: Faraday’s Law of Induction",
+          "url": "https://ocw.mit.edu/courses/8-02-physics-ii-electricity-and-magnetism-spring-2007/ce1720fd4b21def8c2189ff4779f27f7_cha10faraday_law.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "0bd2154aa928edf85398af2e7fc16f8d7a46000e32a44cb73bcd95360206f3c9",
+      "sixGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "sha256": "1b9c953ff0d2147e2231d95ddc5f183252b4f98cc2daac4d1d05587ee8a68189",
+          "reason": "Формулировка и варианты стали ближе по механизму, но первичный capture не содержит достаточных locator для mutual/self induction и polarization; карточка HOLD.",
+          "locator": "pp.2–5, Faraday induction and Lenz law; not enough exact evidence for all new mechanism notes; HOLD",
+          "literal": {
+            "prompt": "В одной катушке меняют ток, из-за чего меняющийся магнитный поток создаёт ЭДС в соседней катушке. Как называется это явление?",
+            "answers": [
+              "Самоиндукция",
+              "Электростатическая индукция",
+              "Взаимная индукция",
+              "Поляризация диэлектрика"
+            ],
+            "correctIndex": 2
+          },
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "group": "explanation",
+          "sha256": "0705188463b0cc93bdfd6295f60a8f6c6cc26f71f615d2e906ee4f4574d148ed",
+          "reason": "Термин самоиндукции и его отличительный механизм не подтверждены достаточным сохранённым locator; это препятствует READY.",
+          "locator": "pp.2–5, Faraday induction; distinct electrostatic-induction claim lacks locator; HOLD",
+          "literal": "Переменный ток в первой катушке меняет магнитный поток через соседнюю катушку, и по закону Фарадея в ней возникает ЭДС. Направление индуцированного тока противодействует изменению потока согласно правилу Ленца.",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "group": "note0",
+          "sha256": "1d6671e7b7ee340558a82f3aac8b3c1dee3d1a41dcd4ef5c6fb041afc9992044",
+          "reason": "Электростатическое перераспределение зарядов не подтверждено в использованном MIT Faraday capture; HOLD сохраняется.",
+          "locator": "pp.2–5, Faraday induction and Lenz law; not enough exact evidence for all new mechanism notes; HOLD",
+          "literal": "При самоиндукции изменение тока в контуре создаёт ЭДС в том же контуре.",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "group": "note1",
+          "sha256": "3fc203dbbbed1f0d6d4796d59ad14dc22ee58242d0cf37190a0358e1d3d1686c",
+          "reason": "Взаимная индукция — ключевое утверждение, но в capture не найдено точное определение/раздел с этой формулировкой; HOLD.",
+          "locator": "pp.2–5, Faraday induction; distinct electrostatic-induction claim lacks locator; HOLD",
+          "literal": "Внешнее электрическое поле вызывает перераспределение зарядов в проводнике.",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "group": "note2",
+          "sha256": "65b47b4a1234f51d56fc6f79a0bdb0b6a610e7d9b8e02a709e5e36cea4d62582",
+          "reason": "Факт о связанных зарядах в диэлектрике не покрыт cited Faraday text; HOLD.",
+          "locator": "pp.2–5, Faraday induction; mutual-induction term/description not verified in capture; HOLD",
+          "literal": "Изменение тока в одной катушке меняет магнитный поток через соседнюю и индуцирует в ней ЭДС.",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "group": "note3",
+          "sha256": "5e97285121d4366e9a89ac263626cbebef4b0567e7f3233f2bda8f884e246fea",
+          "reason": "Текст объясняет Faraday/Lenz, но не снимает пробелы по всем вариантам; авторский статус остаётся HOLD.",
+          "locator": "pp.2–5, Faraday induction; dielectric polarization claim lacks locator; HOLD",
+          "literal": "В диэлектрике смещаются связанные заряды под действием электрического поля.",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        }
+      ],
+      "variantAndNoteReview": [
+        {
+          "index": 0,
+          "text": "Самоиндукция",
+          "correct": false,
+          "substitution": "В capture не найдено достаточного первичного описания этого отличия; HOLD.",
+          "noteReview": "При самоиндукции изменение тока в контуре создаёт ЭДС в том же контуре.",
+          "noteUseful": true,
+          "sourceLocator": "pp.2–5, Faraday induction and Lenz law; not enough exact evidence for all new mechanism notes; HOLD",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "index": 1,
+          "text": "Электростатическая индукция",
+          "correct": false,
+          "substitution": "В capture не найдено достаточного подтверждения для electrostatic induction note; HOLD.",
+          "noteReview": "Внешнее электрическое поле вызывает перераспределение зарядов в проводнике.",
+          "noteUseful": true,
+          "sourceLocator": "pp.2–5, Faraday induction; distinct electrostatic-induction claim lacks locator; HOLD",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "index": 2,
+          "text": "Взаимная индукция",
+          "correct": true,
+          "substitution": "Ключевой mutual induction claim остаётся без точного locator; HOLD.",
+          "noteReview": "Изменение тока в одной катушке меняет магнитный поток через соседнюю и индуцирует в ней ЭДС.",
+          "noteUseful": true,
+          "sourceLocator": "pp.2–5, Faraday induction; mutual-induction term/description not verified in capture; HOLD",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "index": 3,
+          "text": "Поляризация диэлектрика",
+          "correct": false,
+          "substitution": "В capture нет подтверждённой опоры на поляризацию диэлектрика; HOLD.",
+          "noteReview": "В диэлектрике смещаются связанные заряды под действием электрического поля.",
+          "noteUseful": true,
+          "sourceLocator": "pp.2–5, Faraday induction; dielectric polarization claim lacks locator; HOLD",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "review": "Card-level validation",
+          "uniqueCorrectAnswer": true,
+          "allFourTextsDistinct": true,
+          "grammaticalSubstitutionChecked": true,
+          "difficulty": "Frozen level retained; no downgrade. Medium uses close physics concepts; hard requires applying a law or calculation.",
+          "neighborEvidence": "See neighborReview."
+        }
+      ],
+      "neighborReview": {
+        "neighbors": [
+          "physics-electromagnetic-induction-condition (закон Фарадея может создавать ЭДС без тока в разомкнутом контуре)",
+          "physics-lenz-law-direction (направление тока — отдельный закон Ленца)"
+        ],
+        "assessment": "Дубликата с physics-electromagnetic-induction-condition нет: там спрашивается ЭДС в разомкнутом контуре; эта candidate различает взаимную индукцию и самоиндукцию. Статус HOLD из-за недостаточной поддержки новых distractors/notes источником."
+      },
+      "reasonCodes": [
+        "correct_note_repeats_prompt",
+        "distractors"
+      ],
+      "unresolved": {
+        "reason": "Варианты взаимная/самоиндукция не подтверждены точным locator в прочитанном MIT Faraday capture; PDF содержит закон Faraday/Lenz и генераторы, но не подтверждает отдельно взаимную индукцию. Нельзя подтвердить все новые distractors/notes текущим evidence set.",
+        "source": "process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body; полный PDF pp.1–32 проверен, поиск по тексту не обнаружил mutual induction/self-inductance.",
+        "nextOwner": "Координатор: предоставить полный доступный первичный источник с определениями взаимной и самоиндукции либо выбрать проверку, поддержанную сохранёнными материалами; затем запустить независимое ревью точной карточки.",
+        "qualityCredit": 0
+      }
+    },
+    {
+      "id": "physics-ext-diffraction-obstacle",
+      "status": "READY",
+      "beforeHash": "8b1108e0194d0054e6c74fe10fa96e53ae00a7c27f35e7719c83d64572053501",
+      "beforeCard": {
+        "id": "physics-ext-diffraction-obstacle",
+        "difficulty": "medium",
+        "prompt": "Как называется огибание волнами препятствий и расширение пучка после щели?",
+        "answers": [
+          {
+            "text": "Интерференция",
+            "note": "Интерференция возникает при наложении волн согласно принципу суперпозиции."
+          },
+          {
+            "text": "Резонанс",
+            "note": "Резонанс усиливает колебания при близости внешней и собственной частот."
+          },
+          {
+            "text": "Фотоэффект",
+            "note": "Фотоэффект — испускание электронов веществом под действием электромагнитного излучения."
+          },
+          {
+            "text": "Дифракция",
+            "note": "Дифракция — отклонение волн от прямолинейного распространения у краёв и щелей."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Дифракция — отклонение волн от прямолинейного распространения у краёв и щелей. Эффект особенно заметен, когда размер препятствия сравним с длиной волны.",
+        "source": {
+          "title": "NASA Electromagnetic Spectrum: Wave Behaviors",
+          "url": "https://science.nasa.gov/ems/03_behaviors/",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "physics-ext-diffraction-obstacle",
+        "difficulty": "medium",
+        "prompt": "Как называется огибание волнами препятствий и расширение пучка после щели?",
+        "answers": [
+          {
+            "text": "Интерференция",
+            "note": "Интерференция возникает при наложении волн согласно принципу суперпозиции."
+          },
+          {
+            "text": "Резонанс",
+            "note": "Резонанс усиливает колебания при близости внешней и собственной частот."
+          },
+          {
+            "text": "Фотоэффект",
+            "note": "Фотоэффект — испускание электронов веществом под действием электромагнитного излучения."
+          },
+          {
+            "text": "Дифракция",
+            "note": "Дифракция заметнее, когда размер препятствия сравним с длиной волны; спектрометр использует её для разделения света по длинам волн."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Дифракция заметнее, когда размер препятствия сравним с длиной волны. Спектрометр использует дифракционную решётку, чтобы разделить свет на спектр.",
+        "source": {
+          "title": "NASA: Electromagnetic Spectrum — Wave Behaviors",
+          "url": "https://science.nasa.gov/ems/03_behaviors/",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "b622813cbb17462062c803e79fd76afd3d08b56c360f72f5f15fae8311af6124",
+      "sixGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "sha256": "3810f0eb71302712c2db285e64d1c92dda929fc26e2cdca911d5f3450a117e1b",
+          "reason": "Сохраняет средний вопрос и исправляет только требуемую note; варианты относятся к волновым явлениям/квантовому эффекту, а источники привязаны отдельно к каждому утверждению.",
+          "locator": "pp.1–3, interference as superposition of waves and enhancement/cancellation",
+          "literal": {
+            "prompt": "Как называется огибание волнами препятствий и расширение пучка после щели?",
+            "answers": [
+              "Интерференция",
+              "Резонанс",
+              "Фотоэффект",
+              "Дифракция"
+            ],
+            "correctIndex": 3
+          },
+          "sourceRef": "MIT-803-INTERFERENCE-NOTES",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-803-INTERFERENCE-NOTES.body"
+        },
+        {
+          "group": "explanation",
+          "sha256": "f11042937d468440be2841046f1123a2a7e420e4bc7449046184fedcd2814ad2",
+          "reason": "NASA прямо описывает огибание/расширение волн и заметность при размере препятствия, сравнимом с длиной волны; спектрометрическое применение — добавочный факт.",
+          "locator": "p.5, driving near natural frequency gives resonance and large amplitude",
+          "literal": "Дифракция заметнее, когда размер препятствия сравним с длиной волны. Спектрометр использует дифракционную решётку, чтобы разделить свет на спектр.",
+          "sourceRef": "MIT-803-RESONANCE-NOTES",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-803-RESONANCE-NOTES.body"
+        },
+        {
+          "group": "note0",
+          "sha256": "1d8929c61694e599ff96e85dde97e4b74ca7c7e2ac9c297c15ac90b7ef9f49e8",
+          "reason": "MIT lecture называет интерференцию результатом суперпозиции волн и описывает сложение/взаимное усиление и гашение.",
+          "locator": "pp.1–3, interference as superposition of waves and enhancement/cancellation",
+          "literal": "Интерференция возникает при наложении волн согласно принципу суперпозиции.",
+          "sourceRef": "MIT-803-INTERFERENCE-NOTES",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-803-INTERFERENCE-NOTES.body"
+        },
+        {
+          "group": "note1",
+          "sha256": "08de9fad3fc85d8a435f7e9c20cd17eb8eba4c4d92c025176139217788175268",
+          "reason": "MIT описывает резонанс при близости частоты возбуждения к собственной частоте и большой амплитуде.",
+          "locator": "p.5, driving near natural frequency gives resonance and large amplitude",
+          "literal": "Резонанс усиливает колебания при близости внешней и собственной частот.",
+          "sourceRef": "MIT-803-RESONANCE-NOTES",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-803-RESONANCE-NOTES.body"
+        },
+        {
+          "group": "note2",
+          "sha256": "3e20277db5071a850cfd167e05e26ef802400d1dc15ed99d5cbc70f2c38e750a",
+          "reason": "MIT lecture об эффекте фотоэмиссии описывает испускание электронов под светом, что подтверждает отдельный вариант.",
+          "locator": "pp.1–5, photoelectric effect and emission of electrons under light",
+          "literal": "Фотоэффект — испускание электронов веществом под действием электромагнитного излучения.",
+          "sourceRef": "MIT-PHOTOELECTRIC",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-PHOTOELECTRIC.body"
+        },
+        {
+          "group": "note3",
+          "sha256": "ec65365df85d8423f64b3cefccd1bc23a08a900fe7c44a9646cba9fe8726005e",
+          "reason": "NASA сообщает критерий сравнимых размеров и использование дифракции для разделения длин волн; note не повторяет определение огибания.",
+          "locator": "HTML lines 1434–1438, obstacle-size/wavelength criterion and spectrometer",
+          "literal": "Дифракция заметнее, когда размер препятствия сравним с длиной волны; спектрометр использует её для разделения света по длинам волн.",
+          "sourceRef": "NASA-WAVES",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/NASA-WAVES.body"
+        }
+      ],
+      "variantAndNoteReview": [
+        {
+          "index": 0,
+          "text": "Интерференция",
+          "correct": false,
+          "substitution": "Суперпозиция волн подтверждает интерференцию как соседний, отличимый эффект.",
+          "noteReview": "Интерференция возникает при наложении волн согласно принципу суперпозиции.",
+          "noteUseful": true,
+          "sourceLocator": "pp.1–3, interference as superposition of waves and enhancement/cancellation",
+          "sourceRef": "MIT-803-INTERFERENCE-NOTES",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-803-INTERFERENCE-NOTES.body"
+        },
+        {
+          "index": 1,
+          "text": "Резонанс",
+          "correct": false,
+          "substitution": "Частота возбуждения близка к собственной при резонансе; это не прохождение у щели.",
+          "noteReview": "Резонанс усиливает колебания при близости внешней и собственной частот.",
+          "noteUseful": true,
+          "sourceLocator": "p.5, driving near natural frequency gives resonance and large amplitude",
+          "sourceRef": "MIT-803-RESONANCE-NOTES",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-803-RESONANCE-NOTES.body"
+        },
+        {
+          "index": 2,
+          "text": "Фотоэффект",
+          "correct": false,
+          "substitution": "MIT описывает испускание электронов под светом, отдельное от волновой дифракции.",
+          "noteReview": "Фотоэффект — испускание электронов веществом под действием электромагнитного излучения.",
+          "noteUseful": true,
+          "sourceLocator": "pp.1–5, photoelectric effect and emission of electrons under light",
+          "sourceRef": "MIT-PHOTOELECTRIC",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-PHOTOELECTRIC.body"
+        },
+        {
+          "index": 3,
+          "text": "Дифракция",
+          "correct": true,
+          "substitution": "NASA поддерживает дополнительный критерий размера препятствия/длины волны.",
+          "noteReview": "Дифракция заметнее, когда размер препятствия сравним с длиной волны; спектрометр использует её для разделения света по длинам волн.",
+          "noteUseful": true,
+          "sourceLocator": "HTML lines 1434–1438, obstacle-size/wavelength criterion and spectrometer",
+          "sourceRef": "NASA-WAVES",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/NASA-WAVES.body"
+        },
+        {
+          "review": "Card-level validation",
+          "uniqueCorrectAnswer": true,
+          "allFourTextsDistinct": true,
+          "grammaticalSubstitutionChecked": true,
+          "difficulty": "Frozen level retained; no downgrade. Medium uses close physics concepts; hard requires applying a law or calculation.",
+          "neighborEvidence": "See neighborReview."
+        }
+      ],
+      "neighborReview": {
+        "neighbors": [
+          "physics-ext-interference-superposition (наложение волн отличается от дифракции у препятствий)",
+          "physics-ext-resonance-frequency (резонанс — усиление отклика при совпадении частот)"
+        ],
+        "assessment": "Проверены реальные близкие карточки каталога; факты и навыки различаются, прямого дубля нет."
+      },
+      "reasonCodes": [
+        "correct_note_repeats_prompt"
+      ],
+      "unresolved": null
+    },
+    {
+      "id": "physics-ext-electric-flux",
+      "status": "READY",
+      "beforeHash": "4d37d59f5ca3f25ad69e6f51e76cb31270f3a5ac876c9f966aba61bcff801312",
+      "beforeCard": {
+        "id": "physics-ext-electric-flux",
+        "difficulty": "hard",
+        "prompt": "Какая величина характеризует поток электрического поля через поверхность?",
+        "answers": [
+          {
+            "text": "Электрический поток",
+            "note": "Электрический поток зависит от поля, площади и ориентации поверхности."
+          },
+          {
+            "text": "Магнитный поток",
+            "note": "Магнитный поток учитывает величину поля и проекцию площади контура."
+          },
+          {
+            "text": "Индуктивность",
+            "note": "Индуктивность определяет способность цепи противодействовать изменению тока."
+          },
+          {
+            "text": "Показатель преломления",
+            "note": "Показатель преломления показывает, насколько свет замедляется в среде."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Электрический поток зависит от поля, площади и ориентации поверхности. Закон Гаусса связывает полный поток с заключённым зарядом.",
+        "source": {
+          "title": "MIT OCW 8.02 Chapter 4: Gauss’s Law",
+          "url": "https://ocw.mit.edu/courses/8-02-physics-ii-electricity-and-magnetism-spring-2007/b6306257b5c818e4034919c3d8680a70_chapte4gauss_law.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "physics-ext-electric-flux",
+        "difficulty": "hard",
+        "prompt": "Замкнутая сферическая поверхность охватывает точечный заряд q. Если радиус сферы удвоить, как изменится полный электрический поток через неё?",
+        "answers": [
+          {
+            "text": "Не изменится: он определяется охваченным зарядом",
+            "note": "Закон Гаусса связывает полный поток через замкнутую поверхность с зарядом внутри неё."
+          },
+          {
+            "text": "Увеличится вдвое",
+            "note": "Напряжённость поля точечного заряда убывает как 1/r², а площадь сферы растёт как r²."
+          },
+          {
+            "text": "Увеличится в четыре раза",
+            "note": "Площадь сферы пропорциональна квадрату радиуса, но полный поток не равен просто полю, умноженному на растущую площадь без учёта изменения поля."
+          },
+          {
+            "text": "Уменьшится вдвое",
+            "note": "Поле точечного заряда зависит от расстояния по закону обратных квадратов, тогда как для полного потока действует закон Гаусса."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Для замкнутой поверхности полный электрический поток равен охваченному заряду, делённому на ε₀. При изменении радиуса сферы заряд внутри остаётся тем же, хотя напряжённость поля на поверхности меняется.",
+        "source": {
+          "title": "MIT OCW 8.02 Chapter 4: Gauss’s Law",
+          "url": "https://ocw.mit.edu/courses/8-02-physics-ii-electricity-and-magnetism-spring-2007/b6306257b5c818e4034919c3d8680a70_chapte4gauss_law.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "ea348e64b38712b4eaf0e8f73915687748bf3b77b20215afb1f751edd8f538c7",
+      "sixGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "sha256": "32be29856571ad3d6f9dea726a3f63de7c9e59db2ad99c6a0b14bc03c22ac764",
+          "reason": "Замена определения на расчёт по закону Гаусса убирает лексическое совпадение в названии ключа; дистракторы — возможные масштабирования измеряемого потока.",
+          "locator": "pp.2–7, electric flux and Gauss law for enclosed charge",
+          "literal": {
+            "prompt": "Замкнутая сферическая поверхность охватывает точечный заряд q. Если радиус сферы удвоить, как изменится полный электрический поток через неё?",
+            "answers": [
+              "Не изменится: он определяется охваченным зарядом",
+              "Увеличится вдвое",
+              "Увеличится в четыре раза",
+              "Уменьшится вдвое"
+            ],
+            "correctIndex": 0
+          },
+          "sourceRef": "MIT-GAUSS-FLUX",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-GAUSS-FLUX.body"
+        },
+        {
+          "group": "explanation",
+          "sha256": "4c18391834e6202de739d0a84e6b2c67398d4d1086d977819676af91464a7293",
+          "reason": "MIT формулирует закон Гаусса: интегральный поток через замкнутую поверхность определяется заключённым зарядом, значит неизменен при изменении радиуса.",
+          "locator": "pp.4–7, point-charge field varies with inverse square of radius",
+          "literal": "Для замкнутой поверхности полный электрический поток равен охваченному заряду, делённому на ε₀. При изменении радиуса сферы заряд внутри остаётся тем же, хотя напряжённость поля на поверхности меняется.",
+          "sourceRef": "MIT-GAUSS-FLUX",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-GAUSS-FLUX.body"
+        },
+        {
+          "group": "note0",
+          "sha256": "ab4823bbded4f261eeaf9bde7606a9a9b9d20bae054967a1711a8a4a45b06c47",
+          "reason": "Для точечного заряда E убывает как 1/r²; это компенсирует квадратичный рост площади сферы.",
+          "locator": "pp.2–7, electric flux and Gauss law for enclosed charge",
+          "literal": "Закон Гаусса связывает полный поток через замкнутую поверхность с зарядом внутри неё.",
+          "sourceRef": "MIT-GAUSS-FLUX",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-GAUSS-FLUX.body"
+        },
+        {
+          "group": "note1",
+          "sha256": "2f736321b6534496fd912a5058ff20cec518ac639f5fe8e6e62fc29f23360497",
+          "reason": "Площадь действительно растёт как r², но локальное поле одновременно падает как r⁻², поэтому удвоение площади само по себе не означает четырёхкратного полного потока.",
+          "locator": "pp.4–7, point-charge field varies with inverse square of radius",
+          "literal": "Напряжённость поля точечного заряда убывает как 1/r², а площадь сферы растёт как r².",
+          "sourceRef": "MIT-GAUSS-FLUX",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-GAUSS-FLUX.body"
+        },
+        {
+          "group": "note2",
+          "sha256": "e52024c870c1325b7a6e0fbfe25e4ae1e19d8771e4a0f8583cc6f3d8680ec1bf",
+          "reason": "Обратноквадратичная зависимость описывает локальное E; интегральный поток замкнутой сферы подчиняется Gauss и не уменьшается вдвое.",
+          "locator": "pp.2–7, surface area and flux distinction; explanation of why E·A alone does not make total flux scale as area",
+          "literal": "Площадь сферы пропорциональна квадрату радиуса, но полный поток не равен просто полю, умноженному на растущую площадь без учёта изменения поля.",
+          "sourceRef": "MIT-GAUSS-FLUX",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-GAUSS-FLUX.body"
+        },
+        {
+          "group": "note3",
+          "sha256": "b06c326723d19c1f8b4660bc9799790e5d0cb01d57fd9ff6308b69dd5cd0f6cd",
+          "reason": "Explanation отделяет изменение локального поля от инвариантности полного потока при фиксированном охваченном заряде.",
+          "locator": "pp.4–7, point-charge inverse-square field and Gauss law",
+          "literal": "Поле точечного заряда зависит от расстояния по закону обратных квадратов, тогда как для полного потока действует закон Гаусса.",
+          "sourceRef": "MIT-GAUSS-FLUX",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-GAUSS-FLUX.body"
+        }
+      ],
+      "variantAndNoteReview": [
+        {
+          "index": 0,
+          "text": "Не изменится: он определяется охваченным зарядом",
+          "correct": true,
+          "substitution": "Gauss связывает поток с охваченным q, поэтому радиус сферы не меняет результат.",
+          "noteReview": "Закон Гаусса связывает полный поток через замкнутую поверхность с зарядом внутри неё.",
+          "noteUseful": true,
+          "sourceLocator": "pp.2–7, electric flux and Gauss law for enclosed charge",
+          "sourceRef": "MIT-GAUSS-FLUX",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-GAUSS-FLUX.body"
+        },
+        {
+          "index": 1,
+          "text": "Увеличится вдвое",
+          "correct": false,
+          "substitution": "Локальное поле падает как 1/r², не растёт пропорционально площади.",
+          "noteReview": "Напряжённость поля точечного заряда убывает как 1/r², а площадь сферы растёт как r².",
+          "noteUseful": true,
+          "sourceLocator": "pp.4–7, point-charge field varies with inverse square of radius",
+          "sourceRef": "MIT-GAUSS-FLUX",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-GAUSS-FLUX.body"
+        },
+        {
+          "index": 2,
+          "text": "Увеличится в четыре раза",
+          "correct": false,
+          "substitution": "Площадь сферы возрастает как r², но произведение с E точечного заряда компенсируется.",
+          "noteReview": "Площадь сферы пропорциональна квадрату радиуса, но полный поток не равен просто полю, умноженному на растущую площадь без учёта изменения поля.",
+          "noteUseful": true,
+          "sourceLocator": "pp.2–7, surface area and flux distinction; explanation of why E·A alone does not make total flux scale as area",
+          "sourceRef": "MIT-GAUSS-FLUX",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-GAUSS-FLUX.body"
+        },
+        {
+          "index": 3,
+          "text": "Уменьшится вдвое",
+          "correct": false,
+          "substitution": "Поле уменьшается сильнее, чем 1/r, но интегральный поток остаётся q/ε₀.",
+          "noteReview": "Поле точечного заряда зависит от расстояния по закону обратных квадратов, тогда как для полного потока действует закон Гаусса.",
+          "noteUseful": true,
+          "sourceLocator": "pp.4–7, point-charge inverse-square field and Gauss law",
+          "sourceRef": "MIT-GAUSS-FLUX",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-GAUSS-FLUX.body"
+        },
+        {
+          "review": "Card-level validation",
+          "uniqueCorrectAnswer": true,
+          "allFourTextsDistinct": true,
+          "grammaticalSubstitutionChecked": true,
+          "difficulty": "Frozen level retained; no downgrade. Medium uses close physics concepts; hard requires applying a law or calculation.",
+          "neighborEvidence": "See neighborReview."
+        }
+      ],
+      "neighborReview": {
+        "neighbors": [
+          "physics-ext-magnetic-flux (магнитный поток иной величины)",
+          "physics-ext-induction-current-field (изменение магнитного потока вызывает ЭДС; Gauss-вопрос — об электрическом потоке)"
+        ],
+        "assessment": "Проверены реальные близкие карточки каталога; факты и навыки различаются, прямого дубля нет."
+      },
+      "reasonCodes": [
+        "hard_key_leak"
+      ],
+      "unresolved": null
+    },
+    {
+      "id": "physics-ext-magnetic-flux",
+      "status": "READY",
+      "beforeHash": "0501a95d1f9d2aa17aa10e66dfa71616f115eefd5f80989ea58ebdc789bafc0b",
+      "beforeCard": {
+        "id": "physics-ext-magnetic-flux",
+        "difficulty": "hard",
+        "prompt": "Какая величина входит в закон Фарадея как поток магнитного поля через контур?",
+        "answers": [
+          {
+            "text": "Магнитный поток",
+            "note": "Магнитный поток учитывает величину поля и проекцию площади контура."
+          },
+          {
+            "text": "Индуктивность",
+            "note": "Индуктивность определяет способность цепи противодействовать изменению тока."
+          },
+          {
+            "text": "Показатель преломления",
+            "note": "Показатель преломления показывает, насколько свет замедляется в среде."
+          },
+          {
+            "text": "Модуль Юнга",
+            "note": "Модуль Юнга характеризует жёсткость материала при растяжении или сжатии."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Магнитный поток учитывает величину поля и проекцию площади контура. Изменение потока создаёт индукционную ЭДС.",
+        "source": {
+          "title": "MIT OCW 8.02 Chapter 10: Faraday’s Law",
+          "url": "https://ocw.mit.edu/courses/8-02-physics-ii-electricity-and-magnetism-spring-2007/ce1720fd4b21def8c2189ff4779f27f7_cha10faraday_law.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "physics-ext-magnetic-flux",
+        "difficulty": "hard",
+        "prompt": "У катушки 200 витков магнитный поток через каждый виток равномерно уменьшается с 3,0·10⁻⁴ Вб до 1,0·10⁻⁴ Вб за 0,020 с. Каков модуль средней индуцированной ЭДС?",
+        "answers": [
+          {
+            "text": "2,0 В",
+            "note": "Для N витков модуль ЭДС равен N·|ΔΦ|/Δt; здесь это 200·2,0·10⁻⁴/0,020 В."
+          },
+          {
+            "text": "0,50 В",
+            "note": "Катушка с 50 витками при том же изменении потока за то же время создала бы ЭДС 0,50 В."
+          },
+          {
+            "text": "1,0 В",
+            "note": "Это половина результата при учёте всех 200 витков, например при ошибочном удвоении интервала времени."
+          },
+          {
+            "text": "4,0 В",
+            "note": "Это вдвое выше результата и соответствует ошибочному удвоению изменения потока."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "По закону Фарадея модуль средней ЭДС катушки равен N|ΔΦ|/Δt. Подстановка данных даёт 200×2,0·10⁻⁴/0,020=2,0 В.",
+        "source": {
+          "title": "MIT OCW 8.02 Chapter 10: Faraday’s Law of Induction",
+          "url": "https://ocw.mit.edu/courses/8-02-physics-ii-electricity-and-magnetism-spring-2007/ce1720fd4b21def8c2189ff4779f27f7_cha10faraday_law.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "8fd5f5456f634f6929655f29e5442d698cce20fd6ab83911e48770ddb1d3d3c5",
+      "sixGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "sha256": "34e527f9a76e9723bf2815b447da87d0c941b07b0d8f218308ac9a78082b173f",
+          "reason": "Hard-задача требует вычислить модуль ЭДС по числу витков и конечным значениям потока; все четыре числовых ответа используют вольты.",
+          "locator": "p.3, Faraday law ε=−N dΦB/dt for N turns",
+          "literal": {
+            "prompt": "У катушки 200 витков магнитный поток через каждый виток равномерно уменьшается с 3,0·10⁻⁴ Вб до 1,0·10⁻⁴ Вб за 0,020 с. Каков модуль средней индуцированной ЭДС?",
+            "answers": [
+              "2,0 В",
+              "0,50 В",
+              "1,0 В",
+              "4,0 В"
+            ],
+            "correctIndex": 0
+          },
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "group": "explanation",
+          "sha256": "2608e25787f475f5e7cdc9c2f7360927239b3e3d6f4356502b9992a0a9bda6f8",
+          "reason": "MIT даёт ε=−N dΦB/dt; подстановка N=200, |ΔΦ|=2·10⁻⁴ Вб, Δt=0,020 с даёт 2,0 В.",
+          "locator": "p.3, N-turn factor; same ΔΦ and Δt at 50 turns yields 0.50 V",
+          "literal": "По закону Фарадея модуль средней ЭДС катушки равен N|ΔΦ|/Δt. Подстановка данных даёт 200×2,0·10⁻⁴/0,020=2,0 В.",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "group": "note0",
+          "sha256": "f784317047d028a7715f78a6c15f274a71dc7d7dcf0eaa90b899388628a5b4a5",
+          "reason": "Катушка с 50 витками при тех же изменении потока и времени дала бы 0,50 В по тому же уравнению.",
+          "locator": "p.3, Faraday law ε=−N dΦB/dt for N turns",
+          "literal": "Для N витков модуль ЭДС равен N·|ΔΦ|/Δt; здесь это 200·2,0·10⁻⁴/0,020 В.",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "group": "note1",
+          "sha256": "7ed67111758263499e4683bc6f745071d3abd1ce4ec33366f60513453a78c2ed",
+          "reason": "Если интервал был бы вдвое больше, ЭДС стала бы вдвое меньше; это объясняет 1,0 В.",
+          "locator": "p.3, N-turn factor; same ΔΦ and Δt at 50 turns yields 0.50 V",
+          "literal": "Катушка с 50 витками при том же изменении потока за то же время создала бы ЭДС 0,50 В.",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "group": "note2",
+          "sha256": "d0eae32a43d9b0b7f630fa6cf0e51d613409cd6263ba41f7c1264afb1876d5e3",
+          "reason": "Если изменение потока было бы вдвое больше, модуль ЭДС удвоился бы до 4,0 В.",
+          "locator": "p.3, ε magnitude scales inversely with elapsed time",
+          "literal": "Это половина результата при учёте всех 200 витков, например при ошибочном удвоении интервала времени.",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "group": "note3",
+          "sha256": "a166157dc126bbe8bc08eb3fc01d5d52b4d4632de703da9ca1275a5304e3df08",
+          "reason": "Explanation показывает вычисление N|ΔΦ|/Δt и промежуточные величины, достаточные для проверки результата.",
+          "locator": "p.3, ε magnitude scales linearly with flux change",
+          "literal": "Это вдвое выше результата и соответствует ошибочному удвоению изменения потока.",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        }
+      ],
+      "variantAndNoteReview": [
+        {
+          "index": 0,
+          "text": "2,0 В",
+          "correct": true,
+          "substitution": "N|ΔΦ|/Δt = 200·2·10⁻⁴/0,020 = 2,0 В.",
+          "noteReview": "Для N витков модуль ЭДС равен N·|ΔΦ|/Δt; здесь это 200·2,0·10⁻⁴/0,020 В.",
+          "noteUseful": true,
+          "sourceLocator": "p.3, Faraday law ε=−N dΦB/dt for N turns",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "index": 1,
+          "text": "0,50 В",
+          "correct": false,
+          "substitution": "50 витков дали бы 0,50 В при тех же ΔΦ и Δt; задано 200.",
+          "noteReview": "Катушка с 50 витками при том же изменении потока за то же время создала бы ЭДС 0,50 В.",
+          "noteUseful": true,
+          "sourceLocator": "p.3, N-turn factor; same ΔΦ and Δt at 50 turns yields 0.50 V",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "index": 2,
+          "text": "1,0 В",
+          "correct": false,
+          "substitution": "Удвоение Δt в законе Faraday вдвое уменьшает ЭДС до 1,0 В.",
+          "noteReview": "Это половина результата при учёте всех 200 витков, например при ошибочном удвоении интервала времени.",
+          "noteUseful": true,
+          "sourceLocator": "p.3, ε magnitude scales inversely with elapsed time",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "index": 3,
+          "text": "4,0 В",
+          "correct": false,
+          "substitution": "Удвоение |ΔΦ| удваивает ЭДС до 4,0 В.",
+          "noteReview": "Это вдвое выше результата и соответствует ошибочному удвоению изменения потока.",
+          "noteUseful": true,
+          "sourceLocator": "p.3, ε magnitude scales linearly with flux change",
+          "sourceRef": "MIT-FARADAY-GENERATORS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-FARADAY-GENERATORS.body"
+        },
+        {
+          "review": "Card-level validation",
+          "uniqueCorrectAnswer": true,
+          "allFourTextsDistinct": true,
+          "grammaticalSubstitutionChecked": true,
+          "difficulty": "Frozen level retained; no downgrade. Medium uses close physics concepts; hard requires applying a law or calculation.",
+          "neighborEvidence": "See neighborReview."
+        }
+      ],
+      "neighborReview": {
+        "neighbors": [
+          "physics-electromagnetic-induction-condition (качественное появление ЭДС, здесь количественный расчёт её модуля)",
+          "physics-lenz-law-direction (знак/направление; здесь только модуль)"
+        ],
+        "assessment": "Проверены реальные близкие карточки каталога; факты и навыки различаются, прямого дубля нет."
+      },
+      "reasonCodes": [
+        "hard_key_leak",
+        "unconfirmed_note_specific_claim"
+      ],
+      "unresolved": null
+    },
+    {
+      "id": "physics-ext-coriolis-force",
+      "status": "READY",
+      "beforeHash": "18fbb8c1a18c1177949cce6a17112cbbc6b06f3fcb8b4a3b1df33529c5058568",
+      "beforeCard": {
+        "id": "physics-ext-coriolis-force",
+        "difficulty": "hard",
+        "prompt": "Как называется кажущаяся сила, которая отклоняет движущееся тело во вращающейся системе отсчёта?",
+        "answers": [
+          {
+            "text": "Центробежная сила",
+            "note": "Центробежная сила в вращающейся системе направлена от оси вращения."
+          },
+          {
+            "text": "Сила Эйлера",
+            "note": "Сила Эйлера возникает, когда угловая скорость системы отсчёта изменяется."
+          },
+          {
+            "text": "Центростремительная сила",
+            "note": "Центростремительная сила обеспечивает ускорение к центру при движении по окружности."
+          },
+          {
+            "text": "Сила Кориолиса",
+            "note": "Сила Кориолиса отклоняет движущиеся тела относительно вращающейся системы отсчёта."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Сила Кориолиса появляется при описании движения во вращающейся системе отсчёта. На Земле с ней связано отклонение крупных воздушных и водных потоков.",
+        "source": {
+          "title": "NOAA: What is the Coriolis effect?",
+          "url": "https://www.nesdis.noaa.gov/about/k-12-education/atmosphere/what-the-coriolis-effect",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "physics-ext-coriolis-force",
+        "difficulty": "hard",
+        "prompt": "При постоянной угловой скорости вращающейся системы какая кажущаяся сила в уравнении движения направлена перпендикулярно относительной скорости тела и пропорциональна ей?",
+        "answers": [
+          {
+            "text": "Центробежная сила",
+            "note": "Во вращающейся системе эта сила зависит от положения относительно оси и направлена от оси."
+          },
+          {
+            "text": "Сила Эйлера",
+            "note": "Она связана с изменением угловой скорости самой вращающейся системы."
+          },
+          {
+            "text": "Центростремительная сила",
+            "note": "Это результирующая реальных сил, необходимая для ускорения тела к центру траектории."
+          },
+          {
+            "text": "Сила Кориолиса",
+            "note": "В векторной форме она пропорциональна векторному произведению угловой скорости системы на относительную скорость."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Сила Кориолиса появляется при описании движения во вращающейся системе и зависит от относительной скорости тела. Она перпендикулярна этой скорости, поэтому сама по себе не совершает работу.",
+        "source": {
+          "title": "MIT OCW 12.800 Coriolis force lecture notes",
+          "url": "https://ocw.mit.edu/courses/12-800-fluid-dynamics-of-the-atmosphere-and-ocean-fall-2004/df1b6591f0a93bba0c56ba7735efb057_price_coriolis.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "6f998585332abbce86b22d7f4c1fc4a395383d860ba1547240bc7609d86d536e",
+      "sixGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "sha256": "2852be6c74e0e4dc7a3cb84999661f3388a56920ece5f965a11af6ec799c2a71",
+          "reason": "Prompt задаёт постоянную скорость вращения и поперечность относительной скорости; это выделяет Coriolis из centrifugal/Euler terms.",
+          "locator": "pp.1–4, Coriolis/centrifugal distinction; force depends on rotating-frame position",
+          "literal": {
+            "prompt": "При постоянной угловой скорости вращающейся системы какая кажущаяся сила в уравнении движения направлена перпендикулярно относительной скорости тела и пропорциональна ей?",
+            "answers": [
+              "Центробежная сила",
+              "Сила Эйлера",
+              "Центростремительная сила",
+              "Сила Кориолиса"
+            ],
+            "correctIndex": 3
+          },
+          "sourceRef": "MIT-EULER-FORCE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-EULER-FORCE.body"
+        },
+        {
+          "group": "explanation",
+          "sha256": "6ddcdfbf16487f8071c6f0e1c9031196f02548970a3ef25b29a84d4a1b94767b",
+          "reason": "MIT описывает centrifugal term в зависимости от положения относительно оси, что отличает его от velocity-dependent Coriolis term.",
+          "locator": "p.34, note 12: time-varying angular position produces Euler force term",
+          "literal": "Сила Кориолиса появляется при описании движения во вращающейся системе и зависит от относительной скорости тела. Она перпендикулярна этой скорости, поэтому сама по себе не совершает работу.",
+          "sourceRef": "MIT-EULER-FORCE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-EULER-FORCE.body"
+        },
+        {
+          "group": "note0",
+          "sha256": "a3e96becd41279faef07385ed3821d690900ad3aef29f6cb5947a42e46c2fd91",
+          "reason": "MIT указывает, что Euler force появляется при изменении угловой скорости/углового положения frame.",
+          "locator": "pp.1–4, Coriolis/centrifugal distinction; force depends on rotating-frame position",
+          "literal": "Во вращающейся системе эта сила зависит от положения относительно оси и направлена от оси.",
+          "sourceRef": "MIT-EULER-FORCE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-EULER-FORCE.body"
+        },
+        {
+          "group": "note1",
+          "sha256": "3ea13d2493416b791413eb729c3fa0f530ae03c1a2e2b9f4a3b35b7633a7a33f",
+          "reason": "MIT 8.01L связывает центростремительное ускорение с направлением к центру; это реальная результирующая, не кажущаяся сила.",
+          "locator": "p.34, note 12: time-varying angular position produces Euler force term",
+          "literal": "Она связана с изменением угловой скорости самой вращающейся системы.",
+          "sourceRef": "MIT-EULER-FORCE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-EULER-FORCE.body"
+        },
+        {
+          "group": "note2",
+          "sha256": "47642baec520f02dcb00089be5cf1d78428f476e5664fb2f32a348b2740b29c4",
+          "reason": "В вращающемся frame Coriolis term пропорционален Ω×v; векторное произведение перпендикулярно относительной скорости.",
+          "locator": "p.1, centripetal acceleration points toward circle center",
+          "literal": "Это результирующая реальных сил, необходимая для ускорения тела к центру траектории.",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "group": "note3",
+          "sha256": "d0a2399ac2afb151c7f782911d794dffc7f902abe35e416a6693519ba48fd061",
+          "reason": "Из перпендикулярности Coriolis force относительной скорости следует нулевая мгновенная мощность и отсутствие работы этой силы.",
+          "locator": "pp.1–4, Coriolis term in rotating-frame kinematics",
+          "literal": "В векторной форме она пропорциональна векторному произведению угловой скорости системы на относительную скорость.",
+          "sourceRef": "MIT-EULER-FORCE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-EULER-FORCE.body"
+        }
+      ],
+      "variantAndNoteReview": [
+        {
+          "index": 0,
+          "text": "Центробежная сила",
+          "correct": false,
+          "substitution": "Centrifugal term связан с положением/радиусом относительно оси.",
+          "noteReview": "Во вращающейся системе эта сила зависит от положения относительно оси и направлена от оси.",
+          "noteUseful": true,
+          "sourceLocator": "pp.1–4, Coriolis/centrifugal distinction; force depends on rotating-frame position",
+          "sourceRef": "MIT-EULER-FORCE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-EULER-FORCE.body"
+        },
+        {
+          "index": 1,
+          "text": "Сила Эйлера",
+          "correct": false,
+          "substitution": "Euler term появляется при угловом ускорении самой системы координат.",
+          "noteReview": "Она связана с изменением угловой скорости самой вращающейся системы.",
+          "noteUseful": true,
+          "sourceLocator": "p.34, note 12: time-varying angular position produces Euler force term",
+          "sourceRef": "MIT-EULER-FORCE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-EULER-FORCE.body"
+        },
+        {
+          "index": 2,
+          "text": "Центростремительная сила",
+          "correct": false,
+          "substitution": "Centripetal acceleration направлено к центру и не является fictitious Coriolis force.",
+          "noteReview": "Это результирующая реальных сил, необходимая для ускорения тела к центру траектории.",
+          "noteUseful": true,
+          "sourceLocator": "p.1, centripetal acceleration points toward circle center",
+          "sourceRef": "MIT-801L-EQUATIONS",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-801L-EQUATIONS.body"
+        },
+        {
+          "index": 3,
+          "text": "Сила Кориолиса",
+          "correct": true,
+          "substitution": "Ω×v перпендикулярен v и зависит от вращения системы.",
+          "noteReview": "В векторной форме она пропорциональна векторному произведению угловой скорости системы на относительную скорость.",
+          "noteUseful": true,
+          "sourceLocator": "pp.1–4, Coriolis term in rotating-frame kinematics",
+          "sourceRef": "MIT-EULER-FORCE",
+          "rawPath": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/author/sources/alternate/curl-captures/MIT-EULER-FORCE.body"
+        },
+        {
+          "review": "Card-level validation",
+          "uniqueCorrectAnswer": true,
+          "allFourTextsDistinct": true,
+          "grammaticalSubstitutionChecked": true,
+          "difficulty": "Frozen level retained; no downgrade. Medium uses close physics concepts; hard requires applying a law or calculation.",
+          "neighborEvidence": "See neighborReview."
+        }
+      ],
+      "neighborReview": {
+        "neighbors": [
+          "physics-ext-angular-velocity (угловая скорость — вращательная кинематика, не кажущаяся сила)",
+          "physics-ext-centrifugal-force / physics-ext-euler-force if present: отличительные члены вращающейся системы"
+        ],
+        "assessment": "Проверены реальные близкие карточки каталога; факты и навыки различаются, прямого дубля нет."
+      },
+      "reasonCodes": [
+        "ambiguous_prompt",
+        "correct_note_repeats_prompt",
+        "russian_grammar"
+      ],
+      "unresolved": null
+    }
+  ],
+  "summary": {
+    "READY": [
+      "physics-ext-torque-rotation",
+      "physics-ext-angular-velocity",
+      "physics-ext-capacitance-charge-voltage",
+      "physics-ext-resistance-current-opposition",
+      "physics-ext-diffraction-obstacle",
+      "physics-ext-electric-flux",
+      "physics-ext-magnetic-flux",
+      "physics-ext-coriolis-force"
+    ],
+    "HOLD": [
+      "physics-ext-induction-current-field"
+    ],
+    "FIX": [],
+    "qualityCredit": 0,
+    "note": "READY is author candidate only; no adjudication or quality credit."
+  },
+  "evidenceFormat": "Each sixGroups item includes literal equal to hashed canonical value and sourceRef/rawPath/locator; variant checks include per-option factual assessment. Capture paths resolve under sourceCapture."
+}
