@@ -1,0 +1,15 @@
+# Weather source-HOLD авторский пакет
+
+Baseline: `55db9891798bcaf38abc20f6ea3b215c0b3e8626`; scope — только 10 ID из `preimage.json`. Персонально прочитаны все 10 полных карточек, шесть групп каждой, canonical GAME_SPEC «Контент вопросов», question authoring guide, `git show 12e5581b:.agents/references/question-revision.md`, старый weather index, а также переиспользованные full primary contexts и два успешно захваченных контекста.
+
+**Результат: READY 2, FIX 0, HOLD 8.** READY: `weather-climate-iod-indian` и `weather-climate-mediterranean-dry-summer`. У обоих обновлены вопрос/объяснение/notes только на подтверждённые утверждения; сохранены ID, порядок карточки, difficulty, порядок четырёх вариантов и `correctIndex`. Каждая READY имеет шесть literal-групп с canonical SHA-256, concrete sourceReasons, источник и проверку ближайших соседей/дубликатов.
+
+Met Office capture из `process-v2-weather20/author/sources/` прочитан по переданному пути, его body/headers сверены с manifest и hash; capture не копировался. IOD взят из полного нового NOAA CPC response: HTTP 200, body 4416 bytes, `Content-Length` совпадает, headers и SHA сохранены в `author/sources/noaa-cpc-iod.*`. NOAA/AOML source по внетропическим циклонам прочитан лично из `process-v2-weather15/fix-author/sources/`: он подтверждает фронты в keyed claim, но не покрывает все notes текущих четырёх вариантов, поэтому ID остаётся HOLD без заимствования чужого PASS.
+
+По другим альтернативным путям: NOAA NSSL вернул 410; COMET/UCAR перенаправил на 800-byte course-player shell; NWS temperature ответил HTTP 200, но transfer остановился после 16384 bytes/30 секунд. Эти единственные curl-попытки сохранены как incomplete/error artifacts. NOAA/AOML context добавлен как shared source для extratropical card: он валидирует keyed claim, но notes о трёх тропических distractors остались неподтверждёнными. Capture-evidence сохранён как `.attempt.*`, отмечен неполным и не засчитан как source. Для этих URL повторов не было. Equator остаётся HOLD: сохранённый NWS контекст подтверждает нагрев у экватора, но не годовой диапазон и набор климатических notes.
+
+Файлы: `author/candidate.json`, `author/report.md`, `author/sources/capture-recovery.json`, `author/sources/noaa-cpc-iod.body`, `author/sources/noaa-cpc-iod.headers`. Прежний `sources/manifest.json` с первыми TLS failures сохранён; recovery manifest добавлен отдельно. `.gitattributes` отключает text/whitespace-normalization для raw body/headers.
+
+**Оставшиеся HOLD:** `weather-climate-equator-hot`, `weather-climate-extratropical-fronts`, `weather-climate-riming-supercooled`, `weather-climate-aggregation-snowflakes`, `weather-climate-potential-vorticity`, `weather-climate-geostrophic-wind`, `weather-climate-thermal-wind`, `weather-climate-temperature-warmth`. Следующее действие по каждому ID дано в `candidate.json`; не делать новых повторных запросов в этом пакете.
+
+Build, runtime и full tests не запускались. Каталог, индекс, claims и commit не менялись. Author-файлы остаются локальными untracked по заданному scope.
