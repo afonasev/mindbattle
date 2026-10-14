@@ -1,0 +1,72 @@
+{
+  "scope": [
+    "history-japan-medium-01a-05"
+  ],
+  "beforeCard": {
+    "id": "history-japan-medium-01a-05",
+    "difficulty": "medium",
+    "prompt": "Кто получил избирательное право по японскому закону о всеобщем мужском голосовании 1925 года?",
+    "answers": [
+      {
+        "text": "Все взрослые мужчины-граждане",
+        "note": "Закон отменил общее требование об уплате налогов и предоставил право голоса взрослым мужчинам-гражданам; действовали отдельные исключения."
+      },
+      {
+        "text": "Только мужчины, платившие высокий налог",
+        "note": "Требование об уплате налогов было предметом спора и было исключено из закона 1925 года."
+      },
+      {
+        "text": "Все взрослые мужчины и женщины",
+        "note": "Закон 1925 года предоставил право взрослым мужчинам-гражданам и не распространял эту реформу на женщин."
+      },
+      {
+        "text": "Только наследственные пэры",
+        "note": "Закон предоставил право взрослым мужчинам-гражданам, но сохранил исключения для людей на общественном или частном содержании."
+      }
+    ],
+    "correctIndex": 0,
+    "explanation": "Закон предоставил право голоса взрослым мужчинам-гражданам и снял требование об уплате налогов. При этом сохранились отдельные исключения, включая людей на общественном или частном содержании; женщины в эту реформу не вошли.",
+    "source": {
+      "title": "3-13 Adoption of Universal Manhood Suffrage Law and Peace Preservation Law | Modern Japan in archives",
+      "url": "https://www.ndl.go.jp/modern/e/cha3/description13.html",
+      "verifiedAt": "2026-09-02"
+    }
+  },
+  "beforeHash": "3dac4fd8922fbdac7bdaf8f0e281cd036dcdde295cc007fc5e1d0a57983a259f",
+  "cycle": 1,
+  "independentReceipt": "docs/content-audits/question-quality-wave-7/process-v2-japan20-fourth/reviewer/review.json",
+  "readerThreadId": "01a13c5f-82b4-77e1-93a5-e8476233fc90",
+  "defects": [
+    {
+      "id": "D1",
+      "group": "prompt_ordered_answers_key",
+      "kind": "answer_leak_absolute_medium",
+      "reason": "«всеобщем мужском голосовании» states the answer category in the prompt: «Все взрослые мужчины-граждане». «мужском» rules out women and «всеобщем» rules out both «Только» options without Japanese-history knowledge. Absolute medium is not met; revise prompt and precise electorate labels while retaining frozen index 0/difficulty.",
+      "next": "One targeted author fix: ask about the 1925 electoral reform without revealing universal/male eligibility in the law name; keep difficulty medium and correctIndex 0, build plausible parallel electorate categories."
+    },
+    {
+      "id": "D2",
+      "group": "prompt_ordered_answers_key",
+      "kind": "unqualified_all",
+      "reason": "Option 0 «Все взрослые мужчины-граждане» has no qualification, while the actual primary passage explicitly records a dole-recipient exclusion. Best intended key is uniquely index 0, but no option is an unqualified exact statement.",
+      "next": "Qualify the electorate in the option/prompt so the correct answer is literally true; do not erase the source-stated exception."
+    },
+    {
+      "id": "D3",
+      "group": "note3",
+      "kind": "wrong_option_context",
+      "reason": "Note3 is about the law and relief recipients, not «Только наследственные пэры». It fails the canonical own-option useful-fact rule; replace with a sourced fact specifically about peers, or replace this distractor with a plausible electorate category whose own note is supported.",
+      "next": "Give a claim-specific saved official source for a useful peer fact or choose an appropriate supported electorate distractor, and review its own note."
+    },
+    {
+      "id": "D4",
+      "group": "source.verifiedAt",
+      "kind": "stale_verification_date",
+      "reason": "CURRENT verifiedAt is 2026-09-02; complete capture and independent reading occurred on 2026-10-15 in Asia/Yekaterinburg.",
+      "next": "Set verifiedAt to actual checking date 2026-10-15 in the same targeted fix."
+    }
+  ],
+  "qualityCredit": 0,
+  "requirements": "Address all D1-D4 within frozen ID/topic/order/medium/correctIndex0; no key hint, no unconditional all when primary exclusions apply, own-option useful note, actual source checked date. Option texts not frozen; supported plausible alternative permitted; personally verify new card+relevant current neighbors. One substantive cycle then unresolved HOLD.",
+  "next": "Fresh Luna/medium author prepares exact proposal; coordinator apply+affected QA; retainedSolreader when independent slot free."
+}
