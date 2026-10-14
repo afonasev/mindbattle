@@ -1,0 +1,498 @@
+{
+  "schema": "mindbattle-independent-question-review-v1",
+  "reviewerThreadId": "01a13bce-e35c-7560-971b-880d5dd0a5e5",
+  "reviewedAt": "2026-10-15",
+  "baselineCommit": "55db9891798bcaf38abc20f6ea3b215c0b3e8626",
+  "processGitLocator": "12e5581b:.agents/references/question-revision.md",
+  "scope": [
+    "weather-climate-iod-indian",
+    "weather-climate-mediterranean-dry-summer"
+  ],
+  "entries": [
+    {
+      "id": "weather-climate-iod-indian",
+      "currentHash": "bfc0bfd29a283654767649d100d0fe1a88412c99d8147b97068e0bf826202652",
+      "afterHashMatch": true,
+      "verdict": "FIX",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой режим тропического Индийского океана связывают с западно-восточным контрастом температуры поверхности моря и противоположными изменениями осадков по сторонам бассейна?",
+            "answers": [
+              "Эль-Ниньо",
+              "Ла-Нинья",
+              "Диполь Индийского океана",
+              "Североатлантическое колебание"
+            ],
+            "correctIndex": 2
+          },
+          "literalSHA256": "f3d720ebe5769c16bf1c675d7e585d3b9c3a336277f7c854804f4bb208bb80b4",
+          "verdict": "FIX",
+          "sourceReasons": [
+            "CPC IOD paragraphs 3–4 define west-minus-east equatorial SST departures and opposed rainfall anomalies; correct answer index 2. The question’s named Indian Ocean also directly matches only answer 2, creating a medium-tier elimination shortcut.",
+            "NWS ENSO defines El Niño by warmer-than-average central/eastern tropical Pacific SST; it can affect the Indian basin, but is not its intrinsic east–west dipole.",
+            "NWS ENSO defines La Niña by cooler-than-average central/eastern tropical Pacific SST and stronger easterlies, not an intrinsic Indian SST dipole.",
+            "CPC IOD explicitly calls the east–west mode the Indian Ocean Dipole and separates it from basin-wide IOBM/ENSO effects.",
+            "CPC NAO defines a north–south atmospheric height/pressure anomaly dipole over Greenland and the central North Atlantic, not the tropical Indian SST mode."
+          ],
+          "editorialReason": "Four noun labels consistently answer «Какой режим ...?». Climate modes are a common category and lengths are plausible; factual key is correct, but naming the Indian Ocean makes answer 2 trivially identifiable without the knowledge expected at medium."
+        },
+        {
+          "group": "explanation",
+          "literal": "Диполь Индийского океана (IOD) — режим межгодовой изменчивости температуры поверхности моря в тропическом бассейне. При смене фазы тёплая и холодная аномалии меняются местами, а осадки в Восточной Африке и районе Индонезии обычно реагируют противоположно.",
+          "literalSHA256": "fd560b20a4f5075fc081e1662d438a7cb1944f6b2371791ae7d5e5092fa2f496",
+          "verdict": "PASS",
+          "sourceReasons": [
+            "CPC calls IOD an intrinsic climate-variability mode, describes positive western warmth/eastern cooling and their reversal in the negative phase. Its rainfall paragraph gives opposite East African and Maritime Continent responses in the two phases; Indonesia is within the Maritime Continent. Interannual variability describes the climate mode rather than a daily weather event."
+          ],
+          "editorialReason": "Two clear sentences identify the mode and phase behavior without turning a tendency into an absolute rule."
+        },
+        {
+          "group": "note0",
+          "literal": "Эль-Ниньо — фаза ЭНЮК с аномально тёплой поверхностью центральной и восточной тропической части Тихого океана.",
+          "literalSHA256": "5651d82e98a5d932b1b5d5bf53e67fad24ac5d886bcd099eff6a1f451c4041c6",
+          "verdict": "PASS",
+          "sourceReasons": [
+            "NWS ENSO El Niño paragraph directly gives warming of the central and eastern tropical Pacific surface. Opening ENSO definition and the three phase descriptions establish it as an ENSO phase."
+          ],
+          "editorialReason": "Independent term definition, not a negative placeholder; below 35 words."
+        },
+        {
+          "group": "note1",
+          "literal": "При Ла-Нинье поверхность центральной и восточной тропической части Тихого океана холоднее среднего, а обычные восточные ветры усиливаются.",
+          "literalSHA256": "809f4c8a4d22381e2d91a927bba1a98b20f941316882cf24d1384367373d979d",
+          "verdict": "PASS",
+          "sourceReasons": [
+            "NWS ENSO La Niña paragraph explicitly gives below-average SST in the central/eastern tropical Pacific and strengthening of the normal easterly winds."
+          ],
+          "editorialReason": "Independent phase fact, correct declension «при Ла-Нинье», below 35 words."
+        },
+        {
+          "group": "note2",
+          "literal": "Его индекс — разность аномалий температуры поверхности моря на западе и востоке экваториального Индийского океана; положительная фаза обычно усиливает дожди в Восточной Африке.",
+          "literalSHA256": "6ff2a03fa9c638aa75c84e11d3faa0490202b88e54e8996f2588c168ab1fc5c2",
+          "verdict": "PASS",
+          "sourceReasons": [
+            "CPC IOD paragraph 3 defines DMI as western-minus-eastern equatorial Indian SST departures from average; paragraph 4 says positive IOD tends to increase rainfall in equatorial East Africa. The rainfall tendency is an additional fact beyond the asked identification/contrast."
+          ],
+          "editorialReason": "Adds DMI definition and East African rainfall tendency; meets the correct-note additional-fact requirement."
+        },
+        {
+          "group": "note3",
+          "literal": "Североатлантическое колебание — диполь атмосферных аномалий между районом Гренландии и центральной частью Северной Атлантики.",
+          "literalSHA256": "12fb75952c0ff00ebfe0b1c8592dc88b963cecc17078a228d4a59e9862b3f25f",
+          "verdict": "PASS",
+          "sourceReasons": [
+            "CPC NAO definition places the anomaly centers over Greenland and the central North Atlantic (35–40°N), with opposite sign. Atmospheric anomalies are faithful to height/pressure anomalies in that definition."
+          ],
+          "editorialReason": "Independent location/structure fact for NAO, below 35 words."
+        }
+      ],
+      "sourceLocators": [
+        "nws-enso",
+        "noaa-nao",
+        "nws-flight-environment",
+        "noaa-cpc-iod",
+        "metoffice-climate-zones"
+      ],
+      "neighborReview": [
+        {
+          "id": "weather-climate-el-nino-warm",
+          "currentHash": "1b6724371959b2a962ea7544d3a1dff01a22ce5bfec05331c7a74e6dc65c78d7",
+          "personallyRead": "CURRENT_FULL_CARD",
+          "reason": "Pacific/Indonesia rainfall shift identifies El Niño; IOD asks an Indian-basin SST dipole, so the facts are distinct.",
+          "duplicateVerdict": "NO_KEYED_FACT_DUPLICATE"
+        },
+        {
+          "id": "weather-climate-la-nina-cool",
+          "currentHash": "663081b66e216cdff147fa96087c84946cd3cab4e24e07f7eff0c122c50e92ee",
+          "personallyRead": "CURRENT_FULL_CARD",
+          "reason": "La Niña card asks stronger equatorial easterlies, distinct from Indian SST east–west contrast.",
+          "duplicateVerdict": "NO_KEYED_FACT_DUPLICATE"
+        },
+        {
+          "id": "weather-climate-nao-pressure",
+          "currentHash": "a981e5143b9522d8b5098deacaaab751b6e2ab83ec3edd0c9f9256cf44468195",
+          "personallyRead": "CURRENT_FULL_CARD",
+          "reason": "NAO card asks an atmospheric north–south pressure/height dipole; IOD is an ocean SST east–west mode.",
+          "duplicateVerdict": "NO_KEYED_FACT_DUPLICATE"
+        },
+        {
+          "id": "weather-climate-monsoon-seasonal",
+          "currentHash": "4325431e68bc48cc30affa0988fcb7493cc7c243fcee5f3147621ed016d32017",
+          "personallyRead": "CURRENT_FULL_CARD",
+          "reason": "Monsoon card asks seasonal moist airflow to the Indian subcontinent, not interannual opposed SST anomalies.",
+          "duplicateVerdict": "NO_KEYED_FACT_DUPLICATE"
+        }
+      ],
+      "defects": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "type": "medium_key_leak",
+          "description": "Four noun labels consistently answer «Какой режим ...?». Climate modes are a common category and lengths are plausible; factual key is correct, but naming the Indian Ocean makes answer 2 trivially identifiable without the knowledge expected at medium."
+        }
+      ],
+      "nextAction": {
+        "owner": "coordinator_then_author_and_same_independent_reviewer",
+        "action": "Apply one addressed fix preserving ID/topic/order/difficulty/correctIndex, then return the exact new CURRENT hash for review of the changed group and affected dependencies. Until that review, this CURRENT is FIX and receives zero credit.",
+        "fixRequestFile": "docs/content-audits/question-quality-wave-7/process-v2-weather-hold10/reviewer/fix-requests.json",
+        "maxAddressedFixCycles": 1
+      },
+      "absoluteDifficulty": {
+        "frozen": "medium",
+        "reason": "IOD knowledge is medium for a weather/climate-informed adult, but CURRENT wording defeats that target by an obvious geographic label match."
+      },
+      "frozenChecks": {
+        "id": true,
+        "topicId": "weather-climate",
+        "difficulty": true,
+        "correctIndex": true,
+        "positionInTopic": 40
+      },
+      "substitutions": [
+        {
+          "answerIndex": 0,
+          "text": "Эль-Ниньо",
+          "grammar": "PASS",
+          "semanticReason": "NWS ENSO defines El Niño by warmer-than-average central/eastern tropical Pacific SST; it can affect the Indian basin, but is not its intrinsic east–west dipole."
+        },
+        {
+          "answerIndex": 1,
+          "text": "Ла-Нинья",
+          "grammar": "PASS",
+          "semanticReason": "NWS ENSO defines La Niña by cooler-than-average central/eastern tropical Pacific SST and stronger easterlies, not an intrinsic Indian SST dipole."
+        },
+        {
+          "answerIndex": 2,
+          "text": "Диполь Индийского океана",
+          "grammar": "PASS",
+          "semanticReason": "CPC IOD explicitly calls the east–west mode the Indian Ocean Dipole and separates it from basin-wide IOBM/ENSO effects."
+        },
+        {
+          "answerIndex": 3,
+          "text": "Североатлантическое колебание",
+          "grammar": "PASS",
+          "semanticReason": "CPC NAO defines a north–south atmospheric height/pressure anomaly dipole over Greenland and the central North Atlantic, not the tropical Indian SST mode."
+        }
+      ]
+    },
+    {
+      "id": "weather-climate-mediterranean-dry-summer",
+      "currentHash": "96b2db3b5dcdd65afb8d4f9ccae270148133d3e59dfd66869a18e9a59347836c",
+      "afterHashMatch": true,
+      "verdict": "FIX",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой климат отличается сухим летом и мягкой влажной зимой?",
+            "answers": [
+              "Экваториальный климат",
+              "Средиземноморский климат",
+              "Пустынный климат",
+              "Полярный климат"
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "2f098b2bcc49caf88b485d2a480e3aff55661770d610d278bfc38c7c60e212c6",
+          "verdict": "PASS",
+          "sourceReasons": [
+            "Met Office Mediterranean section directly identifies this climate by dry summers and mild wet winters; index 1 is unique among the offered climate types.",
+            "Met Office tropical rainforest section describes high temperatures and year-round rain near the equator, not Mediterranean seasonality.",
+            "Met Office Mediterranean section defines dry summers and mild wet winters.",
+            "Met Office Desert section describes extreme dryness and thermal swings, rather than a distinct mild wet winter.",
+            "Met Office Polar section defines prolonged cold and no monthly mean over 10 °C, unlike the mild Mediterranean winter."
+          ],
+          "editorialReason": "All four consistent nominative noun phrases answer «Какой климат ...?». Climate types form a coherent category. Dry versus year-round wet or prolonged cold distinctions are broadly known school geography and appropriate for easy; no name-matching key leak."
+        },
+        {
+          "group": "explanation",
+          "literal": "Средиземноморский климат — разновидность умеренного: лето в нём сухое, а зима мягкая и влажная. Он встречается на западных окраинах материков, в том числе за пределами Средиземноморского бассейна.",
+          "literalSHA256": "f7cb1fdb1f4b3b9946f32259a9920c99e1d5239a266cf7240a6eaa7f7ae74831",
+          "verdict": "PASS",
+          "sourceReasons": [
+            "Met Office Mediterranean section explicitly calls it a specific type of temperate climate, gives dry summers/mild wet winters, and states occurrence on western coasts of continents and outside the Mediterranean Basin."
+          ],
+          "editorialReason": "Two sentences give the key, classification and geographic distribution; under 70 words."
+        },
+        {
+          "group": "note0",
+          "literal": "У экватора солнечные лучи падают почти отвесно и дают сильный прогрев поверхности; в полярных широтах они идут под гораздо меньшим углом.",
+          "literalSHA256": "dabe1ab01d48f7fade2ac9d29a80e95d9170932c323716a91be958b54f057bcb",
+          "verdict": "PASS",
+          "sourceReasons": [
+            "NWS Flight Environment opening Hemispheric Prevailing Winds paragraphs explicitly attribute maximum solar heating near the equator to more direct rays and much weaker polar heating to oblique rays. This is a relevant physical fact about the equatorial climate option."
+          ],
+          "editorialReason": "Independent solar-incidence fact connects specifically to the equatorial option; grammar and length acceptable."
+        },
+        {
+          "group": "note1",
+          "literal": "Он встречается также в Калифорнии, Западной Австралии, Чили и Южной Африке; характерная растительность включает chaparral и fynbos.",
+          "literalSHA256": "4c92f99c8b2e93be84999bae8f2955e380bf5fc6b31006040f346c28746d7be5",
+          "verdict": "PASS",
+          "sourceReasons": [
+            "Met Office Mediterranean section lists California, parts of Western Australia, Chile and South Africa, and names chaparral and fynbos vegetation. These are useful facts additional to the asked seasons. Latin-script names are understandable scientific names, though Russian transliteration would read more naturally; that is advisory only."
+          ],
+          "editorialReason": "Useful geographic and vegetation facts go beyond the seasonal key, under 35 words. Transliteration of botanical names is optional polish, not an acceptance blocker."
+        },
+        {
+          "group": "note2",
+          "literal": "Пустыни крайне засушливы; ясное небо способствует большим перепадам температуры, а ночью там может быть ниже нуля.",
+          "literalSHA256": "d13c8d079714270ab5747e256bba792fc6638ee054151d0a0b3cfa16fc003731",
+          "verdict": "PASS",
+          "sourceReasons": [
+            "Met Office Desert section explicitly gives extreme dryness, large swings due to cloudless skies, and nights below freezing in many deserts. The note says temperatures can drop below zero, not that every desert necessarily does."
+          ],
+          "editorialReason": "Independent dryness/temperature fact specific to the desert option; grammatically complete and under 35 words."
+        },
+        {
+          "group": "note3",
+          "literal": "В полярном климате средняя температура ни одного месяца не превышает 10 °C; в ледниковых районах ни один месяц не выше 0 °C.",
+          "literalSHA256": "3ad8278d59c6b247c3bb44ca7733b6dcdd30695f58e5f34ea19343a18d0722d3",
+          "verdict": "FIX",
+          "sourceReasons": [
+            "Met Office Polar section gives no monthly mean above 10 °C and separately restricts no monthly mean above 0 °C to ice cap climate. CURRENT translates the latter as any glacial areas, broadening a defined climatic subtype into terrain/ice coverage; that broader statement is not supported."
+          ],
+          "editorialReason": "Needs a narrow wording fix: name the ice cap / glacial climatic subtype and explicitly keep monthly means; do not generalize to any glacier-containing area."
+        }
+      ],
+      "sourceLocators": [
+        "metoffice-climate-zones",
+        "nws-flight-environment"
+      ],
+      "neighborReview": [
+        {
+          "id": "weather-climate-equator-hot",
+          "currentHash": "aded6ac351e57776d52b8e8b05aaa3f83a8efe777e3c02e70aa3c4b658b88aa3",
+          "personallyRead": "CURRENT_FULL_CARD",
+          "reason": "Asks equatorial location and small annual temperature range, distinct from Mediterranean seasonal rainfall.",
+          "duplicateVerdict": "NO_KEYED_FACT_DUPLICATE"
+        },
+        {
+          "id": "weather-climate-desert-dry",
+          "currentHash": "6c0df9437f5f272f7ed0229ebdfbe525f009bd5c953c7c3dd4fc863a928b1c1a",
+          "personallyRead": "CURRENT_FULL_CARD",
+          "reason": "Asks annual dryness; the Mediterranean card specifically distinguishes a dry season from mild wet winter.",
+          "duplicateVerdict": "NO_KEYED_FACT_DUPLICATE"
+        },
+        {
+          "id": "weather-climate-koppen-temperate-c",
+          "currentHash": "65b2d582669b01f9c52c83e64bbc10eb33de98b351b88c0f508d2ec20deaa2d0",
+          "personallyRead": "CURRENT_FULL_CARD",
+          "reason": "Asks Köppen group C under the named NOAA description; Mediterranean asks a specific dry-summer subtype and does not ask a group letter.",
+          "duplicateVerdict": "NO_KEYED_FACT_DUPLICATE"
+        },
+        {
+          "id": "weather-climate-koppen-dry-b",
+          "currentHash": "b8b1cff5e22dbbf25490f69b5bce97cfdeb20a5925fa10956c94e62fc57ac87b",
+          "personallyRead": "CURRENT_FULL_CARD",
+          "reason": "Asks group B from potential evaporation/transpiration versus precipitation, not Mediterranean wet/dry seasonality.",
+          "duplicateVerdict": "NO_KEYED_FACT_DUPLICATE"
+        },
+        {
+          "id": "weather-climate-koppen-polar-e",
+          "currentHash": "78cb6711787dc3e63436b23b01cf3e07777fa14bb9214300f345a054ea56e110",
+          "personallyRead": "CURRENT_FULL_CARD",
+          "reason": "Asks Köppen letter from warmest-month threshold; polar is only a distractor here. Note overlap is educational context, not a repeated keyed fact.",
+          "duplicateVerdict": "NO_KEYED_FACT_DUPLICATE"
+        }
+      ],
+      "defects": [
+        {
+          "group": "note3",
+          "type": "source_scope_translation",
+          "description": "Needs a narrow wording fix: name the ice cap / glacial climatic subtype and explicitly keep monthly means; do not generalize to any glacier-containing area."
+        }
+      ],
+      "nextAction": {
+        "owner": "coordinator_then_author_and_same_independent_reviewer",
+        "action": "Apply one addressed fix preserving ID/topic/order/difficulty/correctIndex, then return the exact new CURRENT hash for review of the changed group and affected dependencies. Until that review, this CURRENT is FIX and receives zero credit.",
+        "fixRequestFile": "docs/content-audits/question-quality-wave-7/process-v2-weather-hold10/reviewer/fix-requests.json",
+        "maxAddressedFixCycles": 1
+      },
+      "absoluteDifficulty": {
+        "frozen": "easy",
+        "reason": "Recognizing dry summers and mild wet winters is broad adult school-geography knowledge; the four climate options demand a relevant distinction."
+      },
+      "frozenChecks": {
+        "id": true,
+        "topicId": "weather-climate",
+        "difficulty": true,
+        "correctIndex": true,
+        "positionInTopic": 53
+      },
+      "substitutions": [
+        {
+          "answerIndex": 0,
+          "text": "Экваториальный климат",
+          "grammar": "PASS",
+          "semanticReason": "Met Office tropical rainforest section describes high temperatures and year-round rain near the equator, not Mediterranean seasonality."
+        },
+        {
+          "answerIndex": 1,
+          "text": "Средиземноморский климат",
+          "grammar": "PASS",
+          "semanticReason": "Met Office Mediterranean section defines dry summers and mild wet winters."
+        },
+        {
+          "answerIndex": 2,
+          "text": "Пустынный климат",
+          "grammar": "PASS",
+          "semanticReason": "Met Office Desert section describes extreme dryness and thermal swings, rather than a distinct mild wet winter."
+        },
+        {
+          "answerIndex": 3,
+          "text": "Полярный климат",
+          "grammar": "PASS",
+          "semanticReason": "Met Office Polar section defines prolonged cold and no monthly mean over 10 °C, unlike the mild Mediterranean winter."
+        }
+      ]
+    }
+  ],
+  "sourceArchive": {
+    "nws-enso": {
+      "sourceUrl": "https://www.weather.gov/mhx/ensowhat",
+      "typedLocator": "El Nino and La Nina phase definitions and associated tropical Pacific SST/rainfall/wind changes",
+      "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+      "body": {
+        "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-37-38-enso/response.body",
+        "bytes": 76857,
+        "sha256": "3f0f506384d0d2ae22064b731ed8e1323c35980a84d47d075f73c55a767abe72",
+        "gitBlob": "64d36570bfd14064bf33c11ab1ba439789c78df7",
+        "verifiedBytesAndSha256": true
+      },
+      "headers": {
+        "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-37-38-enso/response.headers",
+        "bytes": 970,
+        "sha256": "aab74d41029bebacb39e24784ec37a586c8f0f0fce2870f003ca84097048ab69",
+        "gitBlob": "eef1ac82f44fd0d5e574fe769b2fb750f898742d",
+        "verifiedBytesAndSha256": true
+      },
+      "rawAndHeadersByteExact": true,
+      "personalRead": "COMPLETE_PRIMARY_CONTEXT_IN_THIS_REVIEW",
+      "indexGitLocator": "12e5581b:docs/content-audits/process-review-2026-10-14/preserved/mindbattle-source-01a13956-2a8a-7cf1-8313-aa3392952779/weather-climate-whole-topic.json",
+      "retrievalDateFromHeaders": "2026-10-14"
+    },
+    "noaa-nao": {
+      "sourceUrl": "https://www.cpc.ncep.noaa.gov/data/teledoc/nao.shtml",
+      "typedLocator": "NAO definition, pressure-height dipole, and phase effects on jet/storm track and European temperature/precipitation",
+      "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+      "body": {
+        "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-39-nao/response.body",
+        "bytes": 13815,
+        "sha256": "7d84603699828c7fecc4d822aebb7c43ad3826e7b2c4678e23b4226db4419f63",
+        "gitBlob": "cc940a910e4c4ab2e01fa40d1e2b8a20967b8771",
+        "verifiedBytesAndSha256": true
+      },
+      "headers": {
+        "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-39-nao/response.headers",
+        "bytes": 1712,
+        "sha256": "3b0839767fdfae3bd44abcb2fd29fbe38483f48330340062767dd8499708fb64",
+        "gitBlob": "510ab95e81858f5a94d3cd14179d13f1053aef59",
+        "verifiedBytesAndSha256": true
+      },
+      "rawAndHeadersByteExact": true,
+      "personalRead": "COMPLETE_PRIMARY_CONTEXT_IN_THIS_REVIEW",
+      "indexGitLocator": "12e5581b:docs/content-audits/process-review-2026-10-14/preserved/mindbattle-source-01a13956-2a8a-7cf1-8313-aa3392952779/weather-climate-whole-topic.json",
+      "retrievalDateFromHeaders": "2026-10-14"
+    },
+    "nws-flight-environment": {
+      "sourceUrl": "https://www.weather.gov/source/zhu/ZHU_Training_Page/winds/Wx_Terms/Flight_Environment.htm",
+      "typedLocator": "THE JET STREAM section (upper atmosphere, speed, tropopause/polar-front relation, west-to-east flow); Global Circulation section (direct solar heating/rising air near equator; trade, westerly and polar cell winds)",
+      "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+      "body": {
+        "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-31-41-44-flight-environment/response.body",
+        "bytes": 36840,
+        "sha256": "02d2399b16f85ab31ea72e82850d2542c8cfc5f1911c02c8e15367ce88a5db8b",
+        "gitBlob": "6c68453e418d8ef4da5a86ce8b15b098cabc5845",
+        "verifiedBytesAndSha256": true
+      },
+      "headers": {
+        "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-31-41-44-flight-environment/response.headers",
+        "bytes": 1039,
+        "sha256": "de55ab5cd6600896fe3d0a0f7beea6c8a0697337123e61f659eb82bb1d0a9008",
+        "gitBlob": "b55ec1ba93a0e67c69b6f59cd51af1226642a267",
+        "verifiedBytesAndSha256": true
+      },
+      "rawAndHeadersByteExact": true,
+      "personalRead": "COMPLETE_PRIMARY_CONTEXT_IN_THIS_REVIEW",
+      "indexGitLocator": "12e5581b:docs/content-audits/process-review-2026-10-14/preserved/mindbattle-source-01a13956-2a8a-7cf1-8313-aa3392952779/weather-climate-whole-topic.json",
+      "retrievalDateFromHeaders": "2026-10-14"
+    },
+    "noaa-cpc-iod": {
+      "body": {
+        "bytes": 4416,
+        "path": "docs/content-audits/question-quality-wave-7/process-v2-weather-hold10/author/sources/noaa-cpc-iod.body",
+        "sha256": "1da2671fb8d1ed6e484d4b59b8fa635b2598fac11df9e69c0982d9c184a4cb06",
+        "verifiedBytesAndSha256": true
+      },
+      "complete": true,
+      "contentLengthMatched": true,
+      "headers": {
+        "bytes": 1706,
+        "path": "docs/content-audits/question-quality-wave-7/process-v2-weather-hold10/author/sources/noaa-cpc-iod.headers",
+        "sha256": "7b0c3aad6ae77123150ebc797545e87b7d40a6494cdeaaedaafe63e947e001de",
+        "verifiedBytesAndSha256": true
+      },
+      "httpStatus": 200,
+      "locator": "new-capture:noaa-cpc-iod",
+      "retrievedAt": "2026-10-14",
+      "title": "Climate of the Indian Ocean and the Indian Ocean Dipole",
+      "typedLocator": "DMI definition, phases and rainfall effects.",
+      "url": "https://www.cpc.ncep.noaa.gov/products/international/ocean_monitoring/indian/IO_monitoring_fcsts/description.html",
+      "personalRead": "COMPLETE_PRIMARY_CONTEXT_IN_THIS_REVIEW"
+    },
+    "metoffice-climate-zones": {
+      "body": {
+        "bytes": 97891,
+        "path": "docs/content-audits/question-quality-wave-7/process-v2-weather20/author/sources/metoffice-climate-zones.body",
+        "sha256": "349436aa2724491d2069cace7afdd73dbe58a055af436643f098bbc50c5f1326",
+        "verifiedBytesAndSha256": true,
+        "gitLocator": "55db9891798bcaf38abc20f6ea3b215c0b3e8626:docs/content-audits/question-quality-wave-7/process-v2-weather20/author/sources/metoffice-climate-zones.body",
+        "gitBlob": "f6c2bd1549df121186bf4edd3a69b566e2ac43fc"
+      },
+      "complete": true,
+      "completeContentRange": "bytes 0-97890/97891",
+      "headers": {
+        "bytes": 7368,
+        "path": "docs/content-audits/question-quality-wave-7/process-v2-weather20/author/sources/metoffice-climate-zones.headers",
+        "sha256": "4626409dd2e0c38dc7fcb9f0573c0ae947043f7759a2d2b4949ec24cd0a95d64",
+        "verifiedBytesAndSha256": true,
+        "gitLocator": "55db9891798bcaf38abc20f6ea3b215c0b3e8626:docs/content-audits/question-quality-wave-7/process-v2-weather20/author/sources/metoffice-climate-zones.headers",
+        "gitBlob": "aa0c15f328a2bf1e48947d9ac5845712620e4c62"
+      },
+      "httpStatus": 206,
+      "locator": "reused-capture:process-v2-weather20/author/sources/metoffice-climate-zones",
+      "retrievedAt": "2026-10-14",
+      "title": "Climate zones | Met Office",
+      "typedLocator": "Mediterranean, tropical, desert, temperate and polar sections. Existing source reused in place, not copied.",
+      "url": "https://weather.metoffice.gov.uk/climate/climate-explained/climate-zones",
+      "personalRead": "COMPLETE_PRIMARY_CONTEXT_IN_THIS_REVIEW"
+    }
+  },
+  "passCurrentIds": [],
+  "fixCurrentIds": [
+    "weather-climate-iod-indian",
+    "weather-climate-mediterranean-dry-summer"
+  ],
+  "holdCurrentIds": [],
+  "excludedUnappliedAuthorHolds": [
+    "weather-climate-equator-hot",
+    "weather-climate-extratropical-fronts",
+    "weather-climate-riming-supercooled",
+    "weather-climate-aggregation-snowflakes",
+    "weather-climate-potential-vorticity",
+    "weather-climate-geostrophic-wind",
+    "weather-climate-thermal-wind",
+    "weather-climate-temperature-warmth"
+  ],
+  "creditIncrease": 0,
+  "independence": "Full CURRENT cards and primary contexts personally read; author READY and foreign PASS conclusions were not adopted.",
+  "preservation": {
+    "branch": "codex/question-quality-wave-6",
+    "headObserved": "f4358980633c8d13c0ed42c4fd07dcaf6fec8c3d",
+    "reviewCommit": "PENDING_COORDINATOR",
+    "mainIntegration": "NOT_PERFORMED"
+  }
+}
