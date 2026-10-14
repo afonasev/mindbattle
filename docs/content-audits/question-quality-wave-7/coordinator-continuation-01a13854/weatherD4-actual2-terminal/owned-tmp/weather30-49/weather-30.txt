@@ -1,0 +1,704 @@
+var gform;gform||(document.addEventListener("gform_main_scripts_loaded",function(){gform.scriptsLoaded=!0}),document.addEventListener("gform/theme/scripts_loaded",function(){gform.themeScriptsLoaded=!0}),window.addEventListener("DOMContentLoaded",function(){gform.domLoaded=!0}),gform={domLoaded:!1,scriptsLoaded:!1,themeScriptsLoaded:!1,isFormEditor:()=>"function"==typeof InitializeEditor,callIfLoaded:function(o){return!(!gform.domLoaded||!gform.scriptsLoaded||!gform.themeScriptsLoaded&&!gform.isFormEditor()||(gform.isFormEditor()&&console.warn("The use of gform.initializeOnLoaded() is deprecated in the form editor context and will be removed in Gravity Forms 3.1."),o(),0))},initializeOnLoaded:function(o){gform.callIfLoaded(o)||(document.addEventListener("gform_main_scripts_loaded",()=>{gform.scriptsLoaded=!0,gform.callIfLoaded(o)}),document.addEventListener("gform/theme/scripts_loaded",()=>{gform.themeScriptsLoaded=!0,gform.callIfLoaded(o)}),window.addEventListener("DOMContentLoaded",()=>{gform.domLoaded=!0,gform.callIfLoaded(o)}))},hooks:{action:{},filter:{}},addAction:function(o,r,e,t){gform.addHook("action",o,r,e,t)},addFilter:function(o,r,e,t){gform.addHook("filter",o,r,e,t)},doAction:function(o){gform.doHook("action",o,arguments)},applyFilters:function(o){return gform.doHook("filter",o,arguments)},removeAction:function(o,r){gform.removeHook("action",o,r)},removeFilter:function(o,r,e){gform.removeHook("filter",o,r,e)},addHook:function(o,r,e,t,n){null==gform.hooks[o][r]&&(gform.hooks[o][r]=[]);var d=gform.hooks[o][r];null==n&&(n=r+"_"+d.length),gform.hooks[o][r].push({tag:n,callable:e,priority:t=null==t?10:t})},doHook:function(r,o,e){var t;if(e=Array.prototype.slice.call(e,1),null!=gform.hooks[r][o]&&((o=gform.hooks[r][o]).sort(function(o,r){return o.priority-r.priority}),o.forEach(function(o){"function"!=typeof(t=o.callable)&&(t=window[t]),"action"==r?t.apply(null,e):e[0]=t.apply(null,e)})),"filter"==r)return e[0]},removeHook:function(o,r,t,n){var e;null!=gform.hooks[o][r]&&(e=(e=gform.hooks[o][r]).filter(function(o,r,e){return!!(null!=n&&n!=o.tag||null!=t&&t!=o.priority)}),gform.hooks[o][r]=e)}});
+Auroras - NASA Science
+{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://science.nasa.gov/#organization","name":"NASA","sameAs":["https://www.facebook.com/NASA","https://twitter.com/NASA"],"logo":{"@type":"ImageObject","@id":"https://science.nasa.gov/#logo","url":"https://assets.science.nasa.gov/dynamicimage/assets/science/psd/solar/bosf/images/editor-page-nasa-logo-250s.png","contentUrl":"https://assets.science.nasa.gov/dynamicimage/assets/science/psd/solar/bosf/images/editor-page-nasa-logo-250s.png","caption":"NASA Science","inLanguage":"en-US","width":"250","height":"250"}},{"@type":"WebSite","@id":"https://science.nasa.gov/#website","url":"https://science.nasa.gov","name":"NASA Science","alternateName":"National Aeronautics and Space Administration Science","publisher":{"@id":"https://science.nasa.gov/#organization"},"inLanguage":"en-US"},{"@type":"ImageObject","@id":"https://science.nasa.gov/wp-content/uploads/2024/07/bin-li-aurora-ny-alesund-2.jpg","url":"https://science.nasa.gov/wp-content/uploads/2024/07/bin-li-aurora-ny-alesund-2.jpg","width":"1985","height":"541","caption":"A ribbon of green aurora appears in the night sky over snowy mountains and a body of water.","inLanguage":"en-US"},{"@type":"WebPage","@id":"https://science.nasa.gov/sun/auroras/#webpage","url":"https://science.nasa.gov/sun/auroras/","name":"Auroras - NASA Science","datePublished":"2025-02-04T10:15:28-05:00","dateModified":"2025-02-04T10:15:29-05:00","isPartOf":{"@id":"https://science.nasa.gov/#website"},"primaryImageOfPage":{"@id":"https://science.nasa.gov/wp-content/uploads/2024/07/bin-li-aurora-ny-alesund-2.jpg"},"inLanguage":"en-US"},{"@type":"Person","@id":"https://science.nasa.gov/author/rlense/","name":"Rachel Lense","url":"https://science.nasa.gov/author/rlense/","image":{"@type":"ImageObject","@id":"https://assets.science.nasa.gov/dynamicimage/assets/science/hpd/people/Rachel%20Lense%20(square).jpeg","url":"https://assets.science.nasa.gov/dynamicimage/assets/science/hpd/people/Rachel%20Lense%20(square).jpeg","caption":"Rachel Lense","inLanguage":"en-US"},"worksFor":{"@id":"https://science.nasa.gov/#organization"}},{"headline":"Auroras - NASA Science","description":"Auroras are vibrant light displays created when energetic particles from the Sun interact with Earth\u2019s magnetic field and atmosphere. These events, also seen on other planets like Saturn and Jupiter, result in a range of colors depending on altitude and the atmospheric gases involved. Scientists study auroras using tools like rockets, balloons, and ground-based instruments, while public initiatives like NASA\u2019s Aurorasaurus engage citizen scientists to help gather valuable data about these mesmerizing space-weather phenomena.","datePublished":"2025-02-04T10:15:28-05:00","dateModified":"2025-02-04T10:15:29-05:00","keywords":"auroras","image":{"@id":"https://science.nasa.gov/wp-content/uploads/2024/07/bin-li-aurora-ny-alesund-2.jpg"},"author":{"@id":"https://science.nasa.gov/author/rlense/","name":"Rachel Lense"},"@type":"Article","name":"Auroras - NASA Science","articleSection":"Auroras, Citizen Science, Heliophysics, Heliophysics Division, Ionosphere, Magnetosphere, Mesosphere, Missions, Physical Sciences, Science &amp; Research, Scientific Balloons, Sounding Rockets Program, The Sun, Thermosphere, Weather and Atmospheric Dynamics","@id":"https://science.nasa.gov/sun/auroras/#schema-4987710","isPartOf":{"@id":"https://science.nasa.gov/sun/auroras/#webpage"},"publisher":{"@id":"https://science.nasa.gov/#organization"},"inLanguage":"en-US","mainEntityOfPage":{"@id":"https://science.nasa.gov/sun/auroras/#webpage"}},{"@type":"VideoObject","name":"EZIE: The Mission to Explore Earth&#039;s Link to Space","description":"Developed and led for NASA by the Johns Hopkins Applied Physics Laboratory (APL) in Laurel, Maryland, EZIE is a mission to explore Earth\u2019s electrojets \u2014 inte...","uploadDate":"2023-02-28T08:15:51-08:00","thumbnailUrl":"https://science.nasa.gov/wp-content/uploads/2024/07/bin-li-aurora-ny-alesund-2.jpg","embedUrl":"https://www.youtube.com/embed/eTgAumS9gp0","duration":"PT1M12S","width":"1280","height":"720","isFamilyFriendly":"True","@id":"https://science.nasa.gov/sun/auroras/#schema-4987712","isPartOf":{"@id":"https://science.nasa.gov/sun/auroras/#webpage"},"publisher":{"@id":"https://science.nasa.gov/#organization"},"inLanguage":"en-US","mainEntityOfPage":{"@id":"https://science.nasa.gov/sun/auroras/#webpage"}},{"@type":"VideoObject","name":"NASA | Tracking Energy through Space","description":"Simulation courtesy of J. Raeder/UNH.This short video features commentary by David Sibeck, project scientist for the THEMIS mission, discussing a visualizati...","uploadDate":"2013-09-26T10:55:02-07:00","thumbnailUrl":"https://science.nasa.gov/wp-content/uploads/2024/07/bin-li-aurora-ny-alesund-2.jpg","embedUrl":"https://www.youtube.com/embed/AKAsedkrb84","duration":"PT2M17S","width":"1280","height":"720","isFamilyFriendly":"True","@id":"https://science.nasa.gov/sun/auroras/#schema-4987713","isPartOf":{"@id":"https://science.nasa.gov/sun/auroras/#webpage"},"publisher":{"@id":"https://science.nasa.gov/#organization"},"inLanguage":"en-US","mainEntityOfPage":{"@id":"https://science.nasa.gov/sun/auroras/#webpage"}},{"@type":"VideoObject","name":"Auroras - NASA Science","description":"Auroras are vibrant light displays created when energetic particles from the Sun interact with Earth\u2019s magnetic field and atmosphere. These events, also seen on other planets like Saturn and Jupiter, result in a range of colors depending on altitude and the atmospheric gases involved. Scientists study auroras using tools like rockets, balloons, and ground-based instruments, while public initiatives like NASA\u2019s Aurorasaurus engage citizen scientists to help gather valuable data about these mesmerizing space-weather phenomena.","uploadDate":"2025-02-04T10:15:28-05:00","thumbnailUrl":"https://science.nasa.gov/wp-content/uploads/2024/07/bin-li-aurora-ny-alesund-2.jpg","contentUrl":"https://science.nasa.gov/wp-content/uploads/2024/05/x1pt7-flare-may-14-2024-crop-banner.mp4","width":"2004","height":"938","isFamilyFriendly":"True","@id":"https://science.nasa.gov/sun/auroras/#schema-5003522","isPartOf":{"@id":"https://science.nasa.gov/sun/auroras/#webpage"},"publisher":{"@id":"https://science.nasa.gov/#organization"},"inLanguage":"en-US"}]}
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px} /*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+.hds-media .nasa-block-align-inline{max-width:840px}.hds-media .nasa-block-align-full,.hds-media .nasa-block-align-full .hds-media-item-wrapper .hds-cover-wrapper{max-width:100%}.hds-media .nasa-block-align-full figcaption{padding-left:40px;padding-right:40px}@media screen and (max-width:800px){.hds-media .nasa-block-align-full figcaption{padding-left:20px;padding-right:20px}}.hds-media .nasa-block-align-wide{max-width:1100px}.hds-media .hds-media-item-wrapper{margin:0;position:relative}.hds-media .hds-media-inner,.stma-image-wrapper .hds-media-inner{display:flex;height:100%;overflow:hidden;width:100%}.hds-media .hds-media-ratio-fit,.hds-media .hds-media-ratio-fit .parallax-no{background-color:var(--hds-image-contain-bg,transparent)}.hds-media .hds-media-ratio-contain-16x9{align-items:center;aspect-ratio:16/9;background-color:var(--hds-image-contain-bg,#fff);justify-content:center;width:100%}.hds-media .hds-media-ratio-contain-16x9 .parallax-default,.hds-media .hds-media-ratio-contain-16x9 .parallax-no{height:100%;width:100%}.hds-media .hds-media-ratio-contain-16x9 .parallax-default>a,.hds-media .hds-media-ratio-contain-16x9 .parallax-no>a,.hds-media .hds-media-ratio-contain-16x9>a{display:block;height:100%;width:100%}.hds-media .hds-media-ratio-contain-16x9 .parallax-default>a>img,.hds-media .hds-media-ratio-contain-16x9 .parallax-default>img,.hds-media .hds-media-ratio-contain-16x9 .parallax-default>video,.hds-media .hds-media-ratio-contain-16x9 .parallax-no>a>img,.hds-media .hds-media-ratio-contain-16x9 .parallax-no>img,.hds-media .hds-media-ratio-contain-16x9 .parallax-no>video,.hds-media .hds-media-ratio-contain-16x9>a>img,.hds-media .hds-media-ratio-contain-16x9>img,.hds-media .hds-media-ratio-contain-16x9>video{height:100%;-o-object-fit:contain!important;object-fit:contain!important;width:100%} /*# sourceURL=https://science.nasa.gov/wp-content/plugins/nasa-blocks/build/blocks/media/style-index.css */
+.wp-block-image>a,.wp-block-image>figure>a{display:inline-block}.wp-block-image img{box-sizing:border-box;height:auto;max-width:100%;vertical-align:bottom}@media not (prefers-reduced-motion){.wp-block-image img.hide{visibility:hidden}.wp-block-image img.show{animation:show-content-image .4s}}.wp-block-image[style*=border-radius] img,.wp-block-image[style*=border-radius]>a{border-radius:inherit}.wp-block-image.has-custom-border img{box-sizing:border-box}.wp-block-image.aligncenter{text-align:center}.wp-block-image.alignfull>a,.wp-block-image.alignwide>a{width:100%}.wp-block-image.alignfull img,.wp-block-image.alignwide img{height:auto;width:100%}.wp-block-image .aligncenter,.wp-block-image .alignleft,.wp-block-image .alignright,.wp-block-image.aligncenter,.wp-block-image.alignleft,.wp-block-image.alignright{display:table}.wp-block-image .aligncenter>figcaption,.wp-block-image .alignleft>figcaption,.wp-block-image .alignright>figcaption,.wp-block-image.aligncenter>figcaption,.wp-block-image.alignleft>figcaption,.wp-block-image.alignright>figcaption{caption-side:bottom;display:table-caption}.wp-block-image .alignleft{float:left;margin:.5em 1em .5em 0}.wp-block-image .alignright{float:right;margin:.5em 0 .5em 1em}.wp-block-image .aligncenter{margin-left:auto;margin-right:auto}.wp-block-image :where(figcaption){margin-bottom:1em;margin-top:.5em}.wp-block-image.is-style-circle-mask img{border-radius:9999px}@supports ((-webkit-mask-image:none) or (mask-image:none)) or (-webkit-mask-image:none){.wp-block-image.is-style-circle-mask img{border-radius:0;-webkit-mask-image:url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50"/></svg>');mask-image:url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50"/></svg>');mask-mode:alpha;-webkit-mask-position:center;mask-position:center;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:contain;mask-size:contain}}:root :where(.wp-block-image.is-style-rounded img,.wp-block-image .is-style-rounded img){border-radius:9999px}.wp-block-image figure{margin:0}.wp-lightbox-container{display:flex;flex-direction:column;position:relative}.wp-lightbox-container img{cursor:zoom-in}.wp-lightbox-container img:hover+button{opacity:1}.wp-lightbox-container button{align-items:center;backdrop-filter:blur(16px) saturate(180%);background-color:#5a5a5a40;border:none;border-radius:4px;cursor:zoom-in;display:flex;height:20px;justify-content:center;opacity:0;padding:0;position:absolute;right:16px;text-align:center;top:16px;width:20px;z-index:100}@media not (prefers-reduced-motion){.wp-lightbox-container button{transition:opacity .2s ease}}.wp-lightbox-container button:focus-visible{outline:3px auto #5a5a5a40;outline:3px auto -webkit-focus-ring-color;outline-offset:3px}.wp-lightbox-container button:hover{cursor:pointer;opacity:1}.wp-lightbox-container button:focus{opacity:1}.wp-lightbox-container button:focus,.wp-lightbox-container button:hover,.wp-lightbox-container button:not(:hover):not(:active):not(.has-background){background-color:#5a5a5a40;border:none}.wp-lightbox-overlay{box-sizing:border-box;cursor:zoom-out;height:100vh;left:0;overflow:hidden;position:fixed;top:0;visibility:hidden;width:100%;z-index:100000}.wp-lightbox-overlay .wp-lightbox-close-button{align-items:center;cursor:pointer;display:flex;font-family:inherit;gap:8px;justify-content:center;line-height:1;min-height:40px;min-width:40px;padding:0 4px;position:absolute;right:calc(env(safe-area-inset-right) + 16px);top:calc(env(safe-area-inset-top) + 16px);z-index:5000000}.wp-lightbox-overlay .wp-lightbox-close-button:focus,.wp-lightbox-overlay .wp-lightbox-close-button:hover,.wp-lightbox-overlay .wp-lightbox-close-button:not(:hover):not(:active):not(.has-background){background:none;border:none}.wp-lightbox-overlay .wp-lightbox-close-button:has(.wp-lightbox-close-text:not([hidden])) .wp-lightbox-close-icon svg{height:1em;width:1em}.wp-lightbox-overlay .wp-lightbox-close-icon svg{display:block}.wp-lightbox-overlay .wp-lightbox-navigation-button-next,.wp-lightbox-overlay .wp-lightbox-navigation-button-prev{align-items:center;bottom:16px;cursor:pointer;display:flex;font-family:inherit;gap:4px;justify-content:center;line-height:1;min-height:40px;min-width:40px;padding:0 8px;position:absolute;z-index:2000002}.wp-lightbox-overlay .wp-lightbox-navigation-button-next[hidden],.wp-lightbox-overlay .wp-lightbox-navigation-button-prev[hidden]{display:none}@media (min-width:960px){.wp-lightbox-overlay .wp-lightbox-navigation-button-next,.wp-lightbox-overlay .wp-lightbox-navigation-button-prev{bottom:50%;transform:translateY(-50%)}}.wp-lightbox-overlay .wp-lightbox-navigation-button-next:focus,.wp-lightbox-overlay .wp-lightbox-navigation-button-next:hover,.wp-lightbox-overlay .wp-lightbox-navigation-button-next:not(:hover):not(:active):not(.has-background),.wp-lightbox-overlay .wp-lightbox-navigation-button-prev:focus,.wp-lightbox-overlay .wp-lightbox-navigation-button-prev:hover,.wp-lightbox-overlay .wp-lightbox-navigation-button-prev:not(:hover):not(:active):not(.has-background){background:none;border:none;padding:0 8px}.wp-lightbox-overlay .wp-lightbox-navigation-button-next:has(.wp-lightbox-navigation-text:not([hidden])) .wp-lightbox-navigation-icon svg,.wp-lightbox-overlay .wp-lightbox-navigation-button-prev:has(.wp-lightbox-navigation-text:not([hidden])) .wp-lightbox-navigation-icon svg{display:block;height:1.5em;width:1.5em}.wp-lightbox-overlay .wp-lightbox-navigation-button-prev{left:calc(env(safe-area-inset-left) + 16px)}.wp-lightbox-overlay .wp-lightbox-navigation-button-next{right:calc(env(safe-area-inset-right) + 16px)}.wp-lightbox-overlay .wp-lightbox-navigation-icon svg{vertical-align:middle}.wp-lightbox-overlay .lightbox-image-container{height:var(--wp--lightbox-container-height);left:50%;overflow:hidden;position:absolute;top:50%;transform:translate(-50%,-50%);transform-origin:top left;width:var(--wp--lightbox-container-width);z-index:2000001}.wp-lightbox-overlay .wp-block-image{align-items:center;box-sizing:border-box;display:flex;height:100%;justify-content:center;margin:0;position:relative;transform-origin:0 0;width:100%;z-index:3000000}.wp-lightbox-overlay .wp-block-image img{height:var(--wp--lightbox-image-height);min-height:var(--wp--lightbox-image-height);min-width:var(--wp--lightbox-image-width);width:var(--wp--lightbox-image-width)}.wp-lightbox-overlay .wp-block-image figcaption{display:none}.wp-lightbox-overlay button{background:none;border:none}.wp-lightbox-overlay .scrim{background-color:#fff;height:100%;opacity:.9;position:absolute;width:100%;z-index:2000000}.wp-lightbox-overlay.active{visibility:visible}@media not (prefers-reduced-motion){.wp-lightbox-overlay.active{animation:turn-on-visibility .25s both}.wp-lightbox-overlay.active img{animation:turn-on-visibility .35s both}.wp-lightbox-overlay.show-closing-animation:not(.active){animation:turn-off-visibility .35s both}.wp-lightbox-overlay.show-closing-animation:not(.active) img{animation:turn-off-visibility .25s both}.wp-lightbox-overlay.zoom.active{animation:none;opacity:1;visibility:visible}.wp-lightbox-overlay.zoom.active .lightbox-image-container{animation:lightbox-zoom-in .4s}.wp-lightbox-overlay.zoom.active .lightbox-image-container img{animation:none}.wp-lightbox-overlay.zoom.active .scrim{animation:turn-on-visibility .4s forwards}.wp-lightbox-overlay.zoom.show-closing-animation:not(.active){animation:none}.wp-lightbox-overlay.zoom.show-closing-animation:not(.active) .lightbox-image-container{animation:lightbox-zoom-out .4s}.wp-lightbox-overlay.zoom.show-closing-animation:not(.active) .lightbox-image-container img{animation:none}.wp-lightbox-overlay.zoom.show-closing-animation:not(.active) .scrim{animation:turn-off-visibility .4s forwards}}@keyframes show-content-image{0%{visibility:hidden}99%{visibility:hidden}to{visibility:visible}}@keyframes turn-on-visibility{0%{opacity:0}to{opacity:1}}@keyframes turn-off-visibility{0%{opacity:1;visibility:visible}99%{opacity:0;visibility:visible}to{opacity:0;visibility:hidden}}@keyframes lightbox-zoom-in{0%{transform:translate(calc((-100vw + var(--wp--lightbox-scrollbar-width))/2 + var(--wp--lightbox-initial-left-position)),calc(-50vh + var(--wp--lightbox-initial-top-position))) scale(var(--wp--lightbox-scale))}to{transform:translate(-50%,-50%) scale(1)}}@keyframes lightbox-zoom-out{0%{transform:translate(-50%,-50%) scale(1);visibility:visible}99%{visibility:visible}to{transform:translate(calc((-100vw + var(--wp--lightbox-scrollbar-width))/2 + var(--wp--lightbox-initial-left-position)),calc(-50vh + var(--wp--lightbox-initial-top-position))) scale(var(--wp--lightbox-scale));visibility:hidden}} /*# sourceURL=https://science.nasa.gov/wp-includes/blocks/image/style.min.css */
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}:root .has-text-align-center{text-align:center}:root .has-text-align-left{text-align:left}:root .has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{word-wrap:normal!important;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-color]){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}} /*# sourceURL=/wp-includes/css/dist/block-library/common.min.css */
+h1:where(.wp-block-heading).has-background,h2:where(.wp-block-heading).has-background,h3:where(.wp-block-heading).has-background,h4:where(.wp-block-heading).has-background,h5:where(.wp-block-heading).has-background,h6:where(.wp-block-heading).has-background{padding:1.25em 2.375em}h1.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h1.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h2.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h2.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h3.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h3.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h4.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h4.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h5.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h5.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h6.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h6.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]){rotate:180deg} /*# sourceURL=https://science.nasa.gov/wp-includes/blocks/heading/style.min.css */
+.is-small-text{font-size:.875em}.is-regular-text{font-size:1em}.is-large-text{font-size:2.25em}.is-larger-text{font-size:3em}.has-drop-cap:not(:focus):first-letter{float:left;font-size:8.4em;font-style:normal;font-weight:100;line-height:.68;margin:.05em .1em 0 0;text-transform:uppercase}body.rtl .has-drop-cap:not(:focus):first-letter{float:none;margin-left:.1em}p.has-drop-cap.has-background{overflow:hidden}:root :where(p.has-background){padding:1.25em 2.375em}:where(p.has-text-color:not(.has-link-color)) a{color:inherit}p.has-text-align-left[style*="writing-mode:vertical-lr"],p.has-text-align-right[style*="writing-mode:vertical-rl"]{rotate:180deg} /*# sourceURL=https://science.nasa.gov/wp-includes/blocks/paragraph/style.min.css */
+.wp-block-embed.alignleft,.wp-block-embed.alignright,.wp-block[data-align=left]>[data-type="core/embed"],.wp-block[data-align=right]>[data-type="core/embed"]{max-width:360px;width:100%}.wp-block-embed.alignleft .wp-block-embed__wrapper,.wp-block-embed.alignright .wp-block-embed__wrapper,.wp-block[data-align=left]>[data-type="core/embed"] .wp-block-embed__wrapper,.wp-block[data-align=right]>[data-type="core/embed"] .wp-block-embed__wrapper{min-width:280px}.wp-block-cover .wp-block-embed{min-height:240px;min-width:320px}.wp-block-group.is-layout-flex .wp-block-embed{flex:1 1 0%;min-width:0}.wp-block-embed{overflow-wrap:break-word}.wp-block-embed :where(figcaption){margin-bottom:1em;margin-top:.5em}.wp-block-embed iframe{max-width:100%}.wp-block-embed__wrapper{position:relative}.wp-embed-responsive .wp-has-aspect-ratio .wp-block-embed__wrapper:before{content:"";display:block;padding-top:50%}.wp-embed-responsive .wp-has-aspect-ratio iframe{bottom:0;height:100%;left:0;position:absolute;right:0;top:0;width:100%}.wp-embed-responsive .wp-embed-aspect-21-9 .wp-block-embed__wrapper:before{padding-top:42.85%}.wp-embed-responsive .wp-embed-aspect-18-9 .wp-block-embed__wrapper:before{padding-top:50%}.wp-embed-responsive .wp-embed-aspect-16-9 .wp-block-embed__wrapper:before{padding-top:56.25%}.wp-embed-responsive .wp-embed-aspect-4-3 .wp-block-embed__wrapper:before{padding-top:75%}.wp-embed-responsive .wp-embed-aspect-1-1 .wp-block-embed__wrapper:before{padding-top:100%}.wp-embed-responsive .wp-embed-aspect-9-16 .wp-block-embed__wrapper:before{padding-top:177.77%}.wp-embed-responsive .wp-embed-aspect-1-2 .wp-block-embed__wrapper:before{padding-top:200%} /*# sourceURL=https://science.nasa.gov/wp-includes/blocks/embed/style.min.css */
+.wp-block-spacer{clear:both} /*# sourceURL=https://science.nasa.gov/wp-includes/blocks/spacer/style.min.css */
+.hds-card{position:relative}.hds-card-grid .hds-card-grid-header{padding-left:30px;padding-right:30px}.hds-card-grid .hds-card-grid-cards{padding-left:20px;padding-right:20px}.hds-card .hds-card-inner{display:block;margin-left:auto;margin-right:auto;position:relative;width:calc(100% - 20px)}.hds-card .hds-card-content{width:100%}.hds-card-hover-zoom-image .hds-media-background{transition:transform .3s ease-in-out}.hds-card:hover .hds-card-hover-zoom-image .hds-media-background{transform:scale(1.05)}.hds-card .hds-card-thumbnail{display:block;overflow:hidden;padding:0;position:relative}.hds-card .hds-card-thumbnail:after{content:"";display:block;padding-bottom:56.25%}.hds-card-custom .hds-card-thumbnail:after{padding-bottom:75%}.hds-card-article-default .hds-card-thumbnail:after{padding-bottom:67%}.hds-card-article-graphical .hds-card-thumbnail:after{padding-bottom:140%}.hds-card-subtopic .hds-card-thumbnail:after,.hds-card-topic .hds-card-thumbnail:after{padding-bottom:150%}.hds-card-location .hds-card-thumbnail:after{padding-bottom:75%}.hds-card-gallery .hds-card-gallery-images{display:grid;gap:.25rem;grid-template-columns:1.75fr 1fr;grid-template-rows:1fr 1fr}.hds-card-gallery .hds-card-gallery-images .hds-media-background{overflow:hidden}.hds-card-gallery-image-1{grid-column:1/2;grid-row:1/3}.hds-card-gallery-image-2{grid-column:2/3;grid-row:1/2}.hds-card-gallery-image-3{grid-column:2/3;grid-row:2/3}.hds-media-background img{transition:transform .3s ease-in-out}.hds-media-background:hover img{transform:scale(1.05)}.hds-card-heading svg{height:.9em;min-width:.9em;width:.9em}.wp-block-nasa-blocks-card-grid .hds-card-thumbnail .skrim-overlay,.wp-block-nasa-blocks-card-grid .hds-card-thumbnail .skrim-overlay-dark{background:linear-gradient(65.99deg,#000,transparent 99.04%)}.wp-block-nasa-blocks-card-grid.color-mode-dark .button-primary,.wp-block-nasa-blocks-card-grid.color-mode-dark .button-primary span,.wp-block-nasa-blocks-card-grid.color-mode-dark h2,.wp-block-nasa-blocks-card-grid.color-mode-dark p{color:#fff}.wp-block-nasa-blocks-card-grid.color-mode-dark .hds-card .color-carbon-60,.wp-block-nasa-blocks-card-grid.color-mode-dark .hds-card .color-carbon-black,.wp-block-nasa-blocks-card-grid.color-mode-dark .hds-card .label,.wp-block-nasa-blocks-card-grid.color-mode-dark .hds-card .related-article-label,.wp-block-nasa-blocks-card-grid.color-mode-dark .hds-card .related-article-label span,.wp-block-nasa-blocks-card-grid.color-mode-dark .hds-card h3{color:#fff!important}.wp-block-nasa-blocks-card-grid.color-mode-dark .hds-card .related-article-label svg,.wp-block-nasa-blocks-card-grid.color-mode-dark .hds-card .related-article-label svg path{fill:#fff!important} /*# sourceURL=https://science.nasa.gov/wp-content/plugins/nasa-blocks/build/blocks/card-grid/style-index.css */
+.wp-block-nasa-blocks-featured-link.color-mode-dark .button-primary,.wp-block-nasa-blocks-featured-link.color-mode-dark .button-primary span,.wp-block-nasa-blocks-featured-link.color-mode-dark .hds-caption-credits,.wp-block-nasa-blocks-featured-link.color-mode-dark .hds-caption-text,.wp-block-nasa-blocks-featured-link.color-mode-dark .hds-credits,.wp-block-nasa-blocks-featured-link.color-mode-dark .label,.wp-block-nasa-blocks-featured-link.color-mode-dark h2,.wp-block-nasa-blocks-featured-link.color-mode-dark p{color:#fff} /*# sourceURL=https://science.nasa.gov/wp-content/plugins/nasa-blocks/build/blocks/featured-link/style-index.css */
+.hds-listicle .hds-listicle-wrapper{max-width:90rem}.hds-listicle .hds-listicle-heading{font-size:1.375rem;font-weight:700;line-height:1.625rem}.hds-listicle .hds-listicle-list-number{font-family:dm-mono,mono;font-size:1.75rem;font-weight:300;letter-spacing:0;line-height:1;text-align:left}.hds-listicle .hds-listicle-title{font-family:inter,sans-serif;font-size:1.125rem;font-weight:600;letter-spacing:-.5px;line-height:1.4375rem;text-align:left}.hds-listicle .hds-listicle-body{font-family:inter,sans-serif;font-size:.875rem;font-weight:400;letter-spacing:0;line-height:1.25rem;text-align:left}.hds-listicle .hds-listicle-rounded-image figure{aspect-ratio:1;border-radius:50%;margin-left:auto;margin-right:auto;max-width:500px;overflow:hidden;width:100%}.hds-listicle .hds-listicle-rounded-image figure img{height:100%;-o-object-fit:cover;object-fit:cover;width:100%}@media(min-width:40em){.hds-listicle .hds-listicle-text-wrapper{display:absolute}.hds-listicle .hds-listicle-text-wrapper.align-left{padding-right:25%}.hds-listicle .hds-listicle-text-wrapper.align-right{padding-left:25%}}@media screen and (min-width:640px){.hds-listicle .hds-listicle-heading{font-size:2.25rem;font-weight:700;line-height:2.375rem}.hds-listicle .hds-listicle-wrapper>div.grid-row:has(>.listicle-layout-basic){flex-direction:column-reverse}}@media screen and (min-width:1024px){.hds-listicle .hds-listicle-title{font-size:1.375rem;font-weight:700;letter-spacing:-.5px;line-height:1.625rem;text-align:left}.hds-listicle .hds-listicle-body{font-size:1rem;font-weight:400;letter-spacing:0;line-height:1.625rem;text-align:left}.hds-listicle .hds-listicle-wrapper>div.grid-row:has(>.listicle-layout-basic){flex-direction:row!important}}body:not(.wp-admin) .hds-listicle{max-width:unset}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper{margin-left:auto;margin-right:auto}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper ul{padding:0}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper ul li:nth-child(2n){flex-direction:row-reverse}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper ul li:last-child .hds-listicle-text-wrapper{border-bottom:1px solid #58585b;padding-bottom:3rem}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper>div.grid-row:has(>.listicle-layout-basic){flex-direction:column-reverse}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .hds-listicle-text-wrapper{border-top:1px solid #58585b;display:flex;flex-direction:column-reverse}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .hds-listicle-text-wrapper .hds-listicle-list-number{color:#58585b;margin-right:4rem;padding-bottom:1rem}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .hds-listicle-text-wrapper .hds-listicle-list-text h3{margin-top:0}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .hds-listicle-text-wrapper .hds-listicle-list-text a.button-primary{text-decoration:none}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .hds-listicle-text-wrapper .hds-listicle-list-text a.button-primary .hds-listicle-button{font-size:1rem;font-weight:600}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .listicle-layout-basic .hds-listicle-text-wrapper{flex-direction:column;padding-top:2rem;transform:unset}@media(min-width:40em){body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .listicle-layout-basic .hds-listicle-text-wrapper{flex-direction:row}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .round-image-section{display:block;padding:0 60px}}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .listicle-layout-multiple li{flex-direction:column-reverse;padding-bottom:3rem}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .listicle-layout-multiple li:nth-child(2n){flex-direction:column-reverse}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .listicle-layout-multiple li .hds-cover-wrapper{margin-bottom:10px;margin-left:0}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .listicle-layout-multiple li .hds-cover-wrapper img{width:100%}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .listicle-layout-multiple li .hds-listicle-text-wrapper{border-bottom:unset!important;border-top:unset;flex-direction:column;position:relative}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .hds-cover-wrapper.listicle-bkg-image{margin-left:2rem;margin-right:2rem;width:auto}body:not(.wp-admin) .hds-listicle.color-mode-blue{background-color:#0b3d91}body:not(.wp-admin) .hds-listicle.color-mode-blue .hds-listicle-button,body:not(.wp-admin) .hds-listicle.color-mode-blue .hds-listicle-button span,body:not(.wp-admin) .hds-listicle.color-mode-blue .hds-listicle-heading,body:not(.wp-admin) .hds-listicle.color-mode-blue .hds-listicle-list-number,body:not(.wp-admin) .hds-listicle.color-mode-blue .hds-listicle-list-text,body:not(.wp-admin) .hds-listicle.color-mode-blue .hds-listicle-list-text h3{color:#fff!important}body:not(.wp-admin) .hds-listicle.color-mode-blue .hds-listicle-list-description,body:not(.wp-admin) .hds-listicle.color-mode-blue .hds-listicle-list-description a,body:not(.wp-admin) .hds-listicle.color-mode-blue .listicle-layout-multiple .hds-caption .hds-caption-text,body:not(.wp-admin) .hds-listicle.color-mode-blue .listicle-layout-multiple .hds-caption .hds-caption-text a,body:not(.wp-admin) .hds-listicle.color-mode-blue .listicle-layout-multiple .hds-caption .hds-credits,body:not(.wp-admin) .hds-listicle.color-mode-blue .listicle-layout-multiple .hds-caption .hds-credits a{color:#d1d1d1!important}body:not(.wp-admin) .hds-listicle.color-mode-dark{background-color:#17171b}body:not(.wp-admin) .hds-listicle.color-mode-dark .hds-listicle-button,body:not(.wp-admin) .hds-listicle.color-mode-dark .hds-listicle-button span,body:not(.wp-admin) .hds-listicle.color-mode-dark .hds-listicle-heading,body:not(.wp-admin) .hds-listicle.color-mode-dark .hds-listicle-list-text h3{color:#fff!important}body:not(.wp-admin) .hds-listicle.color-mode-dark .hds-listicle-list-number{color:#959599!important}body:not(.wp-admin) .hds-listicle.color-mode-dark .hds-listicle-list-description,body:not(.wp-admin) .hds-listicle.color-mode-dark .hds-listicle-list-description a,body:not(.wp-admin) .hds-listicle.color-mode-dark .listicle-layout-multiple .hds-caption .hds-caption-text,body:not(.wp-admin) .hds-listicle.color-mode-dark .listicle-layout-multiple .hds-caption .hds-caption-text a,body:not(.wp-admin) .hds-listicle.color-mode-dark .listicle-layout-multiple .hds-caption .hds-credits,body:not(.wp-admin) .hds-listicle.color-mode-dark .listicle-layout-multiple .hds-caption .hds-credits a{color:#d1d1d1!important}@media(min-width:40em){body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .listicle-layout-multiple li{flex-direction:row;padding-bottom:3rem}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .listicle-layout-multiple li .hds-cover-wrapper{margin-bottom:0}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .listicle-layout-multiple li:nth-child(odd) .hds-listicle-text-wrapper{padding-left:0;padding-right:8rem}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .listicle-layout-multiple li:nth-child(2n){flex-direction:row-reverse}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .listicle-layout-multiple li:nth-child(2n) .hds-listicle-text-wrapper{padding-left:0;padding-right:0}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .hds-cover-wrapper.listicle-bkg-image{width:85%}body:not(.wp-admin) .hds-listicle .hds-listicle-wrapper .hds-listicle-text-wrapper{top:50%;transform:translateY(-50%)}}body:not(.wp-admin) .hds-listicle.nasa-gb-align-center{margin-left:auto;margin-right:auto}body:not(.wp-admin) .hds-listicle.nasa-gb-align-wide{margin-left:auto;margin-right:auto;max-width:1100px}body:not(.wp-admin) .hds-listicle.nasa-gb-align-full{width:100%} /*# sourceURL=https://science.nasa.gov/wp-content/plugins/nasa-blocks/build/blocks/listicle/style-index.css */
+.wp-block-nasa-blocks-gallery-preview.color-mode-dark .hds-gallery-preview-label svg path{fill:#fff!important} /*# sourceURL=https://science.nasa.gov/wp-content/plugins/nasa-blocks/build/blocks/gallery-preview/style-index.css */
+/*# sourceURL=https://science.nasa.gov/wp-content/plugins/nasa-blocks/build/blocks/hdsnav/style-index.css */
+.hds-news a{text-decoration:none}.hds-news-item-bubble{align-items:center}.wp-block-nasa-blocks-latest-news .news-item .hds-cover-wrapper{min-height:25rem}.news-item-stack .news-item .hds-cover-wrapper{height:100%;min-height:0}.news-item>.hds-cover-wrapper{min-height:410px}@media screen and (max-width:800px){.news-item-stack .news-item .hds-cover-wrapper{min-height:200px}.wp-block-nasa-blocks-latest-news .news-item-stack{flex-direction:row}.news-item>.hds-cover-wrapper{min-height:320px}}.wp-block-nasa-blocks-latest-news a,.wp-block-nasa-blocks-latest-news a:focus,.wp-block-nasa-blocks-latest-news a:hover{text-decoration:none}.wp-block-nasa-blocks-latest-news .news-item .nasa-block-cover{min-height:25rem}.news-item-stack{display:flex;flex-direction:column}.news-item-stack .news-item .nasa-block-cover{height:100%;min-height:0}@media screen and (max-width:800px){.news-item-stack .news-item .nasa-block-cover{min-height:200px}.wp-block-nasa-blocks-latest-news .news-item-stack{flex-direction:row}}.wp-block-nasa-blocks-latest-news .news-item .wp-block-cover{min-height:25rem}.wp-block-nasa-blocks-latest-news .news-item-stack{display:flex;flex-direction:column}.wp-block-nasa-blocks-latest-news .news-item-stack .news-item .wp-block-cover{height:100%;min-height:0}.wp-block-nasa-blocks-latest-news .latest-news-thumbnail-circle{border-radius:50%;height:4.5em;min-height:1px;width:4.5em}@media screen and (max-width:800px){.wp-block-nasa-blocks-latest-news .news-item-stack .news-item .wp-block-cover{min-height:200px}.wp-block-nasa-blocks-latest-news .news-item-stack{flex-direction:row}}.wp-block-nasa-blocks-featured-news a,.wp-block-nasa-blocks-featured-news a:focus,.wp-block-nasa-blocksfeatured-news a:hover{text-decoration:none}.latest-news-items .hds-cover-wrapper{height:100%!important}.latest-news-item a{display:block}.wp-block-nasa-blocks-news-automated .hds-cover-wrapper .skrim-overlay,.wp-block-nasa-blocks-news-automated .hds-cover-wrapper .skrim-overlay-dark{background:linear-gradient(65.99deg,#000,transparent 99.04%)!important}.wp-block-nasa-blocks-news-automated.color-mode-dark .button-primary,.wp-block-nasa-blocks-news-automated.color-mode-dark .button-primary span,.wp-block-nasa-blocks-news-automated.color-mode-dark .hds-news-item-bubble .color-carbon-60,.wp-block-nasa-blocks-news-automated.color-mode-dark .hds-news-item-bubble .color-carbon-black,.wp-block-nasa-blocks-news-automated.color-mode-dark .hds-news-item-bubble .label,.wp-block-nasa-blocks-news-automated.color-mode-dark .hds-news-item-bubble p,.wp-block-nasa-blocks-news-automated.color-mode-dark .hds-news-item-bubble span,.wp-block-nasa-blocks-news-automated.color-mode-dark h2{color:#fff!important}.wp-block-nasa-blocks-news-automated.color-mode-dark .hds-news-item-bubble svg path{fill:#fff!important} /*# sourceURL=https://science.nasa.gov/wp-content/plugins/nasa-blocks/build/blocks/news-automated/style-index.css */
+.hds-meet-the{position:relative}.hds-meet-the .hds-meet-the-slider .slick-track{margin-left:0}.hds-meet-the .hds-meet-the-grid{row-gap:24px}.hds-meet-the .hds-meet-the-grid .hds-meet-the-card{flex:0 0 25%}.hds-meet-the .hds-meet-the-image{border-radius:50%}.hds-meet-the .hds-meet-the-image .hds-cover-wrapper{border-radius:50%;height:6rem;overflow:hidden;width:6rem}.hds-carousel-nav{align-items:flex-end;bottom:30px;justify-content:flex-end;position:absolute;right:0}.hds-carousel-nav-arrow{align-items:center;background:#fff;border:1px solid #b9b9bb;border-radius:50%;box-sizing:border-box;display:flex;height:40px;justify-content:center;margin-right:8px;transition:all .2s ease;width:40px}.hds-carousel-nav-arrow:hover{border:1px solid #000;cursor:pointer}.color-mode-dark .hds-carousel-nav-arrow{background-color:#000;border-color:#58585b}.color-mode-dark .hds-carousel-nav-arrow:hover{border-color:#fff}.color-mode-dark .hds-carousel-nav-arrow svg{fill:#fff}.meet-the-icons{display:flex;margin-top:8px}.meet-the-icon{align-items:center;background-color:#585858;border-radius:50%;display:flex;height:26px;justify-content:center;margin-right:10px;overflow:hidden;transition:all .2s ease;width:26px}.meet-the-icon:hover{background-color:#757575;cursor:pointer}.hds-media-inner.hds-custom-fit-fit .hds-media-wrapper,.meet-the-icon svg{height:15px;width:15px}.hds-custom-fit-cover .hds-media-wrapper,.hds-custom-fit-cover .hds-media-wrapper .hds-media-inner,.hds-custom-fit-cover .hds-media-wrapper .hds-media-inner img{display:block;height:100%;left:0;position:absolute;top:0;width:100%}.hds-custom-fit-meet-the-fit{height:14px;-o-object-fit:contain;object-fit:contain;width:14px}.hds-custom-fit-meet-the-cover img{height:100%;left:0;position:absolute;top:0;width:100%}.hds-custom-fit-meet-the-cover{display:flex;height:100%;position:relative;width:100%}.hds-meet-the-content h3{border-style:unset!important}a.meet-the-icon{position:relative}.editor-styles-wrapper .hds-meet-the .hds-meet-the-content>p{fill:#959599;color:#959599;font-size:.875rem;line-height:1.25} /*# sourceURL=https://science.nasa.gov/wp-content/plugins/nasa-blocks/build/blocks/meet-the/style-index.css */
+.popover-wrapper{display:none!important}.quick-facts-slider .quick-facts-slider-image{border-radius:50%;display:block;height:6rem;overflow:hidden;width:6rem}.quick-facts-slider-image .hds-media-background{position:relative}@media screen and (max-width:1279px)and (min-width:1175px){.quick-facts-slider .quick-facts-slider-image{height:5rem;width:5rem}}@media screen and (max-width:1174px){.quick-facts-slider .quick-facts-slider-image{height:4.5rem;width:4.5rem}}@media screen and (max-width:480px){.quick-facts-slider .quick-facts-slider-image{height:3.5rem;width:3.5rem}}@media screen and (max-width:400px){.quick-facts-slider .quick-facts-slider-image{height:3rem;width:3rem}}.hds-carousel-wrapper-relative .hds-carousel-nav{bottom:unset;justify-content:start;left:unset;position:relative}.wp-block-nasa-blocks-page-intro .slick-dots{display:none!important}.hds-carousel-nav-arrow{align-items:center;background:#fff;border:1px solid #b9b9bb;border-radius:50%;box-sizing:border-box;display:flex;height:40px;justify-content:center;margin-right:8px;transition:all .2s ease;width:40px}.hds-carousel-nav-arrow:hover{border:1px solid #000;cursor:pointer}.hds-page-intro-image-1,.hds-page-intro-image-2,.hds-page-intro-image-3{min-height:320px}@media screen and (max-width:800px){.hds-page-intro-image-1{min-height:200px}.hds-page-intro-image-2,.hds-page-intro-image-3{min-height:120px}}.quick-facts-slider .quick-facts-slider-image figure img{-o-object-fit:cover;object-fit:cover}.quick-facts-slider .quick-facts-slider-image figure{border-radius:50%;display:block;height:100%;margin:0;overflow:hidden;width:100%} /*# sourceURL=https://science.nasa.gov/wp-content/plugins/nasa-blocks/build/blocks/page-intro/style-index.css */
+/*# sourceURL=https://science.nasa.gov/wp-content/plugins/nasa-blocks/build/blocks/secondary-navigation/style-index.css */
+/*# sourceURL=https://science.nasa.gov/wp-content/plugins/nasa-blocks/build/blocks/story/style-index.css */
+.hds-tab-nav{border-bottom:1px solid #b9b9bb}.hds-tabbed-section .hds-tab-nav-item{border-bottom:4px solid transparent;font-size:18px;font-weight:600;line-height:1em;margin-right:40px;padding:10px 0}.hds-tab-nav-item:hover{cursor:pointer}.hds-tab-nav-item.usa-active{border-bottom-color:#000;font-weight:600}.hds-tab-nav-item button{font-feature-settings:"kern";background-color:unset;border:none;font-size:18px;font-weight:600;line-height:1em;padding:0}.hds-tab-nav-item button:hover{cursor:pointer}.hds-tabbed-section-tab:not(.usa-active){display:none}@media screen and (max-width:800px){.hds-tabbed-section .hds-tab-nav-item{margin-right:20px}}.hds-tabbed-section-tab-buttons{gap:15px} /*# sourceURL=https://science.nasa.gov/wp-content/plugins/nasa-blocks/build/blocks/tabbed-section/style-index.css */
+.hds-nasa-live-main .video-js{height:100%;position:absolute;width:100%}.hds-media-align-inline{max-width:70rem}.hds-media-align-wide{max-width:110rem}.hds-media-align-full{max-width:100%}.hds-nasa-live .video-js .vjs-big-play-button{display:none}.hds-live-two-column-player .hds-video-container:after{content:"";display:block;padding-bottom:56.25%}.hds-color-mode-dark .hds-nasa-live-more{background-color:#000}.hds-color-mode-dark .hds-nasa-live-more .color-carbon-black,.hds-nasa-live-two-column.hds-color-mode-dark .button-primary,.hds-nasa-live-two-column.hds-color-mode-dark .button-primary span,.hds-nasa-live-two-column.hds-color-mode-dark a,.hds-nasa-live-two-column.hds-color-mode-dark h2,.hds-nasa-live-two-column.hds-color-mode-dark h3,.hds-nasa-live-two-column.hds-color-mode-dark p{color:#fff}.hds-color-mode-dark .hds-nasa-live-more .color-carbon-60,.hds-color-mode-dark .hds-nasa-live-more .color-carbon-60 span{color:#959599}.hds-live-two-column-player .hds-video-container{position:relative}.hds-nasa-live-main p a{text-decoration:underline;text-underline-offset:.25rem} /*# sourceURL=https://science.nasa.gov/wp-content/plugins/nasa-blocks/build/blocks/nasa-live-two-column/style-index.css */
+.gform_fields{-moz-column-gap:10px;column-gap:10px;display:grid;grid-template-columns:repeat(12,1fr);row-gap:16px}.gform-page-footer,.gform_footer{margin-top:36px}@media only screen and (min-width:800px){.gform_fields{row-gap:36px}}.gform_fields>*{grid-column:span 12}.gform_fields .gfield .ginput_container .large,.gform_fields .gfield .ginput_container>*{width:100%}.gform_fields .ginput_container .gfield_select,.gform_fields .ginput_container input:not([type=checkbox]):not([type=radio]),.gform_fields .ginput_container select{height:48px}.gform_fields .ginput_container textarea{height:148px}.gfield_label.gform-field-label,.gform_fields .gfield_description,.gform_fields .gsection_description{display:block;grid-column:span 12}.gform_fields .gfield{grid-column:span 12}@media only screen and (min-width:800px){.gfield.gfield--width-full:not(.gfield--type-section):not(.gfield--type-html):not(.gfield--type-choice):not(.gfield--type-fileupload){display:grid;grid-template-columns:repeat(12,1fr)}.gform_fields .gfield--width-full.gfield-hds-inline-field-cols-3 .ginput_container,.gform_fields .gfield-hds-inline-field-cols-3{grid-column:span 3}.gform_fields .gfield--width-full.gfield--type-date .ginput_container.ginput_container_date,.gform_fields .gfield-hds-inline-field-cols-4{grid-column:span 4}.gform_fields .gfield-hds-inline-field-cols-5,.gform_fields .gfield.gfield--type-time .ginput_container{grid-column:span 5}.gform_fields .gfield--width-full.gfield--type-date .ginput_container,.gform_fields .gfield--width-full.gfield-hds-inline-field-cols-6 .ginput_container,.gform_fields .gfield-hds-inline-field-cols-6{grid-column:span 6}.gform_fields .gfield-hds-inline-field-cols-7{grid-column:span 7}.gform_fields .gfield-hds-inline-field-cols-8{grid-column:span 8}.gform_fields .gfield-hds-inline-field-cols-9{grid-column:span 9}.gform_fields .gfield-hds-inline-field-cols-10{grid-column:span 10}.gform_fields .gfield-hds-inline-field-cols-11{grid-column:span 11}.gform_fields .gfield--width-full,.gform_fields .gfield--width-full .ginput_container{grid-column:span 12}.gform_fields .gfield .ginput_container .small{width:33%}.gform_fields .gfield .ginput_container .medium{width:50%}.gform_fields .gfield--width-full.gfield-hds-inline-field-cols-3 .ginput_container .medium,.gform_fields .gfield--width-full.gfield-hds-inline-field-cols-3 .ginput_container .small,.gform_fields .gfield--width-full.gfield-hds-inline-field-cols-6 .ginput_container .medium,.gform_fields .gfield--width-full.gfield-hds-inline-field-cols-6 .ginput_container .small{width:100%}}.gfield--type-phone .ginput_container.ginput_container_phone{grid-column:span 4}.gfield--input-type-time .ginput_container,.gfield--type-time .ginput_container{-moz-column-gap:5px;column-gap:5px;display:flex;flex-wrap:nowrap}.gfield--input-type-time .hour_minute_colon,.gfield--type-time .ginput_container .hour_minute_colon{display:none}.gfield--input-type-address .ginput_container span,.gform-grid-col{display:grid}.gfield--input-type-address .ginput_container span.ginput_left,.gfield--input-type-address .ginput_container span.ginput_right{flex:0 0 calc(50% - 5px)}.gform_fields .gfield--input-type-hidden{position:absolute}.gform_fields .gfield .ginput_container_consent input{width:auto}.ui-datepicker .ui-datepicker-header{display:grid;grid-template-columns:15% 70% 15%;grid-template-rows:auto}.ui-datepicker .ui-datepicker-header .ui-datepicker-next,.ui-datepicker .ui-datepicker-header .ui-datepicker-prev,.ui-datepicker .ui-datepicker-header .ui-datepicker-title{grid-row:1}.ui-datepicker .ui-datepicker-header .ui-datepicker-title{grid-column:2}.ui-datepicker .ui-datepicker-header .ui-datepicker-next{display:grid;justify-content:end}.gform_fields .gfield.gfield--input-type-datedropdown .ginput_container{-moz-column-gap:5px;column-gap:5px;display:flex;flex-wrap:nowrap}@media only screen and (min-width:800px){.gfield--type-address .ginput_container,.gfield--type-name .ginput_container{display:flex}.gfield--type-name .ginput_container,.gform_fields .gfield.gfield--input-type-datedropdown .ginput_container{-moz-column-gap:10px;column-gap:10px;flex-wrap:nowrap}.gfield--type-address .ginput_container{-moz-column-gap:10px;column-gap:10px;flex-wrap:wrap;row-gap:5px}.gfield--type-address .ginput_container .ginput_left,.gfield--type-address .ginput_container .ginput_right{width:calc(50% - 5px)}}.gform_wrapper .gform_validation_container{display:none!important}.hds-single-form-embed .form-entry-content{width:100%}fieldset.gfield{border:none;padding:0}.gform_fields select{-moz-appearance:none;-webkit-appearance:none;appearance:none;background:#fff;padding:0 12px}.gform_fields .ginput_container input,.gform_fields .ginput_container select,.gform_fields .ginput_container textarea{border:1px solid #d1d1d1;border-radius:2px}.gform_fields .ginput_container input:focus,.gform_fields .ginput_container select:focus,.gform_fields .ginput_container textarea:focus{border-color:#288bff;outline:2px solid #288bff}.gform_fields .ginput_container input:not([type=checkbox]):not([type=radio]){padding:0 16px}.gform_fields .gfield .ginput_container textarea{padding:16px}.gform_fields .ginput_container input[type=checkbox],.gform_fields .ginput_container input[type=radio]{margin-right:4px}.gform_fields .ginput_container .gchoice{margin-bottom:8px}.gform_fields .ginput_container input[type=radio]{border-radius:100%}.gform_fields .gfield--type-fileupload .ginput_container input[type=file]{padding-top:8px}.gform_fields .gfield-hds-multifile-uploads .ginput_container_fileupload{border:1px solid #d1d1d1;border-radius:2px;padding:12px 24px}.bg-carbon-90 .gsection_title{color:#d1d1d1}.gform_fields .gfield--type-section .gsection_title{border-bottom:1px solid #000;padding-bottom:4px}.gform_fields .gfield_description,.gform_fields .gsection_description{color:#58585b;font-size:12px;margin-top:5px}.gform_fields .gfield--type-section .gsection_description{font-size:1rem;line-height:1.65;margin-bottom:0}.gform_fields .ginput_container_select{position:relative}.gfield--input-type-datedropdown .ginput_container_date:after,.gform_fields .gfield-hds-canadian-address-type .address_state:after,.gform_fields .gfield-hds-international-address-type .address_country:after,.gform_fields .gfield-hds-us-address-type .address_state:after,.gform_fields .gfield_time_ampm:after,.gform_fields .ginput_container_select:after{content:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIHZpZXdCb3g9IjAgMCAxMCAxMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9Ikljb24gLyBBcnJvdyAvIENoZXZyb24tRG93biI+CjxwYXRoIGlkPSJWZWN0b3IgMjcgKFN0cm9rZSkiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNSA2LjMxODg5TDkuMDQxMDUgMi4yNUwxMCAzLjIxNTU1TDUgOC4yNUwtNC4yMjA1N2UtMDggMy4yMTU1NUwwLjk1ODk0OSAyLjI1TDUgNi4zMTg4OVoiIGZpbGw9ImJsYWNrIi8+CjwvZz4KPC9zdmc+Cg==);display:block;pointer-events:none;position:absolute;right:16px;top:16px}.gform_fields input.gform-datepicker{width:100%}.gform_fields .ginput_container_date{position:relative}.gform_fields .gfield--input-type-datepicker .ginput_container_date:after{content:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik00IDBINlYySDE0VjBIMTZWMkgxOVYyMEgxVjJINFYwWk0zIDRIMTdWNkgzVjRaTTMgOFYxOEgxN1Y4SDNaIiBmaWxsPSJibGFjayIvPgo8L3N2Zz4K);display:block;position:absolute;right:16px;top:16px}.ui-datepicker.gform-theme-datepicker{background:#fff;border-radius:2px;box-shadow:0 0 20px rgba(0,0,0,.2);margin-top:5px;padding:10px;width:270px}.ui-datepicker .ui-datepicker-month,.ui-datepicker .ui-datepicker-year{-moz-appearance:none;-webkit-appearance:none;appearance:none;background:#fff;border:none;height:24px}.ui-datepicker .ui-datepicker-month{text-align:center;width:60%}img.ui-datepicker-trigger{display:none}.ui-icon-circle-triangle-e{transform:rotate(180deg)}.ui-datepicker .ui-icon-circle-triangle-e,.ui-datepicker .ui-icon-circle-triangle-w{background-image:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9Ikljb24gLyBBcnJvdyAvIENpcmNsZS1MZWZ0Ij4KPHBhdGggaWQ9IkVsbGlwc2UgMjQ1IiBkPSJNMTAgMTkuNUM0Ljc1MzMgMTkuNSAwLjUgMTUuMjQ2NyAwLjUgMTBDMC40OTk5OTkgNC43NTMzIDQuNzUzMjkgMC41IDEwIDAuNUMxNS4yNDY3IDAuNDk5OTk5IDE5LjUgNC43NTMyOSAxOS41IDEwQzE5LjUgMTUuMjQ2NyAxNS4yNDY3IDE5LjUgMTAgMTkuNVoiIHN0cm9rZT0iIzE3MTcxQiIvPgo8cGF0aCBpZD0iVmVjdG9yIDI3IChTdHJva2UpIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTguOTQ0OTEgMTBMMTIuMiAxMy4yMzI4TDExLjQyNzYgMTRMNy40MDAwMiAxMEwxMS40Mjc2IDZMMTIuMiA2Ljc2NzE2TDguOTQ0OTEgMTBaIiBmaWxsPSIjMTcxNzFCIi8+CjwvZz4KPC9zdmc+Cg==);background-size:100%;display:block;font-size:0;height:24px;width:24px}.ui-datepicker .ui-datepicker-calendar{border-collapse:collapse;margin:10px 0 -10px -5px;width:260px}.ui-datepicker-calendar tbody tr td{border-bottom:10px solid transparent;text-align:center}.ui-datepicker-calendar tbody tr td a{color:#17171b}.ui-datepicker-calendar .ui-datepicker-unselectable{color:#959599}.ui-datepicker-calendar .ui-datepicker-current-day{background:#1c67e3}.ui-datepicker-calendar .ui-datepicker-current-day a{color:#fff}.gfield_label.gform-field-label{color:#2e2e32;font-weight:600;letter-spacing:-.25px;margin-bottom:8px}.gfield_required,.gform_fields .gfield_validation_message{color:#b60109}.gfield_required .gfield_required_text{font-size:90%;font-weight:400;margin-left:6px}.gfield_required .gfield_required_asterisk{margin-left:3px}.gform_fields .gfield_validation_message{align-items:center;display:flex;letter-spacing:.25px}.gform_fields .validation_message--hidden-on-empty{display:none}.gfield_validation_message:before{content:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMCAxOUMxNC45NzA2IDE5IDE5IDE0Ljk3MDYgMTkgMTBDMTkgNS4wMjk0NCAxNC45NzA2IDEgMTAgMUM1LjAyOTQ0IDEgMSA1LjAyOTQ0IDEgMTBDMSAxNC45NzA2IDUuMDI5NDQgMTkgMTAgMTlaTTkgMTNWNEgxMVYxM0g5Wk05IDE2VjE0SDExVjE2SDlaIiBmaWxsPSIjRjY0MTM3Ii8+Cjwvc3ZnPgo=);margin-right:6px}.gform_fields .gform-field-label--type-sub{margin-bottom:12px}.gform_fields input+.gform-field-label--type-sub{margin:5px 0 12px}.gform_fields .gfield-hds-multifile-uploads button,.gform_footer .gform_button.button,.gform_page_footer .gform_button.button,.gform_page_footer .gform_next_button.button,.gform_page_footer .gform_previous_button.button{background-color:#f64137;border:none;color:#fff;font-size:16px;font-weight:600;line-height:20px;padding:12px 20px;transition:background-color .2s ease-in-out}.gform_page_footer .gform_previous_button.button{background-color:unset;border:1px solid #1c67e3;color:#000;margin-right:1.5em}.gform_fields .gfield-hds-multifile-uploads button{font-size:12px;padding:6px 10px}.gform_fields .gfield-hds-multifile-uploads button:hover,.gform_footer .gform_button.button:hover,.gform_page_footer .gform_button.button:hover,.gform_page_footer .gform_next_button.button:hover,.gform_page_footer .gform_previous_button.button:hover{background-color:#b60109;cursor:pointer;transition:background-color .2s ease-in-out}.gform_page_footer .gform_previous_button.button:hover{background-color:unset}.gform_fields .gfield-hds-multifile-uploads button:focus .gform_footer .gform_button.button:focus{outline:1px dashed #b9b9bb}.gform_fields .gfield-hds-singlefile-uploads .ginput_container input::file-selector-button{background-color:#f64137;border:none;color:#fff;font-size:12px;font-weight:600;line-height:20px;padding:6px 10px;transition:background-color .2s ease-in-out}.gform_fields .gfield-hds-singlefile-uploads .ginput_container input::file-selector-button:hover{background-color:#b60109;cursor:pointer;transition:background-color .2s ease-in-out}.usa-article-content div.form-entry-content p.form-omb-approval-wrapper{margin:0}div.form-entry-content p.form-omb-approval-wrapper .form-omb-approval-label{font-size:.7rem;font-weight:700;margin-right:5px}div.form-entry-content p.form-omb-approval-wrapper .form-omb-approval-code{font-family:dm-mono,monospace;font-size:.9rem;font-style:normal;font-weight:500;letter-spacing:1px;line-height:1;text-transform:uppercase}.gf_progressbar_wrapper{margin-bottom:16px}.gf_progressbar_title{color:#2e2e32;font-size:14px;font-weight:600;margin-bottom:8px}.gf_progressbar{background-color:#e6e6e6;border-radius:4px;height:20px;overflow:hidden}.gf_progressbar_percentage{background-color:#1c67e3;border-radius:4px;height:100%;text-align:center;transition:width .3s ease}.gf_progressbar_percentage span{color:#fff;display:block;font-size:12px;font-weight:600;line-height:20px}.hds-gf-stepper{margin-bottom:24px}.hds-gf-stepper__list{display:flex;gap:4px;list-style:none;margin:0;padding:0}.hds-gf-stepper__item{display:flex;flex:1 0 0;flex-direction:column;gap:12px;min-width:0}.hds-gf-stepper__bar{background-color:#d1d1d1;display:block;height:6px;width:100%}.bg-carbon-90 .hds-gf-stepper__bar{background-color:#3d3d40}.hds-gf-stepper__item.is-complete .hds-gf-stepper__bar{background-color:#288bff}.hds-gf-stepper__item.is-active .hds-gf-stepper__bar{background-color:#1c67e3}.hds-gf-stepper__content{display:flex;flex-direction:column;gap:4px;min-width:0}.hds-gf-stepper__heading{align-items:center;color:#000;display:flex;font-family:Inter,sans-serif;font-size:16px;font-weight:400;gap:4px;letter-spacing:-.5px;line-height:20px}.bg-carbon-90 .hds-gf-stepper__heading{color:#d1d1d1}.hds-gf-stepper__item.is-active .hds-gf-stepper__heading{font-weight:600}.hds-gf-stepper__sub{color:#58585b;font-size:12px;font-weight:400;letter-spacing:.25px;line-height:16px}.hds-gf-stepper__check{fill:currentcolor;color:#47da84;flex-shrink:0;height:20px;width:20px}.hds-gf-stepper__current-step{color:#58585b;display:none;font-size:12px;font-weight:400;letter-spacing:.25px;line-height:16px;margin-top:4px}.bg-carbon-90 .hds-gf-stepper__current-step{color:#b9b9bb}.hds-single-form-embed.bg-carbon-90 .form-entry-content{margin-bottom:40px;width:100%}.bg-carbon-90 .gform_fields .ginput_container span>*,.bg-carbon-90 .gform_fields .ginput_container>*{background:transparent;color:#d1d1d1}.bg-carbon-90 .gform_fields .ginput_container input::-moz-placeholder{color:#d1d1d1}.bg-carbon-90 .gform_fields .ginput_container input::placeholder{color:#d1d1d1}.bg-carbon-90 .gform_fields .gsection_title{border-bottom:1px solid #fff}.bg-carbon-90 .gform_fields .ginput_container_date:after{content:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9Ikljb24gLyBDYWxlbmRhciI+CjxwYXRoIGlkPSJVbmlvbiIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik00IDBINlYySDE0VjBIMTZWMkgxOVYyMEgxVjJINFYwWk0zIDRIMTdWNkgzVjRaTTMgOFYxOEgxN1Y4SDNaIiBmaWxsPSJ3aGl0ZSIvPgo8L2c+Cjwvc3ZnPgo=)}.bg-carbon-90 .gform_fields .ginput_container_select:after{content:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIHZpZXdCb3g9IjAgMCAxMCAxMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9Ikljb24gLyBBcnJvdyAvIENoZXZyb24tRG93biI+CjxwYXRoIGlkPSJWZWN0b3IgMjcgKFN0cm9rZSkiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNSA2LjMxODg5TDkuMDQxMDUgMi4yNUwxMCAzLjIxNTU1TDUgOC4yNUwtNC4yMjA1N2UtMDggMy4yMTU1NUwwLjk1ODk0OSAyLjI1TDUgNi4zMTg4OVoiIGZpbGw9IndoaXRlIi8+CjwvZz4KPC9zdmc+Cg==)}.bg-carbon-90 .gf_progressbar_title,.bg-carbon-90 .gfield--type-html,.bg-carbon-90 .gfield--type-html a,.bg-carbon-90 .gform-field-label,.bg-carbon-90 .gform_fields .gfield_description,.bg-carbon-90 .gform_fields .gsection_description,.bg-carbon-90 .gform_required_legend,.bg-carbon-90 h2{color:#d1d1d1}.bg-carbon-90 .gf_progressbar{background-color:#3d3d40}.bg-carbon-90 .hds-gf-stepper__sub{color:#b9b9bb}.gform_submission_error{font-size:revert}@media only screen and (min-width:800px){.hds-single-form-embed.bg-carbon-90{padding:2rem}.hds-single-form-embed.bg-carbon-90 .form-entry-content{margin-bottom:0}.gform_fields select{padding:0 16px}}@media only screen and (max-width:799px){.hds-gf-stepper__content{clip:rect(1px,1px,1px,1px);word-wrap:normal;clip-path:inset(50%);height:1px;overflow:hidden;position:absolute;white-space:nowrap;width:1px}.hds-gf-stepper__current-step{display:block}} /*# sourceURL=https://science.nasa.gov/wp-content/plugins/nasa-blocks/build/blocks/gravity-form-embed/style-index.css */
+var popupData = {"popupId":"879398","randomChance":"0.02"}; var popupData = {"popupId":"879398","randomChance":"0.02"}; //# sourceURL=random-popup-display-js-extra
+var gf_global = {"gf_currency_config":{"name":"U.S. Dollar","symbol_left":"$","symbol_right":"","symbol_padding":"","thousand_separator":",","decimal_separator":".","decimals":2,"code":"USD"},"base_url":"https://science.nasa.gov/wp-content/plugins/gravityforms","number_formats":[],"version_hash":"4f06dba39cdbd9885e8db30261d6eb7e","countries":{"AF":"Afghanistan","AX":"\u00c5land Islands","AL":"Albania","DZ":"Algeria","AS":"American Samoa","AD":"Andorra","AO":"Angola","AI":"Anguilla","AQ":"Antarctica","AG":"Antigua and Barbuda","AR":"Argentina","AM":"Armenia","AW":"Aruba","AU":"Australia","AT":"Austria","AZ":"Azerbaijan","BS":"Bahamas","BH":"Bahrain","BD":"Bangladesh","BB":"Barbados","BY":"Belarus","BE":"Belgium","BZ":"Belize","BJ":"Benin","BM":"Bermuda","BT":"Bhutan","BO":"Bolivia","BQ":"Bonaire, Sint Eustatius and Saba","BA":"Bosnia and Herzegovina","BW":"Botswana","BV":"Bouvet Island","BR":"Brazil","IO":"British Indian Ocean Territory","BN":"Brunei Darussalam","BG":"Bulgaria","BF":"Burkina Faso","BI":"Burundi","CV":"Cabo Verde","KH":"Cambodia","CM":"Cameroon","CA":"Canada","KY":"Cayman Islands","CF":"Central African Republic","TD":"Chad","CL":"Chile","CN":"China","CX":"Christmas Island","CC":"Cocos Islands","CO":"Colombia","KM":"Comoros","CD":"Congo, Democratic Republic of the","CG":"Congo","CK":"Cook Islands","CR":"Costa Rica","CI":"C\u00f4te d'Ivoire","HR":"Croatia","CU":"Cuba","CW":"Cura\u00e7ao","CY":"Cyprus","CZ":"Czechia","DK":"Denmark","DJ":"Djibouti","DM":"Dominica","DO":"Dominican Republic","EC":"Ecuador","EG":"Egypt","SV":"El Salvador","GQ":"Equatorial Guinea","ER":"Eritrea","EE":"Estonia","SZ":"Eswatini","ET":"Ethiopia","FK":"Falkland Islands","FO":"Faroe Islands","FJ":"Fiji","FI":"Finland","FR":"France","GF":"French Guiana","PF":"French Polynesia","TF":"French Southern Territories","GA":"Gabon","GM":"Gambia","GE":"Georgia","DE":"Germany","GH":"Ghana","GI":"Gibraltar","GR":"Greece","GL":"Greenland","GD":"Grenada","GP":"Guadeloupe","GU":"Guam","GT":"Guatemala","GG":"Guernsey","GN":"Guinea","GW":"Guinea-Bissau","GY":"Guyana","HT":"Haiti","HM":"Heard Island and McDonald Islands","VA":"Holy See","HN":"Honduras","HK":"Hong Kong","HU":"Hungary","IS":"Iceland","IN":"India","ID":"Indonesia","IR":"Iran","IQ":"Iraq","IE":"Ireland","IM":"Isle of Man","IL":"Israel","IT":"Italy","JM":"Jamaica","JP":"Japan","JE":"Jersey","JO":"Jordan","KZ":"Kazakhstan","KE":"Kenya","KI":"Kiribati","KP":"Korea, Democratic People's Republic of","KR":"Korea, Republic of","KW":"Kuwait","KG":"Kyrgyzstan","LA":"Lao People's Democratic Republic","LV":"Latvia","LB":"Lebanon","LS":"Lesotho","LR":"Liberia","LY":"Libya","LI":"Liechtenstein","LT":"Lithuania","LU":"Luxembourg","MO":"Macao","MG":"Madagascar","MW":"Malawi","MY":"Malaysia","MV":"Maldives","ML":"Mali","MT":"Malta","MH":"Marshall Islands","MQ":"Martinique","MR":"Mauritania","MU":"Mauritius","YT":"Mayotte","MX":"Mexico","FM":"Micronesia","MD":"Moldova","MC":"Monaco","MN":"Mongolia","ME":"Montenegro","MS":"Montserrat","MA":"Morocco","MZ":"Mozambique","MM":"Myanmar","NA":"Namibia","NR":"Nauru","NP":"Nepal","NL":"Netherlands","NC":"New Caledonia","NZ":"New Zealand","NI":"Nicaragua","NE":"Niger","NG":"Nigeria","NU":"Niue","NF":"Norfolk Island","MK":"North Macedonia","MP":"Northern Mariana Islands","NO":"Norway","OM":"Oman","PK":"Pakistan","PW":"Palau","PS":"Palestine, State of","PA":"Panama","PG":"Papua New Guinea","PY":"Paraguay","PE":"Peru","PH":"Philippines","PN":"Pitcairn","PL":"Poland","PT":"Portugal","PR":"Puerto Rico","QA":"Qatar","RE":"R\u00e9union","RO":"Romania","RU":"Russian Federation","RW":"Rwanda","BL":"Saint Barth\u00e9lemy","SH":"Saint Helena, Ascension and Tristan da Cunha","KN":"Saint Kitts and Nevis","LC":"Saint Lucia","MF":"Saint Martin","PM":"Saint Pierre and Miquelon","VC":"Saint Vincent and the Grenadines","WS":"Samoa","SM":"San Marino","ST":"Sao Tome and Principe","SA":"Saudi Arabia","SN":"Senegal","RS":"Serbia","SC":"Seychelles","SL":"Sierra Leone","SG":"Singapore","SX":"Sint Maarten","SK":"Slovakia","SI":"Slovenia","SB":"Solomon Islands","SO":"Somalia","ZA":"South Africa","GS":"South Georgia and the South Sandwich Islands","SS":"South Sudan","ES":"Spain","LK":"Sri Lanka","SD":"Sudan","SR":"Suriname","SJ":"Svalbard and Jan Mayen","SE":"Sweden","CH":"Switzerland","SY":"Syria Arab Republic","TW":"Taiwan","TJ":"Tajikistan","TZ":"Tanzania, the United Republic of","TH":"Thailand","TL":"Timor-Leste","TG":"Togo","TK":"Tokelau","TO":"Tonga","TT":"Trinidad and Tobago","TN":"Tunisia","TR":"T\u00fcrkiye","TM":"Turkmenistan","TC":"Turks and Caicos Islands","TV":"Tuvalu","UG":"Uganda","UA":"Ukraine","AE":"United Arab Emirates","GB":"United Kingdom","US":"United States","UY":"Uruguay","UM":"US Minor Outlying Islands","UZ":"Uzbekistan","VU":"Vanuatu","VE":"Venezuela","VN":"Viet Nam","VG":"Virgin Islands, British","VI":"Virgin Islands, U.S.","WF":"Wallis and Futuna","EH":"Western Sahara","YE":"Yemen","ZM":"Zambia","ZW":"Zimbabwe"},"strings":{"newRowAdded":"New row added.","rowRemoved":"Row removed","formSaved":"The form has been saved. The content contains the link to return and complete the form."}}; var gform_i18n = {"datepicker":{"wdOffset":1,"helpTextShort":"Press F1 for help","helpText":"Press the arrow keys to navigate by day, PageUp and PageDown to navigate by month, Alt+PageUp and Alt+PageDown to navigate by year, or Escape to cancel.","openOnFocusHelpText":"Press Down arrow to browse the calendar, or Escape to close.","tooltipTxt":"Press Escape to cancel","disabledTxt":"Disabled","markedTxt":"Selected","prevTxt":"Previous","nextTxt":"Next","monthTxt":"Month","yearTxt":"Year","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"days":[{"s":"S","l":"Sunday"},{"s":"M","l":"Monday"},{"s":"T","l":"Tuesday"},{"s":"W","l":"Wednesday"},{"s":"T","l":"Thursday"},{"s":"F","l":"Friday"},{"s":"S","l":"Saturday"}]}}; var gf_legacy_multi = {"45":""}; var gform_gravityforms = {"strings":{"invalid_file_extension":"This type of file is not allowed. Must be one of the following:","file_uploaded":"File uploaded","delete_file":"Delete this file","in_progress":"in progress","file_exceeds_limit":"File exceeds size limit","illegal_extension":"This type of file is not allowed.","max_reached":"Maximum number of files reached","unknown_error":"There was a problem while saving the file on the server","currently_uploading":"Please wait for the uploading to complete","cancel":"Cancel","cancel_upload":"Cancel this upload","cancelled":"Cancelled","error":"Error","message":"Message"},"vars":{"images_url":"https://science.nasa.gov/wp-content/plugins/gravityforms/images"}}; //# sourceURL=gform_gravityforms-js-extra
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src= 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-NLJ258M');
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src= 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-542RDH52');
+{"@context":"https:\/\/schema.org","@type":"NewsArticle","headline":"Auroras","url":"https:\/\/science.nasa.gov\/sun\/auroras\/","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/science.nasa.gov\/sun\/auroras\/"},"thumbnailUrl":"https:\/\/science.nasa.gov\/wp-content\/uploads\/2024\/07\/bin-li-aurora-ny-alesund-2.jpg?w=150&h=150&crop=1","image":{"@type":"ImageObject","url":"https:\/\/science.nasa.gov\/wp-content\/uploads\/2024\/07\/bin-li-aurora-ny-alesund-2.jpg"},"articleSection":"The Sun","author":[{"@type":"Person","name":"Rachel Lense"}],"creator":["Rachel Lense"],"publisher":{"@type":"Organization","name":"NASA Science","logo":"https:\/\/science.nasa.gov\/wp-content\/uploads\/2023\/07\/nasa-logo-web-rgb.webp"},"keywords":["Science &amp; Research","Earth Science","Weather and Atmospheric Dynamics","The Sun","Auroras","Citizen Science","Heliophysics","Heliophysics Division","Ionosphere","Magnetosphere","Mesosphere","Missions","Physical Sciences","Scientific Balloons","Sounding Rockets Program","Thermosphere"],"dateCreated":"2025-02-04T15:15:28Z","datePublished":"2025-02-04T15:15:28Z","dateModified":"2025-02-04T15:15:29Z"}
+Explore
+Search
+News & Events
+News & Events
+Recently Published
+Video Series on NASA+
+Podcasts & Audio
+Blogs
+Newsletters
+Social Media
+Media Resources
+Multimedia
+Multimedia
+NASA+
+Images
+NASA Live
+NASA Apps
+Podcasts
+Image of the Day
+e-Books
+3D Resources
+Interactives
+STEM Multimedia
+NASA Brand & Usage Guidelines
+NASA+
+Search
+Suggested Searches
+ISS
+Roman
+Webb
+Quesst
+Moon Base
+View All Topics A-Z
+Home
+Missions
+Humans in Space
+Earth
+The Solar System
+The Universe
+Science
+Aeronautics
+Technology
+Learning Resources
+About NASA
+Español
+News & Events
+Multimedia
+NASA+
+Highlights
+5 min read
+NASA’s Perseverance Sets Off-World Record for Total Distance Driven
+article
+23 hours ago
+5 min read
+NASA’s SPHEREx Telescope Sees Menagerie of Brown Dwarfs
+article
+5 days ago
+3 min read
+What’s Up: October 2026 Skywatching Tips from NASA
+article
+2 weeks ago
+Back
+Missions
+Search All NASA Missions
+A to Z List of Missions
+Upcoming Launches and Landings
+Spaceships and Rockets
+Communicating with Missions
+Artemis
+James Webb Space Telescope
+Hubble Space Telescope
+International Space Station
+OSIRIS-REx
+Humans in Space
+Why Go to Space
+Astronauts
+Commercial Space
+Destinations
+Spaceships and Rockets
+Living in Space
+Earth
+Explore Earth Science
+Climate Change
+Earth, Our Planet
+Earth Science in Action
+Earth Multimedia
+Earth Data
+Earth Science Researchers
+The Solar System
+The Sun
+Mercury
+Venus
+Earth
+The Moon
+Mars
+Jupiter
+Saturn
+Uranus
+Neptune
+Pluto & Dwarf Planets
+Asteroids, Comets & Meteors
+The Kuiper Belt
+The Oort Cloud
+Skywatching
+The Universe
+Exoplanets
+The Search for Life in the Universe
+Stars
+Galaxies
+Black Holes
+The Big Bang
+Dark Matter
+Dark Energy
+Science
+Earth Science
+Planetary Science
+Astrophysics & Space Science
+The Sun & Heliophysics
+Biological & Physical Sciences
+Lunar Science
+Citizen Science
+Astromaterials
+Aeronautics Research
+Human Space Travel Research
+Aeronautics
+Science in the Air
+NASA Aircraft
+Flight Innovation
+Supersonic Flight
+Air Traffic Solutions
+Green Aviation Tech
+Drones & You
+Technology
+Technology Transfer & Spinoffs
+Space Travel Technology
+Technology Living in Space
+Manufacturing and Materials
+Robotics
+Science Instruments
+Computing
+Learning Resources
+For Kids and Students
+For Educators
+For Colleges and Universities
+For Professionals
+Science for Everyone
+Requests for Exhibits, Artifacts, or Speakers
+STEM Engagement at NASA
+About NASA
+NASA's Impacts
+Centers and Facilities
+Directorates
+Organizations
+People of NASA
+Careers
+Internships
+Our History
+Doing Business with NASA
+Get Involved
+Contact
+NASA en Español
+Ciencia
+Aeronáutica
+Ciencias Terrestres
+Sistema Solar
+Universo
+News & Events
+Recently Published
+Video Series on NASA+
+Podcasts & Audio
+Blogs
+Newsletters
+Social Media
+Media Resources
+Multimedia
+NASA+
+Images
+NASA Live
+NASA Apps
+Podcasts
+Image of the Day
+e-Books
+3D Resources
+Interactives
+STEM Multimedia
+NASA Brand & Usage Guidelines
+Highlights
+5 min read
+NASA’s Perseverance Sets Off-World Record for Total Distance Driven
+article
+23 hours ago
+5 min read
+Webb Measures Distance to Farthest Fast Radio Burst, Suggesting Origin
+article
+5 days ago
+5 min read
+NASA’s SPHEREx Telescope Sees Menagerie of Brown Dwarfs
+article
+5 days ago
+Highlights
+2 min read
+Help NASA Find Practical Ways to Monitor Astronaut Body Temperature in Low Earth Orbit
+article
+2 weeks ago
+3 min read
+NASA Opens 2027 Human Lander Challenge for Lunar Communications
+article
+2 weeks ago
+3 min read
+Researchers: Help NASA Prevent Blood Clot Formation in Space
+article
+3 weeks ago
+Highlights
+3 min read
+An Impact Structure With Legs
+article
+17 hours ago
+3 min read
+Antarctic Sea Ice Grows to Its 2026 Maximum
+article
+2 days ago
+2 min read
+Floodwaters Overwhelm Thailand
+article
+5 days ago
+Highlights
+4 min read
+NASA JPL Testing Readies Voyager Technologies Lander for Moon Mission
+article
+8 hours ago
+1 min read
+Artemis II Preliminary Lunar Science Report
+article
+6 days ago
+3 min read
+NASA’s Curiosity Rover Catches Stunning Martian Dawn
+article
+1 week ago
+Highlights
+5 min read
+NASA’s SPHEREx Telescope Sees Menagerie of Brown Dwarfs
+article
+5 days ago
+5 min read
+Webb Measures Distance to Farthest Fast Radio Burst, Suggesting Origin
+article
+5 days ago
+3 min read
+NASA Advances LISA Mission Contributions With New Test Telescope
+article
+5 days ago
+Highlights
+3 min read
+An Impact Structure With Legs
+article
+17 hours ago
+3 min read
+NASA’s SpaceX CRS-35 Mission to Launch Health Research
+article
+1 day ago
+3 min read
+Antarctic Sea Ice Grows to Its 2026 Maximum
+article
+2 days ago
+Highlights
+2 min read
+NASA Model Wing Lights Up During First Pressure Sensitive Paint Tests
+article
+2 weeks ago
+2 min read
+Dr. Natasha Schatzman Receives Vertical Flight Society (VFS) Award
+article
+2 weeks ago
+10 min read
+2026-2027 DWU: Middle School Design Challenge
+article
+3 weeks ago
+Highlights
+3 min read
+Rains Swamp the Gandak River
+article
+2 weeks ago
+1 min read
+Space Reactors Division
+article
+2 weeks ago
+4 min read
+Powerful Storms Continue to Prowl the Pacific
+article
+2 weeks ago
+Highlights
+4 min read
+NASA Demonstrates Next-Generation Heat Shield Technologies
+article
+4 days ago
+8 min read
+NASA Selects Projects to Engage Communities Across the US with NASA Science
+article
+2 weeks ago
+3 min read
+TechRise (for 6–12 graders)
+article
+2 weeks ago
+Highlights
+4 min read
+NASA, Energy Department Advance New Era of Nuclear-Powered Exploration
+article
+5 days ago
+3 min read
+NASA’s SpaceX CRS-35 Mission to Launch Health Research
+article
+1 day ago
+2 min read
+NASA Releases Artemis II Lunar Science Data, Images
+article
+6 days ago
+Highlights
+11 min read
+La NASA anuncia la cobertura de la misión lunar Artemis II
+article
+7 months ago
+15 min read
+Agenda diaria de la misión a la Luna de Artemis II de la NASA
+article
+7 months ago
+6 min read
+La NASA refuerza Artemis: añade una misión y perfecciona su arquitectura general
+article
+7 months ago
+Explore This Section
+Sun Overview
+Topics
+The Sun
+Sunspots
+Solar Storms and Flares
+Eclipses
+Auroras
+Helio Big Year
+Research
+Our Solar System
+Media & News
+News
+Gallery
+Get Involved
+Scientists
+Citizen Scientists
+Auroras
+Image credit: NASA/Bin Li
+Also known as the northern lights (
+aurora borealis
+) or southern lights (
+aurora australis
+), auroras are colorful, dynamic, and often visually delicate displays of an intricate dance of particles and magnetism between the Sun and Earth called space weather.
+When energetic particles from space collide with atoms and molecules in the atmosphere, they can cause the colorful glow that we call auroras.
+Quick Facts
+Aurora
+is the Latin word for "dawn" and is also the name of the Roman goddess of the dawn. Europeans living far from the Arctic Circle usually experienced auroras as a faint red glow to the north, resembling the reddish glow in the east at dawn.
+Aurora borealis
+translates to “northern dawn.”
+Image credit: NASA/George Varros
+Communities around the world have observed and documented auroras for thousands of years. The Iñupiat peoples of northern Alaska call them
+kiuġuyat
+or
+kiuġiyaq
+in their language, Iñupiaq. Learn more about their perspectives with the University of Alaska Fairbanks’
+Cultural Connections project
+.
+Image credit: NASA/Rachel Lense
+Auroras can occur on other planets and moons with atmospheres. They usually happen where a planet's magnetic field lines meet its atmosphere and have been seen on places like Saturn and Jupiter. However, they can occur in different ways on any planet with an atmosphere.
+Image credit: NASA/ESA/J. Nichols, A. Simon
+The colors of an aurora come from atoms and molecules being energized by colliding with energetic particles in the upper atmosphere. The most common color is green, which is produced when oxygen is excited by electrons around 60 mi (100 km) above Earth's surface.
+Image credit: Gunjan Sinha, used with permission
+What Causes Auroras?
+The Sun continuously produces an outflow of charged particles into the solar system known as the solar wind. When the solar wind reaches Earth, it can interact with Earth’s magnetic shield, often depositing and accumulating energy there. When this energy is finally released, much of it rains down on our atmosphere, causing auroras.
+More on the Physics Behind Auroras
+When energetic particles from space bombard gases in the atmosphere, they can give the atoms and molecules of the gases extra energy. That extra energy is then released as tiny specks of light.
+NASA/Goddard Space Flight Center/Scientific Visualization Studio/Mary P. Hrybyk-Keith
+Related Reading
+How NASA Tracked the Most Intense Solar Storm in Decades
+5 MIN READ
+Aurorasaurus Roars During Historic Solar Storm
+2 MIN READ
+NASA Watches Mars Light Up During Epic Solar Storm
+6 MIN READ
+The Atmosphere… After Dark!
+12 MIN READ
+Why Are Auroras Colorful?
+An aurora can appear in a variety of colors, from an eerie green to blue and purple to pink and red. When particles from space bombard gases in the atmosphere, they can give the atoms and molecules of the gases extra energy that’s released as tiny specks of light.
+The color of an aurora depends on the type of gas that is hit and where that gas is located in the atmosphere.
+Oxygen excited to different energy levels can produce green and red. Green occurs roughly between 60 to 120 miles (100-200 km) altitude, and red occurs above 120 miles (200 km).
+Excited nitrogen gas from about 60 to 120 miles (100-200 km) glows blue. Depending on the type and energy of the particle it is interacting with, nitrogen can give off both pink and blue light. If it is below about 60 miles (100 km), it gives the lower edge of the aurora a reddish-purple to pink glow.
+Sometimes, the light emitted by these gases can appear to mix, making the auroras seem purple, pink, or even white.
+Image credit: Neil Zeller, used with permission
+The colors of an aurora reveal where the lights were created as well as what atoms and molecules created them.
+NASA/Aurorasaurus
+Color
+Altitude
+Composition
+Red
+≥120 miles (≥200 km)
+Oxygen
+Green
+60-120 miles (100-200 km)
+Oxygen
+Blue
+60-120 miles (100-200 km)
+Nitrogen
+Pink
+≤60 miles (≤100 km)
+Nitrogen
+Ground-Based Measurements
+Scientific Balloons
+Sounding Rockets
+Spacecraft
+Citizen Science
+Researching Auroras
+Ground-Based Measurements
+Using ground-based scientific equipment, we can learn a lot about auroras. With tools like
+magnetometers
+that show changes in Earth's magnetic field and
+radar networks
+that monitor particle activity in the upper atmosphere, scientists can analyze the various effects that occur during auroral displays. Some ground stations even provide real-time views of auroras using special wide-field cameras called
+all-sky imagers
+.
+Different countries and agencies collaborate to conduct aurora research using ground stations worldwide, representing just how collaborative science can truly be.
+Stories About Ground-Based Research
+All-sky imagers across Canada capture the progression of auroras.
+NASA/Goddard Space Flight Center/Scientific Visualization Studio/Tom Bridgman
+Researching Auroras
+Scientific Balloons
+For more than 30 years, the
+NASA Balloon Program
+has allowed scientists to conduct experiments with balloons floating high into the atmosphere. It's important to have a clear, steady view of auroras in action to learn about their dynamics. Balloons can be launched across the globe and are a low-cost way to carry scientific instruments to great heights above most atmospheric clouds. At times, this allows balloons to provide a clearer view of the aurora than ground-based cameras.
+One of these balloon missions was called
+BALBOA
+(Balloon-Based Observations for sunlit Aurora) and used infrared cameras to observe how auroras behave during the day.
+More on Scientific Balloons
+A scientific balloon launching from NASA’s Columbia Scientific Balloon Facility in Fort Sumner, New Mexico.
+NASA/Goddard Space Flight Center/Joy Ng
+Researching Auroras
+Sounding Rockets
+Unlike the large rockets that send humans to space,
+sounding rockets
+are smaller and equipped with scientific instruments. They're an important tool for scientists studying auroras because they collect observations as they arc through the sky, showing how physical processes change with altitude and time. And with the ability to reach anywhere from 30 to 800 miles (50 to 1,200 km) above Earth, they can take measurements at elevations too high for balloons to reach and too low for satellites to fly through, making them necessary for painting a fuller picture of how auroras work.
+For instance, NASA scientists joined a global
+Grand Challenge
+to use sounding rockets to better understand the fundamentals of the polar cusp — a region of Earth’s magnetic field over the poles where energetic particles funnel into and out of the atmosphere.
+More on Sounding Rockets
+A NASA-funded sounding rocket launches into an aurora in the early morning of March 3, 2014, over Venetie, Alaska. The Ground-to-Rocket Electrodynamics – Electron Correlative Experiment (GREECE) mission studied how specific structures — classic curls like swirls of cream in coffee — form in the aurora.
+NASA/Christopher Perry
+Researching Auroras
+Spacecraft
+NASA has a storied history of studying auroras with spacecraft, whether Earth-orbiting or flying past other planets in our solar system. In 1979,
+Voyager 1
+caught a glimpse of auroras on the dark side of Jupiter. More recently, the
+Hubble Space Telescope
+,
+Galileo
+, and
+Juno
+have also seen auroras on the gas giant.
+Cassini
+and other missions observed them on Saturn,
+MAVEN
+(Mars Atmosphere and Volatile Evolution) found them on Mars, and
+Pioneer
+discovered them on Venus. Even some
+moons
+have shown signs of auroras, as have
+celestial bodies
+beyond our solar system.
+But the majority of spacecraft studying auroras look Earthward, like
+THEMIS
+(Time History of Events and Macroscale Interactions During Substorms) or the upcoming
+EZIE
+(Electrojet Zeeman Imaging Explorer) and
+GDC
+(Geospace Dynamics Constellation) missions.
+More on Spacecraft
+NASA’s Time History of Events and Macroscale Interactions During Substorms (THEMIS) mission uses satellites to study how mass and energy move through the near-Earth space environment.
+NASA/Goddard Space Flight Center/Conceptual Image Lab
+Researching Auroras
+Citizen Science
+Did you know you don’t have to be a professional scientist to help advance our understanding of auroras? Citizen science (or participatory science) is a form of open collaboration in which individuals or organizations participate voluntarily in the scientific process.
+NASA’s
+Aurorasaurus
+citizen science project encourages people to report their aurora sightings. Each verified report of an aurora serves as a valuable data point for scientists who model these phenomena and can lead to published scientific papers or even
+new discoveries
+!
+More on Citizen Science
+Citizen science projects like Aurorasaurus rely on open collaboration between professional scientists and the public to learn more about auroras.
+Christy Turner Photography, used with permission
+Aurora Science Made EZIE
+The Electrojet Zeeman Imaging Explorer (EZIE) is an upcoming mission to image the magnetic fingerprint of the auroral electrojets, electric currents in the atmosphere linking the magnetosphere to the aurora.
+Learn More About EZIE
+NASA/Johns Hopkins Applied Physics Laboratory
+Watch on YouTube
+4 years ago
+Rockets to Uncover Electric Circuit That Powers the Northern Lights
+Article
+5 min read
+7 years ago
+New Compact Remote Sensor to Image Ionospheric Current's Spatial Structure from Space
+Article
+4 min read
+2 years ago
+Bundling the Best of Heliophysics Education: DigiKits for Physics and Astronomy Teachers
+Article
+3 min read
+Media
+10 Images
+NASA's Guide to
+Finding and Photographing Auroras
+Auroras are one of our night sky’s most dramatic spectacles. With modern cameras and smartphones, photographing these beautiful displays is easier than ever. Digital camera sensors are incredibly sensitive and can even allow you to record auroras you can’t see with the naked eye.
+Explore Photography Tips and Tricks
+Colorful auroras form south of Carseland, Alberta.
+Neil Zeller, used with permission
+citizen science
+Contribute to Aurora Science
+Help scientists track and study auroras by reporting your aurora sightings to the Aurorasaurus citizen science project. Verified reports of auroras from people around the world provide valuable data points for scientists and can lead to published scientific papers and even new discoveries.
+Aurorasaurus
+These auroras were captured from Maryland with a smartphone on Oct. 10, 2024.
+NASA/Lacey Young
+Discover the Physics of Auroras
+Magnetospheres and Geomagnetic Storms
+Many planets, including Earth, are surrounded by a large magnetic shield called a
+magnetosphere
+. On Earth, this shield stems from the churning molten metal core inside the planet and extends far out into space.
+Our magnetosphere protects us from harmful charged particles in the space environment. As these particles collide with the magnetosphere, they can transfer energy to the magnetosphere itself. However, if certain regions become overloaded, a
+geomagnetic storm
+can erupt, just as rain clouds swell with water droplets preceding a thunderstorm.
+During a geomagnetic storm, much of the accumulated energy in the magnetosphere flows down along Earth's magnetic field lines, precipitating into the atmosphere like a summer downpour on the prairie. This type of particle precipitation injects millions of amps into the atmosphere, leading to impressive auroral displays in places far from Earth’s poles.
+This simulation demonstrates a geomagnetic storm hitting Earth’s magnetosphere on February 3, 2020. This particular storm was average in strength, but still destroyed dozens of commercial satellites.
+The green colors show the density of the magnetic current. Lines tracing out the magnetic field are purple in regions of weaker magnetism and orange-yellow where the magnetic field is strongest. Blue lines represent the velocity of the solar wind. They have been calibrated to appear brightest when moving toward Earth. Learn more here:
+https://svs.gsfc.nasa.gov/5193/
+NASA/Goddard Space Flight Center/Scientific Visualization Studio/AJ Christensen
+The Heliosphere and Solar Wind
+Just as planets with churning cores like Earth produce magnetic shields, the Sun’s dense, ever-roiling interior also produces a magnetic shield — on a much larger scale. The Sun’s magnetic shield is called the
+heliosphere
+, and it fills the solar system.
+As the Sun seethes, it radiates its energy throughout the heliosphere. Planets and other objects in the solar system experience much of this radiation as a continuous stream of charged particles and magnetic fields blowing by. This stream of fields and particles is called the
+solar wind
+.
+When the solar wind blows past Earth, it buffets Earth’s magnetosphere like a strong breeze flapping a flag.
+This animation illustrates how the solar wind moves through the solar system and interacts with forces beyond the solar system. It shows three perspectives: orange dots represent the solar wind flowing around Earth's magnetic shield; a top-down view of the solar wind spreading through the solar system as the Sun rotates; and a zoomed-out look at the heliosphere — the Sun’s protective bubble — surrounded by the slower-moving interstellar medium (blue dots).
+Both the solar wind and interstellar medium consist of streaming energetic particles, but the interstellar medium originates from within our galaxy instead of within the Sun. Notice how the interstellar medium flows around the heliosphere, similar to how the solar wind moves around Earth's magnetosphere. Learn more here:
+https://svs.gsfc.nasa.gov/20299/
+NASA/Goddard Space Flight Center/Conceptual Image Lab/Jonathan North
+Coronal Mass Ejections
+Occasionally,
+magnetic storms on the Sun
+eject large amounts of solar material into the solar atmosphere. These huge, flying blobs of Sun-stuff are called
+coronal mass ejections
+, or CMEs.
+If directed at Earth, fast-moving CMEs can reach our planet in as little as 15 hours. (The Sun is approximately 93 million miles away from Earth. A CME arriving here in 15 hours means that it’s traveling around 6.2 million miles per hour, or about 0.9% the speed of light. At those speeds, you could fly from San Francisco to Washington, D.C. in ~1.5 seconds!)
+As they billow away from the Sun, fast CMEs can overtake slower-moving charged particles ahead of them in the solar wind. These particles are accelerated as they’re swept into the careening solar ejecta, increasing the risk and intensity of a radiation storm when they reach Earth.
+Under certain conditions, CMEs can supercharge the magnetosphere as they blow past, creating powerful geomagnetic storms in response.
+On May 1, 2013, the Sun emitted a huge amount of solar material from its eastern limb (left edge). Instruments on multiple Sun-monitoring spacecraft caught the coronal mass ejection (CME) in various wavelengths of light.
+This animation combines perspectives from the NASA Solar Dynamics Observatory (SDO) and the ESA/NASA Solar and Heliospheric Observatory (SOHO) to show the progression of the CME out into space. Learn more about this animation here:
+https://svs.gsfc.nasa.gov/10785/
+NASA/ESA/SOHO/Goddard Space Flight Center
+Magnetic Reconnection
+As we’ve seen, the solar wind emanating from the Sun flows around Earth’s magnetosphere like a river rushing around a rock. This onrush of charged particles stretches Earth’s magnetosphere away from the Sun, creating a long wake known as the magnetotail.
+The magnetic shields of the Sun and Earth are polarized, like refrigerators and the magnets that adhere to them. The polarity of Earth’s magnetic shield is mostly stable, but the Sun’s can vary due to its more dynamic nature.
+Sometimes, the magnetic polarity of the solar wind is opposite that of Earth’s magnetosphere. When the solar wind buffets the magnetosphere under these conditions, the field lines of the Sun and Earth snap together, similar to when an everyday magnet connects to a fridge. This is called
+magnetic reconnection
+.
+The continuously blowing solar wind then pushes these newly connected Sun-Earth field lines, wrapping them around the magnetosphere and stretching them out toward the magnetotail. Eventually, these field lines stretch to their limit and snap like a rubber band. This severs the direct Sun-Earth magnetic connection, releasing energy back along the field lines and reinstating the original magnetic configuration in the process.
+This animation is an artistic interpretation of magnetic reconnections and the resulting geomagnetic substorm that rains down energetic particles at Earth's polar regions.
+Two reconnections are shown here: the first occurs when the Sun's magnetic field disconnects from itself and reconnects to Earth's magnetic field; the second occurs in the magnetotail as the field lines get squeezed too close together. Learn more about this animation here:
+https://svs.gsfc.nasa.gov/20097/
+NASA/Goddard Space Flight Center/Conceptual Image Lab/Walt Feimer
+Geomagnetic Substorms
+While the huge auroral displays caused by geomagnetic storms are fun to see, they’re relatively rare since the Sun’s and Earth’s magnetic fields need to align just right for them to occur. Auroras that stay near the Arctic and Antarctic circles are much more frequent. They’re created by
+geomagnetic substorms
+, magnetic disturbances affecting portions of the magnetosphere. Geomagnetic storms, in contrast, are large-scale disturbances that distort the whole geomagnetic system. The everyday flow of charged particles within Earth’s magnetosphere can create small regions of magnetic imbalance that cause geomagnetic substorms.
+A time-lapse view from the International Space Station shows the Southern Lights,
+aurora australis
+, on June 25, 2017.
+This short video features commentary by David Sibeck, project scientist for NASA's Time History of Events and Macroscale Interactions During Substorms (THEMIS) mission, discussing a visualization of magnetic reconnection and geomagnetic substorms. Learn more about this video here:
+https://svs.gsfc.nasa.gov/11309
+NASA/Goddard Space Flight Center/UNH/J. Raeder
+Views from the Space Station
+Auroras Seen from Orbit
+The International Space Station orbits roughly 250 miles (400 km) above Earth's surface. At that height, astronauts regularly fly over (and sometimes through!) brilliant auroral displays. Many astronauts document their auroral experiences with photos and videos, but did you know the space station has high-definition cameras on board? Photos and time-lapses are uploaded regularly to NASA's online
+Gateway to Astronaut Photography of Earth
+.
+Explore Auroras from the Space Station
+about Auroras Seen from Orbit
+A time-lapse view from the International Space Station shows the southern lights,
+aurora australis
+, on June 25, 2017.
+NASA/Johnson Space Center/International Space Station/Earth Science and Remote Sensing Unit
+Latest News
+More Aurora Stories
+Article
+3 Min Read
+Northern Glow Spans Iceland and Canada
+Blog
+5 Min Read
+NASA Rocket to Conduct ‘CT Scan’ of Auroral Electricity
+2 Min Read
+NASA Missions Help Identify What Powers Auroral ‘Space Battery’
+Blog
+1 Min Read
+Red, Green Light Show
+Image Article
+3 Min Read
+Juno Detected the Final Missing Auroral Signature from Jupiter’s Four Largest Moons
+Article
+Keep Exploring
+Solar Storms and Flares
+Sunspots
+Space Weather
+National Aeronautics and Space Administration
+NASA explores the unknown in air and space, innovates for the benefit of humanity, and inspires the world through discovery.
+About NASA's Mission
+Join Us
+Home
+News & Events
+Multimedia
+NASA+
+Missions
+Humans in Space
+Earth
+The Solar System
+The Universe
+Science
+Aeronautics
+Technology
+Learning Resources
+About NASA
+NASA en Español
+Follow NASA
+More NASA Social Accounts
+NASA Newsletters
+Sitemap
+For Media
+Privacy Policy
+FOIA
+No FEAR Act
+Office of the IG
+Budget & Annual Reports
+Agency Financial Reports
+Contact NASA
+Accessibility
+Page Last Updated:
+Feb 04, 2025
+Page Editor:
+Vanessa Thomas
+Responsible NASA Official for Science:
+Dana Bolles
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/nasa-child/*","/wp-content/themes/nasa/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+Δ
+document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );
+Did you find what you were looking for?
+(Required)
+Yes
+No
+Partly
+What were you looking for?
+(Required)
+What were you hoping to accomplish by visiting our website?
+(Required)
+Submit
+gform.initializeOnLoaded( function() {jQuery('#gform_ajax_frame_45').on('load',function(){var contents = jQuery(this).contents().find('*').html();var is_postback = contents.indexOf('GF_AJAX_POSTBACK') >= 0;if(!is_postback){return;}var form_content = jQuery(this).contents().find('#gform_wrapper_45');var is_confirmation = jQuery(this).contents().find('#gform_confirmation_wrapper_45').length > 0;var is_redirect = contents.indexOf('gformRedirect(){') >= 0;var is_form = form_content.length > 0 && ! is_redirect && ! is_confirmation;var mt = parseInt(jQuery('html').css('margin-top'), 10) + parseInt(jQuery('body').css('margin-top'), 10) + 100;if(is_form){jQuery('#gform_wrapper_45').html(form_content.html());if(form_content.hasClass('gform_validation_error')){jQuery('#gform_wrapper_45').addClass('gform_validation_error');} else {jQuery('#gform_wrapper_45').removeClass('gform_validation_error');}setTimeout( function() { /* delay the scroll by 50 milliseconds to fix a bug in chrome */ }, 50 );var current_page = jQuery('#gform_source_page_number_45').val();jQuery(document).trigger('gform_page_loaded', [45, current_page]);window['gf_submitting_45'] = false;}else if(!is_redirect){var confirmation_content = jQuery(this).contents().find('.GF_AJAX_POSTBACK').html();if(!confirmation_content){confirmation_content = contents;}jQuery('#gform_wrapper_45').replaceWith(confirmation_content);jQuery(document).trigger('gform_confirmation_loaded', [45]);window['gf_submitting_45'] = false;wp.a11y.speak(jQuery('#gform_confirmation_message_45').text());}else{jQuery('#gform_45').append(contents);if(window['gformRedirect']) {gformRedirect();}}jQuery(document).trigger("gform_pre_post_render", [{ formId: "45", currentPage: "current_page", abort: function() { this.preventDefault(); } }]); if (event && event.defaultPrevented) { return; } const gformWrapperDiv = document.getElementById( "gform_wrapper_45" ); if ( gformWrapperDiv ) { const visibilitySpan = document.createElement( "span" ); visibilitySpan.id = "gform_visibility_test_45"; gformWrapperDiv.insertAdjacentElement( "afterend", visibilitySpan ); } const visibilityTestDiv = document.getElementById( "gform_visibility_test_45" ); let postRenderFired = false; function triggerPostRender() { if ( postRenderFired ) { return; } postRenderFired = true; gform.core.triggerPostRenderEvents( 45, current_page ); if ( visibilityTestDiv ) { visibilityTestDiv.parentNode.removeChild( visibilityTestDiv ); } } function debounce( func, wait, immediate ) { var timeout; return function() { var context = this, args = arguments; var later = function() { timeout = null; if ( !immediate ) func.apply( context, args ); }; var callNow = immediate && !timeout; clearTimeout( timeout ); timeout = setTimeout( later, wait ); if ( callNow ) func.apply( context, args ); }; } const debouncedTriggerPostRender = debounce( function() { triggerPostRender(); }, 200 ); if ( visibilityTestDiv && visibilityTestDiv.offsetParent === null ) { const observer = new MutationObserver( ( mutations ) => { mutations.forEach( ( mutation ) => { if ( mutation.type === 'attributes' && visibilityTestDiv.offsetParent !== null ) { debouncedTriggerPostRender(); observer.disconnect(); } }); }); observer.observe( document.body, { attributes: true, childList: false, subtree: true, attributeFilter: [ 'style', 'class' ], }); } else { triggerPostRender(); } } );} );
+×
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } ); //# sourceURL=wp-i18n-js-after
+window.wpParselySiteId = 'science.nasa.gov'; //# sourceURL=wp-parsely-loader-js-before
+window.PARSELY = window.PARSELY || (window.PARSELY = {}); PARSELY.cookieDomain = window.location.host; //# sourceURL=wp-parsely-tracker-js-before
+var edac_frontend_fixes = []; //# sourceURL=edac-frontend-fixes-js-extra
+var gform_theme_config = {"common":{"form":{"honeypot":{"version_hash":"4f06dba39cdbd9885e8db30261d6eb7e"},"ajax":{"ajaxurl":"https://science.nasa.gov/wp-admin/admin-ajax.php","ajax_submission_nonce":"7573803d1b","i18n":{"step_announcement":"Step %1$s of %2$s, %3$s","unknown_error":"There was an unknown error processing your request. Please try again.","error_403":"The request was blocked (403 error) for unknown security reasons. Remove any code-like text (scripts or DB queries) and try again."}}}},"hmr_dev":"","public_path":"https://science.nasa.gov/wp-content/plugins/gravityforms/assets/js/dist/","config_nonce":"d1af287b1b"}; //# sourceURL=gform_gravityforms_theme-js-extra
+var pum_vars = {"version":"1.25.0","pm_dir_url":"https://science.nasa.gov/wp-content/plugins/popup-maker/","ajaxurl":"https://science.nasa.gov/wp-admin/admin-ajax.php","restapi":"https://science.nasa.gov/wp-json/pum/v1","rest_nonce":null,"default_theme":"878188","debug_mode":"","disable_tracking":"1","disable_url_params":"","home_url":"/","message_position":"top","core_sub_forms_enabled":"1","popups":[],"cookie_domain":"","paramNames":{"popup_id":"pid","cta":"cta","notrack":"notrack"}}; var pum_sub_vars = {"ajaxurl":"https://science.nasa.gov/wp-admin/admin-ajax.php","message_position":"top"}; var pum_popups = {"pum-879398":{"triggers":[{"type":"auto_open","settings":{"cookie_name":["sciencenasagov-feedback-popup"],"delay":"5000"}}],"cookies":[{"event":"on_popup_open","settings":{"name":"sciencenasagov-feedback-popup","time":"1 week","path":true}},{"event":"form_submission","settings":{"name":"sciencenasagov-feedback-popup","key":"","session":null,"path":true,"time":"1 month","form":"gravityforms_45","only_in_popup":true}}],"disable_on_mobile":false,"disable_on_tablet":false,"explain":null,"type_section":null,"theme_id":"878188","size":"auto","responsive_min_width":"0%","responsive_max_width":"100%","custom_width":"640px","custom_height_auto":false,"custom_height":"380px","scrollable_content":false,"animation_type":"fade","animation_speed":"350","animation_origin":"center top","open_sound":"none","custom_sound":"","location":"right bottom","position_top":"100","position_bottom":"10","position_left":"0","position_right":"10","position_from_trigger":false,"position_fixed":false,"overlay_disabled":true,"stackable":true,"disable_reposition":false,"zindex":"1999999999","close_button_delay":"10","close_on_form_submission":true,"close_on_form_submission_delay":"250","close_on_overlay_click":false,"close_on_esc_press":false,"close_on_f4_press":false,"disable_form_reopen":true,"disable_accessibility":false,"theme_slug":"content-only","id":879398,"slug":"feedback-popup"}}; //# sourceURL=popup-maker-site-js-extra
+gform.initializeOnLoaded( function() { jQuery(document).on('gform_post_render', function(event, formId, currentPage){if(formId == 45) {} } );jQuery(document).on('gform_post_conditional_logic', function(event, formId, fields, isInit){} ) } );
+gform.initializeOnLoaded( function() {jQuery(document).trigger("gform_pre_post_render", [{ formId: "45", currentPage: "1", abort: function() { this.preventDefault(); } }]); if (event && event.defaultPrevented) { return; } const gformWrapperDiv = document.getElementById( "gform_wrapper_45" ); if ( gformWrapperDiv ) { const visibilitySpan = document.createElement( "span" ); visibilitySpan.id = "gform_visibility_test_45"; gformWrapperDiv.insertAdjacentElement( "afterend", visibilitySpan ); } const visibilityTestDiv = document.getElementById( "gform_visibility_test_45" ); let postRenderFired = false; function triggerPostRender() { if ( postRenderFired ) { return; } postRenderFired = true; gform.core.triggerPostRenderEvents( 45, 1 ); if ( visibilityTestDiv ) { visibilityTestDiv.parentNode.removeChild( visibilityTestDiv ); } } function debounce( func, wait, immediate ) { var timeout; return function() { var context = this, args = arguments; var later = function() { timeout = null; if ( !immediate ) func.apply( context, args ); }; var callNow = immediate && !timeout; clearTimeout( timeout ); timeout = setTimeout( later, wait ); if ( callNow ) func.apply( context, args ); }; } const debouncedTriggerPostRender = debounce( function() { triggerPostRender(); }, 200 ); if ( visibilityTestDiv && visibilityTestDiv.offsetParent === null ) { const observer = new MutationObserver( ( mutations ) => { mutations.forEach( ( mutation ) => { if ( mutation.type === 'attributes' && visibilityTestDiv.offsetParent !== null ) { debouncedTriggerPostRender(); observer.disconnect(); } }); }); observer.observe( document.body, { attributes: true, childList: false, subtree: true, attributeFilter: [ 'style', 'class' ], }); } else { triggerPostRender(); } } );
