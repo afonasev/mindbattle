@@ -11,6 +11,7 @@ const App = lazy(() => import("./ui/App").then(module => ({ default: module.App 
 const NetworkApp = lazy(() => import("./ui/NetworkApp").then(module => ({ default: module.NetworkApp })));
 import "./ui/theme.css";
 import { AppFooter } from "./ui/AppFooter";
+import { preserveLaunchMute } from "./adapters/audio";
 
 const appIcon = document.getElementById("app-icon");
 if (appIcon instanceof HTMLLinkElement) {
@@ -72,7 +73,7 @@ export function updateGame(isSafe: () => boolean, onApplying: () => void) {
 }
 export function navigate(path: string) {
   if (location.pathname === path) return;
-  history.pushState(null, "", path);
+  history.pushState(null, "", preserveLaunchMute(path));
   window.dispatchEvent(new PopStateEvent("popstate"));
 }
 

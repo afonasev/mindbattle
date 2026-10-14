@@ -32,7 +32,7 @@ try {
     await new Promise((resolveWait) => setTimeout(resolveWait, 10));
   }
   const serverReadyMs = Math.round((performance.now() - startedAt) * 10) / 10;
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: true, args: ["--mute-audio"] });
   try {
     const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
     const navigationStartedAt = performance.now();

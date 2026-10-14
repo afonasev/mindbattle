@@ -84,14 +84,16 @@ export class AudioController {
   constructor(
     private readonly sourceFactory: AudioSourceFactory,
     initial: AudioSettings = { musicVolume: 0.7, effectsVolume: 0.7, muted: false },
-    private readonly musicTransitionMs = 0
+    private readonly musicTransitionMs = 0,
+    private readonly launchMuted = isLaunchMuted()
   ) {
-    this.settings = initial;
+    this.settings = { ...initial, muted: launchMuted || initial.muted };
   }
 
   update(settings: AudioSettings) {
     this.settings = {
-      muted: settings.muted,
+      // A launch mute is a session constraint; preference updates cannot clear it.
+      muted: this.launchMuted || settings.muted,
       musicVolume: Math.min(1, Math.max(0, settings.musicVolume)),
       effectsVolume: Math.min(1, Math.max(0, settings.effectsVolume))
     };
@@ -219,6 +221,16 @@ export class AudioController {
 }
 
 let activeSharedAudioController: AudioController | null = null;
+
+/** Read before any cue is played; this is session state and is never persisted. */
+export function isLaunchMuted(search: string = globalThis.location?.search ?? ""): boolean {
+  return new URLSearchParams(search).get("muted") === "1";
+}
+
+export function preserveLaunchMute(path: string, search: string = globalThis.location?.search ?? ""): string {
+  if (!isLaunchMuted(search)) return path;
+  return `${path}${path.includes("?") ? "&" : "?"}muted=1`;
+}
 
 /**
  * Keeps presentation audio alive while the SPA switches between game modes.

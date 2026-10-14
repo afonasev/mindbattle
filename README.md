@@ -63,6 +63,10 @@ Game rules live separately from the renderer and use serializable state and seed
 
 The maintainer deploys with `make deploy` to `mindbattle.afonasev.tech` using a configured VPS and SSH profile. This command builds the app, updates the server, restarts the service, and checks local health; it is not needed for local play. See [scripts/deploy.sh](scripts/deploy.sh) for the exact deployment procedure.
 
+### Тихий запуск
+
+Для браузерной игры откройте [https://mindbattle.afonasev.tech/?muted=1](https://mindbattle.afonasev.tech/?muted=1). Для Electron из исходников запустите `npm run desktop:start -- --muted`. Флаг действует всю сессию, включая переходы между режимами и перезапуск после обновления; он не меняет сохранённые настройки звука.
+
 For website publication, GitHub Releases, and desktop update channels, follow [docs/desktop/RELEASE.md](docs/desktop/RELEASE.md). Installers are served from GitHub; the VPS keeps download metadata and signed update channels.
 
 ## License

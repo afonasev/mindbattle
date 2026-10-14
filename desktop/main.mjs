@@ -5,9 +5,12 @@ import { fileURLToPath } from "node:url";
 import { ShellStore, acknowledgeShell } from "./shell.mjs";
 import { ContentStore, atomicJson } from "./content.mjs";
 import { createHandler, APP_ORIGIN } from "./protocol.mjs";
+import { gameLaunchUrl, isMutedLaunch } from "./launch.mjs";
 import { createUpdateCheck, pendingUpdateInfo, startAutomaticUpdateChecks } from "./updateCheck.mjs";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const config = JSON.parse(await readFile(path.join(here, "config.json"), "utf8"));
+const launchMuted = isMutedLaunch();
+const gameUrl = gameLaunchUrl(APP_ORIGIN, launchMuted);
 if (process.platform === "win32") app.setAppUserModelId("tech.afonasev.mindbattle");
 protocol.registerSchemesAsPrivileged([
     {
@@ -149,7 +152,7 @@ else {
                 if (!app.isPackaged)
                     throw new Error("Обновление оболочки доступно только в установленной игре.");
                 const target = process.platform === "darwin" ? path.resolve(path.dirname(process.execPath), "../..") : path.dirname(process.execPath);
-                const tx = await shellStore.prepare({ target, userData: userRoot, helper: path.join(here, "helper-bin", process.platform === "win32" ? "updater.exe" : "updater"), isSafe: () => safe });
+                const tx = await shellStore.prepare({ target, userData: userRoot, helper: path.join(here, "helper-bin", process.platform === "win32" ? "updater.exe" : "updater"), isSafe: () => safe, launchMuted });
                 if (!tx || !await shellStore.start(tx, () => safe))
                     return false;
                 safe = false;
@@ -159,7 +162,7 @@ else {
             if (await store.activate(() => safe)) {
                 servedDirectory = store.currentDirectory();
                 safe = false;
-                await window.loadURL(`${APP_ORIGIN}/`);
+                await window.loadURL(gameUrl);
                 return true;
             }
             return false;
@@ -204,7 +207,7 @@ else {
             if (!window.isDestroyed()) window.webContents.send("desktop:update-status", status);
         });
         handle("desktop:check-update", check);
-        await window.loadURL(`${APP_ORIGIN}/`);
+        await window.loadURL(gameUrl);
         stopUpdateChecks = startAutomaticUpdateChecks(check, error => console.warn("Update unavailable:", error.message));
     })
         .catch((error) => {

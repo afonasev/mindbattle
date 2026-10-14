@@ -11,6 +11,8 @@ import {
   shouldPlayNetworkAudio,
   revealOutcomeCue,
   TopicCountdownAudioMonitor,
+  isLaunchMuted,
+  preserveLaunchMute,
   type AudioSource,
   type AudioSourceFactory
 } from "../../src/adapters/audio";
@@ -46,6 +48,23 @@ function factory(sources: FakeSource[], options: { reject?: boolean; throwOnCrea
 }
 
 describe("audio controller", () => {
+  it("recognizes the documented launch query before audio controllers are created", () => {
+    expect(isLaunchMuted("?muted=1")).toBe(true);
+    expect(isLaunchMuted("")).toBe(false);
+    expect(isLaunchMuted("?muted=0")).toBe(false);
+  });
+  it("keeps launch mute on internal route navigation", () => {
+    expect(preserveLaunchMute("/network", "?muted=1")).toBe("/network?muted=1");
+    expect(preserveLaunchMute("/", "")).toBe("/");
+  });
+  it("keeps startup mute active across preference updates and does not create audio sources", () => {
+    const sources: FakeSource[] = [];
+    const audio = new AudioController(factory(sources), { musicVolume: .7, effectsVolume: .7, muted: false }, 0, true);
+    expect(audio.play("menu-theme")).toBe(false);
+    audio.update({ musicVolume: 1, effectsVolume: 1, muted: false });
+    expect(audio.play("winner")).toBe(false);
+    expect(sources).toHaveLength(0);
+  });
   it("keeps brief effects above the music at equal saved slider levels", () => {
     const sources: FakeSource[] = [];
     const audio = new AudioController(factory(sources), { musicVolume: .7, effectsVolume: .7, muted: false });

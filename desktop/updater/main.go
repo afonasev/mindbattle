@@ -49,19 +49,29 @@ type Envelope struct {
 	Signature string `json:"signature"`
 }
 type Plan struct {
-	Target    string `json:"target"`
-	Candidate string `json:"candidate"`
-	Backup    string `json:"backup"`
-	Root      string `json:"root"`
-	Manifest  string `json:"manifest"`
-	Journal   string `json:"journal"`
-	ACK       string `json:"ack"`
-	Started   string `json:"started"`
-	Token     string `json:"token"`
-	Parent    int    `json:"parent"`
-	UserData  string `json:"userData"`
-	Timeout   int    `json:"timeout"`
+	Target      string `json:"target"`
+	Candidate   string `json:"candidate"`
+	Backup      string `json:"backup"`
+	Root        string `json:"root"`
+	Manifest    string `json:"manifest"`
+	Journal     string `json:"journal"`
+	ACK         string `json:"ack"`
+	Started     string `json:"started"`
+	Token       string `json:"token"`
+	Parent      int    `json:"parent"`
+	UserData    string `json:"userData"`
+	LaunchMuted bool   `json:"launchMuted"`
+	Timeout     int    `json:"timeout"`
 }
+
+func appLaunchArgs(p Plan) []string {
+	args := []string{"--user-data-dir=" + p.UserData}
+	if p.LaunchMuted {
+		args = append(args, "--muted")
+	}
+	return args
+}
+
 type Journal struct {
 	Phase   string `json:"phase"`
 	Version string `json:"version"`
@@ -319,7 +329,7 @@ func run(p Plan, m Manifest) error {
 			return e
 		}
 		_ = save("rolled-back", cause)
-		cmd := exec.Command(filepath.Join(p.Target, filepath.FromSlash(m.Entry)), "--user-data-dir="+p.UserData)
+		cmd := exec.Command(filepath.Join(p.Target, filepath.FromSlash(m.Entry)), appLaunchArgs(p)...)
 		cmd.Dir = p.UserData
 		cmd.Env = os.Environ()
 		_ = cmd.Start()
@@ -334,7 +344,7 @@ func run(p Plan, m Manifest) error {
 	if e := save("new-moved", nil); e != nil {
 		return rollback(e, nil)
 	}
-	cmd := exec.Command(filepath.Join(p.Target, filepath.FromSlash(m.Entry)), "--user-data-dir="+p.UserData)
+	cmd := exec.Command(filepath.Join(p.Target, filepath.FromSlash(m.Entry)), appLaunchArgs(p)...)
 	cmd.Dir = p.UserData
 	cmd.Env = append(os.Environ(), "MINDBATTLE_SHELL_ACK="+p.ACK, "MINDBATTLE_SHELL_TOKEN="+p.Token)
 	if e := cmd.Start(); e != nil {

@@ -174,7 +174,7 @@ export class ShellStore {
             this.busy = false;
         }
     }
-    async prepare({ target, userData, helper, isSafe, parent = process.pid }) {
+    async prepare({ target, userData, helper, isSafe, parent = process.pid, launchMuted = false }) {
         if (this.busy || !this.state.pending)
             return null;
         this.busy = true;
@@ -230,7 +230,7 @@ export class ShellStore {
             const helperCopy = path.join(tx, this.platform === 'win32-x64' ? 'updater.exe' : 'updater');
             await writeFile(helperCopy, await packagedReadFile(helper), {mode:0o755});
             await chmod(helperCopy, 0o755);
-            const plan = { target, candidate, backup, root: tx, manifest, journal: path.join(tx, 'journal.json'), ack: path.join(tx, 'ready'), started: path.join(tx, 'started'), token, parent, userData, timeout: 60 };
+            const plan = { target, candidate, backup, root: tx, manifest, journal: path.join(tx, 'journal.json'), ack: path.join(tx, 'ready'), started: path.join(tx, 'started'), token, parent, userData, launchMuted: launchMuted === true, timeout: 60 };
             const planFile = path.join(tx, 'plan.json');
             const bytes = Buffer.from(JSON.stringify(plan));
             await writeFile(planFile, bytes, { mode: 0o600 });
