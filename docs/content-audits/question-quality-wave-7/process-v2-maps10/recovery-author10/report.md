@@ -1,0 +1,9 @@
+# Maps Cartography: recovery authoring pass 10
+
+- Baseline: `43ad85e52fe3d8a33a11064a66c3ab40d9b7f512`; 10 exact IDs checked against `preimage.json`; frozen ID, topic, difficulty, answer order and `correctIndex` preserved.
+- New primary context: two complete USGS PDFs in `source-library-v2/maps-hold10/`; sizes and SHA-256 match capture manifest. Entire PDFs were extracted/read; symbol page 1 and scale page 1 were visually rendered and inspected. No new network attempt was made.
+- READY (author result only): `maps-cartography-blue-water`, `maps-cartography-green-vegetation`. Exact USGS map-symbol scope added; correct notes add distinct facts; all four notes and explanations checked against printed page 1; six literal field groups and hashes recorded.
+- HOLD: `maps-cartography-legend-key, maps-cartography-scale-distance, maps-cartography-north-arrow, maps-cartography-title-map, maps-cartography-physical-relief, maps-cartography-political-borders, maps-cartography-road-routes, maps-cartography-weather-conditions`. The captured USGS contexts do not establish the needed concept/definition or every option note for these cards. Full-card review and concrete next action are recorded per ID.
+- Neighbor review: all 10 cards read in full. Relevant map-series neighbors (including blue, green, black-building, and brown-contour color cards) were read from `baseline500.json`; duplicate stems/notes were assessed, not treated as source evidence.
+- No catalog, index, claims, source-library files, or commits changed. No tests, build, runtime, or full-catalog checks run. This is an author package, not independent review or CURRENT credit.
+- Next: coordinator applies the two READY candidates for independent exact-current review; HOLD items need specifically relevant complete primary context before another author pass.
