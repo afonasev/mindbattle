@@ -1,0 +1,2023 @@
+{
+  "reviewerThreadId": "01a13bb3-f49e-7001-a980-fa3fba1f72b3",
+  "reviewedAt": "2026-10-14T19:32:23.898870+00:00",
+  "baselineCommit": "069743068e800cca9a703c6c8621c3c1fcedb3e4",
+  "cycle": 1,
+  "scope": [
+    "weather-climate-cin-cap",
+    "weather-climate-cold-front-symbol",
+    "weather-climate-desert-dry",
+    "weather-climate-lifted-index",
+    "weather-climate-occluded-front",
+    "weather-climate-polar-cold",
+    "weather-climate-polar-easterlies",
+    "weather-climate-satellite-clouds",
+    "weather-climate-stationary-front",
+    "weather-climate-stratus-layer",
+    "weather-climate-westerlies-midlat"
+  ],
+  "counts": {
+    "PASS": 3,
+    "HOLD": 8
+  },
+  "entries": [
+    {
+      "id": "weather-climate-cin-cap",
+      "currentHash": "1deb88cb25bc47951c07711f402a973d635c6b448faae8b3ddafbefee31c80d4",
+      "verdict": "HOLD",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На диаграмме зондирования отрицательная площадь для поднятой частицы лежит от исходного уровня до LFC. Какую энергию нужно преодолеть, чтобы достичь LFC?",
+            "answers": [
+              "CIN",
+              "CAPE",
+              "Индекс поднятия",
+              "Спиральность шторма"
+            ],
+            "correctIndex": 0
+          },
+          "sourceReasons": [
+            "spc-parcel-values CINH: integrated negative area in J/kg from original parcel level to LFC; energy needed to reach LFC.",
+            "spc-parcel-values CAPE: integrated positive area in J/kg from LFC to EL; buoyancy/updraft energy, not a single-level temperature difference.",
+            "spc-parcel-values LI: lifted parcel and sounding temperatures at 500 mb are compared; negative values mean parcel WARMER than environment. Therefore a literal Tparcel−Tenvironment formula cannot have the claimed negative sign for the warmer parcel.",
+            "spc-shear SRH: storm-relative helicity represents streamwise vorticity WITHIN storm inflow layer, swept area between hodograph and STORM MOTION; reference is storm motion, not inflow-relative motion."
+          ],
+          "editorialReason": "Четыре подстановки прочитаны лично: На диаграмме зондирования отрицательная площадь для поднятой частицы лежит от исходного уровня до LFC. Какую энергию нужно преодолеть, чтобы достичь LFC? / CIN / CAPE / Индекс поднятия / Спиральность шторма. Последовательные самостоятельные именные ответы; grammar/key/distractor category проверены. hard: специфическая диагностика зондирования, физически различимые энергия, температура и завихренность. note0 добавляет измерение энергии в Дж/кг, поэтому прежний дефект повторения закрыт; новая note3 не соответствует primary определению.",
+          "literalSHA256": "6e57be2f735b6f5692f0b764c1b7d769dfe392f4936feeeea589cab4b4d51c52"
+        },
+        {
+          "group": "explanation",
+          "literal": "CIN — интегральная отрицательная площадь для поднятой частицы от исходного уровня до уровня свободной конвекции (LFC). Она показывает энергетический барьер подъёму; CAPE, напротив, описывает положительную плавучесть выше LFC.",
+          "sourceReasons": [
+            "spc-parcel-values CINH: integrated negative area in J/kg from original parcel level to LFC; energy needed to reach LFC."
+          ],
+          "editorialReason": "Два предложения, ключ назван, отличительный механизм объяснён; note0 добавляет измерение энергии в Дж/кг, поэтому прежний дефект повторения закрыт; новая note3 не соответствует primary определению.",
+          "literalSHA256": "69132bd8029f765444c769d65ca36356a863daad02c0a673aea7fe0e6be505b9"
+        },
+        {
+          "group": "note0",
+          "literal": "CINH — интегральная отрицательная энергия, выраженная в джоулях на килограмм воздуха.",
+          "sourceReasons": [
+            "spc-parcel-values CINH gives negative-area integral IN J/kg; unit is a new fact beyond prompt."
+          ],
+          "editorialReason": "Правильная справка: note0 добавляет измерение энергии в Дж/кг, поэтому прежний дефект повторения закрыт; новая note3 не соответствует primary определению.",
+          "literalSHA256": "7caf2fe2414b9b146cf8bdefa06f705ecfd9eb73a8f72192d26996f072b856e5"
+        },
+        {
+          "group": "note1",
+          "literal": "CAPE — интегральная положительная плавучесть частицы между уровнем свободной конвекции и уровнем равновесия.",
+          "sourceReasons": [
+            "spc-parcel-values CAPE: integrated positive area in J/kg from LFC to EL; buoyancy/updraft energy, not a single-level temperature difference."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "a56935890aacfdf4a5adf5c75be4fc7259ac5d7f5f056593058e8ccaa79f683a"
+        },
+        {
+          "group": "note2",
+          "literal": "Индекс поднятия сравнивает температуры поднятой частицы и среды на высоте 500 мб.",
+          "sourceReasons": [
+            "spc-parcel-values LI: lifted parcel and sounding temperatures at 500 mb are compared; negative values mean parcel WARMER than environment. Therefore a literal Tparcel−Tenvironment formula cannot have the claimed negative sign for the warmer parcel."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "58381264fc0c852e4472d04161ed5f49b3045fc5870f6561b54b3900c87e52c6"
+        },
+        {
+          "group": "note3",
+          "literal": "Спиральность шторма относительно притока характеризует потоковую завихренность в слое притока.",
+          "sourceReasons": [
+            "spc-shear SRH: storm-relative helicity represents streamwise vorticity WITHIN storm inflow layer, swept area between hodograph and STORM MOTION; reference is storm motion, not inflow-relative motion."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; SRH назван «Спиральность шторма относительно притока». SPC задаёт относительность к движению шторма, а приток — слой вычисления. Фраза смешивает систему отсчёта с местом вычисления.",
+          "literalSHA256": "3ac9d00539283485966422ef6879515de621187b42531a219e018ccabe7f0476"
+        }
+      ],
+      "sourceLocators": [
+        {
+          "locator": "spc-parcel-values",
+          "sourceUrl": "https://www.spc.noaa.gov/exper/soundings/help/parcelvals.html",
+          "typedLocator": "CAPE, CINH, LI, LFC, EL and MPL entries",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a136e6/capture-only/weather20-29-primary/spc-parcel-values.body",
+            "bytes": 2386,
+            "sha256": "fc6ee69c1ea46c620c867bb2c35294597803563d64b9a57f6ed7b572c0226917",
+            "gitBlob": "85d8702e99bbb601a37ec92748cfbd4ac7dd1746"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a136e6/capture-only/weather20-29-primary/spc-parcel-values.headers",
+            "bytes": 1006,
+            "sha256": "2b14293791da71a26ffbbd7cfe3e59c91658ae60fd1b29b032aafe6673ae4b71",
+            "gitBlob": "9dc7a5366266579aa11e9dae08add3887deaad95"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT",
+          "verifiedBytesAndSHA256": true
+        },
+        {
+          "locator": "spc-shear",
+          "sourceUrl": "https://www.spc.noaa.gov/exper/soundings/help/shear.html",
+          "typedLocator": "Storm Relative Helicity definition and 0-1 km/0-3 km discussion",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13772/terminal-second-compaction/capture-helper3a/owned-tmp/spc-children/shear/response.body",
+            "bytes": 2862,
+            "sha256": "a1a7726472d625fa9ef0fc563a2f223492a6297c3f7fee7daa6bebe9be351b7b",
+            "gitBlob": "d15130ae556ca3728bdb4357f39049a80dbc70e6"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13772/terminal-second-compaction/capture-helper3a/owned-tmp/spc-children/shear/response.headers",
+            "bytes": 1026,
+            "sha256": "bee59a8afe5800a563a6cb55429f295fb9781b26ab43883ba1b1f32301248add",
+            "gitBlob": "b2f0ec82dae7f8c4b128cc6c53169ba7737dc432"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT",
+          "verifiedBytesAndSHA256": true
+        }
+      ],
+      "neighborReview": {
+        "currentNeighbors": [
+          {
+            "id": "weather-climate-lifted-index",
+            "currentHash": "f09d44641281c3d081e3bf11fd9ba4fe1ac2ca10476014b272d570c56add4e1c",
+            "prompt": "Какой индекс конвективной неустойчивости рассчитывают по температурному контрасту поднятой частицы и окружающей среды?",
+            "correctAnswer": "Индекс поднятия",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-cape-buoyancy",
+            "currentHash": "74c83aac612f27bf28474abe0aeb78837459614af88a46d8fb6209205edadaf2",
+            "prompt": "На диаграмме зондирования поднятая частица теплее окружающего воздуха между уровнями свободной конвекции и равновесия. Какой индекс суммирует энергию положительной плавучести в этом слое?",
+            "correctAnswer": "CAPE",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-inversion-positive",
+            "currentHash": "3b82c8b5e9a3395b10c463e02d43531a1d82635c1cda30e31b5136a7bf11b0e2",
+            "prompt": "На высоте 1,2 км зондирование показывает 11 °C, а на 1,8 км — 17 °C; выше температура снова убывает с высотой. Поднимающаяся через этот слой порция становится холоднее окружения и останавливается. Какой профиль образует такой барьер конвекции?",
+            "correctAnswer": "Инверсия температуры",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          }
+        ],
+        "editorialReason": "CURRENT CAPE — положительный интеграл между LFC/EL, CIN — отрицательная энергия до LFC, LI — температурная разность на 500 мб. CURRENT inversion-positive задаёт численный профиль/барьер, не индекс. SRH — другой физический диагностический параметр."
+      },
+      "defects": [
+        {
+          "fields": [
+            "note3"
+          ],
+          "detail": "SRH назван «Спиральность шторма относительно притока». SPC задаёт относительность к движению шторма, а приток — слой вычисления. Фраза смешивает систему отсчёта с местом вычисления."
+        }
+      ],
+      "nextAction": "Координатор: оставить CURRENT вне зачёта как HOLD; дефекты сохранены для отдельного решения. Единственный fix-cycle исчерпан, второй в этом пакете не запускать.",
+      "frozenContract": {
+        "id": true,
+        "topic": true,
+        "position": true,
+        "difficulty": true,
+        "correctIndex": true
+      },
+      "difficultyReview": {
+        "frozen": "hard",
+        "absoluteAssessment": "hard: специфическая диагностика зондирования, физически различимые энергия, температура и завихренность."
+      },
+      "scopeReview": {
+        "topicId": "weather-climate",
+        "withinScope": true,
+        "reason": "Спрашивается метеонаблюдение, атмосферная циркуляция, фронт, облако или климат; экологическая политика/общая отвлечённая физика не являются предметом вопроса."
+      },
+      "sourceLinkReview": {
+        "url": "https://www.spc.noaa.gov/exper/soundings/help/parcelvals.html",
+        "verifiedAt": "2026-10-14",
+        "mainFactConfirmedByDisplayedSource": true,
+        "reason": "Точная primary страница подтверждает главный факт."
+      }
+    },
+    {
+      "id": "weather-climate-cold-front-symbol",
+      "currentHash": "c69955f3de00c87b215036d1b90a59240cd6d551c5e8c0c6548a224844f77c99",
+      "verdict": "PASS",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На поверхности холодный воздух наступает на более тёплый и вытесняет его; какая граница проходит?",
+            "answers": [
+              "Тёплый фронт",
+              "Стационарный фронт",
+              "Холодный фронт",
+              "Фронт окклюзии"
+            ],
+            "correctIndex": 2
+          },
+          "sourceReasons": [
+            "nws-basic-fronts Warm Front: cold air must retreat before warm air advances; warm air ascends slantwise over cooler air and can give precipitation ahead with moisture.",
+            "nws-basic-fronts Stationary Front: denser cool air does not retreat; balance means neither mass advances, so boundary barely moves.",
+            "nws-basic-fronts Cold Front: denser cold air advances and displaces warm air; sufficient moisture gives rain and instability can give thunderstorms.",
+            "nws-occluded Occluded Front: composite when cold front overtakes warm or quasi-stationary front; coldest-air placement distinguishes warm/cold occlusion."
+          ],
+          "editorialReason": "Четыре подстановки прочитаны лично: На поверхности холодный воздух наступает на более тёплый и вытесняет его; какая граница проходит? / Тёплый фронт / Стационарный фронт / Холодный фронт / Фронт окклюзии. Последовательные самостоятельные именные ответы; grammar/key/distractor category проверены. easy для холодного/стационарного поверхностного сценария; medium для составной окклюзии. note2 добавляет большую плотность холодной массы, которой не было в prompt; механизм и условные дождь/гроза подтверждены NWS.",
+          "literalSHA256": "e524685a98a0c56707bc6c69ed2e0bbd58020a45ea84250509314fcd96bdb9c4"
+        },
+        {
+          "group": "explanation",
+          "literal": "Холодный фронт — граница, где более плотный холодный воздух продвигается и вытесняет тёплый. Если у границы достаточно влаги, подъём воздуха может вызвать дождь; при неустойчивости возможны грозы.",
+          "sourceReasons": [
+            "nws-basic-fronts Cold Front: denser cold air advances and displaces warm air; sufficient moisture gives rain and instability can give thunderstorms."
+          ],
+          "editorialReason": "Два предложения, ключ назван, отличительный механизм объяснён; note2 добавляет большую плотность холодной массы, которой не было в prompt; механизм и условные дождь/гроза подтверждены NWS.",
+          "literalSHA256": "f0a594de7cb24324d92619c5dc73a569745d786c7d006fe04490066d645049b7"
+        },
+        {
+          "group": "note0",
+          "literal": "Тёплый фронт связан с продвижением тёплого воздуха над отступающим холодным.",
+          "sourceReasons": [
+            "nws-basic-fronts Warm Front: cold air must retreat before warm air advances; warm air ascends slantwise over cooler air and can give precipitation ahead with moisture."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "3ce6eeb6fd640463f71aba7b77706cf3d04b3d33736376ec35abb2f99bb5d63b"
+        },
+        {
+          "group": "note1",
+          "literal": "Стационарный фронт почти не перемещается, пока ни одна масса не вытесняет другую.",
+          "sourceReasons": [
+            "nws-basic-fronts Stationary Front: denser cool air does not retreat; balance means neither mass advances, so boundary barely moves."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "15fcd24b03f9226e53fd23dae71c9b621a25252559f81fcace71de18200cf694"
+        },
+        {
+          "group": "note2",
+          "literal": "В холодном фронте плотный холодный воздух продвигается и вытесняет более тёплую массу.",
+          "sourceReasons": [
+            "nws-basic-fronts Cold Front: denser cold air advances and displaces warm air; sufficient moisture gives rain and instability can give thunderstorms."
+          ],
+          "editorialReason": "Правильная справка: note2 добавляет большую плотность холодной массы, которой не было в prompt; механизм и условные дождь/гроза подтверждены NWS.",
+          "literalSHA256": "a26e006303bb0c132db5ed975e1970db23d2756bd213c336312dd824280780f7"
+        },
+        {
+          "group": "note3",
+          "literal": "Фронт окклюзии возникает, когда холодный фронт обгоняет тёплый или стационарный.",
+          "sourceReasons": [
+            "nws-occluded Occluded Front: composite when cold front overtakes warm or quasi-stationary front; coldest-air placement distinguishes warm/cold occlusion."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "63949a564cd376f7b4a8e8550a406dadb21bb846056d18e751c99f287f756ab9"
+        }
+      ],
+      "sourceLocators": [
+        {
+          "locator": "nws-basic-fronts",
+          "sourceUrl": "https://www.weather.gov/lmk/basic-fronts",
+          "typedLocator": "Warm Front, Cold Front and Stationary Front sections",
+          "gitCommit": "refs/codex-preservation/01a138d8-weather66-terminal",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-35-36-41-fronts/response.body",
+            "bytes": 75793,
+            "sha256": "1b3a738812b7b4fcc416d105d2def689820d94f6b476525be9e7cb68f7ca255f",
+            "gitBlob": "7c1fbc7df500af4df71eb270548632e8fb012069"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-35-36-41-fronts/response.headers",
+            "bytes": 970,
+            "sha256": "013ee26cf5521f66bb4b2283bba8d5ade72ef3cdf34d1c10f3a461ff6f137a91",
+            "gitBlob": "00bc2d8a495124adc4165cab78656278f3beae86"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT_RELEVANT_SECTIONS",
+          "verifiedBytesAndSHA256": true
+        },
+        {
+          "locator": "nws-occluded",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=occluded%20front",
+          "typedLocator": "Occluded Front entry",
+          "gitCommit": "refs/codex-preservation/01a138d8-helper3a-terminal",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/occluded.body",
+            "bytes": 2444,
+            "sha256": "7ca106160482fdb8b782788b46e9424674df065954ac808f77c6b3dbd898a63a",
+            "gitBlob": "8a37c432923aa4bbeb864d709df083a980ab4656"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/occluded.headers",
+            "bytes": 1023,
+            "sha256": "5e581cf0b564aed3eac6a92f02e17a8c9ebfb82200c6e82957bc59b4c839f139",
+            "gitBlob": "59367b86f8f64a8c0bedfc895456f8c080c20968"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT_RELEVANT_SECTIONS",
+          "verifiedBytesAndSHA256": true
+        }
+      ],
+      "neighborReview": {
+        "currentNeighbors": [
+          {
+            "id": "weather-climate-stationary-front",
+            "currentHash": "e54c271f758f7592577ce509d1d9e6b0592cc4a27a2a02a7ebd0873260d33019",
+            "prompt": "Как называется фронт, который почти не перемещается, потому что холодный воздух у его границы не отступает?",
+            "correctAnswer": "Стационарный фронт",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-occluded-front",
+            "currentHash": "1bb3c73d10844984fbacfc5c46b712551bfb75a64a994a81f8b2eafc05af3715",
+            "prompt": "Холодная граница обогнала тёплую; возникшая составная граница объединяет участки двух прежних фронтов. Как она называется?",
+            "correctAnswer": "Фронт окклюзии",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-frontal-rain",
+            "currentHash": "81e62e1be393e6c1fa7b697e7c2e7ef47202470dd7f4ce35fbf62b799c448f24",
+            "prompt": "Какие осадки сопровождают прохождение атмосферного фронта?",
+            "correctAnswer": "Фронтальные осадки",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          }
+        ],
+        "editorialReason": "Наступление холодной массы, почти неподвижная граница и составная окклюзия — разные сценарии; frontal-rain классифицирует осадки. Исправление note не создало дубля."
+      },
+      "defects": [],
+      "nextAction": "Координатор: принять точный hash после adjudication и сохранить результат.",
+      "frozenContract": {
+        "id": true,
+        "topic": true,
+        "position": true,
+        "difficulty": true,
+        "correctIndex": true
+      },
+      "difficultyReview": {
+        "frozen": "easy",
+        "absoluteAssessment": "easy для холодного/стационарного поверхностного сценария; medium для составной окклюзии."
+      },
+      "scopeReview": {
+        "topicId": "weather-climate",
+        "withinScope": true,
+        "reason": "Спрашивается метеонаблюдение, атмосферная циркуляция, фронт, облако или климат; экологическая политика/общая отвлечённая физика не являются предметом вопроса."
+      },
+      "sourceLinkReview": {
+        "url": "https://www.weather.gov/lmk/basic-fronts",
+        "verifiedAt": "2026-10-14",
+        "mainFactConfirmedByDisplayedSource": true,
+        "reason": "Точная primary страница подтверждает главный факт."
+      }
+    },
+    {
+      "id": "weather-climate-desert-dry",
+      "currentHash": "edef7323b8dcb680d53f438c68e61f54fe8efdef8ee99c5be1966f64a99d633f",
+      "verdict": "HOLD",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой климатический тип связан с почти постоянным субтропическим высоким давлением и почти безоблачным небом?",
+            "answers": [
+              "Пустынный климат",
+              "Экваториальный климат",
+              "Полярный климат",
+              "Средиземноморский климат"
+            ],
+            "correctIndex": 0
+          },
+          "sourceReasons": [
+            "metoffice-climate-zones Desert climate: subtropical descending air yields almost permanent high pressure and virtually year-round cloud-free skies. Gobi is a cold desert where annual average temperatures CAN BE below 0 °C; universal assertion without can is not established.",
+            "metoffice-climate-zones Tropical rainforest climate: equatorial regions have high temperatures and year-round rainfall, usually 20–30 °C with minor annual variation; NOAA A covers moist tropics.",
+            "noaa-climate-zones E: year-round cold and warmest month below 10 °C; geography includes Antarctica. Met Office ice cap climates occur in Antarctic regions and have no month averaging above 0 °C.",
+            "metoffice-climate-zones Mediterranean climate: dry summers and mild wet winters; occurrence on western coasts and California/Western Australia/Chile/South Africa."
+          ],
+          "editorialReason": "Четыре подстановки прочитаны лично: Какой климатический тип связан с почти постоянным субтропическим высоким давлением и почти безоблачным небом? / Пустынный климат / Экваториальный климат / Полярный климат / Средиземноморский климат. Последовательные самостоятельные именные ответы; grammar/key/distractor category проверены. easy: Антарктида/климатические контрасты широко знакомы; ясное небо даёт допустимый вывод о засушливости, хотя текст о субтропическом давлении сложнее общего критерия сухости. Правильная note даёт самостоятельный условный факт о холодной Гоби; вопрос о механизме субтропических пустынь отличен от буквенного критерия B Кёппена. Точный source.url не соответствует новому спрашиваемому факту.",
+          "literalSHA256": "61f8d48fbf626f3b20227a1387be78b2f0c33751253efccbbcbaf0fce3760529"
+        },
+        {
+          "group": "explanation",
+          "literal": "Опускающийся воздух по обе стороны тропической зоны поддерживает субтропические области высокого давления. Там небо почти весь год остаётся безоблачным, что способствует формированию пустынь; это не критерий группы B Кёппена.",
+          "sourceReasons": [
+            "metoffice-climate-zones Desert climate: subtropical descending air yields almost permanent high pressure and virtually year-round cloud-free skies. Gobi is a cold desert where annual average temperatures CAN BE below 0 °C; universal assertion without can is not established. Второе предложение о «не критерий B» — сравнение двух primary: NOAA B defines evaporation/transpiration>precipitation; Met Office passage defines subtropical mechanism."
+          ],
+          "editorialReason": "Два предложения, ключ назван, отличительный механизм объяснён; Правильная note даёт самостоятельный условный факт о холодной Гоби; вопрос о механизме субтропических пустынь отличен от буквенного критерия B Кёппена. Точный source.url не соответствует новому спрашиваемому факту.",
+          "literalSHA256": "16e3f8e6b4f5f005bf664911de74dd9b01487270fbcd7b250362558f972eec45"
+        },
+        {
+          "group": "note0",
+          "literal": "Пустыни бывают и холодными: средняя годовая температура Гоби в Восточной Азии может быть ниже 0 °C.",
+          "sourceReasons": [
+            "metoffice-climate-zones Desert climate: subtropical descending air yields almost permanent high pressure and virtually year-round cloud-free skies. Gobi is a cold desert where annual average temperatures CAN BE below 0 °C; universal assertion without can is not established."
+          ],
+          "editorialReason": "Правильная справка: Правильная note даёт самостоятельный условный факт о холодной Гоби; вопрос о механизме субтропических пустынь отличен от буквенного критерия B Кёппена. Точный source.url не соответствует новому спрашиваемому факту.",
+          "literalSHA256": "dd2caf2d97a76a3db55d66d78098ece1278d9cf18870377d89243278365c6a92"
+        },
+        {
+          "group": "note1",
+          "literal": "Экваториальный климат обычно жаркий и влажный, с обильными осадками.",
+          "sourceReasons": [
+            "metoffice-climate-zones Tropical rainforest climate: equatorial regions have high temperatures and year-round rainfall, usually 20–30 °C with minor annual variation; NOAA A covers moist tropics."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "929884148813aa246f19da72470c5784386326006a793fdc54674b84b48acd89"
+        },
+        {
+          "group": "note2",
+          "literal": "В полярном климате среднемесячная температура самого тёплого месяца ниже 10 °C.",
+          "sourceReasons": [
+            "noaa-climate-zones E: year-round cold and warmest month below 10 °C; geography includes Antarctica. Met Office ice cap climates occur in Antarctic regions and have no month averaging above 0 °C."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "1f87670d632f12d06754e32566d97d6f1dc750f94bcaadb851eb41f67ca1605b"
+        },
+        {
+          "group": "note3",
+          "literal": "Средиземноморский климат сочетает сухое лето с более влажным сезоном.",
+          "sourceReasons": [
+            "metoffice-climate-zones Mediterranean climate: dry summers and mild wet winters; occurrence on western coasts and California/Western Australia/Chile/South Africa."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "28871ea67c31a93fc22bd63ea22372d3fb63875f056bcaece72877104c74707b"
+        }
+      ],
+      "sourceLocators": [
+        {
+          "locator": "noaa-climate-zones",
+          "sourceUrl": "https://www.noaa.gov/jetstream/global/climate-zones",
+          "typedLocator": "B - Dry Climates and E - Polar Climates sections",
+          "gitCommit": "refs/codex-preservation/01a138d8-helper3a-terminal (captured against 9b2b0b1a225b2970e916c023b35986e0449e4d31)",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/climate-zones.assembled.body",
+            "bytes": 113834,
+            "sha256": "be3d585f9423185149a7b043b8ade6d415361810b45769d12332ba5f4044ad14",
+            "gitBlob": "4f89c317db15aee4c6362f60b38d87694cc7fe38"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/climate-zones.headers",
+            "bytes": 775,
+            "sha256": "a39fb44ae29867ea4633a9737e8c2a52e36550a8e6e6e9d369364dea98903f3b",
+            "gitBlob": "5e219adb26cfcc3b58c53845384610949c0ec695"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT_RELEVANT_SECTIONS",
+          "verifiedBytesAndSHA256": true
+        },
+        {
+          "locator": "metoffice-climate-zones",
+          "sourceUrl": "https://weather.metoffice.gov.uk/climate/climate-explained/climate-zones",
+          "gitCommit": "55db9891798bcaf38abc20f6ea3b215c0b3e8626",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/process-v2-weather20/author/sources/metoffice-climate-zones.body",
+            "bytes": 97891,
+            "sha256": "349436aa2724491d2069cace7afdd73dbe58a055af436643f098bbc50c5f1326"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/process-v2-weather20/author/sources/metoffice-climate-zones.headers",
+            "bytes": 7368,
+            "sha256": "4626409dd2e0c38dc7fcb9f0573c0ae947043f7759a2d2b4949ec24cd0a95d64"
+          },
+          "verifiedBytesAndSHA256": true
+        }
+      ],
+      "neighborReview": {
+        "currentNeighbors": [
+          {
+            "id": "weather-climate-polar-cold",
+            "currentHash": "bb0b89ddd31921f84e5155ef4709f141f524209072b47775555031c01e1b0805",
+            "prompt": "По температурной классификации к какому климатическому типу относится внутреннее плато Антарктиды?",
+            "correctAnswer": "Полярный климат",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-koppen-dry-b",
+            "currentHash": "b8b1cff5e22dbbf25490f69b5bce97cfdeb20a5925fa10956c94e62fc57ac87b",
+            "prompt": "Какая группа Кёппена—Гейгера определяется тем, что потенциальное испарение и транспирация превышают количество осадков?",
+            "correctAnswer": "Группа B",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-koppen-polar-e",
+            "currentHash": "78cb6711787dc3e63436b23b01cf3e07777fa14bb9214300f345a054ea56e110",
+            "prompt": "Какая группа Кёппена—Гейгера включает климаты, в которых средняя температура самого тёплого месяца ниже 10 °C?",
+            "correctAnswer": "Группа E",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-koppen-tropical-a",
+            "currentHash": "ef08034917fad252203c70794b450a3d3e1570f268bb4849391caa888bc1b319",
+            "prompt": "Какая крупная группа классификации Кёппена—Гейгера включает влажные тропические климаты, где средняя температура каждого месяца выше 18 °C?",
+            "correctAnswer": "Группа A",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-equator-hot",
+            "currentHash": "aded6ac351e57776d52b8e8b05aaa3f83a8efe777e3c02e70aa3c4b658b88aa3",
+            "prompt": "Какой климат характерен для районов у экватора с малой годовой сменой температуры?",
+            "correctAnswer": "Экваториальный климат",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-mediterranean-dry-summer",
+            "currentHash": "96b2db3b5dcdd65afb8d4f9ccae270148133d3e59dfd66869a18e9a59347836c",
+            "prompt": "Какой климат отличается сухим летом и мягкой влажной зимой?",
+            "correctAnswer": "Средиземноморский климат",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          }
+        ],
+        "editorialReason": "CURRENT koppen-dry-b — буквенная группа по испарению/осадкам; desert спрашивает субтропическое формирование. CURRENT koppen-polar-e — буквенная группа по порогу; polar-cold — температурный тип Антарктиды. CURRENT Mediterranean H10 спрашивает сезонность осадков, equator-hot — годовую вариацию. Эти факты различаются; новые neighbour conclusions не кредитуются.",
+        "h10CurrentNotCredited": [
+          {
+            "id": "weather-climate-mediterranean-dry-summer",
+            "currentHash": "96b2db3b5dcdd65afb8d4f9ccae270148133d3e59dfd66869a18e9a59347836c",
+            "role": "Observed current dependency, not accepted/credited by this review"
+          },
+          {
+            "id": "weather-climate-iod-indian",
+            "currentHash": "bfc0bfd29a283654767649d100d0fe1a88412c99d8147b97068e0bf826202652",
+            "role": "Observed current dependency, not accepted/credited by this review"
+          }
+        ],
+        "h10Reason": "Mediterranean actual current seasonality compared above; IOD actual current asks an Indian Ocean SST/rainfall dipole, not climate-type classification or desert formation."
+      },
+      "defects": [
+        {
+          "fields": [
+            "source.url"
+          ],
+          "detail": "Карточка показывает NOAA Climate Zones, где нет нового главного факта о почти постоянном субтропическом высоком давлении и почти безоблачном небе. Этот факт найден в Met Office Desert climate; точный игровой URL остался от прежней карточки."
+        }
+      ],
+      "nextAction": "Координатор: оставить CURRENT вне зачёта как HOLD; дефекты сохранены для отдельного решения. Единственный fix-cycle исчерпан, второй в этом пакете не запускать.",
+      "frozenContract": {
+        "id": true,
+        "topic": true,
+        "position": true,
+        "difficulty": true,
+        "correctIndex": true
+      },
+      "difficultyReview": {
+        "frozen": "easy",
+        "absoluteAssessment": "easy: Антарктида/климатические контрасты широко знакомы; ясное небо даёт допустимый вывод о засушливости, хотя текст о субтропическом давлении сложнее общего критерия сухости."
+      },
+      "scopeReview": {
+        "topicId": "weather-climate",
+        "withinScope": true,
+        "reason": "Спрашивается метеонаблюдение, атмосферная циркуляция, фронт, облако или климат; экологическая политика/общая отвлечённая физика не являются предметом вопроса."
+      },
+      "sourceLinkReview": {
+        "url": "https://www.noaa.gov/jetstream/global/climate-zones",
+        "verifiedAt": "2026-10-14",
+        "mainFactConfirmedByDisplayedSource": false,
+        "reason": "Main fact found only in captured Met Office Desert climate; displayed NOAA Climate Zones URL lacks this fact."
+      }
+    },
+    {
+      "id": "weather-climate-lifted-index",
+      "currentHash": "f09d44641281c3d081e3bf11fd9ba4fe1ac2ca10476014b272d570c56add4e1c",
+      "verdict": "HOLD",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой индекс конвективной неустойчивости рассчитывают по температурному контрасту поднятой частицы и окружающей среды?",
+            "answers": [
+              "CAPE",
+              "Индекс поднятия",
+              "CIN",
+              "Спиральность шторма"
+            ],
+            "correctIndex": 1
+          },
+          "sourceReasons": [
+            "spc-parcel-values CAPE: integrated positive area in J/kg from LFC to EL; buoyancy/updraft energy, not a single-level temperature difference.",
+            "spc-parcel-values LI: lifted parcel and sounding temperatures at 500 mb are compared; negative values mean parcel WARMER than environment. Therefore a literal Tparcel−Tenvironment formula cannot have the claimed negative sign for the warmer parcel.",
+            "spc-parcel-values CINH: integrated negative area in J/kg from original parcel level to LFC; energy needed to reach LFC.",
+            "spc-shear SRH: storm-relative helicity represents streamwise vorticity WITHIN storm inflow layer, swept area between hodograph and STORM MOTION; reference is storm motion, not inflow-relative motion."
+          ],
+          "editorialReason": "Четыре подстановки прочитаны лично: Какой индекс конвективной неустойчивости рассчитывают по температурному контрасту поднятой частицы и окружающей среды? / CAPE / Индекс поднятия / CIN / Спиральность шторма. Последовательные самостоятельные именные ответы; grammar/key/distractor category проверены. hard: специфическая диагностика зондирования, физически различимые энергия, температура и завихренность. Английский sounding убран и 500 мб вынесено в note как допфакт, но формула знака стала неверной. Описание SPC «difference between» без порядка нельзя трактовать вопреки следующему предложению о warmer parcel.",
+          "literalSHA256": "a569486ca87eaeecdc4365880f103d5597ce865422016fe57f2ac69879b3c5dd"
+        },
+        {
+          "group": "explanation",
+          "literal": "Индекс поднятия (LI) сравнивает температуру поднятой частицы с температурой окружающей среды. На стандартном уровне 500 мб отрицательное значение означает, что частица теплее среды и обладает плавучестью; само по себе это не гарантирует грозу.",
+          "sourceReasons": [
+            "spc-parcel-values LI: lifted parcel and sounding temperatures at 500 mb are compared; negative values mean parcel WARMER than environment. Therefore a literal Tparcel−Tenvironment formula cannot have the claimed negative sign for the warmer parcel."
+          ],
+          "editorialReason": "Два предложения, ключ назван, отличительный механизм объяснён; Английский sounding убран и 500 мб вынесено в note как допфакт, но формула знака стала неверной. Описание SPC «difference between» без порядка нельзя трактовать вопреки следующему предложению о warmer parcel.",
+          "literalSHA256": "63288f41f61320e66db55dfb41e6eab15d67a473f1e6d23efabdc0b6fa6a4237"
+        },
+        {
+          "group": "note0",
+          "literal": "CAPE — интегральная положительная плавучесть частицы между уровнями свободной конвекции и равновесия.",
+          "sourceReasons": [
+            "spc-parcel-values CAPE: integrated positive area in J/kg from LFC to EL; buoyancy/updraft energy, not a single-level temperature difference."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "60dadb59554953c3d3cc582cb268dd8297573cae3c4ccf6bf32881e99a6c63a8"
+        },
+        {
+          "group": "note1",
+          "literal": "На высоте 500 мб индекс равен температуре поднятой частицы минус температуру среды; отрицательный знак означает более тёплую частицу.",
+          "sourceReasons": [
+            "spc-parcel-values LI: lifted parcel and sounding temperatures at 500 mb are compared; negative values mean parcel WARMER than environment. Therefore a literal Tparcel−Tenvironment formula cannot have the claimed negative sign for the warmer parcel."
+          ],
+          "editorialReason": "Правильная справка: Английский sounding убран и 500 мб вынесено в note как допфакт, но формула знака стала неверной. Описание SPC «difference between» без порядка нельзя трактовать вопреки следующему предложению о warmer parcel.",
+          "literalSHA256": "f716fb741332fa83c4eb0bbe5583cb152d6daac082f7e3470d926869e568dd92"
+        },
+        {
+          "group": "note2",
+          "literal": "CINH — интегральная отрицательная энергия, которую частица должна преодолеть до уровня свободной конвекции.",
+          "sourceReasons": [
+            "spc-parcel-values CINH: integrated negative area in J/kg from original parcel level to LFC; energy needed to reach LFC."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "6d2dce854a6bad060ad9deafb88997d774c10ef6ba4ac1e799742e6864d49bc7"
+        },
+        {
+          "group": "note3",
+          "literal": "Спиральность шторма относительно притока характеризует потоковую завихренность в слое притока.",
+          "sourceReasons": [
+            "spc-shear SRH: storm-relative helicity represents streamwise vorticity WITHIN storm inflow layer, swept area between hodograph and STORM MOTION; reference is storm motion, not inflow-relative motion."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; «относительно притока» подменяет storm-relative, как в CIN; SPC говорит о завихренности в слое притока относительно движения шторма.",
+          "literalSHA256": "3ac9d00539283485966422ef6879515de621187b42531a219e018ccabe7f0476"
+        }
+      ],
+      "sourceLocators": [
+        {
+          "locator": "spc-parcel-values",
+          "sourceUrl": "https://www.spc.noaa.gov/exper/soundings/help/parcelvals.html",
+          "typedLocator": "CAPE, CINH, LI, LFC, EL and MPL entries",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a136e6/capture-only/weather20-29-primary/spc-parcel-values.body",
+            "bytes": 2386,
+            "sha256": "fc6ee69c1ea46c620c867bb2c35294597803563d64b9a57f6ed7b572c0226917",
+            "gitBlob": "85d8702e99bbb601a37ec92748cfbd4ac7dd1746"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a136e6/capture-only/weather20-29-primary/spc-parcel-values.headers",
+            "bytes": 1006,
+            "sha256": "2b14293791da71a26ffbbd7cfe3e59c91658ae60fd1b29b032aafe6673ae4b71",
+            "gitBlob": "9dc7a5366266579aa11e9dae08add3887deaad95"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT",
+          "verifiedBytesAndSHA256": true
+        },
+        {
+          "locator": "spc-shear",
+          "sourceUrl": "https://www.spc.noaa.gov/exper/soundings/help/shear.html",
+          "typedLocator": "Storm Relative Helicity definition and 0-1 km/0-3 km discussion",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13772/terminal-second-compaction/capture-helper3a/owned-tmp/spc-children/shear/response.body",
+            "bytes": 2862,
+            "sha256": "a1a7726472d625fa9ef0fc563a2f223492a6297c3f7fee7daa6bebe9be351b7b",
+            "gitBlob": "d15130ae556ca3728bdb4357f39049a80dbc70e6"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13772/terminal-second-compaction/capture-helper3a/owned-tmp/spc-children/shear/response.headers",
+            "bytes": 1026,
+            "sha256": "bee59a8afe5800a563a6cb55429f295fb9781b26ab43883ba1b1f32301248add",
+            "gitBlob": "b2f0ec82dae7f8c4b128cc6c53169ba7737dc432"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT",
+          "verifiedBytesAndSHA256": true
+        }
+      ],
+      "neighborReview": {
+        "currentNeighbors": [
+          {
+            "id": "weather-climate-cin-cap",
+            "currentHash": "1deb88cb25bc47951c07711f402a973d635c6b448faae8b3ddafbefee31c80d4",
+            "prompt": "На диаграмме зондирования отрицательная площадь для поднятой частицы лежит от исходного уровня до LFC. Какую энергию нужно преодолеть, чтобы достичь LFC?",
+            "correctAnswer": "CIN",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-cape-buoyancy",
+            "currentHash": "74c83aac612f27bf28474abe0aeb78837459614af88a46d8fb6209205edadaf2",
+            "prompt": "На диаграмме зондирования поднятая частица теплее окружающего воздуха между уровнями свободной конвекции и равновесия. Какой индекс суммирует энергию положительной плавучести в этом слое?",
+            "correctAnswer": "CAPE",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-inversion-positive",
+            "currentHash": "3b82c8b5e9a3395b10c463e02d43531a1d82635c1cda30e31b5136a7bf11b0e2",
+            "prompt": "На высоте 1,2 км зондирование показывает 11 °C, а на 1,8 км — 17 °C; выше температура снова убывает с высотой. Поднимающаяся через этот слой порция становится холоднее окружения и останавливается. Какой профиль образует такой барьер конвекции?",
+            "correctAnswer": "Инверсия температуры",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          }
+        ],
+        "editorialReason": "CURRENT CAPE — положительный интеграл между LFC/EL, CIN — отрицательная энергия до LFC, LI — температурная разность на 500 мб. CURRENT inversion-positive задаёт численный профиль/барьер, не индекс. SRH — другой физический диагностический параметр."
+      },
+      "defects": [
+        {
+          "fields": [
+            "note1",
+            "explanation"
+          ],
+          "detail": "Tчастицы−Tсреды отрицательно при ХОЛОДНОЙ частице, а note говорит, что отрицательно при тёплой. Фактическое противоречие: LI с указанной интерпретацией знака требует Tсреды−Tчастицы."
+        },
+        {
+          "fields": [
+            "note1"
+          ],
+          "detail": "«индекс равен температуре ... минус температуру» не согласовано: исходная конструкция с равен требует согласованной формы для разности."
+        },
+        {
+          "fields": [
+            "note3"
+          ],
+          "detail": "«относительно притока» подменяет storm-relative, как в CIN; SPC говорит о завихренности в слое притока относительно движения шторма."
+        }
+      ],
+      "nextAction": "Координатор: оставить CURRENT вне зачёта как HOLD; дефекты сохранены для отдельного решения. Единственный fix-cycle исчерпан, второй в этом пакете не запускать.",
+      "frozenContract": {
+        "id": true,
+        "topic": true,
+        "position": true,
+        "difficulty": true,
+        "correctIndex": true
+      },
+      "difficultyReview": {
+        "frozen": "hard",
+        "absoluteAssessment": "hard: специфическая диагностика зондирования, физически различимые энергия, температура и завихренность."
+      },
+      "scopeReview": {
+        "topicId": "weather-climate",
+        "withinScope": true,
+        "reason": "Спрашивается метеонаблюдение, атмосферная циркуляция, фронт, облако или климат; экологическая политика/общая отвлечённая физика не являются предметом вопроса."
+      },
+      "sourceLinkReview": {
+        "url": "https://www.spc.noaa.gov/exper/soundings/help/parcelvals.html",
+        "verifiedAt": "2026-10-14",
+        "mainFactConfirmedByDisplayedSource": true,
+        "reason": "Точная primary страница подтверждает главный факт."
+      }
+    },
+    {
+      "id": "weather-climate-occluded-front",
+      "currentHash": "1bb3c73d10844984fbacfc5c46b712551bfb75a64a994a81f8b2eafc05af3715",
+      "verdict": "PASS",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Холодная граница обогнала тёплую; возникшая составная граница объединяет участки двух прежних фронтов. Как она называется?",
+            "answers": [
+              "Тёплый фронт",
+              "Холодный фронт",
+              "Стационарный фронт",
+              "Фронт окклюзии"
+            ],
+            "correctIndex": 3
+          },
+          "sourceReasons": [
+            "nws-basic-fronts Warm Front: cold air must retreat before warm air advances; warm air ascends slantwise over cooler air and can give precipitation ahead with moisture.",
+            "nws-basic-fronts Cold Front: denser cold air advances and displaces warm air; sufficient moisture gives rain and instability can give thunderstorms.",
+            "nws-basic-fronts Stationary Front: denser cool air does not retreat; balance means neither mass advances, so boundary barely moves.",
+            "nws-occluded Occluded Front: composite when cold front overtakes warm or quasi-stationary front; coldest-air placement distinguishes warm/cold occlusion."
+          ],
+          "editorialReason": "Четыре подстановки прочитаны лично: Холодная граница обогнала тёплую; возникшая составная граница объединяет участки двух прежних фронтов. Как она называется? / Тёплый фронт / Холодный фронт / Стационарный фронт / Фронт окклюзии. Последовательные самостоятельные именные ответы; grammar/key/distractor category проверены. easy для холодного/стационарного поверхностного сценария; medium для составной окклюзии. note1 теперь говорит о границе холодного воздуха без погони за «ним». Note3 сверх prompt добавляет возможность обгона квазистационарного фронта; источник определяет два типа окклюзии.",
+          "literalSHA256": "4f732fc7b34d6ac029b24ba7739c1fd286a2afa58c9d0829e4140df62127066f"
+        },
+        {
+          "group": "explanation",
+          "literal": "Фронт окклюзии — составная граница, образующаяся, когда холодный фронт обгоняет тёплый или квазистационарный. В зависимости от того, где находится более холодный воздух, различают тёплую и холодную окклюзии.",
+          "sourceReasons": [
+            "nws-occluded Occluded Front: composite when cold front overtakes warm or quasi-stationary front; coldest-air placement distinguishes warm/cold occlusion."
+          ],
+          "editorialReason": "Два предложения, ключ назван, отличительный механизм объяснён; note1 теперь говорит о границе холодного воздуха без погони за «ним». Note3 сверх prompt добавляет возможность обгона квазистационарного фронта; источник определяет два типа окклюзии.",
+          "literalSHA256": "22c5a8a043739db4bde4b05d3c6bb3a8791ba682cc7c173ef866416a34faed83"
+        },
+        {
+          "group": "note0",
+          "literal": "Тёплый фронт — граница продвижения тёплого воздуха над отступающим холодным.",
+          "sourceReasons": [
+            "nws-basic-fronts Warm Front: cold air must retreat before warm air advances; warm air ascends slantwise over cooler air and can give precipitation ahead with moisture."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "756f59a7e52da21b84771357623e0b2aab0b4131a0f9f173aee9467101259115"
+        },
+        {
+          "group": "note1",
+          "literal": "Холодный фронт — граница, где холодный воздух вытесняет тёплый; сам термин не означает обгон другой границы.",
+          "sourceReasons": [
+            "nws-basic-fronts Cold Front: denser cold air advances and displaces warm air; sufficient moisture gives rain and instability can give thunderstorms."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "4e5d89304a44e60222dfd1a41bd07291d345232ff0ed4dd9c12aae5fd97d6d35"
+        },
+        {
+          "group": "note2",
+          "literal": "Стационарный фронт почти не перемещается, когда ни одна масса не вытесняет другую.",
+          "sourceReasons": [
+            "nws-basic-fronts Stationary Front: denser cool air does not retreat; balance means neither mass advances, so boundary barely moves."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "9dcfa0a0b3c433dadc5ec23b20df5d608066570a1e961d2b0b435ae9125a19a9"
+        },
+        {
+          "group": "note3",
+          "literal": "Фронт окклюзии — составная граница, возникающая, когда холодный фронт обгоняет тёплый или квазистационарный.",
+          "sourceReasons": [
+            "nws-occluded Occluded Front: composite when cold front overtakes warm or quasi-stationary front; coldest-air placement distinguishes warm/cold occlusion."
+          ],
+          "editorialReason": "Правильная справка: note1 теперь говорит о границе холодного воздуха без погони за «ним». Note3 сверх prompt добавляет возможность обгона квазистационарного фронта; источник определяет два типа окклюзии.",
+          "literalSHA256": "e56a3f1d9d55344ba2ac5d9e10c608cbeb990993e35355193aa6fef1b95f1328"
+        }
+      ],
+      "sourceLocators": [
+        {
+          "locator": "nws-basic-fronts",
+          "sourceUrl": "https://www.weather.gov/lmk/basic-fronts",
+          "typedLocator": "Warm Front, Cold Front and Stationary Front sections",
+          "gitCommit": "refs/codex-preservation/01a138d8-weather66-terminal",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-35-36-41-fronts/response.body",
+            "bytes": 75793,
+            "sha256": "1b3a738812b7b4fcc416d105d2def689820d94f6b476525be9e7cb68f7ca255f",
+            "gitBlob": "7c1fbc7df500af4df71eb270548632e8fb012069"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-35-36-41-fronts/response.headers",
+            "bytes": 970,
+            "sha256": "013ee26cf5521f66bb4b2283bba8d5ade72ef3cdf34d1c10f3a461ff6f137a91",
+            "gitBlob": "00bc2d8a495124adc4165cab78656278f3beae86"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT_RELEVANT_SECTIONS",
+          "verifiedBytesAndSHA256": true
+        },
+        {
+          "locator": "nws-occluded",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=occluded%20front",
+          "typedLocator": "Occluded Front entry",
+          "gitCommit": "refs/codex-preservation/01a138d8-helper3a-terminal",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/occluded.body",
+            "bytes": 2444,
+            "sha256": "7ca106160482fdb8b782788b46e9424674df065954ac808f77c6b3dbd898a63a",
+            "gitBlob": "8a37c432923aa4bbeb864d709df083a980ab4656"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/occluded.headers",
+            "bytes": 1023,
+            "sha256": "5e581cf0b564aed3eac6a92f02e17a8c9ebfb82200c6e82957bc59b4c839f139",
+            "gitBlob": "59367b86f8f64a8c0bedfc895456f8c080c20968"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT_RELEVANT_SECTIONS",
+          "verifiedBytesAndSHA256": true
+        }
+      ],
+      "neighborReview": {
+        "currentNeighbors": [
+          {
+            "id": "weather-climate-cold-front-symbol",
+            "currentHash": "c69955f3de00c87b215036d1b90a59240cd6d551c5e8c0c6548a224844f77c99",
+            "prompt": "На поверхности холодный воздух наступает на более тёплый и вытесняет его; какая граница проходит?",
+            "correctAnswer": "Холодный фронт",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-stationary-front",
+            "currentHash": "e54c271f758f7592577ce509d1d9e6b0592cc4a27a2a02a7ebd0873260d33019",
+            "prompt": "Как называется фронт, который почти не перемещается, потому что холодный воздух у его границы не отступает?",
+            "correctAnswer": "Стационарный фронт",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-frontal-rain",
+            "currentHash": "81e62e1be393e6c1fa7b697e7c2e7ef47202470dd7f4ce35fbf62b799c448f24",
+            "prompt": "Какие осадки сопровождают прохождение атмосферного фронта?",
+            "correctAnswer": "Фронтальные осадки",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          }
+        ],
+        "editorialReason": "Наступление холодной массы, почти неподвижная граница и составная окклюзия — разные сценарии; frontal-rain классифицирует осадки. Исправление note не создало дубля."
+      },
+      "defects": [],
+      "nextAction": "Координатор: принять точный hash после adjudication и сохранить результат.",
+      "frozenContract": {
+        "id": true,
+        "topic": true,
+        "position": true,
+        "difficulty": true,
+        "correctIndex": true
+      },
+      "difficultyReview": {
+        "frozen": "medium",
+        "absoluteAssessment": "easy для холодного/стационарного поверхностного сценария; medium для составной окклюзии."
+      },
+      "scopeReview": {
+        "topicId": "weather-climate",
+        "withinScope": true,
+        "reason": "Спрашивается метеонаблюдение, атмосферная циркуляция, фронт, облако или климат; экологическая политика/общая отвлечённая физика не являются предметом вопроса."
+      },
+      "sourceLinkReview": {
+        "url": "https://forecast.weather.gov/glossary.php?word=occluded%20front",
+        "verifiedAt": "2026-10-14",
+        "mainFactConfirmedByDisplayedSource": true,
+        "reason": "Точная primary страница подтверждает главный факт."
+      }
+    },
+    {
+      "id": "weather-climate-polar-cold",
+      "currentHash": "bb0b89ddd31921f84e5155ef4709f141f524209072b47775555031c01e1b0805",
+      "verdict": "HOLD",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "По температурной классификации к какому климатическому типу относится внутреннее плато Антарктиды?",
+            "answers": [
+              "Экваториальный климат",
+              "Полярный климат",
+              "Пустынный климат",
+              "Средиземноморский климат"
+            ],
+            "correctIndex": 1
+          },
+          "sourceReasons": [
+            "metoffice-climate-zones Tropical rainforest climate: equatorial regions have high temperatures and year-round rainfall, usually 20–30 °C with minor annual variation; NOAA A covers moist tropics.",
+            "noaa-climate-zones E: year-round cold and warmest month below 10 °C; geography includes Antarctica. Met Office ice cap climates occur in Antarctic regions and have no month averaging above 0 °C.",
+            "metoffice-climate-zones Desert climate: subtropical descending air yields almost permanent high pressure and virtually year-round cloud-free skies. Gobi is a cold desert where annual average temperatures CAN BE below 0 °C; universal assertion without can is not established.",
+            "metoffice-climate-zones Mediterranean climate: dry summers and mild wet winters; occurrence on western coasts and California/Western Australia/Chile/South Africa."
+          ],
+          "editorialReason": "Четыре подстановки прочитаны лично: По температурной классификации к какому климатическому типу относится внутреннее плато Антарктиды? / Экваториальный климат / Полярный климат / Пустынный климат / Средиземноморский климат. Последовательные самостоятельные именные ответы; grammar/key/distractor category проверены. easy: Антарктида/климатические контрасты широко знакомы; ясное небо даёт допустимый вывод о засушливости, хотя текст о субтропическом давлении сложнее общего критерия сухости. note1 теперь добавляет температурный порог, отсутствующий в Antarctic prompt; прежняя неподтверждённая холодная пустыня Антарктиды удалена. Новое утверждение о Гоби выходит за прочитанный primary.",
+          "literalSHA256": "abfea5cb838e3e21b44a607fc65f9ecbb2b7efab6b9a7c4584d06c6d47319480"
+        },
+        {
+          "group": "explanation",
+          "literal": "Центральная Антарктида относится к полярным климатам. Для этой группы NOAA приводит круглогодично холодные условия и среднюю температуру самого тёплого месяца ниже 10 °C; полярный климат определяется температурой, а не сухостью пустыни.",
+          "sourceReasons": [
+            "noaa-climate-zones E: year-round cold and warmest month below 10 °C; geography includes Antarctica. Met Office ice cap climates occur in Antarctic regions and have no month averaging above 0 °C."
+          ],
+          "editorialReason": "Два предложения, ключ назван, отличительный механизм объяснён; note1 теперь добавляет температурный порог, отсутствующий в Antarctic prompt; прежняя неподтверждённая холодная пустыня Антарктиды удалена. Новое утверждение о Гоби выходит за прочитанный primary.",
+          "literalSHA256": "c2135060b04963a9d0eac4f63b5ac11e6aa40afb33edd1d2f9f2ebcfc750b477"
+        },
+        {
+          "group": "note0",
+          "literal": "Экваториальный климат круглый год тёплый и обычно влажный.",
+          "sourceReasons": [
+            "metoffice-climate-zones Tropical rainforest climate: equatorial regions have high temperatures and year-round rainfall, usually 20–30 °C with minor annual variation; NOAA A covers moist tropics."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "7fa55533dde0e5c2422a1298a6efd3709685018932a36ed52050513900b42147"
+        },
+        {
+          "group": "note1",
+          "literal": "В полярном климате средняя температура самого тёплого месяца ниже 10 °C.",
+          "sourceReasons": [
+            "noaa-climate-zones E: year-round cold and warmest month below 10 °C; geography includes Antarctica. Met Office ice cap climates occur in Antarctic regions and have no month averaging above 0 °C."
+          ],
+          "editorialReason": "Правильная справка: note1 теперь добавляет температурный порог, отсутствующий в Antarctic prompt; прежняя неподтверждённая холодная пустыня Антарктиды удалена. Новое утверждение о Гоби выходит за прочитанный primary.",
+          "literalSHA256": "c43cfe272cfe709428501914595b5c257bb67626b0d60500f653f1be9eb1d715"
+        },
+        {
+          "group": "note2",
+          "literal": "Холодная пустыня Гоби в Восточной Азии имеет среднюю годовую температуру ниже 0 °C.",
+          "sourceReasons": [
+            "metoffice-climate-zones Desert climate says Gobi annual averages CAN BE below 0°C; does NOT establish categorical temperature below zero for entire Gobi. Literal exceeds primary qualification."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; Met Office: annual average temperatures CAN BE below 0 °C. CURRENT утверждает безусловно, что вся Гоби «имеет среднюю годовую температуру ниже 0 °C», утратив оговорку и распространив локально возможное свойство на пустыню целиком.",
+          "literalSHA256": "df302f1a77eb64cc9b4a9eabb99086d076110641ecd533584bd6b8af32adc4df"
+        },
+        {
+          "group": "note3",
+          "literal": "Средиземноморский климат сочетает сухое лето с более влажным сезоном.",
+          "sourceReasons": [
+            "metoffice-climate-zones Mediterranean climate: dry summers and mild wet winters; occurrence on western coasts and California/Western Australia/Chile/South Africa."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "28871ea67c31a93fc22bd63ea22372d3fb63875f056bcaece72877104c74707b"
+        }
+      ],
+      "sourceLocators": [
+        {
+          "locator": "noaa-climate-zones",
+          "sourceUrl": "https://www.noaa.gov/jetstream/global/climate-zones",
+          "typedLocator": "B - Dry Climates and E - Polar Climates sections",
+          "gitCommit": "refs/codex-preservation/01a138d8-helper3a-terminal (captured against 9b2b0b1a225b2970e916c023b35986e0449e4d31)",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/climate-zones.assembled.body",
+            "bytes": 113834,
+            "sha256": "be3d585f9423185149a7b043b8ade6d415361810b45769d12332ba5f4044ad14",
+            "gitBlob": "4f89c317db15aee4c6362f60b38d87694cc7fe38"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/climate-zones.headers",
+            "bytes": 775,
+            "sha256": "a39fb44ae29867ea4633a9737e8c2a52e36550a8e6e6e9d369364dea98903f3b",
+            "gitBlob": "5e219adb26cfcc3b58c53845384610949c0ec695"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT_RELEVANT_SECTIONS",
+          "verifiedBytesAndSHA256": true
+        },
+        {
+          "locator": "metoffice-climate-zones",
+          "sourceUrl": "https://weather.metoffice.gov.uk/climate/climate-explained/climate-zones",
+          "gitCommit": "55db9891798bcaf38abc20f6ea3b215c0b3e8626",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/process-v2-weather20/author/sources/metoffice-climate-zones.body",
+            "bytes": 97891,
+            "sha256": "349436aa2724491d2069cace7afdd73dbe58a055af436643f098bbc50c5f1326"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/process-v2-weather20/author/sources/metoffice-climate-zones.headers",
+            "bytes": 7368,
+            "sha256": "4626409dd2e0c38dc7fcb9f0573c0ae947043f7759a2d2b4949ec24cd0a95d64"
+          },
+          "verifiedBytesAndSHA256": true
+        }
+      ],
+      "neighborReview": {
+        "currentNeighbors": [
+          {
+            "id": "weather-climate-desert-dry",
+            "currentHash": "edef7323b8dcb680d53f438c68e61f54fe8efdef8ee99c5be1966f64a99d633f",
+            "prompt": "Какой климатический тип связан с почти постоянным субтропическим высоким давлением и почти безоблачным небом?",
+            "correctAnswer": "Пустынный климат",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-koppen-dry-b",
+            "currentHash": "b8b1cff5e22dbbf25490f69b5bce97cfdeb20a5925fa10956c94e62fc57ac87b",
+            "prompt": "Какая группа Кёппена—Гейгера определяется тем, что потенциальное испарение и транспирация превышают количество осадков?",
+            "correctAnswer": "Группа B",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-koppen-polar-e",
+            "currentHash": "78cb6711787dc3e63436b23b01cf3e07777fa14bb9214300f345a054ea56e110",
+            "prompt": "Какая группа Кёппена—Гейгера включает климаты, в которых средняя температура самого тёплого месяца ниже 10 °C?",
+            "correctAnswer": "Группа E",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-koppen-tropical-a",
+            "currentHash": "ef08034917fad252203c70794b450a3d3e1570f268bb4849391caa888bc1b319",
+            "prompt": "Какая крупная группа классификации Кёппена—Гейгера включает влажные тропические климаты, где средняя температура каждого месяца выше 18 °C?",
+            "correctAnswer": "Группа A",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-equator-hot",
+            "currentHash": "aded6ac351e57776d52b8e8b05aaa3f83a8efe777e3c02e70aa3c4b658b88aa3",
+            "prompt": "Какой климат характерен для районов у экватора с малой годовой сменой температуры?",
+            "correctAnswer": "Экваториальный климат",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-mediterranean-dry-summer",
+            "currentHash": "96b2db3b5dcdd65afb8d4f9ccae270148133d3e59dfd66869a18e9a59347836c",
+            "prompt": "Какой климат отличается сухим летом и мягкой влажной зимой?",
+            "correctAnswer": "Средиземноморский климат",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          }
+        ],
+        "editorialReason": "CURRENT koppen-dry-b — буквенная группа по испарению/осадкам; desert спрашивает субтропическое формирование. CURRENT koppen-polar-e — буквенная группа по порогу; polar-cold — температурный тип Антарктиды. CURRENT Mediterranean H10 спрашивает сезонность осадков, equator-hot — годовую вариацию. Эти факты различаются; новые neighbour conclusions не кредитуются.",
+        "h10CurrentNotCredited": [
+          {
+            "id": "weather-climate-mediterranean-dry-summer",
+            "currentHash": "96b2db3b5dcdd65afb8d4f9ccae270148133d3e59dfd66869a18e9a59347836c",
+            "role": "Observed current dependency, not accepted/credited by this review"
+          },
+          {
+            "id": "weather-climate-iod-indian",
+            "currentHash": "bfc0bfd29a283654767649d100d0fe1a88412c99d8147b97068e0bf826202652",
+            "role": "Observed current dependency, not accepted/credited by this review"
+          }
+        ],
+        "h10Reason": "Mediterranean actual current seasonality compared above; IOD actual current asks an Indian Ocean SST/rainfall dipole, not climate-type classification or desert formation."
+      },
+      "defects": [
+        {
+          "fields": [
+            "note2"
+          ],
+          "detail": "Met Office: annual average temperatures CAN BE below 0 °C. CURRENT утверждает безусловно, что вся Гоби «имеет среднюю годовую температуру ниже 0 °C», утратив оговорку и распространив локально возможное свойство на пустыню целиком."
+        }
+      ],
+      "nextAction": "Координатор: оставить CURRENT вне зачёта как HOLD; дефекты сохранены для отдельного решения. Единственный fix-cycle исчерпан, второй в этом пакете не запускать.",
+      "frozenContract": {
+        "id": true,
+        "topic": true,
+        "position": true,
+        "difficulty": true,
+        "correctIndex": true
+      },
+      "difficultyReview": {
+        "frozen": "easy",
+        "absoluteAssessment": "easy: Антарктида/климатические контрасты широко знакомы; ясное небо даёт допустимый вывод о засушливости, хотя текст о субтропическом давлении сложнее общего критерия сухости."
+      },
+      "scopeReview": {
+        "topicId": "weather-climate",
+        "withinScope": true,
+        "reason": "Спрашивается метеонаблюдение, атмосферная циркуляция, фронт, облако или климат; экологическая политика/общая отвлечённая физика не являются предметом вопроса."
+      },
+      "sourceLinkReview": {
+        "url": "https://www.noaa.gov/jetstream/global/climate-zones",
+        "verifiedAt": "2026-10-14",
+        "mainFactConfirmedByDisplayedSource": true,
+        "reason": "Точная primary страница подтверждает главный факт."
+      }
+    },
+    {
+      "id": "weather-climate-polar-easterlies",
+      "currentHash": "64cccee7db893cf6223d4ba9bb3b97afe08a64aa41452e5d15aa32adbf95a47c",
+      "verdict": "HOLD",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В трёхъячеечной модели общей циркуляции какой приземный ветровой пояс возникает в полярной ячейке?",
+            "answers": [
+              "Струйное течение",
+              "Пассаты",
+              "Западные ветры",
+              "Полярные восточные ветры"
+            ],
+            "correctIndex": 3
+          },
+          "sourceReasons": [
+            "nws-flight-environment THE JET STREAM: narrow high-speed bands at 20–40 thousand feet, associated with tropopause; upper-atmospheric jet, not surface belt.",
+            "nws-flight-environment HEMISPHERIC PREVAILING WINDS: tropical cell produces northeast trades; Hadley cell surface flow is equatorward from subtropical sinking air.",
+            "nws-flight-environment Ferrel cell: near-surface midlatitude air flows poleward and eastward, while circulation at 30–60° produces prevailing westerlies.",
+            "nws-flight-environment Polar cell: sinking air makes polar highs and diverges outward at surface; surface polar winds are easterly."
+          ],
+          "editorialReason": "Четыре подстановки прочитаны лично: В трёхъячеечной модели общей циркуляции какой приземный ветровой пояс возникает в полярной ячейке? / Струйное течение / Пассаты / Западные ветры / Полярные восточные ветры. Последовательные самостоятельные именные ответы; grammar/key/distractor category проверены. medium требует знакомства с циркуляцией; polar prompt имеет прямую подсказку и этого уровня не достигает. note3 добавляет опускание плотного холодного воздуха и полярный максимум, подтверждённые NWS. Факт ключа устойчив, но абсолютный medium нарушен очевидной словесной подсказкой.",
+          "literalSHA256": "736776339397686c2a0ea3ef8d98542ede0254dd4f3d13919ca2c022de78ee3c"
+        },
+        {
+          "group": "explanation",
+          "literal": "В трёхъячеечной модели полярные восточные ветры связаны с циркуляцией воздуха в высоких широтах. Название потока определяется его преобладающим направлением, а не направлением к полюсу.",
+          "sourceReasons": [
+            "nws-flight-environment Polar cell: sinking air makes polar highs and diverges outward at surface; surface polar winds are easterly."
+          ],
+          "editorialReason": "Два предложения, ключ назван, отличительный механизм объяснён; note3 добавляет опускание плотного холодного воздуха и полярный максимум, подтверждённые NWS. Факт ключа устойчив, но абсолютный medium нарушен очевидной словесной подсказкой.",
+          "literalSHA256": "acb43d6ce01cf7efa57d7a1c7909fa93fe2bb2c4440b087712607f130f57f272"
+        },
+        {
+          "group": "note0",
+          "literal": "Струйное течение — узкая полоса сильного ветра в верхней тропосфере.",
+          "sourceReasons": [
+            "nws-flight-environment THE JET STREAM: narrow high-speed bands at 20–40 thousand feet, associated with tropopause; upper-atmospheric jet, not surface belt."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "f35ea7af95c918c4415255dfed7dafc61e507aada9aa088a2f92750af4f7ba31"
+        },
+        {
+          "group": "note1",
+          "literal": "Пассаты — устойчивые восточные ветры тропиков, связанные с тропической ячейкой.",
+          "sourceReasons": [
+            "nws-flight-environment HEMISPHERIC PREVAILING WINDS: tropical cell produces northeast trades; Hadley cell surface flow is equatorward from subtropical sinking air."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "05b6b87edb4df0696b332d3a1575f8319c3161098419404bcf848bd1be303042"
+        },
+        {
+          "group": "note2",
+          "literal": "Западные ветры преобладают в средних широтах и направлены преимущественно с запада на восток.",
+          "sourceReasons": [
+            "nws-flight-environment Ferrel cell: near-surface midlatitude air flows poleward and eastward, while circulation at 30–60° produces prevailing westerlies."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "478121b78959ee3744b1db985495184f01b4e8a92814f653e047d82fbd252bf5"
+        },
+        {
+          "group": "note3",
+          "literal": "Холодный плотный воздух опускается у полюсов и создаёт там область высокого давления.",
+          "sourceReasons": [
+            "nws-flight-environment Polar cell and preceding cold-air paragraph: cold dense polar air sinks, creates high pressure, then diverges at surface. Correct note adds this causal context beyond prompt."
+          ],
+          "editorialReason": "Правильная справка: note3 добавляет опускание плотного холодного воздуха и полярный максимум, подтверждённые NWS. Факт ключа устойчив, но абсолютный medium нарушен очевидной словесной подсказкой.",
+          "literalSHA256": "1ff5f18e6dd0b93859a755ed28ff0683c05610257c830bd27ca218e68c7f5215"
+        }
+      ],
+      "sourceLocators": [
+        {
+          "locator": "nws-flight-environment",
+          "sourceUrl": "https://www.weather.gov/source/zhu/ZHU_Training_Page/winds/Wx_Terms/Flight_Environment.htm",
+          "typedLocator": "THE JET STREAM section (upper atmosphere, speed, tropopause/polar-front relation, west-to-east flow); Global Circulation section (direct solar heating/rising air near equator; trade, westerly and polar cell winds)",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-31-41-44-flight-environment/response.body",
+            "bytes": 36840,
+            "sha256": "02d2399b16f85ab31ea72e82850d2542c8cfc5f1911c02c8e15367ce88a5db8b",
+            "gitBlob": "6c68453e418d8ef4da5a86ce8b15b098cabc5845"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-31-41-44-flight-environment/response.headers",
+            "bytes": 1039,
+            "sha256": "de55ab5cd6600896fe3d0a0f7beea6c8a0697337123e61f659eb82bb1d0a9008",
+            "gitBlob": "b55ec1ba93a0e67c69b6f59cd51af1226642a267"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT",
+          "verifiedBytesAndSHA256": true
+        }
+      ],
+      "neighborReview": {
+        "currentNeighbors": [
+          {
+            "id": "weather-climate-westerlies-midlat",
+            "currentHash": "8bba5387aedb98895822ebdccaae998fd40ea5416f32237850638117c7957449",
+            "prompt": "Какой пояс господствующих ветров средних широт переносит погоду преимущественно с запада на восток?",
+            "correctAnswer": "Западные ветры",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-jet-stream-fast",
+            "currentHash": "92341289814bdb518d2d0402883cc342592a6736d46e83994a925f57e5c8a9d1",
+            "prompt": "Как называется узкая полоса очень сильного ветра в верхней атмосфере, обычно направленная с запада на восток?",
+            "correctAnswer": "Струйное течение",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          }
+        ],
+        "editorialReason": "CURRENT jet-stream-fast — верхняя узкая скоростная струя; западный пояс — Ferrel, полярный — Polar. Разные циркуляционные структуры. Нынешний полярный prompt всё ещё даёт словесную подсказку."
+      },
+      "defects": [
+        {
+          "fields": [
+            "prompt"
+          ],
+          "detail": "«в полярной ячейке» почти дословно указывает единственный вариант «Полярные восточные ветры». Удаление слов «с востока» не устранило подсказку: medium не требует знания модели, достаточно сопоставления слова полярный."
+        }
+      ],
+      "nextAction": "Координатор: оставить CURRENT вне зачёта как HOLD; дефекты сохранены для отдельного решения. Единственный fix-cycle исчерпан, второй в этом пакете не запускать.",
+      "frozenContract": {
+        "id": true,
+        "topic": true,
+        "position": true,
+        "difficulty": true,
+        "correctIndex": true
+      },
+      "difficultyReview": {
+        "frozen": "medium",
+        "absoluteAssessment": "medium требует знакомства с циркуляцией; polar prompt имеет прямую подсказку и этого уровня не достигает."
+      },
+      "scopeReview": {
+        "topicId": "weather-climate",
+        "withinScope": true,
+        "reason": "Спрашивается метеонаблюдение, атмосферная циркуляция, фронт, облако или климат; экологическая политика/общая отвлечённая физика не являются предметом вопроса."
+      },
+      "sourceLinkReview": {
+        "url": "https://www.weather.gov/source/zhu/ZHU_Training_Page/winds/Wx_Terms/Flight_Environment.htm",
+        "verifiedAt": "2026-10-14",
+        "mainFactConfirmedByDisplayedSource": true,
+        "reason": "Точная primary страница подтверждает главный факт."
+      }
+    },
+    {
+      "id": "weather-climate-satellite-clouds",
+      "currentHash": "30e565e81940103fa326cd27f473d74869feb355dafcd260d41064924eeab0a0",
+      "verdict": "HOLD",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой тип метеорологических наблюдений позволяет многократно получать обзор облаков над обширным регионом с почти неизменной точки обзора?",
+            "answers": [
+              "Метеорадар",
+              "Геостационарный метеоспутник",
+              "Радиозонд",
+              "Цеилометр"
+            ],
+            "correctIndex": 1
+          },
+          "sourceReasons": [
+            "nws-radar RADAR/Radar Beam/Mosaic: reflected radio waves from targets, precipitation targets with limited coverage; surface radar gives detailed regional mosaics, not an optical image of all cloud cover.",
+            "noaa-weather-satellites Geostationary Satellites: located over equator, orbit in 24 hours, fixed Earth-relative perspective permits measurement of cloud motion; polar views limited by Earth curvature.",
+            "nws-radiosonde Radiosonde: balloon carries transmitter for temperature, pressure, humidity; tracking by radar/radio direction/navigation gives WIND. Note that wind is obtained by tracking, not a direct humidity/temperature payload measurement.",
+            "nws-ceilometer Ceilometer: light/laser measures cloud-base height, optical triangulation or laser pulse travel time; local base measurement rather than regional cloud imagery."
+          ],
+          "editorialReason": "Четыре подстановки прочитаны лично: Какой тип метеорологических наблюдений позволяет многократно получать обзор облаков над обширным регионом с почти неизменной точки обзора? / Метеорадар / Геостационарный метеоспутник / Радиозонд / Цеилометр. Последовательные самостоятельные именные ответы; grammar/key/distractor category проверены. medium для метеорологических систем, однако проверяемая связь фиксированной перспективы совпадает с существующей easy orbit-карточкой. Уточнение геостационарного типа корректно; note1 добавляет экватор и 24 часа. Однако семантический repeat основного признака фиксированной перспективы с spaceflight-geo-fixed не закрыт; GOES/ABI сосед спрашивает серию и сам по себе не дубль.",
+          "literalSHA256": "3527a4ae3991682d4ec14dede28955a3f8d60d9daca9ee3556de97956160355d"
+        },
+        {
+          "group": "explanation",
+          "literal": "Геостационарный метеоспутник синхронно вращается с Землёй и сохраняет почти постоянное положение над одной областью. Это позволяет повторно наблюдать облака и отслеживать их движение; у полярных регионов такой обзор ограничен.",
+          "sourceReasons": [
+            "noaa-weather-satellites Geostationary Satellites: located over equator, orbit in 24 hours, fixed Earth-relative perspective permits measurement of cloud motion; polar views limited by Earth curvature."
+          ],
+          "editorialReason": "Два предложения, ключ назван, отличительный механизм объяснён; Уточнение геостационарного типа корректно; note1 добавляет экватор и 24 часа. Однако семантический repeat основного признака фиксированной перспективы с spaceflight-geo-fixed не закрыт; GOES/ABI сосед спрашивает серию и сам по себе не дубль.",
+          "literalSHA256": "df3081ca108beffc0ce8e2494adbc93a18bc0fd68cab6a3e510e80e062a8bcc2"
+        },
+        {
+          "group": "note0",
+          "literal": "Наземный метеорадар обнаруживает отражения от осадков в пределах своей зоны покрытия.",
+          "sourceReasons": [
+            "nws-radar RADAR/Radar Beam/Mosaic: reflected radio waves from targets, precipitation targets with limited coverage; surface radar gives detailed regional mosaics, not an optical image of all cloud cover."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "424a46fc2add20761c172cb21a73a223aaa9bcbb3a4277ab5aa03ecf3d99479b"
+        },
+        {
+          "group": "note1",
+          "literal": "Геостационарный спутник расположен над экватором и делает один оборот за 24 часа, оставаясь над одной областью.",
+          "sourceReasons": [
+            "noaa-weather-satellites Geostationary Satellites: located over equator, orbit in 24 hours, fixed Earth-relative perspective permits measurement of cloud motion; polar views limited by Earth curvature."
+          ],
+          "editorialReason": "Правильная справка: Уточнение геостационарного типа корректно; note1 добавляет экватор и 24 часа. Однако семантический repeat основного признака фиксированной перспективы с spaceflight-geo-fixed не закрыт; GOES/ABI сосед спрашивает серию и сам по себе не дубль.",
+          "literalSHA256": "aec133e3236635209fb9594511e71deb6a45768644966049a2173c36202a433f"
+        },
+        {
+          "group": "note2",
+          "literal": "Радиозонд поднимается на аэростате и передаёт вертикальный профиль температуры, влажности и ветра.",
+          "sourceReasons": [
+            "nws-radiosonde Radiosonde: balloon carries transmitter for temperature, pressure, humidity; tracking by radar/radio direction/navigation gives WIND. Note that wind is obtained by tracking, not a direct humidity/temperature payload measurement."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "a9774cea431ea8a823371b6d310c3fee0111ac163ce75e9fd171b52607d7b2d1"
+        },
+        {
+          "group": "note3",
+          "literal": "Цеилометр измеряет высоту нижней границы облаков над местом установки.",
+          "sourceReasons": [
+            "nws-ceilometer Ceilometer: light/laser measures cloud-base height, optical triangulation or laser pulse travel time; local base measurement rather than regional cloud imagery."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "5d31022cb46d57a836954fdbfc63a7e03138ded98be04912876b76a823743ea8"
+        }
+      ],
+      "sourceLocators": [
+        {
+          "locator": "noaa-weather-satellites",
+          "sourceUrl": "https://www.noaa.gov/jetstream/weather-satellites",
+          "gitCommit": "55db9891798bcaf38abc20f6ea3b215c0b3e8626",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/process-v2-weather20/author/sources/noaa-weather-satellites.body",
+            "bytes": 109590,
+            "sha256": "5dec0eda423a7c053d00f55d313b9254601d3941b4182b093715071d6081f9b9"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/process-v2-weather20/author/sources/noaa-weather-satellites.headers",
+            "bytes": 9364,
+            "sha256": "7ba0018de6339a24e9607277d11c24af00a3133ddd697571627f596fbcc0fbe5"
+          },
+          "verifiedBytesAndSHA256": true
+        },
+        {
+          "locator": "nws-radar",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=radar",
+          "typedLocator": "RADAR, Doppler Radar and precipitation target entries",
+          "gitCommit": "refs/codex-preservation/01a138d8-helper3a-terminal",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/radar-entry.body",
+            "bytes": 8167,
+            "sha256": "06306215ca1655c8e4f89fb0761510727bc4183f66ba6c2c40e8685370cd920d",
+            "gitBlob": "a1e8dda444c183b5dbe7f296dd1dc7e4e1c540b9"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/radar-entry.headers",
+            "bytes": 1023,
+            "sha256": "281f8f33a94bf981ec1b6b670d7d19dbb53e4bfd0cf0f5a76fce10a0a5a6838f",
+            "gitBlob": "85dcbd3d2f7ac5f10eafd28d7db5d620c58170ab"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT_RELEVANT_SECTIONS",
+          "verifiedBytesAndSHA256": true
+        },
+        {
+          "locator": "nws-radiosonde",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=radiosonde",
+          "typedLocator": "Radiosonde entry",
+          "gitCommit": "refs/codex-preservation/01a138d8-helper3a-terminal",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/radiosonde.body",
+            "bytes": 2397,
+            "sha256": "496b42413dfa3d979fd8aad966984b506dca13950ccc8b46bc42cb1778828294",
+            "gitBlob": "5c56f868994dc89ef4a18400a57c4951168141b2"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/radiosonde.headers",
+            "bytes": 1023,
+            "sha256": "39a5a6282abf04e0d46864d8cb4bdae763272842ceeb6f5c042a0efcc2ad8d5f",
+            "gitBlob": "fac57b75ca08019a7c155c6053a40758e3e44d1f"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT_RELEVANT_SECTIONS",
+          "verifiedBytesAndSHA256": true
+        },
+        {
+          "locator": "nws-ceilometer",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=ceilometer",
+          "typedLocator": "Ceilometer entry",
+          "gitCommit": "refs/codex-preservation/01a138d8-helper3a-terminal",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/ceilometer-entry.body",
+            "bytes": 2389,
+            "sha256": "4d2422297704faae7934a723602e52279d4d0145994114fcb842107df57e98b5",
+            "gitBlob": "8b915c50e638d17157e073af66dffa1334c67df7"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/ceilometer-entry.headers",
+            "bytes": 1023,
+            "sha256": "786d690e08759f30aebb6874636d211dbd64559d111632c2d3839d2bcf8ad33c",
+            "gitBlob": "2cca8e2972a5d99fb1a04b18529114e87bddf68f"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT_RELEVANT_SECTIONS",
+          "verifiedBytesAndSHA256": true
+        }
+      ],
+      "neighborReview": {
+        "currentNeighbors": [],
+        "editorialReason": "CURRENT spaceflight-geo-fixed использует ту же связь геостационарности с неподвижной перспективой; добавление облачного покрова не требует иного знания. GOES/ABI спрашивает конкретную серию и не дублирует тип спутника.",
+        "crossTopicNeighbors": [
+          {
+            "id": "spaceflight-geo-fixed",
+            "currentHash": "50f9e32d531f4375b781d50130bade88edbb3efe4f794c698a2a46eed7bd1102",
+            "prompt": "Какой тип орбиты позволяет спутнику казаться неподвижным в небе?",
+            "correctAnswer": "Геостационарная орбита"
+          },
+          {
+            "id": "spaceflight-goes-weather",
+            "currentHash": "a2e07412808a49095e9e1c9638ee8be145016ad932b4d5f65243d6b091a311c2",
+            "prompt": "Какая геостационарная спутниковая серия NOAA использует прибор ABI для частого наблюдения облаков и штормов?",
+            "correctAnswer": "GOES"
+          }
+        ]
+      },
+      "defects": [
+        {
+          "fields": [
+            "prompt"
+          ],
+          "detail": "Главный признак «почти неизменная точка обзора» → геостационарный спутник повторяет spaceflight-geo-fixed («орбита позволяет казаться неподвижным»). Обзор облаков задаёт применение той же связи, но нового различения наблюдательных свойств не требует."
+        }
+      ],
+      "nextAction": "Координатор: оставить CURRENT вне зачёта как HOLD; дефекты сохранены для отдельного решения. Единственный fix-cycle исчерпан, второй в этом пакете не запускать.",
+      "frozenContract": {
+        "id": true,
+        "topic": true,
+        "position": true,
+        "difficulty": true,
+        "correctIndex": true
+      },
+      "difficultyReview": {
+        "frozen": "medium",
+        "absoluteAssessment": "medium для метеорологических систем, однако проверяемая связь фиксированной перспективы совпадает с существующей easy orbit-карточкой."
+      },
+      "scopeReview": {
+        "topicId": "weather-climate",
+        "withinScope": true,
+        "reason": "Спрашивается метеонаблюдение, атмосферная циркуляция, фронт, облако или климат; экологическая политика/общая отвлечённая физика не являются предметом вопроса."
+      },
+      "sourceLinkReview": {
+        "url": "https://www.noaa.gov/jetstream/weather-satellites",
+        "verifiedAt": "2026-10-14",
+        "mainFactConfirmedByDisplayedSource": true,
+        "reason": "Точная primary страница подтверждает главный факт."
+      }
+    },
+    {
+      "id": "weather-climate-stationary-front",
+      "currentHash": "e54c271f758f7592577ce509d1d9e6b0592cc4a27a2a02a7ebd0873260d33019",
+      "verdict": "HOLD",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Как называется фронт, который почти не перемещается, потому что холодный воздух у его границы не отступает?",
+            "answers": [
+              "Тёплый фронт",
+              "Холодный фронт",
+              "Стационарный фронт",
+              "Фронт окклюзии"
+            ],
+            "correctIndex": 2
+          },
+          "sourceReasons": [
+            "nws-basic-fronts Warm Front: cold air must retreat before warm air advances; warm air ascends slantwise over cooler air and can give precipitation ahead with moisture.",
+            "nws-basic-fronts Cold Front: denser cold air advances and displaces warm air; sufficient moisture gives rain and instability can give thunderstorms.",
+            "nws-basic-fronts Stationary Front: denser cool air does not retreat; balance means neither mass advances, so boundary barely moves.",
+            "nws-occluded Occluded Front: composite when cold front overtakes warm or quasi-stationary front; coldest-air placement distinguishes warm/cold occlusion."
+          ],
+          "editorialReason": "Четыре подстановки прочитаны лично: Как называется фронт, который почти не перемещается, потому что холодный воздух у его границы не отступает? / Тёплый фронт / Холодный фронт / Стационарный фронт / Фронт окклюзии. Последовательные самостоятельные именные ответы; grammar/key/distractor category проверены. easy для холодного/стационарного поверхностного сценария; medium для составной окклюзии. Неподтверждённая обязательная облачность/осадки убраны. Правильная note практически не изменилась и не выполняет требование дополняющего факта.",
+          "literalSHA256": "c3780c741372483ad63bb0bc23c9d95579416abfdade9ae1f451abd0931fc37b"
+        },
+        {
+          "group": "explanation",
+          "literal": "Стационарный фронт — граница между воздушными массами, которая почти не перемещается. В описанной NWS схеме баланс тёплой и холодной масс удерживает фронт; сам баланс не означает обязательных осадков.",
+          "sourceReasons": [
+            "nws-basic-fronts Stationary Front: denser cool air does not retreat; balance means neither mass advances, so boundary barely moves. NWS balance does not logically imply mandatory rainfall: отсутствие обязательности — корректный предел вывода из описанного механизма."
+          ],
+          "editorialReason": "Два предложения, ключ назван, отличительный механизм объяснён; Неподтверждённая обязательная облачность/осадки убраны. Правильная note практически не изменилась и не выполняет требование дополняющего факта.",
+          "literalSHA256": "3412602a5b6b55b165fd784d15f582774e7ead542bae0dddc6a0e6d8b131307e"
+        },
+        {
+          "group": "note0",
+          "literal": "Тёплый фронт продвигается вместе с наступающим тёплым воздухом.",
+          "sourceReasons": [
+            "nws-basic-fronts Warm Front: cold air must retreat before warm air advances; warm air ascends slantwise over cooler air and can give precipitation ahead with moisture."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "26d6c9a697a0f302329b0607eadd950ba998d365aa14aa617b9963b24819d8f6"
+        },
+        {
+          "group": "note1",
+          "literal": "Холодный фронт перемещается вместе с наступающим холодным воздухом.",
+          "sourceReasons": [
+            "nws-basic-fronts Cold Front: denser cold air advances and displaces warm air; sufficient moisture gives rain and instability can give thunderstorms."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "2dc63dd4bd62586a7ee51964e91bf831872642311988b6aadea32c35fc2c9d4b"
+        },
+        {
+          "group": "note2",
+          "literal": "Стационарный фронт почти не движется, когда ни одна воздушная масса не вытесняет другую.",
+          "sourceReasons": [
+            "nws-basic-fronts Stationary Front: denser cool air does not retreat; balance means neither mass advances, so boundary barely moves. Fact true, but note duplicates the queried immobility/no-retreat mechanism."
+          ],
+          "editorialReason": "Правильная справка: Неподтверждённая обязательная облачность/осадки убраны. Правильная note практически не изменилась и не выполняет требование дополняющего факта.",
+          "literalSHA256": "d6fd8343dfae048a7a1552e25b03d88524ac2fb396ccd47a15dc48aba410e268"
+        },
+        {
+          "group": "note3",
+          "literal": "Фронт окклюзии возникает, когда холодный фронт обгоняет тёплый или квазистационарный.",
+          "sourceReasons": [
+            "nws-occluded Occluded Front: composite when cold front overtakes warm or quasi-stationary front; coldest-air placement distinguishes warm/cold occlusion."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "8d8307eceebeb800e7c041c5937d70ad5f38f0025921df4e7cb48bdbc979cb69"
+        }
+      ],
+      "sourceLocators": [
+        {
+          "locator": "nws-basic-fronts",
+          "sourceUrl": "https://www.weather.gov/lmk/basic-fronts",
+          "typedLocator": "Warm Front, Cold Front and Stationary Front sections",
+          "gitCommit": "refs/codex-preservation/01a138d8-weather66-terminal",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-35-36-41-fronts/response.body",
+            "bytes": 75793,
+            "sha256": "1b3a738812b7b4fcc416d105d2def689820d94f6b476525be9e7cb68f7ca255f",
+            "gitBlob": "7c1fbc7df500af4df71eb270548632e8fb012069"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-35-36-41-fronts/response.headers",
+            "bytes": 970,
+            "sha256": "013ee26cf5521f66bb4b2283bba8d5ade72ef3cdf34d1c10f3a461ff6f137a91",
+            "gitBlob": "00bc2d8a495124adc4165cab78656278f3beae86"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT_RELEVANT_SECTIONS",
+          "verifiedBytesAndSHA256": true
+        },
+        {
+          "locator": "nws-occluded",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=occluded%20front",
+          "typedLocator": "Occluded Front entry",
+          "gitCommit": "refs/codex-preservation/01a138d8-helper3a-terminal",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/occluded.body",
+            "bytes": 2444,
+            "sha256": "7ca106160482fdb8b782788b46e9424674df065954ac808f77c6b3dbd898a63a",
+            "gitBlob": "8a37c432923aa4bbeb864d709df083a980ab4656"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/occluded.headers",
+            "bytes": 1023,
+            "sha256": "5e581cf0b564aed3eac6a92f02e17a8c9ebfb82200c6e82957bc59b4c839f139",
+            "gitBlob": "59367b86f8f64a8c0bedfc895456f8c080c20968"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT_RELEVANT_SECTIONS",
+          "verifiedBytesAndSHA256": true
+        }
+      ],
+      "neighborReview": {
+        "currentNeighbors": [
+          {
+            "id": "weather-climate-cold-front-symbol",
+            "currentHash": "c69955f3de00c87b215036d1b90a59240cd6d551c5e8c0c6548a224844f77c99",
+            "prompt": "На поверхности холодный воздух наступает на более тёплый и вытесняет его; какая граница проходит?",
+            "correctAnswer": "Холодный фронт",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-occluded-front",
+            "currentHash": "1bb3c73d10844984fbacfc5c46b712551bfb75a64a994a81f8b2eafc05af3715",
+            "prompt": "Холодная граница обогнала тёплую; возникшая составная граница объединяет участки двух прежних фронтов. Как она называется?",
+            "correctAnswer": "Фронт окклюзии",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-frontal-rain",
+            "currentHash": "81e62e1be393e6c1fa7b697e7c2e7ef47202470dd7f4ce35fbf62b799c448f24",
+            "prompt": "Какие осадки сопровождают прохождение атмосферного фронта?",
+            "correctAnswer": "Фронтальные осадки",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          }
+        ],
+        "editorialReason": "Наступление холодной массы, почти неподвижная граница и составная окклюзия — разные сценарии; frontal-rain классифицирует осадки. Исправление note не создало дубля."
+      },
+      "defects": [
+        {
+          "fields": [
+            "note2"
+          ],
+          "detail": "Note2 вновь повторяет весь prompt: фронт почти не движется, когда массы не вытесняют друг друга. Отсутствие отступления холодного воздуха из prompt просто пересказано как отсутствие вытеснения; нового самостоятельного факта нет."
+        }
+      ],
+      "nextAction": "Координатор: оставить CURRENT вне зачёта как HOLD; дефекты сохранены для отдельного решения. Единственный fix-cycle исчерпан, второй в этом пакете не запускать.",
+      "frozenContract": {
+        "id": true,
+        "topic": true,
+        "position": true,
+        "difficulty": true,
+        "correctIndex": true
+      },
+      "difficultyReview": {
+        "frozen": "easy",
+        "absoluteAssessment": "easy для холодного/стационарного поверхностного сценария; medium для составной окклюзии."
+      },
+      "scopeReview": {
+        "topicId": "weather-climate",
+        "withinScope": true,
+        "reason": "Спрашивается метеонаблюдение, атмосферная циркуляция, фронт, облако или климат; экологическая политика/общая отвлечённая физика не являются предметом вопроса."
+      },
+      "sourceLinkReview": {
+        "url": "https://www.weather.gov/lmk/basic-fronts",
+        "verifiedAt": "2026-10-14",
+        "mainFactConfirmedByDisplayedSource": true,
+        "reason": "Точная primary страница подтверждает главный факт."
+      }
+    },
+    {
+      "id": "weather-climate-stratus-layer",
+      "currentHash": "1a4ec5fb2a8da34b25198bcb32fc097d4a047c369105fd9a9c9e8ba609037466",
+      "verdict": "PASS",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой облачный род образует низкий серый слой с довольно ровным основанием?",
+            "answers": [
+              "Кучевые облака",
+              "Перистые облака",
+              "Кучево-дождевые облака",
+              "Слоистые облака"
+            ],
+            "correctIndex": 3
+          },
+          "sourceReasons": [
+            "nws-cumulus Cumulus: detached domes/mounds/towers, rounded tops and more horizontal bases; this supports the flat-base note.",
+            "nws-cirrus Cirrus: high clouds composed of ice crystals, white delicate filaments and typical fibrous/hairlike appearance.",
+            "nws-key-glossary CUMULONIMBUS: cumulus with great vertical development, frequent thunderstorms/heavy rain and often anvil.",
+            "nws-stratus Stratus: low generally gray layer with fairly uniform base, may be ragged patches; fog usually a surface-based form."
+          ],
+          "editorialReason": "Четыре подстановки прочитаны лично: Какой облачный род образует низкий серый слой с довольно ровным основанием? / Кучевые облака / Перистые облака / Кучево-дождевые облака / Слоистые облака. Последовательные самостоятельные именные ответы; grammar/key/distractor category проверены. easy: распространённые облачные формы для взрослой аудитории. note3 теперь даёт новый факт: туман обычно является приземной формой stratus. Четыре рода облаков, key, explanation и все notes подтверждены прочитанными NWS entries.",
+          "literalSHA256": "cdd0d1bd5bb636b6b98f6b0e8dc5cac1f0d36130858b9a00e4de517aecde8c21"
+        },
+        {
+          "group": "explanation",
+          "literal": "Слоистые облака образуют низкий обычно серый слой с относительно ровным основанием. Они могут выглядеть рваными участками, а туман обычно является их приземной формой.",
+          "sourceReasons": [
+            "nws-stratus Stratus: low generally gray layer with fairly uniform base, may be ragged patches; fog usually a surface-based form."
+          ],
+          "editorialReason": "Два предложения, ключ назван, отличительный механизм объяснён; note3 теперь даёт новый факт: туман обычно является приземной формой stratus. Четыре рода облаков, key, explanation и все notes подтверждены прочитанными NWS entries.",
+          "literalSHA256": "a054306bb74ad42c4b14e679b3b666c40f2835f40e1774ebb238f1d02e3acea8"
+        },
+        {
+          "group": "note0",
+          "literal": "Кучевые облака имеют отдельные куполовидные элементы и сравнительно плоское основание.",
+          "sourceReasons": [
+            "nws-cumulus Cumulus: detached domes/mounds/towers, rounded tops and more horizontal bases; this supports the flat-base note."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "6c927468cdc6df7a5b0ac54a449f48d178badeb74648df2898bbcf98fb40ba67"
+        },
+        {
+          "group": "note1",
+          "literal": "Перистые облака высокие, тонкие и волокнистые; обычно они состоят из ледяных кристаллов.",
+          "sourceReasons": [
+            "nws-cirrus Cirrus: high clouds composed of ice crystals, white delicate filaments and typical fibrous/hairlike appearance."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "a2716a045e38a18666feab995b549a0d75885fcc01831dd56f114ed18b5df5fd"
+        },
+        {
+          "group": "note2",
+          "literal": "Кучево-дождевые облака развиваются вертикально и могут приносить ливни и грозы.",
+          "sourceReasons": [
+            "nws-key-glossary CUMULONIMBUS: cumulus with great vertical development, frequent thunderstorms/heavy rain and often anvil."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "94fed1749c035b8c2f614c53bd616caa9122a3b6d92e16841d906953428cc072"
+        },
+        {
+          "group": "note3",
+          "literal": "Туман обычно представляет собой приземную форму слоистых облаков.",
+          "sourceReasons": [
+            "nws-stratus Stratus final sentence: Fog usually is a surface-based form of stratus. New correct-note fact, not in prompt."
+          ],
+          "editorialReason": "Правильная справка: note3 теперь даёт новый факт: туман обычно является приземной формой stratus. Четыре рода облаков, key, explanation и все notes подтверждены прочитанными NWS entries.",
+          "literalSHA256": "90737ce08cae0e3e93d0661e68554616954ceab2d59f98dfc5d8a95346218fb4"
+        }
+      ],
+      "sourceLocators": [
+        {
+          "locator": "nws-stratus",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=stratus",
+          "typedLocator": "Stratus entry",
+          "gitCommit": "refs/codex-preservation/01a138d8-helper3a-terminal",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/stratus.body",
+            "bytes": 3336,
+            "sha256": "1825aca7d86e6919abcc38439774d3aef1e8197df41eb40810739a370583a78f",
+            "gitBlob": "291d2a780950134f3abc4ea6e99e505590c73b66"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/opaque-validator-01a138d8/helper3a-terminal/new-capture-files/weather-new/stratus.headers",
+            "bytes": 1023,
+            "sha256": "3224f0e11cdf5d6a55e3ca686a5f88cddf0f861fdb32736b9c2d60bb3964de57",
+            "gitBlob": "d42085dd409fdd9e226eacbca094ccb44b45a4d7"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT_RELEVANT_SECTIONS",
+          "verifiedBytesAndSHA256": true
+        },
+        {
+          "locator": "nws-cumulus",
+          "url": "https://forecast.weather.gov/glossary.php?word=cumulus",
+          "capturedAt": "2026-10-14T18:39:49.379983+00:00",
+          "attempt": 1,
+          "exitCode": 0,
+          "stderr": "",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/process-v2-weather20/reviewer/sources/nws-cumulus.body",
+            "bytes": 3878,
+            "sha256": "5bb3e221759e04f5a1a5d955304346cc1a8b7bb9e0c1fc34d8dc80be0240531e"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/process-v2-weather20/reviewer/sources/nws-cumulus.headers",
+            "bytes": 1023,
+            "sha256": "52c4d61df42a6d45fce47865104099ae72f7220a47fed7e8bacf89db11446643"
+          }
+        },
+        {
+          "locator": "nws-cirrus",
+          "url": "https://forecast.weather.gov/glossary.php?word=cirrus",
+          "capturedAt": "2026-10-14T18:40:22.793062+00:00",
+          "attempt": 1,
+          "exitCode": 0,
+          "stderr": "",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/process-v2-weather20/reviewer/sources/nws-cirrus.body",
+            "bytes": 2669,
+            "sha256": "eb2677e94daa82d782b52f7d6b7a6e8680391bc1b28a134d053c92da58010ba1"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/process-v2-weather20/reviewer/sources/nws-cirrus.headers",
+            "bytes": 1023,
+            "sha256": "9d410500e13784f8137e63b949a39be5a888c06f60a8233ee38acf41390cc3c0"
+          }
+        },
+        {
+          "locator": "nws-key-glossary",
+          "sourceUrl": "https://www.weather.gov/key/glossary",
+          "typedLocator": "CIRRUS, CUMULUS, CUMULONIMBUS, STRATUS, DEW POINT, HEAT INDEX, HUMIDITY, PRESSURE and other definition entries",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-32-33-glossary/response.body",
+            "bytes": 67052,
+            "sha256": "aafcca36a6534aa6e56b5a8b6bc30826b895771f09315bed352e14a724338ba8",
+            "gitBlob": "3d7edaf7e4a7b4c567f9042c2532f3cc819b2922"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-32-33-glossary/response.headers",
+            "bytes": 970,
+            "sha256": "013ee26cf5521f66bb4b2283bba8d5ade72ef3cdf34d1c10f3a461ff6f137a91",
+            "gitBlob": "00bc2d8a495124adc4165cab78656278f3beae86"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT",
+          "verifiedBytesAndSHA256": true
+        }
+      ],
+      "neighborReview": {
+        "currentNeighbors": [
+          {
+            "id": "weather-climate-cirrus-feathery",
+            "currentHash": "1ad5c9640ccd4133b55e2f4ca531a57b9619002d47d909e00ef2ffe43a1f2e00",
+            "prompt": "Какие облака выглядят как тонкие белые перья высоко в небе?",
+            "correctAnswer": "Перистые облака",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-cumulonimbus-storm",
+            "currentHash": "6bf9e4b790594465d6eea0fd5054c5edd86ff63be95cae57e5f0e9109794c311",
+            "prompt": "Из каких облаков обычно развивается гроза?",
+            "correctAnswer": "Кучево-дождевые облака",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          }
+        ],
+        "editorialReason": "CURRENT cirrus спрашивает высокие перья, cumulonimbus — грозовую связь; stratus — низкий слой и теперь fog в correct note. Разные cloud genera/признаки."
+      },
+      "defects": [],
+      "nextAction": "Координатор: принять точный hash после adjudication и сохранить результат.",
+      "frozenContract": {
+        "id": true,
+        "topic": true,
+        "position": true,
+        "difficulty": true,
+        "correctIndex": true
+      },
+      "difficultyReview": {
+        "frozen": "easy",
+        "absoluteAssessment": "easy: распространённые облачные формы для взрослой аудитории."
+      },
+      "scopeReview": {
+        "topicId": "weather-climate",
+        "withinScope": true,
+        "reason": "Спрашивается метеонаблюдение, атмосферная циркуляция, фронт, облако или климат; экологическая политика/общая отвлечённая физика не являются предметом вопроса."
+      },
+      "sourceLinkReview": {
+        "url": "https://forecast.weather.gov/glossary.php?word=stratus",
+        "verifiedAt": "2026-10-14",
+        "mainFactConfirmedByDisplayedSource": true,
+        "reason": "Точная primary страница подтверждает главный факт."
+      }
+    },
+    {
+      "id": "weather-climate-westerlies-midlat",
+      "currentHash": "8bba5387aedb98895822ebdccaae998fd40ea5416f32237850638117c7957449",
+      "verdict": "HOLD",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой пояс господствующих ветров средних широт переносит погоду преимущественно с запада на восток?",
+            "answers": [
+              "Струйное течение",
+              "Пассаты",
+              "Полярные восточные ветры",
+              "Западные ветры"
+            ],
+            "correctIndex": 3
+          },
+          "sourceReasons": [
+            "nws-flight-environment THE JET STREAM: narrow high-speed bands at 20–40 thousand feet, associated with tropopause; upper-atmospheric jet, not surface belt.",
+            "nws-flight-environment HEMISPHERIC PREVAILING WINDS: tropical cell produces northeast trades; Hadley cell surface flow is equatorward from subtropical sinking air.",
+            "nws-flight-environment Polar cell: sinking air makes polar highs and diverges outward at surface; surface polar winds are easterly.",
+            "nws-flight-environment Ferrel cell: near-surface midlatitude air flows poleward and eastward, while circulation at 30–60° produces prevailing westerlies."
+          ],
+          "editorialReason": "Четыре подстановки прочитаны лично: Какой пояс господствующих ветров средних широт переносит погоду преимущественно с запада на восток? / Струйное течение / Пассаты / Полярные восточные ветры / Западные ветры. Последовательные самостоятельные именные ответы; grammar/key/distractor category проверены. medium требует знакомства с циркуляцией; polar prompt имеет прямую подсказку и этого уровня не достигает. Кориолисовское отклонение вправо подтверждено NWS, но literal правильной справки не сообщает свойства конкретно западного пояса. Сам вопрос остаётся отличным от полярной/тропической циркуляции и высотной струи.",
+          "literalSHA256": "7e68383b2cf5eeda45ab4f2cb8cffe1d0fd84eac1499567b5ce85477cb726a32"
+        },
+        {
+          "group": "explanation",
+          "literal": "Западные ветры — господствующий поток средних широт с запада на восток. Они помогают перемещать многие системы погоды, но локальная траектория отдельного циклона зависит и от других факторов.",
+          "sourceReasons": [
+            "nws-flight-environment Ferrel cell: near-surface midlatitude air flows poleward and eastward, while circulation at 30–60° produces prevailing westerlies."
+          ],
+          "editorialReason": "Два предложения, ключ назван, отличительный механизм объяснён; Кориолисовское отклонение вправо подтверждено NWS, но literal правильной справки не сообщает свойства конкретно западного пояса. Сам вопрос остаётся отличным от полярной/тропической циркуляции и высотной струи.",
+          "literalSHA256": "e0f4b697950fdd3fca654b1bde03990c8642fa749a95cfc03057d942f12191bc"
+        },
+        {
+          "group": "note0",
+          "literal": "Струйное течение — узкий быстрый поток в верхней тропосфере, а не приземный пояс ветров.",
+          "sourceReasons": [
+            "nws-flight-environment THE JET STREAM: narrow high-speed bands at 20–40 thousand feet, associated with tropopause; upper-atmospheric jet, not surface belt."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "997ad7a82cee85125e2bc0e31982acd828e4382e823f3746de396c048998426e"
+        },
+        {
+          "group": "note1",
+          "literal": "Пассаты — устойчивые восточные ветры тропиков, связанные с тропической циркуляцией.",
+          "sourceReasons": [
+            "nws-flight-environment HEMISPHERIC PREVAILING WINDS: tropical cell produces northeast trades; Hadley cell surface flow is equatorward from subtropical sinking air."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "2d1aa9fac38bc409a44e7af20b0ca287c9bd340b8feac7852dc62894e6e41100"
+        },
+        {
+          "group": "note2",
+          "literal": "Полярные восточные ветры возникают в высоких широтах и направлены с востока на запад.",
+          "sourceReasons": [
+            "nws-flight-environment Polar cell: sinking air makes polar highs and diverges outward at surface; surface polar winds are easterly."
+          ],
+          "editorialReason": "Самостоятельное содержание о названном дистракторе проверено лично; относится к этому варианту, факты не подменены свойствами ключа.",
+          "literalSHA256": "6b47bf655a4c4eb9f0c61d92b20ed77fb8d248ed61b8f224f226c854ddc65a15"
+        },
+        {
+          "group": "note3",
+          "literal": "В северном полушарии вращение Земли отклоняет движущийся воздух вправо от его первоначального направления.",
+          "sourceReasons": [
+            "nws-flight-environment: Coriolis deflects air RIGHT in Northern Hemisphere; factual literal is supported, but it states general moving-air law, not a west-wind-specific property."
+          ],
+          "editorialReason": "Правильная справка: Кориолисовское отклонение вправо подтверждено NWS, но literal правильной справки не сообщает свойства конкретно западного пояса. Сам вопрос остаётся отличным от полярной/тропической циркуляции и высотной струи.",
+          "literalSHA256": "61e667dd31c527a04b08ded2697a822609653ac70f2bfed822b8dc00cd11528e"
+        }
+      ],
+      "sourceLocators": [
+        {
+          "locator": "nws-flight-environment",
+          "sourceUrl": "https://www.weather.gov/source/zhu/ZHU_Training_Page/winds/Wx_Terms/Flight_Environment.htm",
+          "typedLocator": "THE JET STREAM section (upper atmosphere, speed, tropopause/polar-front relation, west-to-east flow); Global Circulation section (direct solar heating/rising air near equator; trade, westerly and polar cell winds)",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-31-41-44-flight-environment/response.body",
+            "bytes": 36840,
+            "sha256": "02d2399b16f85ab31ea72e82850d2542c8cfc5f1911c02c8e15367ce88a5db8b",
+            "gitBlob": "6c68453e418d8ef4da5a86ce8b15b098cabc5845"
+          },
+          "headers": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-31-41-44-flight-environment/response.headers",
+            "bytes": 1039,
+            "sha256": "de55ab5cd6600896fe3d0a0f7beea6c8a0697337123e61f659eb82bb1d0a9008",
+            "gitBlob": "b55ec1ba93a0e67c69b6f59cd51af1226642a267"
+          },
+          "rawAndHeadersByteExact": true,
+          "personalRead": "COMPLETE_CONTEXT",
+          "verifiedBytesAndSHA256": true
+        }
+      ],
+      "neighborReview": {
+        "currentNeighbors": [
+          {
+            "id": "weather-climate-polar-easterlies",
+            "currentHash": "64cccee7db893cf6223d4ba9bb3b97afe08a64aa41452e5d15aa32adbf95a47c",
+            "prompt": "В трёхъячеечной модели общей циркуляции какой приземный ветровой пояс возникает в полярной ячейке?",
+            "correctAnswer": "Полярные восточные ветры",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          },
+          {
+            "id": "weather-climate-jet-stream-fast",
+            "currentHash": "92341289814bdb518d2d0402883cc342592a6736d46e83994a925f57e5c8a9d1",
+            "prompt": "Как называется узкая полоса очень сильного ветра в верхней атмосфере, обычно направленная с запада на восток?",
+            "correctAnswer": "Струйное течение",
+            "readStatus": "ACTUAL_CURRENT_READ_FOR_DEPENDENCY_ONLY; no credit inferred"
+          }
+        ],
+        "editorialReason": "CURRENT jet-stream-fast — верхняя узкая скоростная струя; западный пояс — Ferrel, полярный — Polar. Разные циркуляционные структуры. Нынешний полярный prompt всё ещё даёт словесную подсказку."
+      },
+      "defects": [
+        {
+          "fields": [
+            "note3"
+          ],
+          "detail": "Новая справка говорит о любом движущемся воздухе в Северном полушарии и не связывает факт с Западными ветрами. Тот же текст подходит пассатам/полярным восточным/струйным течениям. Нужен самостоятельный факт о конкретном варианте, а не общий принцип атмосферы без связи с ним."
+        }
+      ],
+      "nextAction": "Координатор: оставить CURRENT вне зачёта как HOLD; дефекты сохранены для отдельного решения. Единственный fix-cycle исчерпан, второй в этом пакете не запускать.",
+      "frozenContract": {
+        "id": true,
+        "topic": true,
+        "position": true,
+        "difficulty": true,
+        "correctIndex": true
+      },
+      "difficultyReview": {
+        "frozen": "medium",
+        "absoluteAssessment": "medium требует знакомства с циркуляцией; polar prompt имеет прямую подсказку и этого уровня не достигает."
+      },
+      "scopeReview": {
+        "topicId": "weather-climate",
+        "withinScope": true,
+        "reason": "Спрашивается метеонаблюдение, атмосферная циркуляция, фронт, облако или климат; экологическая политика/общая отвлечённая физика не являются предметом вопроса."
+      },
+      "sourceLinkReview": {
+        "url": "https://www.weather.gov/source/zhu/ZHU_Training_Page/winds/Wx_Terms/Flight_Environment.htm",
+        "verifiedAt": "2026-10-14",
+        "mainFactConfirmedByDisplayedSource": true,
+        "reason": "Точная primary страница подтверждает главный факт."
+      }
+    }
+  ],
+  "unchangedPass7": {
+    "mechanicalHashVerificationOnly": true,
+    "ids": [
+      "weather-climate-ceilometer-cloud-base",
+      "weather-climate-cumulus-puffy",
+      "weather-climate-helicity-rotation",
+      "weather-climate-radar-precipitation",
+      "weather-climate-radiosonde-balloon",
+      "weather-climate-trade-winds-tropics",
+      "weather-climate-warm-front-symbol"
+    ],
+    "notRereviewed": true
+  },
+  "unchangedHold2": {
+    "mechanicalHashVerificationOnly": true,
+    "ids": [
+      "weather-climate-bergeron-ice",
+      "weather-climate-warm-cloud-collision"
+    ],
+    "notRereviewedNotCredited": true
+  },
+  "process": "Personally read actual CURRENT11 and primary bodies, verified exact bytes+SHA. No author verdict inherited, no subagents/chats/downloads/second fix cycle. Actual changed Weather15 and H10 dependencies read without credit.",
+  "checks": {
+    "all11MatchAfterHash": true,
+    "originalTopicPositionsFrozen": true,
+    "frozenIdDifficultyKey": true,
+    "sixLiteralGroupsWithCanonicalSHA256": true,
+    "notesWithin35Words": true,
+    "explanationsWithin70Words": true,
+    "runtimeBuildFullQA": "NotRun: outside task scope"
+  },
+  "stopCondition": "Rereview of the single fix cycle complete; unresolved defects are HOLD, no further fixes authorized in this batch."
+}
