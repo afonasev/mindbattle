@@ -1,0 +1,83 @@
+{
+  "cycle": 0,
+  "accepted": [
+    {
+      "id": "russian-language-question-mark",
+      "cardCanonicalSha256": "d6124e2c147b071388d42783012c9f3db4fb446a1e18889456e067d8759e117b"
+    },
+    {
+      "id": "russian-language-not-verbs",
+      "cardCanonicalSha256": "af8a6c6fa05200262f754181571d3388acc467bbd8cdca4c7db12483f94ea130"
+    }
+  ],
+  "pendingFIX": [
+    {
+      "id": "russian-language-sentence-capital",
+      "hash": "f5eb082e03e56aeea49280d1ee6c38472d1f6c622d2339afd78ed39db69a98bc",
+      "defects": [
+        {
+          "field": "answers[1].note",
+          "defect": "Безусловное «Внутри предложения пишут со строчной» противоречит §157: собственные имена внутри предложения пишутся с прописной.",
+          "nextAction": "Автор: ограничить утверждение обычными нарицательными словами и явно сохранить исключение собственных имён; не менять frozen key/difficulty.",
+          "source": "Орфография §157, PDF167 / печ.165"
+        }
+      ]
+    },
+    {
+      "id": "russian-language-zhi-shi",
+      "hash": "f0c6c45e5a6aeb7be663e5cdd50c9109a5f6717279d9490f5f161703a6e12710",
+      "defects": [
+        {
+          "field": "prompt + ordered answer texts",
+          "defect": "И уже буквально присутствует в ЖИ/ШИ; А и О не являются правдоподобными конкурентами для напечатанных сочетаний.",
+          "nextAction": "Автор: один адресный цикл — убрать напечатанный ключ из условия и дать четыре содержательно конкурирующие полные варианты написания/примеров при сохранённом key=1 и easy; перечитать cha-shcha как ближайшего соседа. Если четыре правдоподобных ответа невозможны, HOLD с запросом решения по слоту.",
+          "source": "Орфография §§13–18, PDF28–32 / печ.26–30; guide Формулировка и варианты"
+        }
+      ]
+    },
+    {
+      "id": "russian-language-cha-shcha",
+      "hash": "5d7e0a82f0cd5c5ec4f4baf2c8263248da02ca4ebc1deffb5237064bf34e1625",
+      "defects": [
+        {
+          "field": "prompt + ordered answer texts",
+          "defect": "А уже напечатана в ЧА/ЩА; У и О дают иные звуки/сочетания, не разумные ошибочные написания этого правила.",
+          "nextAction": "Автор: один адресный цикл — ситуация/варианты написания без готовой А в условии, все четыре правдоподобны, key=1/easy сохранены; не перефразировать zhi-shi тем же шаблоном. Иначе HOLD.",
+          "source": "Орфография §13, PDF28 / печ.26; guide Формулировка и варианты"
+        }
+      ]
+    },
+    {
+      "id": "russian-language-quotes-direct-speech",
+      "hash": "891702d4729407730bc1f518e803e11d535b6af5e50d38f6ceffcfdb87bae2c9",
+      "defects": [
+        {
+          "field": "prompt + answers[3].text",
+          "defect": "Вопрос единственного числа «Каким знаком» при правильном «Кавычками» множественного; «с двух сторон» заранее оставляет единственный парный вариант, восклицательный знак как двустороннее обрамление неправдоподобен.",
+          "nextAction": "Автор: согласовать число и перестроить условие/четыре параллельных способа оформления на реальные конкурирующие конструкции, сохранить key=2 и easy; заново проверить все четыре подстановки.",
+          "source": "Пунктуация §133, PDF303 / печ.301; guide Формулировка и варианты"
+        }
+      ]
+    },
+    {
+      "id": "russian-language-enumeration-comma",
+      "hash": "17752c3e5caf898e5c9068c2ed1a3690e0ec3d6ae9238b6bd7a82fad59e8b1f8",
+      "defects": [
+        {
+          "field": "answers[1].note",
+          "defect": "Цитата «...в домах — повсюду происходили...» не воспроизводит §35. В оригинале «Повсюду: ...в домах — происходили...». Note также объединяет условие последующего обобщающего слова из §34 с §35.",
+          "nextAction": "Автор: исправить только note1 на точную функцию §35 и настоящий пример без вставки повсюду, либо привести точный пример §34 с соответствующим locator; не менять принятые соседние поля.",
+          "source": "Пунктуация §§34–35, PDF223–224 / печ.221–222"
+        }
+      ]
+    }
+  ],
+  "retainedOther13HOLD": true,
+  "newQualityCredit": 2,
+  "CURRENT": 649,
+  "remaining": 1351,
+  "authorFreeze": "1af8634d19b138704ac3f8663a27acb99da4f7f2",
+  "readerFreeze": "4b148feb26238f3df02cad33372b7f5e543613b1",
+  "QA": "actual applied7 affected19PASS, metadata alone no rerun",
+  "next": "Fresh Luna/medium author5 cycle1 after author slot free, retained same independent rereview exactchanged5; continue full exact2000"
+}
