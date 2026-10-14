@@ -1,0 +1,163 @@
+{
+  "cycle": 1,
+  "accepted": [
+    {
+      "id": "physics-ext-torque-rotation",
+      "cardCanonicalSha256": "ce8c7f470b96f66a59c834220212bbe6408c9e1346522fbbd27d686a51a98f8d"
+    },
+    {
+      "id": "physics-ext-resistance-current-opposition",
+      "cardCanonicalSha256": "da49003170a975a9242e914d9fe6a2a3ca86561572d8d3f49dba6c04196640c9"
+    },
+    {
+      "id": "physics-ext-diffraction-obstacle",
+      "cardCanonicalSha256": "b622813cbb17462062c803e79fd76afd3d08b56c360f72f5f15fae8311af6124"
+    },
+    {
+      "id": "physics-ext-magnetic-flux",
+      "cardCanonicalSha256": "8fd5f5456f634f6929655f29e5442d698cce20fd6ab83911e48770ddb1d3d3c5"
+    },
+    {
+      "id": "physics-ext-coriolis-force",
+      "cardCanonicalSha256": "6f998585332abbce86b22d7f4c1fc4a395383d860ba1547240bc7609d86d536e"
+    }
+  ],
+  "readerHOLD": [
+    {
+      "id": "physics-ext-angular-velocity",
+      "hash": "9bfbd85df4c32f8330ccf569ad1bcbbd12f230045f4b694ae4574250405f66d8",
+      "defects": [
+        {
+          "code": "MISSING_UNIFORM_OR_AVERAGE_CONDITION",
+          "groups": [
+            "prompt_ordered_answers_key",
+            "explanation",
+            "note0",
+            "note1",
+            "note2",
+            "note3"
+          ],
+          "finding": "Период одного полного оборота не задаёт постоянную мгновенную угловую скорость. Ключ2π/T верен для равномерного вращения или средней угловой скорости; в CURRENT ни одно ограничение не названо. Полные notes о дробных оборотах и времени на радиан также используют это пропущенное предположение.",
+          "sourceRefs": [
+            "MIT-801L-EQUATIONS",
+            "MIT-EULER-FORCE"
+          ],
+          "locators": [
+            "MIT-801L-EQUATIONS PDFp.1: Circular motion at constant speed; p.2 conversion/table",
+            "MIT-EULER-FORCE PDFp.13: ω=dθ/dt"
+          ],
+          "counterexample": "θ(t)=2πt/T+0.5sin(2πt/T) проходит ровно один оборот за каждый T, но ω(t)=(2π/T)[1+0.5cos(2πt/T)] меняется отπ/T до3π/T. В частности, неверный по ключу вариантπ/T бывает верен как мгновенная скорость.",
+          "solution": "Для будущего разрешённого изменения явно спросить среднюю угловую скорость за оборот либо задать равномерное вращение; согласовать все notes. Это предложение не применяется автоматически после исчерпанного cycle1.",
+          "nextOwner": "coordinator: adjudicate HOLD; any further edit requires a new explicitly authorized scope, not an unchanged fix-loop."
+        }
+      ]
+    },
+    {
+      "id": "physics-ext-capacitance-charge-voltage",
+      "hash": "010386c664a0f9d3010c8e5c01b87505738e76cde72de8734a67460c97d18733",
+      "defects": [
+        {
+          "code": "DIELECTRIC_FIELD_REDUCTION_CONSTRAINT_LOST",
+          "groups": [
+            "note2"
+          ],
+          "finding": "«Диэлектрик ослабляет поле внутри конденсатора» заявлено без ограничения. Прочитанный MIT-контекст начинает с заряженного изолированного конденсатора: Q сохраняется, V и E уменьшаются. При подключённом источнике, удерживающем V, и том же d полеE=V/d остаётся прежним, хотя C и Q растут. Условие карточки не исключает этот случай.",
+          "sourceRefs": [
+            "MIT-CURRENT-CHARGE"
+          ],
+          "locators": [
+            "PDFp.3 Dielectric Demo: Start w/ charged capacitor; A,d unchanged and V smaller",
+            "PDFp.4 Dielectric Constant: E=E0/K, C=Q/(Ed), fixed-Q comparison"
+          ],
+          "counterexample": "Идеальный плоский конденсатор остаётся подключённым к источнику постоянного напряжения. После полного заполнения линейным диэлектриком C возрастает вK раз, Q возрастает вK раз, E=V/d не меняется.",
+          "solution": "В будущем разрешённом изменении дать именно свойство проницаемости и фиксированный свободный заряд: например ε_r=K связывает ослабление поля при неизменном свободном заряде; либо ограничиться C=εA/d для идеального плоского конденсатора. Не исправлять молча сейчас.",
+          "nextOwner": "coordinator: retain exact-current HOLD for note2; new edit scope only if human authorizes continuation."
+        }
+      ]
+    },
+    {
+      "id": "physics-ext-electric-flux",
+      "hash": "ea348e64b38712b4eaf0e8f73915687748bf3b77b20215afb1f751edd8f538c7",
+      "defects": [
+        {
+          "code": "ONLY_KEY_HAS_EXPLANATORY_TAIL",
+          "groups": [
+            "prompt_ordered_answers_key"
+          ],
+          "finding": "Ключ — единственный вариант с развёрнутым объяснением после двоеточия («он определяется охваченным зарядом»). Три других — голые численные масштабирования. Это нарушение сопоставимой детализации вариантов и структурная подсказка правильного ответа; физическая верность закона Гаусса её не устраняет.",
+          "sourceRefs": [],
+          "editorialLocator": "docs/content-audits/question-authoring-guide-2026-09-02.md, Формулировка и варианты: варианты сопоставимы по детализации и не выдают ответ длиной.",
+          "solution": "В будущем разрешённом изменении выровнять формат: все краткие исходы либо все сопоставимые исходы с основаниями. Например plain «Не изменится» сохраняет key0 и физический контракт. После cycle1 никакого автоматического нового цикла.",
+          "nextOwner": "coordinator: adjudicate exact-current HOLD; further substantive work only as a new authorized scope."
+        }
+      ]
+    }
+  ],
+  "authorHOLD": [
+    "physics-ext-induction-current-field"
+  ],
+  "newQualityCredit": 5,
+  "CURRENT": 641,
+  "remaining": 1359,
+  "authorFreeze": "cc9b06c277717c7b071f74b378990281830e44eb",
+  "readerFreeze": "ffadee83c75949247280c42323c83574cbe7970c",
+  "authorEvidenceCorrection": "docs/content-audits/question-quality-wave-7/process-v2-physics20-new/fix-cycle1-author-01a13cb1/author-evidence-correction.json",
+  "rejectedOriginalProseIssues": [
+    {
+      "id": "physics-ext-torque-rotation",
+      "groups": [
+        "note2",
+        "note3"
+      ],
+      "finding": "Author maps note3 to rotational kinetic-energy equation. Actual support is τ=Fℓ on same full PDFp.2, independently inspected. Do not treat the wrong equation locator as semantic evidence."
+    },
+    {
+      "id": "physics-ext-angular-velocity",
+      "groups": [
+        "note1",
+        "note2"
+      ],
+      "finding": "Author note1 reason describes half a turn, but note1 literal is the correct full-turn note; note2 reason conversely describes full turn. Literal/hash bind correctly; reason prose is shifted."
+    },
+    {
+      "id": "physics-ext-capacitance-charge-voltage",
+      "groups": [
+        "note1",
+        "note2"
+      ],
+      "finding": "Author prose for note1 discusses dielectric, whereas literal note1 is capacitance/unit. Field-reduction setup on preceding p.3 was missing from unconditional note2."
+    },
+    {
+      "id": "physics-ext-magnetic-flux",
+      "groups": [
+        "note0",
+        "note1",
+        "note2",
+        "note3"
+      ],
+      "finding": "Author sixGroups reason prose is shifted: note0 reason discusses0.50V, while literal note0 is the correct2.0V law/substitution; later reasons similarly offset. Independent receipt recomputes the exact displayed literal and physics, not those reasons."
+    },
+    {
+      "id": "physics-ext-coriolis-force",
+      "groups": [
+        "explanation",
+        "note0",
+        "note1",
+        "note2",
+        "note3"
+      ],
+      "finding": "Author reasons are shifted between centrifugal/Euler/centripetal/Coriolis fields, and some locators do not support the assigned prose. Independent bases here use eq.(27), §2.4, note[12]p.34 and centripetal formula-sheetp.1 as appropriate."
+    },
+    {
+      "id": "physics-ext-torque-rotation",
+      "finding": "Author names physics-ext-power, which is not an actual ID. Verified retained neighbor is physics-ext-power-work-rate."
+    },
+    {
+      "id": "physics-ext-coriolis-force",
+      "finding": "physics-ext-centrifugal-force and physics-ext-euler-force placeholders do not exist in actual physics catalog; not accepted as neighbor-reading evidence."
+    }
+  ],
+  "resolution": "Original author corrected proof against exact unchanged5cards and read actual neighbors; independent receipt uses correct primarygrounds. No hash/contentchange after independent review. Other3+1 excluded; no new contentfixloop.",
+  "QA": "affected19PASS retained; metadata-only proofcorrection no rerun",
+  "requiredNext": "Keep concrete3readerHOLD+1authorHOLD uncredited; re-open only with concrete newsource/solution under bounded authorizedscope, never unchanged loops. Continue remaining exact2000."
+}
