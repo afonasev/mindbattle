@@ -1,0 +1,841 @@
+{
+  "reviewerThreadId": "01a13b89-56e0-7661-a8d3-88b67254735f",
+  "cycle": 1,
+  "baseline": "31aa848b",
+  "branch": "codex/question-quality-wave-6",
+  "sourceIndexRef": "12e5581b:docs/content-audits/process-review-2026-10-14/preserved/mindbattle-source-01a13956-2a8a-7cf1-8313-aa3392952779/weather-climate-whole-topic.json",
+  "entries": [
+    {
+      "id": "weather-climate-el-nino-warm",
+      "currentHash": "1b6724371959b2a962ea7544d3a1dff01a22ce5bfec05331c7a74e6dc65c78d7",
+      "verdict": "PASS",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой климатический режим обычно уменьшает осадки над Индонезией и увеличивает их в центральной и восточной тропической части Тихого океана?",
+            "answers": [
+              "Ла-Нинья",
+              "Эль-Ниньо",
+              "Североатлантическое колебание",
+              "Нейтральная фаза ENSO"
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "7b5c989f1ee762486f330a99f2e5a35ac6ce2004a6c341c38467f65de42952a8",
+          "sourceReasons": [
+            "NWS La Niña описывает rain increase over Indonesia и decrease over central/eastern Pacific; это противоположно заданному осадочному распределению.",
+            "NWS El Niño прямо описывает rainfall reduced over Indonesia и increased over central/eastern tropical Pacific; key 1.",
+            "CPC NAO описывает dipole pressure/height и North Atlantic jet/storm-track changes. Климатический режим той же категории, но иного механизма, не описанная ENSO схема осадков.",
+            "NWS Neutral — neither El Niño nor La Niña, often SST near average с оговоркой ocean/atmosphere mismatch. Нейтральность не именует характерную заданную El Niño схему."
+          ],
+          "editorialReason": "Теперь спрашивается климатический режим, а не фаза ENSO: NAO больше не исключён формально чужой категорией. Региональное изменение осадков — содержательное medium-знание, не географическая подсказка совпадающего названия. Четыре именные подписи согласованы и сопоставимы."
+        },
+        {
+          "group": "explanation",
+          "literal": "Эль-Ниньо обычно уменьшает осадки над Индонезией и увеличивает их над центральной и восточной тропической частью Тихого океана. Одновременно обычные восточные ветры вдоль экватора ослабевают.",
+          "literalSHA256": "9d629af3fe05aa3e4fd7e8fa214315b861135b32ab3c7c14347fe0f9de5e6b45",
+          "sourceReasons": [
+            "NWS El Niño напрямую подтверждает две области противоположного изменения rainfall и ослабление normal easterly equatorial surface winds."
+          ],
+          "editorialReason": "Explanation проверено целиком: 2 предложения, до 70 слов, русский и фактическая причинная связь согласованы."
+        },
+        {
+          "group": "note0",
+          "literal": "При Ла-Нинья осадки над Индонезией обычно усиливаются, а над центральной и восточной тропической частью Тихого океана ослабевают.",
+          "literalSHA256": "21323b568ccc774f7a78319eae0988dcf5c4ffdf1cd2aec7fe025581468552a0",
+          "sourceReasons": [
+            "NWS La Niña прямо подтверждает увеличение rainfall над Индонезией и уменьшение над central/eastern tropical Pacific."
+          ],
+          "editorialReason": "Справка о конкретном режиме La Niña, с проверенными регионами осадков."
+        },
+        {
+          "group": "note1",
+          "literal": "Обычные восточные низовые ветры вдоль экватора при Эль-Ниньо слабеют, иногда меняя направление.",
+          "literalSHA256": "cb1526503b9c17d9cc3ebcc799682e4581d0ec509fa58c9236cd367ff9185d4a",
+          "sourceReasons": [
+            "NWS El Niño: обычные low-level east-to-west surface winds слабеют и иногда start west-to-east. Note добавляет ветровой отклик к осадочному вопросу."
+          ],
+          "editorialReason": "Correct note даёт дополнительный ветровой факт, отсутствующий в prompt."
+        },
+        {
+          "group": "note2",
+          "literal": "Это режим противоположных аномалий высоты и давления; его фазы меняют положение и силу струйного течения и штормового пути.",
+          "literalSHA256": "de2a72f24943da3c36e63ddbbcdb211c413beff730d04477b2fbd5a3735ce54b",
+          "sourceReasons": [
+            "CPC NAO: north-south dipole anomalies, opposite pressure/height signs; обе фазы меняют location/intensity jet stream и storm track."
+          ],
+          "editorialReason": "Справка сообщает собственный pressure/height и jet/storm-track механизм NAO."
+        },
+        {
+          "group": "note3",
+          "literal": "Так называют состояние без условий Эль-Ниньо и Ла-Нинья; температура тропической части Тихого океана часто близка к средней.",
+          "literalSHA256": "9bd935a3f23a845132bd82d2db559c84716fab1fdc5679171c2ae3f28b3d5298",
+          "sourceReasons": [
+            "NWS Neutral: Neither El Niño nor La Niña; Often tropical Pacific SSTs generally close to average. Оговорка «часто» сохраняет случаи рассогласования океана/атмосферы."
+          ],
+          "editorialReason": "Самостоятельная справка о нейтральности и частой близости температуры к средней."
+        }
+      ],
+      "sourceLocators": [
+        {
+          "sourceId": "nws-enso",
+          "sourceUrl": "https://www.weather.gov/mhx/ensowhat",
+          "typedLocator": "El Nino and La Nina phase definitions and associated tropical Pacific SST/rainfall/wind changes",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-37-38-enso/response.body",
+            "bytes": 76857,
+            "sha256": "3f0f506384d0d2ae22064b731ed8e1323c35980a84d47d075f73c55a767abe72",
+            "gitBlob": "64d36570bfd14064bf33c11ab1ba439789c78df7"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        },
+        {
+          "sourceId": "noaa-nao",
+          "sourceUrl": "https://www.cpc.ncep.noaa.gov/data/teledoc/nao.shtml",
+          "typedLocator": "NAO definition, pressure-height dipole, and phase effects on jet/storm track and European temperature/precipitation",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-39-nao/response.body",
+            "bytes": 13815,
+            "sha256": "7d84603699828c7fecc4d822aebb7c43ad3826e7b2c4678e23b4226db4419f63",
+            "gitBlob": "cc940a910e4c4ab2e01fa40d1e2b8a20967b8771"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        }
+      ],
+      "neighborReview": {
+        "ids": [
+          "weather-climate-la-nina-cool",
+          "weather-climate-nao-pressure",
+          "weather-climate-iod-indian"
+        ],
+        "currentHashes": {
+          "weather-climate-la-nina-cool": "663081b66e216cdff147fa96087c84946cd3cab4e24e07f7eff0c122c50e92ee",
+          "weather-climate-nao-pressure": "a981e5143b9522d8b5098deacaaab751b6e2ab83ec3edd0c9f9256cf44468195",
+          "weather-climate-iod-indian": "bbaf921730eceab6e6b819cb63f95c579721123d586824b1573d1949e720558f"
+        },
+        "editorialReason": "Новый La Niña спрашивает усиление восточных ветров, а El Niño — перераспределение осадков. Это разные атмосферные отклики, не прежний зеркальный warm/cool SST-вопрос. NAO спрашивает pressure/height dipole; IOD — сравнение океанических температур у разных берегов. Связь ENSO notes с соседними facts допустима; вопросы различаются."
+      },
+      "defects": [],
+      "nextAction": "Координатор: принять точный CURRENT по hash после adjudication и сохранить commit.",
+      "frozenContract": {
+        "idTopicOrderCorrectIndexDifficultyPreserved": true,
+        "baseline": "31aa848b",
+        "topicFile": "src/content/topics/weather-climate.json",
+        "order": 37,
+        "correctIndex": 1,
+        "difficulty": "medium",
+        "independentFactReplacementAllowed": true
+      }
+    },
+    {
+      "id": "weather-climate-environmental-lapse",
+      "currentHash": "35782f82c1dfc18c313230867c76cab3b4a192a5b125ee8e25a513f28be514be",
+      "verdict": "HOLD",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Радиозонд показывает температуру 16,0 °C на высоте 0,4 км, 10,4 °C на 1,1 км и 2,5 °C на 2,9 км. Какова средняя скорость падения температуры окружающего воздуха на всём слое 0,4–2,9 км?",
+            "answers": [
+              "4,0 °C/км",
+              "5,4 °C/км",
+              "7,9 °C/км",
+              "9,8 °C/км"
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "a94d6dc9122080498b5e8bee6e5212a70ade02494cc93a2a60229412790da84f",
+          "sourceReasons": [
+            "По exact условию 4,0×(2,9−0,4)=10,0 °C; это меньше actual заданного перепада 16,0−2,5=13,5 °C. Число правдоподобно как ошибочный расчёт, но не ключ.",
+            "По exact условию (16,0−2,5)/(2,9−0,4)=13,5/2,5=5,4 °C/км. NWS Environmental Lapse Rate определяет decrease temperature with height; key correctIndex 1 единственен.",
+            "7,9 °C — разность 10,4−2,5 между промежуточным и верхним уровнем; это не скорость полного слоя. Вариант моделирует ошибку единиц/выбора интервала.",
+            "NWS Adiabatic Lapse Rate даёт 9,8 °C/км для ненасыщенной частицы. Это не наблюдаемый средний градиент из заданных крайних уровней."
+          ],
+          "editorialReason": "Грамматика числовых подстановок, единицы и уникальность ключа исправны. Однако CURRENT прямо спрашивает среднюю скорость падения на заданном слое: два вычитания и деление не требуют специальной метеорологии, промежуточное показание игнорируется. Абсолютная оценка medium (обычная школьная скорость изменения), не frozen hard. Новые числа сами по себе сложности hard не создают."
+        },
+        {
+          "group": "explanation",
+          "literal": "Между крайними уровнями температура падает на 13,5 °C, а высота увеличивается на 2,5 км, поэтому среднее составляет 5,4 °C/км. Это измеренный градиент среды; его сравнивают с адиабатическим изменением температуры порции воздуха.",
+          "literalSHA256": "7f3024582075efce69b14ce48700e181cfbcf48e82cdd83ddc42a31fbacc6b7f",
+          "sourceReasons": [
+            "Точные крайние значения дают 13,5 °C на 2,5 км, то есть 5,4 °C/км. NWS Environmental Lapse Rate подтверждает предмет измерений радиозондом; NWS Neutral Stability сопоставляет градиент среды с сухим или влажным адиабатическим в зависимости от насыщения."
+          ],
+          "editorialReason": "Explanation проверено целиком: 2 предложения, до 70 слов, русский и фактическая причинная связь согласованы."
+        },
+        {
+          "group": "note0",
+          "literal": "Такой темп дал бы падение на 10,0 °C за 2,5 км; между указанными крайними уровнями разница составляет 13,5 °C.",
+          "literalSHA256": "b467f5491c0289acceb5168a5869b9f721147e7c4bdaf98baf228fe94859fbcb",
+          "sourceReasons": [
+            "Вычислено непосредственно из prompt: 4,0×2,5=10,0 °C против 13,5 °C заданного перепада. Note конкретно разбирает числовой дистрактор."
+          ],
+          "editorialReason": "Полезная адресная арифметическая справка, не пустая заглушка."
+        },
+        {
+          "group": "note1",
+          "literal": "На радиозондировании средний вертикальный градиент среды — скорость изменения температуры окружающего воздуха с высотой.",
+          "literalSHA256": "322b0a985e1eb784ad913e48a3ca06cf0f804ed9c45511cf22c230e01e16ac25",
+          "sourceReasons": [
+            "NWS Environmental Lapse Rate прямо определяет decrease temperature with height, usually measured with radiosonde. Note раскрывает смысл измеряемой величины, добавляя определение к числовому ключу."
+          ],
+          "editorialReason": "Правильная note добавляет определение градиента среды и способ измерения к спрашиваемому числу."
+        },
+        {
+          "group": "note2",
+          "literal": "7,9 °C — только разность между показаниями на 1,1 и 2,9 км; это не темп на километр и не среднее по полному слою.",
+          "literalSHA256": "ffb9924727d16f5fe46be07ec903acc6ac380682e735fc2627dd825ff3b207cf",
+          "sourceReasons": [
+            "Exact prompt: 10,4−2,5=7,9 °C для высот 1,1 и 2,9 км; единицы °C отличаются от °C/км, и этот интервал не равен полному 0,4–2,9 км."
+          ],
+          "editorialReason": "Справка связывает ошибочное число с конкретным неполным интервалом; не приписывает ему правильную скорость."
+        },
+        {
+          "group": "note3",
+          "literal": "Это сухоадиабатический темп охлаждения ненасыщенной поднимающейся порции воздуха, а не измеренный профиль окружающей среды.",
+          "literalSHA256": "134c62d43d0de0ec46f8a845c9553a3d08b4adde36be23efecb1f2bb2f2b9c15",
+          "sourceReasons": [
+            "NWS Adiabatic Lapse Rate прямо устанавливает 9,8 °C/км для unsaturated lifted parcel без теплообмена; NWS Environmental Lapse Rate отдельно относится к окружающей атмосфере."
+          ],
+          "editorialReason": "Справка привязана к известному сухоадиабатическому числу и различает частицу/среду."
+        }
+      ],
+      "sourceLocators": [
+        {
+          "sourceId": "nws-environmental-lapse",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=environmental+lapse+rate",
+          "typedLocator": "Environmental Lapse Rate entry",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a136e6/capture-only/weather20-29-primary/environmental-lapse.body",
+            "bytes": 2149,
+            "sha256": "f55f6e999cd2e16a3f72bd24ccb4ac67ba5ce7b99685fe6459ff49ff4feb78bd",
+            "gitBlob": "46cf1d14b0ad960fdb8c785a2668bd968a21a300"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        },
+        {
+          "sourceId": "nws-adiabatic",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=Adiabatic",
+          "typedLocator": "Adiabatic entry",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13619/capture-only/weather-next10-primary/adiabatic.body",
+            "bytes": 3909,
+            "sha256": "0031e6cadb8682eb51b336be194fc2fd732a47e4456b67aaa39b148b8bae14ef",
+            "gitBlob": "874c9f7535fcc2d6e89c379d3e57372d117c29dc"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        },
+        {
+          "sourceId": "nws-stability",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=stability",
+          "typedLocator": "Neutral Stability and Stability entries",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a136e6/capture-only/weather20-29-primary/stability-glossary.body",
+            "bytes": 3072,
+            "sha256": "faf4ca7b383ceebe5fdadaf78c387df5c4f4e5ada342a0f1a5a32bb0da4f5875",
+            "gitBlob": "79d271a359708b76d9aaa09ec4c253555862d48f"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        }
+      ],
+      "neighborReview": {
+        "ids": [
+          "weather-climate-dry-adiabatic-rate",
+          "weather-climate-inversion-positive",
+          "weather-climate-inversion-warmer-above"
+        ],
+        "currentHashes": {
+          "weather-climate-dry-adiabatic-rate": "800e58e9efbca0bb7e4b1c8e47b491fd2f3b17f4cb588dc9dce9fda307decc31",
+          "weather-climate-inversion-positive": "3b82c8b5e9a3395b10c463e02d43531a1d82635c1cda30e31b5136a7bf11b0e2",
+          "weather-climate-inversion-warmer-above": "d394d31645ea4038a223fd11bc02721153935a5b1633cfddb65f34171cf3dc63"
+        },
+        "editorialReason": "CURRENT dry-adiabatic-rate требует учёта двух разных средовых градиентов и смены слоя для равенства частицы/среды. Новый environmental-lapse не повторяет этот факт, но значительно проще. Две инверсии проверяют знак профиля/расположение основания, другие факты."
+      },
+      "defects": [
+        "difficulty hard / prompt: простой расчёт среднего перепада на высоту не содержит специфического знания или содержательной hard-логики; дефект сложности после одного fix-cycle не закрыт."
+      ],
+      "nextAction": "Координатор: сохранить HOLD точного hash и вынести решение о дальнейшей судьбе frozen-hard слота/калибровке человеку. В этом пакете второй fix-cycle не выполнять.",
+      "frozenContract": {
+        "idTopicOrderCorrectIndexDifficultyPreserved": true,
+        "baseline": "31aa848b",
+        "topicFile": "src/content/topics/weather-climate.json",
+        "order": 22,
+        "correctIndex": 1,
+        "difficulty": "hard",
+        "independentFactReplacementAllowed": true
+      }
+    },
+    {
+      "id": "weather-climate-inversion-positive",
+      "currentHash": "3b82c8b5e9a3395b10c463e02d43531a1d82635c1cda30e31b5136a7bf11b0e2",
+      "verdict": "HOLD",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На высоте 1,2 км зондирование показывает 11 °C, а на 1,8 км — 17 °C; выше температура снова убывает с высотой. Поднимающаяся через этот слой порция становится холоднее окружения и останавливается. Какой профиль образует такой барьер конвекции?",
+            "answers": [
+              "Сухоадиабатический градиент",
+              "Влажноадиабатический градиент",
+              "Инверсия температуры",
+              "Вертикальный градиент среды"
+            ],
+            "correctIndex": 2
+          },
+          "literalSHA256": "3b60aa7d81a127023d2da1296983442fcd8e27e2b94fd1b5c3a281ce5967f860",
+          "sourceReasons": [
+            "NWS Dry Adiabatic Lapse Rate описывает охлаждение ненасыщенной частицы. По условию среда при движении вверх нагревается, это иной профиль.",
+            "NWS Moist Adiabatic Lapse Rate описывает охлаждение насыщенной поднятой частицы и зависит от T/P; это не рост температуры окружающей среды между уровнями.",
+            "NWS Temperature Inversion определяет рост T с высотой. Из 11 °C на 1,2 км и 17 °C на 1,8 км этот рост виден напрямую; Capping Inversion подтверждает подавление подъёма частицы. Key 2 верен.",
+            "NWS Environmental Lapse Rate является общим измеренным градиентом среды. Инверсия конкретнее классифицирует его знак; более общий термин не является лучшей классификацией указанного барьера."
+          ],
+          "editorialReason": "Четыре именные подписи согласованы. Но 11→17 °C при 1,2→1,8 км лишь численно повторяет определение инверсии. Упоминание остановки частицы и возврата к убыванию выше не требуется для ключа. Тематическому читателю достаточно базового знания инверсии: medium, не hard. Текущий сценарий не закрывает ранее адресно указанный дефект."
+        },
+        {
+          "group": "explanation",
+          "literal": "В слое 1,2–1,8 км температура растёт с высотой, поэтому это инверсия. Такая тёплая прослойка может подавлять или задерживать грозы: поднятая порция становится холоднее окружающего воздуха и теряет способность подниматься дальше.",
+          "literalSHA256": "a24f7c69b532f6241818ed5c9a64fd090229b2a5687f49f014a391b542ff4a98",
+          "sourceReasons": [
+            "Из exact чисел 17>11 при 1,8>1,2 следует повышение температуры с высотой, соответствующее NWS Temperature Inversion. NWS Capping Inversion описывает тёплый слой, в котором поднятая частица холоднее окружения, и подавление/задержку гроз."
+          ],
+          "editorialReason": "Explanation проверено целиком: 2 предложения, до 70 слов, русский и фактическая причинная связь согласованы."
+        },
+        {
+          "group": "note0",
+          "literal": "Для ненасыщенной поднимающейся порции сухоадиабатический темп составляет 9,8 °C на километр.",
+          "literalSHA256": "d6b2581ea52c68a2938e5846bf7036d4d8ff6219cea3f2ab0af7858fc3c155d8",
+          "sourceReasons": [
+            "NWS Adiabatic Lapse Rate прямо даёт 9,8 °C/км для lifted unsaturated parcels."
+          ],
+          "editorialReason": "Конкретная справка о числе для сухой ненасыщенной частицы."
+        },
+        {
+          "group": "note1",
+          "literal": "Для насыщенной поднимающейся порции этот темп не постоянен и зависит от температуры и давления.",
+          "literalSHA256": "3ac1e79a15b7b5752712017a20d3b8c46d7177e5329c7fcd17b20bc99183af92",
+          "sourceReasons": [
+            "NWS Moist Adiabatic Lapse Rate прямо говорит о saturated lifted parcel, непостоянстве и зависимости от температуры/давления."
+          ],
+          "editorialReason": "Конкретная справка о зависимости влажного градиента от T/P."
+        },
+        {
+          "group": "note2",
+          "literal": "Если инверсионная «крышка» ослабевает или исчезает, развитие гроз может стать взрывным.",
+          "literalSHA256": "d1e0775a361f2bae6035ebecdbcc76310c1aafaedaee8ae184a36ed50d620f6c",
+          "sourceReasons": [
+            "NWS Capping Inversion прямо описывает explosive thunderstorm development при removed/weakened cap. Это самостоятельный полезный эффект снятия барьера, не повтор определения роста T."
+          ],
+          "editorialReason": "Correct note добавляет последствие ослабления инверсионной крышки."
+        },
+        {
+          "group": "note3",
+          "literal": "Это скорость изменения температуры окружающего воздуха с высотой, обычно измеряемая радиозондом.",
+          "literalSHA256": "3f530c8fcf14004a1d3f1dde7c662ec8dd724a31cb5e9cd74e3616c51dd46c74",
+          "sourceReasons": [
+            "NWS Environmental Lapse Rate прямо определяет фактический градиент окружающего воздуха и radiosonde."
+          ],
+          "editorialReason": "Самостоятельное определение градиента среды и способа его измерения."
+        }
+      ],
+      "sourceLocators": [
+        {
+          "sourceId": "nws-inversion",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=Inversion",
+          "typedLocator": "Inversion, Temperature Inversion and Capping Inversion entries",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13619/capture-only/weather-next10-primary/inversion.body",
+            "bytes": 5298,
+            "sha256": "e1f85b3a0eec21b6067b216fa1049896895d4141a6d171c2d5189fdfad431595",
+            "gitBlob": "608a823145f30aeecb9ce48d8b88382c12fa4cab"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        },
+        {
+          "sourceId": "nws-adiabatic",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=Adiabatic",
+          "typedLocator": "Adiabatic entry",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13619/capture-only/weather-next10-primary/adiabatic.body",
+            "bytes": 3909,
+            "sha256": "0031e6cadb8682eb51b336be194fc2fd732a47e4456b67aaa39b148b8bae14ef",
+            "gitBlob": "874c9f7535fcc2d6e89c379d3e57372d117c29dc"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        },
+        {
+          "sourceId": "nws-environmental-lapse",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=environmental+lapse+rate",
+          "typedLocator": "Environmental Lapse Rate entry",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a136e6/capture-only/weather20-29-primary/environmental-lapse.body",
+            "bytes": 2149,
+            "sha256": "f55f6e999cd2e16a3f72bd24ccb4ac67ba5ce7b99685fe6459ff49ff4feb78bd",
+            "gitBlob": "46cf1d14b0ad960fdb8c785a2668bd968a21a300"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        }
+      ],
+      "neighborReview": {
+        "ids": [
+          "weather-climate-inversion-warmer-above",
+          "weather-climate-convection-buoyancy",
+          "weather-climate-environmental-lapse"
+        ],
+        "currentHashes": {
+          "weather-climate-inversion-warmer-above": "d394d31645ea4038a223fd11bc02721153935a5b1633cfddb65f34171cf3dc63",
+          "weather-climate-convection-buoyancy": "c2141c21c4155da9c9c84e75657deb5368f3c82ef88e7c2875aeea1d3f0f49f1",
+          "weather-climate-environmental-lapse": "35782f82c1dfc18c313230867c76cab3b4a192a5b125ee8e25a513f28be514be"
+        },
+        "editorialReason": "CURRENT inversion-warmer-above различает приземное/приподнятое основание; convection-buoyancy проверяет сухую конвекцию; environmental-lapse — среднюю измеренную скорость изменения T. Прямого дубля нет, но эти medium-распознавания подтверждают недостаточную сложность нового hard-профиля."
+      },
+      "defects": [
+        "difficulty hard / prompt: прямое узнавание роста температуры с высотой осталось medium; добавленные числа и описание барьера не являются необходимой hard-логикой."
+      ],
+      "nextAction": "Координатор: сохранить HOLD по новому hash, передать человеку конкретное решение о frozen-hard слоте/калибровке. Второй fix-cycle этой карточки не запускать.",
+      "frozenContract": {
+        "idTopicOrderCorrectIndexDifficultyPreserved": true,
+        "baseline": "31aa848b",
+        "topicFile": "src/content/topics/weather-climate.json",
+        "order": 23,
+        "correctIndex": 2,
+        "difficulty": "hard",
+        "independentFactReplacementAllowed": true
+      }
+    },
+    {
+      "id": "weather-climate-la-nina-cool",
+      "currentHash": "663081b66e216cdff147fa96087c84946cd3cab4e24e07f7eff0c122c50e92ee",
+      "verdict": "PASS",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой климатический режим сопровождается усилением обычных восточных низовых ветров, дующих вдоль экватора?",
+            "answers": [
+              "Эль-Ниньо",
+              "Ла-Нинья",
+              "Североатлантическое колебание",
+              "Нейтральная фаза ENSO"
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "76112346aad49a15584e499e8fc478113e2ae41ab8cf3fcceea3cc39a703a6c6",
+          "sourceReasons": [
+            "NWS El Niño: нормальные easterlies weaken or reverse, не усиление.",
+            "NWS La Niña: normal easterly winds along equator become even stronger; key 1.",
+            "CPC NAO описывает North Atlantic pressure/height и jet/storm track, не экваториальное усиление easterly surface winds ENSO.",
+            "NWS Neutral — ни El Niño, ни La Niña, а не именованный режим усиления обычных equatorial easterlies."
+          ],
+          "editorialReason": "Усиление обычных экваториальных восточных ветров — самостоятельный medium-факт о режиме. Категория «климатический режим» подходит всем четырём подписям; явной подсказки NAO исключением из фаз ENSO больше нет. «Низовые» понятны как low-level; «приземные» и русская расшифровка SST были бы стилистически яснее, но смысл и уникальность ключа не меняют."
+        },
+        {
+          "group": "explanation",
+          "literal": "При Ла-Нинья обычные восточные низовые ветры вдоль экватора усиливаются. В этот период осадки обычно увеличиваются над Индонезией и уменьшаются над центральной и восточной тропической частью Тихого океана.",
+          "literalSHA256": "e2500fcb14736c253cf08cb939e535804577774dedf59992ee9da34d9bf3d184",
+          "sourceReasons": [
+            "NWS La Niña прямо подтверждает усиление normal equatorial easterlies, увеличение rainfall over Indonesia и уменьшение over central/eastern tropical Pacific."
+          ],
+          "editorialReason": "Explanation проверено целиком: 2 предложения, до 70 слов, русский и фактическая причинная связь согласованы."
+        },
+        {
+          "group": "note0",
+          "literal": "При Эль-Ниньо обычные восточные ветры вдоль экватора ослабевают, а иногда начинают дуть в обратном направлении.",
+          "literalSHA256": "003e0ad4898b553a0151cb317225e96ba8ade0f09cf4ea6b33ae24af934d7f99",
+          "sourceReasons": [
+            "NWS El Niño напрямую говорит о weakening/reversal normal easterly winds."
+          ],
+          "editorialReason": "Справка о конкретном ветровом отклике El Niño."
+        },
+        {
+          "group": "note1",
+          "literal": "При Ла-Нинья осадки над Индонезией обычно усиливаются, тогда как над центральной и восточной тропической частью Тихого океана ослабевают.",
+          "literalSHA256": "35bd87ef1886b810d857551e9bef38c31531b8f2dd3ce6b28aeb04c0da7677bc",
+          "sourceReasons": [
+            "NWS La Niña напрямую даёт rain increase Indonesia / decrease central/eastern tropical Pacific. Correct note дополняет вопрос о ветрах осадочным откликом."
+          ],
+          "editorialReason": "Correct note добавляет осадочный отклик к вопросу о ветре."
+        },
+        {
+          "group": "note2",
+          "literal": "Это режим противоположных аномалий высоты и давления; его фазы меняют положение и силу струйного течения и штормового пути.",
+          "literalSHA256": "de2a72f24943da3c36e63ddbbcdb211c413beff730d04477b2fbd5a3735ce54b",
+          "sourceReasons": [
+            "CPC NAO напрямую даёт opposite pressure/height dipole и basin-wide jet/storm-track changes."
+          ],
+          "editorialReason": "Справка о самостоятельном режиме NAO, не пересказ правильного ответа."
+        },
+        {
+          "group": "note3",
+          "literal": "Это состояние без условий Эль-Ниньо и Ла-Нинья; SST тропического Тихого океана часто близка к средней.",
+          "literalSHA256": "32ef7aa98503c94f50108d982a66e58b5fa3cb8161269c5fbb34edab3b0b2519",
+          "sourceReasons": [
+            "NWS Neutral напрямую даёт neither El Niño nor La Niña и often near-average tropical Pacific SST. SST соответствует source sea surface temperature; аббревиатура техническая, но факт проверен; предпочтительна русская расшифровка при будущей редактуре, без нового fix-cycle."
+          ],
+          "editorialReason": "Справка самостоятельна по нейтральному ENSO; английская аббревиатура SST — малозначимая редакторская оговорка, раскрытый source-term sea surface temperature, не непроверенный факт."
+        }
+      ],
+      "sourceLocators": [
+        {
+          "sourceId": "nws-enso",
+          "sourceUrl": "https://www.weather.gov/mhx/ensowhat",
+          "typedLocator": "El Nino and La Nina phase definitions and associated tropical Pacific SST/rainfall/wind changes",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-37-38-enso/response.body",
+            "bytes": 76857,
+            "sha256": "3f0f506384d0d2ae22064b731ed8e1323c35980a84d47d075f73c55a767abe72",
+            "gitBlob": "64d36570bfd14064bf33c11ab1ba439789c78df7"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        },
+        {
+          "sourceId": "noaa-nao",
+          "sourceUrl": "https://www.cpc.ncep.noaa.gov/data/teledoc/nao.shtml",
+          "typedLocator": "NAO definition, pressure-height dipole, and phase effects on jet/storm track and European temperature/precipitation",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-39-nao/response.body",
+            "bytes": 13815,
+            "sha256": "7d84603699828c7fecc4d822aebb7c43ad3826e7b2c4678e23b4226db4419f63",
+            "gitBlob": "cc940a910e4c4ab2e01fa40d1e2b8a20967b8771"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        }
+      ],
+      "neighborReview": {
+        "ids": [
+          "weather-climate-el-nino-warm",
+          "weather-climate-nao-pressure",
+          "weather-climate-iod-indian"
+        ],
+        "currentHashes": {
+          "weather-climate-el-nino-warm": "1b6724371959b2a962ea7544d3a1dff01a22ce5bfec05331c7a74e6dc65c78d7",
+          "weather-climate-nao-pressure": "a981e5143b9522d8b5098deacaaab751b6e2ab83ec3edd0c9f9256cf44468195",
+          "weather-climate-iod-indian": "bbaf921730eceab6e6b819cb63f95c579721123d586824b1573d1949e720558f"
+        },
+        "editorialReason": "Новый El Niño проверяет распределение rainfall, а La Niña — intensification equatorial easterlies. Это разные признаки ENSO, а не два вопроса с одной сменой знака SST. NAO — dipole pressure/height; IOD — western/eastern basin SST, иной факт."
+      },
+      "defects": [],
+      "nextAction": "Координатор: принять точный CURRENT по hash после adjudication и сохранить commit.",
+      "frozenContract": {
+        "idTopicOrderCorrectIndexDifficultyPreserved": true,
+        "baseline": "31aa848b",
+        "topicFile": "src/content/topics/weather-climate.json",
+        "order": 38,
+        "correctIndex": 1,
+        "difficulty": "medium",
+        "independentFactReplacementAllowed": true
+      }
+    },
+    {
+      "id": "weather-climate-lightning-electric",
+      "currentHash": "e0976dce26cc9d1332335992839180b9f65a4cf5ccd7a453fdf3a2086e680596",
+      "verdict": "PASS",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Как называется видимый электрический разряд, возникающий при грозе?",
+            "answers": [
+              "Гром",
+              "Молния",
+              "Радуга",
+              "Полярное сияние"
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "4ed591c24953c7d8786d7db413079cb296b7b02349b2f07f40e9ac25682a45c6",
+          "sourceReasons": [
+            "NWS Thunder определяет sound caused by expanding gases, не видимый electrical discharge. Сопутствующий эффект грозы — правдоподобная путаница.",
+            "NWS Lightning прямо определяет visible electrical discharge produced by thunderstorm: key 1. Широко известный взрослой аудитории факт соответствует easy.",
+            "NWS Rainbow определяет luminous arc от refraction/reflection/dispersion солнечного света через воду; это другой видимый атмосферный эффект, не грозовой разряд.",
+            "NASA Auroras объясняет свечение возбуждением atmospheric gas energetic particles; это другой световой атмосферный эффект, не lightning discharge."
+          ],
+          "editorialReason": "Новый разрешённый независимый факт с тем же correctIndex 1: молния как электрический разряд. Полярность и подсказка частоты устранены. Четыре атмосферных явления одной категории, русские именные ответы согласованы; гром можно спутать как вторую часть грозы, радуга/сияние — другие видимые эффекты. Easy соответствует общеизвестному определению без редкой детали."
+        },
+        {
+          "group": "explanation",
+          "literal": "Молния — видимый электрический разряд, возникающий при грозе. Она может происходить внутри облака, между облаками, между облаком и воздухом или между облаком и землёй.",
+          "literalSHA256": "773107b5b227b7a83eb9139ce9d0b47ec93329a983a5e2a0f0828b8e45d9fd63",
+          "sourceReasons": [
+            "NWS Lightning подтверждает электрический видимый разряд при грозе и направления within/between clouds, cloud-air, cloud-ground; explanation не добавляет неподтверждённых ограничений."
+          ],
+          "editorialReason": "Explanation проверено целиком: 2 предложения, до 70 слов, русский и фактическая причинная связь согласованы."
+        },
+        {
+          "group": "note0",
+          "literal": "Гром — звук, возникающий при быстром расширении воздуха, нагретого каналом молнии.",
+          "literalSHA256": "30888c49a593034eeacea19490f578d15202e412b258bdd17b442c3195615559",
+          "sourceReasons": [
+            "NWS Thunder говорит о rapidly expanding gases; дополнительно лично прочитанный сохранённый NWS Sound of Thunder прямо описывает нагрев воздуха у lightning channel и explosive expansion. Это подтверждает и звук, и нагрев."
+          ],
+          "editorialReason": "Самостоятельная справка именно о громе и механизме звука."
+        },
+        {
+          "group": "note1",
+          "literal": "Типичный разряд облако—земля может быть составным и включать последовательность нескольких ударов.",
+          "literalSHA256": "e160d9dd077a7889675a5074fad215d123b53d2d8de572f150dae86cccfc1819",
+          "sourceReasons": [
+            "NWS Lightning Channel определяет typical ground-cloud flash как composite из sequential strokes; note добавляет составность к определению разряда."
+          ],
+          "editorialReason": "Correct note содержит дополнительный факт о последовательности ударов."
+        },
+        {
+          "group": "note2",
+          "literal": "Радуга возникает из-за преломления, полного отражения и разложения солнечного света в каплях воды.",
+          "literalSHA256": "5e303da7afcedeef25cd4b4bdea45563853647d5ad35babc00143b01a048a971",
+          "sourceReasons": [
+            "NWS Rainbow прямо даёт refraction, total reflection и dispersion, sunlight через water spray/raindrops. Русская note передаёт все три механизма."
+          ],
+          "editorialReason": "Справка именно о радуге и её оптическом механизме."
+        },
+        {
+          "group": "note3",
+          "literal": "Полярное сияние возникает, когда энергичные частицы возбуждают газы верхней атмосферы.",
+          "literalSHA256": "cb61ae533b3614fd56167a9d55ebe42e15790a60415020af1e26668cd8807d9d",
+          "sourceReasons": [
+            "NASA What Causes Auroras / More on Physics: energetic particles дают extra energy atoms/molecules atmospheric gases, высотные gas emissions описаны в Why Are Auroras Colorful. Это подтверждает excitation верхней атмосферы."
+          ],
+          "editorialReason": "Справка именно о полярном сиянии и возбуждении атмосферных газов."
+        }
+      ],
+      "sourceLocators": [
+        {
+          "sourceId": "nws-lightning",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=Lightning",
+          "typedLocator": "Lightning entry",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a136e6/capture-only/weather20-29-primary/lightning.body",
+            "bytes": 4462,
+            "sha256": "4703dcea115d7bd56f6f224919760399c9713be6a9304ae4edcab4aa56dfde51",
+            "gitBlob": "564b377c26228b63075411c990e9208825fbe379"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        },
+        {
+          "sourceId": "nws-thunder",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=Thunder",
+          "typedLocator": "Thunder entry",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a136e6/capture-only/weather20-29-primary/thunder.body",
+            "bytes": 11560,
+            "sha256": "01a6b310afc8596274d82d62af103a3258cfc451e0fb986cf086275e6d4e83c1",
+            "gitBlob": "c8111c6eb3470ec9c93601872041586408ea2084"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        },
+        {
+          "sourceId": "nws-rainbow",
+          "sourceUrl": "https://forecast.weather.gov/glossary.php?word=rainbow",
+          "typedLocator": "Rainbow entry",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a136e6/capture-only/weather20-29-primary/rainbow.body",
+            "bytes": 2457,
+            "sha256": "1006fd0e8af9200c1c4c25b2c8afe529d3013200ae9520d13615790def43d1ef",
+            "gitBlob": "5aa3ef9d30923ab5a432ae79143a5eaf091bb18d"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        },
+        {
+          "sourceId": "nasa-auroras",
+          "sourceUrl": "https://science.nasa.gov/sun/auroras/",
+          "typedLocator": "What Causes Auroras; More on the Physics Behind Auroras; color/oxygen passage around 60 mi (100 km)",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-30/response.body",
+            "bytes": 411292,
+            "sha256": "c99631765ef63966ffb0e5135253f080746d7a9a3a2b0cb32b5147c8175278a0",
+            "gitBlob": "30e70b1d56940b6542bac7a744ab8e654a55f1ec"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        },
+        {
+          "sourceId": "nws-thunder-jetstream",
+          "sourceUrl": "https://www.weather.gov/source/zhu/ZHU_Training_Page/lightning_stuff/lightning2/thunder.html",
+          "typedLocator": "The Sound of Thunder: heat lightning channel and explosive air expansion",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13772/weather5b-e933b9f/raw-capture/thunder-jetstream.body",
+            "gitBlob": "44f947c472872133e95079ca533f858fc96c9541",
+            "sha256": "9297fea339337785038942bd301410a46a5529ba8e23d2714ce26b8b39f8a76e",
+            "bytes": 4630
+          },
+          "readMethod": "personally read complete retained primary page via Git"
+        }
+      ],
+      "neighborReview": {
+        "ids": [
+          "weather-climate-thunder-sound",
+          "weather-climate-rainbow-refraction",
+          "weather-climate-aurora-particles"
+        ],
+        "currentHashes": {
+          "weather-climate-thunder-sound": "88bba857eb3fe37e02bcc8ed0b603f6890064c604fba97c14e23f9d89840b4eb",
+          "weather-climate-rainbow-refraction": "8563e2b68cfcfe8090e95939f5df7f3bf821f25cc91327171dc825411c1205b3",
+          "weather-climate-aurora-particles": "36c4aae85f31cf4fa6004b9f293e4aa0de9f441725ea3380cc2bbda2ae2c876e"
+        },
+        "editorialReason": "Точный CURRENT thunder-sound проверяет короткий звук/расстояние; rainbow-refraction — второй порядок по числу отражений; aurora-particles — солнечные частицы и высокие широты. Новый lightning-electric проверяет электрический разряд при грозе; это отдельный факт, а не обратная карточка об акустике/частицах."
+      },
+      "defects": [],
+      "nextAction": "Координатор: принять точный CURRENT по hash после adjudication и сохранить commit.",
+      "frozenContract": {
+        "idTopicOrderCorrectIndexDifficultyPreserved": true,
+        "baseline": "31aa848b",
+        "topicFile": "src/content/topics/weather-climate.json",
+        "order": 27,
+        "correctIndex": 1,
+        "difficulty": "easy",
+        "independentFactReplacementAllowed": true
+      }
+    },
+    {
+      "id": "weather-climate-nao-pressure",
+      "currentHash": "a981e5143b9522d8b5098deacaaab751b6e2ab83ec3edd0c9f9256cf44468195",
+      "verdict": "PASS",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "У какого климатического режима противоположные по знаку аномалии высоты и давления образуют северо-южный диполь, а фазы меняют положение и силу струйного течения и штормового пути?",
+            "answers": [
+              "Эль-Ниньо",
+              "Североатлантическое колебание",
+              "Ла-Нинья",
+              "Нейтральная фаза ENSO"
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "dac8d24e6991c10b3b3afa6a2d75d51bb128cda591f9657d838973e93038c077",
+          "sourceReasons": [
+            "NWS El Niño: tropical Pacific ocean-atmosphere warming/rainfall/wind pattern, не north-south pressure/height dipole CPC.",
+            "CPC NAO прямо определяет north-south dipole opposite anomalies и изменения intensity/location North Atlantic jet stream/storm track. Key 1; удалённые Icelandic Low/Azores High больше не требуют неподтверждённого контекста.",
+            "NWS La Niña: cold SST phase с усилением equatorial easterlies; это не заданная pressure/height телесвязь.",
+            "NWS Neutral: neither El Niño nor La Niña, обычно near-average tropical Pacific SST; это не NAO dipole."
+          ],
+          "editorialReason": "Географическое слово «Северная Атлантика», напрямую повторявшее ключ, из prompt удалено. Теперь нужно узнать давление/высотные аномалии и изменение jet/storm track — medium тематическое знание. «Аномалии высоты» передаёт source heights в метеорологическом контексте; возможное уточнение «геопотенциальной высоты» — stylistic clarity, не ложный факт. Четыре климатических режима грамматически согласованы."
+        },
+        {
+          "group": "explanation",
+          "literal": "Североатлантическое колебание — телесвязь с противоположными аномалиями высоты и давления в двух центрах. Его фазы связаны с изменением струйного течения и штормового пути, а также с различиями зимней температуры и осадков в Европе.",
+          "literalSHA256": "5d42f91646ca3a020aaca9add3df03c95cf88ddd616463ed9bb28b83458d9438",
+          "sourceReasons": [
+            "CPC NAO прямо даёт два opposite-sign anomaly centers и обе фазы с jet/storm-track changes; European temperature/precipitation including winter effects подтверждены отдельными абзацами. Непроверенные географические имена удалены."
+          ],
+          "editorialReason": "Explanation проверено целиком: 2 предложения, до 70 слов, русский и фактическая причинная связь согласованы."
+        },
+        {
+          "group": "note0",
+          "literal": "При Эль-Ниньо осадки над Индонезией обычно уменьшаются, а в центральной и восточной тропической части Тихого океана увеличиваются.",
+          "literalSHA256": "9295e350494ff4476c9a83a92e099ff133de1f080d6d009fbe92350ca0014fc9",
+          "sourceReasons": [
+            "NWS El Niño прямо даёт rain decrease Indonesia, increase central/eastern tropical Pacific."
+          ],
+          "editorialReason": "Справка конкретно о региональном дождевом отклике El Niño."
+        },
+        {
+          "group": "note1",
+          "literal": "В сильную положительную фазу чаще наблюдаются более тёплые условия в северной Европе и повышенные зимние осадки на севере Европы.",
+          "literalSHA256": "8fd5d4e02158c11c8a5a78675e120d04a577f83cf32aa7daec437e103caa9620",
+          "sourceReasons": [
+            "CPC Strong positive phase: above-average temperature northern Europe и above-average winter precipitation northern Europe/Scandinavia. Note добавляет конкретный фазовый климатический эффект к диполю."
+          ],
+          "editorialReason": "Correct note даёт дополнительный факт о сильной положительной фазе в Европе."
+        },
+        {
+          "group": "note2",
+          "literal": "При Ла-Нинья обычные восточные низовые ветры вдоль экватора усиливаются.",
+          "literalSHA256": "c95214624b3c9103a50d4f0e3339330fc6aab6b545dcf3ee8b57d1b1290b40ec",
+          "sourceReasons": [
+            "NWS La Niña прямо даёт normal easterly equatorial winds become stronger."
+          ],
+          "editorialReason": "Справка конкретно о ветрах La Niña."
+        },
+        {
+          "group": "note3",
+          "literal": "Так называют состояние без условий Эль-Ниньо и Ла-Нинья; температура тропического Тихого океана часто близка к средней.",
+          "literalSHA256": "466743755ed14b0fd35fcf937cfb10d0c566787dad08e23992bb90f0b30f23c2",
+          "sourceReasons": [
+            "NWS Neutral прямо даёт neither El Niño nor La Niña и often tropical Pacific SST near average. «Часто» не превращено в абсолютное условие."
+          ],
+          "editorialReason": "Справка конкретно о нейтральной фазе и часто средней температуре."
+        }
+      ],
+      "sourceLocators": [
+        {
+          "sourceId": "noaa-nao",
+          "sourceUrl": "https://www.cpc.ncep.noaa.gov/data/teledoc/nao.shtml",
+          "typedLocator": "NAO definition, pressure-height dipole, and phase effects on jet/storm track and European temperature/precipitation",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-39-nao/response.body",
+            "bytes": 13815,
+            "sha256": "7d84603699828c7fecc4d822aebb7c43ad3826e7b2c4678e23b4226db4419f63",
+            "gitBlob": "cc940a910e4c4ab2e01fa40d1e2b8a20967b8771"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        },
+        {
+          "sourceId": "nws-enso",
+          "sourceUrl": "https://www.weather.gov/mhx/ensowhat",
+          "typedLocator": "El Nino and La Nina phase definitions and associated tropical Pacific SST/rainfall/wind changes",
+          "gitCommit": "9b2b0b1a225b2970e916c023b35986e0449e4d31",
+          "body": {
+            "path": "docs/content-audits/question-quality-wave-7/coordinator-continuation-01a13854/capture-only/official-alternatives-54/weather-37-38-enso/response.body",
+            "bytes": 76857,
+            "sha256": "3f0f506384d0d2ae22064b731ed8e1323c35980a84d47d075f73c55a767abe72",
+            "gitBlob": "64d36570bfd14064bf33c11ab1ba439789c78df7"
+          },
+          "readMethod": "git show gitCommit:body.path; personally read scientific context; body SHA verified"
+        }
+      ],
+      "neighborReview": {
+        "ids": [
+          "weather-climate-el-nino-warm",
+          "weather-climate-la-nina-cool",
+          "weather-climate-iod-indian"
+        ],
+        "currentHashes": {
+          "weather-climate-el-nino-warm": "1b6724371959b2a962ea7544d3a1dff01a22ce5bfec05331c7a74e6dc65c78d7",
+          "weather-climate-la-nina-cool": "663081b66e216cdff147fa96087c84946cd3cab4e24e07f7eff0c122c50e92ee",
+          "weather-climate-iod-indian": "bbaf921730eceab6e6b819cb63f95c579721123d586824b1573d1949e720558f"
+        },
+        "editorialReason": "CURRENT El Niño спрашивает rainfall shift, La Niña — equatorial wind strengthening, IOD — ocean temperature west/east. Новый NAO спрашивает pressure/height dipole и jet/storm track без географического раскрытия названия. Отдельные величины и процессы, смыслового дубля нет."
+      },
+      "defects": [],
+      "nextAction": "Координатор: принять точный CURRENT по hash после adjudication и сохранить commit.",
+      "frozenContract": {
+        "idTopicOrderCorrectIndexDifficultyPreserved": true,
+        "baseline": "31aa848b",
+        "topicFile": "src/content/topics/weather-climate.json",
+        "order": 39,
+        "correctIndex": 1,
+        "difficulty": "medium",
+        "independentFactReplacementAllowed": true
+      }
+    }
+  ],
+  "checks": {
+    "afterHashMatches": "6/6",
+    "frozenIdTopicOrderCorrectIndexDifficulty": "6/6",
+    "exactFieldGroups": "36 with generated literal/hash",
+    "sourceBodiesVerified": 11,
+    "previousPass4Reread": false,
+    "fullQa": false,
+    "build": false,
+    "runtime": false,
+    "catalogOrIndexEdited": false
+  },
+  "editorialAdjudication": "Two difficulty HOLD judgments are independent human-audience calibration, not arithmetic or source failures. No second fix-cycle requested.",
+  "frozenContractCorrection": "Earlier literal/semantic freezing of the correct answer was overbroad; only ID/topic/order/correctIndex/difficulty quotas frozen. Full independently reviewed fact replacements allowed. Historical review remains immutable; this rereview supersedes only six hashes."
+}
