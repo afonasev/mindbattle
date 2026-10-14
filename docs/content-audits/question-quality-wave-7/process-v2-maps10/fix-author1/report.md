@@ -1,0 +1,9 @@
+# maps-cartography-green-vegetation — один адресный fix-cycle
+
+- Baseline: `43ad85e52fe3d8a33a11064a66c3ab40d9b7f512`; текущая карточка сверена с review/recovery hash `61c7b733e0be282ef18484054126959e8c7211fa8db7ad9d8827dec7fe445d94`.
+- Статус кандидата: **FIX**. Меняется только `answers[0].note`: добавлен конкретный факт из легенды p. 4 о зелёных знаках Woodland, Shrubland, Orchard и Vineyard. Mangrove не обобщён: в той же легенде его знак включает синий водный рисунок.
+- ID, topic, prompt, варианты и порядок, difficulty, correctIndex, explanation, остальные notes и source сохранены. Кандидат SHA-256: `59d3f7e000fd8b42315e79350acaf6d64afbdd75887f0248b7b7c0a81d87c913`. Шесть групп полей, хэши, первичные основания и соседняя проверка записаны в `candidate.json`.
+- Первичный источник: полный USGS PDF из `source-library-v2/maps-hold10`, 2,197,818 байт, SHA-256 `edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59`; полный блок response headers: 178,109 байт, SHA-256 `36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705`, 220 непрерывных HTTP 206 диапазонов. Визуально и содержательно прочитаны страницы 1–4; легенда растительности на p. 4 проверена отдельно.
+- Канонические требования сверены с `mindbattle-planning/docs/GAME_SPEC.md` (каждая справка фактологична, correct note дополняет основной факт) и authoring guide; процесс — `git show 12e5581b:.agents/references/question-revision.md`.
+- Синий PASS и восемь HOLD не менялись и не засчитывались. Тесты, build, runtime не запускались: это content proposal, запрошены только format/hash/frozen checks. Независимый PASS, личная проверка пользователя в Sol-чате и human acceptance ещё не получены.
+- Следующий шаг: координатор сверяет `beforeHash`, применяет только note0, затем организует независимую проверку exact afterHash; при оставшемся дефекте после этого одного цикла — HOLD. Личная проверка пользователя проводится после apply.
