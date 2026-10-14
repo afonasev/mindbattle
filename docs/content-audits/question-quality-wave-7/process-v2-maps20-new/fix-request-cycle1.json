@@ -1,0 +1,187 @@
+{
+  "cycle": 1,
+  "baselineCommit": "eba5b6fd10ffe3cda5bc6b3a2799c1b1a9aee0d9",
+  "readerNativeId": "01a13cb4-0503-7ad1-ab76-ff0c0ca1617e",
+  "scopeIds": [
+    "maps-cartography-mollweide-area",
+    "maps-cartography-conformal-angle",
+    "maps-cartography-compromise",
+    "maps-cartography-contour-line",
+    "maps-cartography-contour-interval",
+    "maps-cartography-equal-interval",
+    "maps-cartography-quantile",
+    "maps-cartography-natural-breaks",
+    "maps-cartography-standard-deviation",
+    "maps-cartography-equator-zero-lat",
+    "maps-cartography-parallel-latitude"
+  ],
+  "entries": [
+    {
+      "id": "maps-cartography-mollweide-area",
+      "beforeHash": "4051066596523cea718cf79fa1b923ed2f3b926b2668802f437a743afaec8f13",
+      "defects": [
+        {
+          "field": "note0",
+          "defect": "Справка ключа повторяет все признаки prompt (площади, эллипс, оси 2:1), не добавляя нового факта.",
+          "nextAction": "Автор: добавить отдельный проверенный факт, например назначение для тематических карт или год/автора из Description; новый hash — независимому читателю.",
+          "owner": "author, then coordinator adjudication"
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-conformal-angle",
+      "beforeHash": "227556fed30d6653dcff3501c7f1be5ccff4493c19c261659813a919f0ea83c1",
+      "defects": [
+        {
+          "field": "difficulty / prompt",
+          "defect": "Условие буквально спрашивает «углы», а ключ «Равноугольность» прозрачно выводится из слова. Без знакомства с картографией можно выбрать ключ; текущий medium не выдерживает абсолютную рубрику.",
+          "nextAction": "Автор: сохранить frozen medium и поставить содержательную задачу на локальное сохранение формы/углов без лексической разгадки; ключ и позиции сохранить.",
+          "owner": "author, then coordinator adjudication"
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-compromise",
+      "beforeHash": "2edee7e6d6891376de910a305b387477b9926df042bc6216166517064b7dafb2",
+      "defects": [
+        {
+          "field": "difficulty / prompt",
+          "defect": "«Баланс ... без точного сохранения» почти словарно выдаёт «Компромиссность». Это общеязыковая разгадка, недостаточная для absolute medium.",
+          "nextAction": "Автор: сохранить medium/key/order и проверить распознавание картографического компромисса на конкретном следствии или применении.",
+          "owner": "author, then coordinator adjudication"
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-contour-line",
+      "beforeHash": "19e3500e596dd94296c3f89123001afc6ac05612e8a17ccaea215a5cad3d75b0",
+      "defects": [
+        {
+          "field": "prompt_ordered_answers_key.answers[2]",
+          "defect": "Утолщённая горизонталь тоже соединяет точки равной высоты. Подстановка 2 истинна вместе с ключом 0; нет ровно одного ответа.",
+          "nextAction": "Автор: заменить вариант 2 на сопоставимый, но не являющийся горизонталью термин; отдельно source-backed обновить note2 и повторно проверить все четыре подстановки.",
+          "owner": "author, then coordinator adjudication"
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-contour-interval",
+      "beforeHash": "1ff31d00407b0bc105de53e4cd093542d648e1338ac499bbbac3ab8850ff3e00",
+      "defects": [
+        {
+          "field": "note0",
+          "defect": "У ключа «Сечение рельефа» стоит определение горизонтали; справка относится к другой сущности.",
+          "nextAction": "Автор: дать самостоятельную справку именно о высотном шаге, с новым дополнительным фактом.",
+          "owner": "author, then coordinator adjudication"
+        },
+        {
+          "field": "note1",
+          "defect": "У «Горизонталь» стоит определение сечения рельефа; справка неверно привязана.",
+          "nextAction": "Автор: исправить привязку notes 0/1 и проверить полезность correct note сверх prompt.",
+          "owner": "author, then coordinator adjudication"
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-equal-interval",
+      "beforeHash": "bb8190218b0c24c87c44e134262fa7ac4f97626545babfc2f7ae1e765c11e586",
+      "defects": [
+        {
+          "field": "difficulty / prompt",
+          "defect": "Вопрос hard требует только узнавания буквального определения «равные интервалы», а остальные методы различимы по базовым определениям. Нет экспертной детали или нетривиального вывода; максимум medium, с сильной лексической подсказкой.",
+          "nextAction": "Автор: сохранить frozen hard и создать содержательный вывод/выбор метода по данным или ограничениям без лексического раскрытия ключа; не менять difficulty молча.",
+          "owner": "author, then coordinator adjudication"
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-quantile",
+      "beforeHash": "d9c68ba71a62d2db940210ecec16d5bbfc74a04d9756df6e8998d87fd10145d4",
+      "defects": [
+        {
+          "field": "difficulty / prompt",
+          "defect": "Равное число объектов — базовое определение квантильной классификации. Знакомый с тематическими картами отвечает прямо; нет точной детали/нетривиального вывода для hard. Абсолютно medium.",
+          "nextAction": "Автор: сохранить frozen hard, усложнить именно проверяемое знание/вывод в пределах факта и проверить заново; перенос уровня требует координатора.",
+          "owner": "author, then coordinator adjudication"
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-natural-breaks",
+      "beforeHash": "2aafceb9105f96b5fe5476369a6385accd90bb3848de93c91039bc043a1ed57b",
+      "defects": [
+        {
+          "field": "difficulty / prompt",
+          "defect": "Большие разрывы → естественные границы: базовая идентификация метода Дженкса, без алгоритмической детали или нетривиального вывода. Absolute medium, не hard.",
+          "nextAction": "Автор: сохранить frozen hard и дать содержательную задачу о зависимости метода от набора/сравнимости или ином подтверждённом ограничении.",
+          "owner": "author, then coordinator adjudication"
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-standard-deviation",
+      "beforeHash": "643d81a1f04136d3d5ffac5e9977c542105c7c125256ee2e5c2559748871df89",
+      "defects": [
+        {
+          "field": "difficulty / prompt",
+          "defect": "Удаление от среднего напрямую узнаётся как стандартное отклонение; это базовый метод классификации, а не точная экспертная деталь. Absolute medium, не hard.",
+          "nextAction": "Автор: сохранить hard и проверить интерпретацию стандартизованных классов/следствие на конкретных данных, сохранив ключ и позиции.",
+          "owner": "author, then coordinator adjudication"
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-equator-zero-lat",
+      "beforeHash": "146213090a7daf9ffa5ac90d62cc0f5d0f965c4f7068e5a199b369edd189750a",
+      "defects": [
+        {
+          "field": "note0",
+          "defect": "Вариант «Нулевой меридиан» описан фактом об экваторе; неверная сущность.",
+          "nextAction": "Автор: исправить notes 0/1 с самостоятельными фактами именно о вариантах.",
+          "owner": "author, then coordinator adjudication"
+        },
+        {
+          "field": "note1",
+          "defect": "Вариант «Экватор» описан фактом о нулевом меридиане; неверная сущность.",
+          "nextAction": "Автор: исправить notes 0/1, correct note должен дополнять 0°/полушария.",
+          "owner": "author, then coordinator adjudication"
+        },
+        {
+          "field": "note0",
+          "defect": "«Самым известным из параллелей» нарушает род; нужно «самой известной параллелью» либо другое согласованное выражение.",
+          "nextAction": "Автор: исправить русский язык после исправления привязки.",
+          "owner": "author, then coordinator adjudication"
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-parallel-latitude",
+      "beforeHash": "c2057dfbbcd9ce1bd551d786003374707cdeafb1d40b0569adad26dc2c3ab81a",
+      "defects": [
+        {
+          "field": "prompt_ordered_answers_key.answers[0]",
+          "defect": "Экватор тоже соединяет точки одной широты (0°). Подстановка 0 истинна наряду с ключом 1; род и его частный случай пересекаются.",
+          "nextAction": "Автор: заменить distractor0 на не-параллель либо сформулировать однозначное родовое название, затем перечитать четыре подстановки.",
+          "owner": "author, then coordinator adjudication"
+        },
+        {
+          "field": "note1",
+          "defect": "«Широту вдоль них измеряют к северу или югу» смешивает направление линии с направлением отсчёта: вдоль параллели широта не меняется. Справка почти повторяет explanation и не даёт устойчивого нового факта сверх определения.",
+          "nextAction": "Автор: разделить направление параллели и отсчёт широты, добавить самостоятельный факт из полного NOAA контекста.",
+          "owner": "author, then coordinator adjudication"
+        }
+      ]
+    }
+  ],
+  "frozen": [
+    "ID",
+    "topic",
+    "order",
+    "difficulty",
+    "correctIndex"
+  ],
+  "answerTextsAndNotes": "source-backed rewrite allowed; not frozen",
+  "stop": "One substantive fix cycle; unresolved concrete HOLD0. Do not change difficulty/key to make tests pass.",
+  "sourceIndex": "source-bindings.json",
+  "applyOwnership": "coordinator only"
+}
