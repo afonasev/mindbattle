@@ -1,0 +1,910 @@
+{
+  "schemaVersion": 1,
+  "candidatePath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/fix-medium9-cycle1-author-01a13d50/remaining6-completion/candidate.json",
+  "baselineCommit": "5022fb1fefa636a510d7ddd983673ec3de89dde6",
+  "scopeIds": [
+    "maps-cartography-choropleth-shading",
+    "maps-cartography-dot-density",
+    "maps-cartography-isoline-value",
+    "maps-cartography-longitude-ew",
+    "maps-cartography-utm-zones",
+    "maps-cartography-elevation-vertical"
+  ],
+  "qualityCredit": 0,
+  "entries": [
+    {
+      "id": "maps-cartography-choropleth-shading",
+      "status": "FIX",
+      "beforeHash": "e3d1afc372e6f7d0d822b9ddcc0236f27f06b3bd6d37140a56f68016b93cd59e",
+      "afterHash": "8614c79d64166b87ceecc3b6e9258f6d91555b2a740cfb17d720ba47abc7c760",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На карте доли домов без водопровода показаны последовательной шкалой: чем темнее, тем выше доля. Классы: 0–5%, 5–10%, 10–15%. В районе X таких 18 из 300 домов, в Y — 36 из 400. В какие классы попадут районы и совпадают ли их точные доли?",
+            "answers": [
+              "X: 0–5%, Y: 5–10%; большее абсолютное число у Y означает большую долю.",
+              "X: 5–10%, Y: 5–10%; доли равны 6% и 9%, поэтому цвет общий, а точные значения различны.",
+              "X: 5–10%, Y: 10–15%; 6% и 9% округляются к верхней границе своего класса.",
+              "X и Y попадают в 5–10% и имеют одинаковую точную долю, раз цвет совпадает."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "813fe1dedf0544ce20ad344548a097bf9e2862866caccf032531d86b04fe6089",
+          "source": {
+            "title": "Esri ArcGIS Pro: Graduated colors",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/graduated-colors.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-01.txt",
+            "fileSHA256": "0932b1fbe526b9bd9107f3fc488ba673cbf781298f5e4859b31b5098cbeefa8a",
+            "exactlocator": "Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios.",
+            "specificClaim": "This exact calculation and interpretation follow the definitions/algorithm at Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу.",
+            "supportingPrimarySources": [
+              {
+                "title": "Esri ArcGIS Pro: Unique values",
+                "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/unique-values.htm",
+                "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-13.txt",
+                "fileSHA256": "0c0155c0ea2dbdf8f8e8b1909f509dac0bc2f7f9eac16c0de138ae8a776c529d",
+                "exactlocator": "Lines 12–18: unique values symbolize qualitative categories such as soil types or planning zones."
+              }
+            ]
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "X: 18/300=6%; Y: 36/400=9%. Обе доли попадают в класс 5–10%, поэтому цвет совпадает, хотя значения различаются. Размер полигонов не участвует в расчёте показателя.",
+          "literalSHA256": "2ec8b9182fe666a23e87db5920b3cbc9f1339c7ab943d8bf5b61b51368f757bc",
+          "source": {
+            "title": "Esri ArcGIS Pro: Graduated colors",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/graduated-colors.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-01.txt",
+            "fileSHA256": "0932b1fbe526b9bd9107f3fc488ba673cbf781298f5e4859b31b5098cbeefa8a",
+            "exactlocator": "Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios.",
+            "specificClaim": "Calculation steps and interpretive limits: Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "Для доли нужно делить число домов на общее число домов района.",
+          "literalSHA256": "25fd4f6360e0f2e4994eeea0e2b528b7e98f97b032507c47e880fc0e94440f72",
+          "source": {
+            "title": "Esri ArcGIS Pro: Graduated colors",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/graduated-colors.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-01.txt",
+            "fileSHA256": "0932b1fbe526b9bd9107f3fc488ba673cbf781298f5e4859b31b5098cbeefa8a",
+            "exactlocator": "Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios.",
+            "specificClaim": "Specific fact for note 0: Для доли нужно делить число домов на общее число домов района. Locator: Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "В градуированной заливке размер символов остаётся постоянным; числовой показатель кодирует цвет.",
+          "literalSHA256": "0a1db387c814d4a645c6eb70fd70dbb7d891f86daad967b8327244a048fec60c",
+          "source": {
+            "title": "Esri ArcGIS Pro: Graduated colors",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/graduated-colors.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-01.txt",
+            "fileSHA256": "0932b1fbe526b9bd9107f3fc488ba673cbf781298f5e4859b31b5098cbeefa8a",
+            "exactlocator": "Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios.",
+            "specificClaim": "Specific fact for note 1: В градуированной заливке размер символов остаётся постоянным; числовой показатель кодирует цвет. Locator: Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Границы классов задают интервалы значений; округление не переносит значение через границу.",
+          "literalSHA256": "52071bac91db2bc23b70953a5925080804cab5b20a1b8674624eed48f78e29cd",
+          "source": {
+            "title": "Esri ArcGIS Pro: Graduated colors",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/graduated-colors.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-01.txt",
+            "fileSHA256": "0932b1fbe526b9bd9107f3fc488ba673cbf781298f5e4859b31b5098cbeefa8a",
+            "exactlocator": "Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios.",
+            "specificClaim": "Specific fact for note 2: Границы классов задают интервалы значений; округление не переносит значение через границу. Locator: Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "Один класс может включать разные числовые значения, даже если его символ один и тот же.",
+          "literalSHA256": "eb976c0bd82db4538fd712534196a40f5f317d37420ff33a7c9b4830c0ba0319",
+          "source": {
+            "title": "Esri ArcGIS Pro: Graduated colors",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/graduated-colors.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-01.txt",
+            "fileSHA256": "0932b1fbe526b9bd9107f3fc488ba673cbf781298f5e4859b31b5098cbeefa8a",
+            "exactlocator": "Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios.",
+            "specificClaim": "Specific fact for note 3: Один класс может включать разные числовые значения, даже если его символ один и тот же. Locator: Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу.",
+            "supportingPrimarySources": [
+              {
+                "title": "Esri ArcGIS Pro: Unique values",
+                "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/unique-values.htm",
+                "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-13.txt",
+                "fileSHA256": "0c0155c0ea2dbdf8f8e8b1909f509dac0bc2f7f9eac16c0de138ae8a776c529d",
+                "exactlocator": "Lines 12–18: unique values symbolize qualitative categories such as soil types or planning zones."
+              }
+            ]
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "answerText": "X: 0–5%, Y: 5–10%; большее абсолютное число у Y означает большую долю.",
+          "note": "Для доли нужно делить число домов на общее число домов района.",
+          "truthOneKey": "WRONG: uses raw counts to choose classes and assert which share is larger, ignoring denominators. Plausible because Y has twice as many cases but also a larger population base.",
+          "grammar": "Грамматически корректно; причина сравнения выражена ясно.",
+          "plausibility": "WRONG: uses raw counts to choose classes and assert which share is larger, ignoring denominators. Plausible because Y has twice as many cases but also a larger population base.",
+          "noteUsefulness": "Notes denominator explicitly, correcting the precise count-versus-rate mistake.",
+          "sourceLocator": "Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios."
+        },
+        {
+          "answerIndex": 1,
+          "answerText": "X: 5–10%, Y: 5–10%; доли равны 6% и 9%, поэтому цвет общий, а точные значения различны.",
+          "note": "В градуированной заливке размер символов остаётся постоянным; числовой показатель кодирует цвет.",
+          "truthOneKey": "ONLY CORRECT: 18/300=6%, 36/400=9%; both fit 5–10%, yet exact rates differ.",
+          "grammar": "Грамматически корректно; parallel forms make both classifications readable.",
+          "plausibility": "ONLY CORRECT: 18/300=6%, 36/400=9%; both fit 5–10%, yet exact rates differ.",
+          "noteUsefulness": "Adds a useful independent symbology rule: graduated-color classes keep symbol size constant.",
+          "sourceLocator": "Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios."
+        },
+        {
+          "answerIndex": 2,
+          "answerText": "X: 5–10%, Y: 10–15%; 6% и 9% округляются к верхней границе своего класса.",
+          "note": "Границы классов задают интервалы значений; округление не переносит значение через границу.",
+          "truthOneKey": "WRONG: 6% and 9% do not round to the interval edges; both belong in 5–10%. Plausible because the answer confuses rounded display labels with class membership.",
+          "grammar": "Грамматически корректно; “округляются к верхней границе” identifies the error.",
+          "plausibility": "WRONG: 6% and 9% do not round to the interval edges; both belong in 5–10%. Plausible because the answer confuses rounded display labels with class membership.",
+          "noteUsefulness": "Clarifies that class bounds are ranges and ordinary rounding does not change bin assignment.",
+          "sourceLocator": "Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios."
+        },
+        {
+          "answerIndex": 3,
+          "answerText": "X и Y попадают в 5–10% и имеют одинаковую точную долю, раз цвет совпадает.",
+          "note": "Один класс может включать разные числовые значения, даже если его символ один и тот же.",
+          "truthOneKey": "WRONG: same bin/color does not imply same exact rate; class 5–10 contains multiple values. Plausible categorical-to-exact-value confusion.",
+          "grammar": "Грамматически complete and clear.",
+          "plausibility": "WRONG: same bin/color does not imply same exact rate; class 5–10 contains multiple values. Plausible categorical-to-exact-value confusion.",
+          "noteUsefulness": "Explains information lost when continuous values are grouped into one symbol class.",
+          "sourceLocator": "Lines 12–20: numeric features are classified into ranges and colored; symbol size remains the same. Lines 52–58: normalization can divide values to create ratios."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-dot-density",
+      "status": "FIX",
+      "beforeHash": "3cdd0b66e7b22e7e77865656eccda1a760b24b18cd0cf19ac6650ccc49966998",
+      "afterHash": "e33a0525b336d7d1757bb8060bbb14ca323ef083db183f58b5e6483751dfeb91",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В легенде карты точек один кружок представляет 200 жителей. В A нарисовано 9 точек, в B — 14. После повторной случайной расстановки координаты кружков изменились, число точек осталось прежним. Сколько жителей в B сверх A, каков общий итог и доказывает ли новая раскладка реальный переезд жителей?",
+            "answers": [
+              "B больше на 5 жителей; всего 23 жителя в двух участках.",
+              "B больше на 1 000 жителей; вместе участки представляют 4 600 жителей. Новая раскладка не доказывает переезд.",
+              "B больше на 1 000 жителей; вместе 2 800 жителей, то есть только население B.",
+              "B больше на 1 000 жителей; вместе 4 600, и при перерисовке эти жители переместились между адресами."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "3fd83c022fc351733e7c6b2f328faa7854ed78982a4a401afbf527a61505f90c",
+          "source": {
+            "title": "Esri ArcGIS Pro: Dot density",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/dot-density.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-04.txt",
+            "fileSHA256": "e4ace2a5e2f2475e72d8c76ee7f29a87abd31774e53e33b06af81422785ced30",
+            "exactlocator": "Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density.",
+            "specificClaim": "This exact calculation and interpretation follow the definitions/algorithm at Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "A представляет 9×200=1 800 жителей, B — 14×200=2 800. Разность равна 1 000, общий итог — 4 600. Перегенерация случайного размещения меняет рисунок, но не число точек или фактические адреса.",
+          "literalSHA256": "994d499ced66292abd7d0ab9e394c04a62a176c959a5602e1d06a0293db601a9",
+          "source": {
+            "title": "Esri ArcGIS Pro: Dot density",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/dot-density.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-04.txt",
+            "fileSHA256": "e4ace2a5e2f2475e72d8c76ee7f29a87abd31774e53e33b06af81422785ced30",
+            "exactlocator": "Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density.",
+            "specificClaim": "Calculation steps and interpretive limits: Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "Число точек не равно числу людей, когда каждая точка представляет 200 жителей.",
+          "literalSHA256": "556c366b66305014d11c687ab13616e87a889a46c14bed76b17759fd14899ec1",
+          "source": {
+            "title": "Esri ArcGIS Pro: Dot density",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/dot-density.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-04.txt",
+            "fileSHA256": "e4ace2a5e2f2475e72d8c76ee7f29a87abd31774e53e33b06af81422785ced30",
+            "exactlocator": "Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density.",
+            "specificClaim": "Specific fact for note 0: Число точек не равно числу людей, когда каждая точка представляет 200 жителей. Locator: Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "Для сравнения плотности в полигонах нужна равновеликая проекция, иначе визуальные сравнения площадей искажаются.",
+          "literalSHA256": "bf969384893416b58e724bd9a143416115cbee69e8f36a5186a744c221ea4edc",
+          "source": {
+            "title": "Esri ArcGIS Pro: Dot density",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/dot-density.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-04.txt",
+            "fileSHA256": "e4ace2a5e2f2475e72d8c76ee7f29a87abd31774e53e33b06af81422785ced30",
+            "exactlocator": "Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density.",
+            "specificClaim": "Specific fact for note 1: Для сравнения плотности в полигонах нужна равновеликая проекция, иначе визуальные сравнения площадей искажаются. Locator: Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Суммарный итог требует сложить представленные значения обоих участков.",
+          "literalSHA256": "e04a5feabaf340071e516c8ae13dd7cddf42ac9979cb50183aff2d07cea2a45a",
+          "source": {
+            "title": "Esri ArcGIS Pro: Dot density",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/dot-density.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-04.txt",
+            "fileSHA256": "e4ace2a5e2f2475e72d8c76ee7f29a87abd31774e53e33b06af81422785ced30",
+            "exactlocator": "Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density.",
+            "specificClaim": "Specific fact for note 2: Суммарный итог требует сложить представленные значения обоих участков. Locator: Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "Точки случайно распределены внутри полигона; новое размещение не описывает адреса или реальное перемещение людей.",
+          "literalSHA256": "46dbe2778f2af33d211a50f4ecbd456712983ae380a4f9be69eebb408de4d6fa",
+          "source": {
+            "title": "Esri ArcGIS Pro: Dot density",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/dot-density.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-04.txt",
+            "fileSHA256": "e4ace2a5e2f2475e72d8c76ee7f29a87abd31774e53e33b06af81422785ced30",
+            "exactlocator": "Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density.",
+            "specificClaim": "Specific fact for note 3: Точки случайно распределены внутри полигона; новое размещение не описывает адреса или реальное перемещение людей. Locator: Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "answerText": "B больше на 5 жителей; всего 23 жителя в двух участках.",
+          "note": "Число точек не равно числу людей, когда каждая точка представляет 200 жителей.",
+          "truthOneKey": "WRONG: treats each mark as one resident, producing a count of marks rather than represented people.",
+          "grammar": "Грамматически корректно; unit is explicit.",
+          "plausibility": "WRONG: treats each mark as one resident, producing a count of marks rather than represented people.",
+          "noteUsefulness": "Reinforces the distinction between marks and their legend weight for this error.",
+          "sourceLocator": "Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density."
+        },
+        {
+          "answerIndex": 1,
+          "answerText": "B больше на 1 000 жителей; вместе участки представляют 4 600 жителей. Новая раскладка не доказывает переезд.",
+          "note": "Для сравнения плотности в полигонах нужна равновеликая проекция, иначе визуальные сравнения площадей искажаются.",
+          "truthOneKey": "ONLY CORRECT: applies 200 per mark, computes B−A=1,000 and total 4,600, and does not infer migration from regenerated random positions.",
+          "grammar": "Грамматически корректно; all game-facing wording is Russian.",
+          "plausibility": "ONLY CORRECT: applies 200 per mark, computes B−A=1,000 and total 4,600, and does not infer migration from regenerated random positions.",
+          "noteUsefulness": "Adds Esri’s separate projection requirement: equal-area projections are needed for valid polygon-density comparisons.",
+          "sourceLocator": "Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density."
+        },
+        {
+          "answerIndex": 2,
+          "answerText": "B больше на 1 000 жителей; вместе 2 800 жителей, то есть только население B.",
+          "note": "Суммарный итог требует сложить представленные значения обоих участков.",
+          "truthOneKey": "WRONG: gets B−A right but reports B alone as the combined total. Plausible because the number 2,800 is a valid B subtotal.",
+          "grammar": "Грамматически correct; contrast between difference and total is explicit.",
+          "plausibility": "WRONG: gets B−A right but reports B alone as the combined total. Plausible because the number 2,800 is a valid B subtotal.",
+          "noteUsefulness": "The note directs calculation to both represented fields/areas rather than a single subtotal.",
+          "sourceLocator": "Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density."
+        },
+        {
+          "answerIndex": 3,
+          "answerText": "B больше на 1 000 жителей; вместе 4 600, и при перерисовке эти жители переместились между адресами.",
+          "note": "Точки случайно распределены внутри полигона; новое размещение не описывает адреса или реальное перемещение людей.",
+          "truthOneKey": "WRONG: arithmetic is correct, but redrawing randomized marks is not evidence that real residents relocated. Plausible because changed locations resemble movement.",
+          "grammar": "Грамматически complete; causal claim is identifiable.",
+          "plausibility": "WRONG: arithmetic is correct, but redrawing randomized marks is not evidence that real residents relocated. Plausible because changed locations resemble movement.",
+          "noteUsefulness": "Corrects the specific inference from a regenerated map pattern to real-world movement.",
+          "sourceLocator": "Lines 12–15: unclassified quantitative fields, constant number per dot; lines 105–112: placement is random, may be regenerated; lines 118–122: equal-area projection is required for valid visual comparisons of density."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-isoline-value",
+      "status": "FIX",
+      "beforeHash": "a73b57f1979a239dddde6be75a179d9963128183e3464bfa36e6abe12117f472",
+      "afterHash": "7731d097c0574532b84d5653efd5968f50a64239ff753481f10ac2ff37ec301c",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "После построения температурного растра две соседние расчётные точки на профиле находятся в 8 км друг от друга: в первой 12 °C, во второй 24 °C. Между ними программа линейно интерполирует значение. На каком расстоянии от первой точки пройдёт изотерма 15 °C, и является ли это показанием станции?",
+            "answers": [
+              "В 6 км от первой точки; изотерма показывает только ближайшее измерение.",
+              "В 2 км от первой точки; это значение модели между расчётными точками, не отдельный замер станции.",
+              "В 4 км от первой точки, поскольку изолиния всегда проходит посередине двух точек.",
+              "Изотерма здесь невозможна, пока станция не зарегистрирует ровно 15 °C."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "8307e0a2b816ca8b2c747a28dccc7b720044fd146fe0b83904d821f981eab74a",
+          "source": {
+            "title": "Esri ArcGIS Pro: How contouring works",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/tool-reference/spatial-analyst/how-contouring-works.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-05.txt",
+            "fileSHA256": "271e03c99d4050983666e575f051778b9a2887389854c7bcc9923f8e93a3750a",
+            "exactlocator": "Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation.",
+            "specificClaim": "This exact calculation and interpretation follow the definitions/algorithm at Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "15 °C превышает 12 °C на 3 из общего перепада 12 °C, то есть на четверть. Четверть расстояния 8 км — 2 км от первой точки. Изотерма представляет интерпретацию растра, а не обязательное наблюдение станции.",
+          "literalSHA256": "59aa66e4bbb905278c6c53c9cff6a5ebe0e4f9cb386192c6df8212bb5dd97a90",
+          "source": {
+            "title": "Esri ArcGIS Pro: How contouring works",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/tool-reference/spatial-analyst/how-contouring-works.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-05.txt",
+            "fileSHA256": "271e03c99d4050983666e575f051778b9a2887389854c7bcc9923f8e93a3750a",
+            "exactlocator": "Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation.",
+            "specificClaim": "Calculation steps and interpretive limits: Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "15 °C на три градуса выше 12 °C; это четверть диапазона 12–24, а не три четверти.",
+          "literalSHA256": "ff8ecb206d64c83d66f3666f2896b761380ea81f125af3c9aab08031906f4ca0",
+          "source": {
+            "title": "Esri ArcGIS Pro: How contouring works",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/tool-reference/spatial-analyst/how-contouring-works.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-05.txt",
+            "fileSHA256": "271e03c99d4050983666e575f051778b9a2887389854c7bcc9923f8e93a3750a",
+            "exactlocator": "Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation.",
+            "specificClaim": "Specific fact for note 0: 15 °C на три градуса выше 12 °C; это четверть диапазона 12–24, а не три четверти. Locator: Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "Близко расположенные изолинии показывают более быстрое изменение поля; это помогает читать и соседние интервалы.",
+          "literalSHA256": "29e4b4c1715fbdb5019b8a55e83edc59fe1d5033a809ec2f6d47f307d0c76615",
+          "source": {
+            "title": "Esri ArcGIS Pro: How contouring works",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/tool-reference/spatial-analyst/how-contouring-works.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-05.txt",
+            "fileSHA256": "271e03c99d4050983666e575f051778b9a2887389854c7bcc9923f8e93a3750a",
+            "exactlocator": "Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation.",
+            "specificClaim": "Specific fact for note 1: Близко расположенные изолинии показывают более быстрое изменение поля; это помогает читать и соседние интервалы. Locator: Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Середина соответствует среднему 18 °C; уровень 15 °C лежит ближе к точке со значением 12 °C.",
+          "literalSHA256": "13a7e37ab1173f96d8a338bb9af0e81105ae64a4854e85775bdd9cebdcd4b4dd",
+          "source": {
+            "title": "Esri ArcGIS Pro: How contouring works",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/tool-reference/spatial-analyst/how-contouring-works.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-05.txt",
+            "fileSHA256": "271e03c99d4050983666e575f051778b9a2887389854c7bcc9923f8e93a3750a",
+            "exactlocator": "Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation.",
+            "specificClaim": "Specific fact for note 2: Середина соответствует среднему 18 °C; уровень 15 °C лежит ближе к точке со значением 12 °C. Locator: Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "Контур строят из значений растровой поверхности, поэтому он может проходить между наблюдениями.",
+          "literalSHA256": "e8319a0e45465bffb89ea946fa82d7794745d90c89f4c583c638046cac7e0d0f",
+          "source": {
+            "title": "Esri ArcGIS Pro: How contouring works",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/tool-reference/spatial-analyst/how-contouring-works.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-05.txt",
+            "fileSHA256": "271e03c99d4050983666e575f051778b9a2887389854c7bcc9923f8e93a3750a",
+            "exactlocator": "Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation.",
+            "specificClaim": "Specific fact for note 3: Контур строят из значений растровой поверхности, поэтому он может проходить между наблюдениями. Locator: Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "answerText": "В 6 км от первой точки; изотерма показывает только ближайшее измерение.",
+          "note": "15 °C на три градуса выше 12 °C; это четверть диапазона 12–24, а не три четверти.",
+          "truthOneKey": "WRONG: takes the complementary three-quarters of the segment; linear interpolation places 15 one-quarter from 12. Plausible because the target is nearer the 24 end only if the fraction is reversed.",
+          "grammar": "Грамматически корректно; offset is measurable.",
+          "plausibility": "WRONG: takes the complementary three-quarters of the segment; linear interpolation places 15 one-quarter from 12. Plausible because the target is nearer the 24 end only if the fraction is reversed.",
+          "noteUsefulness": "Shows the ratio within the value range for this endpoint-reversal error.",
+          "sourceLocator": "Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation."
+        },
+        {
+          "answerIndex": 1,
+          "answerText": "В 2 км от первой точки; это значение модели между расчётными точками, не отдельный замер станции.",
+          "note": "Близко расположенные изолинии показывают более быстрое изменение поля; это помогает читать и соседние интервалы.",
+          "truthOneKey": "ONLY CORRECT: (15−12)/(24−12)=1/4 of 8 km=2 km from the first point; contour is modeled, not a station reading.",
+          "grammar": "Грамматически корректно and Russian; «расчётная точка» is consistent.",
+          "plausibility": "ONLY CORRECT: (15−12)/(24−12)=1/4 of 8 km=2 km from the first point; contour is modeled, not a station reading.",
+          "noteUsefulness": "Adds the independent source rule that closer isolines indicate faster change across the field.",
+          "sourceLocator": "Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation."
+        },
+        {
+          "answerIndex": 2,
+          "answerText": "В 4 км от первой точки, поскольку изолиния всегда проходит посередине двух точек.",
+          "note": "Середина соответствует среднему 18 °C; уровень 15 °C лежит ближе к точке со значением 12 °C.",
+          "truthOneKey": "WRONG: midpoint is 4 km but corresponds to the average 18°C, not the target 15°C. Plausible equal-distance/equal-value assumption.",
+          "grammar": "Грамматически корректно; reason is directly linked.",
+          "plausibility": "WRONG: midpoint is 4 km but corresponds to the average 18°C, not the target 15°C. Plausible equal-distance/equal-value assumption.",
+          "noteUsefulness": "Notes why a midpoint of distance is not a midpoint of the value interval.",
+          "sourceLocator": "Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation."
+        },
+        {
+          "answerIndex": 3,
+          "answerText": "Изотерма здесь невозможна, пока станция не зарегистрирует ровно 15 °C.",
+          "note": "Контур строят из значений растровой поверхности, поэтому он может проходить между наблюдениями.",
+          "truthOneKey": "WRONG: contouring interpolates target values between raster points; no station at exactly 15°C is required. Plausible confusion between observations and modeled surface.",
+          "grammar": "Грамматически correct; «здесь» points to the segment.",
+          "plausibility": "WRONG: contouring interpolates target values between raster points; no station at exactly 15°C is required. Plausible confusion between observations and modeled surface.",
+          "noteUsefulness": "Explains how a contour may fall between observations.",
+          "sourceLocator": "Lines 12–13: contours connect equal raster values and spacing signals rate of change; line 26: bilinear calculation and linear interpolation determine where a target contour falls between points; lines 27,30: raster boundary and source accuracy limit interpretation."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-longitude-ew",
+      "status": "FIX",
+      "beforeHash": "f61edd3da1ad4a72318dbc0ee4cfd1c375523889615d1d5212993af0b3b91b63",
+      "afterHash": "d06c9f30bc9a335c1f6ed7a43ff3c4fa2ea274e975f5250160bb0a5381347757",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На судне местный солнечный полдень наступил, когда часы, установленные по Гринвичу, показывают 14:24. Считайте разницу между полуднем на судне и временем Гринвича и используйте 15° долготы за час. Какую долготу записать?",
+            "answers": [
+              "36° в. д.: местный полдень на судне наступил позже полудня в Гринвиче.",
+              "36° з. д.: Гринвич опережает местный полдень на 2 ч 24 мин, то есть на 36°.",
+              "30° з. д.: учитываются только два полных часа, а 24 минуты не влияют на долготу.",
+              "2°24′ з. д.: цифры 2:24 переносятся с часов на градусы и минуты."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "e9b020c6499167a008fdde7acdb96602c90f59d26ad23f50ef6364455256680d",
+          "source": {
+            "title": "NOAA Ocean Service: Longitude",
+            "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+            "fileSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+            "exactlocator": "Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude.",
+            "specificClaim": "This exact calculation and interpretation follow the definitions/algorithm at Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "Гринвичские часы опережают местный солнечный полдень на 2 часа 24 минуты, или 2,4 часа. 2,4×15°=36°, а более поздний полдень на часах соответствует долготе к западу от Гринвича. Поэтому судно находится на 36° з. д.",
+          "literalSHA256": "9d076b16049b6125f2845a259500e2f0f2b79ec1d49c7dac2717bfda32e94de8",
+          "source": {
+            "title": "NOAA Ocean Service: Longitude",
+            "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+            "fileSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+            "exactlocator": "Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude.",
+            "specificClaim": "Calculation steps and interpretive limits: Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "При восточной долготе местный солнечный полдень наступает раньше по часам Гринвича, а не позже.",
+          "literalSHA256": "c0174d7b4584fe0b3b73b7d6d416eb9fdfe339baedfb0ca092142acb25a18f7c",
+          "source": {
+            "title": "NOAA Ocean Service: Longitude",
+            "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+            "fileSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+            "exactlocator": "Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude.",
+            "specificClaim": "Specific fact for note 0: При восточной долготе местный солнечный полдень наступает раньше по часам Гринвича, а не позже. Locator: Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "Меридианы сходятся у полюсов: один градус долготы равен примерно 111 км на экваторе и 56 км на 60° широты.",
+          "literalSHA256": "78871fb74c5bb6eb2851d00206b52d932c681164c8d9cec5a2e1091a5303c012",
+          "source": {
+            "title": "NOAA Ocean Service: Longitude",
+            "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+            "fileSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+            "exactlocator": "Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude.",
+            "specificClaim": "Specific fact for note 1: Меридианы сходятся у полюсов: один градус долготы равен примерно 111 км на экваторе и 56 км на 60° широты. Locator: Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Земля поворачивается на 15° за час, поэтому каждая часть часа также даёт пропорциональную часть градуса.",
+          "literalSHA256": "eb88bf76bfeebd66796f9044a7e65b9e2ca0c3080f20e071e0c9d95defd714d7",
+          "source": {
+            "title": "NOAA Ocean Service: Longitude",
+            "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+            "fileSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+            "exactlocator": "Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude.",
+            "specificClaim": "Specific fact for note 2: Земля поворачивается на 15° за час, поэтому каждая часть часа также даёт пропорциональную часть градуса. Locator: Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "Часы и угловые градусы не соотносятся один к одному; используется масштаб 15° за час.",
+          "literalSHA256": "e9e270f6813bc0f0c30828810d5ca52e7df3206d8e5fae2cba68e87950c406b3",
+          "source": {
+            "title": "NOAA Ocean Service: Longitude",
+            "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+            "fileSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+            "exactlocator": "Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude.",
+            "specificClaim": "Specific fact for note 3: Часы и угловые градусы не соотносятся один к одному; используется масштаб 15° за час. Locator: Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "answerText": "36° в. д.: местный полдень на судне наступил позже полудня в Гринвиче.",
+          "note": "При восточной долготе местный солнечный полдень наступает раньше по часам Гринвича, а не позже.",
+          "truthOneKey": "WRONG: reverses east/west. At 36°E, local noon would occur when Greenwich time is 09:36, not after Greenwich noon. Plausible sign reversal.",
+          "grammar": "Грамматически correct; event order is stated explicitly.",
+          "plausibility": "WRONG: reverses east/west. At 36°E, local noon would occur when Greenwich time is 09:36, not after Greenwich noon. Plausible sign reversal.",
+          "noteUsefulness": "Corrects this exact temporal-order/sign misconception with the Greenwich clock reading.",
+          "sourceLocator": "Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude."
+        },
+        {
+          "answerIndex": 1,
+          "answerText": "36° з. д.: Гринвич опережает местный полдень на 2 ч 24 мин, то есть на 36°.",
+          "note": "Меридианы сходятся у полюсов: один градус долготы равен примерно 111 км на экваторе и 56 км на 60° широты.",
+          "truthOneKey": "ONLY CORRECT: Greenwich is ahead by 2.4 h; 2.4×15°=36°, west.",
+          "grammar": "Грамматически correct; comparison and conversion are explicit.",
+          "plausibility": "ONLY CORRECT: Greenwich is ahead by 2.4 h; 2.4×15°=36°, west.",
+          "noteUsefulness": "Adds how meridian spacing changes physically with latitude, a useful fact beyond the time calculation.",
+          "sourceLocator": "Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude."
+        },
+        {
+          "answerIndex": 2,
+          "answerText": "30° з. д.: учитываются только два полных часа, а 24 минуты не влияют на долготу.",
+          "note": "Земля поворачивается на 15° за час, поэтому каждая часть часа также даёт пропорциональную часть градуса.",
+          "truthOneKey": "WRONG: discards 24 minutes; the fractional hour contributes six degrees. Plausible truncation of a non-integer time difference.",
+          "grammar": "Грамматически correct and concise.",
+          "plausibility": "WRONG: discards 24 minutes; the fractional hour contributes six degrees. Plausible truncation of a non-integer time difference.",
+          "noteUsefulness": "Reminds that the 15°/hour rate applies proportionally to fractions of an hour.",
+          "sourceLocator": "Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude."
+        },
+        {
+          "answerIndex": 3,
+          "answerText": "2°24′ з. д.: цифры 2:24 переносятся с часов на градусы и минуты.",
+          "note": "Часы и угловые градусы не соотносятся один к одному; используется масштаб 15° за час.",
+          "truthOneKey": "WRONG: copies clock notation 2:24 as degrees/minutes rather than converting time at 15° per hour. Plausible unit-format confusion.",
+          "grammar": "Грамматически correct; the colon comparison is clear.",
+          "plausibility": "WRONG: copies clock notation 2:24 as degrees/minutes rather than converting time at 15° per hour. Plausible unit-format confusion.",
+          "noteUsefulness": "Clarifies the non-identity between clock units and angular units.",
+          "sourceLocator": "Lines 40–44: meridians meet at poles and spacing is 111 km/degree at equator versus 56 km at 60°; lines 70–73: local noon/GMT difference maps to 15° per hour and 14:00 Greenwich means west longitude."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-utm-zones",
+      "status": "FIX",
+      "beforeHash": "f697dc1646a04fe21699f5da2e4795946be9f29668e8e8a89f544ed73c732f43",
+      "afterHash": "735d84a806546912693bb7a97f5f96bcfc2eb21cd406a876fcc4ab5509e73de2",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Для точки 75° з. д., 40° с. ш. выберите систему UTM. Нумерация начинается зоной 1 у 180° з. д.; ширина каждой зоны — 6° долготы. Укажите и номер зоны, и полушарие.",
+            "answers": [
+              "Зона 17N: это следующий шестиградусный участок к западу от точки.",
+              "Зона 18N: 75° з. д. лежит в участке 78–72°, а широта 40° — в северном полушарии.",
+              "Зона 18S: долгота задаёт зону, а знак долготы — полушарие.",
+              "UPS: координаты в градусах следует отнести к полярной системе."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "58c4e65ad3c7e0dfca57f92f636b21a8c89c65156c7fc1708952bf2e2a410d21",
+          "source": {
+            "title": "Esri ArcGIS Pro SDK: CreateWgs84UtmFromLocation",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/sdk/api-reference/topic18435.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-09.txt",
+            "fileSHA256": "9f44f2051662e9106bf88172e0e2507f83c823d7612115cf2854891adc7833f6",
+            "exactlocator": "Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference.",
+            "specificClaim": "This exact calculation and interpretation follow the definitions/algorithm at Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу.",
+            "supportingPrimarySources": [
+              {
+                "title": "Esri ArcGIS Pro: Stereographic",
+                "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+                "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-10.txt",
+                "fileSHA256": "87eebe6c1b8d5ce641b7c9265f5d8852f6216243a1e24c0aa34f046fd92f7e4b",
+                "exactlocator": "Universal Polar Stereographic section: UPS covers north of 84°N and south of 80°S outside UTM."
+              }
+            ]
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "Зона 18 покрывает долготы от 78° до 72° з. д., поэтому 75° з. д. попадает в неё. Широта 40° с. ш. означает северный вариант N. UPS предназначена для полярных областей вне охвата UTM.",
+          "literalSHA256": "eb62656503ee103e437e10ecae4f688c4036bae7f13b38bf1166cf2e77764985",
+          "source": {
+            "title": "Esri ArcGIS Pro SDK: CreateWgs84UtmFromLocation",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/sdk/api-reference/topic18435.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-09.txt",
+            "fileSHA256": "9f44f2051662e9106bf88172e0e2507f83c823d7612115cf2854891adc7833f6",
+            "exactlocator": "Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference.",
+            "specificClaim": "Calculation steps and interpretive limits: Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "Зона 17 расположена западнее участка 78–72° з. д.; границы нужно считать от начального меридиана.",
+          "literalSHA256": "5f0959751a57679f5e036109f8dd25a7ca92e7a251c0644b9d9f3cac62b4450c",
+          "source": {
+            "title": "Esri ArcGIS Pro SDK: CreateWgs84UtmFromLocation",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/sdk/api-reference/topic18435.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-09.txt",
+            "fileSHA256": "9f44f2051662e9106bf88172e0e2507f83c823d7612115cf2854891adc7833f6",
+            "exactlocator": "Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference.",
+            "specificClaim": "Specific fact for note 0: Зона 17 расположена западнее участка 78–72° з. д.; границы нужно считать от начального меридиана. Locator: Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "Средство ArcGIS создаёт систему WGS 84 UTM по долготе и широте в десятичных градусах.",
+          "literalSHA256": "e950f75f049bcd1d4977142be7bd1cf059be1719116054ee332d1c35ad953e3e",
+          "source": {
+            "title": "Esri ArcGIS Pro SDK: CreateWgs84UtmFromLocation",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/sdk/api-reference/topic18435.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-09.txt",
+            "fileSHA256": "9f44f2051662e9106bf88172e0e2507f83c823d7612115cf2854891adc7833f6",
+            "exactlocator": "Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference.",
+            "specificClaim": "Specific fact for note 1: Средство ArcGIS создаёт систему WGS 84 UTM по долготе и широте в десятичных градусах. Locator: Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Полушарие задаётся широтой; отрицательная долгота означает западное направление, не южную широту.",
+          "literalSHA256": "d019130ee8ddbc7becf39d641d17abe99617ee96bd26a10a6d3bca1e1ccfa26d",
+          "source": {
+            "title": "Esri ArcGIS Pro SDK: CreateWgs84UtmFromLocation",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/sdk/api-reference/topic18435.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-09.txt",
+            "fileSHA256": "9f44f2051662e9106bf88172e0e2507f83c823d7612115cf2854891adc7833f6",
+            "exactlocator": "Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference.",
+            "specificClaim": "Specific fact for note 2: Полушарие задаётся широтой; отрицательная долгота означает западное направление, не южную широту. Locator: Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "UPS используют севернее 84° с. ш. и южнее 80° ю. ш.; точка 40° с. ш. не полярная.",
+          "literalSHA256": "a4ecec0cf61cdc774a70b4a8e03b419d9ae1a2286fd8c436efce1132e5ecfc56",
+          "source": {
+            "title": "Esri ArcGIS Pro SDK: CreateWgs84UtmFromLocation",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/sdk/api-reference/topic18435.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-09.txt",
+            "fileSHA256": "9f44f2051662e9106bf88172e0e2507f83c823d7612115cf2854891adc7833f6",
+            "exactlocator": "Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference.",
+            "specificClaim": "Specific fact for note 3: UPS используют севернее 84° с. ш. и южнее 80° ю. ш.; точка 40° с. ш. не полярная. Locator: Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу.",
+            "supportingPrimarySources": [
+              {
+                "title": "Esri ArcGIS Pro: Stereographic",
+                "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+                "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-10.txt",
+                "fileSHA256": "87eebe6c1b8d5ce641b7c9265f5d8852f6216243a1e24c0aa34f046fd92f7e4b",
+                "exactlocator": "Universal Polar Stereographic section: UPS covers north of 84°N and south of 80°S outside UTM."
+              }
+            ]
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "answerText": "Зона 17N: это следующий шестиградусный участок к западу от точки.",
+          "note": "Зона 17 расположена западнее участка 78–72° з. д.; границы нужно считать от начального меридиана.",
+          "truthOneKey": "WRONG: zone 17 ends at 78°W; 75°W is east of that boundary in zone 18. Plausible off-by-one zone.",
+          "grammar": "Грамматически correct; hemispheric suffix is standard coordinate notation.",
+          "plausibility": "WRONG: zone 17 ends at 78°W; 75°W is east of that boundary in zone 18. Plausible off-by-one zone.",
+          "noteUsefulness": "Uses the calculated western boundary to explain this off-by-one choice.",
+          "sourceLocator": "Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference."
+        },
+        {
+          "answerIndex": 1,
+          "answerText": "Зона 18N: 75° з. д. лежит в участке 78–72°, а широта 40° — в северном полушарии.",
+          "note": "Средство ArcGIS создаёт систему WGS 84 UTM по долготе и широте в десятичных градусах.",
+          "truthOneKey": "ONLY CORRECT: the 78°–72°W strip contains 75°W; 40°N selects northern zone 18N.",
+          "grammar": "Грамматически correct; all directional terms are Russian.",
+          "plausibility": "ONLY CORRECT: the 78°–72°W strip contains 75°W; 40°N selects northern zone 18N.",
+          "noteUsefulness": "Adds an implementation fact: ArcGIS can construct WGS84 UTM reference from decimal-degree longitude and latitude.",
+          "sourceLocator": "Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference."
+        },
+        {
+          "answerIndex": 2,
+          "answerText": "Зона 18S: долгота задаёт зону, а знак долготы — полушарие.",
+          "note": "Полушарие задаётся широтой; отрицательная долгота означает западное направление, не южную широту.",
+          "truthOneKey": "WRONG: zone number is right, but S cannot follow 40°N. Plausible confusion of longitude sign with hemisphere.",
+          "grammar": "Грамматически correct; the error is isolated to the suffix.",
+          "plausibility": "WRONG: zone number is right, but S cannot follow 40°N. Plausible confusion of longitude sign with hemisphere.",
+          "noteUsefulness": "Explains that latitude controls N/S while longitude sign controls E/W.",
+          "sourceLocator": "Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference."
+        },
+        {
+          "answerIndex": 3,
+          "answerText": "UPS: координаты в градусах следует отнести к полярной системе.",
+          "note": "UPS используют севернее 84° с. ш. и южнее 80° ю. ш.; точка 40° с. ш. не полярная.",
+          "truthOneKey": "WRONG: UPS is a polar grid; 40°N is within ordinary UTM coverage. Plausible because both are projected coordinate systems.",
+          "grammar": "Грамматически correct; acronyms are expanded by the stem’s UTM context.",
+          "plausibility": "WRONG: UPS is a polar grid; 40°N is within ordinary UTM coverage. Plausible because both are projected coordinate systems.",
+          "noteUsefulness": "States the actual polar bounds for UPS, supporting why it cannot serve this point.",
+          "sourceLocator": "Remarks lines 37–41: sixty north-south zones, six degrees each, zone 1 begins at 180W; each has separate northern/southern definition; method accepts longitude, latitude and returns WGS84 UTM reference."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-elevation-vertical",
+      "status": "FIX",
+      "beforeHash": "181297a983914157d738f1cce4392d6179fff771b59e962396da44b6a587a7c4",
+      "afterHash": "52b3726a3a9936d53cbc577283fa9ba1f50e9807f235512055b75d5b5691dfff",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Совместимая с NAD 83 трёхмерная реализация дала эллипсоидальную высоту h=34,7 м; применимая модель геоида для точки даёт N=−18,2 м. Найдите ортометрическую высоту H для NAVD 88 и охарактеризуйте отношение NAVD 88 к идеальному глобальному геоиду.",
+            "answers": [
+              "H=16,5 м; NAVD 88 совпадает с идеальным глобальным геоидом.",
+              "H=52,9 м; NAVD 88 — реализованный ортометрический датум, не идеальный глобальный геоид.",
+              "H=−52,9 м; нужно вычесть h из отрицательного значения N.",
+              "H=34,7 м; эллипсоидальная и ортометрическая высоты совпадают при верных координатах."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "3cf1a99dca6b986cccdd63aaa51bf041da751c45fd2742a3c40f03ce77dd1a4e",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-11.txt",
+            "fileSHA256": "0838bd1ddcf251c3242dfe6574c02c33b09a8cbfadd1e5da9e349688e8144c59",
+            "exactlocator": "Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid.",
+            "specificClaim": "This exact calculation and interpretation follow the definitions/algorithm at Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "Из связи h=H+N получаем H=34,7−(−18,2)=52,9 м. Геоидальная модель даёт параметр преобразования, а NAVD 88 — реализованный ортометрический датум. Он не совпадает с идеальным глобальным геоидом.",
+          "literalSHA256": "0f3bc34cff084c89820860d05935fbb7caade6af432db7d84a6ddac9a494c608",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-11.txt",
+            "fileSHA256": "0838bd1ddcf251c3242dfe6574c02c33b09a8cbfadd1e5da9e349688e8144c59",
+            "exactlocator": "Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid.",
+            "specificClaim": "Calculation steps and interpretive limits: Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "Формула h=H+N использует знаковое N; NOAA отдельно отличает реализацию NAVD 88 от идеального геоида.",
+          "literalSHA256": "3f623245437b536d3a9a4a2832938c920de25e0bebb651b81dfc2c00a934699d",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-11.txt",
+            "fileSHA256": "0838bd1ddcf251c3242dfe6574c02c33b09a8cbfadd1e5da9e349688e8144c59",
+            "exactlocator": "Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid.",
+            "specificClaim": "Specific fact for note 0: Формула h=H+N использует знаковое N; NOAA отдельно отличает реализацию NAVD 88 от идеального геоида. Locator: Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "NAVD 88 основан на принятой высоте пункта Римуски и использует высоты Гельмерта как приближение истинных ортометрических высот.",
+          "literalSHA256": "7c43c551d38a3bda19098b196ed51bbdb22a34ff09ceaf0064f6b60e4de09ebf",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-11.txt",
+            "fileSHA256": "0838bd1ddcf251c3242dfe6574c02c33b09a8cbfadd1e5da9e349688e8144c59",
+            "exactlocator": "Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid.",
+            "specificClaim": "Specific fact for note 1: NAVD 88 основан на принятой высоте пункта Римуски и использует высоты Гельмерта как приближение истинных ортометрических высот. Locator: Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Из h=H+N следует H=h−N; при отрицательном N его вычитание увеличивает H.",
+          "literalSHA256": "3df4c2b60afe5b91f2173813ff509ab7b0a70ed90857287c5e17f55d0419aa00",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-11.txt",
+            "fileSHA256": "0838bd1ddcf251c3242dfe6574c02c33b09a8cbfadd1e5da9e349688e8144c59",
+            "exactlocator": "Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid.",
+            "specificClaim": "Specific fact for note 2: Из h=H+N следует H=h−N; при отрицательном N его вычитание увеличивает H. Locator: Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "Ортометрическая высота зависит от гравитационного отсчёта и модели; корректная широта/долгота не устраняет N.",
+          "literalSHA256": "375b0a820a3f703529936ccc0c3707f4326cdfa23bc381d235695e576732c9fb",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-11.txt",
+            "fileSHA256": "0838bd1ddcf251c3242dfe6574c02c33b09a8cbfadd1e5da9e349688e8144c59",
+            "exactlocator": "Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid.",
+            "specificClaim": "Specific fact for note 3: Ортометрическая высота зависит от гравитационного отсчёта и модели; корректная широта/долгота не устраняет N. Locator: Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid.",
+            "reason": "Лично прочитан полный сохранённый primary; locator относится к этому literal, SHA — к прочитанному файлу."
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "answerText": "H=16,5 м; NAVD 88 совпадает с идеальным глобальным геоидом.",
+          "note": "Формула h=H+N использует знаковое N; NOAA отдельно отличает реализацию NAVD 88 от идеального геоида.",
+          "truthOneKey": "WRONG: subtracts |N| instead of signed N and equates NAVD88 with ideal geoid. Plausible sign/datum confusion.",
+          "grammar": "Грамматически correct; equation’s result is concise.",
+          "plausibility": "WRONG: subtracts |N| instead of signed N and equates NAVD88 with ideal geoid. Plausible sign/datum confusion.",
+          "noteUsefulness": "Ties the note to the signed model parameter and source’s explicit datum distinction.",
+          "sourceLocator": "Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid."
+        },
+        {
+          "answerIndex": 1,
+          "answerText": "H=52,9 м; NAVD 88 — реализованный ортометрический датум, не идеальный глобальный геоид.",
+          "note": "NAVD 88 основан на принятой высоте пункта Римуски и использует высоты Гельмерта как приближение истинных ортометрических высот.",
+          "truthOneKey": "ONLY CORRECT: H=34.7−(−18.2)=52.9m; NAVD88 is realized orthometric datum, distinct from ideal geoid.",
+          "grammar": "Грамматически correct; formulas and datum role are separately stated.",
+          "plausibility": "ONLY CORRECT: H=34.7−(−18.2)=52.9m; NAVD88 is realized orthometric datum, distinct from ideal geoid.",
+          "noteUsefulness": "Adds NAVD88’s adopted elevation at Point Rimouski and its Helmert-height approximation, beyond key/prompt.",
+          "sourceLocator": "Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid."
+        },
+        {
+          "answerIndex": 2,
+          "answerText": "H=−52,9 м; нужно вычесть h из отрицательного значения N.",
+          "note": "Из h=H+N следует H=h−N; при отрицательном N его вычитание увеличивает H.",
+          "truthOneKey": "WRONG: reverses h and N and returns a negative height. Plausible because the relationship is easy to rearrange incorrectly.",
+          "grammar": "Грамматически correct; causal phrasing is clear.",
+          "plausibility": "WRONG: reverses h and N and returns a negative height. Plausible because the relationship is easy to rearrange incorrectly.",
+          "noteUsefulness": "Shows the rearrangement H=h−N and the effect of negative N.",
+          "sourceLocator": "Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid."
+        },
+        {
+          "answerIndex": 3,
+          "answerText": "H=34,7 м; эллипсоидальная и ортометрическая высоты совпадают при верных координатах.",
+          "note": "Ортометрическая высота зависит от гравитационного отсчёта и модели; корректная широта/долгота не устраняет N.",
+          "truthOneKey": "WRONG: leaves h unchanged and mistakes a correct horizontal position for a vertical conversion. Plausible horizontal/vertical datum confusion.",
+          "grammar": "Грамматически correct; explanation is self-contained.",
+          "plausibility": "WRONG: leaves h unchanged and mistakes a correct horizontal position for a vertical conversion. Plausible horizontal/vertical datum confusion.",
+          "noteUsefulness": "Explains why horizontal coordinates do not remove a vertical geoid correction.",
+          "sourceLocator": "Lines 121–127: geoid model N relates ellipsoidal and NAVD88 heights; 152–156: vertical datum types; 190–192: NAVD88 adopted elevation at Point Rimouski and Helmert orthometric approximation, not ideal global geoid."
+        }
+      ]
+    }
+  ]
+}
