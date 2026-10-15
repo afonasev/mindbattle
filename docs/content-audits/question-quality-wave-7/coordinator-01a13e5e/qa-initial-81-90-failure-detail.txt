@@ -1,0 +1,35 @@
+
+ RUN  v4.1.11 /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle
+
+ × tests/unit/catalog-topics.test.ts > integrated topic packages > keeps every present package valid and globally unique 198ms
+   → maps-cartography: expected [ Array(1) ] to deeply equal []
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/catalog-topics.test.ts > integrated topic packages > keeps every present package valid and globally unique
+AssertionError: maps-cartography: expected [ Array(1) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "maps-cartography/maps-cartography-read-coordinates: explanation должен содержать 2–4 предложения",
++ ]
+
+ ❯ tests/unit/catalog-topics.test.ts:9:50
+      7|     const ids = new Set<string>();
+      8|     for (const topic of catalog.topics) {
+      9|       expect(validateTopicPack(topic), topic.id).toEqual([]);
+       |                                                  ^
+     10|       for (const question of topic.questions) {
+     11|         expect(ids.has(question.id), question.id).toBe(false);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  12:29:58
+   Duration  3.41s (transform 2.30s, setup 0ms, import 3.13s, tests 199ms, environment 0ms)
+
