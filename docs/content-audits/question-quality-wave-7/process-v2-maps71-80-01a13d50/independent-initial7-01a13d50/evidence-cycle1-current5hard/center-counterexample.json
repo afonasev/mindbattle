@@ -1,0 +1,56 @@
+{
+  "claim": "Missing center latitude prevents unconditional110-degree optimum",
+  "method": "Spherical dot product: cos(c)=sin(phi_center)sin(phi_point)+cos(phi_center)cos(phi_point)cos(delta_lambda); phi_point=0 for all equatorial targets, so cos(c)=cos(phi_center)cos(delta_lambda).",
+  "sourceGround": {
+    "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-orthographic.txt",
+    "primaryRawByteSHA256": "73479d6077fa644b4b38c5c10e7790ffa5a0b81141c8ec4320b988df89a4debe",
+    "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/orthographic.htm",
+    "locator": "full page L7,20–26,35–39,42–50",
+    "claim": "Сферическая ортографическая, граница полусферы, рост искажений; две координаты центра",
+    "actualGround": "L7 infinite-distance azimuthal perspective, sphere only; L21 граница90° в equatorial aspect; L26 radial distortion increase; L39 hemisphere; Parameters содержит отдельно Longitude Of Center L48 и Latitude Of Center L50. Экваториальные точки сами не фиксируют Latitude Of Center."
+  },
+  "counterexample": [
+    {
+      "centerLongitude": 75,
+      "centerLatitudeNotConstrainedByPrompt": 0,
+      "angularDistancesTo80_100_170": [
+        4.999999999999992,
+        25.000000000000004,
+        95.0
+      ],
+      "allVisible": false
+    },
+    {
+      "centerLongitude": 150,
+      "centerLatitudeNotConstrainedByPrompt": 0,
+      "angularDistancesTo80_100_170": [
+        70.0,
+        50.0,
+        19.999999999999993
+      ],
+      "allVisible": true
+    },
+    {
+      "centerLongitude": 110,
+      "centerLatitudeNotConstrainedByPrompt": 89,
+      "angularDistancesTo80_100_170": [
+        89.1339855891126,
+        89.01519375479748,
+        89.5000190389512
+      ],
+      "allVisible": true
+    },
+    {
+      "centerLongitude": 160,
+      "centerLatitudeNotConstrainedByPrompt": 0,
+      "angularDistancesTo80_100_170": [
+        80.0,
+        59.99999999999999,
+        10.000000000000012
+      ],
+      "allVisible": true
+    }
+  ],
+  "result": "150°/0° remains fully visible and priority separation70°, while110°/89° also fully visible but priority separation≈89.134°. Thus150° wins if these unspecified latitudes are allowed. At all center latitudes0°,110° wins as intended.",
+  "scope": "No hidden latitude assumptions supplied; no request for a second fix cycle."
+}
