@@ -1,0 +1,152 @@
+Geodatabase topology rules and fixes for polygon features | ArcGIS Pro documentation (https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polygon-features.html)
+citeturn1view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polygon-features.html","lineno":null}); Total lines: 174
+L0: cite0†Skip to main content L1: 
+L2: [Input: Search the documentation]
+L3: # Geodatabase topology rules and fixes for polygon features
+L4: 
+L5: cite1†Image Available with Standard or Advanced license.
+L6: Geodatabase topology rules allow you to define relationships between features in the same feature class or subtype or between two feature classes or subtypes. The status of a topology, including errors and exceptions, is saved to the source geodatabase. In the Contents pane, geodatabase topology rules appear as group layers containing sublayers that symbolize modified areas, and errors organized by geometry type.
+L7: This topic explains the topology rules available for polygon features and their predefined fixes. For steps to validate a geodatabase topology and fix errors, see cite2†Validate and fix geodatabase topology. L8: ##### Note:
+L9: 
+L10: For a poster-size PDF file listing all topology rules, see cite3†ArcGIS Geodatabase Topology Rules .
+L11: 
+L12: ## Must Be Larger Than Cluster tolerance
+L13: 
+L14: The cluster tolerance is the minimum distance between the vertices that make up a feature. Vertices that fall within the cluster tolerance are determined to be coincident. This rule is mandatory for a topology and applies to all polygon feature classes.
+L15: 
+L16: cite4†Image: Must Be Larger Than Cluster tolerance L17: ### Errors
+L18: 
+L19: Any polygon feature that would collapse when validating the topology is an error. Features that violate this rule are left unchanged.
+L20: 
+L21: cite5†Image: Must Be Larger Than Cluster tolerance errors L22: 
+L23: ### Predefined fixes
+L24: 
+L25: Delete Feature cite6†Image removes polygon features that would collapse during the validate process based on the cluster tolerance.
+L26: ## Must Not Overlap
+L27: 
+L28: Requires that polygons must not overlap within a feature class or subtype. Polygons can be disconnected, touch at a point, or touch along an edge. Use this rule to make sure that no polygon feature overlaps another polygon feature in the same feature class or subtype, for example, when administrative boundaries such as ZIP Codes or voting districts, or mutually exclusive area classifications such as land form types cannot have any overlaps.
+L29: 
+L30: cite7†Image: Must Not Overlap L31: ### Errors
+L32: 
+L33: Polygon errors are created from areas where polygons overlap.
+L34: 
+L35: cite8†Image: Must Not Overlap errors L36: ### Predefined fixes
+L37: 
+L38: Remove Overlap cite9†Image removes the overlapping geometry from the feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L39: 
+L40: Create Feature cite10†Image creates a new polygon feature from the error shape and removes the portion of overlap from each of the features. The result is a planar representation of the feature geometry.
+L41: Merge cite11†Image adds the geometry of one feature into the other feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L42: ## Must Not Have Gaps
+L43: 
+L44: Requires that polygons must not have a void between them within a feature class or subtype. Use this rule when all of your polygons should form a continuous surface with no voids or gaps, for example, when soil polygons cannot include gaps or form voids and must form a continuous fabric.
+L45: 
+L46: cite12†Image: Must Not Have Gaps L47: ### Errors
+L48: 
+L49: Line errors are created from the outlines of void areas in a single polygon or between polygons boundaries that are not coincident with other polygon boundaries.
+L50: 
+L51: cite13†Image: Must Not Have Gaps errors L52: ### Predefined fixes
+L53: 
+L54: Create Feature cite10†Image creates new polygon features using a closed ring of the line error shapes that form a gap. If you select two errors, the result will be one polygon feature per ring.
+L55: 
+L56: Merge cite11†Image adds the geometry of one feature into the other feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L57: ## Must Not Overlap With
+L58: 
+L59: Polygons of the first feature class or subtype must not overlap polygons of the second feature class or subtype. Use this rule when polygons from one feature class or subtype should not overlap polygons of another feature class or subtype, for example, when lakes and land parcels from two different feature classes must not overlap.
+L60: 
+L61: cite14†Image: Must Not Overlap With L62: ### Errors
+L63: 
+L64: Polygon errors are created where polygons from the two feature classes or subtypes overlap.
+L65: 
+L66: cite15†Image: Must Not Overlap With errors L67: 
+L68: ### Predefined fixes
+L69: 
+L70: Remove Overlap cite9†Image removes the overlapping geometry from the feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L71: 
+L72: Merge cite11†Image adds the geometry of one feature into the other feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L73: ## Must Be Covered By Feature Class Of
+L74: 
+L75: The polygons in the first feature class or subtype must be covered by the polygons of the second feature class or subtype. Use this rule when each polygon in one feature class or subtype should be covered by all the polygons of another feature class or subtype, for example, when states are covered by counties.
+L76: 
+L77: cite16†Image: Must Be Covered By Feature Class Of L78: ### Errors
+L79: 
+L80: Polygon errors are created from the uncovered areas of the polygons in the first feature class or subtype.
+L81: 
+L82: cite17†Image: Must Be Covered By Feature Class Of errors L83: ### Predefined fixes
+L84: 
+L85: Remove Overlap cite9†Image removes the overlapping geometry from the feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L86: 
+L87: Create Feature cite10†Image creates a new polygon feature out of the portion of overlap from the existing polygon so the boundary of each feature from both feature classes is the same.
+L88: ## Must Cover Each Other
+L89: 
+L90: All polygons in the first feature class and all polygons in the second feature class must cover each other. This means that feature class one (1) must be covered by feature class two (2), and feature class two (2) must be covered by a feature class of feature class one (1). Use this rule when you want the polygons from two feature classes or subtypes to cover the same area, for example, when vegetation and soils must cover each other.
+L91: 
+L92: cite18†Image: Must Cover Each Other L93: ### Errors
+L94: 
+L95: Polygon errors are created where any part of a polygon is not covered by one or more polygons in the other feature class or subtype.
+L96: 
+L97: cite19†Image: Must Cover Each Other errors L98: ### Predefined fixes
+L99: 
+L100: Remove Overlap cite9†Image removes the overlapping geometry from the feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L101: 
+L102: Create Feature cite10†Image creates a new polygon feature out of the portion of overlap from the existing polygon, so the boundary of each feature from both feature classes is the same.
+L103: ## Must Be Covered By
+L104: 
+L105: Polygons in one feature class or subtype must be covered by a single polygon from another feature class or subtype. Use this rule when you want one set of polygons to be covered by some part of another single polygon in another feature class or subtype, for example, when counties must be covered by states.
+L106: 
+L107: cite20†Image: Must Be Covered By L108: ### Errors
+L109: 
+L110: Polygon errors are created from polygons from the first feature class or subtype that are not covered by a single polygon from the second feature class or subtype.
+L111: 
+L112: cite21†Image: Must Be Covered By errors L113: 
+L114: ### Predefined fixes
+L115: 
+L116: Create Feature cite10†Image creates a new polygon feature out of the portion of overlap from the existing polygon, so the boundary of each feature from both feature classes is the same.
+L117: ## Boundary Must Be Covered By
+L118: 
+L119: Polygon boundaries in one feature class or subtype must be covered by the lines of another feature class or subtype. Use this rule when polygon boundaries should be coincident with another line feature class or subtype, for example, when major road lines form part of outlines for census blocks.
+L120: 
+L121: cite22†Image: Boundary Must Be Covered By L122: ### Errors
+L123: 
+L124: Line errors are created where polygon boundaries are not covered by a line of another feature class or subtype.
+L125: 
+L126: cite23†Image: Boundary Must Be Covered By errors L127: 
+L128: ### Predefined fixes
+L129: 
+L130: Create Feature cite10†Image creates a new line feature from the boundary segments of the polygon feature generating the error.
+L131: ## Area Boundary Must Be Covered By Boundary Of
+L132: 
+L133: The boundaries of polygons in one feature class or subtype must be covered by the boundaries of polygons in another feature class or subtype. Use this rule when the boundaries of polygons in one feature class or subtype should align with the boundaries of polygons in another feature class or subtype, for example, when subdivision boundaries are coincident with parcel boundaries but do not cover all parcels.
+L134: cite24†Image: Area Boundary Must Be Covered By Boundary Of L135: ### Errors
+L136: 
+L137: Line errors are created where polygon boundaries in the first feature class or subtype are not covered by the boundaries of polygons in another feature class or subtype.
+L138: 
+L139: cite25†Image: Area Boundary Must Be Covered By Boundary Of errors L140: 
+L141: ### Predefined fixes
+L142: 
+L143: A predefined fix is not available for this error. Consider using tools in the Modify Features pane.
+L144: ## Contains Point
+L145: 
+L146: Each polygon of the first feature class or subtype must contain within its boundaries at least one point of the second feature class or subtype. Use this rule to make sure that all polygons have at least one point within their boundaries. Overlapping polygons can share a point in that overlapping area, for example, when school district boundaries must contain at least one school.
+L147: 
+L148: cite26†Image: Contains Point L149: ### Errors
+L150: 
+L151: Polygon errors are created from polygons that do not contain at least one point. A point on the boundary of a polygon is also an error.
+L152: 
+L153: cite27†Image: Contains Point errors L154: 
+L155: ### Predefined fixes
+L156: 
+L157: Create Feature cite10†Image creates a new point feature at the centroid of the polygon feature that is causing the error.
+L158: ## Contains One Point
+L159: 
+L160: Each polygon must contain exactly one point. Each point must fall within a polygon. Use this rule to make sure that there is a one-to-one correspondence between features of a polygon feature class and a point feature class, for example, when parcels must contain exactly one address point.
+L161: 
+L162: cite28†Image: Contains One Point L163: 
+L164: ### Errors
+L165: 
+L166: Polygon errors are created from the polygons that do not contain exactly one point.
+L167: 
+L168: cite29†Image: Contains One Point errors L169: ### Predefined fixes
+L170: 
+L171: A predefined fix is not available for this error. Consider using tools in the Modify Features pane.
+L172: 
+L173: [Button: Back to top]

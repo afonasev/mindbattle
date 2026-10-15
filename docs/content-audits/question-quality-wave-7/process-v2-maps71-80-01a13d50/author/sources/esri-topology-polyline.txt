@@ -1,0 +1,212 @@
+Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation (https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html)
+citeturn0view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html","lineno":null}); Total lines: 244
+L0: cite0†Skip to main content L1: 
+L2: [Input: Search the documentation]
+L3: # Geodatabase topology rules and fixes for polyline features
+L4: 
+L5: cite1†Image Available with Standard or Advanced license.
+L6: Geodatabase topology rules allow you to define relationships between features in the same feature class or subtype or between two feature classes or subtypes. The status of a topology, including errors and exceptions, is saved to the source geodatabase. In the Contents pane, geodatabase topology rules appear as group layers containing sublayers that symbolize modified areas, and errors organized by geometry type.
+L7: This topic explains the topology rules available for polyline features and their predefined fixes. For steps to validate a geodatabase topology and fix errors, see cite2†Validate and fix geodatabase topology. L8: ##### Note:
+L9: 
+L10: For a poster-size PDF file listing all topology rules, see cite3†ArcGIS Geodatabase Topology Rules .
+L11: 
+L12: ## Must Be Larger Than Cluster tolerance
+L13: 
+L14: The cluster tolerance is the minimum distance between the vertices that make up a feature. Vertices that fall within the cluster tolerance are determined to be coincident. This rule is mandatory for a topology and applies to all polyline feature classes.
+L15: 
+L16: cite4†Image: Must Be Larger Than Cluster tolerance L17: ### Errors
+L18: 
+L19: Any polyline feature that would collapse when validating the topology is an error. Features that violate this rule are left unchanged.
+L20: 
+L21: cite5†Image: Must Be Larger Than Cluster tolerance errors L22: 
+L23: ### Predefined fixes
+L24: 
+L25: Delete Feature cite6†Image removes polyline features that would collapse during the validate process based on the cluster tolerance.
+L26: ## Must Not Overlap
+L27: 
+L28: Lines must not overlap any part of another line within a feature class or subtype. Lines can touch, intersect, and overlap themselves. Use this rule with lines that should never occupy the same space with other lines, for example, when lot lines cannot overlap one another.
+L29: 
+L30: cite7†Image: Must Not Overlap L31: 
+L32: ### Errors
+L33: 
+L34: Line errors are created where lines overlap.
+L35: 
+L36: cite8†Image: Must Not Overlap errors L37: ### Predefined fixes
+L38: 
+L39: Remove Overlap cite9†Image removes the overlapping line segments from the feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L40: ## Must Not Intersect
+L41: 
+L42: Lines must not cross or overlap any part of another line within the same feature class or subtype. Use this rule with lines whose segments should never cross or occupy the same space with other lines, for example, when lot lines cannot intersect or overlap, but the endpoint of one feature can touch the interior of another feature.
+L43: 
+L44: cite10†Image: Must Not Intersect L45: ### Errors
+L46: 
+L47: Line errors are created where lines overlap, and point errors are created where lines cross.
+L48: 
+L49: cite11†Image: Must Not Intersect errors L50: ### Predefined fixes
+L51: 
+L52: Remove Overlap cite9†Image removes the overlapping line segments from the feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L53: 
+L54: Split cite12†Image splits the line features that cross one another at their point of intersection. If two lines cross at a single point, the result is four features. Attributes from the original features will be maintained in the split features. If a split policy is present, the attributes will be updated accordingly.
+L55: ## Must Not Intersect With
+L56: 
+L57: Lines must not cross or overlap any part of another line within the same feature class or subtype. Use this rule with lines whose segments should never cross or occupy the same space with other lines, for example, when lot lines cannot intersect or overlap, but the endpoint of one feature can touch the interior of another feature.
+L58: 
+L59: cite13†Image: Must Not Intersect With L60: ### Errors
+L61: 
+L62: Line errors are created where lines overlap, and point errors are created where lines cross.
+L63: 
+L64: cite14†Image: Must Not Intersect With errors L65: ### Predefined fixes
+L66: 
+L67: Remove Overlap cite9†Image removes the overlapping line segments from the feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L68: 
+L69: Split cite12†Image splits the line features that cross one another at their point of intersection. If two lines cross at a single point, the result is four features. Attributes from the original features will be maintained in the split features. If a split policy is present, the attributes will be updated accordingly.
+L70: ## Must Not Have Dangles
+L71: 
+L72: The end of a line must touch any part of one other line or any part of itself within a feature class or subtype. Use this rule when you want lines in a feature class or subtype to connect to one another, for example, when a street network has line segments that connect. In this example, you can set exceptions to this rule for road segments that end at cul-de-sacs or terminate with dead-ends.
+L73: 
+L74: cite15†Image: Must Not Have Dangles L75: ### Errors
+L76: 
+L77: Point errors are created at the end of a line that does not touch at least one other line or itself.
+L78: 
+L79: cite16†Image: Must Not Have Dangles errors L80: ### Predefined fixes
+L81: 
+L82: Extend cite17†Image extends the dangling end of line features if they snap to other line features within a given distance. If no feature is found within the specified distance, the feature is not extended. If the distance value is 0, lines will extend until they snap to a feature. When you apply the fix to all errors, features that cannot be extended are skipped and remain errors.
+L83: Trim cite18†Image trims dangling line features if the intersection is within the specified distance. If no feature is found within the specified distance, the feature is not trimmed. When specified distance is greater than the length of the feature in error, it is not deleted. If the distance value is 0, lines are trimmed to the intersection. When you apply the fix to all errors, features that cannot be trimmed are skipped and remain errors.
+L84: Snap cite19†Image snaps dangling line features to the nearest line feature within a given distance. If no line feature is found within the distance specified, the line will not be snapped. This command snaps to the nearest feature found within the distance. It searches for endpoints to snap to first, then vertices, and finally to the edge of line features within the feature class.
+L85: ## Must Not Have Pseudo Nodes
+L86: 
+L87: The end of a line cannot touch the end of only one other line within a feature class or subtype. The end of a line can touch any part of itself. Use this rule to clean up data with inappropriately subdivided lines. For example, for hydrologic analysis, segments of a river system might be constrained to only have nodes at endpoints or junctions.
+L88: 
+L89: cite20†Image: Must Not Have Pseudo Nodes L90: ### Errors
+L91: 
+L92: Point errors are created where the end of a line touches the end of only one other line.
+L93: 
+L94: cite21†Image: Must Not Have Pseudo Nodes errors L95: ### Predefined fixes
+L96: 
+L97: Merge To Largest cite22†Image merges the geometry of the shorter line into the geometry of the longest line. You can choose the feature to preserve or apply the fix to all errors.
+L98: 
+L99: Merge cite22†Image adds the geometry of one line feature into the other line feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L100: ## Must Not Intersect Or Touch Interior
+L101: 
+L102: Lines can only touch at their ends and must not overlap each other within a feature class or subtype. Use this rule when you only want lines to touch at their ends and not intersect or overlap, for example, when lot lines cannot intersect or overlap and must connect to one another only at the endpoint of each line feature.
+L103: 
+L104: cite23†Image: Must Not Intersect Or Touch Interior L105: ### Errors
+L106: 
+L107: Line errors are created where lines overlap, and point errors are created where lines cross or touch.
+L108: 
+L109: cite24†Image: Must Not Intersect Or Touch Interior errors L110: ### Predefined fixes
+L111: 
+L112: Remove Overlap cite9†Image removes the overlapping line segments from the feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L113: 
+L114: Split cite12†Image splits the line features that cross one another at their point of intersection. If two lines cross at a single point, the result is four features. Attributes from the original features will be maintained in the split features. If a split policy is present, the attributes will be updated accordingly.
+L115: ## Must Not Intersect Or Touch Interior With
+L116: 
+L117: Lines in one feature class or subtype can only touch at their ends and must not overlap lines in another feature class or subtype. Use this rule when you only want lines to touch at their ends and not intersect or overlap with lines in another feature class or subtype, for example, when lot lines cannot intersect or overlap block lines and must connect to one another only at the endpoint of each line feature.
+L118: cite25†Image: Must Not Intersect Or Touch Interior With L119: ### Errors
+L120: 
+L121: Line errors are created where lines overlap, and point errors are created where lines cross or touch.
+L122: 
+L123: cite26†Image: Must Not Intersect Or Touch Interior With errors L124: ### Predefined fixes
+L125: 
+L126: Remove Overlap cite9†Image removes the overlapping line segments from the feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L127: 
+L128: Split cite12†Image splits the line features that cross one another at their point of intersection. If two lines cross at a single point, the result is four features. Attributes from the original features will be maintained in the split features. If a split policy is present, the attributes will be updated accordingly.
+L129: ## Must Not Overlap With
+L130: 
+L131: Lines in one feature class or subtype must not overlap any part of another line in another feature class or subtype. Use this rule for lines that should never occupy the same space with lines in another feature class or subtype, for example, when highways can cross and come close to rivers, but road segments cannot overlap river segments.
+L132: 
+L133: cite27†Image: Must Not Overlap With L134: ### Errors
+L135: 
+L136: Line errors are created where lines from two feature classes or subtypes overlap.
+L137: 
+L138: cite28†Image: Must Not Overlap With errors L139: 
+L140: ### Predefined fixes
+L141: 
+L142: Remove Overlap cite9†Image removes the overlapping line segments from the feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L143: ## Must Be Covered By Feature Class Of
+L144: 
+L145: Lines in one feature class or subtype must be covered by lines in another feature class or subtype. Use this rule when you have multiple groups of lines describing the same geography, for example, when lines that make up bus routes must be on top of lines in a road network.
+L146: 
+L147: cite29†Image: Must Be Covered By Feature Class Of L148: ### Errors
+L149: 
+L150: Line errors are created on the lines in the first feature class that are not covered by lines in the second feature class.
+L151: 
+L152: cite30†Image: Must Be Covered By Feature Class Of errors L153: 
+L154: ### Predefined fixes
+L155: 
+L156: A predefined fix is not available for this error. Consider using tools in the Modify Features pane.
+L157: ## Must Be Covered By Boundary Of
+L158: 
+L159: Lines in one feature class or subtype must be covered by the boundaries of polygons in another feature class or subtype. Use this rule when you want to model lines that are coincident with the boundaries of polygons, for example, when polyline features used for displaying block and lot boundaries must be covered by parcel boundaries.
+L160: 
+L161: cite31†Image: Must Be Covered By Boundary Of L162: ### Errors
+L163: 
+L164: Line errors are created on lines that are not covered by the boundaries of polygons.
+L165: 
+L166: cite32†Image: Must Be Covered By Boundary Of errors L167: 
+L168: ### Predefined fixes
+L169: 
+L170: Remove Overlap cite9†Image removes the overlapping line segments from the feature causing the error. You can choose the feature to preserve or apply the fix to all errors.
+L171: ## Must Be Inside
+L172: 
+L173: Lines in one feature class or subtype must be contained by polygons of another feature class or subtype. Use this rule when you want lines to be contained within the boundaries of polygons, for example, when streams are within watersheds.
+L174: 
+L175: cite33†Image: Must Be Inside L176: 
+L177: ### Errors
+L178: 
+L179: Line errors are created where lines are not within polygons.
+L180: 
+L181: cite34†Image: Must Be Inside errors L182: 
+L183: ### Predefined fixes
+L184: 
+L185: Delete Feature cite6†Image removes line features that are not within polygon features.
+L186: ## Endpoint Must Be Covered By
+L187: 
+L188: The ends of lines in one feature class or subtype must be covered by points in another feature class or subtype. Use this rule when you want to model the ends of lines in one feature class or subtype that are coincident with point features in another feature class, for example, when endpoints of secondary electric lines must be capped by either a transformer or meter.
+L189: 
+L190: cite35†Image: Endpoint Must Be Covered By L191: ### Errors
+L192: 
+L193: Point errors are created at the ends of lines that are not covered by a point.
+L194: 
+L195: cite36†Image: Endpoint Must Be Covered By errors L196: 
+L197: ### Predefined fixes
+L198: 
+L199: Create Feature cite37†Image adds a new point feature at the endpoint of the line feature that is in error.
+L200: ## Must Not Self-Overlap
+L201: 
+L202: Lines must not overlap themselves within a feature class or subtype. Lines can touch, intersect, and overlap lines in another feature class or subtype. Use this rule with lines whose segments should never occupy the same space as another segment on the same line. For example, for transportation analysis, street and highway segments of the same feature should not overlap themselves.
+L203: 
+L204: cite38†Image: Must Not Self-Overlap L205: ### Errors
+L206: 
+L207: Line errors are created where lines overlap themselves.
+L208: 
+L209: cite39†Image: Must Not Self-Overlap errors L210: 
+L211: ### Predefined fixes
+L212: 
+L213: Simplify cite40†Image removes self-overlapping line segments from the feature in error. This can result in multipart features, which you can detect using the Must Be Single Part rule.
+L214: ## Must Not Self-Intersect
+L215: 
+L216: Lines must not cross or overlap themselves within a feature class or subtype. Lines can touch themselves and touch, intersect, and overlap other lines. Use this rule when you only want lines to touch at their ends without intersecting or overlapping themselves, for example, when contour lines cannot intersect themselves.
+L217: 
+L218: cite41†Image: Must Not Self-Intersect L219: ### Errors
+L220: 
+L221: Line errors are created where lines overlap themselves, and point errors are created where lines cross themselves.
+L222: 
+L223: cite42†Image: Must Not Self-Intersect errors L224: 
+L225: ### Predefined fixes
+L226: 
+L227: Simplify cite40†Image removes self-overlapping line segments from the feature in error. This can result in multipart features, which you can detect using the Must Be Single Part rule.
+L228: ## Must Be Single Part
+L229: 
+L230: Lines within a feature class or subtype must only have one part. Use this rule when you want lines to be composed of a single series of connected segments, for example, when a highway system is made up of individual features where any one feature is not made up of more than one part.
+L231: 
+L232: cite43†Image: Must Be Single Part L233: 
+L234: ### Errors
+L235: 
+L236: Multipart line errors are created where lines have more than one part.
+L237: 
+L238: cite44†Image: Must Be Single Part L239: ### Predefined fixes
+L240: 
+L241: Explode cite45†Image creates single-part line features from each part of the multipart line feature that is in error.
+L242: 
+L243: [Button: Back to top]

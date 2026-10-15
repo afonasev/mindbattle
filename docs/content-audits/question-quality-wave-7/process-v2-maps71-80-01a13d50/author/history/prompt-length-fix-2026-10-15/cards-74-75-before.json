@@ -1,0 +1,736 @@
+{
+  "maps-cartography-overshoot-line": {
+    "candidateEntry": {
+      "id": "maps-cartography-overshoot-line",
+      "topicId": "maps-cartography",
+      "sourceOrder": 74,
+      "stage": "initial-source-editorial",
+      "status": "FIX",
+      "difficulty": "hard",
+      "correctIndex": 2,
+      "beforeCard": {
+        "id": "maps-cartography-overshoot-line",
+        "difficulty": "hard",
+        "prompt": "Как называют ошибку, при которой линия проходит дальше предполагаемой точки соединения?",
+        "answers": [
+          {
+            "text": "Полигон-щель",
+            "note": "Полигон-щель возникает как узкая лишняя область при несовпадении соседних границ."
+          },
+          {
+            "text": "Недолёт линии",
+            "note": "Недолёт линии оставляет зазор до предполагаемого соединения."
+          },
+          {
+            "text": "Перелёт линии",
+            "note": "Перелёт линии означает, что она проходит дальше точки соединения."
+          },
+          {
+            "text": "Висячий узел",
+            "note": "Висячий узел — свободный конец линии там, где ожидалось соединение."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Правильный ответ — Перелёт линии. Перелёт линии означает, что она проходит дальше точки соединения.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "beforeHash": "c12609cd7a87701e258ba01b4e76c35a027b53b3f94cb914da1926924936f446",
+      "proposedCard": {
+        "id": "maps-cartography-overshoot-line",
+        "difficulty": "hard",
+        "prompt": "В слое осевых линий улиц проверяют правило Must Not Have Dangles. Конец A прошёл на 2 м за заданный стык; конец B остановился за 3 м до другого заданного стыка. Оба целевых пересечения находятся в радиусе исправления 5 м. По регламенту Snap применять нельзя: нужно обрезать или продлить каждую линию в нужном направлении. Какой план исправит оба конца?",
+        "answers": [
+          {
+            "text": "Следует выполнить Extend для обоих концов.",
+            "note": "Extend продлит короткий конец B, но ещё дальше уведёт за узел уже длинный конец A."
+          },
+          {
+            "text": "Следует выполнить Trim для обоих концов.",
+            "note": "Trim укоротит конец A, но увеличит зазор у короткого конца B."
+          },
+          {
+            "text": "Следует обрезать конец A командой Trim, а конец B продлить командой Extend.",
+            "note": "При массовом исправлении объекты, для которых операция не сработает, останутся ошибками."
+          },
+          {
+            "text": "Следует привязать оба конца командой Snap к ближайшим линиям.",
+            "note": "Snap переносит конец к ближайшему объекту, а регламент требует сохранить указанную геометрию стыков."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Конец A выступает за пересечение, поэтому его нужно обрезать Trim; конец B не достигает пересечения, поэтому его нужно продлить Extend. Оба целевых соединения находятся в допуске, а Snap исключён регламентом.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "3053d081ec47232f5a7980e8e129eee5de29a6777a36f905094378d13a9de33c",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В слое осевых линий улиц проверяют правило Must Not Have Dangles. Конец A прошёл на 2 м за заданный стык; конец B остановился за 3 м до другого заданного стыка. Оба целевых пересечения находятся в радиусе исправления 5 м. По регламенту Snap применять нельзя: нужно обрезать или продлить каждую линию в нужном направлении. Какой план исправит оба конца?",
+            "answers": [
+              "Следует выполнить Extend для обоих концов.",
+              "Следует выполнить Trim для обоих концов.",
+              "Следует обрезать конец A командой Trim, а конец B продлить командой Extend.",
+              "Следует привязать оба конца командой Snap к ближайшим линиям."
+            ],
+            "correctIndex": 2
+          },
+          "literalSHA256": "de7be0d67166a1a0918264543eff2317806ab0aef64e408f1b73099e06ad4260"
+        },
+        {
+          "group": "explanation",
+          "literal": "Конец A выступает за пересечение, поэтому его нужно обрезать Trim; конец B не достигает пересечения, поэтому его нужно продлить Extend. Оба целевых соединения находятся в допуске, а Snap исключён регламентом.",
+          "literalSHA256": "d5b6fd73b1e1bef6de80f1bf57a5da2aa413f815527a0bf267a5597b8c1d52e6"
+        },
+        {
+          "group": "note0",
+          "literal": "Extend продлит короткий конец B, но ещё дальше уведёт за узел уже длинный конец A.",
+          "literalSHA256": "bcf184f198d88cb1ef7916fd4c8afba33398bbb96d366e59af2974f43d8fa903"
+        },
+        {
+          "group": "note1",
+          "literal": "Trim укоротит конец A, но увеличит зазор у короткого конца B.",
+          "literalSHA256": "70c88fe8f7357ca5284687ad7177ddb3f2c1686c62d3cfa4b34be1559d7bb5ed"
+        },
+        {
+          "group": "note2",
+          "literal": "При массовом исправлении объекты, для которых операция не сработает, останутся ошибками.",
+          "literalSHA256": "dcb91b6d3ac9199c31ab9c7c2c0d699d00c2a2fea412263f46a3dad6cb77b572"
+        },
+        {
+          "group": "note3",
+          "literal": "Snap переносит конец к ближайшему объекту, а регламент требует сохранить указанную геометрию стыков.",
+          "literalSHA256": "a1c39373fb9e61cbe8c8f9c5e04deaeb296a536c19bfb51dcdcb10f60615b406"
+        }
+      ],
+      "assessments": [
+        {
+          "answerIndex": 0,
+          "fullPrompt": "В слое осевых линий улиц проверяют правило Must Not Have Dangles. Конец A прошёл на 2 м за заданный стык; конец B остановился за 3 м до другого заданного стыка. Оба целевых пересечения находятся в радиусе исправления 5 м. По регламенту Snap применять нельзя: нужно обрезать или продлить каждую линию в нужном направлении. Какой план исправит оба конца?",
+          "promptAssessment": "Вопрос содержит два противоположных конца и требует подобрать пары действий, поэтому ответ Extend для обоих прямо проверяется по A и B.",
+          "answerText": "Следует выполнить Extend для обоих концов.",
+          "truthOneKeyAssessment": "Extend исправит короткий B, но удлинит уже выступающий A.",
+          "plausibilityAssessment": "Операция уместна только для одной половины примера.",
+          "noteText": "Extend продлит короткий конец B, но ещё дальше уведёт за узел уже длинный конец A.",
+          "grammarAssessment": "Полное предложение с «Следует выполнить» корректно сочетается с названием операции Extend. В заметке подлежащие «Extend» и «Trim» оформлены как названия операций; формы «продлит» и «уведёт» согласованы с ними.",
+          "ownNoteUsefulnessAssessment": "Причастный оборот «уже длинный» относится к концу A, а противопоставление выполнено корректно."
+        },
+        {
+          "answerIndex": 1,
+          "fullPrompt": "В слое осевых линий улиц проверяют правило Must Not Have Dangles. Конец A прошёл на 2 м за заданный стык; конец B остановился за 3 м до другого заданного стыка. Оба целевых пересечения находятся в радиусе исправления 5 м. По регламенту Snap применять нельзя: нужно обрезать или продлить каждую линию в нужном направлении. Какой план исправит оба конца?",
+          "promptAssessment": "Числа и общий допуск удерживают решение в сценарии, а не в словарном определении.",
+          "answerText": "Следует выполнить Trim для обоих концов.",
+          "truthOneKeyAssessment": "Trim подходит A, но обрезание B отдалит его от заданного узла.",
+          "plausibilityAssessment": "Половина плана верна, целиком ответ не выполняет требование.",
+          "noteText": "Trim укоротит конец A, но увеличит зазор у короткого конца B.",
+          "grammarAssessment": "Инфинитивный план после «Следует» оформлен грамматически правильно. В заметке противопоставлены действия Trim и зазор; придаточные «укоротит» и «увеличит» имеют ясные дополнения.",
+          "ownNoteUsefulnessAssessment": "Союз «но» корректно связывает верную и ошибочную части действия."
+        },
+        {
+          "answerIndex": 2,
+          "fullPrompt": "В слое осевых линий улиц проверяют правило Must Not Have Dangles. Конец A прошёл на 2 м за заданный стык; конец B остановился за 3 м до другого заданного стыка. Оба целевых пересечения находятся в радиусе исправления 5 м. По регламенту Snap применять нельзя: нужно обрезать или продлить каждую линию в нужном направлении. Какой план исправит оба конца?",
+          "promptAssessment": "Требуется именно план для пары A/B с заданным направлением коррекции.",
+          "answerText": "Следует обрезать конец A командой Trim, а конец B продлить командой Extend.",
+          "truthOneKeyAssessment": "Trim для конца за узлом и Extend для короткого конца согласуются с обоими дефектами.",
+          "plausibilityAssessment": "Только этот план обрабатывает две противоположные геометрии.",
+          "noteText": "При массовом исправлении объекты, для которых операция не сработает, останутся ошибками.",
+          "grammarAssessment": "Ответ грамматически оформлен как инструкция с однородными инфинитивами и разделением по объектам A и B. В заметке придаточное «для которых операция не сработает» согласовано во множественном числе с «объекты».",
+          "ownNoteUsefulnessAssessment": "Вторая часть сообщает независимое поведение пакетного инструмента; форма «для которых операция не сработает» грамматически связана с «объекты»."
+        },
+        {
+          "answerIndex": 3,
+          "fullPrompt": "В слое осевых линий улиц проверяют правило Must Not Have Dangles. Конец A прошёл на 2 м за заданный стык; конец B остановился за 3 м до другого заданного стыка. Оба целевых пересечения находятся в радиусе исправления 5 м. По регламенту Snap применять нельзя: нужно обрезать или продлить каждую линию в нужном направлении. Какой план исправит оба конца?",
+          "promptAssessment": "В вопросе явно запрещено Snap и задано сохранить установленную геометрию стыков.",
+          "answerText": "Следует привязать оба конца командой Snap к ближайшим линиям.",
+          "truthOneKeyAssessment": "Snap ставит конец на ближайший объект, но не подбирает противоположные операции по длине.",
+          "plausibilityAssessment": "Похожа как способ связать линии, но противоречит протоколу задачи.",
+          "noteText": "Snap переносит конец к ближайшему объекту, а регламент требует сохранить указанную геометрию стыков.",
+          "grammarAssessment": "«Следует привязать оба конца» — нормативная безличная конструкция; оборот с названием Snap уточняет способ. В заметке подлежащее Snap согласовано со сказуемым «переносит», а однородные действия сохранены в инфинитиве.",
+          "ownNoteUsefulnessAssessment": "Согласование «Snap переносит конец» выдержано в единственном числе; note ссылается на условие."
+        }
+      ],
+      "editorialReason": "Hard-demand redesign uses multiple independent constraints and supplied scenario data; difficulty basis and competing interpretations are recorded for independent review.",
+      "peerIds": [
+        "maps-cartography-orthographic-space",
+        "maps-cartography-lambert-azimuthal",
+        "maps-cartography-sliver-polygon",
+        "maps-cartography-overshoot-line",
+        "maps-cartography-undershoot-line",
+        "maps-cartography-closed-hill",
+        "maps-cartography-v-valley",
+        "maps-cartography-atlas-collection",
+        "maps-cartography-globe-sphere",
+        "maps-cartography-wall-map"
+      ],
+      "difficultyBasis": {
+        "constraints": [
+          "Два разных состояния висячего конца нужно обработать в одной сети.",
+          "Обе целевые геометрии лежат внутри заданного допуска 5 м.",
+          "Регламент требует направленной коррекции Trim/Extend и исключает Snap."
+        ],
+        "competingInterpretations": [
+          "Extend подходит только короткому B.",
+          "Trim подходит только выступающему A.",
+          "Snap меняет положение до ближайшей линии и запрещён условием."
+        ],
+        "appliedDecision": "Сопоставить направление ошибки каждого endpoint с преднастроенной операцией и проверить ограничение допуска."
+      }
+    },
+    "peerTarget": {
+      "id": "maps-cartography-overshoot-line",
+      "sourceOrder": 74,
+      "currentCard": {
+        "id": "maps-cartography-overshoot-line",
+        "difficulty": "hard",
+        "prompt": "Как называют ошибку, при которой линия проходит дальше предполагаемой точки соединения?",
+        "answers": [
+          {
+            "text": "Полигон-щель",
+            "note": "Полигон-щель возникает как узкая лишняя область при несовпадении соседних границ."
+          },
+          {
+            "text": "Недолёт линии",
+            "note": "Недолёт линии оставляет зазор до предполагаемого соединения."
+          },
+          {
+            "text": "Перелёт линии",
+            "note": "Перелёт линии означает, что она проходит дальше точки соединения."
+          },
+          {
+            "text": "Висячий узел",
+            "note": "Висячий узел — свободный конец линии там, где ожидалось соединение."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Правильный ответ — Перелёт линии. Перелёт линии означает, что она проходит дальше точки соединения.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "currentSHA256": "c12609cd7a87701e258ba01b4e76c35a027b53b3f94cb914da1926924936f446",
+      "proposedCard": {
+        "id": "maps-cartography-overshoot-line",
+        "difficulty": "hard",
+        "prompt": "В слое осевых линий улиц проверяют правило Must Not Have Dangles. Конец A прошёл на 2 м за заданный стык; конец B остановился за 3 м до другого заданного стыка. Оба целевых пересечения находятся в радиусе исправления 5 м. По регламенту Snap применять нельзя: нужно обрезать или продлить каждую линию в нужном направлении. Какой план исправит оба конца?",
+        "answers": [
+          {
+            "text": "Следует выполнить Extend для обоих концов.",
+            "note": "Extend продлит короткий конец B, но ещё дальше уведёт за узел уже длинный конец A."
+          },
+          {
+            "text": "Следует выполнить Trim для обоих концов.",
+            "note": "Trim укоротит конец A, но увеличит зазор у короткого конца B."
+          },
+          {
+            "text": "Следует обрезать конец A командой Trim, а конец B продлить командой Extend.",
+            "note": "При массовом исправлении объекты, для которых операция не сработает, останутся ошибками."
+          },
+          {
+            "text": "Следует привязать оба конца командой Snap к ближайшим линиям.",
+            "note": "Snap переносит конец к ближайшему объекту, а регламент требует сохранить указанную геометрию стыков."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Конец A выступает за пересечение, поэтому его нужно обрезать Trim; конец B не достигает пересечения, поэтому его нужно продлить Extend. Оба целевых соединения находятся в допуске, а Snap исключён регламентом.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedSHA256": "3053d081ec47232f5a7980e8e129eee5de29a6777a36f905094378d13a9de33c",
+      "status": "FIX"
+    },
+    "sourceproofCard": {
+      "id": "maps-cartography-overshoot-line",
+      "status": "FIX",
+      "evidence": [
+        {
+          "fieldGroup": "prompt_ordered_answers_key",
+          "primarySources": [
+            {
+              "id": "polyline",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polyline.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+              "sha256": "63e29a307704cf3cbe5a83ba1694f3a6208c82bf786478ca013d0d82a8103c5d",
+              "bytes": 17486,
+              "sourceKind": "complete official primary context, personally read",
+              "exactLocator": "L70-L99",
+              "accessDate": "2026-10-15"
+            }
+          ],
+          "exactLocator": "L70-L99",
+          "specificClaim": "The two supplied endpoint directions, finite tolerance, and no-Snap procedure produce a paired Trim/Extend decision.",
+          "reason": "This locator supports the exact prompt, selected answer/distractors, or note text in this field group; source hash identifies the complete retained primary context."
+        },
+        {
+          "fieldGroup": "explanation",
+          "primarySources": [
+            {
+              "id": "polyline",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polyline.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+              "sha256": "63e29a307704cf3cbe5a83ba1694f3a6208c82bf786478ca013d0d82a8103c5d",
+              "bytes": 17486,
+              "sourceKind": "complete official primary context, personally read",
+              "exactLocator": "L70-L99",
+              "accessDate": "2026-10-15"
+            }
+          ],
+          "exactLocator": "L70-L99",
+          "specificClaim": "Trim removes a nearby dangling overrun; Extend lengthens a short dangle; Snap is a separate nearest-feature fix.",
+          "reason": "This locator supports the exact prompt, selected answer/distractors, or note text in this field group; source hash identifies the complete retained primary context."
+        },
+        {
+          "fieldGroup": "note0",
+          "primarySources": [
+            {
+              "id": "polyline",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polyline.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+              "sha256": "63e29a307704cf3cbe5a83ba1694f3a6208c82bf786478ca013d0d82a8103c5d",
+              "bytes": 17486,
+              "sourceKind": "complete official primary context, personally read",
+              "exactLocator": "L70-L99",
+              "accessDate": "2026-10-15"
+            }
+          ],
+          "exactLocator": "L70-L99",
+          "specificClaim": "Extend lengthens dangling endpoints when a feature is available within the distance.",
+          "reason": "This locator supports the exact prompt, selected answer/distractors, or note text in this field group; source hash identifies the complete retained primary context."
+        },
+        {
+          "fieldGroup": "note1",
+          "primarySources": [
+            {
+              "id": "polyline",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polyline.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+              "sha256": "63e29a307704cf3cbe5a83ba1694f3a6208c82bf786478ca013d0d82a8103c5d",
+              "bytes": 17486,
+              "sourceKind": "complete official primary context, personally read",
+              "exactLocator": "L70-L99",
+              "accessDate": "2026-10-15"
+            }
+          ],
+          "exactLocator": "L70-L99",
+          "specificClaim": "Trim removes line portions at a nearby intersection; applying it to a short endpoint would move it farther from the intended join.",
+          "reason": "This locator supports the exact prompt, selected answer/distractors, or note text in this field group; source hash identifies the complete retained primary context."
+        },
+        {
+          "fieldGroup": "note2",
+          "primarySources": [
+            {
+              "id": "polyline",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polyline.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+              "sha256": "63e29a307704cf3cbe5a83ba1694f3a6208c82bf786478ca013d0d82a8103c5d",
+              "bytes": 17486,
+              "sourceKind": "complete official primary context, personally read",
+              "exactLocator": "L70-L99",
+              "accessDate": "2026-10-15"
+            }
+          ],
+          "exactLocator": "L70-L99",
+          "specificClaim": "Batch Trim skips lines that cannot be trimmed and leaves them as errors.",
+          "reason": "This locator supports the exact prompt, selected answer/distractors, or note text in this field group; source hash identifies the complete retained primary context."
+        },
+        {
+          "fieldGroup": "note3",
+          "primarySources": [
+            {
+              "id": "polyline",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polyline.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+              "sha256": "63e29a307704cf3cbe5a83ba1694f3a6208c82bf786478ca013d0d82a8103c5d",
+              "bytes": 17486,
+              "sourceKind": "complete official primary context, personally read",
+              "exactLocator": "L70-L99",
+              "accessDate": "2026-10-15"
+            }
+          ],
+          "exactLocator": "L70-L99",
+          "specificClaim": "Snap chooses the nearest line within the specified distance rather than applying the specified Trim/Extend pair.",
+          "reason": "This locator supports the exact prompt, selected answer/distractors, or note text in this field group; source hash identifies the complete retained primary context."
+        }
+      ]
+    }
+  },
+  "maps-cartography-undershoot-line": {
+    "candidateEntry": {
+      "id": "maps-cartography-undershoot-line",
+      "topicId": "maps-cartography",
+      "sourceOrder": 75,
+      "stage": "initial-source-editorial",
+      "status": "FIX",
+      "difficulty": "hard",
+      "correctIndex": 2,
+      "beforeCard": {
+        "id": "maps-cartography-undershoot-line",
+        "difficulty": "hard",
+        "prompt": "Какой вид ошибки пространственных данных описан? Он оставляет зазор до предполагаемого соединения.",
+        "answers": [
+          {
+            "text": "Полигон-щель",
+            "note": "Полигон-щель возникает как узкая лишняя область при несовпадении соседних границ."
+          },
+          {
+            "text": "Перелёт линии",
+            "note": "Перелёт линии означает, что она проходит дальше точки соединения."
+          },
+          {
+            "text": "Недолёт линии",
+            "note": "Недолёт линии оставляет зазор до предполагаемого соединения."
+          },
+          {
+            "text": "Висячий узел",
+            "note": "Висячий узел — свободный конец линии там, где ожидалось соединение."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Правильный ответ — Недолёт линии. Недолёт линии оставляет зазор до предполагаемого соединения.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "beforeHash": "ac8b92f6b403b35c76b1f2ef34027bc7d593255a534936665ef58ebc038e4f36",
+      "proposedCard": {
+        "id": "maps-cartography-undershoot-line",
+        "difficulty": "hard",
+        "prompt": "Пакетная проверка Must Not Have Dangles находит два коротких конца осевых линий: A находится в 4 м от целевой линии, B — в 9 м. Допустимый радиус автоматического исправления задан как 5 м; дальние ошибки нужно оставить видимыми, а не удлинять без ограничения или привязывать к ближайшему объекту. Какой план соблюдает оба требования?",
+        "answers": [
+          {
+            "text": "Следует задать нулевой радиус и выполнить Extend для обоих концов.",
+            "note": "При нулевом расстоянии Extend продолжает линию до стыка с найденным объектом, даже если он далеко."
+          },
+          {
+            "text": "Следует выполнить Snap с радиусом 5 м для обоих концов.",
+            "note": "Snap привязывает конец к ближайшей линии в допуске, а не продлевает его до заданной цели."
+          },
+          {
+            "text": "Следует выполнить Extend с радиусом 5 м для обоих концов: A удлинится, а B останется ошибкой.",
+            "note": "Нулевой радиус имеет особую семантику: линия продолжается до найденного стыка."
+          },
+          {
+            "text": "Следует выполнить Trim с радиусом 5 м для обоих концов.",
+            "note": "Trim укорачивает висячую линию при близком пересечении, а не устраняет короткий конец."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Extend с радиусом 5 м обработает A, поскольку целевая линия внутри допуска; B не найдёт подходящий объект в заданном радиусе и останется ошибкой. Нулевой радиус означал бы продление до найденного стыка без ограничения 5 м.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "afd1412e84968ad447a90fc989789f4dd120b14755a6bdee618b151d61423d0a",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Пакетная проверка Must Not Have Dangles находит два коротких конца осевых линий: A находится в 4 м от целевой линии, B — в 9 м. Допустимый радиус автоматического исправления задан как 5 м; дальние ошибки нужно оставить видимыми, а не удлинять без ограничения или привязывать к ближайшему объекту. Какой план соблюдает оба требования?",
+            "answers": [
+              "Следует задать нулевой радиус и выполнить Extend для обоих концов.",
+              "Следует выполнить Snap с радиусом 5 м для обоих концов.",
+              "Следует выполнить Extend с радиусом 5 м для обоих концов: A удлинится, а B останется ошибкой.",
+              "Следует выполнить Trim с радиусом 5 м для обоих концов."
+            ],
+            "correctIndex": 2
+          },
+          "literalSHA256": "b3b654b8a7cb744235b729a64edd9b31b969d87c715ded310f99a70636682abc"
+        },
+        {
+          "group": "explanation",
+          "literal": "Extend с радиусом 5 м обработает A, поскольку целевая линия внутри допуска; B не найдёт подходящий объект в заданном радиусе и останется ошибкой. Нулевой радиус означал бы продление до найденного стыка без ограничения 5 м.",
+          "literalSHA256": "413a98b2bbf8c82534fc96952eeaca11531680a58d396ad1583bfb39de5b49dd"
+        },
+        {
+          "group": "note0",
+          "literal": "При нулевом расстоянии Extend продолжает линию до стыка с найденным объектом, даже если он далеко.",
+          "literalSHA256": "6b9e704cbf1f3f02c69b2c74ec57ac06eda4fd8b5844fb998ddf5fa80051a2af"
+        },
+        {
+          "group": "note1",
+          "literal": "Snap привязывает конец к ближайшей линии в допуске, а не продлевает его до заданной цели.",
+          "literalSHA256": "65f76fd8409fbd222a1d3eff9c110b53e1a779e87cd09ffb8f854b37143a1f8d"
+        },
+        {
+          "group": "note2",
+          "literal": "Нулевой радиус имеет особую семантику: линия продолжается до найденного стыка.",
+          "literalSHA256": "595375e34b9cce94a0a528d366b0f3d5cc47a421322d63b7fd8011e2369fe89f"
+        },
+        {
+          "group": "note3",
+          "literal": "Trim укорачивает висячую линию при близком пересечении, а не устраняет короткий конец.",
+          "literalSHA256": "b201da36409dfa7fd501b495d4443c0306706c0903037ae1d09d3a282410ad4e"
+        }
+      ],
+      "assessments": [
+        {
+          "answerIndex": 0,
+          "fullPrompt": "Пакетная проверка Must Not Have Dangles находит два коротких конца осевых линий: A находится в 4 м от целевой линии, B — в 9 м. Допустимый радиус автоматического исправления задан как 5 м; дальние ошибки нужно оставить видимыми, а не удлинять без ограничения или привязывать к ближайшему объекту. Какой план соблюдает оба требования?",
+          "promptAssessment": "Вопрос задаёт два числовых расстояния, предел исправления и требование оставить дальнюю ошибку видимой.",
+          "answerText": "Следует задать нулевой радиус и выполнить Extend для обоих концов.",
+          "truthOneKeyAssessment": "Нулевой радиус задаёт специальное продолжение до найденного стыка и нарушает конечный предел 5 м.",
+          "plausibilityAssessment": "Кажется удобным для пакетной обработки, но не сохраняет заданное ограничение.",
+          "noteText": "При нулевом расстоянии Extend продолжает линию до стыка с найденным объектом, даже если он далеко.",
+          "grammarAssessment": "Ответ — корректная инструкция: инфинитивы «задать» и «выполнить» зависят от «следует». В заметке «Extend» назван подлежащим при «продолжает»; придаточное с «даже если» оформлено правильно.",
+          "ownNoteUsefulnessAssessment": "Подлежащее «радиус» согласуется с «задаёт»; зависимое «до найденного объекта» грамматически завершено."
+        },
+        {
+          "answerIndex": 1,
+          "fullPrompt": "Пакетная проверка Must Not Have Dangles находит два коротких конца осевых линий: A находится в 4 м от целевой линии, B — в 9 м. Допустимый радиус автоматического исправления задан как 5 м; дальние ошибки нужно оставить видимыми, а не удлинять без ограничения или привязывать к ближайшему объекту. Какой план соблюдает оба требования?",
+          "promptAssessment": "Запрос требует корректировать только конечный конец в допуске и не перемещать его к постороннему объекту.",
+          "answerText": "Следует выполнить Snap с радиусом 5 м для обоих концов.",
+          "truthOneKeyAssessment": "Snap привязывает к ближайшей линии вместо направленного удлинения до указанной цели.",
+          "plausibilityAssessment": "Похожа способом соединения, но использует другой алгоритм и не гарантирует заданный результат.",
+          "noteText": "Snap привязывает конец к ближайшей линии в допуске, а не продлевает его до заданной цели.",
+          "grammarAssessment": "Конструкция «Следует выполнить Snap с радиусом 5 м» грамматически завершена и однозначно относится к обоим концам. В заметке «Snap» выступает подлежащим, «привязывает» согласовано в единственном числе.",
+          "ownNoteUsefulnessAssessment": "Сравнительная конструкция «а не продлевает» корректно разделяет методы."
+        },
+        {
+          "answerIndex": 2,
+          "fullPrompt": "Пакетная проверка Must Not Have Dangles находит два коротких конца осевых линий: A находится в 4 м от целевой линии, B — в 9 м. Допустимый радиус автоматического исправления задан как 5 м; дальние ошибки нужно оставить видимыми, а не удлинять без ограничения или привязывать к ближайшему объекту. Какой план соблюдает оба требования?",
+          "promptAssessment": "Условие различает A внутри радиуса и B за ним, затем спрашивает план пакетной правки.",
+          "answerText": "Следует выполнить Extend с радиусом 5 м для обоих концов: A удлинится, а B останется ошибкой.",
+          "truthOneKeyAssessment": "Extend с радиусом 5 м удлинит A; B останется вне допуска и будет пропущен.",
+          "plausibilityAssessment": "Только этот вариант одновременно выполняет безопасное исправление и сохраняет нерешённую ошибку.",
+          "noteText": "Нулевой радиус имеет особую семантику: линия продолжается до найденного стыка.",
+          "grammarAssessment": "В ответе перечислены операция и заданный радиус, затем однородно описаны результаты для A и B; формы «удлинится» и «останется» согласованы с подразумеваемым «конец». В заметке двоеточие корректно вводит пояснение.",
+          "ownNoteUsefulnessAssessment": "Note грамматически оформлен как полное предложение; факт о нулевом расстоянии расширяет понимание настройки."
+        },
+        {
+          "answerIndex": 3,
+          "fullPrompt": "Пакетная проверка Must Not Have Dangles находит два коротких конца осевых линий: A находится в 4 м от целевой линии, B — в 9 м. Допустимый радиус автоматического исправления задан как 5 м; дальние ошибки нужно оставить видимыми, а не удлинять без ограничения или привязывать к ближайшему объекту. Какой план соблюдает оба требования?",
+          "promptAssessment": "Для обоих концов требуются удлинение либо сохранение за пределом радиуса, но не укорочение.",
+          "answerText": "Следует выполнить Trim с радиусом 5 м для обоих концов.",
+          "truthOneKeyAssessment": "Trim укорачивает линии у найденного пересечения и не исправляет короткие концы.",
+          "plausibilityAssessment": "Релевантная операция для противоположного дефекта, поэтому ответ неверен.",
+          "noteText": "Trim укорачивает висячую линию при близком пересечении, а не устраняет короткий конец.",
+          "grammarAssessment": "Ответ грамматически соответствует вопросу о плане: «Следует выполнить» управляет инфинитивом. В заметке «Trim» является подлежащим при «укорачивает»; сравнение через «а не» построено корректно.",
+          "ownNoteUsefulnessAssessment": "Причастное описание согласовано с Trim; заметка содержит обе части условия."
+        }
+      ],
+      "editorialReason": "Hard-demand redesign uses multiple independent constraints and supplied scenario data; difficulty basis and competing interpretations are recorded for independent review.",
+      "peerIds": [
+        "maps-cartography-orthographic-space",
+        "maps-cartography-lambert-azimuthal",
+        "maps-cartography-sliver-polygon",
+        "maps-cartography-overshoot-line",
+        "maps-cartography-undershoot-line",
+        "maps-cartography-closed-hill",
+        "maps-cartography-v-valley",
+        "maps-cartography-atlas-collection",
+        "maps-cartography-globe-sphere",
+        "maps-cartography-wall-map"
+      ],
+      "difficultyBasis": {
+        "constraints": [
+          "У каждого из двух endpoints своя дистанция до известной целевой линии.",
+          "Максимальный допуск должен быть конечным и равен 5 м.",
+          "За пределами допуска ошибка должна остаться в наборе, а не исправляться небезопасно."
+        ],
+        "competingInterpretations": [
+          "Нулевой радиус задаёт не отсутствие исправления, а продление до найденного стыка.",
+          "Snap переносит конец к ближайшей линии, не выполняя направленное продление до указанной цели.",
+          "Trim исправляет выступающие, а не короткие концы."
+        ],
+        "appliedDecision": "Сопоставить численные расстояния с семантикой конечного допуска и предсказать исход пакетной операции."
+      }
+    },
+    "peerTarget": {
+      "id": "maps-cartography-undershoot-line",
+      "sourceOrder": 75,
+      "currentCard": {
+        "id": "maps-cartography-undershoot-line",
+        "difficulty": "hard",
+        "prompt": "Какой вид ошибки пространственных данных описан? Он оставляет зазор до предполагаемого соединения.",
+        "answers": [
+          {
+            "text": "Полигон-щель",
+            "note": "Полигон-щель возникает как узкая лишняя область при несовпадении соседних границ."
+          },
+          {
+            "text": "Перелёт линии",
+            "note": "Перелёт линии означает, что она проходит дальше точки соединения."
+          },
+          {
+            "text": "Недолёт линии",
+            "note": "Недолёт линии оставляет зазор до предполагаемого соединения."
+          },
+          {
+            "text": "Висячий узел",
+            "note": "Висячий узел — свободный конец линии там, где ожидалось соединение."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Правильный ответ — Недолёт линии. Недолёт линии оставляет зазор до предполагаемого соединения.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "currentSHA256": "ac8b92f6b403b35c76b1f2ef34027bc7d593255a534936665ef58ebc038e4f36",
+      "proposedCard": {
+        "id": "maps-cartography-undershoot-line",
+        "difficulty": "hard",
+        "prompt": "Пакетная проверка Must Not Have Dangles находит два коротких конца осевых линий: A находится в 4 м от целевой линии, B — в 9 м. Допустимый радиус автоматического исправления задан как 5 м; дальние ошибки нужно оставить видимыми, а не удлинять без ограничения или привязывать к ближайшему объекту. Какой план соблюдает оба требования?",
+        "answers": [
+          {
+            "text": "Следует задать нулевой радиус и выполнить Extend для обоих концов.",
+            "note": "При нулевом расстоянии Extend продолжает линию до стыка с найденным объектом, даже если он далеко."
+          },
+          {
+            "text": "Следует выполнить Snap с радиусом 5 м для обоих концов.",
+            "note": "Snap привязывает конец к ближайшей линии в допуске, а не продлевает его до заданной цели."
+          },
+          {
+            "text": "Следует выполнить Extend с радиусом 5 м для обоих концов: A удлинится, а B останется ошибкой.",
+            "note": "Нулевой радиус имеет особую семантику: линия продолжается до найденного стыка."
+          },
+          {
+            "text": "Следует выполнить Trim с радиусом 5 м для обоих концов.",
+            "note": "Trim укорачивает висячую линию при близком пересечении, а не устраняет короткий конец."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Extend с радиусом 5 м обработает A, поскольку целевая линия внутри допуска; B не найдёт подходящий объект в заданном радиусе и останется ошибкой. Нулевой радиус означал бы продление до найденного стыка без ограничения 5 м.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedSHA256": "afd1412e84968ad447a90fc989789f4dd120b14755a6bdee618b151d61423d0a",
+      "status": "FIX"
+    },
+    "sourceproofCard": {
+      "id": "maps-cartography-undershoot-line",
+      "status": "FIX",
+      "evidence": [
+        {
+          "fieldGroup": "prompt_ordered_answers_key",
+          "primarySources": [
+            {
+              "id": "polyline",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polyline.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+              "sha256": "63e29a307704cf3cbe5a83ba1694f3a6208c82bf786478ca013d0d82a8103c5d",
+              "bytes": 17486,
+              "sourceKind": "complete official primary context, personally read",
+              "exactLocator": "L70-L99",
+              "accessDate": "2026-10-15"
+            }
+          ],
+          "exactLocator": "L70-L99",
+          "specificClaim": "The two synthetic distances straddle a finite 5 m tolerance, and the output must preserve the out-of-range error.",
+          "reason": "This locator supports the exact prompt, selected answer/distractors, or note text in this field group; source hash identifies the complete retained primary context."
+        },
+        {
+          "fieldGroup": "explanation",
+          "primarySources": [
+            {
+              "id": "polyline",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polyline.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+              "sha256": "63e29a307704cf3cbe5a83ba1694f3a6208c82bf786478ca013d0d82a8103c5d",
+              "bytes": 17486,
+              "sourceKind": "complete official primary context, personally read",
+              "exactLocator": "L70-L99",
+              "accessDate": "2026-10-15"
+            }
+          ],
+          "exactLocator": "L70-L99",
+          "specificClaim": "Extend modifies a dangling end only when a target lies within the specified distance; the batch behavior leaves an unmodifiable line in error.",
+          "reason": "This locator supports the exact prompt, selected answer/distractors, or note text in this field group; source hash identifies the complete retained primary context."
+        },
+        {
+          "fieldGroup": "note0",
+          "primarySources": [
+            {
+              "id": "polyline",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polyline.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+              "sha256": "63e29a307704cf3cbe5a83ba1694f3a6208c82bf786478ca013d0d82a8103c5d",
+              "bytes": 17486,
+              "sourceKind": "complete official primary context, personally read",
+              "exactLocator": "L70-L99",
+              "accessDate": "2026-10-15"
+            }
+          ],
+          "exactLocator": "L70-L99",
+          "specificClaim": "Distance zero has the documented special behavior of extending until a feature is reached.",
+          "reason": "This locator supports the exact prompt, selected answer/distractors, or note text in this field group; source hash identifies the complete retained primary context."
+        },
+        {
+          "fieldGroup": "note1",
+          "primarySources": [
+            {
+              "id": "polyline",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polyline.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+              "sha256": "63e29a307704cf3cbe5a83ba1694f3a6208c82bf786478ca013d0d82a8103c5d",
+              "bytes": 17486,
+              "sourceKind": "complete official primary context, personally read",
+              "exactLocator": "L70-L99",
+              "accessDate": "2026-10-15"
+            }
+          ],
+          "exactLocator": "L70-L99",
+          "specificClaim": "Snap uses the nearest feature within a distance and is not the specified directed extension to the target.",
+          "reason": "This locator supports the exact prompt, selected answer/distractors, or note text in this field group; source hash identifies the complete retained primary context."
+        },
+        {
+          "fieldGroup": "note2",
+          "primarySources": [
+            {
+              "id": "polyline",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polyline.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+              "sha256": "63e29a307704cf3cbe5a83ba1694f3a6208c82bf786478ca013d0d82a8103c5d",
+              "bytes": 17486,
+              "sourceKind": "complete official primary context, personally read",
+              "exactLocator": "L70-L99",
+              "accessDate": "2026-10-15"
+            }
+          ],
+          "exactLocator": "L70-L99",
+          "specificClaim": "Extend checks target distance and is distinct from zero-distance unbounded extension.",
+          "reason": "This locator supports the exact prompt, selected answer/distractors, or note text in this field group; source hash identifies the complete retained primary context."
+        },
+        {
+          "fieldGroup": "note3",
+          "primarySources": [
+            {
+              "id": "polyline",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polyline.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+              "sha256": "63e29a307704cf3cbe5a83ba1694f3a6208c82bf786478ca013d0d82a8103c5d",
+              "bytes": 17486,
+              "sourceKind": "complete official primary context, personally read",
+              "exactLocator": "L70-L99",
+              "accessDate": "2026-10-15"
+            }
+          ],
+          "exactLocator": "L70-L99",
+          "specificClaim": "Trim shortens a dangling line when an intersection is within the distance.",
+          "reason": "This locator supports the exact prompt, selected answer/distractors, or note text in this field group; source hash identifies the complete retained primary context."
+        }
+      ]
+    }
+  }
+}
