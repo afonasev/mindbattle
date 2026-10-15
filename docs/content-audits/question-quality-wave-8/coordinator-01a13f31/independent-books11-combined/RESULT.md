@@ -1,0 +1,8 @@
+Exact CURRENT combined11, tested catalog73b09639e0aa139676058cf6d8abf98b4559d63c; QA19 PASS read only.
+FINAL3 PASS: complete PeaceCorps bookparts/usually/traditionally, own reverse-side extra; title/verso relation correct; Japanese tobira term MAIN distinct.
+INITIAL PASS11/13/14/16/19/20. INITIAL FIX12/15/17/18; qualityCredit0 pending root binding.
+12 proof mistranslated «доказательная версия макета» in note2; note3 Russian coordination.15 correct note repeats all prompt/key details.17 exact actual crafts69 MAIN duplicate and unsupported cheaper-than-perfect claim.18 blanket lay-flat contrast with staples/glue not supported.
+16 Cornell finishing trim association distinct from crafts86 spine-glue mechanism; own-note adds ordering trim after gluing, not merely repeats even edge result.
+66 literal groups/44 full triples, exact hashes/frozen/length/source links checked. All100 topic+8 independently selected cross peers bound;55 full-proposal bilateral pairs. Source3 author proposals11–20 match actual current byte-for-literal card objects.
+Official full relevant source bodies read; author manual-excerpt gaps supplemented with saved primary-live-a/b/c.json. UNT single failure documented; Berkeley alternative used. No runtime/tests/build/Git/index/refs/catalog/planning/claims changes, no own processes/temp resources.
+Next: coordinator saves this evidence in branch codex/question-quality-wave-6, adjudicates/binds PASS, sends only INITIALFIX12/15/17/18 into solecycle1. Title3 FINAL complete; oldHOLD4/5/6 stay neighbors. Archival waits root Git preservation; no further action depends on this chat-only context.
