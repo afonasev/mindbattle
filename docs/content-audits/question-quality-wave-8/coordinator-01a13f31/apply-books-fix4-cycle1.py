@@ -1,0 +1,22 @@
+"""Normalize peerhash key alias only and apply exact SOURCEsolecycle1 FIX4."""
+import pathlib,json,copy,importlib.util,subprocess,hashlib
+C=pathlib.Path(__file__).resolve().parents[4];D=pathlib.Path(__file__).parent;P=pathlib.Path('/Users/eaafonasev/Projects/mindbattle/planning')
+def rd(p):return json.loads(pathlib.Path(p).read_text())
+def wr(p,j):pathlib.Path(p).write_text(json.dumps(j,ensure_ascii=False,indent=2)+'\n')
+s=importlib.util.spec_from_file_location('m',C/'docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/apply-standard.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m);m.P=P
+A=C/'docs/content-audits/question-quality-wave-8/process-v2-books12-15-17-18-cycle1-01a13f31/author';B=D/'normalized-books-fix4-cycle1';B.mkdir(exist_ok=True);a=rd(A/'candidate.json');sp=rd(A/'sourceproof.json');p=rd(A/'peer-snapshot.json');cand={e['id']:e for e in a['entries']};dec=[]
+for e in p['actualCurrentPeers']:
+ assert m.sha(e['card'])==e['canonicalSHA256'];e['sha256']=e['canonicalSHA256']
+for e in sp['entries']:
+ for g in e['literalGroups']:
+  if g['group']=='prompt_ordered_answers_key' and isinstance(g['literal'],str):
+   c=cand[e['id']]['proposedCard'];old=g['literal'];obj=json.loads(old);assert obj=={'prompt':c['prompt'],'answers':[v['text'] for v in c['answers']],'correctIndex':c['correctIndex']} and m.sha(obj)==g['literalSHA256'];g['literal']=obj;g['originalSerializedLiteral']=old;dec.append(e['id'])
+catalog={}
+for t in {e['topicId'] for e in p['actualCurrentPeers']}:catalog.update({q['id']:q for q in rd(C/f'src/content/topics/{t}.json')['questions']})
+for e in p['actualCurrentPeers']:assert e['card']==catalog[e['id']] and m.sha(e['card'])==e['sha256']
+for name,j in [('candidate.json',a),('sourceproof.json',sp),('peer-snapshot.json',p)]:wr(B/name,j)
+wr(B/'normalization-manifest.json',{'originalAuthor':str(A.relative_to(C)),'onlyPeerHashAliasAdded':'sha256=existingcanonicalSHA256','onlyExactKeyJSONDecodes':dec,'sourceGroundsAndJudgmentsUnchanged':True,'historicalReaderArrays':'SOURCEcopiedearlierreadersnapshotasdata; sourcecycle1ProposedCards/cycle1BilateralMAINComparisons/cycle1ProposedPairComparisons andbooks21to30Refresh arelatestSOURCE, oldall11arrays arehistoricalandNOTlatestproposals.','qualityCredit':0})
+same={'actualCurrentPeers':[e for e in p['actualCurrentPeers'] if e['topicId']=='books-publishing']};r=m.apply(B,'01a13fc7-e37f-7822-9f37-2f69122dc2fe',[12,15,17,18],None,None,None,qualifyOnly=True,peerSnapshot=same);assert len(r['applied'])==4
+ip=D/'source-author-git-status-incident-01a13fc7.json';idx=pathlib.Path(subprocess.check_output(['git','-C',str(C),'rev-parse','--git-path','index']).decode().strip());dig=hashlib.sha256(idx.read_bytes()).hexdigest();wr(ip,{'author':'01a13fc7-e37f-7822-9f37-2f69122dc2fe','reported':'AuthorinitiallycalledgitstatusdespiteassignmentNoGit; reportednootherGitcallsorindex/stagingmutations.','rootObservedCodeSharedIndexSHA256':dig,'knownBeforeSHA256':'90d6ec0a5a629e7a0dbb9e77921ccf15af2be7cee62a1c0e3269e8f8105da78c','byteDriftObserved':dig!='90d6ec0a5a629e7a0dbb9e77921ccf15af2be7cee62a1c0e3269e8f8105da78c','rootAction':'Noindexreset/restoration; preserveallforeignstaging, onlyprivateindexsaves. RoleNoGitreiterated. Noqualitycredit.'})
+s=importlib.util.spec_from_file_location('h',P/'evidence/question-revision-process-v2/private-save-helper-01a13cb1.py');h=importlib.util.module_from_spec(s);s.loader.exec_module(h);files=[q for q in A.rglob('*') if q.is_file()]+[q for q in B.rglob('*') if q.is_file()]+[ip,pathlib.Path(__file__)];print('SOURCE4freeze',h.save(C,'refs/heads/codex/question-quality-wave-6',[str(q.relative_to(C)) for q in files],'Preserve qualifiedSOURCEsolecycle1 booksFIX4 and peerhashalias proof',m.raw(C/h.git(C,'rev-parse','--git-path','index'))))
+m.apply(B,'01a13fc7-e37f-7822-9f37-2f69122dc2fe',[12,15,17,18],D/'apply-books-fix4-cycle1.json',D/'qa-books-fix4-cycle1.json',pathlib.Path(__file__),peerSnapshot=same,concerns=['FreshFINAL4 aftersolecycle1; prooftranslation/grammar12, ownextra15, independentnewMAIN17pagevolumepluspricequalification, positiveonlycoil18. Eachfull6/4 andreallevel/source/peer required, noinheritSOURCEPASS.','Books21–26/28–30CURRENT9readbySOURCEandcurrentpeerbindingsupdated. ActiveINITIAL9readerwillneedonlychangedpeer4 refresh andnewQA19 snapshot; target9literalsunchanged.','Canonicalwrongnotefactpoolallowed. Historicalcopiedreaderarrays retained asdata, latestSOURCEcycle1 arrays distinct.'])
