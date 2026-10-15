@@ -1,4 +1,5 @@
-import { useLayoutEffect, useRef } from "react";
+import { desktop } from "../desktop";
+import { useLayoutEffect, useRef, useState } from "react";
 
 const version = document.querySelector<HTMLMetaElement>('meta[name="mindbattle:version"]')?.content.split("+")[0] || "Разработка";
 const publication = document.querySelector<HTMLMetaElement>('meta[name="mindbattle:published-at"]')?.content;
@@ -9,6 +10,8 @@ const publicationLabel = publishedAt ? new Intl.DateTimeFormat("ru-RU", {
 
 export function AppFooter() {
   const ref = useRef<HTMLElement>(null);
+  const [shell, setShell] = useState<string>();
+  useLayoutEffect(() => { void desktop?.status().then(info => setShell(`Оболочка ${info.shellVersion} · ${info.platform ?? "desktop"}/${info.architecture ?? ""} · ${info.channel ?? "stable"}`)).catch(() => {}); }, []);
   useLayoutEffect(() => {
     const footer = ref.current;
     if (!footer) return;
@@ -25,7 +28,8 @@ export function AppFooter() {
     };
   }, []);
   return <footer ref={ref} className="app-release-footer" aria-label="Версия приложения">
-    <span>Версия {version}</span>
+    <span>{desktop ? "Контент" : "Версия"} {version}</span>
+    {shell && <span>{shell}</span>}
     {publishedAt ? <span>Опубликована <time dateTime={publishedAt.toISOString()}>{publicationLabel}</time></span> : <span>Ещё не опубликована</span>}
   </footer>;
 }

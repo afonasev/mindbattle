@@ -49,25 +49,27 @@ type Envelope struct {
 	Signature string `json:"signature"`
 }
 type Plan struct {
-	Target      string `json:"target"`
-	Candidate   string `json:"candidate"`
-	Backup      string `json:"backup"`
-	Root        string `json:"root"`
-	Manifest    string `json:"manifest"`
-	Journal     string `json:"journal"`
-	ACK         string `json:"ack"`
-	Started     string `json:"started"`
-	Token       string `json:"token"`
-	Parent      int    `json:"parent"`
-	UserData    string `json:"userData"`
-	LaunchMuted bool   `json:"launchMuted"`
-	Timeout     int    `json:"timeout"`
+	Target      string   `json:"target"`
+	Candidate   string   `json:"candidate"`
+	Backup      string   `json:"backup"`
+	Root        string   `json:"root"`
+	Manifest    string   `json:"manifest"`
+	Journal     string   `json:"journal"`
+	ACK         string   `json:"ack"`
+	Started     string   `json:"started"`
+	Token       string   `json:"token"`
+	Parent      int      `json:"parent"`
+	UserData    string   `json:"userData"`
+	LaunchMuted bool     `json:"launchMuted"`
+	LaunchArgs  []string `json:"launchArgs"`
+	Timeout     int      `json:"timeout"`
 }
 
 func appLaunchArgs(p Plan) []string {
-	args := []string{"--user-data-dir=" + p.UserData}
+	args := append([]string{}, p.LaunchArgs...)
+	args = append(args, "--user-data-dir="+p.UserData)
 	if p.LaunchMuted {
-		args = append(args, "--muted")
+		args = append(args, "-muted")
 	}
 	return args
 }
@@ -238,7 +240,7 @@ func validatePlan(p Plan) error {
 			return errors.New("noncanonical transaction path")
 		}
 	}
-	if p.Parent < 1 || p.Timeout < 5 || p.Timeout > 120 || filepath.Dir(p.Candidate) != filepath.Dir(p.Target) || p.Candidate != p.Target+".candidate-"+p.Token || p.Backup != p.Target+".backup-"+p.Token {
+	if p.Parent < 1 || p.Timeout < 5 || p.Timeout > 120 || (p.Candidate != filepath.Join(p.Root, "candidate") && p.Candidate != p.Target+".candidate-"+p.Token) || p.Backup != p.Target+".backup-"+p.Token {
 		return errors.New("invalid target transaction")
 	}
 	if !within(p.UserData, p.Root) || !within(p.Root, p.Manifest) || !within(p.Root, p.Journal) || !within(p.Root, p.ACK) || !within(p.Root, p.Started) {
@@ -304,7 +306,7 @@ func run(p Plan, m Manifest) error {
 	if e := waitParent(p.Parent, 30*time.Second); e != nil {
 		return e
 	}
-	if e := os.Rename(p.Target, p.Backup); e != nil {
+	if e := replaceInstallation(p, m, false); e != nil {
 		return e
 	}
 	rollback := func(cause error, child *os.Process) error {
@@ -312,15 +314,7 @@ func run(p Plan, m Manifest) error {
 			stopChild(child)
 			waitGone(child, 5*time.Second)
 		}
-		failed := p.Candidate + ".failed"
-		_ = os.RemoveAll(failed)
-		if _, e := os.Stat(p.Target); e == nil {
-			if e = os.Rename(p.Target, failed); e != nil {
-				_ = save("recovery-required", e)
-				return e
-			}
-		}
-		if e := os.Rename(p.Backup, p.Target); e != nil {
+		if e := replaceInstallation(p, m, true); e != nil {
 			_ = save("recovery-required", e)
 			return e
 		}
@@ -338,9 +332,7 @@ func run(p Plan, m Manifest) error {
 	if e := save("old-moved", nil); e != nil {
 		return rollback(e, nil)
 	}
-	if e := os.Rename(p.Candidate, p.Target); e != nil {
-		return rollback(e, nil)
-	}
+
 	if e := save("new-moved", nil); e != nil {
 		return rollback(e, nil)
 	}
@@ -368,6 +360,11 @@ func run(p Plan, m Manifest) error {
 	return rollback(errors.New("new shell did not acknowledge startup"), cmd.Process)
 }
 func main() {
+	filesOnly := ""
+	if len(os.Args) == 4 && (os.Args[1] == "--files-only=swap" || os.Args[1] == "--files-only=rollback") {
+		filesOnly = strings.TrimPrefix(os.Args[1], "--files-only=")
+		os.Args = append([]string{os.Args[0]}, os.Args[2:]...)
+	}
 	if len(os.Args) != 3 {
 		fmt.Fprintln(os.Stderr, "expected transaction file and hash")
 		os.Exit(2)
@@ -396,10 +393,14 @@ func main() {
 		}
 	}
 	if e == nil {
-		e = run(p, m)
+		if filesOnly != "" {
+			e = swapFiles(p, m, filesOnly == "rollback")
+		} else {
+			e = run(p, m)
+		}
 	}
 	if e != nil {
-		if validPlan {
+		if validPlan && filesOnly == "" {
 			var j Journal
 			b, _ := os.ReadFile(p.Journal)
 			_ = json.Unmarshal(b, &j)

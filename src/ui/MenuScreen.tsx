@@ -1,9 +1,10 @@
+import { useMenuNavigation } from "./menuNavigation";
 import { MatchSetupFields } from "./MatchSetupFields";
 import { MenuAction, ScreenHeader, ScreenSurface } from "./menuUi";
 import { PresentationSettings } from "./PresentationSettings";
 import { DesktopQuit } from "./DesktopControls";
 import { MainMenuUpdate } from "./MainMenuUpdate";
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import type {
   AccessibilityPreferences,
   ControlSource,
@@ -69,6 +70,9 @@ export function MenuScreen({
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [classicSetupOpen, setClassicSetupOpen] = useState(false);
   const home = !settingsOpen && !classicSetupOpen;
+  const surface = useRef<HTMLElement>(null);
+  const goBack = useCallback(() => { setSettingsOpen(false); setClassicSetupOpen(false); }, []);
+  useMenuNavigation(surface, settingsOpen ? "settings" : classicSetupOpen ? "classic" : "home", home ? undefined : goBack);
   const activeTeams = TEAM_IDS.slice(0, settings.teamCount);
   const valid = assignmentsAreCompleteAndUnique(activeTeams, settings.assignments);
   const updateTeamCount = (teamCount: 2 | 3 | 4) => {
@@ -107,11 +111,11 @@ export function MenuScreen({
   };
 
   return (
-    <ScreenSurface className={`menu-shell ${home ? "menu-home" : "menu-subpage"}`}>
+    <ScreenSurface menuRef={surface} menuSurface className={`menu-shell ${home ? "menu-home" : "menu-subpage"}`}>
       {home && <div className="menu-scenery" aria-hidden="true"><div className="arena-orbit"><div className="arena-core" /></div><div className="arena-horizon" /></div>}
       <ScreenHeader hero={home} subtitle={home ? "Главное меню" : settingsOpen ? "Настройки" : "На одном устройстве"} back={settingsOpen ? () => setSettingsOpen(false) : classicSetupOpen ? () => setClassicSetupOpen(false) : undefined} />
 
-      {home && (
+      {home && (<div className="menu-home-content menu-scroll">
       <section className="menu-mode-stage" aria-label="Выбор режима">
         <div className="menu-intro"><span className="eyebrow">Интеллектуальная битва</span><p>Все решит эрудиция</p></div>
         <div className="menu-actions main-menu-actions">
@@ -124,13 +128,12 @@ export function MenuScreen({
         </div>
         {error && <p className="menu-error" role="alert">{error}</p>}
       </section>
-      )}
-      {home && <div className="menu-utilities">
+      <div className="menu-utilities">
         <MenuAction className="menu-records-action" arrow caption="Лучшие результаты одиночной игры" onClick={viewRecords}>Рекорды</MenuAction>
         <MenuAction arrow onClick={() => setSettingsOpen(true)}>Настройки</MenuAction>
         <MainMenuUpdate />
         <DesktopQuit />
-      </div>}
+      </div></div>)}
 
       {classicSetupOpen && (
       <section className="setup-stage mobile-classic-setup" aria-labelledby="setup-title">

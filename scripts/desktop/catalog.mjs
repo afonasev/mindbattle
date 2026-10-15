@@ -5,7 +5,7 @@ const config = JSON.parse(await readFile("desktop/config.json", "utf8"));
 const files = await readdir("desktop-installers");
 const choices = {
   mac: `Mindbattle-${config.shellVersion}-mac-universal.dmg`,
-  windows: `Mindbattle-${config.shellVersion}.exe`,
+  windows: `Mindbattle-${config.shellVersion}-win-x64.exe`,
 };
 const root = "desktop-release/installers";
 await rm(root, { recursive: true, force: true });

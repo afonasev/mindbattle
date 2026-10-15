@@ -65,7 +65,7 @@ The maintainer deploys with `make deploy` to `mindbattle.afonasev.tech` using a 
 
 ### Тихий запуск
 
-Для браузерной игры откройте [https://mindbattle.afonasev.tech/?muted=1](https://mindbattle.afonasev.tech/?muted=1). Для Electron из исходников запустите `npm run desktop:start -- --muted`. Флаг действует всю сессию, включая переходы между режимами и перезапуск после обновления; он не меняет сохранённые настройки звука.
+Для браузерной игры откройте [https://mindbattle.afonasev.tech/?muted=1](https://mindbattle.afonasev.tech/?muted=1). Для Electron из исходников запустите `npm run desktop:start -- -muted`. Флаг действует всю сессию, включая переходы между режимами и перезапуск после обновления; он не меняет сохранённые настройки звука.
 
 For website publication, GitHub Releases, and desktop update channels, follow [docs/desktop/RELEASE.md](docs/desktop/RELEASE.md). Installers are served from GitHub; the VPS keeps download metadata and signed update channels.
 
@@ -74,3 +74,5 @@ For website publication, GitHub Releases, and desktop update channels, follow [d
 [MIT](LICENSE).
 
 Выбирайте локальный gate по [матрице QA](.agents/references/qa-scope.md): влияние на контракты, а не имя файла. `qa` сохраняет точную revision, counts и время в отдельной evidence-папке; для durable evidence добавьте `-- --evidence /absolute/path`. Физические телефоны/gamepad и явная ручная приёмка остаются отдельными.
+
+Shared menu, settings, installer and update requirements are pinned in [template integration](docs/template-alignment/CONNECTION.md), with [requirement coverage](docs/template-alignment/COVERAGE.md). Desktop shell 1.0.6 and bridge-2 content are prepared in source; platform acceptance and publication are separate steps.

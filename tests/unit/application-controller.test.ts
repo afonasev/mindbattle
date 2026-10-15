@@ -351,15 +351,15 @@ describe("GameController", () => {
     const controller = makeController(storage);
     controller.start(CONFIG);
     const snapshot = loadPersistedData(storage, makeCatalog().revision).lastMatch;
-    expect(controller.updatePreferences({ muted: true, textSize: "large" })).toMatchObject({
-      muted: true,
+    expect(controller.updatePreferences({ masterVolume: 0, textSize: "large" })).toMatchObject({
+      masterVolume: 0, muted: false,
       textSize: "large"
     });
     expect(loadPersistedData(storage, makeCatalog().revision).lastMatch).toEqual(snapshot);
     expect(() => controller.updatePreferences({ musicVolume: 2 })).toThrow(RangeError);
 
     const reloaded = makeController(storage, new FakeClock(), new FakeSeeds(["unused"]));
-    expect(reloaded.preferences).toMatchObject({ muted: true, textSize: "large" });
+    expect(reloaded.preferences).toMatchObject({ masterVolume: 0, muted: false, textSize: "large" });
   });
 });
 

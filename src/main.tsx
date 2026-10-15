@@ -1,3 +1,4 @@
+import { FpsCounter, GamepadKeyboard } from "./ui/MenuUtilities";
 import { browserFeedback } from './feedback/outbox';
 import { desktop, type DesktopUpdateStatus } from "./desktop";
 import { initializeStatistics } from './statistics/control';
@@ -51,7 +52,7 @@ export function updateGame(isSafe: () => boolean, onApplying: () => void) {
   return runManualUpdate({ isSafe, onApplying, apply: applyPwaUpdate, check: async () => {
     if (updateReady) return true;
     if (desktop) {
-      if (desktop.checkUpdate) return (await desktop.checkUpdate()).ready;
+
       if ((await desktop.status()).ready) return true;
       throw new Error("В этой версии приложения обновления проверяются автоматически. Попробуйте ещё раз чуть позже.");
     }
@@ -85,13 +86,13 @@ function RoutedApp() {
     window.addEventListener("popstate", syncPath);
     return () => window.removeEventListener("popstate", syncPath);
   }, []);
-  return <>{path === "/network" ? <NetworkApp /> : <App />}<AppFooter /></>;
+  return <>{path === "/network" ? <NetworkApp /> : <App />}<AppFooter /><FpsCounter /><GamepadKeyboard /></>;
 }
 function updateAvailable(ready: boolean, version?: string, publishedAt?: string) { updateReady = ready; updateVersion = ready ? version : undefined; updatePublishedAt = ready ? publishedAt : undefined; updateListeners.forEach(listener => listener(ready, updateVersion, updatePublishedAt)); }
 if (desktop) {
   applyUpdate = async () => { if (!await desktop!.applyUpdate()) throw new Error("Update not applied"); };
   desktop.onUpdate((ready, version, publishedAt) => { desktopStatusRevision++; updateAvailable(ready, version, publishedAt); });
-  window.addEventListener('online', () => { void desktop?.checkUpdate?.().catch(() => {}); });
+
   desktop.onUpdateStatus?.(desktopStatusChanged);
   const revision = desktopStatusRevision;
   void desktop.status().then(state => {

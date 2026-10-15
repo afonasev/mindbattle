@@ -5,5 +5,5 @@ export function gameLaunchUrl(origin, muted = false) {
 }
 
 export function isMutedLaunch(argv = process.argv) {
-    return argv.includes("--muted");
+    return argv.includes("-muted") || argv.includes("--muted");
 }

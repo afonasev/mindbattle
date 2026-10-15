@@ -1,3 +1,5 @@
+import { useRef } from "react";
+import { useMenuNavigation } from "./menuNavigation";
 import { MenuAction, ScreenHeader, ScreenSurface, SessionMenu } from "./menuUi";
 import type { Question } from "../content";
 import type { SoloCommand, SoloState } from "../domain/solo";
@@ -49,8 +51,10 @@ export function SoloRecordsScreen({ records, exit }: {
   return <SoloFrame onBack={exit}><section className="winner-stage solo-results" aria-labelledby="solo-records-title"><div className="stage-label stage-label--bonus">Соло-забег</div><h2 id="solo-records-title">Рекорды</h2>{records.length > 0 ? <ol>{records.slice(0, 10).map((record, index) => <li key={record.id}><span className="solo-record-rank">{index + 1}</span><strong>{record.name}</strong><b>{record.score}</b></li>)}</ol> : <p className="solo-rank">Пока нет сохранённых результатов.</p>}</section></SoloFrame>;
 }
 
-function SoloFrame({ children, onMenu, onBack, onContinue }: { readonly children: React.ReactNode; readonly onMenu?: () => void; readonly onBack?: () => void; readonly onContinue?: () => void }) {
-  return <ScreenSurface className="game-shell solo-shell" onClick={onContinue}><ScreenHeader subtitle="Одиночная игра" menu={onMenu} back={onBack} />{children}</ScreenSurface>;
+function SoloFrame({ children, onMenu, onBack, onContinue, menuSurface = false }: { readonly children: React.ReactNode; readonly onMenu?: () => void; readonly onBack?: () => void; readonly onContinue?: () => void; readonly menuSurface?: boolean }) {
+  const surface = useRef<HTMLElement>(null);
+  useMenuNavigation(surface, "solo-menu", onBack);
+  return <ScreenSurface menuRef={onBack || menuSurface ? surface : undefined} menuSurface={!!onBack || menuSurface} className="game-shell solo-shell" onClick={onContinue}><ScreenHeader subtitle="Одиночная игра" menu={onMenu} back={onBack} />{children}</ScreenSurface>;
 }
 
 function SoloQuestionBoard({ phase, question, questionNumber, titleById, inputKind, command }: { readonly phase: Extract<SoloState["phase"], { kind: "answering" | "reveal" }>; readonly question: Question; readonly questionNumber: number; readonly titleById: Readonly<Record<string, string>>; readonly inputKind: SoloInputKind; readonly command: (command: SoloCommand) => void }) {
@@ -82,5 +86,5 @@ export function SoloFeedbackScreen({ value, choose, toggleReason, setNote, submi
 
 function NameEntry({ score, finish, skip }: { readonly score: number; readonly finish: (name: string) => void; readonly skip: () => void }) {
   let input: HTMLInputElement | null = null;
-  return <SoloFrame onMenu={skip}><section className="winner-stage solo-results"><div className="stage-label">Забег завершён</div><h2>Результат: {score}</h2><form className="solo-name-form" onSubmit={(event) => { event.preventDefault(); finish(input?.value ?? ""); }}><label>Ваше имя<input autoFocus maxLength={32} ref={(element) => { input = element; }} /></label><MenuAction variant="primary" type="submit">Сохранить результат</MenuAction><MenuAction onClick={skip}>Пропустить</MenuAction></form></section></SoloFrame>;
+  return <SoloFrame menuSurface onMenu={skip}><section className="winner-stage solo-results"><div className="stage-label">Забег завершён</div><h2>Результат: {score}</h2><form className="solo-name-form" onSubmit={(event) => { event.preventDefault(); finish(input?.value ?? ""); }}><label>Ваше имя<input autoFocus maxLength={32} ref={(element) => { input = element; }} /></label><MenuAction variant="primary" type="submit">Сохранить результат</MenuAction><MenuAction onClick={skip}>Пропустить</MenuAction></form></section></SoloFrame>;
 }

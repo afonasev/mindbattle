@@ -1,6 +1,7 @@
 import { ResultObserver, type ResultSink } from '../statistics/events';
 import {
   loadPersistedData,
+  savePreferencesOnly,
   resetQuestionHistory as resetStoredQuestionHistory,
   savePersistedData,
   updatePreferences as replacePreferences,
@@ -283,18 +284,22 @@ export class GameController {
   }
 
   resetQuestionHistory(): void {
-    this.persisted = resetStoredQuestionHistory(this.persisted);
+    const next = resetStoredQuestionHistory(this.persisted);
+    this.saveSucceeded = savePersistedData(this.storage, next);
+    if (!this.saveSucceeded) throw new Error("Не удалось сохранить очищенную историю. Попробуйте снова.");
+    this.persisted = next;
     this.context = new CatalogDomainContext(this.catalog, EMPTY_QUESTION_HISTORY);
-    this.saveSucceeded = savePersistedData(this.storage, this.persisted);
   }
 
   updatePreferences(patch: Partial<AccessibilityPreferences>): AccessibilityPreferences {
     const preferences = { ...this.persisted.preferences, ...patch };
-    if (![preferences.musicVolume, preferences.effectsVolume].every((volume) => Number.isFinite(volume) && volume >= 0 && volume <= 1)) {
+    if (![preferences.masterVolume ?? 1, preferences.musicVolume, preferences.effectsVolume].every((volume) => Number.isFinite(volume) && volume >= 0 && volume <= 1)) {
       throw new RangeError("Volume must be between 0 and 1");
     }
-    this.persisted = replacePreferences(this.persisted, preferences);
-    this.saveSucceeded = savePersistedData(this.storage, this.persisted);
+    const next = replacePreferences(this.persisted, preferences);
+    this.saveSucceeded = savePreferencesOnly(this.storage, preferences, next);
+    if (!this.saveSucceeded) throw new Error("Не удалось сохранить настройки. Освободите место и попробуйте снова.");
+    this.persisted = next;
     return preferences;
   }
 

@@ -1,3 +1,5 @@
+import { desktop } from "../desktop";
+import { useMenuNavigation } from "./menuNavigation";
 import { registerStatisticsRoom } from '../statistics/control';
 import { statisticsEnabled, readStatisticsPreference } from '../statistics/preference';
 import { NetworkEntry } from "./NetworkEntry";
@@ -34,6 +36,7 @@ import {
 } from "../adapters/audio";
 import {
   DEFAULT_PREFERENCES,
+  emptyPersistedData,
   decodePreferences,
   STORAGE_KEY,
 } from "../adapters/storage";
@@ -103,8 +106,10 @@ export function NetworkApp() {
   const [terminal, setTerminal] = useState(false);
   const [busy, setBusy] = useState(false);
   const [preferences, setPreferences] = useState(initialPreferences);
+  useEffect(() => { const update = (event: StorageEvent) => { if (event.key === STORAGE_KEY) setPreferences(initialPreferences()); }; window.addEventListener('storage',update); return () => window.removeEventListener('storage',update); }, []);
   const [pauseSettingsOpen, setPauseSettingsOpen] = useState(false);
   const [localMenuOpen, setLocalMenuOpen] = useState(false);
+  const menuRoot = useRef<HTMLElement>(null);
   const muted =
     new URLSearchParams(location.search).get("muted") === "1" ||
     preferences.muted;
@@ -118,26 +123,25 @@ export function NetworkApp() {
   const enableAudio = () => {
     if (!mobile && !audio.current)
       audio.current = sharedAudioController({
+        masterVolume: preferences.masterVolume,
         musicVolume: preferences.musicVolume,
         effectsVolume: preferences.effectsVolume,
         muted,
       });
   };
   useEffect(() => {
-    audio.current?.update({ musicVolume: preferences.musicVolume, effectsVolume: preferences.effectsVolume, muted });
+    audio.current?.update({ masterVolume: preferences.masterVolume, musicVolume: preferences.musicVolume, effectsVolume: preferences.effectsVolume, muted });
     if (muted) audio.current?.stopMusic();
-  }, [muted, preferences.musicVolume, preferences.effectsVolume]);
+  }, [muted, preferences.masterVolume, preferences.musicVolume, preferences.effectsVolume]);
   const savePreferences = (next: typeof preferences) => {
-    setPreferences(next);
     try {
-      localStorage.setItem("mindbattle-network-preferences-v1", JSON.stringify(next));
-      const persisted = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
-      if (persisted && typeof persisted === "object" && !Array.isArray(persisted)) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...persisted, preferences: next }));
-      }
+      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
+      const persisted = stored && typeof stored === "object" && !Array.isArray(stored) ? stored : emptyPersistedData("");
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...persisted, preferences: { ...next, muted: (next.masterVolume ?? 1) === 0 } }));
     } catch {
-      // Storage is optional presentation state.
+      throw new Error("Не удалось сохранить настройки. Освободите место и попробуйте снова.");
     }
+    setPreferences(next);
   };
   useEffect(() => {
     if (!credential) return;
@@ -227,6 +231,7 @@ export function NetworkApp() {
   async function enter(data: { title: string; password: string } | { code: string; name: string; password: string }, create: boolean) {
     setBusy(true); setError(""); enableAudio();
     try {
+      await desktop?.safeToUpdate(false);
       const permission = readStatisticsPreference(localStorage);
       const next = await networkRequest<Credential>(create ? "create" : "join", create ? { ...data, collectStatistics: statisticsEnabled(), statisticsRevision: permission.revision ?? 0, statisticsGeneration: permission.generation ?? 0 } : data);
       saveCredential(next);
@@ -241,6 +246,7 @@ export function NetworkApp() {
     setError("");
     enableAudio();
     try {
+      if (action.type === "start" || action.type === "replay") await desktop?.safeToUpdate(false);
       await connection.current.command(snapshot, action);
       return true;
     } catch (e) {
@@ -348,8 +354,11 @@ export function NetworkApp() {
       ))}
     </div>
   ) : null;
+  useMenuNavigation(menuRoot, !credential ? "entry" : phase === "lobby" ? "lobby" : "game", undefined);
   return (
     <ScreenSurface
+      menuRef={!credential || phase === "lobby" || terminal ? menuRoot : undefined}
+      menuSurface={!credential || phase === "lobby" || terminal}
       className={`game-shell network-app ${!credential || phase === "lobby" ? "network-discovery" : ""} ${mobile ? "network-mobile" : "network-display"} ${preferences.textSize === "large" ? "network-text-large" : ""} ${preferences.highContrast ? "network-high-contrast" : ""} ${preferences.reducedMotion ? "reduced-motion" : ""}`}
       onClick={
         canSkipConfirmation && !localMenuOpen && !pauseSettingsOpen
@@ -378,7 +387,7 @@ export function NetworkApp() {
           <MenuAction onClick={reset}>Вернуться к подключению</MenuAction>
         </section>
       ) : !credential ? (
-        <NetworkEntry submissionError={error} clearError={() => setError("")} mobile={mobile} busy={busy} enter={enter} restore={next => { enableAudio(); setCredential(next); }} largeText={preferences.textSize === "large"}/>
+        <NetworkEntry submissionError={error} clearError={() => setError("")} mobile={mobile} busy={busy} enter={enter} restore={async next => { await desktop?.safeToUpdate(false); enableAudio(); setCredential(next); }} largeText={preferences.textSize === "large"}/>
       ) : !snapshot ? (
         <section className="network-entry">
           <p>Ожидаем состояние комнаты…</p>
@@ -860,7 +869,10 @@ export function NetworkApp() {
       )}
       {complaint && snapshot?.complaintContext?.eventId === complaint.eventId && snapshot.role === 'player' && <ComplaintDialog context={complaint} close={() => { setComplaint(null); setLocalMenuOpen(false); }} />}
       {pauseSettingsOpen && (
-        <SettingsDialog preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} />
+        <SettingsDialog preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} session={{resetHistory: () => {
+          const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+          if (raw && typeof raw === 'object') localStorage.setItem(STORAGE_KEY, JSON.stringify({...raw,history:emptyPersistedData("").history}));
+        }}} />
       )}
     </ScreenSurface>
   );

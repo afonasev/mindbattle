@@ -102,8 +102,8 @@ for (const legacy of [false, true]) {
         applyUpdate: async () => false, safeToUpdate: () => {}, ready: async () => {}, quit: async () => {},
       };
     }, legacy);
-    await page.goto("/");
-    const update = page.getByRole("button", { name: "Обновить", exact: true });
+    await page.goto("/?muted=1");
+    const update = page.getByRole("button", { name: "Перезапустить", exact: true });
     await expect(page.getByRole("button", { name: "Одиночная игра", exact: true })).toBeVisible();
     await expect(update).toBeHidden();
     await page.evaluate(() => (window as any).notifyUpdate(true, "1.2.3+abcdef12"));
@@ -111,7 +111,7 @@ for (const legacy of [false, true]) {
     await expect(update).toContainText("Версия 1.2.3");
     await expect(update).not.toContainText("abcdef12");
     await update.click();
-    await expect(page.getByRole("alert")).toContainText("Не удалось обновить");
+    await expect(page.getByRole("alert")).toContainText("Не удалось выполнить обновление");
     await expect(update).toBeEnabled();
     await page.evaluate(() => (window as any).notifyUpdate(false));
     await expect(update).toBeHidden();
@@ -139,20 +139,23 @@ test('desktop checks automatically, hides manual checking and highlights the ver
       safeToUpdate: () => {}, ready: async () => {}, quit: async () => {},
     };
   });
-  await page.goto('/');
-  const update = page.getByRole('button', { name: 'Обновить', exact: true });
+  await page.goto('/?muted=1');
+  const update = page.getByRole('button', { name: 'Перезапустить', exact: true });
   await expect(update).toBeHidden();
   await expect(page.getByRole('status')).toContainText('Проверяем обновления');
   await page.evaluate(() => (window as any).notifyStatus({ phase: 'downloading', version: '0.2.0+abcdef12', completed: 2, total: 4 }));
   await expect(update).toBeHidden();
-  await expect(page.getByRole('status')).toContainText('50% файлов');
+  await expect(page.getByRole('status')).toContainText('50%');
   await page.evaluate(() => (window as any).notifyStatus({ phase: 'error', message: 'offline' }));
   await expect(page.getByRole('button', { name: 'Повторить проверку' })).toBeHidden();
-  await expect(page.getByRole('status')).toContainText('Повторим автоматически');
+  await expect(page.getByRole('status')).toContainText('Следующая проверка — при запуске игры.');
   await page.evaluate(() => {
     localStorage.setItem('update-preserved', 'saved');
     window.dispatchEvent(new Event('online'));
   });
+  expect(await page.evaluate(() => (window as any).updateCalls)).toBe(0);
+  await expect(update).toBeHidden();
+  await page.evaluate(() => { (window as any).notifyUpdate(true,'0.2.0+abcdef12','2026-10-10T07:15:00.000Z'); (window as any).notifyStatus({phase:'ready',version:'0.2.0+abcdef12'}); });
   await expect(update).toBeVisible();
   await expect(update).toContainText('Версия 0.2.0');
   await expect(update).not.toContainText('abcdef12');
@@ -169,11 +172,11 @@ test('desktop checks automatically, hides manual checking and highlights the ver
   expect(await update.evaluate(element => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
   await expect(update.locator('time')).toBeVisible();
   await page.screenshot({ path: info.outputPath('automatic-update-mobile.png'), fullPage: true });
-  expect(await page.evaluate(() => (window as any).updateCalls)).toBe(1);
+  expect(await page.evaluate(() => (window as any).updateCalls)).toBe(0);
   expect(await page.evaluate(() => (window as any).applyCalls)).toBe(0);
   expect(await page.evaluate(() => localStorage.getItem('update-preserved'))).toBe('saved');
   await update.click();
-  await expect(page.getByRole('alert')).toContainText('Не удалось обновить');
+  await expect(page.getByRole('alert')).toContainText('Не удалось выполнить обновление');
   await expect(update).toBeEnabled();
 });
 
@@ -188,13 +191,13 @@ test(`desktop delayed startup ${rejected ? 'error' : 'snapshot'} cannot hide a n
       safeToUpdate: () => {}, ready: async () => {}, quit: async () => {},
     };
   }, rejected);
-  await page.goto('/');
+  await page.goto('/?muted=1');
   await expect(page.getByRole('button', { name: 'Одиночная игра', exact: true })).toBeVisible();
   await page.evaluate(() => {
     (window as any).notifyUpdate(true, '1.0.5');
     (window as any).finishStatus({ ready: false, shellVersion: '1.0.4' });
   });
-  await expect(page.getByRole('button', { name: 'Обновить', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Перезапустить', exact: true })).toBeVisible();
   await expect(page.getByRole('alert')).toBeHidden();
 });
 }

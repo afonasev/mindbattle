@@ -18,7 +18,7 @@ test("local mode uses the same secondary action and opens classic setup", async 
 });
 
 test("persists presentation volume in the browser", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/?muted=1");
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
@@ -38,7 +38,7 @@ for (const width of [1280, 390]) {
     await page.getByRole("button", { name: "Рекорды", exact: true }).click();
     await page.getByRole("button", { name: "Назад", exact: true }).click();
     await page.getByRole("button", { name: width <= 760 ? "Подключиться к игре" : "Сетевая игра (2–12)", exact: true }).click();
-    await expect(page).toHaveURL(/\/network$/);
+    await expect(page).toHaveURL(/\/network\?muted=1$/);
     await page.getByRole("button", { name: "Назад", exact: true }).click();
     await page.getByRole("button", { name: "Одиночная игра", exact: true }).click();
     await page.getByRole("button", { name: "Меню", exact: true }).click();
@@ -47,6 +47,7 @@ for (const width of [1280, 390]) {
     await page.getByLabel("Громкость музыки").fill("0.3");
     await page.keyboard.press("Escape");
     await expect(page.getByRole("dialog", { name: "Игра на паузе", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Настройки", exact: true })).toBeFocused();
     await page.screenshot({ path: testInfo.outputPath(`shared-pause-${width}.png`), fullPage: true });
     await page.getByRole("button", { name: "Продолжить", exact: true }).click();
     await expect(page.getByRole("heading", { name: "Выберите тему", exact: true })).toBeVisible();

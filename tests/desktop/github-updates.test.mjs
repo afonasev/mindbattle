@@ -36,7 +36,7 @@ for (const kind of ['content', 'shell']) {
     const bytes = Buffer.from('game data');
     const file = kind === 'content' ? 'index.html' : 'Contents/MacOS/Mindbattle';
     const payload = JSON.stringify({ format: 1, sequence: 2, version: '1.0.5', publishedAt: '2026-10-11T07:00:00.000Z', bridge: 1, shellMajor: 1,
-      product: 'tech.afonasev.mindbattle', platform: 'darwin-universal', helper: 1, entry: file, links: [],
+      product: 'tech.afonasev.mindbattle', platform: kind === 'content' ? 'web-content' : 'darwin-universal', helper: 1, entry: file, links: [],
       objectBaseUrl: releaseBase(kind, 2), files: [{ path: file, size: bytes.length, sha256: digest(bytes), mode: 0o755 }] });
     const envelope = { payload, signature: sign(null, Buffer.from(payload), privateKey).toString('base64') };
     const validate = env => kind === 'content' ? checkManifest(env, publicKey, '1.0.4') : shellManifest(env, publicKey, 'darwin-universal');
@@ -78,6 +78,8 @@ test('publication uploads and verifies before switching Pages, resumes safely an
   await writeFile(path.join(cwd, '.gitignore'), 'desktop-release/\n');
   await writeFile(path.join(cwd, 'desktop/config.json'), JSON.stringify({ shellVersion: '1.0.5', updateOrigin }));
   await writeFile(path.join(cwd, 'desktop/content-public.pem'), publicKey.export({ type: 'spki', format: 'pem' }));
+  await mkdir(path.join(cwd, 'docs/desktop/release-changes'), {recursive:true});
+  await writeFile(path.join(cwd,'docs/desktop/release-changes/fixture.json'),JSON.stringify({id:'fixture',changes:[{category:'fixed',ru:'Исправлено обновление игры.',en:'Fixed game updates.'}]}));
   git('add', '.'); git('commit', '-m', 'fixture'); git('remote', 'add', 'origin', remote); git('push', 'origin', 'main');
   let envelope; let bytes;
   const stage = async (sequence, body, publishedAt = '2026-10-11T07:00:00.000Z') => {

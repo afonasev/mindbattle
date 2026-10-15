@@ -75,18 +75,11 @@ test('publication date follows the verified pending release and shell apply prio
   assert.deepEqual(await pendingUpdateInfo(shell, content), { version: '0.2.0', publishedAt: '2026-10-10T07:15:00.000Z' });
 });
 
-test('startup and five-minute retries discover updates after failure without a manual action', async () => {
-  let tick; let stopped; let failures = 0; let attempts = 0;
-  const stop = startAutomaticUpdateChecks(async () => {
-    attempts++;
-    if (attempts === 1) throw Error('offline');
-  }, () => failures++, {
-    setInterval: (callback, delay) => { assert.equal(delay, 300_000); tick = callback; return 42; },
-    clearInterval: id => { stopped = id; },
+test('automatic startup performs exactly one attempt without timers or retry', async () => {
+  let attempts = 0, failures = 0;
+  const stop = startAutomaticUpdateChecks(async () => { attempts++; throw Error('offline'); }, () => failures++, {
+    setInterval: () => { throw Error('Periodic checks are forbidden'); }, clearInterval: () => {},
   });
   await new Promise(resolve => setImmediate(resolve));
-  assert.equal(attempts, 1); assert.equal(failures, 1);
-  tick(); await new Promise(resolve => setImmediate(resolve));
-  assert.equal(attempts, 2); assert.equal(failures, 1);
-  stop(); assert.equal(stopped, 42);
+  assert.equal(attempts, 1); assert.equal(failures, 1); stop();
 });

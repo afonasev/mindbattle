@@ -44,10 +44,13 @@ async function walk(dir, relative = "") {
 await walk("dist");
 const payload = JSON.stringify({
   format: 1,
+  product: "tech.afonasev.mindbattle",
+  channel: "stable",
+  platform: "web-content",
   sequence,
   version: publication.version,
   publishedAt: publication.publishedAt,
-  bridge: 1,
+  bridge: 2,
   shellMajor: Number(config.shellVersion.split(".")[0]),
   objectBaseUrl: releaseBase('content', sequence),
   files,

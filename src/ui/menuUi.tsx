@@ -1,14 +1,19 @@
-import { useEffect, useId, useRef, type ButtonHTMLAttributes, type HTMLAttributes, type ReactNode } from "react";
+import { menuDevice, useMenuNavigation } from "./menuNavigation";
+import { useEffect, useId, useRef, useState, useCallback, type ButtonHTMLAttributes, type HTMLAttributes, type ReactNode } from "react";
 
-export function ScreenSurface({ children, ...props }: HTMLAttributes<HTMLElement>) {
-  return <main {...props}>{children}</main>;
+export function ScreenSurface({ children, menuRef, menuSurface, ...props }: HTMLAttributes<HTMLElement> & { menuRef?: React.RefObject<HTMLElement | null>; menuSurface?: boolean }) {
+  return <main {...props} ref={menuRef} data-menu-surface={menuSurface ? "" : undefined}>{children}</main>;
 }
 
 export function MenuAction({ variant = "secondary", className = "", onClick, children, caption, arrow = false, ...props }: ButtonHTMLAttributes<HTMLButtonElement> & { readonly variant?: "primary" | "secondary"; readonly caption?: ReactNode; readonly arrow?: boolean }) {
   const id = useId();
+  const [input, setInput] = useState(menuDevice);
+  useEffect(() => { const update = () => setInput(menuDevice()); window.addEventListener("menu-device", update); return () => window.removeEventListener("menu-device", update); }, []);
+  const backAction = typeof children === "string" && /^(Назад|Закрыть|Отменить)$/.test(children);
   const describedBy = [props["aria-describedby"], caption ? `${id}-caption` : undefined].filter(Boolean).join(" ") || undefined;
   return <button {...props} aria-labelledby={props["aria-labelledby"] ?? (caption && !props["aria-label"] ? `${id}-label` : undefined)} aria-describedby={describedBy} type={props.type ?? "button"} className={`menu-action ${variant}-action ${caption || arrow ? "menu-action--detailed" : ""} ${className}`} onClick={(event) => { event.stopPropagation(); onClick?.(event); }}>
     <span className="menu-action-label" id={`${id}-label`}>{children}</span>
+    {input.kind === "pad" && <span className={`pad-action-hint ${backAction ? "pad-action-hint--back" : ""}`} aria-hidden="true">{backAction ? input.back : input.confirm}</span>}
     {caption && <span className="menu-action-caption" id={`${id}-caption`}>{caption}</span>}
     {arrow && <span className="menu-action-arrow" aria-hidden="true">→</span>}
   </button>;
@@ -33,55 +38,15 @@ export function ScreenHeader({ subtitle, back, menu, disabled = false, hero = fa
   </header>;
 }
 
-export function MenuDialog({ title, label = "Меню", children, back, wide = false, className = "" }: { readonly className?: string; readonly wide?: boolean; readonly title: string; readonly label?: string; readonly children: ReactNode; readonly back?: () => void }) {
+export function MenuDialog({ title, label = "Меню", children, back, wide = false, className = "", footer }: { readonly className?: string; readonly footer?: ReactNode; readonly wide?: boolean; readonly title: string; readonly label?: string; readonly children: ReactNode; readonly back?: () => void }) {
   const id = useId();
   const panel = useRef<HTMLElement>(null);
   const backRef = useRef(back);
   backRef.current = back;
-  useEffect(() => {
-    const previous = document.activeElement;
-    panel.current?.querySelector<HTMLElement>("button:not(:disabled), input, select")?.focus();
-    const move = (delta: number) => {
-      const items = [...(panel.current?.querySelectorAll<HTMLButtonElement>('button:not(:disabled)') ?? [])];
-      const index = items.indexOf(document.activeElement as HTMLButtonElement);
-      items[(index + delta + items.length) % items.length]?.focus();
-    };
-    let frame = 0;
-    const previousButtons = new Map<number, readonly boolean[]>();
-    const poll = () => {
-      for (const pad of (typeof navigator.getGamepads === 'function' ? navigator.getGamepads() : [])) {
-        if (!pad) continue;
-        const buttons = pad.buttons.map(button => button.pressed);
-        const previous = previousButtons.get(pad.index) ?? buttons;
-        previousButtons.set(pad.index, buttons);
-        const pressed = buttons.findIndex((down, index) => down && !previous[index]);
-        if (document.activeElement instanceof HTMLTextAreaElement || document.activeElement instanceof HTMLInputElement) continue;
-        if (pressed === 12 || pressed === 14) move(-1);
-        else if (pressed === 13 || pressed === 15) move(1);
-        else if (pressed === 0 && document.activeElement instanceof HTMLButtonElement && panel.current?.contains(document.activeElement)) document.activeElement.click();
-        else if (pressed === 1 || pressed === 9) backRef.current?.();
-      }
-      frame = requestAnimationFrame(poll);
-    };
-    frame = requestAnimationFrame(poll);
-    const keyboard = (event: KeyboardEvent) => {
-      if (event.repeat) return;
-      const text = event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement;
-      if (!text && ['ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'KeyW', 'KeyS'].includes(event.code)) {
-        event.preventDefault(); event.stopImmediatePropagation(); move(['ArrowUp', 'ArrowLeft', 'KeyW'].includes(event.code) ? -1 : 1);
-      }
-      if (event.code === "Escape") { event.preventDefault(); event.stopImmediatePropagation(); backRef.current?.(); }
-      if (event.code === "Tab") {
-        const items = [...(panel.current?.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href]') ?? [])];
-        const first = items[0], last = items.at(-1);
-        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
-        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
-      }
-    };
-    window.addEventListener("keydown", keyboard, true);
-    return () => { cancelAnimationFrame(frame); window.removeEventListener("keydown", keyboard, true); if (previous instanceof HTMLElement && previous.isConnected) previous.focus(); };
-  }, []);
-  return <div className="pause-backdrop" role="dialog" aria-modal="true" aria-labelledby={id} onClick={(event) => event.stopPropagation()}><section ref={panel} className={`pause-dialog session-menu ${wide ? "session-menu--wide" : ""} ${className}`}><div className="stage-label">{label}</div><h2 id={id}>{title}</h2>{children}</section></div>;
+  const goBack = useCallback(() => backRef.current?.(), []);
+  useMenuNavigation(panel, title, goBack);
+
+  return <div ref={panel as React.RefObject<HTMLDivElement>} className="pause-backdrop" data-menu-surface role="dialog" aria-modal="true" aria-labelledby={id} onClick={(event) => event.stopPropagation()}><section className={`pause-dialog session-menu ${wide ? "session-menu--wide" : ""} ${className}`}><div className="stage-label">{label}</div><h2 id={id}>{title}</h2><div className="menu-dialog-content" data-menu-scroll-area tabIndex={0} role="region" aria-label="Содержимое">{children}</div>{footer && <div className="menu-dialog-actions">{footer}</div>}</section></div>;
 }
 
 export function SessionMenu({ title = "Игра на паузе", children, resume, settings, complaint, restart, restartLabel = "Начать заново", exit, exitLabel = "Выйти в меню", back, disabled = false, resumeDisabled = false }: {

@@ -1,3 +1,5 @@
+import { decodePreferences, STORAGE_KEY } from "../adapters/storage";
+import { desktop } from "../desktop";
 import { statisticsEnabled, statisticsGeneration } from '../statistics/preference';
 import { useStatistics } from './useStatistics';
 import { ComplaintDialog } from './ComplaintDialog';
@@ -130,6 +132,13 @@ export function App() {
   const lobbyThemePlayedRef = useRef(false);
   const audioActivationRef = useRef(false);
   const audioRef = useRef(sharedAudioController(preferences));
+  useEffect(() => {
+    const update = (event: StorageEvent) => {
+      if (event.key !== STORAGE_KEY) return;
+      try { const next = decodePreferences(JSON.parse(event.newValue || "null")?.preferences); if (next) { setPreferences(next); audioRef.current.update(next); } } catch { /* Retain last valid preferences. */ }
+    };
+    window.addEventListener('storage', update); return () => window.removeEventListener('storage', update);
+  }, []);
 
 
   const sync = useCallback(
@@ -150,8 +159,9 @@ export function App() {
     [controller, sync]
   );
 
-  const start = useCallback(() => {
+  const start = useCallback(async () => {
     try {
+      await desktop?.safeToUpdate(false);
       assertFullCatalog();
       const teams = ["green", "blue", "yellow", "red"].slice(0, settings.teamCount) as TeamId[];
       controller.updateControlAssignments(settings.assignments);
@@ -174,8 +184,9 @@ export function App() {
     }
   }, [controller, settings, sync]);
 
-  const startSolo = useCallback(() => {
+  const startSolo = useCallback(async () => {
     try {
+      await desktop?.safeToUpdate(false);
       assertFullCatalog();
       setSoloRecordId(null);
       setSoloInput("pointer");
@@ -749,7 +760,7 @@ export function App() {
       setComplaint({ eventId: `feedback-v3:${solo.runId}:solo-${solo.slotIndex + 1}:${solo.phase.round.questionId}`, matchId: solo.runId, catalogRevision: solo.catalogRevision, questionId: solo.phase.round.questionId, assignedDifficulty: solo.phase.round.difficulty });
     } : undefined;
     if (complaint) return <div className={rootClass}><ComplaintDialog context={complaint} initial={solo.phase.kind === 'reveal' ? solo.phase.complaintDraft : undefined} close={() => { setComplaint(null); dispatchSolo({ type: 'resume' }); }} /></div>;
-    return <div className={rootClass}><ReleaseAction safe={canApplyPwaUpdate(false, solo.phase.kind)} />{pauseSettingsOpen ? <SettingsDialog preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} settings={() => setPauseSettingsOpen(true)} complaint={openComplaint} command={command => { setSoloInput('pointer'); dispatchSolo(command); }} finish={name => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}</div>;
+    return <div className={rootClass}><ReleaseAction safe={canApplyPwaUpdate(false, solo.phase.kind)} />{pauseSettingsOpen ? <SettingsDialog preferences={preferences} setPreferences={savePreferences} back={() => setPauseSettingsOpen(false)} session={{ resetHistory: () => controller.resetQuestionHistory() }} /> : <SoloScreen state={solo} question={question} titleById={TOPIC_TITLE_BY_ID} records={soloController.records} savedRecordId={soloRecordId} inputKind={soloInput} settings={() => setPauseSettingsOpen(true)} complaint={openComplaint} command={command => { setSoloInput('pointer'); dispatchSolo(command); }} finish={name => { const record = soloController.saveResult(name); if (record) setSoloRecordId(record.id); }} exit={() => setSolo(null)} />}</div>;
   }
 
   if (!match || !controller.view) {
@@ -773,12 +784,13 @@ export function App() {
           gamepads={gamepads}
           start={start}
           startSolo={startSolo}
-          enterNetwork={() => navigate("/network")}
-          restoreSolo={soloController.canRestore ? () => setSolo(soloController.restore()) : null}
+          enterNetwork={async () => { await desktop?.safeToUpdate(false); navigate("/network"); }}
+          restoreSolo={soloController.canRestore ? async () => { await desktop?.safeToUpdate(false); setSolo(soloController.restore()); } : null}
           restoreLabel={
             controller.savedMatchStatus === "in-progress" ? "Продолжить игру на одном устройстве" : null
           }
-          restore={() => {
+          restore={async () => {
+            await desktop?.safeToUpdate(false);
             const restored = controller.restoreLastMatch();
             if (restored) {
               setSettings((current) => ({
@@ -793,9 +805,7 @@ export function App() {
           }}
           viewRecords={() => setShowSoloRecords(true)}
           resetHistory={() => {
-            if (window.confirm("Сбросить историю вопросов? Последняя партия сохранится.")) {
-              controller.resetQuestionHistory();
-            }
+            controller.resetQuestionHistory();
           }}
           error={menuError}
         />}
@@ -820,7 +830,7 @@ export function App() {
       audioRef.current.update(saved);
       if (saved.muted) audioRef.current.stopMusic();
       setPreferences(saved);
-    }} back={() => setPauseSettingsOpen(false)} /></div>;
+    }} back={() => setPauseSettingsOpen(false)} session={{ resetHistory: () => controller.resetQuestionHistory() }} /></div>;
   }
 
   return (

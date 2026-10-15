@@ -36,7 +36,7 @@ describe("versioned persistence", () => {
       ...emptyPersistedData("r1"),
       preferences: { volume: 0.35, muted: true, textSize: "large", highContrast: false, reducedMotion: true }
     }), "r1").preferences).toEqual({
-      musicVolume: 0.35, effectsVolume: 0.35, muted: true,
+      masterVolume: 0, showFps: false, musicVolume: 0.35, effectsVolume: 0.35, muted: false,
       textSize: "large", highContrast: false, reducedMotion: true
     });
   });
@@ -52,7 +52,7 @@ describe("versioned persistence", () => {
       savedAt: "2026-09-01T10:00:00.000Z",
       state: { phase: "answering" }
     });
-    data = updatePreferences(data, { ...DEFAULT_PREFERENCES, muted: true });
+    data = updatePreferences(data, { ...DEFAULT_PREFERENCES, masterVolume: 0 });
     data = updateControls(data, [
       { teamId: "green", source: { kind: "keyboard", layout: "wasd" } },
       { teamId: "blue", source: { kind: "keyboard", layout: "arrows" } }

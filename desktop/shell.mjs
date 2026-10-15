@@ -1,3 +1,4 @@
+import os from "node:os";
 import { createHash, verify, randomBytes } from 'node:crypto';
 import { readFile as packagedReadFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
@@ -8,7 +9,7 @@ const { createReadStream } = fs;
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { digest, atomicJson, boundedBytes } from './content.mjs';
-import { objectBase, fetchUpdate, validPublishedAt } from './updateTransport.mjs';
+import { versionAtLeast, objectBase, fetchUpdate, validPublishedAt } from './updateTransport.mjs';
 export const shellPath = value => typeof value === 'string' && value.length > 0 && !/[\\:\x00\r\n\t]/.test(value) && !value.startsWith('/') && value.split('/').every(p => p && p !== '.' && p !== '..' && !/[. ]$/.test(p));
 export async function fileHash(file) { const h = createHash('sha256'); for await (const bytes of createReadStream(file))
     h.update(bytes); return h.digest('hex'); }
@@ -22,6 +23,8 @@ export function shellManifest(envelope, key, platform) {
     if (typeof envelope?.payload !== 'string' || envelope.payload.length > 8 * 1024 ** 2 || typeof envelope.signature !== 'string' || !verify(null, Buffer.from(envelope.payload), key, Buffer.from(envelope.signature, 'base64')))
         throw Error('Invalid shell signature');
     const m = JSON.parse(envelope.payload);
+    if (m.minimumKernel !== undefined && !/^\d+\.\d+\.\d+$/.test(m.minimumKernel)) throw Error('Invalid OS compatibility');
+    if (m.channel !== undefined && m.channel !== "stable") throw Error("Incompatible shell channel");
     if (m.publishedAt != null && !validPublishedAt(m.publishedAt)) throw Error('Invalid publication date');
     versionNumber(m.version);
     if (m.format !== 1 || m.product !== 'tech.afonasev.mindbattle' || m.platform !== platform || m.helper !== 1 || !Number.isSafeInteger(m.sequence) || m.sequence < 1 || !shellPath(m.entry) || !Array.isArray(m.files) || !m.files.length || m.files.length > 20000 || !Array.isArray(m.links))
@@ -127,14 +130,22 @@ export class ShellStore {
     async save() { await atomicJson(path.join(this.root, 'state.json'), this.state); }
     releaseDir(id = this.state.pending) { if (!/^[a-f0-9]{64}$/.test(id || ''))
         throw Error('Invalid shell release'); return path.join(this.root, 'releases', id); }
-    async pendingManifest() { return shellManifest(JSON.parse(await readFile(path.join(this.releaseDir(), 'release.json'), 'utf8')), this.key, this.platform); }
-    async check(onProgress = () => {}) {
+    async pendingManifest() { const m = shellManifest(JSON.parse(await readFile(path.join(this.releaseDir(), 'release.json'), 'utf8')), this.key, this.platform); if (m.minimumKernel && !versionAtLeast(os.release(),m.minimumKernel)) throw Error('Incompatible operating system'); return m; }
+    candidate(raw) {
+      const envelope = JSON.parse(Buffer.from(raw).toString());
+      const manifest = shellManifest(envelope, this.key, this.platform);
+      objectBase(manifest, 'shell', this.origin);
+      if (manifest.minimumKernel && !versionAtLeast(os.release(),manifest.minimumKernel)) return null;
+      if (manifest.sequence <= this.state.highWater || !newerVersion(manifest.version, this.version)) return null;
+      return { raw: Buffer.from(raw), manifest };
+    }
+    async check(onProgress = () => {}, options = {}) {
         if (this.busy)
             return Boolean(this.state.pending);
         this.busy = true;
         let stage;
         try {
-            const raw = await boundedBytes(await this.fetcher(`${this.origin}/desktop/shell/${this.platform}/latest.json`, { redirect: 'error', signal: AbortSignal.timeout(30000), cache: 'no-store' }), 8 * 1024 ** 2);
+            const raw = options.raw ?? await boundedBytes(await this.fetcher(`${this.origin}/desktop/shell/${this.platform}/latest.json`, { redirect: 'error', signal: AbortSignal.timeout(30000), cache: 'no-store' }), 8 * 1024 ** 2);
             const env = JSON.parse(raw.toString());
             const m = shellManifest(env, this.key, this.platform);
             if (m.sequence <= this.state.highWater || !newerVersion(m.version, this.version))
@@ -147,7 +158,8 @@ export class ShellStore {
             await rm(stage, { recursive: true, force: true });
             await mkdir(stage, { recursive: true });
             for (const f of m.files) {
-                await downloadFile(await fetchUpdate(this.fetcher, `${base}/${f.sha256}`, { signal: AbortSignal.timeout(120000) }), path.join(stage, 'runtime', f.path), f);
+                options.signal?.throwIfAborted();
+                await downloadFile(await fetchUpdate(this.fetcher, `${base}/${f.sha256}`, { signal: options.signal ? AbortSignal.any([options.signal, AbortSignal.timeout(120000)]) : AbortSignal.timeout(120000) }), path.join(stage, 'runtime', f.path), f);
                 onProgress({ phase: 'downloading', version: m.version, completed: ++completed, total: m.files.length });
             }
 
@@ -174,7 +186,7 @@ export class ShellStore {
             this.busy = false;
         }
     }
-    async prepare({ target, userData, helper, isSafe, parent = process.pid, launchMuted = false }) {
+    async prepare({ target, userData, helper, isSafe, parent = process.pid, launchMuted = false, launchArgs = [] }) {
         if (this.busy || !this.state.pending)
             return null;
         this.busy = true;
@@ -190,13 +202,15 @@ export class ShellStore {
             if (this.platform === 'darwin-universal' && (target.startsWith('/Volumes/') || target.includes('/AppTranslocation/')))
                 throw Error('Переместите игру из DMG в доступную для записи папку и повторите обновление.');
             const token = randomBytes(32).toString('hex');
-            candidate = `${target}.candidate-${token}`;
+            const tx = path.join(this.root, 'transactions', token);
+            await mkdir(tx, { recursive: true, mode: 0o700 });
+            candidate = path.join(tx, 'candidate');
             const backup = `${target}.backup-${token}`;
             try {
                 await mkdir(candidate, { mode: 0o700 });
             }
             catch {
-                throw Error('Папка установки недоступна для записи. Переместите игру в свою папку или используйте установщик.');
+                throw Error('Не удалось подготовить обновление в папке данных игры.');
             }
             await cp(source, candidate, { recursive: true, dereference: false, verbatimSymlinks: true });
             // Preserve installer-owned and user-added files; obsolete payload files are excluded using the installed inventory.
@@ -223,14 +237,12 @@ export class ShellStore {
                 await rm(candidate, { recursive: true, force: true });
                 return null;
             }
-            const tx = path.join(this.root, 'transactions', token);
-            await mkdir(tx, { recursive: true, mode: 0o700 });
             const manifest = path.join(tx, 'release.json');
             await cp(path.join(this.releaseDir(), 'release.json'), manifest);
             const helperCopy = path.join(tx, this.platform === 'win32-x64' ? 'updater.exe' : 'updater');
             await writeFile(helperCopy, await packagedReadFile(helper), {mode:0o755});
             await chmod(helperCopy, 0o755);
-            const plan = { target, candidate, backup, root: tx, manifest, journal: path.join(tx, 'journal.json'), ack: path.join(tx, 'ready'), started: path.join(tx, 'started'), token, parent, userData, launchMuted: launchMuted === true, timeout: 60 };
+            const plan = { target, candidate, backup, root: tx, manifest, journal: path.join(tx, 'journal.json'), ack: path.join(tx, 'ready'), started: path.join(tx, 'started'), token, parent, userData, launchMuted: launchMuted === true, launchArgs, timeout: 60 };
             const planFile = path.join(tx, 'plan.json');
             const bytes = Buffer.from(JSON.stringify(plan));
             await writeFile(planFile, bytes, { mode: 0o600 });

@@ -8,7 +8,7 @@ import {
   access,
 } from "node:fs/promises";
 import path from "node:path";
-import { objectBase, fetchUpdate, validPublishedAt } from './updateTransport.mjs';
+import { versionAtLeast, objectBase, fetchUpdate, validPublishedAt } from './updateTransport.mjs';
 
 export const digest = (bytes) =>
   createHash("sha256").update(bytes).digest("hex");
@@ -36,13 +36,15 @@ export function checkManifest(envelope, publicKey, shellVersion) {
   )
     throw new Error("Invalid content signature");
   const m = JSON.parse(envelope.payload);
+  if (m.product !== undefined && m.product !== "tech.afonasev.mindbattle" || m.channel !== undefined && m.channel !== "stable" || m.platform !== undefined && m.platform !== "web-content") throw Error("Incompatible content identity");
   if (m.publishedAt != null && !validPublishedAt(m.publishedAt)) throw Error('Invalid publication date');
   if (m.version !== undefined && (typeof m.version !== "string" || !/^[0-9][a-zA-Z0-9.+_-]{0,63}$/.test(m.version))) throw new Error("Invalid content version");
   if (
     m.format !== 1 ||
     !Number.isSafeInteger(m.sequence) ||
     m.sequence < 1 ||
-    m.bridge !== 1 ||
+    ![1,2].includes(m.bridge) ||
+    m.bridge === 2 && !versionAtLeast(shellVersion, "1.0.6") ||
     !Number.isInteger(m.shellMajor) ||
     m.shellMajor !== Number(shellVersion.split(".")[0])
   )
@@ -181,18 +183,32 @@ export class ContentStore {
         base.sequence
     )
       this.state.pending = null;
+    if (this.state.applyOnNext && this.state.pending) {
+      this.state.previous = this.state.active;
+      this.state.active = this.state.pending;
+      this.state.pending = null;
+      this.state.trial = true;
+    }
+    this.state.applyOnNext = false;
     await this.save();
     return this.currentDirectory();
   }
   currentDirectory() {
     return this.state.active ? this.directory(this.state.active) : this.bundle;
   }
-  async check(onProgress = () => {}) {
+  candidate(raw) {
+    const envelope = JSON.parse(Buffer.from(raw).toString());
+    const manifest = checkManifest(envelope, this.publicKey, this.shellVersion);
+    objectBase(manifest, 'content', this.origin);
+    if (manifest.sequence <= this.state.highWater) return null;
+    return { raw: Buffer.from(raw), manifest };
+  }
+  async check(onProgress = () => {}, options = {}) {
     if (this.busy) return Boolean(this.state.pending);
     this.busy = true;
     let staging;
     try {
-      const response = await this.fetcher(
+      const response = options.raw ? null : await this.fetcher(
         `${this.origin}/desktop/content/latest.json`,
         {
           redirect: "error",
@@ -200,7 +216,7 @@ export class ContentStore {
           cache: "no-store",
         },
       );
-      const raw = await boundedBytes(response, 4_100_000);
+      const raw = options.raw ?? await boundedBytes(response, 4_100_000);
       const envelope = JSON.parse(raw.toString());
       const manifest = checkManifest(
         envelope,
@@ -217,6 +233,7 @@ export class ContentStore {
       await rm(staging, { recursive: true, force: true });
       await mkdir(staging, { recursive: true });
       for (const file of manifest.files) {
+        options.signal?.throwIfAborted();
         let bytes;
         try {
           const old = await readFile(
@@ -231,7 +248,7 @@ export class ContentStore {
           bytes = await boundedBytes(
             await fetchUpdate(this.fetcher,
               `${base}/${file.sha256}`,
-              { redirect: "error", signal: AbortSignal.timeout(60000) },
+              { redirect: "error", signal: options.signal ? AbortSignal.any([options.signal, AbortSignal.timeout(60000)]) : AbortSignal.timeout(60000) },
             ),
             file.size,
           );
@@ -261,6 +278,9 @@ export class ContentStore {
       if (staging) await rm(staging, { recursive: true, force: true });
       this.busy = false;
     }
+  }
+  async prepareNextStart() {
+    if (this.state.pending && await this.validRelease(this.state.pending)) { this.state.applyOnNext = true; await this.save(); }
   }
   async activate(isSafe = () => true) {
     if (this.busy || !this.state.pending) return false;

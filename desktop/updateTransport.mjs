@@ -37,3 +37,10 @@ export async function fetchUpdate(fetcher, url, options = {}) {
   }
   throw Error('Too many update redirects');
 }
+
+export function versionAtLeast(actual, minimum) {
+  if (!/^\d+\.\d+\.\d+$/.test(actual) || !/^\d+\.\d+\.\d+$/.test(minimum)) return false;
+  const a=actual.split('.').map(Number),b=minimum.split('.').map(Number);
+  for(let i=0;i<3;i++){if(a[i]!==b[i]) return a[i]>b[i];}
+  return true;
+}

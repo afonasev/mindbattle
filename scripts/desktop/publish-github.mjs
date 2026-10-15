@@ -1,3 +1,4 @@
+import { releaseNotes } from "./release-notes.mjs";
 // Explicit release operation. Upload binaries before switching the VPS catalog.
 import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
@@ -10,7 +11,7 @@ const releases = JSON.parse(gh("api", `repos/${repo}/releases?per_page=100`));
 let release = releases.find(r => r.tag_name === tag);
 if (!release) {
   const commit = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
-  gh("release", "create", tag, "--repo", repo, "--target", commit, "--draft", "--title", `Mindbattle ${config.shellVersion}`, "--notes", "Windows: Program Files installation, game icon, desktop shortcut and launch options together on the finish page. macOS: universal Intel/Apple Silicon DMG. Installers are unsigned. Windows installation acceptance remains pending.");
+  gh("release", "create", tag, "--repo", repo, "--target", commit, "--draft", "--title", `Mindbattle ${config.shellVersion}`, "--notes", releaseNotes({ channel: "installer" }));
   release = JSON.parse(gh("api", `repos/${repo}/releases?per_page=100`)).find(r => r.tag_name === tag);
 }
 if (!release) throw new Error(`Release ${tag} missing after creation`);

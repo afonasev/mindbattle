@@ -8,6 +8,8 @@ export const STORAGE_KEY = "mindbattle:data:v1";
 export const SOLO_RECORDS_STORAGE_KEY = "mindbattle:solo-records:v1";
 
 export interface AccessibilityPreferences {
+  readonly masterVolume?: number;
+  readonly showFps?: boolean;
   readonly musicVolume: number;
   readonly effectsVolume: number;
   readonly muted: boolean;
@@ -17,6 +19,8 @@ export interface AccessibilityPreferences {
 }
 
 export const DEFAULT_PREFERENCES: AccessibilityPreferences = {
+  masterVolume: 1,
+  showFps: false,
   musicVolume: 0.7,
   effectsVolume: 0.7,
   muted: false,
@@ -113,25 +117,16 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 export function decodePreferences(value: unknown): AccessibilityPreferences | null {
   if (!isRecord(value)) return null;
-  const musicVolume = typeof value.musicVolume === "number" ? value.musicVolume : value.volume;
-  const effectsVolume = typeof value.effectsVolume === "number" ? value.effectsVolume : value.volume;
-  if (
-    typeof musicVolume !== "number" || musicVolume < 0 || musicVolume > 1 ||
-    typeof effectsVolume !== "number" || effectsVolume < 0 || effectsVolume > 1 ||
-    typeof value.muted !== "boolean" ||
-    (value.textSize !== "normal" && value.textSize !== "large") ||
-    typeof value.highContrast !== "boolean" ||
-    typeof value.reducedMotion !== "boolean"
-  ) {
-    return null;
-  }
+  const volume = (number: unknown, fallback: number) => typeof number === "number" && Number.isFinite(number) && number >= 0 && number <= 1 ? number : fallback;
   return {
-    musicVolume,
-    effectsVolume,
-    muted: value.muted,
-    textSize: value.textSize,
-    highContrast: value.highContrast,
-    reducedMotion: value.reducedMotion
+    masterVolume: volume(value.masterVolume, value.muted === true ? 0 : 1),
+    showFps: value.showFps === true,
+    musicVolume: volume(value.musicVolume ?? value.volume, DEFAULT_PREFERENCES.musicVolume),
+    effectsVolume: volume(value.effectsVolume ?? value.volume, DEFAULT_PREFERENCES.effectsVolume),
+    muted: false,
+    textSize: value.textSize === "large" ? "large" : "normal",
+    highContrast: value.highContrast === true,
+    reducedMotion: value.reducedMotion === true
   };
 }
 
@@ -286,7 +281,7 @@ export function savePersistedData(storage: StorageLike, data: PersistedData): bo
     // Older controller instances must not restore a revoked statistics permission.
     let latest: any;
     try { latest = JSON.parse(raw ?? 'null'); } catch { /* unrelated corrupt snapshot */ }
-    const next: any = { ...data, ...(pending.length ? { pendingFeedback: pending } : {}) };
+    const next: any = { ...data, preferences: { ...data.preferences, muted: data.preferences.masterVolume !== undefined ? data.preferences.masterVolume === 0 : data.preferences.muted }, ...(pending.length ? { pendingFeedback: pending } : {}) };
     for (const key of ['lastMatch', 'lastSolo']) {
       const previous = latest?.[key]?.state; const current = next[key]?.state;
       const id = key === 'lastMatch' ? 'matchId' : 'runId';
@@ -337,4 +332,15 @@ export function addSoloRecord<TState>(
 
 export function soloLeaderboard(records: readonly SoloRecord[]): readonly SoloRecord[] {
   return [...records].sort((left, right) => right.score - left.score || left.savedAt.localeCompare(right.savedAt) || left.id.localeCompare(right.id));
+}
+
+// Preferences never replace a newer saved game or another view's data.
+export function savePreferencesOnly(storage: StorageLike, preferences: AccessibilityPreferences, fallback: PersistedData): boolean {
+  try {
+    let latest: unknown;
+    try { latest = JSON.parse(storage.getItem(STORAGE_KEY) ?? "null"); } catch { /* preserve fallback */ }
+    const base = isRecord(latest) ? latest : fallback;
+    storage.setItem(STORAGE_KEY, JSON.stringify({ ...base, preferences: { ...preferences, muted: preferences.masterVolume !== undefined ? preferences.masterVolume === 0 : preferences.muted } }));
+    return true;
+  } catch { return false; }
 }

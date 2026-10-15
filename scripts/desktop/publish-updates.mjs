@@ -1,3 +1,4 @@
+import { releaseNotes } from "./release-notes.mjs";
 // Explicit publication only. Build and web-deploy never invoke this script.
 import { execFileSync } from 'node:child_process';
 import { readFile, writeFile, mkdir, mkdtemp, rm, cp } from 'node:fs/promises';
@@ -100,7 +101,7 @@ export async function publishUpdates(kind, { cwd = process.cwd(), run = execute,
     const releases = JSON.parse(gh('api', '--paginate', '--slurp', `repos/${repo}/releases?per_page=100`)).flat();
     let release = releases.find(r => r.tag_name === tag);
     if (!release) {
-      gh('release', 'create', tag, '--repo', repo, '--target', commit, '--draft', '--prerelease', '--title', `Mindbattle ${kind} ${manifests[0].manifest.version}`, '--notes', `Signed ${kind} update. Source: ${commit}. Platform acceptance is recorded separately.`);
+      gh('release', 'create', tag, '--repo', repo, '--target', commit, '--draft', '--title', `Mindbattle ${kind} ${manifests[0].manifest.version}`, '--notes', releaseNotes({ cwd, channel: kind, revision: commit, run: args => git(...args) }));
       release = JSON.parse(gh('api', '--paginate', '--slurp', `repos/${repo}/releases?per_page=100`)).flat().find(r => r.tag_name === tag);
     }
     if (!release) throw Error('Release missing after creation');

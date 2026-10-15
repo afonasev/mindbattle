@@ -53,6 +53,7 @@ export const AUDIO_CUE_MANIFEST: Readonly<Record<AudioCue, AudioCueDefinition>> 
 };
 
 export interface AudioSettings {
+  readonly masterVolume?: number;
   readonly musicVolume: number;
   readonly effectsVolume: number;
   readonly muted: boolean;
@@ -93,6 +94,7 @@ export class AudioController {
   update(settings: AudioSettings) {
     this.settings = {
       // A launch mute is a session constraint; preference updates cannot clear it.
+      masterVolume: Math.min(1, Math.max(0, settings.masterVolume ?? 1)),
       muted: this.launchMuted || settings.muted,
       musicVolume: Math.min(1, Math.max(0, settings.musicVolume)),
       effectsVolume: Math.min(1, Math.max(0, settings.effectsVolume))
@@ -101,7 +103,7 @@ export class AudioController {
       this.stopMusic();
       this.stopEvents();
     }
-    for (const source of this.events.keys()) source.volume = this.settings.effectsVolume;
+    for (const source of this.events.keys()) source.volume = this.settings.effectsVolume * (this.settings.masterVolume ?? 1);
     this.applyMusicVolume();
   }
 
@@ -112,7 +114,7 @@ export class AudioController {
 
   private applyMusicVolume(): void {
     const eventDuck = [...this.events.values()].some(event => event.duckMusic);
-    const volume = this.settings.musicVolume * MUSIC_MIX_GAIN * (this.musicDucked || eventDuck ? MUSIC_DUCK_GAIN : 1);
+    const volume = (this.settings.masterVolume ?? 1) * this.settings.musicVolume * MUSIC_MIX_GAIN * (this.musicDucked || eventDuck ? MUSIC_DUCK_GAIN : 1);
     if (this.activeMusic) this.activeMusic.volume = volume * this.fadeProgress;
     if (this.retiringMusic) this.retiringMusic.volume = volume * (1 - this.fadeProgress);
   }
@@ -160,7 +162,7 @@ export class AudioController {
 
   play(cue: AudioCue): boolean {
     const definition = AUDIO_CUE_MANIFEST[cue];
-    const volume = definition.track === "music" ? this.settings.musicVolume : this.settings.effectsVolume;
+    const volume = (this.settings.masterVolume ?? 1) * (definition.track === "music" ? this.settings.musicVolume : this.settings.effectsVolume);
     if (this.settings.muted || volume === 0) return false;
     if (definition.track === "music" && this.activeMusic && this.activeMusicCue === cue) {
       this.applyMusicVolume();

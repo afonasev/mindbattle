@@ -8,8 +8,8 @@ export function ReleaseAction({ safe = true, showUpdate = true }: { safe?: boole
   const [busy, setBusy] = useState(false);
   useEffect(() => onPwaUpdate(setReady), []);
   useEffect(() => {
-    desktop?.safeToUpdate(safe);
-    return () => desktop?.safeToUpdate(false);
+    void desktop?.safeToUpdate(safe);
+    return () => { void desktop?.safeToUpdate(false); };
   }, [safe]);
   useEffect(() => {
     if (desktop) return;

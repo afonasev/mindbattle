@@ -2,9 +2,10 @@ export interface DisplaySettings {
   width: number;
   height: number;
   fullscreen: boolean;
+  auto?: boolean;
 }
 export interface DesktopUpdateStatus {
-  phase: "idle" | "checking" | "downloading" | "ready" | "current" | "error";
+  phase: "idle" | "checking" | "downloading" | "available" | "paused" | "verifying" | "download-error" | "ready" | "current" | "error";
   version?: string;
   publishedAt?: string;
   completed?: number;
@@ -13,14 +14,20 @@ export interface DesktopUpdateStatus {
 }
 export interface DesktopBridge {
   version: 1;
-  status(): Promise<{ ready: boolean; shellVersion: string; updateVersion?: string; updatePublishedAt?: string; updateStatus?: DesktopUpdateStatus }>;
-  checkUpdate?(): Promise<{ ready: boolean }>;
+  status(): Promise<{ ready: boolean; shellVersion: string; platform?: string; architecture?: string; channel?: string; updateVersion?: string; updatePublishedAt?: string; updateStatus?: DesktopUpdateStatus }>;
+  checkUpdate?(): Promise<{ ready: boolean }>; // Legacy shells only.
+  downloadUpdate?(): Promise<boolean>;
+  cancelDownload?(): Promise<void>;
+  releaseHistory?(): Promise<readonly { tag: string; version: string; date: string; notes: string }[]>;
   onUpdateStatus?(listener: (status: DesktopUpdateStatus) => void): () => void;
   onUpdate(listener: (ready: boolean, version?: string, publishedAt?: string) => void): () => void;
   applyUpdate(): Promise<boolean>;
-  safeToUpdate(safe: boolean): void;
+  safeToUpdate(safe: boolean): void | Promise<void>;
   ready(): Promise<void>;
   display(): Promise<DisplaySettings>;
+  displayOptions?(): Promise<readonly { width:number; height:number }[]>;
+  confirmDisplay?(): Promise<DisplaySettings>;
+  cancelDisplay?(): Promise<DisplaySettings>;
   setDisplay(settings: DisplaySettings): Promise<DisplaySettings>;
   quit(): Promise<void>;
 }

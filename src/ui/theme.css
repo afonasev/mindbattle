@@ -1609,3 +1609,73 @@ div:has(> .release-action) > .game-shell .screen-header,
 .complaint-dialog .menu-action[aria-pressed="true"] { border-color: var(--accent, #85d4e2); background: rgba(85, 170, 200, .18); }
 .complaint-dialog .feedback-note textarea { min-height: 5rem; }
 @media (max-width: 480px) { .complaint-dialog { padding: 1rem; } .complaint-dialog .complaint-reasons .menu-action { font-size: .8rem; } }
+
+/* Template menu contract: stationary navigation and independently scrolling content. */
+.menu-shell { height: calc(100dvh - var(--app-footer-height)); min-height: 0; overflow: hidden; }
+.menu-subpage { grid-template-rows: auto minmax(0,1fr); }
+.menu-settings-stage { min-height: 0; max-height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+.settings-stage-heading,.settings-stage-footer { flex-shrink: 0; }
+.settings-grid { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: .4rem; align-content: start; }
+.settings-stage-footer { display: flex; align-items: center; justify-content: flex-end; gap: 1rem; padding-top: .75rem; }
+.settings-group { align-self: start; }
+.settings-group .menu-action { width: 100%; margin-top: .65rem; padding: .6rem; font-size: .9rem; }
+.session-menu { display: flex; flex-direction: column; overflow: hidden; }
+.menu-dialog-content { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: .3rem; }
+.session-menu--wide .menu-dialog-content:has(> .menu-settings-stage) { overflow: hidden; display: flex; }
+.session-menu--wide .menu-settings-stage { flex: 1; }
+.pad-action-hint { display:none; margin-left:.7rem; border:1px solid currentColor; border-radius:50%; padding:.05rem .35rem; }
+.menu-action:focus .pad-action-hint,.pad-action-hint--back { display:inline-block; }
+html[data-menu-device="pad"] [data-menu-surface] { cursor:none; }
+html[data-menu-device="pad"] [data-menu-surface] * { cursor:none; }
+[data-menu-surface] :is(button,input,select,textarea,a):focus-visible,html[data-menu-device="pad"] [data-menu-surface] :focus { outline:3px solid #77e1ef; outline-offset:3px; }
+.controls-help-art { height:clamp(130px,30vh,280px); background-image:url('/images/controls-devices-v1.png'); background-size:100% auto; background-repeat:no-repeat; border-radius:.6rem; margin:1rem 0; }
+.controls-help-art--keyboard { background-position:center top; }
+.controls-help-art--pad { background-size:130% auto; background-position:center bottom; }
+.controls-help-copy p { line-height:1.5; }
+.help-tabs { display:flex; flex-wrap:wrap; gap:.5rem; }
+.help-tabs .menu-action { flex:1; min-width:5rem; padding:.5rem; }
+.gamepad-keyboard { display:grid; grid-template-columns:repeat(10,minmax(0,1fr)); gap:.35rem; margin:1rem 0; }
+.gamepad-keyboard .menu-action { min-width:0; padding:.55rem .2rem; }
+.keyboard-preview { display:block; min-height:3rem; border:1px solid var(--line); padding:.5rem; word-break:break-all; }
+.fps-counter { position:fixed; top:.5rem; left:.5rem; z-index:20; padding:.25rem .5rem; border-radius:.3rem; background:#07101fe6; font-size:.75rem; pointer-events:none; }
+.release-notes { margin:1rem 0; }
+@media(max-width:760px) {
+ .menu-home { display:flex; flex-direction:column; gap:.5rem; padding-top:1rem; overflow-y:auto; }
+ .menu-home .menu-mode-stage { margin-top:.5rem; flex-shrink:0; }
+ .menu-home .main-menu-actions .menu-action,.menu-home .menu-utilities .menu-action { min-height:3.1rem; padding:.5rem 1rem; }
+ .menu-utilities { margin-top:0; gap:.4rem; flex-shrink:0; }
+ .menu-home .screen-header { flex-shrink:0; }
+ .menu-settings-stage { width:100%; }
+ .settings-grid { grid-template-columns:1fr; }
+ .gamepad-keyboard { grid-template-columns:repeat(7,minmax(0,1fr)); }
+}
+
+.controls-help-art { height:auto; aspect-ratio:3 / 1; background-size:100% auto; }
+.controls-help-art--pad { background-size:100% auto; }
+
+.menu-home { display:grid; grid-template-rows:auto minmax(0,1fr); overflow:hidden; }
+.menu-home-content { min-height:0; overflow-y:auto; overscroll-behavior:contain; padding:.3rem; }
+@media(max-width:760px) { .menu-home { display:grid; overflow:hidden; } .menu-home-content { width:100%; } }
+
+.controls-help-art { position:relative; }
+.help-callout { position:absolute; color:#e9fdff; background:#0b1928ed; border:1px solid #77cbd7; border-radius:.35rem; font-size:clamp(.65rem,1vw,.9rem); padding:.25rem .4rem; }
+.help-callout::before { content:""; position:absolute; top:100%; left:50%; height:1.25rem; border-left:1px solid #77cbd7; }
+.help-callout--keys { left:12%;top:4%; }
+.help-callout--mouse { right:1%;top:6%; }
+.help-callout--dpad { left:17%;top:1%; }
+.help-callout--answers { right:8%;top:3%; }
+
+.menu-update:empty { display:none; }
+.controls-help-art--pad { aspect-ratio:2.8 / 1; }
+.help-callout--dpad { left:33%; }
+.help-callout--answers { right:29%; }
+.help-callout--keys { left:5%; }
+.help-callout--keys::before { height:clamp(1rem,8vw,5rem); }
+.help-callout--mouse { right:5%; }
+.session-menu--wide > .stage-label,.session-menu--wide > h2 { display:block; flex-shrink:0; }
+.session-menu--wide:has(> .menu-dialog-content > .menu-settings-stage) > .stage-label,
+.session-menu--wide:has(> .menu-dialog-content > .menu-settings-stage) > h2 { display:none; }
+
+.menu-dialog-actions { flex-shrink:0; padding:.65rem .3rem 0; }
+.menu-dialog-actions > .menu-action { width:100%; }
+.controls-help-art--keyboard { aspect-ratio:3.2 / 1; }

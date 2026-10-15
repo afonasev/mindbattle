@@ -210,3 +210,17 @@ test("failed state commit retains the serving release and pending candidate", as
   assert.ok(s.state.pending);
   assert.equal(s.busy, false);
 });
+
+test('prepared content activates on the next ordinary launch, confirms or restores last good after failed startup', async t => {
+ const f=await fixture(t);const initial=new ContentStore(f.options);await initial.initialize();await initial.check();
+ const selected=initial.state.pending;assert.ok(selected);await initial.prepareNextStart();
+ const next=new ContentStore(f.options);await next.initialize();assert.equal(next.state.active,selected);assert.equal(next.state.trial,true);assert.equal(next.state.pending,null);
+ const recovered=new ContentStore(f.options);await recovered.initialize();assert.equal(recovered.state.active,null);assert.equal(recovered.state.highWater,2);
+ const f2=await fixture(t);const store=new ContentStore(f2.options);await store.initialize();await store.check();await store.prepareNextStart();
+ const healthy=new ContentStore(f2.options);await healthy.initialize();const active=healthy.state.active;await healthy.confirm();
+ const final=new ContentStore(f2.options);await final.initialize();assert.equal(final.state.active,active);assert.equal(final.state.trial,false);
+});
+
+test('new content bridge refuses older shells instead of exposing unsafe legacy display APIs',()=>{
+ const r=release(3,'new API',{bridge:2});assert.throws(()=>checkManifest(r.envelope,publicKey,'1.0.5'),/Incompatible/);assert.equal(checkManifest(r.envelope,publicKey,'1.0.6').bridge,2);
+});

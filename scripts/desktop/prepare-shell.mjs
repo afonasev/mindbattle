@@ -41,7 +41,7 @@ for (const platform of ['darwin-universal', 'win32-x64']) {
         }
     }
     await walk(root);
-    const payload = JSON.stringify({ format: 1, product: 'tech.afonasev.mindbattle', sequence, version: config.shellVersion, publishedAt, platform, helper: 1, objectBaseUrl: releaseBase('shell', sequence), entry: platform === 'darwin-universal' ? 'Contents/MacOS/Mindbattle' : 'Mindbattle.exe', files, links });
+    const payload = JSON.stringify({ format: 1, channel: 'stable', minimumKernel: platform === 'darwin-universal' ? '22.0.0' : '10.0.0', product: 'tech.afonasev.mindbattle', sequence, version: config.shellVersion, publishedAt, platform, helper: 1, objectBaseUrl: releaseBase('shell', sequence), entry: platform === 'darwin-universal' ? 'Contents/MacOS/Mindbattle' : 'Mindbattle.exe', files, links });
     const envelope = { payload, signature: sign(null, Buffer.from(payload), key).toString('base64') };
     shellManifest(envelope, publicKey, platform);
     await mkdir(path.join(output, platform));
