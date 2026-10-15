@@ -7,28 +7,35 @@ for (const [width,height] of [[1280,900],[360,640]]) test(`specific control lege
   await page.getByRole('button',{name:'Справка по управлению',exact:true}).click();
   const dialog=page.getByRole('dialog',{name:'Управление в игре'});
   await expect(dialog.getByRole('img',{name:'Клавиши W сверху, D справа, S снизу, A слева'})).toBeVisible();
-  const keyboard=dialog.locator('.help-device-label');
-  await expect(keyboard).toHaveText(['W','D','S','A','↑','→','↓','←','Space','Enter','Shift','Esc','ЛКМ']);
-  for (const image of await dialog.locator('svg').all()) {
-    const size=await image.boundingBox();expect(size!.width).toBeGreaterThan(40);
-  }
+  await expect(dialog.locator('.simple-answer-label')).toHaveText(['WВерхний ответ','DПравый ответ','SНижний ответ','AЛевый ответ']);
+  await expect(dialog.locator('.simple-help-actions > div')).toHaveCount(3);
+  await expect(dialog.getByText('Отменить выбор в бонусе',{exact:true})).toHaveCount(0);
+  await expect(dialog.getByRole('status')).toHaveCount(0);
   await page.screenshot({path:info.outputPath(`keyboard-${width}.png`)});
-  await dialog.getByText('ЛКМ / касание',{exact:true}).scrollIntoViewIfNeeded();
+  await dialog.getByText('Пауза',{exact:true}).scrollIntoViewIfNeeded();
   await page.screenshot({path:info.outputPath(`keyboard-actions-${width}.png`)});
+  await dialog.getByRole('button',{name:'Командная игра',exact:true}).click();
+  await expect(dialog.getByText('Тема и риск',{exact:true})).toHaveCount(0);
+  await expect(dialog.getByText('Отменить выбор в бонусе',{exact:true})).toBeVisible();
+  await dialog.getByLabel('Набор клавиш').selectOption('arrows');
+  await expect(dialog.locator('.simple-answer-label')).toHaveText(['↑Верхний ответ','→Правый ответ','↓Нижний ответ','←Левый ответ']);
+  await expect(dialog.getByRole('img',{name:'Правый Shift',exact:true})).toBeVisible();
+  await page.screenshot({path:info.outputPath(`team-arrows-${width}.png`)});
   await dialog.getByRole('button',{name:'Геймпад',exact:true}).click();
   const family=dialog.getByLabel('Обозначения контроллера');
   for(const [value,glyphs] of [['xbox',['Y','B','A','X']],['playstation',['△','○','×','□']],['nintendo',['X','A','B','Y']]] as const){
     await family.selectOption(value);
-    await expect(dialog.locator('.help-device-label').first()).toHaveText(glyphs[0]);
-    await expect(dialog.locator('.help-device-label').last()).toHaveText(value==='playstation'?'Options':value==='nintendo'?'+':'Start');
-    await expect(dialog.locator('.help-answer-map kbd')).toHaveText([...glyphs]);
-    if(value==='xbox') await page.screenshot({path:info.outputPath(`pad-${width}.png`)});
+    await expect(dialog.locator('.simple-pad-label').first()).toHaveText(glyphs[0]);
+    await expect(dialog.locator('.simple-pad-label').last()).toHaveText(value==='playstation'?'Options':value==='nintendo'?'+':'Start');
+    await expect(dialog.locator('.simple-pad-map kbd')).toHaveText([...glyphs]);
   }
+  await expect(dialog.locator('.simple-help-actions').getByText('Пауза',{exact:true})).toHaveCount(0);
+  await dialog.getByRole('button',{name:'Одиночная игра',exact:true}).click();
+  await expect(dialog.locator('.simple-help-actions').getByText('Пауза',{exact:true})).toBeVisible();
+  await expect(dialog.getByText('Отменить выбор в бонусе',{exact:true})).toHaveCount(0);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth && document.documentElement.scrollHeight<=innerHeight+1)).toBe(true);
   await expect(dialog.getByRole('button',{name:'Назад',exact:true})).toBeInViewport();
-  await dialog.getByText('Start / Options / +',{exact:true}).scrollIntoViewIfNeeded();
-  await expect(dialog.getByText('Start / Options / +',{exact:true})).toBeInViewport();
-  await page.screenshot({path:info.outputPath(`pad-actions-${width}.png`)});
+  await page.screenshot({path:info.outputPath(`pad-${width}.png`)});
   await page.keyboard.press('Escape');
   await expect(page.getByRole('button',{name:'Справка по управлению',exact:true})).toBeFocused();
 });
@@ -44,4 +51,32 @@ test('pause settings and nested help keep both return actions reachable',async({
   await expect(page.getByRole('button',{name:'Назад',exact:true})).toBeInViewport();
   await page.getByRole('button',{name:'Назад',exact:true}).click();
   await expect(page.getByRole('button',{name:'Продолжить',exact:true})).toBeVisible();
+});
+
+test('missing artwork is reported while bindings remain readable',async({page})=>{
+  await page.route('**/images/controls-keycaps-v2.png',route=>route.abort());
+  await page.goto('/?muted=1');
+  await page.getByRole('button',{name:'Настройки',exact:true}).click();
+  await page.getByRole('button',{name:'Справка по управлению',exact:true}).click();
+  await expect(page.getByRole('status')).toContainText('Не удалось загрузить');
+  await expect(page.locator('.simple-answer-label')).toHaveCount(4);
+  await expect(page.getByText('Тема и риск',{exact:true})).toBeVisible();
+});
+
+test('virtual pad switches help mode and returns to the invoking settings action',async({page})=>{
+  await page.addInitScript(()=>{
+    const pad={id:'Xbox standard',index:0,mapping:'standard',connected:true,buttons:Array.from({length:17},()=>({pressed:false,value:0,touched:false})),axes:[0,0,0,0],timestamp:0};
+    (window as any).__helpPad=pad;Object.defineProperty(navigator,'getGamepads',{value:()=>[pad]});
+  });
+  await page.goto('/?muted=1');
+  await page.getByRole('button',{name:'Настройки',exact:true}).click();
+  await page.getByRole('button',{name:'Справка по управлению',exact:true}).click();
+  const press=async(index:number)=>{await page.evaluate(i=>{(window as any).__helpPad.buttons[i].pressed=true;},index);await page.waitForTimeout(50);await page.evaluate(i=>{(window as any).__helpPad.buttons[i].pressed=false;},index);await page.waitForTimeout(50);};
+  await press(13);await press(13);await press(13);
+  await expect(page.getByRole('button',{name:'Командная игра',exact:true})).toBeFocused();
+  await press(0);
+  await expect(page.getByRole('button',{name:'Командная игра',exact:true})).toHaveAttribute('aria-pressed','true');
+  await expect(page.getByText('Отменить выбор в бонусе',{exact:true})).toBeVisible();
+  await press(1);
+  await expect(page.getByRole('button',{name:'Справка по управлению',exact:true})).toBeFocused();
 });

@@ -2,72 +2,73 @@ import { useState } from "react";
 import { GAMEPAD_GLYPHS, type GamepadProfile } from "../adapters/gamepadProfiles";
 import { MenuAction, MenuDialog } from "./menuUi";
 
-const SOURCE = "/images/controls-devices-v1.png";
+const SOLO_ART = "/images/controls-simplified-v2.png";
+const KEY_ART = "/images/controls-keycaps-v2.png";
+const PAD_ART = "/images/controls-devices-v1.png";
 const DIRECTIONS = ["north", "east", "south", "west"] as const;
 const POSITIONS = { north: "Верхний ответ", east: "Правый ответ", south: "Нижний ответ", west: "Левый ответ" };
-// Coordinates refer to the immutable 1536×1024 generated source asset.
-// Button names come from the same family profiles as runtime answer hints.
-function DeviceCrop({ viewBox, label, marks }: {
-  viewBox: string; label: string; marks: readonly { x: number; y: number; text: string; size?: number }[];
-}) {
-  return <svg className="help-device" viewBox={viewBox} role="img" aria-label={label}>
-    <image href={SOURCE} width="1536" height="1024" />
-    {marks.map(({ x, y, text, size = 25 }) => <g key={`${x}-${y}`}>
-      <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fontSize={size} className="help-device-label">{text}</text>
-    </g>)}
+
+// Transparent generated sprites follow the approved keycap style. Full source art
+// stays versioned; SVG viewBox only selects the relevant sprite at display time.
+const BOXES = { wasd:"8 170 369 255", arrows:"392 170 377 255", ad:"800 231 321 159", horizontal:"1210 231 320 159", enter:"18 674 349 161", space:"402 674 349 161", shift:"784 674 359 161", esc:"1258 674 174 161" } as const;
+function KeyArt({ kind, label }: { kind: keyof typeof BOXES; label: string }) {
+  return <svg className="simple-key-art" viewBox={BOXES[kind]} role="img" aria-label={label}>
+    <image href={KEY_ART} width="1536" height="1024" />
+  </svg>;
+}
+
+function PadArt({ glyph, pauseLabel }: { glyph: typeof GAMEPAD_GLYPHS.xbox.answer; pauseLabel: string }) {
+  const marks = [
+    [948,571,glyph.north],[986,610,glyph.east],[948,648,glyph.south],[908,610,glyph.west],
+    [584,584,"↑"],[611,609,"→"],[583,638,"↓"],[556,609,"←"],[885,550,pauseLabel],
+  ] as const;
+  return <svg className="simple-pad-art" viewBox="440 487 650 405" role="img" aria-label={`Геймпад: ${glyph.north} сверху, ${glyph.east} справа, ${glyph.south} снизу, ${glyph.west} слева`}>
+    <image href={PAD_ART} width="1536" height="1024" />
+    {marks.map(([x,y,text],i)=><text className="simple-pad-label" key={i} x={x} y={y} textAnchor="middle" dominantBaseline="central" fontSize={i===8?21:28}>{text}</text>)}
   </svg>;
 }
 
 export function ControlsHelp({ back }: { back: () => void }) {
-  const [page, setPage] = useState<"keyboard" | "pad">("keyboard");
-  const [family, setFamily] = useState<GamepadProfile>("xbox");
-  const [missing, setMissing] = useState(false);
+  const [device,setDevice] = useState<"keyboard" | "pad">("keyboard");
+  const [mode,setMode] = useState<"solo" | "team">("solo");
+  const [layout,setLayout] = useState<"wasd" | "arrows">("wasd");
+  const [family,setFamily] = useState<GamepadProfile>("xbox");
+  const [failed,setFailed] = useState<string[]>([]);
   const glyph = GAMEPAD_GLYPHS[family].answer;
-  const pauseLabel = family === "playstation" ? "Options" : family === "nintendo" ? "+" : "Start";
+  const pauseLabel = family==="playstation"?"Options":family==="nintendo"?"+":"Start";
+  const arrows = layout==="arrows";
+  const missing = (device==="pad"?[PAD_ART]:[KEY_ART]).some(p=>failed.includes(p));
+  const keys = arrows?["↑","→","↓","←"]:["W","D","S","A"];
+  const confirm = mode==="solo"?"Enter":arrows?"Правый Shift":"Space";
   return <MenuDialog wide title="Управление в игре" back={back} footer={<MenuAction onClick={back}>Назад</MenuAction>}>
-    <div className="help-tabs"><MenuAction onClick={() => setPage("keyboard")} aria-pressed={page === "keyboard"}>Клавиатура и мышь</MenuAction><MenuAction onClick={() => setPage("pad")} aria-pressed={page === "pad"}>Геймпад</MenuAction></div>
-    <img hidden src={SOURCE} alt="" onError={() => setMissing(true)} />
-    {missing && <p role="status">Не удалось загрузить иллюстрацию управления. Откройте справку снова после восстановления файлов игры.</p>}
-    <div className="controls-help-content">
-      {page === "keyboard" ? <>
-        <h3>Клавиши ответов</h3>
-        <p>Нажмите клавишу со стороны нужного ответа на экране.</p>
-        <div className="help-answer-groups">
-          <section className="help-control-card"><h4>WASD</h4>
-            {!missing && <DeviceCrop viewBox="170 201 170 87" label="Клавиши W сверху, D справа, S снизу, A слева" marks={[{ x:244,y:225,text:"W" },{ x:297,y:263,text:"D" },{ x:252,y:263,text:"S" },{ x:205,y:263,text:"A" }]} />}
-            <div className="help-answer-map">{DIRECTIONS.map((d,i)=><div key={d}><kbd>{["W","D","S","A"][i]}</kbd><span>{POSITIONS[d]}</span></div>)}</div>
-          </section>
-          <section className="help-control-card"><h4>Стрелки</h4>
-            {!missing && <DeviceCrop viewBox="851 276 165 100" label="Клавиши стрелок вверх, вправо, вниз и влево" marks={[{ x:932,y:300,text:"↑" },{ x:980,y:342,text:"→" },{ x:934,y:342,text:"↓" },{ x:887,y:342,text:"←" }]} />}
-            <div className="help-answer-map">{DIRECTIONS.map((d,i)=><div key={d}><kbd>{["↑","→","↓","←"][i]}</kbd><span>{POSITIONS[d]}</span></div>)}</div>
-          </section>
+    <div className="help-tabs"><MenuAction onClick={()=>setDevice("keyboard")} aria-pressed={device==="keyboard"}>Клавиатура и мышь</MenuAction><MenuAction onClick={()=>setDevice("pad")} aria-pressed={device==="pad"}>Геймпад</MenuAction></div>
+    <div className="simple-help-modes" aria-label="Режим игры"><MenuAction onClick={()=>setMode("solo")} aria-pressed={mode==="solo"}>Одиночная игра</MenuAction><MenuAction onClick={()=>setMode("team")} aria-pressed={mode==="team"}>Командная игра</MenuAction></div>
+    {[SOLO_ART,KEY_ART,PAD_ART].map(src=><img hidden key={src} src={src} alt="" onError={()=>setFailed(old=>old.includes(src)?old:[...old,src])} />)}
+    <div className="simple-help">
+      {device==="keyboard" ? <div className="simple-help-picker"><label>Набор клавиш<select value={layout} onChange={e=>setLayout(e.target.value as typeof layout)}><option value="wasd">WASD</option><option value="arrows">Стрелки</option></select></label></div> : <div className="simple-help-picker"><label>Обозначения контроллера<select value={family} onChange={e=>setFamily(e.target.value as GamepadProfile)}><option value="xbox">Xbox</option><option value="playstation">PlayStation</option><option value="nintendo">Nintendo</option><option value="universal">По положению кнопок</option></select></label></div>}
+      <h3>Выберите ответ</h3>
+      {missing && <p role="status">Не удалось загрузить иллюстрацию управления. Подписи действий доступны ниже.</p>}
+      {device==="keyboard" ? <>
+        <div className="simple-answer-diagram" aria-label={`Ответы: ${layout}`}>
+          {DIRECTIONS.map((d,i)=><span className={`simple-answer-label simple-answer-label--${d}`} key={d}><kbd>{keys[i]}</kbd>{POSITIONS[d]}</span>)}
+          {!missing && <KeyArt kind={arrows?"arrows":"wasd"} label={arrows?"Стрелки: вверх, вправо, вниз, влево":"Клавиши W сверху, D справа, S снизу, A слева"} />}
         </div>
-        <p>В командной игре WASD и стрелки принадлежат разным назначенным командам. В одиночной игре можно использовать любой набор.</p>
-        <div className="help-action-grid">
-          <section className="help-control-card"><h4>Выбор и продолжение</h4>
-            {!missing && <DeviceCrop viewBox="269 315 340 60" label="Клавиша Space" marks={[{ x:439,y:343,text:"Space",size:27 }]} />}
-            <div className="help-key-pair">{!missing && <><DeviceCrop viewBox="737 242 109 43" label="Клавиша Enter" marks={[{ x:798,y:263,text:"Enter",size:19 }]} /><DeviceCrop viewBox="718 281 127 37" label="Правый Shift" marks={[{ x:783,y:300,text:"Shift",size:19 }]} /></>}</div>
-            <p><kbd>Space</kbd> — подтверждение и продолжение для команды WASD; <kbd>правый Shift</kbd> — для команды со стрелками.</p>
-            <p>В одиночной игре <kbd>A / ←</kbd> и <kbd>D / →</kbd> меняют тему или риск; <kbd>Enter / Space</kbd> подтверждают выбор и продолжают после ответа.</p>
-            <p>В командной игре <kbd>A / ←</kbd> и <kbd>D / →</kbd> меняют тему; в бонусе <kbd>W / ↑</kbd> отменяют свой выбор.</p>
-          </section>
-          <section className="help-control-card"><h4>Пауза и мышь</h4>
-            <div className="help-small-devices">{!missing && <><DeviceCrop viewBox="109 124 67 52" label="Клавиша Esc" marks={[{ x:144,y:145,text:"Esc",size:17 }]} /><DeviceCrop viewBox="1270 130 205 285" label="Левая кнопка мыши: выбор экранного ответа" marks={[{ x:1325,y:182,text:"ЛКМ",size:22 }]} /></>}</div>
-            <p><kbd>Esc</kbd> — пауза партии.</p><p><kbd>ЛКМ / касание</kbd> — выбрать ответ и игровые действия на экране в одиночной и сетевой игре.</p>
-          </section>
+        <div className="simple-help-actions">
+          <div><div className="simple-action-art">{!missing?<KeyArt kind={arrows?"horizontal":"ad"} label={arrows?"Клавиши влево и вправо":"Клавиши A и D"} />:<kbd>{arrows?"← →":"A D"}</kbd>}</div><span>{mode==="solo"?"Тема и риск":"Выбор темы"}</span></div>
+          <div><div className="simple-action-art">{!missing ? <KeyArt kind={mode==="solo"?"enter":arrows?"shift":"space"} label={confirm}/>:<kbd>{confirm}</kbd>}</div><span>Подтвердить · дальше</span>{mode==="team" && <small>{confirm}</small>}</div>
+          {mode==="team" && <div><div className="simple-action-art"><kbd>{arrows?"↑":"W"}</kbd></div><span>Отменить выбор в бонусе</span></div>}
+          <div><div className="simple-action-art">{!missing?<KeyArt kind="esc" label="Клавиша Esc"/>:<kbd>Esc</kbd>}</div><span>Пауза</span></div>
         </div>
+        <p className="simple-help-note">{mode==="solo"?"Ответы также можно выбирать мышью или касанием.":"Каждая команда использует назначенный ей набор клавиш."}</p>
       </> : <>
-        <label className="help-family">Обозначения контроллера<select value={family} onChange={e=>setFamily(e.target.value as GamepadProfile)}><option value="xbox">Xbox</option><option value="playstation">PlayStation</option><option value="nintendo">Nintendo</option><option value="universal">По положению кнопок</option></select></label>
-        {!missing && <DeviceCrop viewBox="440 487 650 405" label={`Геймпад: ${glyph.north} сверху, ${glyph.east} справа, ${glyph.south} снизу, ${glyph.west} слева; крестовина слева; ${pauseLabel} справа от сенсорной панели`} marks={[
-          { x:948,y:571,text:glyph.north,size:30 },{ x:986,y:610,text:glyph.east,size:30 },{ x:948,y:648,text:glyph.south,size:30 },{ x:908,y:610,text:glyph.west,size:30 },
-          { x:584,y:584,text:"↑",size:24 },{ x:611,y:609,text:"→",size:24 },{ x:583,y:638,text:"↓",size:24 },{ x:556,y:609,text:"←",size:24 },{ x:885,y:550,text:pauseLabel,size:21 }
-        ]} />}
-        <h3>Кнопки ответов</h3>
-        <div className="help-answer-map help-answer-map--pad">{DIRECTIONS.map(d=><div key={d}><kbd>{glyph[d]}</kbd><span>{POSITIONS[d]}</span></div>)}</div>
-        <div className="help-action-grid">
-          <section className="help-control-card"><h4>Выбор темы и риска</h4><p><kbd>D-pad ← / →</kbd> — сменить вариант.</p><p><kbd>{glyph.south}</kbd> (нижняя кнопка) — подтвердить выбор и продолжить после ответа.</p><p>В командном бонусе <kbd>D-pad ↑</kbd> — отменить свой выбор.</p></section>
-          <section className="help-control-card"><h4>Одиночная игра</h4><p><kbd>Start / Options / +</kbd> — пауза.</p><p>На вопрос также можно ответить стрелками крестовины: расположение соответствует ответам на экране.</p></section>
+        {!missing && <PadArt glyph={glyph} pauseLabel={pauseLabel} />}
+        <div className="simple-pad-map">{DIRECTIONS.map(d=><div key={d}><kbd>{glyph[d]}</kbd><span>{POSITIONS[d]}</span></div>)}</div>
+        <div className="simple-help-actions simple-help-actions--pad">
+          <div><kbd>D-pad ← →</kbd><span>{mode==="solo"?"Тема и риск":"Выбор темы"}</span></div>
+          <div><kbd>{glyph.south}</kbd><span>Подтвердить · дальше</span></div>
+          {mode==="team"?<div><kbd>D-pad ↑</kbd><span>Отменить выбор в бонусе</span></div>:<div><kbd>{pauseLabel}</kbd><span>Пауза</span></div>}
         </div>
+        {mode==="solo" && <p className="simple-help-note">Крестовина также выбирает ответ по его положению.</p>}
       </>}
     </div>
   </MenuDialog>;
