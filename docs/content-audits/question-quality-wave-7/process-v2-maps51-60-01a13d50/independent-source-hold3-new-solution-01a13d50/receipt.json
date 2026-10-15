@@ -1,0 +1,823 @@
+{
+  "schema": "independent-current-source-hold3-new-solution-v1",
+  "reviewerRole": "Independent reader different from author; no inherited author PASS",
+  "requestedCurrentCommit": "cdb2c91f0a4c44b7ea3289f3c760268b12883df1",
+  "exactApplyCommit": "019f5250a23886f91e3908043ef06b855294c0bf",
+  "reportedSourceBranch": "codex/question-quality-wave-6",
+  "scopeIds": [
+    "maps-cartography-bar-scale",
+    "maps-cartography-verbal-scale",
+    "maps-cartography-index-place"
+  ],
+  "counts": {
+    "PASS": 3,
+    "HOLD": 0
+  },
+  "qualityCredit": 0,
+  "qualityCreditGate": "Coordinator must bind this exact receipt to unchanged CURRENT hashes; no automatic quality credit, integration or human acceptance.",
+  "hashContract": {
+    "cardsAndObjectGroup": "SHA256(JSON sorted keys, compact separators, ensure_ascii=False, UTF-8)",
+    "fiveStringGroups": "SHA256(raw UTF-8 literal string, not JSON string)",
+    "files": "SHA256(path.read_bytes()), preserving CRLF and every original byte"
+  },
+  "items": [
+    {
+      "id": "maps-cartography-bar-scale",
+      "status": "PASS",
+      "currentCard": {
+        "id": "maps-cartography-bar-scale",
+        "prompt": "На вымышленной карте полоса масштаба длиной 4 см подписана «200 м». Отрезок от А до Б занимает 1,5 см. Какое расстояние соответствует ему на местности?",
+        "answers": [
+          {
+            "text": "150 м",
+            "note": "Для 4 см получается 50 м на сантиметр; умножение на 1,5 даёт 75 м, поэтому 150 м завышает результат вдвое."
+          },
+          {
+            "text": "200 м",
+            "note": "200 м соответствуют всей полосе длиной 4 см; отрезок А—Б короче и занимает только 1,5 см."
+          },
+          {
+            "text": "75 м",
+            "note": "Подходящий масштаб зависит также от размера листа и того, насколько точно на нём нужно разместить объекты."
+          },
+          {
+            "text": "800 м",
+            "note": "Это получилось бы при умножении 4 см на 200 м без учёта того, что 200 м уже подписаны для всей полосы."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "4 см полосы соответствуют 200 м, значит 1,5 см составляют 1,5/4 от неё. Это 75 м.",
+        "source": {
+          "title": "USGS Fact Sheet 015-02: Map Scales",
+          "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+          "verifiedAt": "2026-10-15"
+        },
+        "difficulty": "easy"
+      },
+      "currentCardCanonicalSHA256": "7ea859557fbd3ec6105a8570e9f9c9271c9e7fe888d29ea8bfbeab11ba2cf25b",
+      "topic": "maps-cartography",
+      "sourceOrderZeroBased": 50,
+      "frozen": {
+        "id": "maps-cartography-bar-scale",
+        "topic": "maps-cartography",
+        "difficulty": "easy",
+        "correctIndex": 2,
+        "candidateAfterHashMatches": true,
+        "order": "Read in actual source array; exact apply record retained separately; no catalog edits by reader."
+      },
+      "absoluteEasy": "EASY in absolute terms: one supplied scale proportion, divide 200 by 4 and multiply 50 by 1.5. No classification terminology, projection model, or external empirical data needed; elementary decimal arithmetic.",
+      "sixCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На вымышленной карте полоса масштаба длиной 4 см подписана «200 м». Отрезок от А до Б занимает 1,5 см. Какое расстояние соответствует ему на местности?",
+            "answers": [
+              "150 м",
+              "200 м",
+              "75 м",
+              "800 м"
+            ],
+            "correctIndex": 2
+          },
+          "canonicalSHA256": "543582b9ce5ab106cb683fb28967306c870049b8b2c49174310b93c6b46e93b2",
+          "encoding": "sorted compact ensure_ascii=False JSON UTF-8",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "independentReasoning": "200/4=50 m per cm; 50×1.5=75 m. Only answer 2 equals the result; both lengths refer to this fictional map.",
+          "status": "PASS"
+        },
+        {
+          "group": "explanation",
+          "literal": "4 см полосы соответствуют 200 м, значит 1,5 см составляют 1,5/4 от неё. Это 75 м.",
+          "canonicalSHA256": "540dc3a3fa67376df41fd2c34861195c3589284b69c78b1bc66e592dbfde762d",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "independentReasoning": "1.5/4 of the 200 m bar is 75 m; metres remain the requested ground unit.",
+          "status": "PASS"
+        },
+        {
+          "group": "note0",
+          "literal": "Для 4 см получается 50 м на сантиметр; умножение на 1,5 даёт 75 м, поэтому 150 м завышает результат вдвое.",
+          "canonicalSHA256": "06d4799ed4815510b39adc57a185774b94d986f245723006410426c1402df42e",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "independentReasoning": "The note recalculates 50 m/cm and identifies that 150 m is twice 75 m. It repairs this specific overestimate.",
+          "status": "PASS"
+        },
+        {
+          "group": "note1",
+          "literal": "200 м соответствуют всей полосе длиной 4 см; отрезок А—Б короче и занимает только 1,5 см.",
+          "canonicalSHA256": "a18fdb33e4d200b9358ad32413577c7409e41d4d49619c7f93266e707b62bac3",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "independentReasoning": "200 m belongs to the whole 4 cm bar, not its 1.5 cm subsegment; note usefully distinguishes whole and part.",
+          "status": "PASS"
+        },
+        {
+          "group": "note2",
+          "literal": "Подходящий масштаб зависит также от размера листа и того, насколько точно на нём нужно разместить объекты.",
+          "canonicalSHA256": "8383e8c5912c874b80f21ff696c815233559fbdbe861cbd8cde4e43b054b5191",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1 opening paragraph, The proportion chosen... / Selecting the appropriate scale...",
+              "claim": "Appropriate scale depends on sheet size and accurate placement of features."
+            }
+          ],
+          "independentReasoning": "The note adds scale-selection factors (sheet size and placement precision), neither the 75 m key nor the prompt measurements.",
+          "status": "PASS"
+        },
+        {
+          "group": "note3",
+          "literal": "Это получилось бы при умножении 4 см на 200 м без учёта того, что 200 м уже подписаны для всей полосы.",
+          "canonicalSHA256": "76e7643a5071eb94273ddc3d638cf037501f439d1275cd9313ddd31b7ca7c343",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "independentReasoning": "The note describes a mistaken multiplication of the numerical labels 4 and 200. It is an explanation of the wrong method, not a valid dimensional equation: cm×m would not be a distance. Its final clause explains why that method is inappropriate.",
+          "status": "PASS"
+        }
+      ],
+      "fourFullVariants": [
+        {
+          "answerIndex": 0,
+          "fullPrompt": "На вымышленной карте полоса масштаба длиной 4 см подписана «200 м». Отрезок от А до Б занимает 1,5 см. Какое расстояние соответствует ему на местности?",
+          "answerText": "150 м",
+          "note": "Для 4 см получается 50 м на сантиметр; умножение на 1,5 даёт 75 м, поэтому 150 м завышает результат вдвое.",
+          "isCorrect": false,
+          "grammarInActualPrompt": "PASS: numeric metre phrase answers the distance question with consistent units.",
+          "plausibility": "150 m can arise by doubling 75 m or misusing the 1.5 factor.",
+          "truthAndNoteUsefulness": "The note recalculates 50 m/cm and identifies that 150 m is twice 75 m. It repairs this specific overestimate.",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "answerIndex": 1,
+          "fullPrompt": "На вымышленной карте полоса масштаба длиной 4 см подписана «200 м». Отрезок от А до Б занимает 1,5 см. Какое расстояние соответствует ему на местности?",
+          "answerText": "200 м",
+          "note": "200 м соответствуют всей полосе длиной 4 см; отрезок А—Б короче и занимает только 1,5 см.",
+          "isCorrect": false,
+          "grammarInActualPrompt": "PASS: numeric metre phrase answers the distance question with consistent units.",
+          "plausibility": "200 m copies the bar label without scaling.",
+          "truthAndNoteUsefulness": "200 m belongs to the whole 4 cm bar, not its 1.5 cm subsegment; note usefully distinguishes whole and part.",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "answerIndex": 2,
+          "fullPrompt": "На вымышленной карте полоса масштаба длиной 4 см подписана «200 м». Отрезок от А до Б занимает 1,5 см. Какое расстояние соответствует ему на местности?",
+          "answerText": "75 м",
+          "note": "Подходящий масштаб зависит также от размера листа и того, насколько точно на нём нужно разместить объекты.",
+          "isCorrect": true,
+          "grammarInActualPrompt": "PASS: numeric metre phrase answers the distance question with consistent units.",
+          "plausibility": "75 m follows both proportional steps.",
+          "truthAndNoteUsefulness": "The note adds scale-selection factors (sheet size and placement precision), neither the 75 m key nor the prompt measurements.",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            },
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1 opening paragraph, The proportion chosen... / Selecting the appropriate scale...",
+              "claim": "Appropriate scale depends on sheet size and accurate placement of features."
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "answerIndex": 3,
+          "fullPrompt": "На вымышленной карте полоса масштаба длиной 4 см подписана «200 м». Отрезок от А до Б занимает 1,5 см. Какое расстояние соответствует ему на местности?",
+          "answerText": "800 м",
+          "note": "Это получилось бы при умножении 4 см на 200 м без учёта того, что 200 м уже подписаны для всей полосы.",
+          "isCorrect": false,
+          "grammarInActualPrompt": "PASS: numeric metre phrase answers the distance question with consistent units.",
+          "plausibility": "800 m is a recognizable multiply-labels error (4×200), with consistent-looking m in the option.",
+          "truthAndNoteUsefulness": "The note describes a mistaken multiplication of the numerical labels 4 and 200. It is an explanation of the wrong method, not a valid dimensional equation: cm×m would not be a distance. Its final clause explains why that method is inappropriate.",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "status": "PASS"
+        }
+      ],
+      "oneKey": "Exactly index 2; individual rejected alternatives justified above.",
+      "wholeCardAssessment": "All prompt assumptions, four alternatives, explanation, source and notes personally assessed. No unresolved factual or language defect. Correct note adds a supported fact beyond prompt/key.",
+      "unresolved": []
+    },
+    {
+      "id": "maps-cartography-verbal-scale",
+      "status": "PASS",
+      "currentCard": {
+        "id": "maps-cartography-verbal-scale",
+        "prompt": "На вымышленной карте 3 см соответствуют 750 м на местности. Какое расстояние на местности соответствует 1 см на этой карте?",
+        "answers": [
+          {
+            "text": "150 м",
+            "note": "150 м не делят заданные 750 м на три равные части; здесь известна длина именно 3 см."
+          },
+          {
+            "text": "750 м",
+            "note": "750 м относятся ко всему отрезку 3 см, а требуется расстояние для одного сантиметра."
+          },
+          {
+            "text": "250 м",
+            "note": "USGS отмечает, что на картах масштаба 1:24 000 могут быть показаны даже пешеходные мосты, разводные мосты, ограды и частные дороги."
+          },
+          {
+            "text": "2 250 м",
+            "note": "Умножение 750 м на 3 повторно учитывает заданные 3 см вместо того, чтобы разделить расстояние на три части."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "750 м приходятся на 3 см. Делим 750 на 3: одному сантиметру соответствуют 250 м.",
+        "source": {
+          "title": "USGS Fact Sheet 015-02: Map Scales",
+          "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+          "verifiedAt": "2026-10-15"
+        },
+        "difficulty": "easy"
+      },
+      "currentCardCanonicalSHA256": "bb29518bae7531806494ddd3534c2df71005266ef2e3a599fbab97269fd9c66d",
+      "topic": "maps-cartography",
+      "sourceOrderZeroBased": 52,
+      "frozen": {
+        "id": "maps-cartography-verbal-scale",
+        "topic": "maps-cartography",
+        "difficulty": "easy",
+        "correctIndex": 2,
+        "candidateAfterHashMatches": true,
+        "order": "Read in actual source array; exact apply record retained separately; no catalog edits by reader."
+      },
+      "absoluteEasy": "EASY in absolute terms: one division 750/3 with matching units and no conversion or specialist inference.",
+      "sixCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На вымышленной карте 3 см соответствуют 750 м на местности. Какое расстояние на местности соответствует 1 см на этой карте?",
+            "answers": [
+              "150 м",
+              "750 м",
+              "250 м",
+              "2 250 м"
+            ],
+            "correctIndex": 2
+          },
+          "canonicalSHA256": "ceae0d6adf6bb3ee11b210525455177b12bd584e9c8b0cd4aeeab553ba605e43",
+          "encoding": "sorted compact ensure_ascii=False JSON UTF-8",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "independentReasoning": "750/3=250 m per centimetre; only index 2 is 250 m. No real map/example is attributed to USGS.",
+          "status": "PASS"
+        },
+        {
+          "group": "explanation",
+          "literal": "750 м приходятся на 3 см. Делим 750 на 3: одному сантиметру соответствуют 250 м.",
+          "canonicalSHA256": "f959833188a1d0ed95baea1a9b0868c306f99fb43e9908442ce46ccd59a6f0db",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "independentReasoning": "Division into three equal centimetres gives 250 m for each; the explanation uses the stipulated proportion consistently.",
+          "status": "PASS"
+        },
+        {
+          "group": "note0",
+          "literal": "150 м не делят заданные 750 м на три равные части; здесь известна длина именно 3 см.",
+          "canonicalSHA256": "66efe797cc104fdae3e383c1cc93c32d4a26573e7d882470f8b8301bca13f228",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "independentReasoning": "150 m is not one third of 750 m (three such parts sum to 450 m). The note identifies the failed division and reminds that the whole length is 3 cm; wording is understandable though terse.",
+          "status": "PASS"
+        },
+        {
+          "group": "note1",
+          "literal": "750 м относятся ко всему отрезку 3 см, а требуется расстояние для одного сантиметра.",
+          "canonicalSHA256": "83f24772f6f98ba78bf82393a31b9d901ffc6896606493afe3999c8aba7fb71f",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "independentReasoning": "750 m is the given whole for 3 cm; the note distinguishes that whole from the requested 1 cm.",
+          "status": "PASS"
+        },
+        {
+          "group": "note2",
+          "literal": "USGS отмечает, что на картах масштаба 1:24 000 могут быть показаны даже пешеходные мосты, разводные мосты, ограды и частные дороги.",
+          "canonicalSHA256": "6d4afa13bde107a1ce7417df49bc2e8b4a7ef02d579e2bfd9ab2399ea1f3aeda",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1 last paragraph continued at p.2 first paragraph, Footbridges, drawbridges, fence lines, and private roads...",
+              "claim": "These features are shown at 1:24,000 in the cited USGS description. Footbridges means пешеходные мосты, not броды."
+            }
+          ],
+          "independentReasoning": "The added fact is the USGS list at 1:24,000. All four translated items match p.2; пешеходные мосты correctly renders Footbridges. This is useful detail about what scale allows, absent from prompt and key.",
+          "status": "PASS"
+        },
+        {
+          "group": "note3",
+          "literal": "Умножение 750 м на 3 повторно учитывает заданные 3 см вместо того, чтобы разделить расстояние на три части.",
+          "canonicalSHA256": "399ea03a5a88ed2d2811442eee5fc264ad5ea082e968795e18de745a3cc1172a",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "independentReasoning": "2250=750×3 reverses the required operation; the note names multiplication instead of division and explains the repeated factor.",
+          "status": "PASS"
+        }
+      ],
+      "fourFullVariants": [
+        {
+          "answerIndex": 0,
+          "fullPrompt": "На вымышленной карте 3 см соответствуют 750 м на местности. Какое расстояние на местности соответствует 1 см на этой карте?",
+          "answerText": "150 м",
+          "note": "150 м не делят заданные 750 м на три равные части; здесь известна длина именно 3 см.",
+          "isCorrect": false,
+          "grammarInActualPrompt": "PASS: numeric metre phrase answers the distance question with consistent units.",
+          "plausibility": "150 m is an erroneous unit-rate quotient (one fifth rather than one third).",
+          "truthAndNoteUsefulness": "150 m is not one third of 750 m (three such parts sum to 450 m). The note identifies the failed division and reminds that the whole length is 3 cm; wording is understandable though terse.",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "answerIndex": 1,
+          "fullPrompt": "На вымышленной карте 3 см соответствуют 750 м на местности. Какое расстояние на местности соответствует 1 см на этой карте?",
+          "answerText": "750 м",
+          "note": "750 м относятся ко всему отрезку 3 см, а требуется расстояние для одного сантиметра.",
+          "isCorrect": false,
+          "grammarInActualPrompt": "PASS: numeric metre phrase answers the distance question with consistent units.",
+          "plausibility": "750 m copies the total without dividing by 3.",
+          "truthAndNoteUsefulness": "750 m is the given whole for 3 cm; the note distinguishes that whole from the requested 1 cm.",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "answerIndex": 2,
+          "fullPrompt": "На вымышленной карте 3 см соответствуют 750 м на местности. Какое расстояние на местности соответствует 1 см на этой карте?",
+          "answerText": "250 м",
+          "note": "USGS отмечает, что на картах масштаба 1:24 000 могут быть показаны даже пешеходные мосты, разводные мосты, ограды и частные дороги.",
+          "isCorrect": true,
+          "grammarInActualPrompt": "PASS: numeric metre phrase answers the distance question with consistent units.",
+          "plausibility": "250 m is the correct unit rate.",
+          "truthAndNoteUsefulness": "The added fact is the USGS list at 1:24,000. All four translated items match p.2; пешеходные мосты correctly renders Footbridges. This is useful detail about what scale allows, absent from prompt and key.",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            },
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1 last paragraph continued at p.2 first paragraph, Footbridges, drawbridges, fence lines, and private roads...",
+              "claim": "These features are shown at 1:24,000 in the cited USGS description. Footbridges means пешеходные мосты, not броды."
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "answerIndex": 3,
+          "fullPrompt": "На вымышленной карте 3 см соответствуют 750 м на местности. Какое расстояние на местности соответствует 1 см на этой карте?",
+          "answerText": "2 250 м",
+          "note": "Умножение 750 м на 3 повторно учитывает заданные 3 см вместо того, чтобы разделить расстояние на три части.",
+          "isCorrect": false,
+          "grammarInActualPrompt": "PASS: numeric metre phrase answers the distance question with consistent units.",
+          "plausibility": "2250 m is the common inverse-operation error 750×3.",
+          "truthAndNoteUsefulness": "2250=750×3 reverses the required operation; the note names multiplication instead of division and explains the repeated factor.",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "bytes": 365302,
+              "exactLocator": "PDF p.1, Large Is Small, first two paragraphs (Simply defined...; These representative fraction scales...)",
+              "claim": "Scale relates map distance to ground distance; same-unit ratios establish proportional conversion. Synthetic numbers are prompt conditions, not USGS factual examples."
+            }
+          ],
+          "status": "PASS"
+        }
+      ],
+      "oneKey": "Exactly index 2; individual rejected alternatives justified above.",
+      "wholeCardAssessment": "All prompt assumptions, four alternatives, explanation, source and notes personally assessed. No unresolved factual or language defect. Correct note adds a supported fact beyond prompt/key.",
+      "unresolved": []
+    },
+    {
+      "id": "maps-cartography-index-place",
+      "status": "PASS",
+      "currentCard": {
+        "id": "maps-cartography-index-place",
+        "prompt": "На учебном макете используется префикс зоны NX; названия мест и четырёхзначные ссылки вымышлены. В указателе: «Астер» — NX 1845; «Берег» — NX 1942; «Вершина» — NX 2147; «Ясень» — NX 2050. Какое место расположено севернее остальных?",
+        "answers": [
+          {
+            "text": "«Астер» — NX 1845",
+            "note": "В этой ссылке северное значение 45; оно меньше значения 50 у «Ясеня»."
+          },
+          {
+            "text": "«Берег» — NX 1942",
+            "note": "Значение 42 — наименьшее из четырёх северных значений, поэтому эта запись южнее остальных."
+          },
+          {
+            "text": "«Ясень» — NX 2050",
+            "note": "Двухбуквенный префикс нужен, потому что цифровая ссылка может повторяться в разных 100-км зонах."
+          },
+          {
+            "text": "«Вершина» — NX 2147",
+            "note": "Северное значение 47 меньше, чем 50 у записи «Ясень»."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Сначала читают восточное число, затем северное. Северные значения здесь 45, 42, 47 и 50; большее 50 у «Ясеня».",
+        "source": {
+          "title": "Ordnance Survey: Map Reading",
+          "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+          "verifiedAt": "2026-10-15"
+        },
+        "difficulty": "easy"
+      },
+      "currentCardCanonicalSHA256": "25446bb3665e1e6e26e0d3e112990f4e55343fdea1e643c8fc74ff218a3b8a96",
+      "topic": "maps-cartography",
+      "sourceOrderZeroBased": 55,
+      "frozen": {
+        "id": "maps-cartography-index-place",
+        "topic": "maps-cartography",
+        "difficulty": "easy",
+        "correctIndex": 2,
+        "candidateAfterHashMatches": true,
+        "order": "Read in actual source array; exact apply record retained separately; no catalog edits by reader."
+      },
+      "absoluteEasy": "EASY map-reading task: apply the standard two-pair four-figure convention once and compare four two-digit northings in one NX square. No interpolation, cross-zone conversion, true-north correction or geographic lookup; all names/data supplied.",
+      "sixCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На учебном макете используется префикс зоны NX; названия мест и четырёхзначные ссылки вымышлены. В указателе: «Астер» — NX 1845; «Берег» — NX 1942; «Вершина» — NX 2147; «Ясень» — NX 2050. Какое место расположено севернее остальных?",
+            "answers": [
+              "«Астер» — NX 1845",
+              "«Берег» — NX 1942",
+              "«Ясень» — NX 2050",
+              "«Вершина» — NX 2147"
+            ],
+            "correctIndex": 2
+          },
+          "canonicalSHA256": "1d767899a81c69fd63922b9a26d2f02acb19768548cd33ad705b4c33e3af0829",
+          "encoding": "sorted compact ensure_ascii=False JSON UTF-8",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "byteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "bytes": 5857300,
+              "exactLocator": "PDF p.8 Grid references and 4-figure map references; p.9 full diagrams/examples 1845,1945,1844,1944",
+              "claim": "Eastings first, northings second; northings increase upwards/northward; four figures identify a kilometre square by its bottom-left corner."
+            }
+          ],
+          "independentReasoning": "All records have the same NX prefix. Read suffixes as east/north pairs: 18/45,19/42,21/47,20/50. The northing 50 is uniquely greatest; kilometre squares do not overlap in north range (next highest 47), so unknown within-square positions cannot alter the winner.",
+          "status": "PASS"
+        },
+        {
+          "group": "explanation",
+          "literal": "Сначала читают восточное число, затем северное. Северные значения здесь 45, 42, 47 и 50; большее 50 у «Ясеня».",
+          "canonicalSHA256": "99ae8a3e539a002cf4c782351477b63831e6fb00b5f9ce7a22ee1d012cecb66b",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "byteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "bytes": 5857300,
+              "exactLocator": "PDF p.8 Grid references and 4-figure map references; p.9 full diagrams/examples 1845,1945,1844,1944",
+              "claim": "Eastings first, northings second; northings increase upwards/northward; four figures identify a kilometre square by its bottom-left corner."
+            }
+          ],
+          "independentReasoning": "The explanation gives easting-first/northing-second and correctly lists 45,42,47,50. Greatest northing selects Ясень.",
+          "status": "PASS"
+        },
+        {
+          "group": "note0",
+          "literal": "В этой ссылке северное значение 45; оно меньше значения 50 у «Ясеня».",
+          "canonicalSHA256": "a3abab7c13b5a150ce8c01fcd7313f03468739a334cd64a5e28c8abd477415fd",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "byteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "bytes": 5857300,
+              "exactLocator": "PDF p.8 Grid references and 4-figure map references; p.9 full diagrams/examples 1845,1945,1844,1944",
+              "claim": "Eastings first, northings second; northings increase upwards/northward; four figures identify a kilometre square by its bottom-left corner."
+            }
+          ],
+          "independentReasoning": "Астер is in northing square 45, below 50; note uses the second pair, not easting 18.",
+          "status": "PASS"
+        },
+        {
+          "group": "note1",
+          "literal": "Значение 42 — наименьшее из четырёх северных значений, поэтому эта запись южнее остальных.",
+          "canonicalSHA256": "c011e379a1c25c428e6bf020c2596974402304d9c86b9722e7c204c290f545bb",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "byteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "bytes": 5857300,
+              "exactLocator": "PDF p.8 Grid references and 4-figure map references; p.9 full diagrams/examples 1845,1945,1844,1944",
+              "claim": "Eastings first, northings second; northings increase upwards/northward; four figures identify a kilometre square by its bottom-left corner."
+            }
+          ],
+          "independentReasoning": "Берег has northing 42, the smallest; its square is south of the others, so the note is useful and correct.",
+          "status": "PASS"
+        },
+        {
+          "group": "note2",
+          "literal": "Двухбуквенный префикс нужен, потому что цифровая ссылка может повторяться в разных 100-км зонах.",
+          "canonicalSHA256": "b235ea84cde7347edfb9bc1f67c8f64578993304fef58610fbac6f63c79294d7",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "byteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "bytes": 5857300,
+              "exactLocator": "PDF p.10 National Grid lines, complete two paragraphs and National Grid diagram",
+              "claim": "A two-letter prefix identifies a 100-km square; numeric references repeat in other squares; NX is shown and used in the example NX 509582."
+            }
+          ],
+          "independentReasoning": "The note adds why prefixes matter: otherwise numerical addresses repeat between 100-km squares. That fact is absent from the prompt and does not name Ясень as the answer.",
+          "status": "PASS"
+        },
+        {
+          "group": "note3",
+          "literal": "Северное значение 47 меньше, чем 50 у записи «Ясень».",
+          "canonicalSHA256": "5c220ab9d55043010c0aca0b914fcd3420bacc0c3414e8bf9b5a87fc380a0d97",
+          "encoding": "raw UTF-8 string without JSON quotes",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "byteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "bytes": 5857300,
+              "exactLocator": "PDF p.8 Grid references and 4-figure map references; p.9 full diagrams/examples 1845,1945,1844,1944",
+              "claim": "Eastings first, northings second; northings increase upwards/northward; four figures identify a kilometre square by its bottom-left corner."
+            }
+          ],
+          "independentReasoning": "Вершина has northing 47; the note correctly compares it to 50 rather than being fooled by its larger easting 21.",
+          "status": "PASS"
+        }
+      ],
+      "fourFullVariants": [
+        {
+          "answerIndex": 0,
+          "fullPrompt": "На учебном макете используется префикс зоны NX; названия мест и четырёхзначные ссылки вымышлены. В указателе: «Астер» — NX 1845; «Берег» — NX 1942; «Вершина» — NX 2147; «Ясень» — NX 2050. Какое место расположено севернее остальных?",
+          "answerText": "«Астер» — NX 1845",
+          "note": "В этой ссылке северное значение 45; оно меньше значения 50 у «Ясеня».",
+          "isCorrect": false,
+          "grammarInActualPrompt": "PASS: quoted place name and its complete supplied reference answer Какое место; spelling/quotes/reference agree with prompt.",
+          "plausibility": "Астер is a supplied named record, requiring actual coordinate interpretation to reject.",
+          "truthAndNoteUsefulness": "Астер is in northing square 45, below 50; note uses the second pair, not easting 18.",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "byteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "bytes": 5857300,
+              "exactLocator": "PDF p.8 Grid references and 4-figure map references; p.9 full diagrams/examples 1845,1945,1844,1944",
+              "claim": "Eastings first, northings second; northings increase upwards/northward; four figures identify a kilometre square by its bottom-left corner."
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "answerIndex": 1,
+          "fullPrompt": "На учебном макете используется префикс зоны NX; названия мест и четырёхзначные ссылки вымышлены. В указателе: «Астер» — NX 1845; «Берег» — NX 1942; «Вершина» — NX 2147; «Ясень» — NX 2050. Какое место расположено севернее остальных?",
+          "answerText": "«Берег» — NX 1942",
+          "note": "Значение 42 — наименьшее из четырёх северных значений, поэтому эта запись южнее остальных.",
+          "isCorrect": false,
+          "grammarInActualPrompt": "PASS: quoted place name and its complete supplied reference answer Какое место; spelling/quotes/reference agree with prompt.",
+          "plausibility": "Берег is another supplied record; selecting the smallest northing reverses direction.",
+          "truthAndNoteUsefulness": "Берег has northing 42, the smallest; its square is south of the others, so the note is useful and correct.",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "byteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "bytes": 5857300,
+              "exactLocator": "PDF p.8 Grid references and 4-figure map references; p.9 full diagrams/examples 1845,1945,1844,1944",
+              "claim": "Eastings first, northings second; northings increase upwards/northward; four figures identify a kilometre square by its bottom-left corner."
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "answerIndex": 2,
+          "fullPrompt": "На учебном макете используется префикс зоны NX; названия мест и четырёхзначные ссылки вымышлены. В указателе: «Астер» — NX 1845; «Берег» — NX 1942; «Вершина» — NX 2147; «Ясень» — NX 2050. Какое место расположено севернее остальных?",
+          "answerText": "«Ясень» — NX 2050",
+          "note": "Двухбуквенный префикс нужен, потому что цифровая ссылка может повторяться в разных 100-км зонах.",
+          "isCorrect": true,
+          "grammarInActualPrompt": "PASS: quoted place name and its complete supplied reference answer Какое место; spelling/quotes/reference agree with prompt.",
+          "plausibility": "Ясень has maximal northing 50.",
+          "truthAndNoteUsefulness": "The note adds why prefixes matter: otherwise numerical addresses repeat between 100-km squares. That fact is absent from the prompt and does not name Ясень as the answer.",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "byteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "bytes": 5857300,
+              "exactLocator": "PDF p.8 Grid references and 4-figure map references; p.9 full diagrams/examples 1845,1945,1844,1944",
+              "claim": "Eastings first, northings second; northings increase upwards/northward; four figures identify a kilometre square by its bottom-left corner."
+            },
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "byteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "bytes": 5857300,
+              "exactLocator": "PDF p.10 National Grid lines, complete two paragraphs and National Grid diagram",
+              "claim": "A two-letter prefix identifies a 100-km square; numeric references repeat in other squares; NX is shown and used in the example NX 509582."
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "answerIndex": 3,
+          "fullPrompt": "На учебном макете используется префикс зоны NX; названия мест и четырёхзначные ссылки вымышлены. В указателе: «Астер» — NX 1845; «Берег» — NX 1942; «Вершина» — NX 2147; «Ясень» — NX 2050. Какое место расположено севернее остальных?",
+          "answerText": "«Вершина» — NX 2147",
+          "note": "Северное значение 47 меньше, чем 50 у записи «Ясень».",
+          "isCorrect": false,
+          "grammarInActualPrompt": "PASS: quoted place name and its complete supplied reference answer Какое место; spelling/quotes/reference agree with prompt.",
+          "plausibility": "Вершина has the largest easting (21), a plausible axis-confusion distractor.",
+          "truthAndNoteUsefulness": "Вершина has northing 47; the note correctly compares it to 50 rather than being fooled by its larger easting 21.",
+          "primaryGrounds": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "byteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "bytes": 5857300,
+              "exactLocator": "PDF p.8 Grid references and 4-figure map references; p.9 full diagrams/examples 1845,1945,1844,1944",
+              "claim": "Eastings first, northings second; northings increase upwards/northward; four figures identify a kilometre square by its bottom-left corner."
+            }
+          ],
+          "status": "PASS"
+        }
+      ],
+      "oneKey": "Exactly index 2; individual rejected alternatives justified above.",
+      "wholeCardAssessment": "All prompt assumptions, four alternatives, explanation, source and notes personally assessed. No unresolved factual or language defect. Correct note adds a supported fact beyond prompt/key.",
+      "unresolved": []
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-source-hold3-new-solution-01a13d50/evidence/current3.json",
+      "byteSHA256": "8232828734176e37bf88e46a29241ccfc18a3326bb420fa153e9c2e8e1834dc9",
+      "bytes": 6126
+    },
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-source-hold3-new-solution-01a13d50/evidence/input-bindings.json",
+      "byteSHA256": "5526317ecca7b5c610989066caeaaf0bfbba9252239ed6d072b5e305ce663884",
+      "bytes": 2235
+    },
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-source-hold3-new-solution-01a13d50/evidence/narrow-gis6-current-delta.json",
+      "byteSHA256": "9bb4c01e3c5875b8e41123cdd2d730d210a88a6b6e3ea153a15bfc9314722276",
+      "bytes": 18775
+    },
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-source-hold3-new-solution-01a13d50/evidence/peer-snapshot-actual-and-proposed.json",
+      "byteSHA256": "3b1ae1b004abcbd014e5575afdb9615383219d9125f451ad8296ba947a014157",
+      "bytes": 118462
+    },
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-source-hold3-new-solution-01a13d50/evidence/primary-reading.json",
+      "byteSHA256": "64178b6bd412bba85dcf8a8f797446bb2b20994c5e682adfb04b32bed7949765",
+      "bytes": 5896
+    }
+  ],
+  "history": "Prior author HOLD3 remains real and untouched. This independently verifies changed map-use solution; no unsupported old taxonomy is rehabilitated. Route is design context within granted mutable-text scope, not a human policy decision or factual source.",
+  "checks": {
+    "readerEvidenceGenerationOnly": true,
+    "groups": 18,
+    "fullVariants": 12,
+    "currentMatchesExactCandidate": true,
+    "runtimeTestsBuildAudio": "Not run, explicitly out of scope",
+    "GitIndexCatalogClaimMutations": "None",
+    "ownProcesses": "No persistent processes created; short extraction/evidence commands complete",
+    "cleanup": "No temporary files/downloads/builds created; existing sources reused. New durable receipt/evidence only.",
+    "next": "Coordinator binds receipt/current hashes and preserves receipt in Git; no messages sent by reader."
+  },
+  "preservation": "Durable task directory; not committed by reader due explicit no Git/index mutation scope. Coordinator owns Git preservation. Session archival waits for that preservation.",
+  "snapshotDelta": {
+    "reportedAppliedCommit": "3935455cd589b00c15d47b3d9f6984e9d7a6e728",
+    "targetCurrentUnchanged": true,
+    "narrowSixPeerDelta": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-source-hold3-new-solution-01a13d50/evidence/narrow-gis6-current-delta.json"
+  }
+}
