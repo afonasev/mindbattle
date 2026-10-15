@@ -1,0 +1,5 @@
+import pathlib,importlib.util
+C=pathlib.Path(__file__).resolve().parents[4];D=pathlib.Path(__file__).parent
+s=importlib.util.spec_from_file_location('apply',C/'docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/apply-standard.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m);m.P=pathlib.Path('/Users/eaafonasev/Projects/mindbattle/planning')
+B=D/'qualified-frbr96-sourcec2';p=m.read(B/'peer-snapshot.json')
+m.apply(B,'01a141c2-1cfb-70c3-ac8d-d9c6953ca02b',[96],D/'apply-frbr96-sourcec2.json',D/'qa-class3-frbr96-final-snapshot.json',pathlib.Path(__file__),peerSnapshot={'actualCurrentPeers':p['actualCurrentPeers']},concerns=['InitialSOURCE96 qualified, independentINITIAL required. HARDprofessionalFRBRlevels, ownnoteprovenanceIFLA4.5.3, sixactualMAIN peers includingvariant50 andmanifestation75; do notinheritgrade/PASS.', 'Combinedfinalcatalog3notes+FRBR96 willgetoneaffected19snapshot, independentreceiptsseparateFINAL3/INITIAL1. SourceQA/rootREADY0qualitycredit.'])
