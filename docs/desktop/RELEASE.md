@@ -156,3 +156,10 @@ Content updater пишет в userData и работает при защищён
 Оболочка 1.0.6 делает один GitHub API discovery после открытия окна, с ETag-кешем. Ни таймера, ни online-retry, ни ручной проверки в сессии нет. Ошибка сообщает, что следующая попытка будет при новом запуске. «Обновить» начинает выбранный download, доступны прогресс/отмена/retry; перед матчем загрузка и история останавливаются. Готовый пакет применяется при следующем обычном запуске либо по «Перезапустить» в безопасном меню. «Что нового» доступно независимо от новой версии: до 8 последних релизов плюс установленная. Новый content использует bridge=2 и требует shell >=1.0.6: прежние оболочки не должны получать новый UI/API через content-only публикацию. Pages feeds сохраняются для перехода legacy клиентов; новые стабильные releases не помечаются prerelease. Точное подключение и 30 OPT: [CONNECTION.md](../template-alignment/CONNECTION.md).
 
 Тихий запуск установленной игры: `/Applications/Mindbattle.app/Contents/MacOS/Mindbattle -muted`; Windows PowerShell: `& 'C:\Program Files\Mindbattle\Mindbattle.exe' -muted`. Из исходников: `npm run desktop:start -- -muted`; старый `--muted` остаётся alias. Автоматические browser checks используют `?muted=1` и Chromium `--mute-audio` до autoplay. При обновлении сохраняются CLI-аргументы и профиль. Новое имя Windows-пакета: `Mindbattle-<version>-win-x64.exe`.
+
+Release smoke fixtures launch with `-muted --mute-audio` before any renderer loads.
+Content smoke verifies that offline discovery is not retried on reconnect, then
+restarts the isolated process online to exercise explicit download and restart.
+Display changes are confirmed through the same timed confirmation dialog as the
+installed game. Packaged shell smoke uses isolated signed fixture versions
+1.0.6 → 1.0.7 for success and rollback; it does not publish a 1.0.7 release.

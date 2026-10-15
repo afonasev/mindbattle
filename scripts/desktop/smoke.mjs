@@ -41,7 +41,7 @@ await writeFile(path.join(content, "latest.json"), JSON.stringify(envelope));
 let app;
 const launch = async () => {
   app = await electron.launch({
-    args: ["tests/desktop/harness.mjs"],
+    args: ["tests/desktop/harness.mjs", "-muted", "--mute-audio"],
     env: {
       ...process.env,
       MINDBATTLE_DESKTOP_TEST_DIR: user,
@@ -49,11 +49,7 @@ const launch = async () => {
     },
   });
   const page = await app.firstWindow();
-  await app.evaluate(({ BrowserWindow }) =>
-    BrowserWindow.getAllWindows().forEach((w) =>
-      w.webContents.setAudioMuted(true),
-    ),
-  );
+  assert.equal(new URL(page.url()).searchParams.get("muted"), "1");
   await page
     .getByRole("button", { name: "Выход из игры", exact: true })
     .waitFor();
@@ -64,7 +60,7 @@ try {
   assert.equal(await page.evaluate(() => !!window.mindbattleDesktop), true);
   const footer = () => page.getByRole("contentinfo", { name: "Версия приложения" });
   const currentRelease = await footer().innerText();
-  assert.match(currentRelease, /Версия 0\.1\.0(?:\s|$)/);
+  assert.match(currentRelease, /Контент 0\.1\.0(?:\s|$)/);
   const release = JSON.parse(await readFile("dist/game-version.json", "utf8"));
   if (release.publishedAt) {
     assert.match(currentRelease, /Опубликована/);
@@ -72,9 +68,11 @@ try {
   } else assert.match(currentRelease, /Ещё не опубликована/);
   await page.screenshot({ path: path.join(evidence, "desktop-menu.png") });
   await page.getByRole("button", { name: "Настройки", exact: true }).click();
-  await page.getByLabel("Разрешение окна").selectOption("1600x900");
+  await page.getByLabel("Разрешение окна").selectOption("1024x768");
+  await page.getByRole("button", {name:"Сохранить режим", exact:true}).click();
+  await page.getByRole("dialog", {name:"Сохранить режим экрана?", exact:true}).waitFor({state:"hidden"});
   await app.evaluate(({app, BrowserWindow})=>{app.focus({steal:true}); BrowserWindow.getAllWindows()[0].focus();});
-  await page.getByLabel("Режим экрана").selectOption("full");
+  await page.getByLabel("Режим экрана", {exact:true}).selectOption("full");
   for (
     let i = 0;
     i < 50 &&
@@ -84,14 +82,16 @@ try {
     i++
   )
     await new Promise((r) => setTimeout(r, 100));
-  if(!(await app.evaluate(({ BrowserWindow })=>BrowserWindow.getAllWindows()[0].isFullScreen()))) console.error("Fullscreen diagnostic", await app.evaluate(({BrowserWindow})=>{const w=BrowserWindow.getAllWindows()[0];return {fullscreenable:w.isFullScreenable(), visible:w.isVisible(), focused:w.isFocused(),bounds:w.getBounds()};}), await page.getByLabel("Режим экрана").inputValue(), await page.locator("body").innerText(), await page.evaluate(()=>window.mindbattleDesktop.display()));
+  if(!(await app.evaluate(({ BrowserWindow })=>BrowserWindow.getAllWindows()[0].isFullScreen()))) console.error("Fullscreen diagnostic", await app.evaluate(({BrowserWindow})=>{const w=BrowserWindow.getAllWindows()[0];return {fullscreenable:w.isFullScreenable(), visible:w.isVisible(), focused:w.isFocused(),bounds:w.getBounds()};}), await page.getByLabel("Режим экрана", {exact:true}).inputValue(), await page.locator("body").innerText(), await page.evaluate(()=>window.mindbattleDesktop.display()));
   assert.equal(
     await app.evaluate(({ BrowserWindow }) =>
       BrowserWindow.getAllWindows()[0].isFullScreen(),
     ),
     true,
   );
-  await page.getByLabel("Режим экрана").selectOption("window");
+  await page.getByRole("button", {name:"Сохранить режим", exact:true}).click();
+  await page.getByRole("dialog", {name:"Сохранить режим экрана?", exact:true}).waitFor({state:"hidden"});
+  await page.getByLabel("Режим экрана", {exact:true}).selectOption("window");
   for (
     let i = 0;
     i < 50 &&
@@ -107,6 +107,8 @@ try {
     ),
     false,
   );
+  await page.getByRole("button", {name:"Сохранить режим", exact:true}).click();
+  await page.getByRole("dialog", {name:"Сохранить режим экрана?", exact:true}).waitFor({state:"hidden"});
   await page.screenshot({ path: path.join(evidence, "desktop-settings.png") });
   await page.evaluate(() => localStorage.setItem("desktop-smoke", "preserved"));
   await page.evaluate(
@@ -141,7 +143,7 @@ try {
   );
   assert.equal(
     (await page.evaluate(() => window.mindbattleDesktop.display())).width,
-    1600,
+    1024,
   );
   const queueCount = () =>
     page.evaluate(
@@ -190,13 +192,16 @@ try {
   assert.deepEqual(await app.evaluate(() => globalThis.testNetwork.events), [
     "offline-smoke",
   ]);
-  // Connectivity restoration triggers automatic discovery; no manual check action.
-  await page.evaluate(() => window.dispatchEvent(new Event("online")));
+  // Offline discovery is once per process; reconnect flushes results, never retries discovery.
+  assert.equal(await app.evaluate(() => globalThis.testNetwork.discoveries), 1);
+  assert.equal((await page.evaluate(() => window.mindbattleDesktop.status())).updateStatus.phase, "error");
+  await app.close(); app = null;
+  await writeFile(path.join(user, "fixture-online"), "yes");
+  page = await launch();
   await page.getByRole("button", { name: "Обновить", exact: true }).waitFor();
   assert.equal(await footer().innerText(), currentRelease);
-  assert.equal((await page.evaluate(() => window.mindbattleDesktop.status())).updateVersion, "0.1.0+smoke-new");
-  assert.match(await page.getByRole("button", { name: "Обновить", exact: true }).innerText(), /Версия 0\.1\.0(?:\s|$)/);
-  assert.doesNotMatch(await page.getByRole("button", { name: "Обновить", exact: true }).innerText(), /\+smoke-new/);
+  assert.equal((await page.evaluate(() => window.mindbattleDesktop.status())).updateStatus.version, "0.1.0+smoke-new");
+  assert.match(await page.getByRole("button", { name: "Обновить", exact: true }).innerText(), /0\.1\.0\+smoke-new/);
   await page.screenshot({ path: path.join(evidence, "desktop-update.png") });
   await page
     .getByRole("button", {
@@ -204,10 +209,11 @@ try {
       exact: true,
     })
     .click();
-  await page.waitForFunction(
-    () => document.documentElement.dataset.desktopUpdated === "yes",
-  );
-  assert.match(await footer().innerText(), /Версия 0\.1\.0(?:\s|$)/);
+  await page.getByRole("button", {name:"Перезапустить", exact:true}).waitFor();
+  assert.notEqual(await page.evaluate(() => document.documentElement.dataset.desktopUpdated), "yes");
+  await page.getByRole("button", {name:"Перезапустить", exact:true}).click();
+  await page.waitForFunction(() => document.documentElement.dataset.desktopUpdated === "yes");
+  assert.match(await footer().innerText(), /Контент 0\.1\.0(?:\s|$)/);
   assert.equal(
     await page.evaluate(() => localStorage.getItem("desktop-smoke")),
     "preserved",
@@ -227,6 +233,8 @@ try {
       offlineStatisticsSurviveRestart: true,
       reconnectAck: true,
       explicitSignedContentUpdate: true,
+      startupOnlyDiscovery: true,
+      mutedBeforeStartup: true,
       storagePreserved: true,
       evidence,
     }),

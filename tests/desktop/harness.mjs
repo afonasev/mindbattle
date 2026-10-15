@@ -5,7 +5,8 @@ import path from "node:path";
 if (!process.env.MINDBATTLE_DESKTOP_TEST_DIR)
   throw new Error("Isolated test directory required");
 app.setPath("userData", process.env.MINDBATTLE_DESKTOP_TEST_DIR);
-globalThis.testNetwork = { online: false, events: [], duplicate: false };
+app.commandLine.appendSwitch("mute-audio");
+globalThis.testNetwork = { online: false, events: [], duplicate: false, discoveries: 0 };
 try {
   await readFile(
     path.join(process.env.MINDBATTLE_DESKTOP_TEST_DIR, "fixture-online"),
@@ -14,12 +15,24 @@ try {
 } catch {}
 const originalFetch = globalThis.fetch;
 globalThis.fetch = async (url, options = {}) => {
+  if (String(url).startsWith("https://api.github.com/repos/afonasev/mindbattle/releases")) {
+    const state = globalThis.testNetwork;
+    state.discoveries++;
+    if (!state.online) throw new Error("Fixture offline");
+    const envelope = JSON.parse(await readFile(path.join(process.env.MINDBATTLE_DESKTOP_TEST_CONTENT, "latest.json")));
+    const manifest = JSON.parse(envelope.payload);
+    const base = manifest.objectBaseUrl;
+    return Response.json([{ tag_name: `content-${manifest.sequence}`, draft: false, prerelease: false,
+      published_at: manifest.publishedAt, body: "## Русский\nТестовое обновление\n\n## English\nTest update",
+      assets: [{name:"latest.json",state:"uploaded",browser_download_url:`${base}/latest.json`},
+        ...manifest.files.map(f => ({name:f.sha256,state:"uploaded",size:f.size,browser_download_url:`${base}/${f.sha256}`}))] }]);
+  }
   if (String(url).startsWith("https://mindbattle.afonasev.tech/") || String(url).startsWith("https://afonasev.github.io/mindbattle/") || String(url).startsWith("https://github.com/afonasev/mindbattle/releases/download/")) {
     const state = globalThis.testNetwork;
     if (!state.online) throw new Error("Fixture offline");
     const u = new URL(url);
     if (u.hostname === "afonasev.github.io") u.pathname = u.pathname.slice("/mindbattle".length);
-    if (u.hostname === "github.com") u.pathname = `/desktop/content/objects/${u.pathname.split("/").at(-1)}`;
+    if (u.hostname === "github.com") u.pathname = u.pathname.endsWith("/latest.json") ? "/desktop/content/latest.json" : `/desktop/content/objects/${u.pathname.split("/").at(-1)}`;
     if (
       u.pathname.startsWith("/api/network/") &&
       process.env.MINDBATTLE_DESKTOP_TEST_API
