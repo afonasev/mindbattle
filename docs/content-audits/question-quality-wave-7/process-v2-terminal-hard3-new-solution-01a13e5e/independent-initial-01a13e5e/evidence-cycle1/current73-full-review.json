@@ -1,0 +1,167 @@
+{
+  "id": "maps-cartography-sliver-polygon",
+  "sourceOrder": 73,
+  "verdict": "FINAL_PASS",
+  "currentCard": {
+    "id": "maps-cartography-sliver-polygon",
+    "difficulty": "hard",
+    "prompt": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+    "answers": [
+      {
+        "text": "[6, 5] км².",
+        "note": "Площадь пересечения равна 60+45−94=11 км²; 5 км² — превышение суммы площадей над площадью маски."
+      },
+      {
+        "text": "[0, 11] км².",
+        "note": "Объединение занимает 94 км² из 100 км² маски, поэтому остаётся 6 км² незаполненной площади."
+      },
+      {
+        "text": "[6, 11] км².",
+        "note": "В топологии Esri, если Must Not Have Gaps выявляет пустую область, ошибка отмечается по её контуру как линейная."
+      },
+      {
+        "text": "[11, 6] км².",
+        "note": "Формулы дают пустоту 100−94=6 км² и пересечение 60+45−94=11 км², в обратном порядке."
+      }
+    ],
+    "correctIndex": 2,
+    "explanation": "Пустота в пределах маски равна 100−94=6 км². Пересечение полигонов равно 60+45−94=11 км² по формуле включения–исключения. Искомая пара в указанном порядке — (6, 11) км².",
+    "source": {
+      "title": "Geodatabase topology rules and fixes for polygon features | ArcGIS Pro documentation",
+      "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polygon-features.html",
+      "verifiedAt": "2026-10-15"
+    }
+  },
+  "currentCanonicalSHA256": "837c98d10b2dc7867b4b2ad08117da9120871abbbfad77493d3afeeb7ce49607",
+  "sixLiteralCanonicalGroups": [
+    {
+      "group": "prompt_ordered_answers_key",
+      "literal": {
+        "prompt": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+        "answers": [
+          "[6, 5] км².",
+          "[0, 11] км².",
+          "[6, 11] км².",
+          "[11, 6] км²."
+        ],
+        "correctIndex": 2
+      },
+      "canonicalSHA256": "08db12f55cb3414c439a1bfc5b195f75073fb7b8f9b2580be9b3c48c0a0bc9df",
+      "changed": false,
+      "individualGround": "Exact whole prompt and all4 alternatives personally read. Full containment makes complement valid; set inclusion–exclusion gives intersection without assuming an internal hole. Only slot2 satisfies both values and order. Numeric alternatives are grammatically parallel and plausible."
+    },
+    {
+      "group": "explanation",
+      "literal": "Пустота в пределах маски равна 100−94=6 км². Пересечение полигонов равно 60+45−94=11 км² по формуле включения–исключения. Искомая пара в указанном порядке — (6, 11) км².",
+      "canonicalSHA256": "63dcff9b1705c8dee91919e3cc3381823888bb9840160126707cd1205aa152b1",
+      "changed": false,
+      "individualGround": "All stated calculations independently checked:100−94=6;60+45−94=11. Neither formula depends on unspecified interior-gap geometry or a class/subtype."
+    },
+    {
+      "group": "note0",
+      "literal": "Площадь пересечения равна 60+45−94=11 км²; 5 км² — превышение суммы площадей над площадью маски.",
+      "canonicalSHA256": "9306210d70f12ae7fa53783b5406681122b18eadadf2d0c57e4e9919a8289080",
+      "changed": false,
+      "individualGround": "Truthful useful own calculation: overlap11 versus net excess5. No external claim needed for supplied fictional numbers."
+    },
+    {
+      "group": "note1",
+      "literal": "Объединение занимает 94 км² из 100 км² маски, поэтому остаётся 6 км² незаполненной площади.",
+      "canonicalSHA256": "f53c79cca31a5cecbcb930bbf9eff9dbd8470c9a83c0c2f67e7e984cfce8abcb",
+      "changed": false,
+      "individualGround": "Truthful useful residual-area relation94/100 leaves6. Valid regardless of uncovered-region shape."
+    },
+    {
+      "group": "note2",
+      "literal": "В топологии Esri, если Must Not Have Gaps выявляет пустую область, ошибка отмечается по её контуру как линейная.",
+      "canonicalSHA256": "612e44424a84e374ec7b62c7b19262cdfc4e426e59c6508b22637c7abae607f6",
+      "changed": true,
+      "individualGround": "Conditional general Esri fact, supported by L49. No claim about this fixture’s hole geometry or class relation. Adds how the topology error is represented, beyond both numerical outputs."
+    },
+    {
+      "group": "note3",
+      "literal": "Формулы дают пустоту 100−94=6 км² и пересечение 60+45−94=11 км², в обратном порядке.",
+      "canonicalSHA256": "37b0cd21d022b364d354b039d53f49a8d41015c2b98104ddcbeb86a2b4591a31",
+      "changed": false,
+      "individualGround": "Both equations true; “в обратном порядке” explains the wrong option’s reversal. Slightly compressed but no grammatical ambiguity that changes the factual claim."
+    }
+  ],
+  "fourFullPromptAnswerNoteVariants": [
+    {
+      "slot": 0,
+      "prompt": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "answer": "[6, 5] км².",
+      "note": "Площадь пересечения равна 60+45−94=11 км²; 5 км² — превышение суммы площадей над площадью маски.",
+      "tripleCanonicalSHA256": "de79b7ec3c0c85cb7a9d283679cc1603c2de19c46f85f3a0524d6a6e23df8671",
+      "bindingIncludingIdSlotSHA256": "addc9f97d44fa161cd7a9b65ae5fc0592ee89f439b85986051c8b348fd8b2f46",
+      "grammar": "Read the complete prompt followed by this answer and note. The numeric pair answers the requested two areas in consistent km²; the note is a grammatical complete explanation.",
+      "specificIndependentGrounds": {
+        "plausibility": "Confuses total excess over mask with true polygon overlap; first component correct.",
+        "answer": "100−94=6 but intersection60+45−94=11; 5 is105−100, not intersection. Slot0 is wrong.",
+        "note": "Truthful useful own calculation: overlap11 versus net excess5. No external claim needed for supplied fictional numbers."
+      },
+      "isCorrect": false
+    },
+    {
+      "slot": 1,
+      "prompt": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "answer": "[0, 11] км².",
+      "note": "Объединение занимает 94 км² из 100 км² маски, поэтому остаётся 6 км² незаполненной площади.",
+      "tripleCanonicalSHA256": "ad81a59f99042d6472d41ea18d1a2c2a2a4632e4627ff92b375f728988644079",
+      "bindingIncludingIdSlotSHA256": "3dccedc6e83ac95bde548dbc19d4634ba2e05bcc18a1fb3a45c7d4160ef28b00",
+      "grammar": "Read the complete prompt followed by this answer and note. The numeric pair answers the requested two areas in consistent km²; the note is a grammatical complete explanation.",
+      "specificIndependentGrounds": {
+        "plausibility": "Recognizes overlap11 but incorrectly assumes mask coverage is complete.",
+        "answer": "Union94 cannot fill mask100; uncovered6 is required. Slot1 is wrong.",
+        "note": "Truthful useful residual-area relation94/100 leaves6. Valid regardless of uncovered-region shape."
+      },
+      "isCorrect": false
+    },
+    {
+      "slot": 2,
+      "prompt": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "answer": "[6, 11] км².",
+      "note": "В топологии Esri, если Must Not Have Gaps выявляет пустую область, ошибка отмечается по её контуру как линейная.",
+      "tripleCanonicalSHA256": "603eb212b69cb52d87ae4889c4a5e607d83bccb68e866df31a217b76a02e8a79",
+      "bindingIncludingIdSlotSHA256": "517bdbfedff491212471933bc65e2b4ac8359c99fe6ab7f7d5ed6ded628c7341",
+      "grammar": "Read the complete prompt followed by this answer and note. The numeric pair answers the requested two areas in consistent km²; the note is a grammatical complete explanation.",
+      "specificIndependentGrounds": {
+        "plausibility": "Both components and their order match the requested quantities.",
+        "answer": "Only slot2 yields uncovered6 and overlap11.",
+        "note": "Conditional general Esri fact, supported by L49. No claim about this fixture’s hole geometry or class relation. Adds how the topology error is represented, beyond both numerical outputs."
+      },
+      "isCorrect": true
+    },
+    {
+      "slot": 3,
+      "prompt": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "answer": "[11, 6] км².",
+      "note": "Формулы дают пустоту 100−94=6 км² и пересечение 60+45−94=11 км², в обратном порядке.",
+      "tripleCanonicalSHA256": "d756e6eac5125b51ea9a0099c7c8ab1fd4f6f60f5dbec36d6e32337646d597fa",
+      "bindingIncludingIdSlotSHA256": "f611eb3b1394a2e5cad7da38f4eddde1bb5c323002aef8e94a5cdb408c810552",
+      "grammar": "Read the complete prompt followed by this answer and note. The numeric pair answers the requested two areas in consistent km²; the note is a grammatical complete explanation.",
+      "specificIndependentGrounds": {
+        "plausibility": "Reverses the two correctly calculated numbers; a real response-order error.",
+        "answer": "Required order is uncovered then intersection:6,11, not11,6. Slot3 is wrong.",
+        "note": "Both equations true; “в обратном порядке” explains the wrong option’s reversal. Slightly compressed but no grammatical ambiguity that changes the factual claim."
+      },
+      "isCorrect": false
+    }
+  ],
+  "onlyChangedField": "answers[2].note",
+  "beforeCanonicalSHA256": "1b23f859d2a6d38330477d45c959b546173563fbdd337e4d653c3ab7e93b5fc2",
+  "absoluteHARD": {
+    "verdict": "PASS",
+    "contract": {
+      "absolutePath": "/Users/eaafonasev/Projects/mindbattle-planning/openspec/specs/question-catalog/spec.md",
+      "rawSHA256": "44a7ca00aa6ee983e4427873a1116e632e932df9679b2f25672166fb0f8052e4",
+      "locators": "Lines21–33: adult general-knowledge requirement and Hard scenario",
+      "requirementExact": "hard SHALL требовать специфического знания либо содержательной логики.",
+      "scenarioExact": "вопрос требует специфического знания или многошагового вывода, но его варианты содержат контекстные признаки для разумного исключения хотя бы части ответов в большинстве пакета",
+      "interpretation": "Disjunction: specific knowledge OR substantive/multistep inference. Advanced/unusual mathematics, interacting features and an undisclosed rule are not required. Supplied constraints can still require substantive application. Do not infer level solely from amount of arithmetic or peer labels."
+    },
+    "grounds": "Same demand as the adjudicated INITIAL: derive mask complement, independently reconstruct overlap from union/double counting, and retain ordered output. Slot0/slot1 independently require each relation; slot3 tests reversal. This substantive multistep inference meets the actual disjunctive criterion; no extra requirement for advanced mathematics or physically interacting GIS operations is imposed. Note-only change neither supplies the solution in the prompt nor weakens these dependencies."
+  },
+  "residualDefects": [],
+  "qualityCredit": 0
+}

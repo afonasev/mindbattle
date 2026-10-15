@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "role": "OTHER independent reader, solecycle1 FINAL CURRENT73 only",
+  "scopeId": "maps-cartography-sliver-polygon",
+  "sourceOrder": 73,
+  "stage": "SOLECYCLE1_FINAL_CURRENT",
+  "verdict": "PASS",
+  "status": "FINAL_PASS",
+  "residualHOLDCount": 0,
+  "residualDefects": [],
+  "qualityCredit": 0,
+  "currentCanonicalSHA256": "837c98d10b2dc7867b4b2ad08117da9120871abbbfad77493d3afeeb7ce49607",
+  "beforeCanonicalSHA256": "1b23f859d2a6d38330477d45c959b546173563fbdd337e4d653c3ab7e93b5fc2",
+  "frozen": {
+    "id": "maps-cartography-sliver-polygon",
+    "topicId": "maps-cartography",
+    "difficulty": "hard",
+    "correctIndex": 2
+  },
+  "currentCard": {
+    "id": "maps-cartography-sliver-polygon",
+    "difficulty": "hard",
+    "prompt": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+    "answers": [
+      {
+        "text": "[6, 5] км².",
+        "note": "Площадь пересечения равна 60+45−94=11 км²; 5 км² — превышение суммы площадей над площадью маски."
+      },
+      {
+        "text": "[0, 11] км².",
+        "note": "Объединение занимает 94 км² из 100 км² маски, поэтому остаётся 6 км² незаполненной площади."
+      },
+      {
+        "text": "[6, 11] км².",
+        "note": "В топологии Esri, если Must Not Have Gaps выявляет пустую область, ошибка отмечается по её контуру как линейная."
+      },
+      {
+        "text": "[11, 6] км².",
+        "note": "Формулы дают пустоту 100−94=6 км² и пересечение 60+45−94=11 км², в обратном порядке."
+      }
+    ],
+    "correctIndex": 2,
+    "explanation": "Пустота в пределах маски равна 100−94=6 км². Пересечение полигонов равно 60+45−94=11 км² по формуле включения–исключения. Искомая пара в указанном порядке — (6, 11) км².",
+    "source": {
+      "title": "Geodatabase topology rules and fixes for polygon features | ArcGIS Pro documentation",
+      "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polygon-features.html",
+      "verifiedAt": "2026-10-15"
+    }
+  },
+  "applyCommit": "c29a34ead9759ead8ed68135c8d3152668268b22",
+  "QA19PASSCommit": "5ca3f604baf61d0669da036fc6a5c9d6963246b8",
+  "observedBranch": "codex/question-quality-wave-6",
+  "observedHEAD": "9df21ad73ea17b1a1d5a8fe37130528157cd3cab",
+  "atUTC": "2026-10-15T09:20:07.991727+00:00",
+  "addressedDefect": "Note2 no longer asserts that the specific residual mask area forms a topology gap or that the polygons share a class. It conditionally reports the general supported line-error geometry for a detected Must Not Have Gaps void.",
+  "changedOnly": "answers[2].note; all other target fields exactly preserved",
+  "primaryConclusion": "PASS supported by personally read full saved polygon context L44/L49; source locator correctionL41->L44 documented without content blocker.",
+  "grammarPlausibilityNotes": "All4 complete prompt/answer/note substitutions read; four plausible partially-correct/reversal outcomes, exactly one key2; every note true/useful, note2 provides supported additional fact beyond numeric solution.",
+  "HARD": "PASS using actual spec21–33 and prior explicit adjudication; complement + inclusion–exclusion + ordered independent outputs remain unchanged.",
+  "actualPeerBindings": {
+    "count": 7,
+    "changed92_93_95ReadWhole": true,
+    "certified71_74NotReAdjudicated": true,
+    "whole100Review": false
+  },
+  "evidence": {
+    "fullCardSixGroupsFourTriples": "docs/content-audits/question-quality-wave-7/process-v2-terminal-hard3-new-solution-01a13e5e/independent-initial-01a13e5e/evidence-cycle1/current73-full-review.json",
+    "fullPrimaryPathBytesSHAAndLocators": "docs/content-audits/question-quality-wave-7/process-v2-terminal-hard3-new-solution-01a13e5e/independent-initial-01a13e5e/evidence-cycle1/primary-source-binding.json",
+    "actualFullPeerSnapshotsHashesBidirectionalQuotes": "docs/content-audits/question-quality-wave-7/process-v2-terminal-hard3-new-solution-01a13e5e/independent-initial-01a13e5e/evidence-cycle1/actual-current-peers.json"
+  },
+  "applyPacket": {
+    "actualPath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-terminal-hard3-new-solution-01a13e5e/apply-new73-cycle1.json",
+    "rawSHA256": "0133acd07863a6a64584a65ee2b8b3320d8b3f7dfa2b4bf249fc55fd10fc2466",
+    "pathResolution": "Packet located in process-v2-terminal-hard3-new-solution-01a13e5e root, not coordinator-01a13e5e; exact final card and hash verified."
+  },
+  "initialHistory": "Unmodified initial receipt/adjudication/history remain under same reader folder; this is separate FINAL record for changed73 only.",
+  "checks": "JSON/canonicalhash/preimage/changed-field/reference consistency only. No project tests/runtime/browser/build/deploy/network refetch. Prior QA19PASS is supplied provenance, not a test executed by this reader.",
+  "processesAndCleanup": "No own background processes launched; no build/log/cache/temp artifacts outside output. All evidence retained for preservation; foreign files/index untouched.",
+  "integration": "New reader output in working tree only; no Git/index/history mutation or main-integration claim.",
+  "nextStep": "Coordinator preserves this receipt and evidence in task branch, certifies exact CURRENT73, then may close reader session. No secondfix-cycle.",
+  "archiveGate": "Do not archive until coordinator saves these new files in Git or another durable store."
+}

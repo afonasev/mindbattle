@@ -1,0 +1,307 @@
+{
+  "catalogPath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/src/content/topics/maps-cartography.json",
+  "catalogRawSHA256": "5ae836e5c52625144e59d1b84383d127a4703aa8027da003ea55839cf40295b8",
+  "peers": [
+    {
+      "sourceOrder": 16,
+      "id": "maps-cartography-equal-area",
+      "currentCard": {
+        "id": "maps-cartography-equal-area",
+        "difficulty": "medium",
+        "prompt": "Какое свойство проекции сохраняет относительные площади территорий?",
+        "answers": [
+          {
+            "text": "Равновеликость",
+            "note": "Мольвейде — пример равновеликой проекции; её эллиптический контур имеет оси 2:1."
+          },
+          {
+            "text": "Равноугольность",
+            "note": "Меркатор сохраняет локальные углы, но искажает площади, особенно у полюсов."
+          },
+          {
+            "text": "Равнопромежуточность",
+            "note": "Азимутальная равноудалённая сохраняет расстояние и направление от центра, а не площади."
+          },
+          {
+            "text": "Компромиссность",
+            "note": "Робинсон — компромиссная проекция, но не равновеликая."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Равновеликость означает сохранение относительных площадей территорий. Мольвейде — пример такой проекции, хотя формы, направления и расстояния обычно искажены.",
+        "source": {
+          "title": "ArcGIS Pro Documentation: Mollweide",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/mollweide.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "currentCanonicalSHA256": "7431a8a67564e33238cfb5211f25f7f77a40b680bf79dc7e486b4bbb93a76860",
+      "changedSinceInitial": false,
+      "reading": "Earlier whole-card reading retained; exact CURRENT hash revalidated unchanged",
+      "targetCanonicalSHA256": "837c98d10b2dc7867b4b2ad08117da9120871abbbfad77493d3afeeb7ce49607",
+      "targetExactQuote": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "peerExactQuote": "Какое свойство проекции сохраняет относительные площади территорий?",
+      "targetToPeer": "Numerical set overlap is not projection equal-area preservation.",
+      "peerToTarget": "Preserving relative mapped areas does not determine mask complement or intersection of source polygons.",
+      "result": "No duplicate demand, contradiction or new dependency affecting73 found. Peer review is a collision check, not independent certification of these peers."
+    },
+    {
+      "sourceOrder": 72,
+      "id": "maps-cartography-lambert-azimuthal",
+      "currentCard": {
+        "id": "maps-cartography-lambert-azimuthal",
+        "difficulty": "hard",
+        "prompt": "У слоя бассейнов фактическая эллипсоидальная система координат известна, но в метаданных ошибочно записана другая. Нужно исправить сохранённую систему исходного слоя и получить преобразованные координаты в равновеликой полярной проекции на эллипсоиде. Какой рабочий план выполнит оба требования?",
+        "answers": [
+          {
+            "text": "Сразу выполнить Project в обычную эллипсоидальную LAEA, не исправляя метаданные источника.",
+            "note": "Project использует систему координат входа; неверно заданная система приведёт к неверной интерпретации координат."
+          },
+          {
+            "text": "Назначить исходным координатам полярную LAEA через Define Projection и остановиться.",
+            "note": "Define Projection меняет сведения о системе координат, но не преобразует геометрию объектов."
+          },
+          {
+            "text": "Сначала задать известную фактическую систему через Define Projection, затем выполнить Project в обычную полярную LAEA.",
+            "note": "Среди параметров LAEA задаются центральный меридиан и широта начала координат."
+          },
+          {
+            "text": "Исправить метаданные источника, затем спроецировать в LAEA Auxiliary Sphere Type 3.",
+            "note": "Type 3 сохраняет равновеликость, но итоговые координаты не совпадают с истинным эллипсоидальным решением."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Сначала нужно привести метаданные источника к известной фактической системе: Define Projection меняет описание, не геометрию. Затем Project преобразует координаты в обычную полярную LAEA, единственный из двух вариантов Lambert LAEA, который поддерживает эллипсоид; Auxiliary Sphere Type 3 сохраняет площади, но не даёт эллипсоидальные координаты.",
+        "source": {
+          "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "currentCanonicalSHA256": "e7cd4c354f20fc4c8e2cf813e1f431bc100b9ef28079a7c10935a84024ced36c",
+      "changedSinceInitial": false,
+      "reading": "Earlier whole-card reading retained; exact CURRENT hash revalidated unchanged",
+      "targetCanonicalSHA256": "837c98d10b2dc7867b4b2ad08117da9120871abbbfad77493d3afeeb7ce49607",
+      "targetExactQuote": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "peerExactQuote": "У слоя бассейнов фактическая эллипсоидальная система координат известна, но в метаданных ошибочно записана другая. Нужно исправить сохранённую систему исходного слоя и получить преобразованные координаты в равновеликой полярной проекции на эллипсоиде. Какой рабочий план выполнит оба требования?",
+      "targetToPeer": "This card does not need CRS metadata correction or a projection workflow.",
+      "peerToTarget": "Ellipsoidal LAEA and Define/Project order do not imply the input polygons have a gap or a shared class.",
+      "result": "No duplicate demand, contradiction or new dependency affecting73 found. Peer review is a collision check, not independent certification of these peers."
+    },
+    {
+      "sourceOrder": 87,
+      "id": "maps-cartography-cadastral-parcels",
+      "currentCard": {
+        "id": "maps-cartography-cadastral-parcels",
+        "difficulty": "medium",
+        "prompt": "Для кадастрового плана нужно различать соседние участки шириной около 18 м. Единственная исходная карта имеет масштаб 1:50 000; её цифровое изображение можно увеличить на экране, но точность первоначальной съёмки неизвестна. Какой вывод о пригодности данных следует сделать?",
+        "answers": [
+          {
+            "text": "Увеличить изображение до масштаба 1:1 000: экранное увеличение уточнит границы.",
+            "note": "Увеличение меняет отображение, а не точность исходных измерений."
+          },
+          {
+            "text": "Взять топографическую карту 1:50 000: этот масштаб достаточен для узких кадастровых участков.",
+            "note": "FAO поясняет, что линия 0,5 мм при 1:50 000 занимает на местности 25 м, уже шире указанных участков."
+          },
+          {
+            "text": "Считать участки точными по экрану, если контуры выглядят раздельными.",
+            "note": "Визуально раздельные цифровые линии не доказывают разрешение или точность исходной съёмки."
+          },
+          {
+            "text": "Не считать увеличение заменой новой съёмки; запросить исходные крупномасштабные данные, пригодные для участков такого размера.",
+            "note": "При 1:50 000 линия толщиной 0,5 мм соответствует 25 м; экранный зум точности не добавляет."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "В масштабе 1:50 000 линия шириной 0,5 мм соответствует 25 м на местности, что превышает ширину участков 18 м. FAO также предупреждает, что увеличение цифровой карты не делает её точнее исходных данных; для кадастровых планов обычно применяют масштабы 1:500–1:2 500, хотя нужный масштаб зависит от местности. Следовательно, требуется подходящая исходная съёмка, а не визуальное увеличение этой карты.",
+        "source": {
+          "title": "Cadastral surveys and records of rights in land | FAO",
+          "url": "https://www.fao.org/4/v4860e/v4860e03.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "currentCanonicalSHA256": "d8b8cda76ac5fb5f6c9472d6388b3c34a65228bf0a2923cc46fff43959d0b3a8",
+      "changedSinceInitial": false,
+      "reading": "Whole actual CURRENT personally read in this cycle",
+      "targetCanonicalSHA256": "837c98d10b2dc7867b4b2ad08117da9120871abbbfad77493d3afeeb7ce49607",
+      "targetExactQuote": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "peerExactQuote": "Для кадастрового плана нужно различать соседние участки шириной около 18 м. Единственная исходная карта имеет масштаб 1:50 000; её цифровое изображение можно увеличить на экране, но точность первоначальной съёмки неизвестна. Какой вывод о пригодности данных следует сделать?",
+      "targetToPeer": "Conditional exact areas here do not claim cadastral measurement accuracy.",
+      "peerToTarget": "Screen enlargement/18m parcels/source scale are not coverage or intersection relations.",
+      "result": "No duplicate demand, contradiction or new dependency affecting73 found. Peer review is a collision check, not independent certification of these peers."
+    },
+    {
+      "sourceOrder": 88,
+      "id": "maps-cartography-area-distortion",
+      "currentCard": {
+        "id": "maps-cartography-area-distortion",
+        "difficulty": "medium",
+        "prompt": "В ГИС сравнивают участки с наземными площадями 80 км² (A) и 100 км² (B). На одной проекции их изображения занимают 4 см² и 6 см² соответственно. После нормирования на наземную площадь во сколько раз коэффициент отображения площади B больше, чем A?",
+        "answers": [
+          {
+            "text": "В 0,5 раза",
+            "note": "Коэффициент 0,5 был бы у B, если бы после нормирования он составлял половину A; здесь 0,06/0,05 = 1,2."
+          },
+          {
+            "text": "В 0,8333… раза",
+            "note": "Обратное нормированное отношение равно 0,05/0,06 = 0,8333…, то есть примерно 0,83. Это коэффициент A относительно B, а в вопросе требуется B относительно A."
+          },
+          {
+            "text": "В 1 раз",
+            "note": "Равные коэффициенты дали бы 1; здесь после нормирования получаются 0,05 и 0,06."
+          },
+          {
+            "text": "В 1,2 раза",
+            "note": "Проекция Ламберта сохраняет относительные площади, но Esri указывает, что вдали от центра обычно искажаются формы, углы, направления и расстояния."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Сначала найдите коэффициенты: для A это 4/80 = 0,05, для B — 6/100 = 0,06 см²/км². Затем сравните их: 0,06/0,05 = 1,2, поэтому нормированный коэффициент B в 1,2 раза больше.",
+        "source": {
+          "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "currentCanonicalSHA256": "524d529c3f127907920f94c01a76b712af1ccbeeb72ecac9e05a8323dfd8cb04",
+      "changedSinceInitial": false,
+      "reading": "Whole actual CURRENT personally read in this cycle",
+      "targetCanonicalSHA256": "837c98d10b2dc7867b4b2ad08117da9120871abbbfad77493d3afeeb7ce49607",
+      "targetExactQuote": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "peerExactQuote": "В ГИС сравнивают участки с наземными площадями 80 км² (A) и 100 км² (B). На одной проекции их изображения занимают 4 см² и 6 см² соответственно. После нормирования на наземную площадь во сколько раз коэффициент отображения площади B больше, чем A?",
+      "targetToPeer": "Target computes set-area complement and double-counted overlap, not projected area coefficient ratio.",
+      "peerToTarget": "Normalizing4/80 and6/100 does not determine a void or Esri error geometry; no contradiction with the conditional note.",
+      "result": "No duplicate demand, contradiction or new dependency affecting73 found. Peer review is a collision check, not independent certification of these peers."
+    },
+    {
+      "sourceOrder": 92,
+      "id": "maps-cartography-generalization-select",
+      "currentCard": {
+        "id": "maps-cartography-generalization-select",
+        "difficulty": "medium",
+        "prompt": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+        "answers": [
+          {
+            "text": "Выбрать Shape_Area < 100, затем применить Simplify Building.",
+            "note": "Порог <100 оставляет малые здания."
+          },
+          {
+            "text": "Выбрать Shape_Area > 100, затем применить Aggregate Polygons.",
+            "note": "Агрегация не упрощает контуры."
+          },
+          {
+            "text": "Применить Simplify Building ко всему слою без выборки.",
+            "note": "Без отбора малые здания останутся."
+          },
+          {
+            "text": "Выбрать Shape_Area > 100, затем применить Simplify Building.",
+            "note": "В примере включён CHECK_CONFLICTS."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Сначала выражение Shape_Area > 100 отбирает здания больше минимальной площади: малые здания для масштаба 1:50 000 исключаются. Затем Simplify Building убирает у выбранных контуров вогнутости, выступы и лишние вершины. В примере у инструмента также включён параметр CHECK_CONFLICTS.",
+        "source": {
+          "title": "Automating conflict resolution and generalization workflows with geoprocessing | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.6/tool-reference/cartography/conflict-resolution-and-generalization-with-geoprocessing.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "currentCanonicalSHA256": "c37a62874f8507a2b99b52be4153d0894b02d7044873b559c55422895015db0c",
+      "changedSinceInitial": true,
+      "reading": "Whole actual CURRENT personally read in this cycle",
+      "targetCanonicalSHA256": "837c98d10b2dc7867b4b2ad08117da9120871abbbfad77493d3afeeb7ce49607",
+      "targetExactQuote": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "peerExactQuote": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+      "targetToPeer": "Target does not select or simplify buildings; its supplied areas are set relationships.",
+      "peerToTarget": "Shape_Area>100 followed by Simplify Building is a workflow on individual features, not100km² mask coverage; shared numbers are unrelated.",
+      "result": "No duplicate demand, contradiction or new dependency affecting73 found. Peer review is a collision check, not independent certification of these peers."
+    },
+    {
+      "sourceOrder": 93,
+      "id": "maps-cartography-classification-groups",
+      "currentCard": {
+        "id": "maps-cartography-classification-groups",
+        "difficulty": "medium",
+        "prompt": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+        "answers": [
+          {
+            "text": "0–10, >10–30, >30–60 и >60–80 °C.",
+            "note": "Ширины интервалов различны."
+          },
+          {
+            "text": "Поставить границы по квартилям, уравняв число станций.",
+            "note": "Квантили уравнивают число записей."
+          },
+          {
+            "text": "Задать вручную пороги 0, 18, 42, 65 и 80 °C.",
+            "note": "Ручные границы произвольны."
+          },
+          {
+            "text": "0–20, >20–40, >40–60 и >60–80 °C.",
+            "note": "Jenks группирует близкие значения."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Размах значений равен 80 °C; разделив его на четыре класса, получаем ширину 20 °C. Поэтому границы идут через 20: 0, 20, 40, 60 и 80. Метод Jenks, в отличие от этого расчёта, ищет естественные группы похожих значений.",
+        "source": {
+          "title": "Data classification methods | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.0/help/mapping/layer-properties/data-classification-methods.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "currentCanonicalSHA256": "687128d09162548a67218b5512c3e94f673ae6ecc84288890d5a9154f5aa4ff5",
+      "changedSinceInitial": true,
+      "reading": "Whole actual CURRENT personally read in this cycle",
+      "targetCanonicalSHA256": "837c98d10b2dc7867b4b2ad08117da9120871abbbfad77493d3afeeb7ce49607",
+      "targetExactQuote": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "peerExactQuote": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+      "targetToPeer": "Ordered pair of two different area relations is separate from four equal-width temperature classes.",
+      "peerToTarget": "Equal-interval widths20 and Jenks grouping do not establish overlap or any topology predicate.",
+      "result": "No duplicate demand, contradiction or new dependency affecting73 found. Peer review is a collision check, not independent certification of these peers."
+    },
+    {
+      "sourceOrder": 95,
+      "id": "maps-cartography-label-placement",
+      "currentCard": {
+        "id": "maps-cartography-label-placement",
+        "difficulty": "medium",
+        "prompt": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+        "answers": [
+          {
+            "text": "Задать веса объектов: больнице высокий, вокзалу средний, парку низкий.",
+            "note": "Weight — конфликт с объектом."
+          },
+          {
+            "text": "Дать парку приоритет выше вокзала и больницы.",
+            "note": "Это обратный порядок важности."
+          },
+          {
+            "text": "Установить всем классам одинаковый приоритет.",
+            "note": "Равный ранг не задаёт порядок."
+          },
+          {
+            "text": "Приоритеты: больница > вокзал > парк; разрешить конфликты. Нижние подписи могут сдвигаться или сниматься; показ больницы не гарантирован.",
+            "note": "При зуме движок меняет позиции."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Задайте приоритет классов «больница → вокзал → парк» и оставьте стандартное разрешение конфликтов. Приоритет задаёт очередность размещения, но не гарантирует видимость даже больничной подписи. Нижестоящая конфликтующая подпись может переместиться или исчезнуть; движок также меняет размещение при зуме и панорамировании.",
+        "source": {
+          "title": "Label with the Standard Label Engine | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.4/help/mapping/text/label-with-the-standard-label-engine.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "currentCanonicalSHA256": "421d676b174db341902fa65207016e090528ff4f07a88576fa29ba72a9a36428",
+      "changedSinceInitial": true,
+      "reading": "Whole actual CURRENT personally read in this cycle",
+      "targetCanonicalSHA256": "837c98d10b2dc7867b4b2ad08117da9120871abbbfad77493d3afeeb7ce49607",
+      "targetExactQuote": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "peerExactQuote": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+      "targetToPeer": "Gap-error line representation is geometric validation, not label placement priority.",
+      "peerToTarget": "Priority order/zoom and lack of guaranteed visibility for labels are unrelated to locating a topology error on a void outline.",
+      "result": "No duplicate demand, contradiction or new dependency affecting73 found. Peer review is a collision check, not independent certification of these peers."
+    }
+  ]
+}
