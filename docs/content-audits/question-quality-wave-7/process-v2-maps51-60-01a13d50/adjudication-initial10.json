@@ -1,0 +1,105 @@
+{
+  "receipt": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/receipt.json",
+  "receiptSHA256": "dda3f41f1b24a246889578f6c775203d4795239d8846e2c4d6441da7eab881fa",
+  "decisions": [
+    {
+      "id": "maps-cartography-bar-scale",
+      "currentCardSHA256": "41acc491e1dff8a7ce31c32910b226559615afd5e910de6cf62dff05791c2c2d",
+      "status": "FIX",
+      "defects": [
+        "SOURCE: National Geographic не содержит определения bar scale или named/verbal scale; USGS Map Scales не определяет графическую форму. Нельзя зачесть основания prompt/explanation/note1/note2.",
+        "LEAKAGE: note0 1:50 000 + численная дробь раскрывает ratio-scale; note1 «1 см — 500 м» раскрывает verbal-scale."
+      ]
+    },
+    {
+      "id": "maps-cartography-ratio-scale",
+      "currentCardSHA256": "c6fce6927a7928370f96429441bad1746a95da7e7d7ed7ae597a3f160ff1d0a6",
+      "status": "FIX",
+      "defects": [
+        "SOURCE: note0 о размеченном отрезке и note1 о словесной форме отсутствуют в указанной статье National Geographic.",
+        "LEAKAGE: note0 раскрывает bar-scale; note1 содержит тот же пример 1 см/500 м, что verbal-scale prompt."
+      ]
+    },
+    {
+      "id": "maps-cartography-verbal-scale",
+      "currentCardSHA256": "fc830c2fbe525a334410bec6e30f17c49baf4c59287747766607cb041470e40d",
+      "status": "FIX",
+      "defects": [
+        "SOURCE: статья National Geographic не содержит словесной формы, bar scale или приписанного cm/km примера; нужен конкретный полный первичный контекст.",
+        "LEAKAGE: note0 описывает bar-scale; note1 содержит буквальный 1:50 000 и численный масштаб из ratio-scale."
+      ]
+    },
+    {
+      "id": "maps-cartography-large-scale",
+      "currentCardSHA256": "746396029c95e274bf6c48c2c4993f8d1d3c1fc111d3d55db7c7b8fb52d3304d",
+      "status": "FIX",
+      "defects": [
+        "CORRECT_NOTE: note2 повторяет больше объектов/деталей на том же листе, уже данные prompt/explanation; «USGS сравнивает» не новый факт.",
+        "PROMPT: относительное «меньшему расстоянию» без названного сравнения; уточнить сравнение при фиксированном формате листа в адресной редактуре."
+      ]
+    },
+    {
+      "id": "maps-cartography-grid-square",
+      "currentCardSHA256": "23dd15ff22b4c1686c2a0811b2f75174e15445adf6595b462b79f33aaf54139a",
+      "status": "FIX",
+      "defects": [
+        "CORRECT_NOTE: note2 повторяет букву столбца, номер строки и D7 из prompt.",
+        "SOURCE: NatGeo Grid даёт лишь пересекающиеся линии; нет буквенно-цифровой адресации, а Index/Customer Information не доказывает поиск топонима по странице/сетке.",
+        "LEAKAGE: notes0/1/3 раскрывают функции index-place/inset-detail/locator-context."
+      ]
+    },
+    {
+      "id": "maps-cartography-index-place",
+      "currentCardSHA256": "1ce3b376ab86b72f18c931285137673abe0b0fe73b5dd6d94b62c0829495c4c0",
+      "status": "FIX",
+      "defects": [
+        "CORRECT_NOTE: note2 повторяет нахождение по названию и отсылку к сетке из prompt; «обычно» без первичного основания.",
+        "SOURCE: NatGeo Index = Customer Information не доказывает перечень топонимов со страницами/квадратами; ни prompt/explanation, ни заметка не покрыты.",
+        "LEAKAGE: notes0/1/3 раскрывают grid-square/inset-detail/locator-context."
+      ]
+    },
+    {
+      "id": "maps-cartography-inset-detail",
+      "currentCardSHA256": "3c4f623f3538ddebcd2c24c5ec2562472cd13873d767ddc8eee89255a17af921",
+      "status": "FIX",
+      "defects": [
+        "SOURCE: note1 о lookup названия к странице/координате не следует из NatGeo Index; note3 буквенно-цифровая адресация не следует из общего Grid.",
+        "LEAKAGE: note0 непосредственно раскрывает locator-context; note1 index-place; note3 grid-square."
+      ]
+    },
+    {
+      "id": "maps-cartography-locator-context",
+      "currentCardSHA256": "fa6193cc94bfe4693b05273d9bdc5875beb27b487403eb750e6d03da346349c7",
+      "status": "FIX",
+      "defects": [
+        "SOURCE: note1 с D7 не покрыта общим NatGeo Grid.",
+        "LEAKAGE: note3 раскрывает inset-detail; note1 повторяет D7 grid-square; note0 непосредственно определяет ответ legend-key."
+      ]
+    },
+    {
+      "id": "maps-cartography-close-steep",
+      "currentCardSHA256": "4d403e3318ca3ec4cf015784967f3b0c30719fa6c8964046e876c8941f0fba12",
+      "status": "FIX",
+      "defects": [
+        "CORRECT_NOTE: note2 повторяет близко расположенные горизонтали = крутой склон; атрибуция USGS не добавляет факта.",
+        "LEAKAGE: note0 полностью раскрывает wide-gentle; CURRENT closed-hill/v-valley notes0 раскрывают close-steep.",
+        "DISTRACTORS: «Холм» и «Долина» — формы рельефа, а вопрос прямо просит вид уклона; существенно слабее парного склонового варианта."
+      ]
+    },
+    {
+      "id": "maps-cartography-wide-gentle",
+      "currentCardSHA256": "330566a5a0852484ca2b4d28e3f061b132ec1ea090ffb2237490bd96ab3a8057",
+      "status": "FIX",
+      "defects": [
+        "CORRECT_NOTE: note2 повторяет широко расставленные горизонтали = ровная поверхность; атрибуция USGS не добавляет факта.",
+        "LEAKAGE: note0 полностью раскрывает close-steep; CURRENT closed-hill/v-valley notes1 раскрывают wide-gentle.",
+        "DISTRACTORS: «Холм» и «Долина» — формы рельефа, а вопрос просит уклон; категория исключается без чтения горизонталей."
+      ]
+    }
+  ],
+  "adjudication": "Agree: unsupported claimed source content, non-additional correct notes and exact cross-card leakage are concrete repairable defects. Current10 remains uncertified.",
+  "qualityCredit": 0,
+  "CURRENT": 662,
+  "remaining": 1338,
+  "fixRequest": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-request-cycle1.json"
+}
