@@ -1,0 +1,151 @@
+{
+  "cycle": 1,
+  "stage": "single substantive authorfix afterINITIAL, not dispatched until author capacity frees",
+  "baselineCommit": "23f619cb2484a53d2d44a49d16c446a7faa7b3b7",
+  "reader": "01a13e9e-3586-72c0-ab4d-d4832f29cdeb",
+  "readerReceipt": "docs/content-audits/question-quality-wave-8/process-v2-engineering1-10-01a13e5e/independent-initial-01a13e5e/receipt.json",
+  "scopeIds": [
+    "engineering-machines-pulley-rope",
+    "engineering-machines-wheel-axle"
+  ],
+  "entries": [
+    {
+      "id": "engineering-machines-pulley-rope",
+      "beforeCard": {
+        "id": "engineering-machines-pulley-rope",
+        "difficulty": "easy",
+        "prompt": "Какой простой механизм использует колесо с канавкой и гибкий канат?",
+        "answers": [
+          {
+            "text": "Блок",
+            "note": "Для выигрыша в полиспасте считают ветви, поддерживающие груз; ветвь, меняющую направление тяги, не учитывают."
+          },
+          {
+            "text": "Наклонная плоскость",
+            "note": "При одной высоте подъёма увеличение длины наклона меняет идеальное механическое преимущество."
+          },
+          {
+            "text": "Колесо и ось",
+            "note": "Отвёртка и дверная ручка — примеры применения этого механизма."
+          },
+          {
+            "text": "Рычаг",
+            "note": "Во втором классе нагрузка находится между опорой и приложенным усилием; такая схема умножает силу."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Неподвижная схема меняет направление силы, а подвижная или составная система может давать выигрыш в силе. Для его оценки считают ветви, поддерживающие груз.",
+        "source": {
+          "title": "Yale-New Haven Teachers Institute: Simple Machines, Engines and the Environment",
+          "url": "https://teachersinstitute.yale.edu/curriculum/units/2004/4/04.04.03/2",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeSHA256": "9c1b0125feedb9dcea4ca281f91a1fc6b54ccfe338e18d42669b43220b8574f8",
+      "fixes": [
+        {
+          "fields": [
+            "explanation",
+            "answers[0].note"
+          ],
+          "defect": "Counting branches needs ideal equal-tension context; exclude a branch ONLY redirecting force, not any branch whose path changes direction. Current wording overgeneralizes the strand rule.",
+          "requestedCycle1": "State ideal advantage and distinguish load-supporting strands from free strands used only for redirecting pull. Keep a genuine new fact beyond the prompt.",
+          "primary": "Yale L35,L91,L100"
+        }
+      ],
+      "uniqueKey": {
+        "index": 0,
+        "status": "PASS",
+        "basis": "Only pulley matches grooved wheel plus rope. Inclined plane is a sloping load path; not grooved wheel/rope. Wheel/axle transfer through connected different radii; pulley wheel rotates relative to its axle. Lever is a pivoted rigid bar, not rope over grooved wheel."
+      },
+      "absoluteLevel": {
+        "status": "PASS",
+        "difficulty": "easy",
+        "basis": "One elementary familiar mechanism recognized by shape/operation; no calculation, specialized vocabulary inference or multi-step reasoning required. Difficulty judged absolutely, not against the other 100 cards."
+      },
+      "correctNoteNewFact": {
+        "status": "FIX",
+        "judgment": "Supporting-strand counting is genuinely new beyond grooved-wheel/rope identification, but current unqualified exclusion rule needs repair."
+      },
+      "directAnswerInPrompt": {
+        "status": "PASS",
+        "judgment": "Mechanism name is not supplied; construction must be identified."
+      }
+    },
+    {
+      "id": "engineering-machines-wheel-axle",
+      "beforeCard": {
+        "id": "engineering-machines-wheel-axle",
+        "difficulty": "easy",
+        "prompt": "Какой простой механизм состоит из соединённых колеса и оси разного радиуса?",
+        "answers": [
+          {
+            "text": "Рычаг",
+            "note": "Когда нагрузка находится между опорой и усилием, механизм даёт выигрыш в силе."
+          },
+          {
+            "text": "Колесо и ось",
+            "note": "Большое колесо может дать оси короткое, но более сильное движение."
+          },
+          {
+            "text": "Блок",
+            "note": "Неподвижная конфигурация меняет направление приложенной силы; подвижная может увеличивать её."
+          },
+          {
+            "text": "Наклонная плоскость",
+            "note": "При одинаковой высоте идеальное преимущество зависит от длины наклона; можно сравнить поверхности разной длины."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Колесо больше центральной оси и закреплено на ней. Его длинное движение может превратиться в короткое, но более сильное движение оси.",
+        "source": {
+          "title": "Yale-New Haven Teachers Institute: Simple Machines, Engines and the Environment",
+          "url": "https://teachersinstitute.yale.edu/curriculum/units/2004/4/04.04.03/2",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeSHA256": "e6e62d52cf6bbd351d5dd9180ee6de581def2176bce6eead099cfb5d6c89b147",
+      "fixes": [
+        {
+          "fields": [
+            "prompt"
+          ],
+          "defect": "Prompt names «колеса и оси», i.e. the whole key «Колесо и ось»; recognition becomes copying the supplied answer.",
+          "requestedCycle1": "Ask through a concrete operation/example without supplying both key nouns; keep easy and frozen key 1."
+        },
+        {
+          "fields": [
+            "explanation",
+            "answers[1].note"
+          ],
+          "defect": "«короткое, но более сильное движение» conflates displacement and force; connected wheel and axle have the same angular displacement. No permissible primary context here supports this exact specific claim. Cited L105-L106 is unrelated; UMass attributed Wikipedia is not independent primary evidence.",
+          "requestedCycle1": "Use a precise supported useful new fact, e.g. source-provided application not already named in revised prompt, or properly sourced qualified tangential force/distance relationship."
+        }
+      ],
+      "uniqueKey": {
+        "index": 1,
+        "status": "PASS",
+        "basis": "Lever uses bar/fulcrum, not connected wheel and axle. Matches two circular parts; nevertheless question repeats whole answer. Pulley wheel is not rigidly coupled to its axle as this simple machine requires. Inclined plane is a surface and has no coupled circular parts."
+      },
+      "absoluteLevel": {
+        "status": "PASS",
+        "difficulty": "easy",
+        "basis": "One elementary familiar mechanism recognized by shape/operation; no calculation, specialized vocabulary inference or multi-step reasoning required. Difficulty judged absolutely, not against the other 100 cards."
+      },
+      "correctNoteNewFact": {
+        "status": "FIX",
+        "judgment": "Intended force/path exchange would be new, but the present vague sentence lacks acceptable specific primary support; no new-fact credit yet."
+      },
+      "directAnswerInPrompt": {
+        "status": "FIX",
+        "judgment": "Both whole-key nouns are supplied verbatim."
+      }
+    }
+  ],
+  "frozen": "ID/topic/order/easy/numerickey0forpulley,1forwheel; alltextsemanticsmutable source-backed",
+  "certifiedUnchanged": [
+    "engineering-machines-lever-force",
+    "engineering-machines-inclined-plane"
+  ],
+  "qualityCredit": 0
+}
