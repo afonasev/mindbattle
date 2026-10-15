@@ -1,156 +1,11 @@
 {
-  "schema": "mindbattle-peer-snapshot-v1",
+  "schema": "mindbattle-peer-snapshot-v2",
   "baseline": "8880d868fe74ee03d6fce009e275ee4f1cb65201",
-  "scanScope": "Prompt plus correct-answer text across all src/content/topics/*.json; retain globally relevant full cards and hashes. Direct candidate relations recorded bilaterally; same-topic nonoverlap examples retained as nearby process peers.",
+  "scanMethod": "All topic JSON prompt plus correct-answer label; relevant actual full cards retained below.",
   "scanMatches": [
     {
-      "topicId": "books-publishing",
-      "id": "books-publishing-work-model",
-      "relation": "Same FRBR entity hierarchy; direct adjacent-level confusion risk. Compare specific entity and level.",
-      "card": {
-        "id": "books-publishing-work-model",
-        "difficulty": "hard",
-        "prompt": "Какой уровень модели FRBR обозначает абстрактный интеллектуальный замысел?",
-        "answers": [
-          {
-            "text": "Выражение",
-            "note": "Перевод на другой язык считается новым выражением того же произведения; изменения формулировок могут сохранять исходное произведение."
-          },
-          {
-            "text": "Манифестация",
-            "note": "Манифестация объединяет носители с общими характеристиками содержания и физической формы; смена бумаги на микрофильм образует новую манифестацию."
-          },
-          {
-            "text": "Произведение",
-            "note": "Границы произведения могут трактоваться по-разному в разных культурах и национальных библиографических традициях."
-          },
-          {
-            "text": "Экземпляр",
-            "note": "Экземпляр может отличаться от других копий той же манифестации из-за утраты страницы или переплёта, сделанного библиотекой."
-          }
-        ],
-        "correctIndex": 2,
-        "explanation": "Произведение — абстрактное интеллектуальное или художественное создание, общее содержание которого распознаётся через его выражения. Его границы могут определяться по-разному в разных библиографических традициях.",
-        "source": {
-          "title": "Functional Requirements for Bibliographic Records: Final Report — IFLA",
-          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
-          "verifiedAt": "2026-10-16"
-        }
-      },
-      "canonicalSHA256": "6ea8c8f8ae25c371579c6a98c116cc499c6d532068f1e2223ed12331f0ed23b3"
-    },
-    {
-      "topicId": "books-publishing",
-      "id": "books-publishing-expression-model",
-      "relation": "Same FRBR entity hierarchy; direct adjacent-level confusion risk. Compare specific entity and level.",
-      "card": {
-        "id": "books-publishing-expression-model",
-        "difficulty": "hard",
-        "prompt": "Какой уровень FRBR обозначает конкретную языковую или музыкальную реализацию произведения?",
-        "answers": [
-          {
-            "text": "Манифестация",
-            "note": "Манифестация описывает общие физические и производственные характеристики набора копий; смена носителя может создать новую манифестацию."
-          },
-          {
-            "text": "Экземпляр",
-            "note": "Экземпляр — отдельный представитель манифестации; его владельческие пометы и повреждения относятся к этой конкретной копии."
-          },
-          {
-            "text": "Выражение",
-            "note": "Перевод на другой язык считается новым выражением того же произведения; сходное содержание может воплощаться в разных манифестациях."
-          },
-          {
-            "text": "Произведение",
-            "note": "Произведение — абстрактное создание, распознаваемое по общему содержанию его выражений, а не отдельная формулировка текста."
-          }
-        ],
-        "correctIndex": 2,
-        "explanation": "Выражение — интеллектуальная или художественная реализация произведения в определённой форме, например в словесном тексте или музыкальном исполнении. Перевод на другой язык считается другим выражением того же произведения.",
-        "source": {
-          "title": "Functional Requirements for Bibliographic Records: Final Report — IFLA",
-          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
-          "verifiedAt": "2026-10-16"
-        }
-      },
-      "canonicalSHA256": "a0393a20e7fd9665cc085cbe227fb395b8ee021870fcc6e261079a04baf63837"
-    },
-    {
-      "topicId": "books-publishing",
-      "id": "books-publishing-manifestation-model",
-      "relation": "Same FRBR entity hierarchy; direct adjacent-level confusion risk. Compare specific entity and level.",
-      "card": {
-        "id": "books-publishing-manifestation-model",
-        "difficulty": "hard",
-        "prompt": "В FRBR один и тот же текст представлен печатной книгой и микрофильмом. Какой уровень обозначает каждую форму физического воплощения?",
-        "answers": [
-          {
-            "text": "Экземпляр",
-            "note": "Экземпляр — одна копия манифестации; её состояние может измениться после производства, например из-за утраченной страницы или нового переплёта."
-          },
-          {
-            "text": "Произведение",
-            "note": "Произведение — абстрактное интеллектуальное создание, общее содержание которого прослеживается через разные выражения."
-          },
-          {
-            "text": "Выражение",
-            "note": "Выражение передаёт интеллектуальную или художественную форму произведения; шрифт и расположение страницы сами по себе к нему не относятся."
-          },
-          {
-            "text": "Манифестация",
-            "note": "Манифестация описывает физические характеристики группы копий и характеристики её производства и распространения."
-          }
-        ],
-        "correctIndex": 3,
-        "explanation": "Манифестация — физическое воплощение выражения произведения. Копии на разных физических носителях, например бумаге и микрофильме, относятся к разным манифестациям.",
-        "source": {
-          "title": "Functional Requirements for Bibliographic Records: Final Report — IFLA",
-          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
-          "verifiedAt": "2026-10-16"
-        }
-      },
-      "canonicalSHA256": "82e5962a88e910e9600ccf43697aacc378cf187ba6f301f011e4bca895b439ea"
-    },
-    {
-      "topicId": "books-publishing",
-      "id": "books-publishing-proof-stage",
-      "relation": "lexical overlap only (copy/edition/state); prompt and correct answer target publishing bibliography, not conservation or FRBR item level.",
-      "card": {
-        "id": "books-publishing-proof-stage",
-        "difficulty": "medium",
-        "prompt": "Получив несколько экземпляров корректуры с разными пометками, какого участника производственного цикла подключают до передачи дальнейших правок наборщику?",
-        "answers": [
-          {
-            "text": "Сводчик корректур (proof collator)",
-            "note": "Он объединяет исправления, отмеченные автором и корректором, в один оттиск и передаёт его наборщику."
-          },
-          {
-            "text": "Корректор (proofreader)",
-            "note": "Он читает и размечает корректурный оттиск, отмечая ошибки набора, проблемы макета и пропуски, оставшиеся после copyediting."
-          },
-          {
-            "text": "Наборщик (typesetter)",
-            "note": "Он располагает текст и изображения на страницах и предоставляет корректурный оттиск для проверки."
-          },
-          {
-            "text": "Копи-редактор (copyeditor)",
-            "note": "Он проверяет грамматику, орфографию, пунктуацию и единообразие текста, подготавливая его к верстке."
-          }
-        ],
-        "correctIndex": 0,
-        "explanation": "Сводчик корректур (proof collator) объединяет поправки автора и корректора в один вариант для наборщика. Корректор отвечает за проверку и пометки, а наборщик получает согласованный набор изменений.",
-        "source": {
-          "title": "CIEP — Glossary of editorial and publishing terms",
-          "url": "https://www.ciep.uk/resource/editorial-glossary.html",
-          "verifiedAt": "2026-10-15"
-        }
-      },
-      "canonicalSHA256": "b90fcae270406810bf16aa61fbfc25ad75ba7784139cdb96b8967fe57436085a"
-    },
-    {
-      "topicId": "books-publishing",
       "id": "books-publishing-edition-state",
-      "relation": "lexical overlap only (copy/edition/state); prompt and correct answer target publishing bibliography, not conservation or FRBR item level.",
+      "topicId": "books-publishing",
       "card": {
         "id": "books-publishing-edition-state",
         "difficulty": "hard",
@@ -181,12 +36,14 @@
           "verifiedAt": "2026-10-15"
         }
       },
-      "canonicalSHA256": "da3208976346fc6a53b9f6f569a96bf95271f824586355b5fa4258ba396c310a"
+      "canonicalSHA256": "da3208976346fc6a53b9f6f569a96bf95271f824586355b5fa4258ba396c310a",
+      "source": "actual-current frozen topic snapshot",
+      "actualRelevantRelation": "Nearby publishing-bibliography term; groups copies by setting/manufacturing history, not FRBR individual-copy condition.",
+      "sourceOrder": 48
     },
     {
-      "topicId": "books-publishing",
       "id": "books-publishing-issue-state",
-      "relation": "lexical overlap only (copy/edition/state); prompt and correct answer target publishing bibliography, not conservation or FRBR item level.",
+      "topicId": "books-publishing",
       "card": {
         "id": "books-publishing-issue-state",
         "difficulty": "hard",
@@ -217,12 +74,14 @@
           "verifiedAt": "2026-10-16"
         }
       },
-      "canonicalSHA256": "f5ff5ff232bdf402e860e5593a3090fe183dec1f36df6656c2df8e43c5cda05f"
+      "canonicalSHA256": "f5ff5ff232bdf402e860e5593a3090fe183dec1f36df6656c2df8e43c5cda05f",
+      "source": "actual-current frozen topic snapshot",
+      "actualRelevantRelation": "Nearby publishing-bibliography term; a publisher-designated group, not an individual post-production copy.",
+      "sourceOrder": 49
     },
     {
-      "topicId": "books-publishing",
       "id": "books-publishing-variant-state",
-      "relation": "lexical overlap only (copy/edition/state); prompt and correct answer target publishing bibliography, not conservation or FRBR item level.",
+      "topicId": "books-publishing",
       "card": {
         "id": "books-publishing-variant-state",
         "difficulty": "hard",
@@ -253,22 +112,374 @@
           "verifiedAt": "2026-10-15"
         }
       },
-      "canonicalSHA256": "a153c413a5cd1a8d9e4162999fcc441c0d12c083025280eee301d0b8225b994a"
+      "canonicalSHA256": "a153c413a5cd1a8d9e4162999fcc441c0d12c083025280eee301d0b8225b994a",
+      "source": "actual-current frozen topic snapshot",
+      "actualRelevantRelation": "Nearby copy-variation term; a variation within an impression/issue, not the FRBR item entity’s documented provenance/condition.",
+      "sourceOrder": 50
+    },
+    {
+      "id": "books-publishing-work-model",
+      "topicId": "books-publishing",
+      "card": {
+        "id": "books-publishing-work-model",
+        "difficulty": "hard",
+        "prompt": "Какой уровень модели FRBR обозначает абстрактный интеллектуальный замысел?",
+        "answers": [
+          {
+            "text": "Выражение",
+            "note": "Перевод на другой язык считается новым выражением того же произведения; изменения формулировок могут сохранять исходное произведение."
+          },
+          {
+            "text": "Манифестация",
+            "note": "Манифестация объединяет носители с общими характеристиками содержания и физической формы; смена бумаги на микрофильм образует новую манифестацию."
+          },
+          {
+            "text": "Произведение",
+            "note": "Границы произведения могут трактоваться по-разному в разных культурах и национальных библиографических традициях."
+          },
+          {
+            "text": "Экземпляр",
+            "note": "Экземпляр может отличаться от других копий той же манифестации из-за утраты страницы или переплёта, сделанного библиотекой."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Произведение — абстрактное интеллектуальное или художественное создание, общее содержание которого распознаётся через его выражения. Его границы могут определяться по-разному в разных библиографических традициях.",
+        "source": {
+          "title": "Functional Requirements for Bibliographic Records: Final Report — IFLA",
+          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
+          "verifiedAt": "2026-10-16"
+        }
+      },
+      "canonicalSHA256": "6ea8c8f8ae25c371579c6a98c116cc499c6d532068f1e2223ed12331f0ed23b3",
+      "source": "actual-current frozen topic snapshot",
+      "actualRelevantRelation": "Adjacent conceptual level: abstract creation, not the post-production-specific exemplar in target 96.",
+      "sourceOrder": 73
+    },
+    {
+      "id": "books-publishing-expression-model",
+      "topicId": "books-publishing",
+      "card": {
+        "id": "books-publishing-expression-model",
+        "difficulty": "hard",
+        "prompt": "Какой уровень FRBR обозначает конкретную языковую или музыкальную реализацию произведения?",
+        "answers": [
+          {
+            "text": "Манифестация",
+            "note": "Манифестация описывает общие физические и производственные характеристики набора копий; смена носителя может создать новую манифестацию."
+          },
+          {
+            "text": "Экземпляр",
+            "note": "Экземпляр — отдельный представитель манифестации; его владельческие пометы и повреждения относятся к этой конкретной копии."
+          },
+          {
+            "text": "Выражение",
+            "note": "Перевод на другой язык считается новым выражением того же произведения; сходное содержание может воплощаться в разных манифестациях."
+          },
+          {
+            "text": "Произведение",
+            "note": "Произведение — абстрактное создание, распознаваемое по общему содержанию его выражений, а не отдельная формулировка текста."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Выражение — интеллектуальная или художественная реализация произведения в определённой форме, например в словесном тексте или музыкальном исполнении. Перевод на другой язык считается другим выражением того же произведения.",
+        "source": {
+          "title": "Functional Requirements for Bibliographic Records: Final Report — IFLA",
+          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
+          "verifiedAt": "2026-10-16"
+        }
+      },
+      "canonicalSHA256": "a0393a20e7fd9665cc085cbe227fb395b8ee021870fcc6e261079a04baf63837",
+      "source": "actual-current frozen topic snapshot",
+      "actualRelevantRelation": "Adjacent conceptual level: realization of a work; describes intellectual/artistic form, not one copy’s condition/history.",
+      "sourceOrder": 74
+    },
+    {
+      "id": "books-publishing-manifestation-model",
+      "topicId": "books-publishing",
+      "card": {
+        "id": "books-publishing-manifestation-model",
+        "difficulty": "hard",
+        "prompt": "В FRBR один и тот же текст представлен печатной книгой и микрофильмом. Какой уровень обозначает каждую форму физического воплощения?",
+        "answers": [
+          {
+            "text": "Экземпляр",
+            "note": "Экземпляр — одна копия манифестации; её состояние может измениться после производства, например из-за утраченной страницы или нового переплёта."
+          },
+          {
+            "text": "Произведение",
+            "note": "Произведение — абстрактное интеллектуальное создание, общее содержание которого прослеживается через разные выражения."
+          },
+          {
+            "text": "Выражение",
+            "note": "Выражение передаёт интеллектуальную или художественную форму произведения; шрифт и расположение страницы сами по себе к нему не относятся."
+          },
+          {
+            "text": "Манифестация",
+            "note": "Манифестация описывает физические характеристики группы копий и характеристики её производства и распространения."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Манифестация — физическое воплощение выражения произведения. Копии на разных физических носителях, например бумаге и микрофильме, относятся к разным манифестациям.",
+        "source": {
+          "title": "Functional Requirements for Bibliographic Records: Final Report — IFLA",
+          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
+          "verifiedAt": "2026-10-16"
+        }
+      },
+      "canonicalSHA256": "82e5962a88e910e9600ccf43697aacc378cf187ba6f301f011e4bca895b439ea",
+      "source": "actual-current frozen topic snapshot",
+      "actualRelevantRelation": "Closest peer: shared physical embodiment/production group. Target 96 asks about one individual copy with a later binding change or missing page.",
+      "sourceOrder": 75
     }
   ],
   "proposedPairs": [
     {
       "targetId": "books-publishing-item-model",
+      "peerId": "books-publishing-edition-state",
+      "targetCard": {
+        "id": "books-publishing-item-model",
+        "difficulty": "hard",
+        "prompt": "В каталоге описаны две копии одной манифестации. У одной после выхода из печати заменили переплёт и обнаружили утрату страницы. Какую сущность FRBR обозначает запись об этой копии?",
+        "answers": [
+          {
+            "text": "Экземпляр",
+            "note": "Для этой сущности отдельно описывают историю прежних владельцев и хранителей."
+          },
+          {
+            "text": "Произведение",
+            "note": "Произведение обозначает абстрактное интеллектуальное или художественное создание, узнаваемое по его выражениям."
+          },
+          {
+            "text": "Выражение",
+            "note": "Выражение фиксирует интеллектуальную или художественную реализацию произведения; перевод обычно создаёт новое выражение того же произведения."
+          },
+          {
+            "text": "Манифестация",
+            "note": "Манифестация описывает общие физические и производственные характеристики группы копий; физический носитель помогает различать манифестации."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Экземпляр — индивидуальный представитель манифестации: послепроизводственная замена переплёта и утрата страницы относятся к его собственным признакам. Для этой сущности FRBR также предусматривает описание истории прежних владельцев и хранителей.",
+        "source": {
+          "title": "IFLA, Functional Requirements for Bibliographic Records: Final Report",
+          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
+          "verifiedAt": "2026-10-16"
+        }
+      },
+      "targetCanonicalSHA256": "7f6b8d88aec67e5bc21fc97f2beb6038c65e9dfa42e533a75c2a57c0d258d724",
+      "peerCard": {
+        "id": "books-publishing-edition-state",
+        "difficulty": "hard",
+        "prompt": "Как называется совокупность экземпляров, полученных из одного набора либо изготовленных по одной и той же наборной форме?",
+        "answers": [
+          {
+            "text": "Оттиск (impression)",
+            "note": "Оттиск — все экземпляры текстового издания, полученные в ходе одного события печати."
+          },
+          {
+            "text": "Выпуск (issue)",
+            "note": "Выпуск — запланированная издателем группа экземпляров, отличимая от других специально выбранными признаками."
+          },
+          {
+            "text": "Состояние (state)",
+            "note": "Состояние различает экземпляры в том же оттиске или выпуске; отличия не предназначены объявлять новый публичный выпуск."
+          },
+          {
+            "text": "Издание (edition)",
+            "note": "В книгах ручного печатного периода помета «impression» обычно могла указывать на новое издание или выпуск."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Издание — совокупность экземпляров, полученных из одного набора или по практически одинаковому оригиналу. Оттиск относится к одному событию печати, а выпуск и состояние различают группы копий по другим библиографическим признакам.",
+        "source": {
+          "title": "DCRMR Glossary — Rare Books and Manuscripts Section",
+          "url": "https://bsc.rbms.info/DCRMR/glossary/",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "peerCanonicalSHA256": "da3208976346fc6a53b9f6f569a96bf95271f824586355b5fa4258ba396c310a",
+      "differentEntity": "The target is FRBR Item (one individual exemplar with its own later physical history); this peer is bibliographic Edition (a set of copies made from one setting or substantially the same original).",
+      "relation": "Individual object state versus edition-level production grouping.",
+      "value": "The copy-specific replacement binding and missing page affect the Item; they do not alone define a new Edition.",
+      "context": "Target prompt concerns post-release changes to one physical object. Peer prompt asks which publication group derives from a setting/form.",
+      "directReverse": "The target asks which FRBR entity represents the one object with a post-production physical change. The peer asks about Издание (edition) in its own stated context; naming either entity does not answer the other prompt."
+    },
+    {
+      "targetId": "books-publishing-item-model",
+      "peerId": "books-publishing-issue-state",
+      "targetCard": {
+        "id": "books-publishing-item-model",
+        "difficulty": "hard",
+        "prompt": "В каталоге описаны две копии одной манифестации. У одной после выхода из печати заменили переплёт и обнаружили утрату страницы. Какую сущность FRBR обозначает запись об этой копии?",
+        "answers": [
+          {
+            "text": "Экземпляр",
+            "note": "Для этой сущности отдельно описывают историю прежних владельцев и хранителей."
+          },
+          {
+            "text": "Произведение",
+            "note": "Произведение обозначает абстрактное интеллектуальное или художественное создание, узнаваемое по его выражениям."
+          },
+          {
+            "text": "Выражение",
+            "note": "Выражение фиксирует интеллектуальную или художественную реализацию произведения; перевод обычно создаёт новое выражение того же произведения."
+          },
+          {
+            "text": "Манифестация",
+            "note": "Манифестация описывает общие физические и производственные характеристики группы копий; физический носитель помогает различать манифестации."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Экземпляр — индивидуальный представитель манифестации: послепроизводственная замена переплёта и утрата страницы относятся к его собственным признакам. Для этой сущности FRBR также предусматривает описание истории прежних владельцев и хранителей.",
+        "source": {
+          "title": "IFLA, Functional Requirements for Bibliographic Records: Final Report",
+          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
+          "verifiedAt": "2026-10-16"
+        }
+      },
+      "targetCanonicalSHA256": "7f6b8d88aec67e5bc21fc97f2beb6038c65e9dfa42e533a75c2a57c0d258d724",
+      "peerCard": {
+        "id": "books-publishing-issue-state",
+        "difficulty": "hard",
+        "prompt": "Как называется заранее спланированная группа экземпляров, выделенная как отдельная издательская единица?",
+        "answers": [
+          {
+            "text": "Издание",
+            "note": "Издание включает все экземпляры, полученные в ходе одной работы типографской композиции или с одного основного оригинала."
+          },
+          {
+            "text": "Выпуск",
+            "note": "В обсуждении DCRM(B) новую титульную страницу, нового издателя и иной тип бумаги перечислили как возможные признаки нового выпуска."
+          },
+          {
+            "text": "Тиражный оттиск",
+            "note": "Impression охватывает все экземпляры текстового издания, произведённые за одно событие печати."
+          },
+          {
+            "text": "Вариант",
+            "note": "Вариант (state) отличается от других копий того же печатания или выпуска, но не считается отдельным издательским усилием."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Выпуск (issue) — сознательно спланированная группа опубликованных копий, которую отличают от других групп как отдельную единицу. Различия специально предназначены для её обозначения.",
+        "source": {
+          "title": "RBMS / DCRM (RDA Edition) — Glossary",
+          "url": "https://bsc.rbms.info/DCRMR/glossary/",
+          "verifiedAt": "2026-10-16"
+        }
+      },
+      "peerCanonicalSHA256": "f5ff5ff232bdf402e860e5593a3090fe183dec1f36df6656c2df8e43c5cda05f",
+      "differentEntity": "The target is FRBR Item, an individual object; this peer is Issue, a publisher-designated group of copies treated as a separate publishing unit.",
+      "relation": "Individual exemplar versus intentionally distinguished publication group.",
+      "value": "A later rebinding or missing page describes one object, not a publisher-planned Issue.",
+      "context": "Target prompt gives a post-production physical history for one copy. Peer prompt asks for the planned publisher grouping.",
+      "directReverse": "The target asks which FRBR entity represents the one object with a post-production physical change. The peer asks about Выпуск in its own stated context; naming either entity does not answer the other prompt."
+    },
+    {
+      "targetId": "books-publishing-item-model",
+      "peerId": "books-publishing-variant-state",
+      "targetCard": {
+        "id": "books-publishing-item-model",
+        "difficulty": "hard",
+        "prompt": "В каталоге описаны две копии одной манифестации. У одной после выхода из печати заменили переплёт и обнаружили утрату страницы. Какую сущность FRBR обозначает запись об этой копии?",
+        "answers": [
+          {
+            "text": "Экземпляр",
+            "note": "Для этой сущности отдельно описывают историю прежних владельцев и хранителей."
+          },
+          {
+            "text": "Произведение",
+            "note": "Произведение обозначает абстрактное интеллектуальное или художественное создание, узнаваемое по его выражениям."
+          },
+          {
+            "text": "Выражение",
+            "note": "Выражение фиксирует интеллектуальную или художественную реализацию произведения; перевод обычно создаёт новое выражение того же произведения."
+          },
+          {
+            "text": "Манифестация",
+            "note": "Манифестация описывает общие физические и производственные характеристики группы копий; физический носитель помогает различать манифестации."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Экземпляр — индивидуальный представитель манифестации: послепроизводственная замена переплёта и утрата страницы относятся к его собственным признакам. Для этой сущности FRBR также предусматривает описание истории прежних владельцев и хранителей.",
+        "source": {
+          "title": "IFLA, Functional Requirements for Bibliographic Records: Final Report",
+          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
+          "verifiedAt": "2026-10-16"
+        }
+      },
+      "targetCanonicalSHA256": "7f6b8d88aec67e5bc21fc97f2beb6038c65e9dfa42e533a75c2a57c0d258d724",
+      "peerCard": {
+        "id": "books-publishing-variant-state",
+        "difficulty": "hard",
+        "prompt": "Как называется экземпляр, отличающийся внутри того же печатания или выпуска, но не выделенный как отдельная издательская единица?",
+        "answers": [
+          {
+            "text": "Тиражный оттиск",
+            "note": "Impression охватывает все экземпляры текстового издания, произведённые за одно событие печати."
+          },
+          {
+            "text": "Вариант",
+            "note": "Вариант (state) может отличаться в печатном листе или издательской оболочке, но издатель не выделяет его как отдельное издательское усилие."
+          },
+          {
+            "text": "Выпуск",
+            "note": "Выпуск (issue) — заранее спланированная группа экземпляров, специально отличимая от других как отдельная издательская единица."
+          },
+          {
+            "text": "Издание",
+            "note": "Издание включает все экземпляры, полученные в ходе одной работы типографской композиции или с одного основного оригинала."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Вариант (state) — копия или группа копий, отличающаяся внутри того же печатания или выпуска. Издатель не представляет это отличие как отдельное издательское усилие.",
+        "source": {
+          "title": "RBMS / DCRM (RDA Edition) — Glossary",
+          "url": "https://bsc.rbms.info/DCRMR/glossary/",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "peerCanonicalSHA256": "a153c413a5cd1a8d9e4162999fcc441c0d12c083025280eee301d0b8225b994a",
+      "differentEntity": "The target is FRBR Item, the individual exemplar with post-production condition/history; this peer is Variant/State, a bibliographic distinction among copies within the same printing or issue.",
+      "relation": "FRBR object identity versus textual/printing-state description within an impression or issue.",
+      "value": "A copy-specific later replacement binding or missing page identifies the FRBR Item. A variant/state describes an in-printing or in-issue difference and does not by itself assert this later physical history.",
+      "context": "Target prompt is about an individual object after production. Peer prompt asks how to name a difference within the same printing/issue that was not issued as a separate publisher unit.",
+      "directReverse": "The target asks which FRBR entity represents the one object with a post-production physical change. The peer asks about Вариант in its own stated context; naming either entity does not answer the other prompt."
+    },
+    {
+      "targetId": "books-publishing-item-model",
       "peerId": "books-publishing-work-model",
-      "leftEntity": "Item / Экземпляр: an individual copy, distinct by post-production binding change",
-      "rightEntity": "Произведение",
-      "relation": "adjacent FRBR entity distinction",
-      "value": "single copy-level entity versus peer’s model level",
-      "context": "target asks which entity identifies one rebound copy; peer is a work/expression/manifestation definition",
-      "directReverse": "A reader answering the peer prompt must identify its named level, not choose Item merely because the prompt concerns a copy; target’s individual-copy context is absent.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "peerCanonicalSHA256": "6ea8c8f8ae25c371579c6a98c116cc499c6d532068f1e2223ed12331f0ed23b3",
+      "targetCard": {
+        "id": "books-publishing-item-model",
+        "difficulty": "hard",
+        "prompt": "В каталоге описаны две копии одной манифестации. У одной после выхода из печати заменили переплёт и обнаружили утрату страницы. Какую сущность FRBR обозначает запись об этой копии?",
+        "answers": [
+          {
+            "text": "Экземпляр",
+            "note": "Для этой сущности отдельно описывают историю прежних владельцев и хранителей."
+          },
+          {
+            "text": "Произведение",
+            "note": "Произведение обозначает абстрактное интеллектуальное или художественное создание, узнаваемое по его выражениям."
+          },
+          {
+            "text": "Выражение",
+            "note": "Выражение фиксирует интеллектуальную или художественную реализацию произведения; перевод обычно создаёт новое выражение того же произведения."
+          },
+          {
+            "text": "Манифестация",
+            "note": "Манифестация описывает общие физические и производственные характеристики группы копий; физический носитель помогает различать манифестации."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Экземпляр — индивидуальный представитель манифестации: послепроизводственная замена переплёта и утрата страницы относятся к его собственным признакам. Для этой сущности FRBR также предусматривает описание истории прежних владельцев и хранителей.",
+        "source": {
+          "title": "IFLA, Functional Requirements for Bibliographic Records: Final Report",
+          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
+          "verifiedAt": "2026-10-16"
+        }
+      },
+      "targetCanonicalSHA256": "7f6b8d88aec67e5bc21fc97f2beb6038c65e9dfa42e533a75c2a57c0d258d724",
       "peerCard": {
         "id": "books-publishing-work-model",
         "difficulty": "hard",
@@ -298,20 +509,48 @@
           "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
           "verifiedAt": "2026-10-16"
         }
-      }
+      },
+      "peerCanonicalSHA256": "6ea8c8f8ae25c371579c6a98c116cc499c6d532068f1e2223ed12331f0ed23b3",
+      "differentEntity": "The target is FRBR Item, a single exemplar; this peer is Work, the abstract intellectual creation.",
+      "relation": "Concrete copy-level entity versus abstract creation level.",
+      "value": "The target’s later physical changes do not change the underlying Work.",
+      "context": "Target prompt concerns the copy’s physical condition/history. Peer prompt asks which FRBR level represents the abstract intellectual idea.",
+      "directReverse": "The target asks which FRBR entity represents the one object with a post-production physical change. The peer asks about Произведение in its own stated context; naming either entity does not answer the other prompt."
     },
     {
       "targetId": "books-publishing-item-model",
       "peerId": "books-publishing-expression-model",
-      "leftEntity": "Item / Экземпляр: an individual copy, distinct by post-production binding change",
-      "rightEntity": "Выражение",
-      "relation": "adjacent FRBR entity distinction",
-      "value": "single copy-level entity versus peer’s model level",
-      "context": "target asks which entity identifies one rebound copy; peer is a work/expression/manifestation definition",
-      "directReverse": "A reader answering the peer prompt must identify its named level, not choose Item merely because the prompt concerns a copy; target’s individual-copy context is absent.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "peerCanonicalSHA256": "a0393a20e7fd9665cc085cbe227fb395b8ee021870fcc6e261079a04baf63837",
+      "targetCard": {
+        "id": "books-publishing-item-model",
+        "difficulty": "hard",
+        "prompt": "В каталоге описаны две копии одной манифестации. У одной после выхода из печати заменили переплёт и обнаружили утрату страницы. Какую сущность FRBR обозначает запись об этой копии?",
+        "answers": [
+          {
+            "text": "Экземпляр",
+            "note": "Для этой сущности отдельно описывают историю прежних владельцев и хранителей."
+          },
+          {
+            "text": "Произведение",
+            "note": "Произведение обозначает абстрактное интеллектуальное или художественное создание, узнаваемое по его выражениям."
+          },
+          {
+            "text": "Выражение",
+            "note": "Выражение фиксирует интеллектуальную или художественную реализацию произведения; перевод обычно создаёт новое выражение того же произведения."
+          },
+          {
+            "text": "Манифестация",
+            "note": "Манифестация описывает общие физические и производственные характеристики группы копий; физический носитель помогает различать манифестации."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Экземпляр — индивидуальный представитель манифестации: послепроизводственная замена переплёта и утрата страницы относятся к его собственным признакам. Для этой сущности FRBR также предусматривает описание истории прежних владельцев и хранителей.",
+        "source": {
+          "title": "IFLA, Functional Requirements for Bibliographic Records: Final Report",
+          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
+          "verifiedAt": "2026-10-16"
+        }
+      },
+      "targetCanonicalSHA256": "7f6b8d88aec67e5bc21fc97f2beb6038c65e9dfa42e533a75c2a57c0d258d724",
       "peerCard": {
         "id": "books-publishing-expression-model",
         "difficulty": "hard",
@@ -341,20 +580,48 @@
           "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
           "verifiedAt": "2026-10-16"
         }
-      }
+      },
+      "peerCanonicalSHA256": "a0393a20e7fd9665cc085cbe227fb395b8ee021870fcc6e261079a04baf63837",
+      "differentEntity": "The target is FRBR Item, a single exemplar; this peer is Expression, the intellectual or artistic realization of a Work.",
+      "relation": "Concrete copy-level entity versus content-realization level.",
+      "value": "A later binding replacement or missing page does not create a new translation, wording, performance, or other Expression.",
+      "context": "Target prompt concerns post-production object changes. Peer prompt asks for the language or musical realization level.",
+      "directReverse": "The target asks which FRBR entity represents the one object with a post-production physical change. The peer asks about Выражение in its own stated context; naming either entity does not answer the other prompt."
     },
     {
       "targetId": "books-publishing-item-model",
       "peerId": "books-publishing-manifestation-model",
-      "leftEntity": "Item / Экземпляр: an individual copy, distinct by post-production binding change",
-      "rightEntity": "Манифестация",
-      "relation": "adjacent FRBR entity distinction",
-      "value": "single copy-level entity versus peer’s model level",
-      "context": "target asks which entity identifies one rebound copy; peer is a work/expression/manifestation definition",
-      "directReverse": "A reader answering the peer prompt must identify its named level, not choose Item merely because the prompt concerns a copy; target’s individual-copy context is absent.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "peerCanonicalSHA256": "82e5962a88e910e9600ccf43697aacc378cf187ba6f301f011e4bca895b439ea",
+      "targetCard": {
+        "id": "books-publishing-item-model",
+        "difficulty": "hard",
+        "prompt": "В каталоге описаны две копии одной манифестации. У одной после выхода из печати заменили переплёт и обнаружили утрату страницы. Какую сущность FRBR обозначает запись об этой копии?",
+        "answers": [
+          {
+            "text": "Экземпляр",
+            "note": "Для этой сущности отдельно описывают историю прежних владельцев и хранителей."
+          },
+          {
+            "text": "Произведение",
+            "note": "Произведение обозначает абстрактное интеллектуальное или художественное создание, узнаваемое по его выражениям."
+          },
+          {
+            "text": "Выражение",
+            "note": "Выражение фиксирует интеллектуальную или художественную реализацию произведения; перевод обычно создаёт новое выражение того же произведения."
+          },
+          {
+            "text": "Манифестация",
+            "note": "Манифестация описывает общие физические и производственные характеристики группы копий; физический носитель помогает различать манифестации."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Экземпляр — индивидуальный представитель манифестации: послепроизводственная замена переплёта и утрата страницы относятся к его собственным признакам. Для этой сущности FRBR также предусматривает описание истории прежних владельцев и хранителей.",
+        "source": {
+          "title": "IFLA, Functional Requirements for Bibliographic Records: Final Report",
+          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
+          "verifiedAt": "2026-10-16"
+        }
+      },
+      "targetCanonicalSHA256": "7f6b8d88aec67e5bc21fc97f2beb6038c65e9dfa42e533a75c2a57c0d258d724",
       "peerCard": {
         "id": "books-publishing-manifestation-model",
         "difficulty": "hard",
@@ -384,895 +651,253 @@
           "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
           "verifiedAt": "2026-10-16"
         }
-      }
-    },
+      },
+      "peerCanonicalSHA256": "82e5962a88e910e9600ccf43697aacc378cf187ba6f301f011e4bca895b439ea",
+      "differentEntity": "The target is FRBR Item, one individual exemplar; this peer is Manifestation, the shared physical embodiment grouping.",
+      "relation": "One member of a production/form grouping versus the grouping that bears shared physical and production characteristics.",
+      "value": "An individual post-production binding change or missing page belongs to the Item history; the common manifestation can continue to describe the remaining copies.",
+      "context": "Target prompt concerns an individual copy after production. Peer prompt contrasts print and microfilm as forms of physical embodiment.",
+      "directReverse": "The target asks which FRBR entity represents the one object with a post-production physical change. The peer asks about Манифестация in its own stated context; naming either entity does not answer the other prompt."
+    }
+  ],
+  "actualCurrentSnapshot": {
+    "path": "docs/content-audits/question-quality-wave-8/coordinator-01a141dd/actual-current-print4-stageB-peers.json",
+    "rawSHA256": "50bf399d73f922d0a080efed49b2692eeaf681371f201170236eafd70b0bf233"
+  },
+  "actualCurrentPeers": [
     {
-      "targetId": "books-publishing-deacidification-term",
-      "peerId": "books-publishing-foxing-term",
-      "leftEntity": "treatment that neutralizes acid",
-      "rightEntity": "condition marked by brown spots",
-      "relation": "intervention versus observed paper condition",
-      "value": "one is a treatment that neutralizes acid; the other is a condition marked by brown spots",
-      "context": "Как называется консервационная обработка, при которой в кислую бумагу вводят щелочные соединения, чтобы продлить срок её службы? / Как называется состояние старой бумаги с рыжевато-коричневыми пятнами, механизм появления которых у разных бумаг может быть сложным?",
-      "directReverse": "A response that gives condition marked by brown spots does not answer the prompt asking treatment that neutralizes acid; conversely treatment that neutralizes acid does not answer the other prompt.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "targetCanonicalSHA256": "83d6d4610d4a61a95794bee3ca34cd0bb5d25925ea3d42e9704602cb46332345",
-      "targetCard": {
-        "id": "books-publishing-deacidification-term",
+      "id": "books-publishing-edition-state",
+      "topicId": "books-publishing",
+      "sourceOrder": 48,
+      "card": {
+        "id": "books-publishing-edition-state",
         "difficulty": "hard",
-        "prompt": "Как называется консервационная обработка, при которой в кислую бумагу вводят щелочные соединения, чтобы продлить срок её службы?",
+        "prompt": "Как называется совокупность экземпляров, полученных из одного набора либо изготовленных по одной и той же наборной форме?",
         "answers": [
           {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция помещает лист между защитными прозрачными листами и запечатывает оболочку."
+            "text": "Оттиск (impression)",
+            "note": "Оттиск — все экземпляры текстового издания, полученные в ходе одного события печати."
           },
           {
-            "text": "Деацидификация",
-            "note": "Деацидификация вводит в кислую бумагу щелочные соединения; подходящую бумагу обрабатывают до охрупчивания."
+            "text": "Выпуск (issue)",
+            "note": "Выпуск — запланированная издателем группа экземпляров, отличимая от других специально выбранными признаками."
           },
           {
-            "text": "Увлажнение",
-            "note": "Увлажнение контролируемо размягчает бумагу для расправления складок или свёртков."
+            "text": "Состояние (state)",
+            "note": "Состояние различает экземпляры в том же оттиске или выпуске; отличия не предназначены объявлять новый публичный выпуск."
           },
           {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна на бумаге, а не способ её обработки."
+            "text": "Издание (edition)",
+            "note": "В книгах ручного печатного периода помета «impression» обычно могла указывать на новое издание или выпуск."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Издание — совокупность экземпляров, полученных из одного набора или по практически одинаковому оригиналу. Оттиск относится к одному событию печати, а выпуск и состояние различают группы копий по другим библиографическим признакам.",
+        "source": {
+          "title": "DCRMR Glossary — Rare Books and Manuscripts Section",
+          "url": "https://bsc.rbms.info/DCRMR/glossary/",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "canonicalSHA256": "da3208976346fc6a53b9f6f569a96bf95271f824586355b5fa4258ba396c310a",
+      "sha256": "da3208976346fc6a53b9f6f569a96bf95271f824586355b5fa4258ba396c310a",
+      "source": "actual-current frozen topic snapshot",
+      "actualRelevantRelation": "Nearby publishing-bibliography term; groups copies by setting/manufacturing history, not FRBR individual-copy condition."
+    },
+    {
+      "id": "books-publishing-issue-state",
+      "topicId": "books-publishing",
+      "sourceOrder": 49,
+      "card": {
+        "id": "books-publishing-issue-state",
+        "difficulty": "hard",
+        "prompt": "Как называется заранее спланированная группа экземпляров, выделенная как отдельная издательская единица?",
+        "answers": [
+          {
+            "text": "Издание",
+            "note": "Издание включает все экземпляры, полученные в ходе одной работы типографской композиции или с одного основного оригинала."
+          },
+          {
+            "text": "Выпуск",
+            "note": "В обсуждении DCRM(B) новую титульную страницу, нового издателя и иной тип бумаги перечислили как возможные признаки нового выпуска."
+          },
+          {
+            "text": "Тиражный оттиск",
+            "note": "Impression охватывает все экземпляры текстового издания, произведённые за одно событие печати."
+          },
+          {
+            "text": "Вариант",
+            "note": "Вариант (state) отличается от других копий того же печатания или выпуска, но не считается отдельным издательским усилием."
           }
         ],
         "correctIndex": 1,
-        "explanation": "Деацидификация вводит щелочные соединения в кислую бумагу и может продлить срок её службы. Если бумага уже ослабла, восстановить её первоначальную пригодность почти невозможно.",
+        "explanation": "Выпуск (issue) — сознательно спланированная группа опубликованных копий, которую отличают от других групп как отдельную единицу. Различия специально предназначены для её обозначения.",
         "source": {
-          "title": "Library of Congress, Mass Deacidification",
-          "url": "https://www.loc.gov/preservation/scientists/projects/mass_deacid.html",
+          "title": "RBMS / DCRM (RDA Edition) — Glossary",
+          "url": "https://bsc.rbms.info/DCRMR/glossary/",
           "verifiedAt": "2026-10-16"
         }
       },
-      "peerCanonicalSHA256": "fa2025aaf15943fbd0bea8510db8efb50cd132f0c1a4e858546d349ba00eec58",
-      "peerCard": {
-        "id": "books-publishing-foxing-term",
-        "difficulty": "hard",
-        "prompt": "Как называется состояние старой бумаги с рыжевато-коричневыми пятнами, механизм появления которых у разных бумаг может быть сложным?",
-        "answers": [
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение — контролируемая подача влаги, например чтобы расслабить свёрнутую бумагу."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация нейтрализует кислотность бумаги щелочным соединением."
-          },
-          {
-            "text": "Фоксинг",
-            "note": "Фоксингом называют рыжевато-коричневые или бурые пятна на старой бумаге; их связывают, в частности, с долгим хранением во влажности."
-          },
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция защищает лист между двумя прозрачными инертными пластинами."
-          }
-        ],
-        "correctIndex": 2,
-        "explanation": "Фоксинг — название рыжевато-коричневых пятен на старой бумаге. Канадский институт консервации указывает связь с длительным хранением во влажности и считает плесень возможной причиной.",
-        "source": {
-          "title": "Canadian Conservation Institute, Basic care – Books",
-          "url": "https://www.canada.ca/en/conservation-institute/services/care-objects/paper-books/basic-care-books.html",
-          "verifiedAt": "2026-10-16"
-        }
-      }
+      "canonicalSHA256": "f5ff5ff232bdf402e860e5593a3090fe183dec1f36df6656c2df8e43c5cda05f",
+      "sha256": "f5ff5ff232bdf402e860e5593a3090fe183dec1f36df6656c2df8e43c5cda05f",
+      "source": "actual-current frozen topic snapshot",
+      "actualRelevantRelation": "Nearby publishing-bibliography term; a publisher-designated group, not an individual post-production copy."
     },
     {
-      "targetId": "books-publishing-foxing-term",
-      "peerId": "books-publishing-deacidification-term",
-      "leftEntity": "condition marked by brown spots",
-      "rightEntity": "treatment that neutralizes acid",
-      "relation": "intervention versus observed paper condition",
-      "value": "one is a condition marked by brown spots; the other is a treatment that neutralizes acid",
-      "context": "Как называется состояние старой бумаги с рыжевато-коричневыми пятнами, механизм появления которых у разных бумаг может быть сложным? / Как называется консервационная обработка, при которой в кислую бумагу вводят щелочные соединения, чтобы продлить срок её службы?",
-      "directReverse": "A response that gives treatment that neutralizes acid does not answer the prompt asking condition marked by brown spots; conversely condition marked by brown spots does not answer the other prompt.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "targetCanonicalSHA256": "fa2025aaf15943fbd0bea8510db8efb50cd132f0c1a4e858546d349ba00eec58",
-      "targetCard": {
-        "id": "books-publishing-foxing-term",
+      "id": "books-publishing-variant-state",
+      "topicId": "books-publishing",
+      "sourceOrder": 50,
+      "card": {
+        "id": "books-publishing-variant-state",
         "difficulty": "hard",
-        "prompt": "Как называется состояние старой бумаги с рыжевато-коричневыми пятнами, механизм появления которых у разных бумаг может быть сложным?",
+        "prompt": "Как называется экземпляр, отличающийся внутри того же печатания или выпуска, но не выделенный как отдельная издательская единица?",
         "answers": [
           {
-            "text": "Увлажнение",
-            "note": "Увлажнение — контролируемая подача влаги, например чтобы расслабить свёрнутую бумагу."
+            "text": "Тиражный оттиск",
+            "note": "Impression охватывает все экземпляры текстового издания, произведённые за одно событие печати."
           },
           {
-            "text": "Деацидификация",
-            "note": "Деацидификация нейтрализует кислотность бумаги щелочным соединением."
+            "text": "Вариант",
+            "note": "Вариант (state) может отличаться в печатном листе или издательской оболочке, но издатель не выделяет его как отдельное издательское усилие."
           },
           {
-            "text": "Фоксинг",
-            "note": "Фоксингом называют рыжевато-коричневые или бурые пятна на старой бумаге; их связывают, в частности, с долгим хранением во влажности."
+            "text": "Выпуск",
+            "note": "Выпуск (issue) — заранее спланированная группа экземпляров, специально отличимая от других как отдельная издательская единица."
           },
           {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция защищает лист между двумя прозрачными инертными пластинами."
-          }
-        ],
-        "correctIndex": 2,
-        "explanation": "Фоксинг — название рыжевато-коричневых пятен на старой бумаге. Канадский институт консервации указывает связь с длительным хранением во влажности и считает плесень возможной причиной.",
-        "source": {
-          "title": "Canadian Conservation Institute, Basic care – Books",
-          "url": "https://www.canada.ca/en/conservation-institute/services/care-objects/paper-books/basic-care-books.html",
-          "verifiedAt": "2026-10-16"
-        }
-      },
-      "peerCanonicalSHA256": "83d6d4610d4a61a95794bee3ca34cd0bb5d25925ea3d42e9704602cb46332345",
-      "peerCard": {
-        "id": "books-publishing-deacidification-term",
-        "difficulty": "hard",
-        "prompt": "Как называется консервационная обработка, при которой в кислую бумагу вводят щелочные соединения, чтобы продлить срок её службы?",
-        "answers": [
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция помещает лист между защитными прозрачными листами и запечатывает оболочку."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация вводит в кислую бумагу щелочные соединения; подходящую бумагу обрабатывают до охрупчивания."
-          },
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение контролируемо размягчает бумагу для расправления складок или свёртков."
-          },
-          {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна на бумаге, а не способ её обработки."
+            "text": "Издание",
+            "note": "Издание включает все экземпляры, полученные в ходе одной работы типографской композиции или с одного основного оригинала."
           }
         ],
         "correctIndex": 1,
-        "explanation": "Деацидификация вводит щелочные соединения в кислую бумагу и может продлить срок её службы. Если бумага уже ослабла, восстановить её первоначальную пригодность почти невозможно.",
+        "explanation": "Вариант (state) — копия или группа копий, отличающаяся внутри того же печатания или выпуска. Издатель не представляет это отличие как отдельное издательское усилие.",
         "source": {
-          "title": "Library of Congress, Mass Deacidification",
-          "url": "https://www.loc.gov/preservation/scientists/projects/mass_deacid.html",
-          "verifiedAt": "2026-10-16"
-        }
-      }
-    },
-    {
-      "targetId": "books-publishing-deacidification-term",
-      "peerId": "books-publishing-encapsulation-term",
-      "leftEntity": "chemical treatment to extend life",
-      "rightEntity": "physical protective enclosure",
-      "relation": "chemistry versus housing/support",
-      "value": "one is a chemical treatment to extend life; the other is a physical protective enclosure",
-      "context": "Как называется консервационная обработка, при которой в кислую бумагу вводят щелочные соединения, чтобы продлить срок её службы? / Как называется способ поддержки хрупкого бумажного документа между двумя прозрачными химически инертными пластиковыми листами, края которых запечатаны?",
-      "directReverse": "A response that gives physical protective enclosure does not answer the prompt asking chemical treatment to extend life; conversely chemical treatment to extend life does not answer the other prompt.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "targetCanonicalSHA256": "83d6d4610d4a61a95794bee3ca34cd0bb5d25925ea3d42e9704602cb46332345",
-      "targetCard": {
-        "id": "books-publishing-deacidification-term",
-        "difficulty": "hard",
-        "prompt": "Как называется консервационная обработка, при которой в кислую бумагу вводят щелочные соединения, чтобы продлить срок её службы?",
-        "answers": [
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция помещает лист между защитными прозрачными листами и запечатывает оболочку."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация вводит в кислую бумагу щелочные соединения; подходящую бумагу обрабатывают до охрупчивания."
-          },
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение контролируемо размягчает бумагу для расправления складок или свёртков."
-          },
-          {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна на бумаге, а не способ её обработки."
-          }
-        ],
-        "correctIndex": 1,
-        "explanation": "Деацидификация вводит щелочные соединения в кислую бумагу и может продлить срок её службы. Если бумага уже ослабла, восстановить её первоначальную пригодность почти невозможно.",
-        "source": {
-          "title": "Library of Congress, Mass Deacidification",
-          "url": "https://www.loc.gov/preservation/scientists/projects/mass_deacid.html",
-          "verifiedAt": "2026-10-16"
+          "title": "RBMS / DCRM (RDA Edition) — Glossary",
+          "url": "https://bsc.rbms.info/DCRMR/glossary/",
+          "verifiedAt": "2026-10-15"
         }
       },
-      "peerCanonicalSHA256": "e3c8c16fc684031c77d53528935e43066dec82d087acbde12974d44b99ded0b2",
-      "peerCard": {
-        "id": "books-publishing-encapsulation-term",
-        "difficulty": "hard",
-        "prompt": "Как называется способ поддержки хрупкого бумажного документа между двумя прозрачными химически инертными пластиковыми листами, края которых запечатаны?",
-        "answers": [
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация вводит щелочные соединения в кислую бумагу, чтобы замедлить её химическое разрушение."
-          },
-          {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна, заметные на старой бумаге."
-          },
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение помогает расслабить свёрнутую или сложенную бумагу перед расправлением."
-          },
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция заключает документ между двумя прозрачными инертными листами, края которых запечатывают."
-          }
-        ],
-        "correctIndex": 3,
-        "explanation": "Инкапсуляция создаёт защитную оболочку и поддерживает хрупкий лист. Для документа, обе стороны которого нужно видеть при исследовании, такая оболочка позволяет обозревать обе стороны.",
-        "source": {
-          "title": "National Park Service, Conserve O Gram 13/3: Polyester Encapsulation",
-          "url": "https://www.nps.gov/subjects/museums/upload/13-03_508.pdf",
-          "verifiedAt": "2026-10-16"
-        }
-      }
+      "canonicalSHA256": "a153c413a5cd1a8d9e4162999fcc441c0d12c083025280eee301d0b8225b994a",
+      "sha256": "a153c413a5cd1a8d9e4162999fcc441c0d12c083025280eee301d0b8225b994a",
+      "source": "actual-current frozen topic snapshot",
+      "actualRelevantRelation": "Nearby copy-variation term; a variation within an impression/issue, not the FRBR item entity’s documented provenance/condition."
     },
     {
-      "targetId": "books-publishing-encapsulation-term",
-      "peerId": "books-publishing-deacidification-term",
-      "leftEntity": "physical protective enclosure",
-      "rightEntity": "chemical treatment to extend life",
-      "relation": "chemistry versus housing/support",
-      "value": "one is a physical protective enclosure; the other is a chemical treatment to extend life",
-      "context": "Как называется способ поддержки хрупкого бумажного документа между двумя прозрачными химически инертными пластиковыми листами, края которых запечатаны? / Как называется консервационная обработка, при которой в кислую бумагу вводят щелочные соединения, чтобы продлить срок её службы?",
-      "directReverse": "A response that gives chemical treatment to extend life does not answer the prompt asking physical protective enclosure; conversely physical protective enclosure does not answer the other prompt.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "targetCanonicalSHA256": "e3c8c16fc684031c77d53528935e43066dec82d087acbde12974d44b99ded0b2",
-      "targetCard": {
-        "id": "books-publishing-encapsulation-term",
+      "id": "books-publishing-work-model",
+      "topicId": "books-publishing",
+      "sourceOrder": 73,
+      "card": {
+        "id": "books-publishing-work-model",
         "difficulty": "hard",
-        "prompt": "Как называется способ поддержки хрупкого бумажного документа между двумя прозрачными химически инертными пластиковыми листами, края которых запечатаны?",
+        "prompt": "Какой уровень модели FRBR обозначает абстрактный интеллектуальный замысел?",
         "answers": [
           {
-            "text": "Деацидификация",
-            "note": "Деацидификация вводит щелочные соединения в кислую бумагу, чтобы замедлить её химическое разрушение."
+            "text": "Выражение",
+            "note": "Перевод на другой язык считается новым выражением того же произведения; изменения формулировок могут сохранять исходное произведение."
           },
           {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна, заметные на старой бумаге."
+            "text": "Манифестация",
+            "note": "Манифестация объединяет носители с общими характеристиками содержания и физической формы; смена бумаги на микрофильм образует новую манифестацию."
           },
           {
-            "text": "Увлажнение",
-            "note": "Увлажнение помогает расслабить свёрнутую или сложенную бумагу перед расправлением."
+            "text": "Произведение",
+            "note": "Границы произведения могут трактоваться по-разному в разных культурах и национальных библиографических традициях."
           },
           {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция заключает документ между двумя прозрачными инертными листами, края которых запечатывают."
-          }
-        ],
-        "correctIndex": 3,
-        "explanation": "Инкапсуляция создаёт защитную оболочку и поддерживает хрупкий лист. Для документа, обе стороны которого нужно видеть при исследовании, такая оболочка позволяет обозревать обе стороны.",
-        "source": {
-          "title": "National Park Service, Conserve O Gram 13/3: Polyester Encapsulation",
-          "url": "https://www.nps.gov/subjects/museums/upload/13-03_508.pdf",
-          "verifiedAt": "2026-10-16"
-        }
-      },
-      "peerCanonicalSHA256": "83d6d4610d4a61a95794bee3ca34cd0bb5d25925ea3d42e9704602cb46332345",
-      "peerCard": {
-        "id": "books-publishing-deacidification-term",
-        "difficulty": "hard",
-        "prompt": "Как называется консервационная обработка, при которой в кислую бумагу вводят щелочные соединения, чтобы продлить срок её службы?",
-        "answers": [
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция помещает лист между защитными прозрачными листами и запечатывает оболочку."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация вводит в кислую бумагу щелочные соединения; подходящую бумагу обрабатывают до охрупчивания."
-          },
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение контролируемо размягчает бумагу для расправления складок или свёртков."
-          },
-          {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна на бумаге, а не способ её обработки."
-          }
-        ],
-        "correctIndex": 1,
-        "explanation": "Деацидификация вводит щелочные соединения в кислую бумагу и может продлить срок её службы. Если бумага уже ослабла, восстановить её первоначальную пригодность почти невозможно.",
-        "source": {
-          "title": "Library of Congress, Mass Deacidification",
-          "url": "https://www.loc.gov/preservation/scientists/projects/mass_deacid.html",
-          "verifiedAt": "2026-10-16"
-        }
-      }
-    },
-    {
-      "targetId": "books-publishing-deacidification-term",
-      "peerId": "books-publishing-humidification-term",
-      "leftEntity": "neutralizes acid in paper",
-      "rightEntity": "controlled moisture relaxes folds/rolls",
-      "relation": "chemical stabilization versus temporary physical relaxation",
-      "value": "one is a neutralizes acid in paper; the other is a controlled moisture relaxes folds/rolls",
-      "context": "Как называется консервационная обработка, при которой в кислую бумагу вводят щелочные соединения, чтобы продлить срок её службы? / Как называется контролируемая процедура, которая помогает расслабить свёрнутую или сложенную бумагу перед расправлением?",
-      "directReverse": "A response that gives controlled moisture relaxes folds/rolls does not answer the prompt asking neutralizes acid in paper; conversely neutralizes acid in paper does not answer the other prompt.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "targetCanonicalSHA256": "83d6d4610d4a61a95794bee3ca34cd0bb5d25925ea3d42e9704602cb46332345",
-      "targetCard": {
-        "id": "books-publishing-deacidification-term",
-        "difficulty": "hard",
-        "prompt": "Как называется консервационная обработка, при которой в кислую бумагу вводят щелочные соединения, чтобы продлить срок её службы?",
-        "answers": [
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция помещает лист между защитными прозрачными листами и запечатывает оболочку."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация вводит в кислую бумагу щелочные соединения; подходящую бумагу обрабатывают до охрупчивания."
-          },
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение контролируемо размягчает бумагу для расправления складок или свёртков."
-          },
-          {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна на бумаге, а не способ её обработки."
-          }
-        ],
-        "correctIndex": 1,
-        "explanation": "Деацидификация вводит щелочные соединения в кислую бумагу и может продлить срок её службы. Если бумага уже ослабла, восстановить её первоначальную пригодность почти невозможно.",
-        "source": {
-          "title": "Library of Congress, Mass Deacidification",
-          "url": "https://www.loc.gov/preservation/scientists/projects/mass_deacid.html",
-          "verifiedAt": "2026-10-16"
-        }
-      },
-      "peerCanonicalSHA256": "e95953d86af59ca0ec1ecca651e8bb5708d2fe898f2909d625f3c090bf3e67d4",
-      "peerCard": {
-        "id": "books-publishing-humidification-term",
-        "difficulty": "hard",
-        "prompt": "Как называется контролируемая процедура, которая помогает расслабить свёрнутую или сложенную бумагу перед расправлением?",
-        "answers": [
-          {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна на старой бумаге."
-          },
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция помещает бумажный лист между прозрачными защитными пластинами."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация нейтрализует кислоты в бумаге с помощью щелочных соединений."
-          },
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение контролируемо размягчает свёрнутую или сложенную бумагу перед расправлением."
-          }
-        ],
-        "correctIndex": 3,
-        "explanation": "Контролируемое увлажнение помогает расслабить свёрток или сгибы, после чего бумагу расправляют. Национальная парковая служба предупреждает: предметы с железо-галловыми чернилами требуют работы профессионального консерватора.",
-        "source": {
-          "title": "National Park Service, Conserve O Gram 13/2: How to Flatten Folded or Rolled Paper Collections",
-          "url": "https://www.nps.gov/articles/000/conserve-o-gram-13-2-flatten-folded-rolled-paper.htm",
-          "verifiedAt": "2026-10-16"
-        }
-      }
-    },
-    {
-      "targetId": "books-publishing-humidification-term",
-      "peerId": "books-publishing-deacidification-term",
-      "leftEntity": "controlled moisture relaxes folds/rolls",
-      "rightEntity": "neutralizes acid in paper",
-      "relation": "chemical stabilization versus temporary physical relaxation",
-      "value": "one is a controlled moisture relaxes folds/rolls; the other is a neutralizes acid in paper",
-      "context": "Как называется контролируемая процедура, которая помогает расслабить свёрнутую или сложенную бумагу перед расправлением? / Как называется консервационная обработка, при которой в кислую бумагу вводят щелочные соединения, чтобы продлить срок её службы?",
-      "directReverse": "A response that gives neutralizes acid in paper does not answer the prompt asking controlled moisture relaxes folds/rolls; conversely controlled moisture relaxes folds/rolls does not answer the other prompt.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "targetCanonicalSHA256": "e95953d86af59ca0ec1ecca651e8bb5708d2fe898f2909d625f3c090bf3e67d4",
-      "targetCard": {
-        "id": "books-publishing-humidification-term",
-        "difficulty": "hard",
-        "prompt": "Как называется контролируемая процедура, которая помогает расслабить свёрнутую или сложенную бумагу перед расправлением?",
-        "answers": [
-          {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна на старой бумаге."
-          },
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция помещает бумажный лист между прозрачными защитными пластинами."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация нейтрализует кислоты в бумаге с помощью щелочных соединений."
-          },
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение контролируемо размягчает свёрнутую или сложенную бумагу перед расправлением."
-          }
-        ],
-        "correctIndex": 3,
-        "explanation": "Контролируемое увлажнение помогает расслабить свёрток или сгибы, после чего бумагу расправляют. Национальная парковая служба предупреждает: предметы с железо-галловыми чернилами требуют работы профессионального консерватора.",
-        "source": {
-          "title": "National Park Service, Conserve O Gram 13/2: How to Flatten Folded or Rolled Paper Collections",
-          "url": "https://www.nps.gov/articles/000/conserve-o-gram-13-2-flatten-folded-rolled-paper.htm",
-          "verifiedAt": "2026-10-16"
-        }
-      },
-      "peerCanonicalSHA256": "83d6d4610d4a61a95794bee3ca34cd0bb5d25925ea3d42e9704602cb46332345",
-      "peerCard": {
-        "id": "books-publishing-deacidification-term",
-        "difficulty": "hard",
-        "prompt": "Как называется консервационная обработка, при которой в кислую бумагу вводят щелочные соединения, чтобы продлить срок её службы?",
-        "answers": [
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция помещает лист между защитными прозрачными листами и запечатывает оболочку."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация вводит в кислую бумагу щелочные соединения; подходящую бумагу обрабатывают до охрупчивания."
-          },
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение контролируемо размягчает бумагу для расправления складок или свёртков."
-          },
-          {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна на бумаге, а не способ её обработки."
-          }
-        ],
-        "correctIndex": 1,
-        "explanation": "Деацидификация вводит щелочные соединения в кислую бумагу и может продлить срок её службы. Если бумага уже ослабла, восстановить её первоначальную пригодность почти невозможно.",
-        "source": {
-          "title": "Library of Congress, Mass Deacidification",
-          "url": "https://www.loc.gov/preservation/scientists/projects/mass_deacid.html",
-          "verifiedAt": "2026-10-16"
-        }
-      }
-    },
-    {
-      "targetId": "books-publishing-foxing-term",
-      "peerId": "books-publishing-encapsulation-term",
-      "leftEntity": "appearance/condition of paper",
-      "rightEntity": "protective enclosure technique",
-      "relation": "observed marks versus intervention",
-      "value": "one is a appearance/condition of paper; the other is a protective enclosure technique",
-      "context": "Как называется состояние старой бумаги с рыжевато-коричневыми пятнами, механизм появления которых у разных бумаг может быть сложным? / Как называется способ поддержки хрупкого бумажного документа между двумя прозрачными химически инертными пластиковыми листами, края которых запечатаны?",
-      "directReverse": "A response that gives protective enclosure technique does not answer the prompt asking appearance/condition of paper; conversely appearance/condition of paper does not answer the other prompt.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "targetCanonicalSHA256": "fa2025aaf15943fbd0bea8510db8efb50cd132f0c1a4e858546d349ba00eec58",
-      "targetCard": {
-        "id": "books-publishing-foxing-term",
-        "difficulty": "hard",
-        "prompt": "Как называется состояние старой бумаги с рыжевато-коричневыми пятнами, механизм появления которых у разных бумаг может быть сложным?",
-        "answers": [
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение — контролируемая подача влаги, например чтобы расслабить свёрнутую бумагу."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация нейтрализует кислотность бумаги щелочным соединением."
-          },
-          {
-            "text": "Фоксинг",
-            "note": "Фоксингом называют рыжевато-коричневые или бурые пятна на старой бумаге; их связывают, в частности, с долгим хранением во влажности."
-          },
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция защищает лист между двумя прозрачными инертными пластинами."
+            "text": "Экземпляр",
+            "note": "Экземпляр может отличаться от других копий той же манифестации из-за утраты страницы или переплёта, сделанного библиотекой."
           }
         ],
         "correctIndex": 2,
-        "explanation": "Фоксинг — название рыжевато-коричневых пятен на старой бумаге. Канадский институт консервации указывает связь с длительным хранением во влажности и считает плесень возможной причиной.",
+        "explanation": "Произведение — абстрактное интеллектуальное или художественное создание, общее содержание которого распознаётся через его выражения. Его границы могут определяться по-разному в разных библиографических традициях.",
         "source": {
-          "title": "Canadian Conservation Institute, Basic care – Books",
-          "url": "https://www.canada.ca/en/conservation-institute/services/care-objects/paper-books/basic-care-books.html",
+          "title": "Functional Requirements for Bibliographic Records: Final Report — IFLA",
+          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
           "verifiedAt": "2026-10-16"
         }
       },
-      "peerCanonicalSHA256": "e3c8c16fc684031c77d53528935e43066dec82d087acbde12974d44b99ded0b2",
-      "peerCard": {
-        "id": "books-publishing-encapsulation-term",
-        "difficulty": "hard",
-        "prompt": "Как называется способ поддержки хрупкого бумажного документа между двумя прозрачными химически инертными пластиковыми листами, края которых запечатаны?",
-        "answers": [
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация вводит щелочные соединения в кислую бумагу, чтобы замедлить её химическое разрушение."
-          },
-          {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна, заметные на старой бумаге."
-          },
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение помогает расслабить свёрнутую или сложенную бумагу перед расправлением."
-          },
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция заключает документ между двумя прозрачными инертными листами, края которых запечатывают."
-          }
-        ],
-        "correctIndex": 3,
-        "explanation": "Инкапсуляция создаёт защитную оболочку и поддерживает хрупкий лист. Для документа, обе стороны которого нужно видеть при исследовании, такая оболочка позволяет обозревать обе стороны.",
-        "source": {
-          "title": "National Park Service, Conserve O Gram 13/3: Polyester Encapsulation",
-          "url": "https://www.nps.gov/subjects/museums/upload/13-03_508.pdf",
-          "verifiedAt": "2026-10-16"
-        }
-      }
+      "canonicalSHA256": "6ea8c8f8ae25c371579c6a98c116cc499c6d532068f1e2223ed12331f0ed23b3",
+      "sha256": "6ea8c8f8ae25c371579c6a98c116cc499c6d532068f1e2223ed12331f0ed23b3",
+      "source": "actual-current frozen topic snapshot",
+      "actualRelevantRelation": "Adjacent conceptual level: abstract creation, not the post-production-specific exemplar in target 96."
     },
     {
-      "targetId": "books-publishing-encapsulation-term",
-      "peerId": "books-publishing-foxing-term",
-      "leftEntity": "protective enclosure technique",
-      "rightEntity": "appearance/condition of paper",
-      "relation": "observed marks versus intervention",
-      "value": "one is a protective enclosure technique; the other is a appearance/condition of paper",
-      "context": "Как называется способ поддержки хрупкого бумажного документа между двумя прозрачными химически инертными пластиковыми листами, края которых запечатаны? / Как называется состояние старой бумаги с рыжевато-коричневыми пятнами, механизм появления которых у разных бумаг может быть сложным?",
-      "directReverse": "A response that gives appearance/condition of paper does not answer the prompt asking protective enclosure technique; conversely protective enclosure technique does not answer the other prompt.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "targetCanonicalSHA256": "e3c8c16fc684031c77d53528935e43066dec82d087acbde12974d44b99ded0b2",
-      "targetCard": {
-        "id": "books-publishing-encapsulation-term",
+      "id": "books-publishing-expression-model",
+      "topicId": "books-publishing",
+      "sourceOrder": 74,
+      "card": {
+        "id": "books-publishing-expression-model",
         "difficulty": "hard",
-        "prompt": "Как называется способ поддержки хрупкого бумажного документа между двумя прозрачными химически инертными пластиковыми листами, края которых запечатаны?",
+        "prompt": "Какой уровень FRBR обозначает конкретную языковую или музыкальную реализацию произведения?",
         "answers": [
           {
-            "text": "Деацидификация",
-            "note": "Деацидификация вводит щелочные соединения в кислую бумагу, чтобы замедлить её химическое разрушение."
+            "text": "Манифестация",
+            "note": "Манифестация описывает общие физические и производственные характеристики набора копий; смена носителя может создать новую манифестацию."
           },
           {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна, заметные на старой бумаге."
+            "text": "Экземпляр",
+            "note": "Экземпляр — отдельный представитель манифестации; его владельческие пометы и повреждения относятся к этой конкретной копии."
           },
           {
-            "text": "Увлажнение",
-            "note": "Увлажнение помогает расслабить свёрнутую или сложенную бумагу перед расправлением."
+            "text": "Выражение",
+            "note": "Перевод на другой язык считается новым выражением того же произведения; сходное содержание может воплощаться в разных манифестациях."
           },
           {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция заключает документ между двумя прозрачными инертными листами, края которых запечатывают."
-          }
-        ],
-        "correctIndex": 3,
-        "explanation": "Инкапсуляция создаёт защитную оболочку и поддерживает хрупкий лист. Для документа, обе стороны которого нужно видеть при исследовании, такая оболочка позволяет обозревать обе стороны.",
-        "source": {
-          "title": "National Park Service, Conserve O Gram 13/3: Polyester Encapsulation",
-          "url": "https://www.nps.gov/subjects/museums/upload/13-03_508.pdf",
-          "verifiedAt": "2026-10-16"
-        }
-      },
-      "peerCanonicalSHA256": "fa2025aaf15943fbd0bea8510db8efb50cd132f0c1a4e858546d349ba00eec58",
-      "peerCard": {
-        "id": "books-publishing-foxing-term",
-        "difficulty": "hard",
-        "prompt": "Как называется состояние старой бумаги с рыжевато-коричневыми пятнами, механизм появления которых у разных бумаг может быть сложным?",
-        "answers": [
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение — контролируемая подача влаги, например чтобы расслабить свёрнутую бумагу."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация нейтрализует кислотность бумаги щелочным соединением."
-          },
-          {
-            "text": "Фоксинг",
-            "note": "Фоксингом называют рыжевато-коричневые или бурые пятна на старой бумаге; их связывают, в частности, с долгим хранением во влажности."
-          },
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция защищает лист между двумя прозрачными инертными пластинами."
+            "text": "Произведение",
+            "note": "Произведение — абстрактное создание, распознаваемое по общему содержанию его выражений, а не отдельная формулировка текста."
           }
         ],
         "correctIndex": 2,
-        "explanation": "Фоксинг — название рыжевато-коричневых пятен на старой бумаге. Канадский институт консервации указывает связь с длительным хранением во влажности и считает плесень возможной причиной.",
+        "explanation": "Выражение — интеллектуальная или художественная реализация произведения в определённой форме, например в словесном тексте или музыкальном исполнении. Перевод на другой язык считается другим выражением того же произведения.",
         "source": {
-          "title": "Canadian Conservation Institute, Basic care – Books",
-          "url": "https://www.canada.ca/en/conservation-institute/services/care-objects/paper-books/basic-care-books.html",
-          "verifiedAt": "2026-10-16"
-        }
-      }
-    },
-    {
-      "targetId": "books-publishing-foxing-term",
-      "peerId": "books-publishing-humidification-term",
-      "leftEntity": "brown spotting condition",
-      "rightEntity": "controlled moisture procedure",
-      "relation": "symptom versus process",
-      "value": "one is a brown spotting condition; the other is a controlled moisture procedure",
-      "context": "Как называется состояние старой бумаги с рыжевато-коричневыми пятнами, механизм появления которых у разных бумаг может быть сложным? / Как называется контролируемая процедура, которая помогает расслабить свёрнутую или сложенную бумагу перед расправлением?",
-      "directReverse": "A response that gives controlled moisture procedure does not answer the prompt asking brown spotting condition; conversely brown spotting condition does not answer the other prompt.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "targetCanonicalSHA256": "fa2025aaf15943fbd0bea8510db8efb50cd132f0c1a4e858546d349ba00eec58",
-      "targetCard": {
-        "id": "books-publishing-foxing-term",
-        "difficulty": "hard",
-        "prompt": "Как называется состояние старой бумаги с рыжевато-коричневыми пятнами, механизм появления которых у разных бумаг может быть сложным?",
-        "answers": [
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение — контролируемая подача влаги, например чтобы расслабить свёрнутую бумагу."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация нейтрализует кислотность бумаги щелочным соединением."
-          },
-          {
-            "text": "Фоксинг",
-            "note": "Фоксингом называют рыжевато-коричневые или бурые пятна на старой бумаге; их связывают, в частности, с долгим хранением во влажности."
-          },
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция защищает лист между двумя прозрачными инертными пластинами."
-          }
-        ],
-        "correctIndex": 2,
-        "explanation": "Фоксинг — название рыжевато-коричневых пятен на старой бумаге. Канадский институт консервации указывает связь с длительным хранением во влажности и считает плесень возможной причиной.",
-        "source": {
-          "title": "Canadian Conservation Institute, Basic care – Books",
-          "url": "https://www.canada.ca/en/conservation-institute/services/care-objects/paper-books/basic-care-books.html",
+          "title": "Functional Requirements for Bibliographic Records: Final Report — IFLA",
+          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
           "verifiedAt": "2026-10-16"
         }
       },
-      "peerCanonicalSHA256": "e95953d86af59ca0ec1ecca651e8bb5708d2fe898f2909d625f3c090bf3e67d4",
-      "peerCard": {
-        "id": "books-publishing-humidification-term",
-        "difficulty": "hard",
-        "prompt": "Как называется контролируемая процедура, которая помогает расслабить свёрнутую или сложенную бумагу перед расправлением?",
-        "answers": [
-          {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна на старой бумаге."
-          },
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция помещает бумажный лист между прозрачными защитными пластинами."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация нейтрализует кислоты в бумаге с помощью щелочных соединений."
-          },
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение контролируемо размягчает свёрнутую или сложенную бумагу перед расправлением."
-          }
-        ],
-        "correctIndex": 3,
-        "explanation": "Контролируемое увлажнение помогает расслабить свёрток или сгибы, после чего бумагу расправляют. Национальная парковая служба предупреждает: предметы с железо-галловыми чернилами требуют работы профессионального консерватора.",
-        "source": {
-          "title": "National Park Service, Conserve O Gram 13/2: How to Flatten Folded or Rolled Paper Collections",
-          "url": "https://www.nps.gov/articles/000/conserve-o-gram-13-2-flatten-folded-rolled-paper.htm",
-          "verifiedAt": "2026-10-16"
-        }
-      }
+      "canonicalSHA256": "a0393a20e7fd9665cc085cbe227fb395b8ee021870fcc6e261079a04baf63837",
+      "sha256": "a0393a20e7fd9665cc085cbe227fb395b8ee021870fcc6e261079a04baf63837",
+      "source": "actual-current frozen topic snapshot",
+      "actualRelevantRelation": "Adjacent conceptual level: realization of a work; describes intellectual/artistic form, not one copy’s condition/history."
     },
     {
-      "targetId": "books-publishing-humidification-term",
-      "peerId": "books-publishing-foxing-term",
-      "leftEntity": "controlled moisture procedure",
-      "rightEntity": "brown spotting condition",
-      "relation": "symptom versus process",
-      "value": "one is a controlled moisture procedure; the other is a brown spotting condition",
-      "context": "Как называется контролируемая процедура, которая помогает расслабить свёрнутую или сложенную бумагу перед расправлением? / Как называется состояние старой бумаги с рыжевато-коричневыми пятнами, механизм появления которых у разных бумаг может быть сложным?",
-      "directReverse": "A response that gives brown spotting condition does not answer the prompt asking controlled moisture procedure; conversely controlled moisture procedure does not answer the other prompt.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "targetCanonicalSHA256": "e95953d86af59ca0ec1ecca651e8bb5708d2fe898f2909d625f3c090bf3e67d4",
-      "targetCard": {
-        "id": "books-publishing-humidification-term",
+      "id": "books-publishing-manifestation-model",
+      "topicId": "books-publishing",
+      "sourceOrder": 75,
+      "card": {
+        "id": "books-publishing-manifestation-model",
         "difficulty": "hard",
-        "prompt": "Как называется контролируемая процедура, которая помогает расслабить свёрнутую или сложенную бумагу перед расправлением?",
+        "prompt": "В FRBR один и тот же текст представлен печатной книгой и микрофильмом. Какой уровень обозначает каждую форму физического воплощения?",
         "answers": [
           {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна на старой бумаге."
+            "text": "Экземпляр",
+            "note": "Экземпляр — одна копия манифестации; её состояние может измениться после производства, например из-за утраченной страницы или нового переплёта."
           },
           {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция помещает бумажный лист между прозрачными защитными пластинами."
+            "text": "Произведение",
+            "note": "Произведение — абстрактное интеллектуальное создание, общее содержание которого прослеживается через разные выражения."
           },
           {
-            "text": "Деацидификация",
-            "note": "Деацидификация нейтрализует кислоты в бумаге с помощью щелочных соединений."
+            "text": "Выражение",
+            "note": "Выражение передаёт интеллектуальную или художественную форму произведения; шрифт и расположение страницы сами по себе к нему не относятся."
           },
           {
-            "text": "Увлажнение",
-            "note": "Увлажнение контролируемо размягчает свёрнутую или сложенную бумагу перед расправлением."
+            "text": "Манифестация",
+            "note": "Манифестация описывает физические характеристики группы копий и характеристики её производства и распространения."
           }
         ],
         "correctIndex": 3,
-        "explanation": "Контролируемое увлажнение помогает расслабить свёрток или сгибы, после чего бумагу расправляют. Национальная парковая служба предупреждает: предметы с железо-галловыми чернилами требуют работы профессионального консерватора.",
+        "explanation": "Манифестация — физическое воплощение выражения произведения. Копии на разных физических носителях, например бумаге и микрофильме, относятся к разным манифестациям.",
         "source": {
-          "title": "National Park Service, Conserve O Gram 13/2: How to Flatten Folded or Rolled Paper Collections",
-          "url": "https://www.nps.gov/articles/000/conserve-o-gram-13-2-flatten-folded-rolled-paper.htm",
+          "title": "Functional Requirements for Bibliographic Records: Final Report — IFLA",
+          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
           "verifiedAt": "2026-10-16"
         }
       },
-      "peerCanonicalSHA256": "fa2025aaf15943fbd0bea8510db8efb50cd132f0c1a4e858546d349ba00eec58",
-      "peerCard": {
-        "id": "books-publishing-foxing-term",
-        "difficulty": "hard",
-        "prompt": "Как называется состояние старой бумаги с рыжевато-коричневыми пятнами, механизм появления которых у разных бумаг может быть сложным?",
-        "answers": [
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение — контролируемая подача влаги, например чтобы расслабить свёрнутую бумагу."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация нейтрализует кислотность бумаги щелочным соединением."
-          },
-          {
-            "text": "Фоксинг",
-            "note": "Фоксингом называют рыжевато-коричневые или бурые пятна на старой бумаге; их связывают, в частности, с долгим хранением во влажности."
-          },
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция защищает лист между двумя прозрачными инертными пластинами."
-          }
-        ],
-        "correctIndex": 2,
-        "explanation": "Фоксинг — название рыжевато-коричневых пятен на старой бумаге. Канадский институт консервации указывает связь с длительным хранением во влажности и считает плесень возможной причиной.",
-        "source": {
-          "title": "Canadian Conservation Institute, Basic care – Books",
-          "url": "https://www.canada.ca/en/conservation-institute/services/care-objects/paper-books/basic-care-books.html",
-          "verifiedAt": "2026-10-16"
-        }
-      }
-    },
-    {
-      "targetId": "books-publishing-encapsulation-term",
-      "peerId": "books-publishing-humidification-term",
-      "leftEntity": "protective sandwich enclosure",
-      "rightEntity": "controlled moisture relaxation",
-      "relation": "housing versus treatment procedure",
-      "value": "one is a protective sandwich enclosure; the other is a controlled moisture relaxation",
-      "context": "Как называется способ поддержки хрупкого бумажного документа между двумя прозрачными химически инертными пластиковыми листами, края которых запечатаны? / Как называется контролируемая процедура, которая помогает расслабить свёрнутую или сложенную бумагу перед расправлением?",
-      "directReverse": "A response that gives controlled moisture relaxation does not answer the prompt asking protective sandwich enclosure; conversely protective sandwich enclosure does not answer the other prompt.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "targetCanonicalSHA256": "e3c8c16fc684031c77d53528935e43066dec82d087acbde12974d44b99ded0b2",
-      "targetCard": {
-        "id": "books-publishing-encapsulation-term",
-        "difficulty": "hard",
-        "prompt": "Как называется способ поддержки хрупкого бумажного документа между двумя прозрачными химически инертными пластиковыми листами, края которых запечатаны?",
-        "answers": [
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация вводит щелочные соединения в кислую бумагу, чтобы замедлить её химическое разрушение."
-          },
-          {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна, заметные на старой бумаге."
-          },
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение помогает расслабить свёрнутую или сложенную бумагу перед расправлением."
-          },
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция заключает документ между двумя прозрачными инертными листами, края которых запечатывают."
-          }
-        ],
-        "correctIndex": 3,
-        "explanation": "Инкапсуляция создаёт защитную оболочку и поддерживает хрупкий лист. Для документа, обе стороны которого нужно видеть при исследовании, такая оболочка позволяет обозревать обе стороны.",
-        "source": {
-          "title": "National Park Service, Conserve O Gram 13/3: Polyester Encapsulation",
-          "url": "https://www.nps.gov/subjects/museums/upload/13-03_508.pdf",
-          "verifiedAt": "2026-10-16"
-        }
-      },
-      "peerCanonicalSHA256": "e95953d86af59ca0ec1ecca651e8bb5708d2fe898f2909d625f3c090bf3e67d4",
-      "peerCard": {
-        "id": "books-publishing-humidification-term",
-        "difficulty": "hard",
-        "prompt": "Как называется контролируемая процедура, которая помогает расслабить свёрнутую или сложенную бумагу перед расправлением?",
-        "answers": [
-          {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна на старой бумаге."
-          },
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция помещает бумажный лист между прозрачными защитными пластинами."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация нейтрализует кислоты в бумаге с помощью щелочных соединений."
-          },
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение контролируемо размягчает свёрнутую или сложенную бумагу перед расправлением."
-          }
-        ],
-        "correctIndex": 3,
-        "explanation": "Контролируемое увлажнение помогает расслабить свёрток или сгибы, после чего бумагу расправляют. Национальная парковая служба предупреждает: предметы с железо-галловыми чернилами требуют работы профессионального консерватора.",
-        "source": {
-          "title": "National Park Service, Conserve O Gram 13/2: How to Flatten Folded or Rolled Paper Collections",
-          "url": "https://www.nps.gov/articles/000/conserve-o-gram-13-2-flatten-folded-rolled-paper.htm",
-          "verifiedAt": "2026-10-16"
-        }
-      }
-    },
-    {
-      "targetId": "books-publishing-humidification-term",
-      "peerId": "books-publishing-encapsulation-term",
-      "leftEntity": "controlled moisture relaxation",
-      "rightEntity": "protective sandwich enclosure",
-      "relation": "housing versus treatment procedure",
-      "value": "one is a controlled moisture relaxation; the other is a protective sandwich enclosure",
-      "context": "Как называется контролируемая процедура, которая помогает расслабить свёрнутую или сложенную бумагу перед расправлением? / Как называется способ поддержки хрупкого бумажного документа между двумя прозрачными химически инертными пластиковыми листами, края которых запечатаны?",
-      "directReverse": "A response that gives protective sandwich enclosure does not answer the prompt asking controlled moisture relaxation; conversely controlled moisture relaxation does not answer the other prompt.",
-      "targetQuestionCannotAnswerPeer": true,
-      "peerQuestionCannotAnswerTarget": true,
-      "targetCanonicalSHA256": "e95953d86af59ca0ec1ecca651e8bb5708d2fe898f2909d625f3c090bf3e67d4",
-      "targetCard": {
-        "id": "books-publishing-humidification-term",
-        "difficulty": "hard",
-        "prompt": "Как называется контролируемая процедура, которая помогает расслабить свёрнутую или сложенную бумагу перед расправлением?",
-        "answers": [
-          {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна на старой бумаге."
-          },
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция помещает бумажный лист между прозрачными защитными пластинами."
-          },
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация нейтрализует кислоты в бумаге с помощью щелочных соединений."
-          },
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение контролируемо размягчает свёрнутую или сложенную бумагу перед расправлением."
-          }
-        ],
-        "correctIndex": 3,
-        "explanation": "Контролируемое увлажнение помогает расслабить свёрток или сгибы, после чего бумагу расправляют. Национальная парковая служба предупреждает: предметы с железо-галловыми чернилами требуют работы профессионального консерватора.",
-        "source": {
-          "title": "National Park Service, Conserve O Gram 13/2: How to Flatten Folded or Rolled Paper Collections",
-          "url": "https://www.nps.gov/articles/000/conserve-o-gram-13-2-flatten-folded-rolled-paper.htm",
-          "verifiedAt": "2026-10-16"
-        }
-      },
-      "peerCanonicalSHA256": "e3c8c16fc684031c77d53528935e43066dec82d087acbde12974d44b99ded0b2",
-      "peerCard": {
-        "id": "books-publishing-encapsulation-term",
-        "difficulty": "hard",
-        "prompt": "Как называется способ поддержки хрупкого бумажного документа между двумя прозрачными химически инертными пластиковыми листами, края которых запечатаны?",
-        "answers": [
-          {
-            "text": "Деацидификация",
-            "note": "Деацидификация вводит щелочные соединения в кислую бумагу, чтобы замедлить её химическое разрушение."
-          },
-          {
-            "text": "Фоксинг",
-            "note": "Фоксинг — рыжевато-коричневые пятна, заметные на старой бумаге."
-          },
-          {
-            "text": "Увлажнение",
-            "note": "Увлажнение помогает расслабить свёрнутую или сложенную бумагу перед расправлением."
-          },
-          {
-            "text": "Инкапсуляция",
-            "note": "Инкапсуляция заключает документ между двумя прозрачными инертными листами, края которых запечатывают."
-          }
-        ],
-        "correctIndex": 3,
-        "explanation": "Инкапсуляция создаёт защитную оболочку и поддерживает хрупкий лист. Для документа, обе стороны которого нужно видеть при исследовании, такая оболочка позволяет обозревать обе стороны.",
-        "source": {
-          "title": "National Park Service, Conserve O Gram 13/3: Polyester Encapsulation",
-          "url": "https://www.nps.gov/subjects/museums/upload/13-03_508.pdf",
-          "verifiedAt": "2026-10-16"
-        }
-      }
+      "canonicalSHA256": "82e5962a88e910e9600ccf43697aacc378cf187ba6f301f011e4bca895b439ea",
+      "sha256": "82e5962a88e910e9600ccf43697aacc378cf187ba6f301f011e4bca895b439ea",
+      "source": "actual-current frozen topic snapshot",
+      "actualRelevantRelation": "Closest peer: shared physical embodiment/production group. Target 96 asks about one individual copy with a later binding change or missing page."
     }
   ]
 }
