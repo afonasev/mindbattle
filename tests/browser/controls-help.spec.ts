@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { test, expect } from '@playwright/test';
 
 for (const [width,height] of [[1280,900],[360,640]]) test(`specific control legends fit ${width}x${height}`,async({page},info)=>{
@@ -6,14 +7,29 @@ for (const [width,height] of [[1280,900],[360,640]]) test(`specific control lege
   await page.getByRole('button',{name:'Настройки',exact:true}).click();
   await page.getByRole('button',{name:'Справка по управлению',exact:true}).click();
   const dialog=page.getByRole('dialog',{name:'Управление в игре'});
-  await expect(dialog.getByRole('img',{name:'Клавиши W сверху, D справа, S снизу, A слева'})).toBeVisible();
-  await expect(dialog.locator('.simple-answer-label')).toHaveText(['WВерхний ответ','DПравый ответ','SНижний ответ','AЛевый ответ']);
-  await expect(dialog.locator('.simple-help-actions > div')).toHaveCount(3);
-  await expect(dialog.getByText('Отменить выбор в бонусе',{exact:true})).toHaveCount(0);
+  const poster=dialog.locator('.controls-ready-poster');
+  await expect(poster).toBeVisible();
+  await expect(poster).toHaveAttribute('src','/images/controls-simplified-v2.png');
+  await expect(poster).toHaveAccessibleName(/W — верхний ответ, D — правый, S — нижний, A — левый/);
+  await expect(poster).toHaveAccessibleName(/Enter — подтвердить и продолжить. Esc — пауза/);
+  await expect(dialog.locator('svg,.simple-answer-label,.simple-help-actions')).toHaveCount(0);
+  const image=await page.request.get('/images/controls-simplified-v2.png');
+  expect(createHash('sha256').update(await image.body()).digest('hex')).toBe('5a4821bc3b89e60a26f3e8a50016a0e839621997aadad3dff253a23f70bddbd1');
+  expect(await poster.evaluate((img:HTMLImageElement)=>[img.naturalWidth,img.naturalHeight])).toEqual([1536,1024]);
   await expect(dialog.getByRole('status')).toHaveCount(0);
   await page.screenshot({path:info.outputPath(`keyboard-${width}.png`)});
-  await dialog.getByText('Пауза',{exact:true}).scrollIntoViewIfNeeded();
-  await page.screenshot({path:info.outputPath(`keyboard-actions-${width}.png`)});
+  await dialog.getByRole('button',{name:'Увеличить',exact:true}).click();
+  const viewport=dialog.getByRole('region',{name:'Картинка управления: прокрутка',exact:true});
+  expect((await poster.boundingBox())!.width).toBeGreaterThanOrEqual(1000);
+  await expect(dialog.getByRole('button',{name:'Назад',exact:true})).toBeInViewport();
+  if(width===360){
+    await dialog.getByRole('button',{name:'Сдвинуть картинку вправо'}).click();
+    await expect.poll(()=>viewport.evaluate(e=>e.scrollLeft)).toBeGreaterThan(100);
+    await dialog.getByRole('button',{name:'Сдвинуть картинку влево'}).click();
+    await expect.poll(()=>viewport.evaluate(e=>e.scrollLeft)).toBeLessThan(20);
+  }
+  await page.screenshot({path:info.outputPath(`poster-zoom-${width}.png`)});
+  await dialog.getByRole('button',{name:'Вместить',exact:true}).click();
   await dialog.getByRole('button',{name:'Командная игра',exact:true}).click();
   await expect(dialog.getByText('Тема и риск',{exact:true})).toHaveCount(0);
   await expect(dialog.getByText('Отменить выбор в бонусе',{exact:true})).toBeVisible();
@@ -54,13 +70,14 @@ test('pause settings and nested help keep both return actions reachable',async({
 });
 
 test('missing artwork is reported while bindings remain readable',async({page})=>{
-  await page.route('**/images/controls-keycaps-v2.png',route=>route.abort());
+  await page.route('**/images/controls-simplified-v2.png',route=>route.abort());
   await page.goto('/?muted=1');
   await page.getByRole('button',{name:'Настройки',exact:true}).click();
   await page.getByRole('button',{name:'Справка по управлению',exact:true}).click();
   await expect(page.getByRole('status')).toContainText('Не удалось загрузить');
-  await expect(page.locator('.simple-answer-label')).toHaveCount(4);
-  await expect(page.getByText('Тема и риск',{exact:true})).toBeVisible();
+  await expect(page.locator('.poster-fallback')).toContainText('W — верхний ответ; D — правый; S — нижний; A — левый');
+  await expect(page.locator('.poster-fallback')).toContainText('Enter — подтвердить и продолжить. Esc — пауза');
+  await expect(page.getByRole('dialog',{name:'Управление в игре'}).getByRole('button',{name:'Назад',exact:true})).toBeInViewport();
 });
 
 test('virtual pad switches help mode and returns to the invoking settings action',async({page})=>{
@@ -72,7 +89,8 @@ test('virtual pad switches help mode and returns to the invoking settings action
   await page.getByRole('button',{name:'Настройки',exact:true}).click();
   await page.getByRole('button',{name:'Справка по управлению',exact:true}).click();
   const press=async(index:number)=>{await page.evaluate(i=>{(window as any).__helpPad.buttons[i].pressed=true;},index);await page.waitForTimeout(50);await page.evaluate(i=>{(window as any).__helpPad.buttons[i].pressed=false;},index);await page.waitForTimeout(50);};
-  await press(13);await press(13);await press(13);
+  const team=page.getByRole('button',{name:'Командная игра',exact:true});
+  for(let i=0;i<10 && !await team.evaluate(e=>e===document.activeElement);i++) await press(13);
   await expect(page.getByRole('button',{name:'Командная игра',exact:true})).toBeFocused();
   await press(0);
   await expect(page.getByRole('button',{name:'Командная игра',exact:true})).toHaveAttribute('aria-pressed','true');

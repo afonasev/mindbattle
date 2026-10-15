@@ -23,3 +23,13 @@ text. No background rectangles or checkerboard pattern.
 Pad keeps the existing device source and runtime `GAMEPAD_GLYPHS`; family and game
 mode are selected separately. Keyboard bindings are checked against input.ts/soloInput.ts,
 pause handling against App.tsx. No physical input adapter is changed.
+
+## F3: render the approved original intact
+
+The solo/WASD page now renders `controls-simplified-v2.png` as one full `<img>`,
+without sprite extraction, new key legends or reconstructed captions. Exact SHA256
+is verified against the approved asset by browser QA. Transparent mode hotspots
+follow the tabs already printed in the picture; external device/layout controls and
+Back remain functional. Fit/zoom and pan controls make the complete original
+accessible on narrow screens. Other modes/layouts retain their corresponding
+existing illustrations and bindings, rather than showing an inaccurate solo PNG.
