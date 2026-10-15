@@ -1,0 +1,917 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "05423a2ed03c7663705ce8b7edc3b142d2f58928",
+  "proofs": [
+    {
+      "id": "maps-cartography-digital-map",
+      "status": "FIX",
+      "source": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/usgs-national-map-viewer.response.json",
+      "sourceLocator": "Native response line 128, call_55457e8a46bf4810a0ed0be7227e0cbf; L12, L14-L20, L23-L25, L50, L56-L63, L127-L128, L163",
+      "claim": "USGS сообщает, что данные The National Map доступны через скачивание, веб-сервисы и онлайн-просмотр. Пользователю нужно открыть интерактивную карту в браузере, изучать слои и создать собственную веб-карту. Какой способ доступа выбрать?",
+      "keyTruth": "Открыть онлайн-просмотрщик The National Map",
+      "proof": "Онлайн-просмотрщик решает обе задачи из условия: интерактивно показывает GIS-слои и позволяет создать веб-карту. Data Downloader получает данные, веб-сервисы предназначены для подключения GIS-слоёв, а topoBuilder создаёт заказные карты.",
+      "answerAndNoteEvidence": [
+        {
+          "slot": 0,
+          "answer": "Скачать данные и карты через Data Downloader",
+          "note": "Этот путь загружает наборы данных или карты для дальнейшего использования; в условии требуется интерактивно изучать слои в браузере.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Data Downloader сохраняет набор для последующего использования, а не открывает интерактивный просмотрщик из условия.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/usgs-national-map-viewer.response.json",
+          "sourceLocator": "Native response line 128, call_55457e8a46bf4810a0ed0be7227e0cbf; L12, L14-L20, L23-L25, L50, L56-L63, L127-L128, L163"
+        },
+        {
+          "slot": 1,
+          "answer": "Подключиться к веб-сервисам карт",
+          "note": "USGS называет веб-сервисы отдельным способом доступа; в условии просят открыть именно браузерный просмотрщик и создать веб-карту.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Веб-сервис отдаёт картографические слои для подключения; карточка различает такой доступ и готовый интерактивный браузерный Viewer.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/usgs-national-map-viewer.response.json",
+          "sourceLocator": "Native response line 128, call_55457e8a46bf4810a0ed0be7227e0cbf; L12, L14-L20, L23-L25, L50, L56-L63, L127-L128, L163"
+        },
+        {
+          "slot": 2,
+          "answer": "Заказать карту через topoBuilder",
+          "note": "topoBuilder позволяет запросить индивидуальную топографическую карту, но не является способом открыть интерактивный просмотрщик слоёв.",
+          "judgment": "distractor",
+          "claimSpecificReason": "topoBuilder готовит индивидуальную топографическую карту; он не выполняет требуемое просмотрщиком изучение слоёв и создание веб-карты.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/usgs-national-map-viewer.response.json",
+          "sourceLocator": "Native response line 128, call_55457e8a46bf4810a0ed0be7227e0cbf; L12, L14-L20, L23-L25, L50, L56-L63, L127-L128, L163"
+        },
+        {
+          "slot": 3,
+          "answer": "Открыть онлайн-просмотрщик The National Map",
+          "note": "USGS описывает The National Map как бесплатную коллекцию географических данных США и территорий, согласованную на национальном уровне.",
+          "judgment": "key",
+          "claimSpecificReason": "Viewer соответствует обеим операциям в условии; заметка добавляет проверяемую характеристику National Map — бесплатная национальная коллекция данных США и территорий.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/usgs-national-map-viewer.response.json",
+          "sourceLocator": "Native response line 128, call_55457e8a46bf4810a0ed0be7227e0cbf; L12, L14-L20, L23-L25, L50, L56-L63, L127-L128, L163"
+        }
+      ],
+      "fieldGroupReview": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literalSHA256": "49abb1fc34feac5b732a087ca47baa41ed7e6ce25babded195c54a655d50511c",
+          "result": "SUPPORTED",
+          "reason": "Условие различает три названных USGS канала и спрашивает браузерный Viewer по двум требуемым операциям."
+        },
+        {
+          "group": "explanation",
+          "literalSHA256": "553aac24953cb6bf74b24b5912fe874a905f147cc1f91b529b7d9f2c41129407",
+          "result": "SUPPORTED",
+          "reason": "Проверяет, что Viewer решает обе операции, а Data Downloader, web services и topoBuilder отделены по назначению."
+        },
+        {
+          "group": "note0",
+          "literalSHA256": "622614d300c82ced7784bed12245e4d5fe7ae67c11d492afa75ce8e1713d4239",
+          "result": "SUPPORTED",
+          "reason": "Data Downloader сохраняет набор для последующего использования, а не открывает интерактивный просмотрщик из условия."
+        },
+        {
+          "group": "note1",
+          "literalSHA256": "f5d60d90b8e2ce8256adfd714d694d9dbc8e37e5ea37002075414353d7a3f7a3",
+          "result": "SUPPORTED",
+          "reason": "Веб-сервис отдаёт картографические слои для подключения; карточка различает такой доступ и готовый интерактивный браузерный Viewer."
+        },
+        {
+          "group": "note2",
+          "literalSHA256": "2e8c5eabe02a9c78791e865cfff64c0876eecbd612b645316774fb2aa4a1f32b",
+          "result": "SUPPORTED",
+          "reason": "topoBuilder готовит индивидуальную топографическую карту; он не выполняет требуемое просмотрщиком изучение слоёв и создание веб-карты."
+        },
+        {
+          "group": "note3",
+          "literalSHA256": "3eaf4defcea9872b9b6a402fb304aeaa98160e64269e081150b6ea311d7ac1eb",
+          "result": "SUPPORTED",
+          "reason": "Viewer соответствует обеим операциям в условии; заметка добавляет проверяемую характеристику National Map — бесплатная национальная коллекция данных США и территорий."
+        }
+      ],
+      "peerReview": {
+        "snapshot": "peer-snapshot.json",
+        "scope": "CURRENT 50-100; all available PROPOSED maps 69-80 incl. historic2 and source-HOLD78-80; scalegrid3; medium9; projection50; raster62; canonical SHA-256 exact-card grouping.; для карт 81–90 текущая версия набора учтена как baseline для совпадений, но не как дублирующая PROPOSED target-версия",
+        "result": "NO_DUPLICATE_PROPOSED_CORRECT_KEY_OR_ANSWER_CUE",
+        "reason": "Сопоставлена со способами доступа USGS и предложенными цифровыми/растровыми peer-версиями; ключ выбирает Viewer по двум операциям из условия, не повторяя ключевой текст peer-карточек."
+      }
+    },
+    {
+      "id": "maps-cartography-orient-align",
+      "status": "FIX",
+      "source": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+      "sourceLocator": "PAGE 13, Know your compass; PAGE 14, Using your compass; PAGE 15, Using land features",
+      "claim": "Перед тем как определить по компасу направление к ориентиру, путешественник поворачивает карту так, чтобы её направления совпали с направлениями на местности. Как называется действие с картой?",
+      "keyTruth": "Ориентировать карту",
+      "proof": "Ориентировать карту — значит совместить её направления с направлениями местности перед навигацией. OS предлагает выровнять компасные ориентирующие линии с вертикальными линиями восточных координат и отдельно учитывать магнитное склонение.",
+      "answerAndNoteEvidence": [
+        {
+          "slot": 0,
+          "answer": "Снять компасный азимут",
+          "note": "Азимут задаёт направление движения к цели; он ещё не совмещает ориентацию карты с местностью.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Азимут сообщает направление к цели, но не совмещает карту с окружающими направлениями.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+          "sourceLocator": "PAGE 13, Know your compass; PAGE 14, Using your compass; PAGE 15, Using land features"
+        },
+        {
+          "slot": 1,
+          "answer": "Учесть магнитное склонение",
+          "note": "Поправка связывает магнитный север компаса с выбранным севером; сама по себе она не поворачивает карту.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Склонение — угловая поправка между северными направлениями; её учёт не является поворотом карты.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+          "sourceLocator": "PAGE 13, Know your compass; PAGE 14, Using your compass; PAGE 15, Using land features"
+        },
+        {
+          "slot": 2,
+          "answer": "Определить своё положение по ориентирам",
+          "note": "Так находят точку, где стоит путешественник; здесь требуется изменить ориентацию карты.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Определение позиции отвечает на вопрос «где я?», а в задаче меняется ориентация карты до движения.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+          "sourceLocator": "PAGE 13, Know your compass; PAGE 14, Using your compass; PAGE 15, Using land features"
+        },
+        {
+          "slot": 3,
+          "answer": "Ориентировать карту",
+          "note": "В руководстве OS линии сетки компаса совмещают с вертикальными линиями сетки карты, ориентированными на север.",
+          "judgment": "key",
+          "claimSpecificReason": "Ключ называет действие; заметка уточняет способ OS: совместить линии компаса с сеточным севером.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+          "sourceLocator": "PAGE 13, Know your compass; PAGE 14, Using your compass; PAGE 15, Using land features"
+        }
+      ],
+      "fieldGroupReview": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literalSHA256": "7e909968809a1f183568a15b3f70d3fcf916cb703d9c95f9dea1a4a4d8b05a34",
+          "result": "SUPPORTED",
+          "reason": "Условие описывает предварительное совмещение карты с направлениями местности, а не определение азимута или поправку."
+        },
+        {
+          "group": "explanation",
+          "literalSHA256": "cc1cbea7d2f814b515b55d0d3cea75fd99306a82b6ae75141a2583c54ba9aed4",
+          "result": "SUPPORTED",
+          "reason": "Проверяет смысл ориентирования и отличие от азимута, поправки склонения и определения местоположения; формулировка заметки OS уточнена до совмещения сеток."
+        },
+        {
+          "group": "note0",
+          "literalSHA256": "ce7c3bd92cd6aec45056f0204d22a2b304b4592636b71e12b73d4d0948c61838",
+          "result": "SUPPORTED",
+          "reason": "Азимут сообщает направление к цели, но не совмещает карту с окружающими направлениями."
+        },
+        {
+          "group": "note1",
+          "literalSHA256": "45d2e4ac875b3cbf63a5631bd39cdd92a6b914153bb6c60bc2c4a7026f37517f",
+          "result": "SUPPORTED",
+          "reason": "Склонение — угловая поправка между северными направлениями; её учёт не является поворотом карты."
+        },
+        {
+          "group": "note2",
+          "literalSHA256": "3f6de9cd6533041f5e6f1e7e64b99e7798db4bb638d1a3b74ce10b0994ebc9a9",
+          "result": "SUPPORTED",
+          "reason": "Определение позиции отвечает на вопрос «где я?», а в задаче меняется ориентация карты до движения."
+        },
+        {
+          "group": "note3",
+          "literalSHA256": "37a9b2121c5ffd06a3b3cf3c48c1e87f54718d18d12273b046f281abc52a2e43",
+          "result": "SUPPORTED",
+          "reason": "Ключ называет действие; заметка уточняет способ OS: совместить линии компаса с сеточным севером."
+        }
+      ],
+      "peerReview": {
+        "snapshot": "peer-snapshot.json",
+        "scope": "CURRENT 50-100; all available PROPOSED maps 69-80 incl. historic2 and source-HOLD78-80; scalegrid3; medium9; projection50; raster62; canonical SHA-256 exact-card grouping.; для карт 81–90 текущая версия набора учтена как baseline для совпадений, но не как дублирующая PROPOSED target-версия",
+        "result": "NO_DUPLICATE_PROPOSED_CORRECT_KEY_OR_ANSWER_CUE",
+        "reason": "Сопоставлена с текущей диаграммой склонения (100), grid-square и всеми peer-версиями маршрутов/ориентации; проверяется действие по совмещению карты, не чтение диаграммы или координатная ячейка."
+      }
+    },
+    {
+      "id": "maps-cartography-measure-distance",
+      "status": "FIX",
+      "source": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+      "sourceLocator": "PAGES 5–6, scale 1:50 000 means 1 cm corresponds to 50,000 cm on ground; PAGE 23, measure map distance to each route checkpoint using map scale.",
+      "claim": "На карте извилистая тропа измерена четырьмя участками: 0,8 см, 1,0 см, 0,7 см и 0,5 см. Масштаб — 1:50 000. Какова общая длина тропы на местности?",
+      "keyTruth": "1,5 км",
+      "proof": "Сложите длины участков: 0,8 + 1,0 + 0,7 + 0,5 = 3 см. При масштабе 1:50 000 один сантиметр равен 0,5 км, поэтому тропа имеет длину 1,5 км.",
+      "answerAndNoteEvidence": [
+        {
+          "slot": 0,
+          "answer": "0,75 км",
+          "note": "0,75 км получается, если не сложить все четыре отрезка и перевести на местность только часть тропы.",
+          "judgment": "distractor",
+          "claimSpecificReason": "0,75 км учитывает только 1,5 см пути, то есть половину суммы четырёх измеренных сегментов.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+          "sourceLocator": "PAGES 5–6, scale 1:50 000 means 1 cm corresponds to 50,000 cm on ground; PAGE 23, measure map distance to each route checkpoint using map scale."
+        },
+        {
+          "slot": 1,
+          "answer": "15 км",
+          "note": "При 1:50 000 один сантиметр — 0,5 км, а не 5 км; здесь десятикратная ошибка перевода.",
+          "judgment": "distractor",
+          "claimSpecificReason": "15 км в десять раз больше правильного результата: при масштабе один сантиметр соответствует 0,5 км.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+          "sourceLocator": "PAGES 5–6, scale 1:50 000 means 1 cm corresponds to 50,000 cm on ground; PAGE 23, measure map distance to each route checkpoint using map scale."
+        },
+        {
+          "slot": 2,
+          "answer": "150 км",
+          "note": "Это значение завышено в сто раз: один сантиметр соответствует 500 м, а длина карты равна лишь 3 см.",
+          "judgment": "distractor",
+          "claimSpecificReason": "150 км в сто раз больше результата и не согласуется с переводом 3 см при масштабе 1:50 000.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+          "sourceLocator": "PAGES 5–6, scale 1:50 000 means 1 cm corresponds to 50,000 cm on ground; PAGE 23, measure map distance to each route checkpoint using map scale."
+        },
+        {
+          "slot": 3,
+          "answer": "1,5 км",
+          "note": "OS указывает, что на карте 1:50 000 каждый миллиметр шкалы компаса соответствует 50 м на местности.",
+          "judgment": "key",
+          "claimSpecificReason": "Сумма сегментов — 3 см, каждый сантиметр соответствует 0,5 км, значит ответ 1,5 км; примечание OS даёт дополнительную проверку масштаба: 1 мм — 50 м.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+          "sourceLocator": "PAGES 5–6, scale 1:50 000 means 1 cm corresponds to 50,000 cm on ground; PAGE 23, measure map distance to each route checkpoint using map scale."
+        }
+      ],
+      "fieldGroupReview": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literalSHA256": "5f528926e78e18183615e1f4b5f65878e819bb58b40a8979bb8e75ce4648a3bb",
+          "result": "SUPPORTED",
+          "reason": "Четыре явно заданных отрезка дают сумму 3 см; масштаб однозначно задаёт наземный перевод."
+        },
+        {
+          "group": "explanation",
+          "literalSHA256": "a5164392abce8a3a0b26b05b86294ea9e89337bd63405858aa5a70160586696a",
+          "result": "SUPPORTED",
+          "reason": "Показывает сумму четырёх сегментов и перевод масштаба 1:50 000 без промежуточного округления."
+        },
+        {
+          "group": "note0",
+          "literalSHA256": "33c0a00b2b48da989d7fdb2516aa606a4246ab3f6c7d13da942fd0d47c3847ca",
+          "result": "SUPPORTED",
+          "reason": "0,75 км учитывает только 1,5 см пути, то есть половину суммы четырёх измеренных сегментов."
+        },
+        {
+          "group": "note1",
+          "literalSHA256": "eeca8ffe2b9ae066a3be1b347e2aad3a1a8381522447338186f6173fc6923234",
+          "result": "SUPPORTED",
+          "reason": "15 км в десять раз больше правильного результата: при масштабе один сантиметр соответствует 0,5 км."
+        },
+        {
+          "group": "note2",
+          "literalSHA256": "7109c79e3343526a91f02aada3e4ea3c1f6bb2d87d2decc5c06284d2c3b8598a",
+          "result": "SUPPORTED",
+          "reason": "150 км в сто раз больше результата и не согласуется с переводом 3 см при масштабе 1:50 000."
+        },
+        {
+          "group": "note3",
+          "literalSHA256": "7baf97dbc1ceadd777fff266f642ba713bb7b5daa0c8f641a903130176820dc1",
+          "result": "SUPPORTED",
+          "reason": "Сумма сегментов — 3 см, каждый сантиметр соответствует 0,5 км, значит ответ 1,5 км; примечание OS даёт дополнительную проверку масштаба: 1 мм — 50 м."
+        }
+      ],
+      "peerReview": {
+        "snapshot": "peer-snapshot.json",
+        "scope": "CURRENT 50-100; all available PROPOSED maps 69-80 incl. historic2 and source-HOLD78-80; scalegrid3; medium9; projection50; raster62; canonical SHA-256 exact-card grouping.; для карт 81–90 текущая версия набора учтена как baseline для совпадений, но не как дублирующая PROPOSED target-версия",
+        "result": "NO_DUPLICATE_PROPOSED_CORRECT_KEY_OR_ANSWER_CUE",
+        "reason": "Сопоставлена с картами масштаба 51–55, 69–80 и scalegrid3: это сумма четырёх отрезков пути и перевод общего расстояния, не отношение масштаба, площадь клетки или увеличение печати."
+      }
+    },
+    {
+      "id": "maps-cartography-read-coordinates",
+      "status": "FIX",
+      "source": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/esri-coordinate-systems.response.json",
+      "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; ArcGIS coordinate-system page L10-L16, especially L14",
+      "claim": "Для точки заданы широта 40° с. ш. и долгота 74° з. д. Требуется записать пару в порядке (долгота, широта). Какую запись выбрать?",
+      "keyTruth": "(74° з. д., 40° с. ш.)",
+      "proof": "В заданном порядке первой записывают долготу, затем широту; направления запад и север сохраняют знаки исходной точки. В geographic CRS Esri longitude — x, latitude — y, обычно в градусах.",
+      "answerAndNoteEvidence": [
+        {
+          "slot": 0,
+          "answer": "(40° с. ш., 74° з. д.)",
+          "note": "Здесь значения стоят в порядке широта, затем долгота, обратном требуемому формату.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Пара записана как широта-долгота, хотя условие явно требует долготу первой.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/esri-coordinate-systems.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; ArcGIS coordinate-system page L10-L16, especially L14"
+        },
+        {
+          "slot": 1,
+          "answer": "(74° в. д., 40° с. ш.)",
+          "note": "Порядок верен, но знак долготы должен быть западным, а не восточным.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Восточное направление меняет знак заданной западной долготы.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/esri-coordinate-systems.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; ArcGIS coordinate-system page L10-L16, especially L14"
+        },
+        {
+          "slot": 2,
+          "answer": "(74° з. д., 40° ю. ш.)",
+          "note": "Долгота указана верно, но широта должна быть северной.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Южное направление меняет знак заданной северной широты.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/esri-coordinate-systems.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; ArcGIS coordinate-system page L10-L16, especially L14"
+        },
+        {
+          "slot": 3,
+          "answer": "(74° з. д., 40° с. ш.)",
+          "note": "В географической системе долгота задаёт x, а широта — y; обе координаты обычно выражены угловыми единицами.",
+          "judgment": "key",
+          "claimSpecificReason": "Значения и полушария сохранены и стоят в требуемом порядке; Esri описывает longitude как x, latitude как y в географической CRS.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/esri-coordinate-systems.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; ArcGIS coordinate-system page L10-L16, especially L14"
+        }
+      ],
+      "fieldGroupReview": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literalSHA256": "d9c7fd775d71103e89d0cae57f431a53fef1ee09721e9f96e914709dce735ee7",
+          "result": "SUPPORTED",
+          "reason": "В условии явно задан формат (долгота, широта), значения и полушария однозначно определены."
+        },
+        {
+          "group": "explanation",
+          "literalSHA256": "704e834b9ef08a22792be66d369e0eeb017b438efbf70a1cdbf7a8eef46625cf",
+          "result": "SUPPORTED",
+          "reason": "Объясняет требуемый порядок пары, сохранение полушарий и соответствие x/y в geographic CRS."
+        },
+        {
+          "group": "note0",
+          "literalSHA256": "9fe2ef71dd57ffaac613721e8a4a6e7ab2d11c150b102a9ab68ca3a03e764c81",
+          "result": "SUPPORTED",
+          "reason": "Пара записана как широта-долгота, хотя условие явно требует долготу первой."
+        },
+        {
+          "group": "note1",
+          "literalSHA256": "fd4b802efa4eba13341083ed6e2a8b129aec438f320b2108546da2e9922d8829",
+          "result": "SUPPORTED",
+          "reason": "Восточное направление меняет знак заданной западной долготы."
+        },
+        {
+          "group": "note2",
+          "literalSHA256": "aef38ec644281975836f0822e41aa1fdc41c5d440f384651f9d0704101c9f11c",
+          "result": "SUPPORTED",
+          "reason": "Южное направление меняет знак заданной северной широты."
+        },
+        {
+          "group": "note3",
+          "literalSHA256": "f9595292fe91f9fc032e20de28c12f425498468a638e8fd478b11fa118f6ee5a",
+          "result": "SUPPORTED",
+          "reason": "Значения и полушария сохранены и стоят в требуемом порядке; Esri описывает longitude как x, latitude как y в географической CRS."
+        }
+      ],
+      "peerReview": {
+        "snapshot": "peer-snapshot.json",
+        "scope": "CURRENT 50-100; all available PROPOSED maps 69-80 incl. historic2 and source-HOLD78-80; scalegrid3; medium9; projection50; raster62; canonical SHA-256 exact-card grouping.; для карт 81–90 текущая версия набора учтена как baseline для совпадений, но не как дублирующая PROPOSED target-версия",
+        "result": "NO_DUPLICATE_PROPOSED_CORRECT_KEY_OR_ANSWER_CUE",
+        "reason": "Сопоставлена с grid-square, средними координатными peer-картами latitude/longitude/UTM (medium9), 69–80 и projection50: это порядок подписанной географической пары, без вычисления координат, зоны или часового пояса."
+      }
+    },
+    {
+      "id": "maps-cartography-follow-route",
+      "status": "FIX",
+      "source": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+      "sourceLocator": "PAGE 3, journey planning and route features; PAGE 16, pre-plan route; PAGES 24–25, route checkpoints",
+      "claim": "На карте отмечен путь от старта через мост к перевалу. Путешественник сверяется с картой, чтобы выбрать следующий отрезок именно этой последовательности. Какое действие он выполняет?",
+      "keyTruth": "Проследить маршрут",
+      "proof": "Планирование предшествует прогулке, а следование маршруту означает сверять своё продвижение с нанесённой последовательностью участков. OS рекомендует выбирать промежуточные контрольные точки, учитывая рельеф.",
+      "answerAndNoteEvidence": [
+        {
+          "slot": 0,
+          "answer": "Планировать маршрут",
+          "note": "Планирование выбирает и наносит путь до выхода; в условии путь уже задан и путешественник проходит его.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Планирование выбирает путь до выхода; в задаче маршрут уже нанесён, и человек идёт по нему.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+          "sourceLocator": "PAGE 3, journey planning and route features; PAGE 16, pre-plan route; PAGES 24–25, route checkpoints"
+        },
+        {
+          "slot": 1,
+          "answer": "Оценить время в пути",
+          "note": "Для оценки времени нужны темп и длина участков, а не только порядок мост—перевал.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Оценка времени требует темпа/скорости и длины, которых в условии нет; требуется выбрать следующий сегмент пути.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+          "sourceLocator": "PAGE 3, journey planning and route features; PAGE 16, pre-plan route; PAGES 24–25, route checkpoints"
+        },
+        {
+          "slot": 2,
+          "answer": "Найти координаты контрольной точки",
+          "note": "Координаты задают положение моста или перевала, но не указывают следующий отрезок пути.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Координата задаёт точку, но не операцию следования последовательности сегментов маршрута.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+          "sourceLocator": "PAGE 3, journey planning and route features; PAGE 16, pre-plan route; PAGES 24–25, route checkpoints"
+        },
+        {
+          "slot": 3,
+          "answer": "Проследить маршрут",
+          "note": "Он сверяет следующий участок и поворот с заранее заданной последовательностью пути.",
+          "judgment": "key",
+          "claimSpecificReason": "Ответ описывает сверку продвижения с уже заданным путём; OS дополнительно советует выбирать контрольные точки с учётом рельефа.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+          "sourceLocator": "PAGE 3, journey planning and route features; PAGE 16, pre-plan route; PAGES 24–25, route checkpoints"
+        }
+      ],
+      "fieldGroupReview": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literalSHA256": "4d1a2ab7627f02a95b2531d6b0efbb17a9e6118305415c7618bfbf896dab8e18",
+          "result": "SUPPORTED",
+          "reason": "Путь уже нанесён, поэтому проверяется чтение следующего участка последовательности."
+        },
+        {
+          "group": "explanation",
+          "literalSHA256": "2f902bb61ce181a0d058ba533296f9a13450ddf7d06b0d5bcbe826640a5cdc77",
+          "result": "SUPPORTED",
+          "reason": "Отделяет следование уже заданному пути от планирования, оценки времени и задания точки координатами."
+        },
+        {
+          "group": "note0",
+          "literalSHA256": "037a04d27a383057512ec58475cc666924036a81d1e9e8dcf11fe73f203cdcc9",
+          "result": "SUPPORTED",
+          "reason": "Планирование выбирает путь до выхода; в задаче маршрут уже нанесён, и человек идёт по нему."
+        },
+        {
+          "group": "note1",
+          "literalSHA256": "42e41fa93eba82bbbca52dd5a90fbf3ecb3069b0a86cf9f7f3c9a6e71804ce48",
+          "result": "SUPPORTED",
+          "reason": "Оценка времени требует темпа/скорости и длины, которых в условии нет; требуется выбрать следующий сегмент пути."
+        },
+        {
+          "group": "note2",
+          "literalSHA256": "7924ffe54e03779e3065e0b40e2a71ab254d7584f6ac0ad545848c73c314ebc5",
+          "result": "SUPPORTED",
+          "reason": "Координата задаёт точку, но не операцию следования последовательности сегментов маршрута."
+        },
+        {
+          "group": "note3",
+          "literalSHA256": "5adb2199192ccb37dd7c6bfa4b55b96df6ff8498663782cba58fe66d1f1065cb",
+          "result": "SUPPORTED",
+          "reason": "Ответ описывает сверку продвижения с уже заданным путём; OS дополнительно советует выбирать контрольные точки с учётом рельефа."
+        }
+      ],
+      "peerReview": {
+        "snapshot": "peer-snapshot.json",
+        "scope": "CURRENT 50-100; all available PROPOSED maps 69-80 incl. historic2 and source-HOLD78-80; scalegrid3; medium9; projection50; raster62; canonical SHA-256 exact-card grouping.; для карт 81–90 текущая версия набора учтена как baseline для совпадений, но не как дублирующая PROPOSED target-версия",
+        "result": "NO_DUPLICATE_PROPOSED_CORRECT_KEY_OR_ANSWER_CUE",
+        "reason": "Сопоставлена с маршрутными картами 69–80 и 78–80 source-hold: путь уже задан, спрашивается следование следующему участку; ключи peer-карт о планировании/глобусе/настенной печати не дублируются."
+      }
+    },
+    {
+      "id": "maps-cartography-waldseemuller-america",
+      "status": "FIX",
+      "source": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/loc-waldseemuller-1507.response.json",
+      "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; full LoC primary page L19-L21",
+      "claim": "Куратор готовит подпись к карте Вальдземюллера. Источник говорит, что автор назвал новые земли Америкой, признавая вывод о новом континенте; карта ясно отделяет Западное полушарие от Азии и показывает Тихий океан отдельно. Какую интерпретацию следует дать посетителю?",
+      "keyTruth": "Карта отмечает новые земли как отдельный континент и меняет европейское представление о мире.",
+      "proof": "Подпись должна передать не только слово «Америка», но и новый образ мира: отдельный западный материк и Тихий океан. Библиотека Конгресса отмечает, что карта изменила прежнее европейское деление мира на три части.",
+      "answerAndNoteEvidence": [
+        {
+          "slot": 0,
+          "answer": "Карта сохраняет трёхчастную модель мира, в которой западные земли остаются частью Азии.",
+          "note": "LoC описывает противоположное: отдельное Западное полушарие, отделённое от Азии.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Это противоречит описанию LoC: западные земли отделены от Азии и показаны как новый континент.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/loc-waldseemuller-1507.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; full LoC primary page L19-L21"
+        },
+        {
+          "slot": 1,
+          "answer": "Название «Америка» относится к автору карты, а не к новому материку.",
+          "note": "LoC объясняет название признанием нового континента, связанного с пониманием Веспуччи.",
+          "judgment": "distractor",
+          "claimSpecificReason": "LoC связывает имя America с новыми землями и выводом о новом континенте, а не с именем картографа.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/loc-waldseemuller-1507.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; full LoC primary page L19-L21"
+        },
+        {
+          "slot": 2,
+          "answer": "Карта показывает отдельную западную часть мира, но Тихий океан включает в Атлантический.",
+          "note": "Источник говорит о Тихом океане как об отдельном океане, наряду с отдельным Западным полушарием.",
+          "judgment": "distractor",
+          "claimSpecificReason": "LoC отдельно указывает изображённый Тихий океан; его нельзя включить в Атлантический в интерпретации карты.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/loc-waldseemuller-1507.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; full LoC primary page L19-L21"
+        },
+        {
+          "slot": 3,
+          "answer": "Карта отмечает новые земли как отдельный континент и меняет европейское представление о мире.",
+          "note": "LoC говорит, что эта карта ясно отделила Западное полушарие от Азии и изменила прежнее европейское представление мира.",
+          "judgment": "key",
+          "claimSpecificReason": "Интерпретация согласуется с LoC о новом континенте и перемене европейского образа мира; эта единственная известная сохранившаяся копия — полезный дополнительный факт источника.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/loc-waldseemuller-1507.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; full LoC primary page L19-L21"
+        }
+      ],
+      "fieldGroupReview": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literalSHA256": "b763e401548c31b7f25872422e3db29c4f4ef15e99303b9824acda587fab385a",
+          "result": "SUPPORTED",
+          "reason": "Условие ограничивает ответ исторической интерпретацией карты Вальдземюллера и явно задаёт проверяемые факты LoC."
+        },
+        {
+          "group": "explanation",
+          "literalSHA256": "28ef5927bef0c50264a19b461dbc7a155e9f56b075653844774a99aef50717b6",
+          "result": "SUPPORTED",
+          "reason": "Обосновывает историческую интерпретацию по отдельному Западному полушарию, Тихому океану и изменению европейской модели мира."
+        },
+        {
+          "group": "note0",
+          "literalSHA256": "f44d89c63665b8e7da6bb22b452923988bf656c956a4952b1d58c0704d8ffbac",
+          "result": "SUPPORTED",
+          "reason": "Это противоречит описанию LoC: западные земли отделены от Азии и показаны как новый континент."
+        },
+        {
+          "group": "note1",
+          "literalSHA256": "e19b089077ccff9fd4ed869010126197acef75bf8d9ce674818777b1019e7b79",
+          "result": "SUPPORTED",
+          "reason": "LoC связывает имя America с новыми землями и выводом о новом континенте, а не с именем картографа."
+        },
+        {
+          "group": "note2",
+          "literalSHA256": "f14aadb356d1b78a03153a36d5c0579002af21ef4f353b0e67aad694f00cf990",
+          "result": "SUPPORTED",
+          "reason": "LoC отдельно указывает изображённый Тихий океан; его нельзя включить в Атлантический в интерпретации карты."
+        },
+        {
+          "group": "note3",
+          "literalSHA256": "1e4115c07adee0cc30ab965a90c434268f44a58e4de07338d8ac958b38e61081",
+          "result": "SUPPORTED",
+          "reason": "Интерпретация согласуется с LoC о новом континенте и перемене европейского образа мира; эта единственная известная сохранившаяся копия — полезный дополнительный факт источника."
+        }
+      ],
+      "peerReview": {
+        "snapshot": "peer-snapshot.json",
+        "scope": "CURRENT 50-100; all available PROPOSED maps 69-80 incl. historic2 and source-HOLD78-80; scalegrid3; medium9; projection50; raster62; canonical SHA-256 exact-card grouping.; для карт 81–90 текущая версия набора учтена как baseline для совпадений, но не как дублирующая PROPOSED target-версия",
+        "result": "NO_DUPLICATE_PROPOSED_CORRECT_KEY_OR_ANSWER_CUE",
+        "reason": "Сопоставлена с обеими доступными историческими версиями и Mappa Mundi peer-картой: вывод о новой интерпретации Вальдземюллера не равен идентификации старой схемы мира; exact proposed key не повторяется."
+      }
+    },
+    {
+      "id": "maps-cartography-cadastral-parcels",
+      "status": "FIX",
+      "source": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/fao-cadastral-maps.response.json",
+      "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; full FAO page L2-L10, L20, L25-L29, L40-L42",
+      "claim": "Для городской ГИС нужен слой смежных земельных участков: у каждого контура свой номер, по которому он связывается с отдельной записью. Какой вид карты предназначен для такой идентификации участков?",
+      "keyTruth": "Кадастровая карта",
+      "proof": "Кадастровая карта связывает каждый земельный участок с отдельным идентификатором и записями о нём. FAO также предупреждает, что цифровое увеличение карты не повышает точность исходной съёмки.",
+      "answerAndNoteEvidence": [
+        {
+          "slot": 0,
+          "answer": "Топографическая карта",
+          "note": "Топографическая карта показывает рельеф и общие объекты; FAO отмечает, что обычного масштаба 1:50 000 недостаточно для кадастровых участков.",
+          "judgment": "distractor",
+          "claimSpecificReason": "FAO отличает кадастровые карты от обзорных топографических и отмечает, что масштаба 1:50 000 недостаточно для parcel surveying.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/fao-cadastral-maps.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; full FAO page L2-L10, L20, L25-L29, L40-L42"
+        },
+        {
+          "slot": 1,
+          "answer": "Карта земного покрова",
+          "note": "USGS отдельно перечисляет данные о земном покрове; FAO описывает кадастровую карту через границы участков и их идентификаторы для связи с реестром.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Слой земного покрова описывает классы покрытия территории; FAO определяет кадастровую идентификацию через границы участков и номера/связь с записями.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/fao-cadastral-maps.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; full FAO page L2-L10, L20, L25-L29, L40-L42"
+        },
+        {
+          "slot": 2,
+          "answer": "Дорожная карта",
+          "note": "OS объясняет чтение дорог и планирование пути; в условии требуется идентифицировать земельные участки и связать их контуры с записями.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Дорожная карта служит чтению дорог и планированию маршрута, тогда как здесь нужно сопоставлять parcel-контур с записью.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/fao-cadastral-maps.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; full FAO page L2-L10, L20, L25-L29, L40-L42"
+        },
+        {
+          "slot": 3,
+          "answer": "Кадастровая карта",
+          "note": "FAO описывает границы участков и номера, связывающие карту с соответствующими записями реестра.",
+          "judgment": "key",
+          "claimSpecificReason": "Ключ соответствует контурам участков и их идентификаторам; FAO предупреждает, что цифровое увеличение исходную точность съёмки не улучшает.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/fao-cadastral-maps.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; full FAO page L2-L10, L20, L25-L29, L40-L42"
+        }
+      ],
+      "fieldGroupReview": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literalSHA256": "2c42bf6640d7cf1405f345eb917ee8d5728b80cedf9d41de4267618b06ec2a80",
+          "result": "SUPPORTED",
+          "reason": "Идентификатор участка связан с записью, это специфическая функция кадастрового слоя."
+        },
+        {
+          "group": "explanation",
+          "literalSHA256": "6e72ff9a413e1e4c835cd3516d986242b653b2a92c779f40f007ad3fddc2b379",
+          "result": "SUPPORTED",
+          "reason": "Обосновывает parcel-идентификацию по границам/номерам и добавляет ограничение точности при увеличении."
+        },
+        {
+          "group": "note0",
+          "literalSHA256": "3de769b54f2a9c6ee10f610f5360e5575b112d49789656faf2cc69ce5472edf7",
+          "result": "SUPPORTED",
+          "reason": "FAO отличает кадастровые карты от обзорных топографических и отмечает, что масштаба 1:50 000 недостаточно для parcel surveying."
+        },
+        {
+          "group": "note1",
+          "literalSHA256": "30e0b1db00ea6956abb6195480872810326df53d4881103752dd2e4d75f8c1ec",
+          "result": "SUPPORTED",
+          "reason": "Слой земного покрова описывает классы покрытия территории; FAO определяет кадастровую идентификацию через границы участков и номера/связь с записями."
+        },
+        {
+          "group": "note2",
+          "literalSHA256": "a4a6c79ea955681f62b04e11559f85d6d345af6ef9dfeb0d54d4a3a189ce460d",
+          "result": "SUPPORTED",
+          "reason": "Дорожная карта служит чтению дорог и планированию маршрута, тогда как здесь нужно сопоставлять parcel-контур с записью."
+        },
+        {
+          "group": "note3",
+          "literalSHA256": "6b278cdb2fc69958003023fe43b098145fa88ea3ffef157781e0421e169a62a7",
+          "result": "SUPPORTED",
+          "reason": "Ключ соответствует контурам участков и их идентификаторам; FAO предупреждает, что цифровое увеличение исходную точность съёмки не улучшает."
+        }
+      ],
+      "peerReview": {
+        "snapshot": "peer-snapshot.json",
+        "scope": "CURRENT 50-100; all available PROPOSED maps 69-80 incl. historic2 and source-HOLD78-80; scalegrid3; medium9; projection50; raster62; canonical SHA-256 exact-card grouping.; для карт 81–90 текущая версия набора учтена как baseline для совпадений, но не как дублирующая PROPOSED target-версия",
+        "result": "NO_DUPLICATE_PROPOSED_CORRECT_KEY; SHARED DISTRACTOR TERM IS NON-CUING",
+        "reason": "В одной proposed Mappa Mundi версии «Кадастровая карта» стоит неверным distractor; целевые условия различают карты по функции и набору признаков, поэтому формулировка не раскрывает ключ 87. Сверены также land-cover/raster peers: thematic coverage не связывает контуры участков с реестровыми записями."
+      }
+    },
+    {
+      "id": "maps-cartography-area-distortion",
+      "status": "FIX",
+      "source": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-lambert-azimuthal-equal-area.txt",
+      "sourceLocator": "L26-L28; use of Lambert azimuthal equal-area for thematic mapping of polar regions",
+      "claim": "Два участка имеют одинаковую наземную площадь, но на проекции занимают соответственно 4 см² и 6 см². Во сколько раз изображённая площадь второго участка больше изображения первого?",
+      "keyTruth": "В 1,5 раза",
+      "proof": "Отношение изображённых площадей равно 6/4 = 1,5. Это сравнивает только относительные площади двух участков; оно само по себе не устанавливает искажения углов, направлений или длин.",
+      "answerAndNoteEvidence": [
+        {
+          "slot": 0,
+          "answer": "В 0,5 раза",
+          "note": "Отношение 4 к 6 обращает порядок: оно показывает первый участок относительно второго.",
+          "judgment": "distractor",
+          "claimSpecificReason": "0,5 — обратное отношение 4/6, а вопрос спрашивает второй участок относительно первого.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-lambert-azimuthal-equal-area.txt",
+          "sourceLocator": "L26-L28; use of Lambert azimuthal equal-area for thematic mapping of polar regions"
+        },
+        {
+          "slot": 1,
+          "answer": "В 2 раза",
+          "note": "Двойное увеличение дало бы 8 см² против 4 см²; фактически второй занимает 6 см².",
+          "judgment": "distractor",
+          "claimSpecificReason": "При удвоении 4 см² получилось бы 8 см²; заданная площадь второго изображения — 6 см².",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-lambert-azimuthal-equal-area.txt",
+          "sourceLocator": "L26-L28; use of Lambert azimuthal equal-area for thematic mapping of polar regions"
+        },
+        {
+          "slot": 2,
+          "answer": "В 0,67 раза",
+          "note": "0,67 — округлённое обратное отношение 4/6; вопрос просит площадь второго изображения относительно первого.",
+          "judgment": "distractor",
+          "claimSpecificReason": "0,67 округляет обратное отношение 4/6, не требуемое 6/4.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-lambert-azimuthal-equal-area.txt",
+          "sourceLocator": "L26-L28; use of Lambert azimuthal equal-area for thematic mapping of polar regions"
+        },
+        {
+          "slot": 3,
+          "answer": "В 1,5 раза",
+          "note": "Esri отмечает, что азимутальную равновеликую проекцию Ламберта часто применяют для тематических карт полярных областей.",
+          "judgment": "key",
+          "claimSpecificReason": "6/4=1,5. Примечание Esri приводит отдельное применение LAEA для тематических карт полярных областей, не утверждая сохранение углов или локального масштаба.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-lambert-azimuthal-equal-area.txt",
+          "sourceLocator": "L26-L28; use of Lambert azimuthal equal-area for thematic mapping of polar regions"
+        }
+      ],
+      "fieldGroupReview": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literalSHA256": "f0ab1e99d0ceb2cf2985c51eded3128aaa4c4181ae9e4cfbc245fba37564144a",
+          "result": "SUPPORTED",
+          "reason": "Сравниваются две заданные площади на изображении; отношение второго к первому вычисляется как 6/4."
+        },
+        {
+          "group": "explanation",
+          "literalSHA256": "58d705958a42006ce92da6927d1ca28e7bfb3606e637d83f73d9b0ea660a45bd",
+          "result": "SUPPORTED",
+          "reason": "Проверяет 6/4 и ограничивает вывод только сравнением изображённых площадей."
+        },
+        {
+          "group": "note0",
+          "literalSHA256": "5ab475b8a6c34d87bb6773463389c6ce34cdb0c8288925623b33514c5bb11090",
+          "result": "SUPPORTED",
+          "reason": "0,5 — обратное отношение 4/6, а вопрос спрашивает второй участок относительно первого."
+        },
+        {
+          "group": "note1",
+          "literalSHA256": "425f46988cb8a90a1bcb6f7ed79e718604955a10195ff48cbade6ee11b8a3a00",
+          "result": "SUPPORTED",
+          "reason": "При удвоении 4 см² получилось бы 8 см²; заданная площадь второго изображения — 6 см²."
+        },
+        {
+          "group": "note2",
+          "literalSHA256": "a43fc45b99608b42d593afa29e09d8a17066c37421565bc4b1e260684ef05978",
+          "result": "SUPPORTED",
+          "reason": "0,67 округляет обратное отношение 4/6, не требуемое 6/4."
+        },
+        {
+          "group": "note3",
+          "literalSHA256": "deb20e56b1fead53588d2d630d5538136941051439e10b1d1ef65917e26e0366",
+          "result": "SUPPORTED",
+          "reason": "6/4=1,5. Примечание Esri приводит отдельное применение LAEA для тематических карт полярных областей, не утверждая сохранение углов или локального масштаба."
+        }
+      ],
+      "peerReview": {
+        "snapshot": "peer-snapshot.json",
+        "scope": "CURRENT 50-100; all available PROPOSED maps 69-80 incl. historic2 and source-HOLD78-80; scalegrid3; medium9; projection50; raster62; canonical SHA-256 exact-card grouping.; для карт 81–90 текущая версия набора учтена как baseline для совпадений, но не как дублирующая PROPOSED target-версия",
+        "result": "NO_DUPLICATE_PROPOSED_CORRECT_KEY_OR_ANSWER_CUE",
+        "reason": "Сопоставлена с choropleth/dot-density (medium9), картами LAEA 71–72, projection50 и scalegrid3: вычисляется отношение площадей рисунков равновеликих земельных площадей, а не плотность значений, grid scale или деформация углов."
+      }
+    },
+    {
+      "id": "maps-cartography-shape-distortion",
+      "status": "FIX",
+      "source": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/esri-coordinate-systems.response.json",
+      "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; ArcGIS coordinate-system page L35-L37, preservation of local angles by some projections",
+      "claim": "На местности два дорожных перекрёстка имеют углы по 90°. На проекции первый остаётся 90°, а второй измеряется как 78°. На сколько градусов угол второго перекрёстка отклонён от исходного?",
+      "keyTruth": "На 12°",
+      "proof": "Разница второго угла равна 90° − 78° = 12°. ArcGIS отмечает, что некоторые проекции сохраняют локальные углы; измерение здесь показывает отличие в конкретном месте.",
+      "answerAndNoteEvidence": [
+        {
+          "slot": 0,
+          "answer": "На 0°",
+          "note": "Нулевое отклонение относится к первому перекрёстку, который на карте сохранил угол 90°.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Первый угол сохранился, но спрашивается отклонение второго, которое равным нулю не является.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/esri-coordinate-systems.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; ArcGIS coordinate-system page L35-L37, preservation of local angles by some projections"
+        },
+        {
+          "slot": 1,
+          "answer": "На 78°",
+          "note": "78° — это измеренный угол на карте, а не разница с исходными 90°.",
+          "judgment": "distractor",
+          "claimSpecificReason": "78° — измеренное значение, а не его разница с исходными 90°.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/esri-coordinate-systems.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; ArcGIS coordinate-system page L35-L37, preservation of local angles by some projections"
+        },
+        {
+          "slot": 2,
+          "answer": "На 90°",
+          "note": "90° — исходный угол на местности и угол первого перекрёстка, а не величина изменения второго.",
+          "judgment": "distractor",
+          "claimSpecificReason": "90° — исходное значение угла; отклонение получается вычитанием измеренного значения из него.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/esri-coordinate-systems.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; ArcGIS coordinate-system page L35-L37, preservation of local angles by some projections"
+        },
+        {
+          "slot": 3,
+          "answer": "На 12°",
+          "note": "ArcGIS указывает, что некоторые проекции сохраняют локальные углы; это свойство можно проверять по углам между направлениями в точке.",
+          "judgment": "key",
+          "claimSpecificReason": "90°−78°=12°. ArcGIS подтверждает, что некоторые проекции сохраняют локальные углы; данное вычисление относится только к указанному перекрёстку.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author/sources/esri-coordinate-systems.response.json",
+          "sourceLocator": "Native response line 112, call_f5233552f68340f7abeb9c915755e7ce; ArcGIS coordinate-system page L35-L37, preservation of local angles by some projections"
+        }
+      ],
+      "fieldGroupReview": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literalSHA256": "3b0e663734c6e2202f687ab9184da316df3bd1b1b667be0189be884d4a3ed314",
+          "result": "SUPPORTED",
+          "reason": "Два исходных угла и одно измеренное значение полностью задают локальное отклонение."
+        },
+        {
+          "group": "explanation",
+          "literalSHA256": "7c2c853e9ce91fc3b09fc4e6be16ec390db7328cbea29f9c5283d3841ba214df",
+          "result": "SUPPORTED",
+          "reason": "Проверяет вычитание 90−78 и ограничивает наблюдение конкретным местом, не выводя глобальное свойство проекции."
+        },
+        {
+          "group": "note0",
+          "literalSHA256": "cd3dad1880a4d1bf5fe8d2527ae0198965887eea442d3a7eec9c3c9634fb69ce",
+          "result": "SUPPORTED",
+          "reason": "Первый угол сохранился, но спрашивается отклонение второго, которое равным нулю не является."
+        },
+        {
+          "group": "note1",
+          "literalSHA256": "02f8e75d8c8ca672979eaf08e9de59ca0cb9f9f23ba57aa7ba6ccaeb8cf416f4",
+          "result": "SUPPORTED",
+          "reason": "78° — измеренное значение, а не его разница с исходными 90°."
+        },
+        {
+          "group": "note2",
+          "literalSHA256": "4c35d1e44c04b798c722dc32c6d6d94577abc9691c801663bce6bb8d465d17ac",
+          "result": "SUPPORTED",
+          "reason": "90° — исходное значение угла; отклонение получается вычитанием измеренного значения из него."
+        },
+        {
+          "group": "note3",
+          "literalSHA256": "899cfcd5d8a055e7cd54d0483675432c5a11b06ba572ae0b67af61afbc95f136",
+          "result": "SUPPORTED",
+          "reason": "90°−78°=12°. ArcGIS подтверждает, что некоторые проекции сохраняют локальные углы; данное вычисление относится только к указанному перекрёстку."
+        }
+      ],
+      "peerReview": {
+        "snapshot": "peer-snapshot.json",
+        "scope": "CURRENT 50-100; all available PROPOSED maps 69-80 incl. historic2 and source-HOLD78-80; scalegrid3; medium9; projection50; raster62; canonical SHA-256 exact-card grouping.; для карт 81–90 текущая версия набора учтена как baseline для совпадений, но не как дублирующая PROPOSED target-версия",
+        "result": "NO_DUPLICATE_PROPOSED_CORRECT_KEY_OR_ANSWER_CUE",
+        "reason": "Сопоставлена с projection50 и всеми проекционными peer-версиями 69–80: численно сравниваются два локальных угла; не спрашивается название или общее свойство проекции. Отличается от area/length чисел 88 и 90."
+      }
+    },
+    {
+      "id": "maps-cartography-distance-distortion",
+      "status": "FIX",
+      "source": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-lambert-azimuthal-equal-area.txt",
+      "sourceLocator": "L23-L25; LAEA scale variation in radial and perpendicular directions",
+      "claim": "Два наземных отрезка имеют длину по 10 км. На проекции первый занимает 2,0 см, второй — 1,6 см. Во сколько раз линейный масштаб первого участка больше масштаба второго?",
+      "keyTruth": "В 1,25 раза",
+      "proof": "При равных наземных длинах отношение локальных масштабов равно отношению длин изображений: 2,0/1,6 = 1,25. Различие масштабов зависит от места и направления; отсюда не следует изменение площади.",
+      "answerAndNoteEvidence": [
+        {
+          "slot": 0,
+          "answer": "В 0,8 раза",
+          "note": "1,6/2,0 сравнивает масштаб второго участка с первым, то есть обращает требуемое отношение.",
+          "judgment": "distractor",
+          "claimSpecificReason": "0,8 — обратное отношение длин изображения 1,6/2,0, а спрашивается масштаб первого относительно второго.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-lambert-azimuthal-equal-area.txt",
+          "sourceLocator": "L23-L25; LAEA scale variation in radial and perpendicular directions"
+        },
+        {
+          "slot": 1,
+          "answer": "В 1 раз",
+          "note": "Одинаковая длина на местности сама по себе не делает масштабы равными: на карте отрезки имеют разную длину — 2,0 см и 1,6 см.",
+          "judgment": "distractor",
+          "claimSpecificReason": "Равенство наземных длин не гарантирует одинаковые локальные масштабы; при 2,0 и 1,6 см их отношение не равно единице.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-lambert-azimuthal-equal-area.txt",
+          "sourceLocator": "L23-L25; LAEA scale variation in radial and perpendicular directions"
+        },
+        {
+          "slot": 2,
+          "answer": "В 1,6 раза",
+          "note": "1,6 см — длина второго отрезка на карте; это не отношение двух локальных масштабов.",
+          "judgment": "distractor",
+          "claimSpecificReason": "1,6 см — длина изображения второго отрезка, а не отношение масштабов.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-lambert-azimuthal-equal-area.txt",
+          "sourceLocator": "L23-L25; LAEA scale variation in radial and perpendicular directions"
+        },
+        {
+          "slot": 3,
+          "answer": "В 1,25 раза",
+          "note": "У азимутальной равновеликой проекции Ламберта масштаб убывает от центра вдоль радиусов и увеличивается поперёк них.",
+          "judgment": "key",
+          "claimSpecificReason": "При одинаковых наземных длинах отношение масштабов равно отношению длин изображения: 2,0/1,6=1,25; Esri указывает радиальное и поперечное изменение масштаба LAEA.",
+          "sourcePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-lambert-azimuthal-equal-area.txt",
+          "sourceLocator": "L23-L25; LAEA scale variation in radial and perpendicular directions"
+        }
+      ],
+      "fieldGroupReview": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literalSHA256": "e7071e6e03ef28a60447a348df4696c44cf6a70921e5ef17ad98bd957490a78a",
+          "result": "SUPPORTED",
+          "reason": "При равных наземных длинах отношение двух локальных масштабов равно 2,0/1,6."
+        },
+        {
+          "group": "explanation",
+          "literalSHA256": "1503bb389ccae169f83b1b3bca999070041cbe70fac39dd7de87f50bed837431",
+          "result": "SUPPORTED",
+          "reason": "Проверяет равенство наземных длин, отношение 2,0/1,6 и различает линейный масштаб с площадью."
+        },
+        {
+          "group": "note0",
+          "literalSHA256": "1bfbb034651289fdca72382c3d2b22ab5b70e2c7b31d154d1bd2445342e08670",
+          "result": "SUPPORTED",
+          "reason": "0,8 — обратное отношение длин изображения 1,6/2,0, а спрашивается масштаб первого относительно второго."
+        },
+        {
+          "group": "note1",
+          "literalSHA256": "237abc7b88d643156af8433143d19d25299fbbfa2dbb02fbe5f798c26868c96b",
+          "result": "SUPPORTED",
+          "reason": "Равенство наземных длин не гарантирует одинаковые локальные масштабы; при 2,0 и 1,6 см их отношение не равно единице."
+        },
+        {
+          "group": "note2",
+          "literalSHA256": "cb2747f75eaedce59e7a4871e3b265f80ae8c5b29e8d68e0fa7789418f356990",
+          "result": "SUPPORTED",
+          "reason": "1,6 см — длина изображения второго отрезка, а не отношение масштабов."
+        },
+        {
+          "group": "note3",
+          "literalSHA256": "6a3332da0225924b657c2dbec0432ba16ff4894a6984b21cb082d61376b7191e",
+          "result": "SUPPORTED",
+          "reason": "При одинаковых наземных длинах отношение масштабов равно отношению длин изображения: 2,0/1,6=1,25; Esri указывает радиальное и поперечное изменение масштаба LAEA."
+        }
+      ],
+      "peerReview": {
+        "snapshot": "peer-snapshot.json",
+        "scope": "CURRENT 50-100; all available PROPOSED maps 69-80 incl. historic2 and source-HOLD78-80; scalegrid3; medium9; projection50; raster62; canonical SHA-256 exact-card grouping.; для карт 81–90 текущая версия набора учтена как baseline для совпадений, но не как дублирующая PROPOSED target-версия",
+        "result": "NO_DUPLICATE_PROPOSED_CORRECT_KEY_OR_ANSWER_CUE",
+        "reason": "Сопоставлена с ratio/large-scale/grid-square (scalegrid3), projection50 и medium9: сравниваются map-length/ground-length масштабы двух равных наземных сегментов, не площадь 88, угловое отклонение 89 или линейный масштаб одного сегмента."
+      }
+    }
+  ],
+  "reviewBoundary": "Авторская проверка первичных источников, 40 answer/note slots, 60 SHA-256 field-groups и указанного полного peer snapshot; independent review remains pending."
+}
