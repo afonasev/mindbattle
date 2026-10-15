@@ -1,0 +1,76 @@
+{
+  "cycle": 1,
+  "baselineCommit": "532d6a7dd3ee2314d18340eedb680440b26e8c81",
+  "readerNativeId": "01a13d0a-0765-7323-a405-95ed16e65b3c",
+  "scopeIds": [
+    "russian-language-zarubit-na-nosu",
+    "russian-language-gerund-smiling",
+    "russian-language-dash-predicate"
+  ],
+  "entries": [
+    {
+      "id": "russian-language-zarubit-na-nosu",
+      "beforeHash": "d844da4ce95f7fc0f798d35bf7b19049fc58e26a71b4e65c5c24d1dcc332142e",
+      "defects": [
+        {
+          "findingId": "Z1",
+          "field": "prompt_ordered_answers_key / explanation / sourceproof exact-phrase link",
+          "defect": "Полная статья ЗАРУБИТЬ подтверждает переносное значение самого глагола, но не содержит «на носу»; НОС тоже не содержит этого выражения. Авторские claims о phrase examples преувеличивают фактический контекст. Известность выражения не заменяет требуемое первичное доказательство.",
+          "nextAction": "Один author fix-cycle: дать полный первичный контекст именно «зарубить на носу» и точный locator для значения; если отсутствует — HOLD после цикла. Не выдавать текущую общую статью за доказательство точной фразы."
+        }
+      ]
+    },
+    {
+      "id": "russian-language-gerund-smiling",
+      "beforeHash": "d8f547d9126a779cab4b07ddf0baf25555f27d567c1e5b485f28688e180bedf3",
+      "defects": [
+        {
+          "findingId": "G1",
+          "field": "prompt / source-model consistency",
+          "defect": "Вопрос без оговорки называет деепричастие частью речи, объяснение и словарь — формой глагола. Полный §5.2.1 Сичинавы говорит о выделении в отдельную часть речи лишь в некоторых трактовках. Автор использовал морфологическое различие, но не учёл это ограничение контекста.",
+          "nextAction": "Один author fix-cycle: убрать безусловную теоретическую предпосылку, сохранив точное распознавание деепричастия, key=1 и реальный medium; либо явно задать подтверждённую модель. Перепроверить prompt, explanation и notes в одном контракте."
+        }
+      ]
+    },
+    {
+      "id": "russian-language-dash-predicate",
+      "beforeHash": "43014b81e9f611603f8a02f54f0831bdb61a2b0a1cd21274e9d895fd66cece8d",
+      "defects": [
+        {
+          "findingId": "D1",
+          "field": "difficulty=medium / prompt_ordered_answers_key",
+          "defect": "Абсолютный medium не достигается: прототип «Москва — столица России», а грамматические роли уже названы в prompt. Игроку достаточно вспомнить один базовый знак; никаких конкурирующих условий или самостоятельного синтаксического анализа задача не требует. Более сложные notes после ответа не повышают трудность самого решения.",
+          "nextAction": "Один author fix-cycle: содержательно довести проверяемую операцию до medium при frozen difficulty/key/topic/order; не просто добавить термины/длину в объяснение. Не менять difficulty на easy молча."
+        }
+      ]
+    }
+  ],
+  "sourceAttributionCorrections": [
+    {
+      "id": "russian-language-spustya-rukava",
+      "issue": "Author says full four-sense РУКАВ lines56016–56028, but sense4/derived material extends56029–56033. Author option0 silently substitutes finite засучил by dictionary засучив and overclaims compulsory figurativity. Option1 described as subordinate in sourceproof though it is coordination."
+    },
+    {
+      "id": "russian-language-nadet-odet",
+      "issue": "CURRENT title wrongly places ОДЕТЬ/ОБУТЬ in A–N. Correct sourceproof part2 locators remain distinguished from erroneous CURRENT title."
+    },
+    {
+      "id": "russian-language-zarubit-na-nosu",
+      "issue": "Phrase-specific proof is not provided by complete bare-verb ЗАРУБИТЬ or НОС. No silent addition of a remembered idiom or invented etymology."
+    },
+    {
+      "id": "russian-language-gerund-smiling",
+      "issue": "Sitchinava core agreement sentence is PDF20, section continues21; full framework qualification retained. Own ПРЕДЛОГ/служебные sections supply missing non-key relation claim; author locator not rewritten."
+    },
+    {
+      "id": "russian-language-dash-predicate",
+      "issue": "§112 startsPDF282 not283; §128 starts296 not297; §129 starts297, causal condition298, continues300; author page300/line11964 pairing incorrect. Current printed pages295–297 cover relevant colon conditions, but independent full context includes final note on printed298/PDF300."
+    }
+  ],
+  "exhaustedCycle1HOLD": [
+    "russian-language-spustya-rukava",
+    "russian-language-nadet-odet"
+  ],
+  "meaning": "Only3initialFIX eligible onefreshauthorcycle;2priorcycleHOLD excluded from unchanged retry.",
+  "qualityCredit": 0
+}
