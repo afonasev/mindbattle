@@ -45,13 +45,25 @@ for snapshot in peers.get('latestProposalSnapshots',[]):
   entry=next(e for e in rd(sourcePath.parent/'candidate.json')['entries'] if e['id']==p['id'])
   assert local['frozenLocalProposalCard']==entry['proposedCard'] and local['frozenLocalProposalSHA256']==entry['afterHash']
  assert entry['proposedCard']==p['card'] and sha(p['card'])==digest(p)==entry['afterHash'];assert p['id'] not in proposals;proposals[p['id']]=p
-for pair in peers['bilateralMainComparisons']:
- assert pair['leftToRight'] and pair['rightToLeft']
+pairEvidence=peers.get('bilateralMainComparisons',peers.get('bilateralMAINComparisons'))
+assert isinstance(pairEvidence,list) and pairEvidence
+pairEvidence=pairEvidence+peers.get('proposedBilateralMAINComparisons',[])
+actualPeerBindings={p['id']:p for p in peers['actualCurrentPeers']}
+for pair in pairEvidence:
+ if 'leftToRight' in pair:
+  assert pair['leftToRight'] and pair['rightToLeft']
+ else:
+  # Joint bilateral prose names both actual relations; full cards are linked by
+  # ID/hash into the personally-read snapshot, rather than duplicated per row.
+  assert pair['bilateralEntityRelationValueContextAssessment'] and isinstance(pair['directReverse'],bool)
  for side in ['left','right']:
   p=pair[side]
-  if p.get('state','').startswith('UNAPPLIED_'):
-   assert p['id'] in proposals and p['card']==proposals[p['id']]['card'] and sha(p['card'])==digest(p)==digest(proposals[p['id']])
-  else:assert p['card']==cat[p['id']] and sha(p['card'])==digest(p)
+  known=proposals.get(p['id']) if p.get('state','').startswith('UNAPPLIED_') else actualPeerBindings.get(p['id'])
+  assert known and digest(p)==digest(known)
+  card=p.get('card',known['card'])
+  assert card==known['card'] and sha(card)==digest(p)
+  if 'MAIN' in p:assert p['MAIN']==card['prompt'] and p['key']==card['answers'][card['correctIndex']]['text']
+  if not p.get('state','').startswith('UNAPPLIED_'):assert card==cat[p['id']]
 for s in src['sources']:
  assert raw(C/s['path'])==s['rawReadSHA256'] and s['personalReadEvidence'] and (s.get('locator') or s.get('locators'))
  if s.get('readPath'):assert raw(C/s['readPath'])==s['readTextSHA256']
@@ -72,7 +84,7 @@ for e in r['entries']:
   assert e['status']=='PASS' and not e['defects'];author=authors[i];accepted.append({'questionId':i,'cardCanonicalSha256':sha(q),'authorNativeId':author['id'],'authorReceipt':author['packet']+'/sourceproof.json','authorFreeze':case['sourceFreeze'],'readerNativeId':case['readerNativeId'],'independentReceipt':str(rp.relative_to(C)),'readerReceiptRawSHA256':raw(rp),'coordinatorDecision':case['coordinatorDecision']})
 assert len(accepted)==len(acceptedOrders)>0
 audit={'root':compacted(O),'SOURCE':{a['id']:compacted(a['id']) for a in authors.values()},'OTHER':compacted(case['readerNativeId'])};assert audit['root']<2
-report={**case['reportBase'],'scope':case['scope'],'acceptedOrders':case['acceptedOrders'],'verified':{'currentCards':len(r['entries']),'literalGroups':6*len(r['entries']),'wholeVariants':4*len(r['entries']),'acceptedCards':len(accepted),'actualPeers':len(peers['actualCurrentPeers']),'bilateralMainPairs':len(peers['bilateralMainComparisons'])},'QA':{'path':case['qaPath'],'pass':19,'fail':0,'pending':0,'testedCatalogCommit':case['testedCatalogCommit'],'reportCommit':case['qaReportCommit']},'preleaseGuard':True,'sourceFreezeLineage':sourceLineage,'actualCompactionAudit':audit,'ownIntakeCURRENT':775}
+report={**case['reportBase'],'scope':case['scope'],'acceptedOrders':case['acceptedOrders'],'verified':{'currentCards':len(r['entries']),'literalGroups':6*len(r['entries']),'wholeVariants':4*len(r['entries']),'acceptedCards':len(accepted),'actualPeers':len(peers['actualCurrentPeers']),'bilateralMainPairs':len(pairEvidence)},'QA':{'path':case['qaPath'],'pass':19,'fail':0,'pending':0,'testedCatalogCommit':case['testedCatalogCommit'],'reportCommit':case['qaReportCommit']},'preleaseGuard':True,'sourceFreezeLineage':sourceLineage,'actualCompactionAudit':audit,'ownIntakeCURRENT':775}
 if '--verify-only' in sys.argv:
  print(json.dumps({'verified':report['verified'],'acceptedOrders':case['acceptedOrders'],'audit':audit,'mutations':False}));raise SystemExit(0)
 m=load('certificate',D/'certification-common.py');m.O=O;m.P=P;guard=load('guard',D.parent/'coordinator-01a13f31/planning-certification-guard.py')
