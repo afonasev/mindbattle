@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "stage": "CONCRETE_NEW_SOLUTION_ROUTE_ONLY_NOT_READY_OR_QUALITY_CREDIT",
+  "scopeIds": [
+    "maps-cartography-raster-cells"
+  ],
+  "priorTerminalReceipt": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/independent-initial6-01a13d50/receipt-cycle1-current6.json",
+  "currentCard": {
+    "id": "maps-cartography-raster-cells",
+    "difficulty": "medium",
+    "prompt": "В условной модели рельефа с вещественными значениями аналитик ищет локальные возвышения: сравнивает каждую позицию с максимумом в окне 3×3 и записывает результат туда же. Нужна сплошная поверхность с отдельным выходом для каждого места. Как организовать вычисление?",
+    "answers": [
+      {
+        "text": "Представить узлы сетки точечными объектами и подбирать соседей пространственным запросом для каждой точки.",
+        "note": "Векторный слой может содержать точечные объекты и отдельные атрибуты; Esri приводит города как пример такого слоя."
+      },
+      {
+        "text": "Объединить соседние места в полигоны одинаковой высоты и хранить один итог на область.",
+        "note": "Esri связывает полигоны с таблицами атрибутов; такой способ описывает области, а не сохраняет отдельный результат в каждой ячейке."
+      },
+      {
+        "text": "Посчитать статистику соседнего окна для каждой ячейки и записать выход как растр той же поверхности.",
+        "note": "Для вещественного входного растра Focal Statistics поддерживает максимум, но не статистики Majority, Minority и Variety."
+      },
+      {
+        "text": "Записать одно значение максимума на весь участок в таблицу атрибутов без пространственной позиции.",
+        "note": "У векторного слоя таблица описывает его объекты; единый табличный итог не задаёт отдельный выход для каждого места поверхности."
+      }
+    ],
+    "correctIndex": 2,
+    "explanation": "Здесь нужен локальный максимум вокруг каждой обрабатываемой позиции, а результат сохраняется в той же сетке. ArcGIS Focal Statistics рассчитывает статистику входных ячеек в заданном соседстве и выдаёт растр.",
+    "source": {
+      "title": "Esri ArcGIS Pro, Focal Statistics",
+      "url": "https://pro.arcgis.com/en/pro-app/3.5/tool-reference/spatial-analyst/focal-statistics.htm",
+      "verifiedAt": "2026-10-15"
+    }
+  },
+  "currentCardSHA256": "515df6d18a3c88375171f16f8678110615f0df09971449a3edd8697b20782a2d",
+  "frozen": {
+    "topic": "maps-cartography",
+    "difficulty": "medium",
+    "correctIndex": 2
+  },
+  "exactDefect": "Point-grid neighbour queries can implement same local max; old prompt lacks operator/output constraint, source proves rasterplan works but notuniqueness.",
+  "concreteNewSolution": "Replace selecting a tool/implementation with interpreting a specified raster operator output. Give a small numerical raster window, exact kernel and NoData setting, and ask numeric output of the named operation. Four disjoint outputs avoid asserting point methods impossible; actual GIS NoData/operator semantics still source-backed.",
+  "designExampleOnly": {
+    "window": [
+      [
+        2,
+        4,
+        6
+      ],
+      [
+        8,
+        "NoData",
+        10
+      ],
+      [
+        12,
+        14,
+        24
+      ]
+    ],
+    "operator": "MEAN, rectangular3x3, ignoreNoData enabled; author MUST personally verify fullprimary semantics before using",
+    "derivedConditionalResult": "If all eight valid cells are included and NoData excluded, sum80/count8=10. Other illustrative outcomes 80/9,9,24 represent NoData-aszero,wrongneighbourhood,MAX; check actual distinctness/rounding before finalcard."
+  },
+  "primaryBasisToPersonallyVerify": {
+    "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/fix-initial6-cycle1-author-01a13d50/exact-native-tool-responses/primary-contexts/raster-neighborhood.txt",
+    "byteSHA256": "2fc16ba41dac3d7380ce3e9cf856ab591097f0156411f97c937f858dc6108b76",
+    "declaredPath": "exact-native-tool-responses/primary-contexts/raster-neighborhood.txt",
+    "declaredPathBase": "sourceproof directory"
+  },
+  "scopeAuthorization": "Coordinator proposal within user-authorized all-text revision; no invented external threshold/productpolicy; numeric data are explicitly fictional input.",
+  "qualityCredit": 0,
+  "next": "Fresh bounded author only when capacity permits; actualfullprimary/6groups4variants/absoluteMEDIUM/actualpeers thenapplyaffected19/differentindependentCURRENT. Preserve terminalhistory; notunchangedretry."
+}

@@ -1,0 +1,272 @@
+[
+  {
+    "id": "maps-cartography-vector-features",
+    "sourceOrder": 61,
+    "topicId": "maps-cartography",
+    "currentCard": {
+      "id": "maps-cartography-vector-features",
+      "difficulty": "medium",
+      "prompt": "В схеме городских сетей точки трансформаторов, линии фидеров и зоны обслуживания нужно править независимо; у каждого объекта должны оставаться собственные поля, а снимок местности служит только фоном. Какой способ хранения выбрать для редактируемых объектов?",
+      "answers": [
+        {
+          "text": "Запечь все объекты в растровую сетку и после каждой правки пересобирать участок карты.",
+          "note": "В учебном примере Esri цифровая модель высот хранит отдельное значение в каждой ячейке; это удобно для поверхности."
+        },
+        {
+          "text": "Опубликовать только готовые картографические тайлы и заменять фрагменты карты после каждой правки.",
+          "note": "Руководство Esri перечисляет тайлы как один из видов содержимого карты, наряду с изображениями и объектными данными."
+        },
+        {
+          "text": "Хранить объекты в векторных слоях и связывать их геометрию с таблицами записей.",
+          "note": "В Esri геометрия объектов связана с таблицей атрибутов; точечные, линейные и полигональные примеры размещены в отдельных слоях."
+        },
+        {
+          "text": "Свести объекты и фон в один файл изображения, ведя общий список кодов отдельно.",
+          "note": "В примере Esri щелчок по пикселю изображения показывает источник снимка, разрешение и точность данных."
+        }
+      ],
+      "correctIndex": 2,
+      "explanation": "Векторные объекты можно исправлять как отдельные записи, сохраняя их пространственную геометрию и поля. Esri показывает эту связь для точечных, линейных и полигональных слоёв; снимок изображения в её упражнении хранится как растр.",
+      "source": {
+        "title": "Esri, Working with GIS Layers",
+        "url": "https://www.esri.com/content/dam/esrisites/en-us/media/pdf/teach-with-gis/working-with-gis-layers.pdf",
+        "verifiedAt": "2026-10-15"
+      }
+    },
+    "cardSHA256": "fdcab4fc2d91c0bfaf32c62a8943dfdeec66f274b2f35650ba057c6492ec1bab",
+    "verdict": "TERMINAL_HOLD",
+    "substantiveCycleUsed": 1,
+    "finding": {
+      "code": "MEDIUM_AND_DISTRACTORS",
+      "ground": "Independent editing with own fields can be an applied problem, but this set offers three obviously flattened render stores (“запечь”, “только готовые”, “один файл изображения”) against the sole object-preserving vector plan. Point/line/polygon+fields still gives the definition, with no credible competing editable plan.",
+      "neededEvidenceOrNewSolution": "New solution needed: compare genuinely plausible object-preserving storage/editing plans whose difference must be resolved from a substantive constraint; do not merely rename the flattened alternatives."
+    },
+    "sourceClaims": "Old primary gaps are not inherited: new context/rewrite reviewed separately. Substantive HOLD remains even where factual source support is adequate.",
+    "sourceExplanationRead": "Векторные объекты можно исправлять как отдельные записи, сохраняя их пространственную геометрию и поля. Esri показывает эту связь для точечных, линейных и полигональных слоёв; снимок изображения в её упражнении хранится как растр."
+  },
+  {
+    "id": "maps-cartography-raster-cells",
+    "sourceOrder": 62,
+    "topicId": "maps-cartography",
+    "currentCard": {
+      "id": "maps-cartography-raster-cells",
+      "difficulty": "medium",
+      "prompt": "В условной модели рельефа с вещественными значениями аналитик ищет локальные возвышения: сравнивает каждую позицию с максимумом в окне 3×3 и записывает результат туда же. Нужна сплошная поверхность с отдельным выходом для каждого места. Как организовать вычисление?",
+      "answers": [
+        {
+          "text": "Представить узлы сетки точечными объектами и подбирать соседей пространственным запросом для каждой точки.",
+          "note": "Векторный слой может содержать точечные объекты и отдельные атрибуты; Esri приводит города как пример такого слоя."
+        },
+        {
+          "text": "Объединить соседние места в полигоны одинаковой высоты и хранить один итог на область.",
+          "note": "Esri связывает полигоны с таблицами атрибутов; такой способ описывает области, а не сохраняет отдельный результат в каждой ячейке."
+        },
+        {
+          "text": "Посчитать статистику соседнего окна для каждой ячейки и записать выход как растр той же поверхности.",
+          "note": "Для вещественного входного растра Focal Statistics поддерживает максимум, но не статистики Majority, Minority и Variety."
+        },
+        {
+          "text": "Записать одно значение максимума на весь участок в таблицу атрибутов без пространственной позиции.",
+          "note": "У векторного слоя таблица описывает его объекты; единый табличный итог не задаёт отдельный выход для каждого места поверхности."
+        }
+      ],
+      "correctIndex": 2,
+      "explanation": "Здесь нужен локальный максимум вокруг каждой обрабатываемой позиции, а результат сохраняется в той же сетке. ArcGIS Focal Statistics рассчитывает статистику входных ячеек в заданном соседстве и выдаёт растр.",
+      "source": {
+        "title": "Esri ArcGIS Pro, Focal Statistics",
+        "url": "https://pro.arcgis.com/en/pro-app/3.5/tool-reference/spatial-analyst/focal-statistics.htm",
+        "verifiedAt": "2026-10-15"
+      }
+    },
+    "cardSHA256": "515df6d18a3c88375171f16f8678110615f0df09971449a3edd8697b20782a2d",
+    "verdict": "TERMINAL_HOLD",
+    "substantiveCycleUsed": 1,
+    "finding": {
+      "code": "ONE_KEY_UNPROVEN",
+      "ground": "Point-grid neighbour queries in option0 are not excluded by the prompt. Native raster focal statistics are valid, but efficiency/native-tool/output-format restrictions are not specified, and grid-node point processing can implement the same local-max operation. The source proves option2 works, not that option0 cannot.",
+      "neededEvidenceOrNewSolution": "New solution/primary needed: an explicit raster-tool or output/operator constraint that uniquely separates plausible plans, supported by substantive primary material; retain frozen key. Do not restore the false claim that points cannot represent a regular grid."
+    },
+    "sourceClaims": "Old primary gaps are not inherited: new context/rewrite reviewed separately. Substantive HOLD remains even where factual source support is adequate.",
+    "sourceExplanationRead": "Здесь нужен локальный максимум вокруг каждой обрабатываемой позиции, а результат сохраняется в той же сетке. ArcGIS Focal Statistics рассчитывает статистику входных ячеек в заданном соседстве и выдаёт растр."
+  },
+  {
+    "id": "maps-cartography-attribute-table",
+    "sourceOrder": 63,
+    "topicId": "maps-cartography",
+    "currentCard": {
+      "id": "maps-cartography-attribute-table",
+      "difficulty": "medium",
+      "prompt": "В условных данных слоя парков и ведомости каждая строка имеет уникальный ParkID. Нужно перенести два поля в записи полигонов, сохранив геометрию и прежние поля. Какой шаг обработки выполнить?",
+      "answers": [
+        {
+          "text": "Редактировать вершины полигонов и закодировать новые значения в их форме.",
+          "note": "Esri описывает геометрию как пространственную часть объекта, связанную с его табличными атрибутами."
+        },
+        {
+          "text": "Выбрать ячейки растра, покрывающие парки, и перенести значения по совпавшим пикселям.",
+          "note": "В упражнении Esri значения высоты находятся в ячейках растровой поверхности; они не являются полями записей выбранных объектов."
+        },
+        {
+          "text": "Сопоставить строки обеих таблиц по ParkID и перенести выбранные поля в записи полигонов.",
+          "note": "В ArcGIS Join Field подходит текстовый, числовой или датированный ключ; текстовые значения при сопоставлении учитывают регистр."
+        },
+        {
+          "text": "Запустить пространственный запрос и выбрать парки по их положению на карте.",
+          "note": "Словарь Esri определяет пространственный запрос как выбор объектов по местоположению или пространственному отношению."
+        }
+      ],
+      "correctIndex": 2,
+      "explanation": "Нужно сопоставить строки по общему коду, а не менять форму парков или отбирать их по положению. Инструмент Join Field добавляет поля из второй таблицы к входным записям и позволяет выбрать, какие именно поля переносить.",
+      "source": {
+        "title": "Esri ArcGIS Pro, Join Field",
+        "url": "https://pro.arcgis.com/en/pro-app/3.5/tool-reference/data-management/join-field.htm",
+        "verifiedAt": "2026-10-15"
+      }
+    },
+    "cardSHA256": "cb509c5cb15f93399081638116d48c8c52ae1ee7f89c9f9d9b43a5fd310dc9a3",
+    "verdict": "TERMINAL_HOLD",
+    "substantiveCycleUsed": 1,
+    "finding": {
+      "code": "MEDIUM_AND_DISTRACTORS",
+      "ground": "Unique ParkID plus transfer-two-fields is an actual join scenario, but key repeats this direct mapping. Vertex-encoding visibly violates unchanged geometry, raster matching assumes absent raster inputs, and selection does not transfer fields. None competes on a realistic ID/cardinality/transfer issue.",
+      "neededEvidenceOrNewSolution": "New solution needed: compare plausible tabular association/transfer plans with a source-backed constraint; verify preservation and key matching rather than obvious unrelated operations."
+    },
+    "sourceClaims": "Old primary gaps are not inherited: new context/rewrite reviewed separately. Substantive HOLD remains even where factual source support is adequate.",
+    "sourceExplanationRead": "Нужно сопоставить строки по общему коду, а не менять форму парков или отбирать их по положению. Инструмент Join Field добавляет поля из второй таблицы к входным записям и позволяет выбрать, какие именно поля переносить."
+  },
+  {
+    "id": "maps-cartography-gnss-positioning",
+    "sourceOrder": 65,
+    "topicId": "maps-cartography",
+    "currentCard": {
+      "id": "maps-cartography-gnss-positioning",
+      "difficulty": "medium",
+      "prompt": "Оператор сравнивает четыре результата обработки контрольных пунктов. Требуется оставить координаты именно измеренных rover-пунктов в 3D, улучшить их постобработкой и привязать результат к NSRS; заданного порога точности нет. Какую запись выбрать?",
+      "answers": [
+        {
+          "text": "Трёхмерные координаты рассчитаны только по наблюдениям ровера; источник поправок и привязка к NSRS не указаны.",
+          "note": "Это самостоятельный набор GNSS-наблюдений без подтверждённого использования данных CORS для повышения точности и выравнивания в NSRS."
+        },
+        {
+          "text": "Координаты референцных станций CORS скопированы вместо координат измеренных полевых пунктов.",
+          "note": "Станции CORS предоставляют данные и метаданные; сами опорные координаты станции не подменяют измерения целевого ровера."
+        },
+        {
+          "text": "Координаты ровера обработаны вместе с данными CORS и выровнены в NSRS.",
+          "note": "NOAA указывает, что постобработанные данные CORS могут улучшать точность координат пользователя до нескольких сантиметров по горизонтали и вертикали."
+        },
+        {
+          "text": "Из воздушных лазерных возвратов создана точечная модель рельефа с координатами самолёта и его ориентацией.",
+          "note": "Воздушная лидарная система NOAA использует GPS для положения самолёта и инерциальную систему для его ориентации."
+        }
+      ],
+      "correctIndex": 2,
+      "explanation": "Подходит запись, где целевые наблюдения ровера обработаны с референцными данными CORS и результат привязан к NSRS. NOAA описывает применение CORS для трёхмерного позиционирования; сантиметровая точность возможна для улучшенных постобработанных координат, но здесь она не задана как критерий.",
+      "source": {
+        "title": "NOAA National Geodetic Survey, The NOAA CORS Network",
+        "url": "https://geodesy.noaa.gov/CORS/",
+        "verifiedAt": "2026-10-15"
+      }
+    },
+    "cardSHA256": "8dccdc4372a64612ee83f5a7dbf64249295c5bdab8478794716add59abef67c2",
+    "verdict": "TERMINAL_HOLD",
+    "substantiveCycleUsed": 1,
+    "finding": {
+      "code": "MEDIUM_AND_DISTRACTORS",
+      "ground": "Question lists rover identity, postprocessing and NSRS; key repeats all. Option0 announces absent alignment/provenance, option1 says station values copied instead of target, and option3 is a different terrain deliverable. Textual compliance alone solves it; no GNSS judgement is required.",
+      "neededEvidenceOrNewSolution": "New solution needed: plausible processing-result records requiring substantive interpretation beyond literal missing/incorrect targets; source-supported quality/reference constraints, not an invented accuracy threshold."
+    },
+    "sourceClaims": "Old primary gaps are not inherited: new context/rewrite reviewed separately. Substantive HOLD remains even where factual source support is adequate.",
+    "sourceExplanationRead": "Подходит запись, где целевые наблюдения ровера обработаны с референцными данными CORS и результат привязан к NSRS. NOAA описывает применение CORS для трёхмерного позиционирования; сантиметровая точность возможна для улучшенных постобработанных координат, но здесь она не задана как критерий."
+  },
+  {
+    "id": "maps-cartography-total-station",
+    "sourceOrder": 66,
+    "topicId": "maps-cartography",
+    "currentCard": {
+      "id": "maps-cartography-total-station",
+      "difficulty": "medium",
+      "prompt": "В журнале вертикального хода записаны повторные взаимные наблюдения: в каждом наборе есть зенитный угол и наклонная дальность, снятые в прямом и обратном положениях прибора. Нужен наземный прибор, который выполнит обе операции и позволит усреднять наборы. Что выбрать?",
+      "answers": [
+        {
+          "text": "Приёмник GNSS и обработку по референцным данным.",
+          "note": "NOAA CORS поддерживает трёхмерное позиционирование и привязку координат к NSRS, используя GNSS-наблюдения."
+        },
+        {
+          "text": "Цифровой нивелир с рейкой и повторными отсчётами превышений.",
+          "note": "USGS показывает применение оптического или цифрового нивелира для съёмки уклона; это другой полевой способ получения высот."
+        },
+        {
+          "text": "Электронный тахеометр с угловыми наблюдениями и встроенным дальномером.",
+          "note": "USGS рекомендует для точных тригонометрических ходов тахеометр с угловой неопределённостью до ±5″ и EDM до ±3 мм + 3 ppm."
+        },
+        {
+          "text": "Воздушную лидарную систему с GPS и инерциальной навигацией.",
+          "note": "В описании NOAA самолётная система измеряет поверхность лазерными импульсами, а GPS и INS определяют положение и ориентацию платформы."
+        }
+      ],
+      "correctIndex": 2,
+      "explanation": "Полевой журнал требует угловых и дальномерных наблюдений, которые повторяют в двух положениях прибора и взаимно проверяют. USGS указывает электронный тахеометр с EDM и рекомендует усреднять измерения в положениях F1 и F2.",
+      "source": {
+        "title": "USGS, Procedures and best practices for trigonometric leveling",
+        "url": "https://www.usgs.gov/publications/procedures-and-best-practices-trigonometric-leveling-us-geological-survey",
+        "verifiedAt": "2026-10-15"
+      }
+    },
+    "cardSHA256": "34ce9e887ce24c6bc23fa61530e25021fe38cef44ef268ccc3f2da52bfedd0ee",
+    "verdict": "TERMINAL_HOLD",
+    "substantiveCycleUsed": 1,
+    "finding": {
+      "code": "ABSOLUTE_MEDIUM",
+      "ground": "Despite field-log framing, choosing the instrument still reduces to the defining pair zenith-angle+electronic slope-distance. Other instruments lack that pair; F1/F2 and reciprocal averaging do not affect which answer wins. Aerial option is excluded merely by “наземный”.",
+      "neededEvidenceOrNewSolution": "New solution needed: compare plausible instrument/procedure plans within terrestrial angular/distance surveying, where a genuine quality-control constraint determines the choice."
+    },
+    "sourceClaims": "Old primary gaps are not inherited: new context/rewrite reviewed separately. Substantive HOLD remains even where factual source support is adequate.",
+    "sourceExplanationRead": "Полевой журнал требует угловых и дальномерных наблюдений, которые повторяют в двух положениях прибора и взаимно проверяют. USGS указывает электронный тахеометр с EDM и рекомендует усреднять измерения в положениях F1 и F2."
+  },
+  {
+    "id": "maps-cartography-lidar-laser",
+    "sourceOrder": 68,
+    "topicId": "maps-cartography",
+    "currentCard": {
+      "id": "maps-cartography-lidar-laser",
+      "difficulty": "medium",
+      "prompt": "После шторма нужно быстро получить плотное покрытие высотами длинной береговой полосы. В журнале полёта есть время возврата импульсов, координаты воздушной платформы и её ориентация; результат должен быть облаком наземных точек, а не несколькими контрольными точками. Какой план съёмки соответствует данным и цели?",
+      "answers": [
+        {
+          "text": "Использовать только GNSS-роверы с CORS, сохраняя координаты отдельных наземных пунктов.",
+          "note": "Данные NOAA CORS помогают улучшать трёхмерные координаты полевых GNSS-наблюдений и привязывать их к NSRS."
+        },
+        {
+          "text": "Пройти берег тахеометром и измерить отдельные отражатели с наземных станций.",
+          "note": "Для точных наземных ходов USGS рекомендует повторные угловые и дальномерные наблюдения тахеометром."
+        },
+        {
+          "text": "Обработать воздушное лазерное сканирование вместе с GPS/INS платформы.",
+          "note": "NOAA описывает вычисление высоты по времени возврата лазерного импульса; высокая плотность таких точек могла бы занять месяцы при традиционной съёмке."
+        },
+        {
+          "text": "Выполнить тригонометрическое нивелирование для контрольного вертикального хода.",
+          "note": "USGS применяет тригонометрическое нивелирование для вертикального контроля и полевых площадок, где важны скорость и точность."
+        }
+      ],
+      "correctIndex": 2,
+      "explanation": "Возвраты лазерных импульсов дают высотные точки, а GPS/INS описывают положение и ориентацию самолёта. NOAA отмечает, что воздушная система может получать плотность точек, сбор которой традиционными наземными методами занял бы месяцы.",
+      "source": {
+        "title": "NOAA National Geodetic Survey, Light Detection and Ranging",
+        "url": "https://www.ngs.noaa.gov/RESEARCH/RSD/main/lidar/lidar.shtml",
+        "verifiedAt": "2026-10-15"
+      }
+    },
+    "cardSHA256": "f068563ea73a00d004403b851d5f82d7280669cdea1a188980d72deb3505a5e6",
+    "verdict": "TERMINAL_HOLD",
+    "substantiveCycleUsed": 1,
+    "finding": {
+      "code": "MEDIUM_AND_DISTRACTORS",
+      "ground": "Flight log with pulse returns identifies the only airborne answer. All other plans are explicitly terrestrial control/reflector traverses. Density and storm/coast mission context therefore do not drive a decision between plausible plans.",
+      "neededEvidenceOrNewSolution": "New solution needed: credible competing acquisition/processing plans for the same airborne data/product; require a source-supported substantive distinction. Keep density/time statement conditional."
+    },
+    "sourceClaims": "Old primary gaps are not inherited: new context/rewrite reviewed separately. Substantive HOLD remains even where factual source support is adequate.",
+    "sourceExplanationRead": "Возвраты лазерных импульсов дают высотные точки, а GPS/INS описывают положение и ориентацию самолёта. NOAA отмечает, что воздушная система может получать плотность точек, сбор которой традиционными наземными методами занял бы месяцы."
+  }
+]
