@@ -1,0 +1,231 @@
+{
+  "stage": "cycle1 CURRENT3 pending affected19 and retained independent",
+  "authorNativeId": "01a13d9d-daff-77d0-afff-ca3489b97c23",
+  "authorCandidate": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/fix-medium9-cycle1-author-01a13d50/first3-completion/candidate.json",
+  "authorSourceProof": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/fix-medium9-cycle1-author-01a13d50/first3-completion/sourceproof.json",
+  "authorPeers": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/fix-medium9-cycle1-author-01a13d50/first3-completion/peer-snapshot.json",
+  "applied": [
+    {
+      "id": "maps-cartography-spot-elevation",
+      "status": "FIX",
+      "beforeCard": {
+        "id": "maps-cartography-spot-elevation",
+        "difficulty": "medium",
+        "prompt": "На топокарте горизонтали подписаны 700 м и 720 м. Между ними у знака × стоит число 712 м, причём горизонталь через знак не проходит. Что можно заключить о месте знака?",
+        "answers": [
+          {
+            "text": "Все точки ближайшей горизонтали имеют отметку 712 м.",
+            "note": "Контурная линия, в отличие от точечной отметки, объединяет множество мест одной высоты."
+          },
+          {
+            "text": "В самой отмеченной точке высота указана как 712 м.",
+            "note": "USGS показывает spot elevation отдельным точечным знаком, не протяжённой линией."
+          },
+          {
+            "text": "Разность высот соседних горизонталей равна 12 м.",
+            "note": "Сечение рельефа — разность высот соседних линий, которую задаёт легенда карты."
+          },
+          {
+            "text": "Знак × является геодезическим репером с опубликованной контрольной отметкой.",
+            "note": "На карте репер обычно обозначают специальным BM/control symbol, отдельно от spot elevation."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Число у знака × относится к конкретному отмеченному месту и даёт его высоту 712 м. Оно не задаёт отметку целой горизонтали и само по себе не обозначает геодезический репер.",
+        "source": {
+          "title": "USGS: Topographic Map Symbols",
+          "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "065695444bcdf83f734e8435fdb3631ea581a55a2195432e550a002292435da8",
+      "proposedCard": {
+        "id": "maps-cartography-spot-elevation",
+        "difficulty": "medium",
+        "prompt": "На топокарте USGS соседние горизонтали подписаны 700 м и 720 м. Между ними у отдельного знака × стоит 712 м; линия через знак не проходит. Каковы сечение горизонталей и превышение точки над нижней горизонталью?",
+        "answers": [
+          {
+            "text": "Сечение 12 м; точка на 712 м, на 12 м выше 700 м.",
+            "note": "Сечение берут по отметкам соседних контуров, а не по числу отдельной точки."
+          },
+          {
+            "text": "Сечение 20 м; точка на 712 м, на 12 м выше линии 700 м.",
+            "note": "Индексные горизонтали USGS печатают шире промежуточных и подписывают в нескольких местах."
+          },
+          {
+            "text": "Сечение 20 м; проходящая рядом горизонталь имеет высоту 712 м.",
+            "note": "Контур соединяет точки одной высоты; отдельное точечное значение не переносится на линию."
+          },
+          {
+            "text": "Сечение 20 м; знак × — репер с опубликованной отметкой 712 м.",
+            "note": "В легенде USGS точечную высотную отметку и геодезический репер обозначают разными знаками."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Сечение — разность отметок соседних горизонталей: 720−700=20 м. Точка на 712 м находится на 12 м выше линии 700 м. Её значение не задаёт высоту контура или репера.",
+        "source": {
+          "title": "USGS: Topographic Map Symbols",
+          "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "721288cae186a459989ae77d864ecbc76b941d311f05d61e3c52a976f2aae455",
+      "reason": "Initial specific defects corrected; difficulty and answer key remain frozen."
+    },
+    {
+      "id": "maps-cartography-flow-map",
+      "status": "FIX",
+      "beforeCard": {
+        "id": "maps-cartography-flow-map",
+        "difficulty": "medium",
+        "prompt": "В таблице поездок указано 40 пассажиров из A в B и 120 из B в C. На flow map ширина линии пропорциональна потоку, стрелки показывают направление. Какой вывод верен?",
+        "answers": [
+          {
+            "text": "A–B имеет больший поток, потому что его линия длиннее на карте.",
+            "note": "Длина нарисованного сегмента не является заданной величиной потока; по условию его кодирует ширина."
+          },
+          {
+            "text": "Поток B–C втрое больше A–B; стрелка показывает направление отдельно от объёма.",
+            "note": "Ширина выражает относительное число перемещений, а стрелки или arrowheads могут задавать направление."
+          },
+          {
+            "text": "Диаметр узла C обязательно равен потоку B–C и заменяет ширину линии.",
+            "note": "Размер узла может кодировать общее движение, входящее в узел и выходящее из него, а не только один поток."
+          },
+          {
+            "text": "Стрелка с направлением B–C означает, что туда переместилось только 120 километров.",
+            "note": "Условие задаёт пассажирский объём потока; стрелка показывает направление, а не единицу расстояния."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Отношение потоков равно 120/40=3, поэтому линия B–C передаёт больший объём. Стрелки задают направление, а ширина кодирует относительное количество перемещений.",
+        "source": {
+          "title": "ICA-Abs: Origin-destination flow maps",
+          "url": "https://ica-abs.copernicus.org/articles/1/351/2019/",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "fff2f1c242679f4e113275bebd05c170d6353df8deafd49f77709f80657d0e6d",
+      "proposedCard": {
+        "id": "maps-cartography-flow-map",
+        "difficulty": "medium",
+        "prompt": "На карте потоков ширина линии пропорциональна числу поездок, стрелки задают направление, а диаметр узла — сумму входящих и исходящих потоков. Даны A→B: 40, B→C: 120, C→D: 30 пассажиров. Как сравнить A→B и B→C и найти сумму в узле C?",
+        "answers": [
+          {
+            "text": "A→B втрое больше B→C; сумма в C равна 150 пассажирам.",
+            "note": "40 — это треть от 120; направление стрелки не меняет объём, записанный у линии."
+          },
+          {
+            "text": "B→C втрое больше A→B; сумма в C равна 150 пассажирам.",
+            "note": "Если линии пересекаются и мешают чтению, их можно изогнуть, чтобы уменьшить перекрытия."
+          },
+          {
+            "text": "B→C на 80 пассажиров больше, значит линия в 80 раз шире; сумма в C — только 120.",
+            "note": "Разность двух значений не равна отношению потоков и не задаёт пропорцию ширин."
+          },
+          {
+            "text": "B→C втрое больше A→B; сумма в C равна только 120 входящим пассажирам.",
+            "note": "Сумма узла включает 120 прибывших и 30 отправленных из C пассажиров."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Отношение B→C к A→B равно 120/40=3. Через узел C проходят 120 входящих и 30 исходящих поездок, всего 150. Изгиб линий помогает уменьшать перекрытия, но не меняет объём потока.",
+        "source": {
+          "title": "ICA-Abs: Origin-destination flow maps",
+          "url": "https://ica-abs.copernicus.org/articles/1/351/2019/",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "df537cea2eb27df7615d0228a75762ae131ae7ab8e084467f804105a18037baf",
+      "reason": "Initial specific defects corrected; difficulty and answer key remain frozen."
+    },
+    {
+      "id": "maps-cartography-latitude-ns",
+      "status": "FIX",
+      "beforeCard": {
+        "id": "maps-cartography-latitude-ns",
+        "difficulty": "medium",
+        "prompt": "Полевой отряд находится на 37° ю. ш. и перемещается строго на север примерно на 444 км по тому же меридиану; примите 111 км на градус широты. Какую широту записать после перехода?",
+        "answers": [
+          {
+            "text": "41° ю. ш.: северное движение увеличивает число градусов южной широты.",
+            "note": "Знак S задаёт южное направление от экватора; движение к северу уменьшает абсолютную южную широту."
+          },
+          {
+            "text": "33° ю. ш.: четыре градуса к северу уменьшают южное удаление от экватора.",
+            "note": "Один градус широты составляет примерно 111 км; 444 км дают четыре градуса."
+          },
+          {
+            "text": "33° с. ш.: после пересечения экватора знак меняется на северный.",
+            "note": "Переход через экватор сменил бы полушарную букву, но 444 км меньше расстояния от 37° ю. ш. до экватора."
+          },
+          {
+            "text": "37° ю. ш.: движение по меридиану меняет долготу, а не широту.",
+            "note": "Меридиан сохраняет долготу; движение по нему меняет угловое положение north/south."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "444 км соответствуют четырём градусам широты. Движение на север уменьшает южное удаление от экватора: 37° южной широты превращается в 33° южной широты, а не пересекает экватор.",
+        "source": {
+          "title": "NOAA Ocean Service: Latitude",
+          "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "0c53dbd9d665b5cd097ab0ed1cfda3bdca5fb950c894839fbe4802589653b119",
+      "proposedCard": {
+        "id": "maps-cartography-latitude-ns",
+        "difficulty": "medium",
+        "prompt": "Отряд находится на 37° ю. ш. и движется строго на север по тому же меридиану 444 км. Для задачи примите 111 км на градус широты. Какую широту записать после перехода?",
+        "answers": [
+          {
+            "text": "41° ю. ш.: при движении на север южная широта увеличивается.",
+            "note": "На южном полушарии северное движение приближает точку к экватору и уменьшает модуль широты."
+          },
+          {
+            "text": "33° ю. ш.: 444 км дают около 4°, значит 37° ю. ш. − 4° = 33° ю. ш.",
+            "note": "111 км — приближение: Земля ближе к эллипсоиду, поэтому точное вычисление требует более точной модели."
+          },
+          {
+            "text": "33° с. ш.: отнять четыре градуса и сразу сменить полушарие.",
+            "note": "Полушарная метка меняется только при пересечении экватора; 4° не покрывают исходные 37° до экватора."
+          },
+          {
+            "text": "37° ю. ш.: движение по меридиану меняет долготу, но не широту.",
+            "note": "Меридиан сохраняет долготу; движение вдоль него меняет положение севернее или южнее."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "444/111=4°, поэтому конечная широта — 37°−4°=33° южной широты. Экватор не пересекается: отряд проходит 4° из исходных 37°. Указанные 111 км на градус — приближение.",
+        "source": {
+          "title": "NOAA Ocean Service: Latitude",
+          "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "f50d1394a9fe116ca2092b53801e268e79abecd5b81f96a2859e1b2a225b0869",
+      "reason": "Initial specific defects corrected; difficulty and answer key remain frozen."
+    }
+  ],
+  "inlinePunctuationAmendment": [
+    {
+      "id": "maps-cartography-latitude-ns",
+      "authorCardHash": "6818c1a7937d04e709dcc63d4346942149527911b0a19c535dd5490ef923a39f",
+      "appliedCardHash": "f50d1394a9fe116ca2092b53801e268e79abecd5b81f96a2859e1b2a225b0869",
+      "field": "explanation",
+      "before": "444/111=4°, поэтому конечная широта — 37°−4°=33° южной широты Экватор не пересекается: отряд проходит 4° из исходных 37°. Указанные 111 км на градус — приближение.",
+      "after": "444/111=4°, поэтому конечная широта — 37°−4°=33° южной широты. Экватор не пересекается: отряд проходит 4° из исходных 37°. Указанные 111 км на градус — приближение.",
+      "reason": "restore sentence delimiter after author expanded abbreviated ю. ш.; punctuation only no claim change"
+    }
+  ],
+  "verified": [
+    "3exactpreimages/frozenIDdifficultykeyorder",
+    "18literal/12variant exactbindings,sourcehashes; hashpolicy preserved author canonicalJSONstrings",
+    "Punctuation-only delimiter restoration bound above; no semantic claim changed"
+  ],
+  "qualityCredit": 0,
+  "qaSelection": {
+    "command": "node node_modules/vitest/vitest.mjs run tests/unit/catalog-topics.test.ts tests/unit/content.test.ts tests/unit/content-answer-notes.test.ts --reporter=json --outputFile=docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/qa-medium-first3-cycle1-01a13d50.json",
+    "reason": "3 authored content cards plus punctuation only; catalog schema and notes affected; no runtime/build/audio"
+  }
+}
