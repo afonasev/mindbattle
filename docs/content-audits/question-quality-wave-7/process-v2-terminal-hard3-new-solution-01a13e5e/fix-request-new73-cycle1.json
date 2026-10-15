@@ -1,0 +1,57 @@
+{
+  "cycle": 1,
+  "scopeIds": [
+    "maps-cartography-sliver-polygon"
+  ],
+  "baselineCommit": "e581e5a505177afa60eceee1c4a5a0bf192f23f7",
+  "reader": "01a13ec9-88e6-7423-84d0-2026dbfcffb1",
+  "receipt": "docs/content-audits/question-quality-wave-7/process-v2-terminal-hard3-new-solution-01a13e5e/independent-initial-01a13e5e/receipt.json",
+  "FIX": [
+    {
+      "id": "maps-cartography-sliver-polygon",
+      "sourceOrder": 73,
+      "currentCanonicalSHA256": "1b23f859d2a6d38330477d45c959b546173563fbdd337e4d653c3ab7e93b5fc2",
+      "verdict": "FIX",
+      "uniqueKeyVerified": 2,
+      "frozenDifficulty": "hard",
+      "defects": [
+        "Correct note asserts unspecified gap geometry and class-dependent topology outcomes"
+      ],
+      "nextAction": "Keep hard and key2. Address the correct-note source defect: either explicitly supply every geometry and class/subtype assumption required by that note, or replace it with a supported additional fact that does not assert these unspecified inputs. Rebind complete revised card/notes and affected sources/peers in the one allowed fix cycle.",
+      "owner": "Author for sole targeted note fix; coordinator adjudicates and preserves"
+    }
+  ],
+  "currentCard": [
+    {
+      "id": "maps-cartography-sliver-polygon",
+      "difficulty": "hard",
+      "prompt": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "answers": [
+        {
+          "text": "[6, 5] км².",
+          "note": "Площадь пересечения равна 60+45−94=11 км²; 5 км² — превышение суммы площадей над площадью маски."
+        },
+        {
+          "text": "[0, 11] км².",
+          "note": "Объединение занимает 94 км² из 100 км² маски, поэтому остаётся 6 км² незаполненной площади."
+        },
+        {
+          "text": "[6, 11] км².",
+          "note": "Если ошибки проверять топологией Esri, контур пустоты будет линейной ошибкой Must Not Have Gaps, а область перекрытия — полигонной ошибкой Must Not Overlap."
+        },
+        {
+          "text": "[11, 6] км².",
+          "note": "Формулы дают пустоту 100−94=6 км² и пересечение 60+45−94=11 км², в обратном порядке."
+        }
+      ],
+      "correctIndex": 2,
+      "explanation": "Пустота в пределах маски равна 100−94=6 км². Пересечение полигонов равно 60+45−94=11 км² по формуле включения–исключения. Искомая пара в указанном порядке — (6, 11) км².",
+      "source": {
+        "title": "Geodatabase topology rules and fixes for polygon features | ArcGIS Pro documentation",
+        "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polygon-features.html",
+        "verifiedAt": "2026-10-15"
+      }
+    }
+  ],
+  "instruction": "Only concreteNEW73 firstfix for note unsupported gap geometry/same-class assumption. Keep alreadyconfirmedsource maths/HARD and key2; no unchangedsecond oldsolution cycle. Add real supported extra fact beyondprompt/key without claiming fixturegeometry; protect certified71/74 and currentothercards. Fullfinal6groups4variants/source/peers binding; returnHOLDifunsolved."
+}
