@@ -1,0 +1,73 @@
+{
+  "owner": "01a13f31-9224-7dd1-90e0-e5b0ea2e94a9",
+  "at": "2026-10-15T11:16:00.127779+00:00",
+  "CURRENT": 712,
+  "remaining": 1288,
+  "qualityCredit": 0,
+  "independentReceipt": "docs/content-audits/question-quality-wave-8/coordinator-01a13f31/independent-material4/receipt.json",
+  "receiptRawSHA256": "3c90358c04257a9083d33de62f2897f70624e7c5677bbde1e569b27ed1af2a42",
+  "decisions": [
+    {
+      "id": "engineering-machines-yield-strength",
+      "decision": "Accept concrete INITIAL FIX; authorize its sole substantive cycle1 within frozen scope",
+      "defects": [
+        {
+          "code": "EXPLANATION_KEY_NOT_NAMED",
+          "field": "explanation",
+          "detail": "Два предложения истинно описывают остаточную деформацию и условные 0,2% (L50–65), но explanation нигде прямо не называет правильный ответ «Предел текучести», как требует pinned authoring-guide, раздел «Справки и объяснение». Достаточен адресный ввод названия без смены факта.",
+          "severity": "editorial"
+        }
+      ]
+    },
+    {
+      "id": "engineering-machines-ultimate-strength",
+      "decision": "Accept concrete INITIAL FIX; authorize its sole substantive cycle1 within frozen scope",
+      "defects": [
+        {
+          "code": "MAIN_DUPLICATE_CROSS_TOPIC",
+          "field": "prompt_ordered_answers_key",
+          "detail": "engineering-machines-ultimate-strength и materials-tensile-strength-pull спрашивают одно: UTS как максимум нагрузки/исходной площади в растяжении. Уточнение «инженерное» уже присутствует в correct note/explanation peer. Разная тема/формулировка не делает независимым факт.",
+          "severity": "substantive"
+        },
+        {
+          "code": "EXPLANATION_KEY_NOT_NAMED",
+          "field": "explanation",
+          "detail": "Механика исходной площади/локализации после максимума верна по L72–108; explanation нигде не называет правильный ответ «Предел прочности». Кроме этого, MAIN-дубль с materials65 требует отдельного решения координатора.",
+          "severity": "editorial"
+        }
+      ]
+    },
+    {
+      "id": "engineering-machines-creep-strength",
+      "decision": "Accept concrete INITIAL FIX; authorize its sole substantive cycle1 within frozen scope",
+      "defects": [
+        {
+          "code": "WRONGNOTE_DESCRIBES_CORRECT_PROCESS",
+          "field": "note3",
+          "detail": "Фраза сообщает высокотемпературную деформацию ниже текучести — именно ползучесть (MIT creep L354–360). Она ничего не сообщает о сопротивлении росту трещины и приписана дистрактору «Трещиностойкость», подменяя факт о нём свойством правильного процесса.",
+          "severity": "substantive"
+        }
+      ]
+    },
+    {
+      "id": "engineering-machines-fatigue-limit",
+      "decision": "Accept concrete INITIAL FIX; authorize its sole substantive cycle1 within frozen scope",
+      "defects": [
+        {
+          "code": "FERROUS_ALLOYS_MISTRANSLATION",
+          "field": "note3,explanation",
+          "detail": "Плато для некоторых сплавов на основе железа и отсутствие его у алюминия подтверждены L52–58; «ферросплавы» переводит ferrous alloys неверным специальным термином (ферросплавы — отдельные металлургические сплавы/добавки). Источник говорит о ferrous alloys и low-carbon steel. Требуется «сплавов на основе железа» или «некоторых сталей».",
+          "severity": "factual-terminology"
+        },
+        {
+          "code": "ANSWER_CATEGORY_GIVEAWAY",
+          "field": "prompt_ordered_answers_key",
+          "detail": "Понятие предела выносливости соответствует MEDIUM при содержательных альтернативах, но текущий набор (кривая / концентрация / закон / предел) позволяет выбрать единственный предел по категории вопроса «уровень напряжения». Frozen difficulty сохраняется; улучшать нужно задачу/дистракторы в разрешённом fix-cycle.",
+          "severity": "editorial-medium-contract"
+        }
+      ]
+    }
+  ],
+  "route": "Fresh Luna SOURCE cycle1 all4, exactCURRENT preimages, actualmaterials65peer and new MAINsolution for UTS. Applyqualifiedonly + affectedQA19, then same independentreaderFINAL. Unresolvedaftercycle1terminalHOLD0.",
+  "criterion": "Canonicalfactpoolallowed; realwrongnoteattribution/MAINduplicates/unique-answer/explanationgrounds retained. No productpolicychange required."
+}
