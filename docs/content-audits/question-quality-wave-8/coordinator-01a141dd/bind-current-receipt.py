@@ -114,7 +114,7 @@ with m.flow.locked():m.flow.lease('acquire','planning',O)
 try:
  cp=rd(P/'openspec/changes/question-quality-future-waves/current-checkpoint.json');n=len(cp['currentEligibleCompletedIds']);waves=[w['currentSourceEditorialCards'] for w in cp['waves']]
  sp=P/'evidence/question-revision-process-v2/coordinator-state.json';st=rd(sp);st['waveCURRENT']=waves;wr(sp,st)
- gp=P/'evidence/question-revision-process-v2/active-full2000-goal-01a141dd.json';g=rd(gp);g.update(CURRENT=n,remaining=2000-n,newlyCertified=n-804,waveCURRENT=waves,latestCodeCommit=cc,latestCertification=case['reportPath']);wr(gp,g)
+ gp=P/'evidence/question-revision-process-v2/active-full2000-goal-01a141dd-92a3-7ad3-a762-def3551bbda8.json';g=rd(gp);g.update(CURRENT=n,remaining=2000-n,newlyCertified=n-804,waveCURRENT=waves,latestCodeCommit=cc,latestCertification=case['reportPath']);wr(gp,g)
  print('projection',m.h.save(P,'refs/heads/codex/question-revision-resume-20261014',[str(p.relative_to(P)) for p in [sp,gp]],f'Record fullgoal CURRENT{n} delta{n-804} exact accepted subset',raw(P/m.h.git(P,'rev-parse','--git-path','index'))))
 finally:
  with m.flow.locked():m.flow.lease('release','planning',O)
