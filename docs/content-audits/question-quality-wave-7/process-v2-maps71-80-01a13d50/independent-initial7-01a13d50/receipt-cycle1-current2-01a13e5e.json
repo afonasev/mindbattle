@@ -1,0 +1,891 @@
+{
+  "schemaVersion": 1,
+  "stage": "retained OTHER independent reader; sole cycle1 FINALCURRENT2",
+  "readerThread": "01a13e36-756e-77b2-8a1e-af5b0428e68a",
+  "authorNativeId": "01a13e63-3568-70d1-bc76-88e6628dcb42",
+  "coordinatorThread": "01a13e5e-e7e9-7f33-8165-57a15db42e1c",
+  "reviewedHEAD": "b5c703e80425df1fa3e3fd146f08d70a7b84302a",
+  "appliedCommit": "fda00931c11d854e210c03a21d23dbf9e2663b57",
+  "branch": "codex/question-quality-wave-6",
+  "processPinnedCommit": "12e5581b",
+  "counts": {
+    "PASS": 2,
+    "FIX": 0,
+    "HOLD": 0
+  },
+  "qualityCredit": 0,
+  "creditGate": "Only root coordinator binding may grant credit.",
+  "canonicalization": "json.dumps(value, sort_keys=True, separators=(',',':'), ensure_ascii=False).encode('utf-8') for EVERY literal, including strings; raw files hashed read_bytes without CRLF normalization.",
+  "entries": [
+    {
+      "id": "maps-cartography-closed-hill",
+      "topicId": "maps-cartography",
+      "sourceOrder": 76,
+      "currentCard": {
+        "id": "maps-cartography-closed-hill",
+        "difficulty": "easy",
+        "prompt": "Какой вид рельефа показывают замкнутые горизонтали, если отметки растут к центру?",
+        "answers": [
+          {
+            "text": "Крутой склон",
+            "note": "Чтобы оценить уклон, учитывают высотный интервал карты и расстояние на местности."
+          },
+          {
+            "text": "Пологий склон",
+            "note": "Пешеход может идти вдоль горизонтали, чтобы избежать лишнего набора высоты."
+          },
+          {
+            "text": "Долина",
+            "note": "Ручьи часто проходят по дну долин и на карте показаны синими линиями."
+          },
+          {
+            "text": "Холм",
+            "note": "Точечная отметка сообщает числовую высоту отдельной точки на карте."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Замкнутые горизонтали с ростом высот к центру показывают холм. Отдельная точечная отметка может подписать высоту вершины, а каждая горизонталь соединяет точки одинаковой высоты.",
+        "source": {
+          "title": "Topographic Map Symbols",
+          "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "cardCanonicalSHA256": "315d5996e7699aa40a722ab01e5dd7e411ed0ddd51bef0556fe14ee9a151b131",
+      "status": "PASS",
+      "scope": "sole cycle1 final CURRENT; no quality credit before root binding",
+      "independentlyDerivedKey": 3,
+      "difficulty": "easy",
+      "difficultyAssessment": "Абсолютный EASY: распознать один стандартный рисунок горизонталей; нет лишних вычислений/технического интерфейса.",
+      "oneKeyAssessment": "Самостоятельный единственный ключ — Холм: повышение к центру замкнутых уровней изображает возвышение. Вывод сделан по картографическому признаку, затем сверен correctIndex=3.",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой вид рельефа показывают замкнутые горизонтали, если отметки растут к центру?",
+            "answers": [
+              "Крутой склон",
+              "Пологий склон",
+              "Долина",
+              "Холм"
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "cd71fcc9073211ff1d06ad0d1942ad61079d47a17cbc472bffdb32ea166c690d",
+          "assessment": "Базовое EASY-узнавание одного стандартного рисунка рельефа. Все варианты грамматически подходят; only key3 доказан по признаку, не по индексу. Дистракторы принадлежат теме рельефа; степень крутизны из условия не выводится.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 landscape / contour diagram and complete surrounding text",
+              "claim": "Замкнутые повышающиеся горизонтали обозначают холм",
+              "actualGround": "Диаграмма переводит два холма в вложенные замкнутые контуры; подписи10/20/30/40 увеличиваются к вершине. Текст задаёт равенство высот вдоль линии и чтение uphill.",
+              "isReasonedConsequenceOfSource": false
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p3 CONTROL DATA AND MONUMENTS – continued / Vertical control",
+              "claim": "Числовая высота отдельной точки",
+              "actualGround": "USGS отдельно показывает Spot elevation с числовой отметкой7523, отличая её от контурных линий и реперов; применимость к вершине является обычным частным случаем точки.",
+              "isReasonedConsequenceOfSource": true
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 What is a Topographic Map? / Reading Topographic Maps",
+              "claim": "Контур имеет постоянную высоту; уклон читается по горизонталям и высотному интервалу",
+              "actualGround": "USGS определяет contour как equal elevation; contour interval как elevation difference between adjacent lines; связывает близость линий с крутизной. Наземное расстояние дополняет перепад для оценки уклона.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Замкнутые горизонтали с ростом высот к центру показывают холм. Отдельная точечная отметка может подписать высоту вершины, а каждая горизонталь соединяет точки одинаковой высоты.",
+          "canonicalSHA256": "44a94c134aa7392eca00484bf6d4246b6ef4974092aa68ab13aa086091708cdf",
+          "assessment": "Объяснение правильно связывает вложенный рост высот с холмом; точечная высота вершины и равенство высот линии подтверждены как дополнительные свойства.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 landscape / contour diagram and complete surrounding text",
+              "claim": "Замкнутые повышающиеся горизонтали обозначают холм",
+              "actualGround": "Диаграмма переводит два холма в вложенные замкнутые контуры; подписи10/20/30/40 увеличиваются к вершине. Текст задаёт равенство высот вдоль линии и чтение uphill.",
+              "isReasonedConsequenceOfSource": false
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p3 CONTROL DATA AND MONUMENTS – continued / Vertical control",
+              "claim": "Числовая высота отдельной точки",
+              "actualGround": "USGS отдельно показывает Spot elevation с числовой отметкой7523, отличая её от контурных линий и реперов; применимость к вершине является обычным частным случаем точки.",
+              "isReasonedConsequenceOfSource": true
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 What is a Topographic Map? / Reading Topographic Maps",
+              "claim": "Контур имеет постоянную высоту; уклон читается по горизонталям и высотному интервалу",
+              "actualGround": "USGS определяет contour как equal elevation; contour interval как elevation difference between adjacent lines; связывает близость линий с крутизной. Наземное расстояние дополняет перепад для оценки уклона.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Чтобы оценить уклон, учитывают высотный интервал карты и расстояние на местности.",
+          "canonicalSHA256": "d613acedebdba34a1e9a7b95ec76c6785493689c7eeebde7a3dc576dbad53881",
+          "assessment": "Новый полезный факт для крутизны: нужны перепад/интервал и наземное расстояние, а не признак замкнутости. Прямой зависимости тесные→крутой, решающей close-steep, не сообщает.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 What is a Topographic Map? / Reading Topographic Maps",
+              "claim": "Контур имеет постоянную высоту; уклон читается по горизонталям и высотному интервалу",
+              "actualGround": "USGS определяет contour как equal elevation; contour interval как elevation difference between adjacent lines; связывает близость линий с крутизной. Наземное расстояние дополняет перепад для оценки уклона.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Пешеход может идти вдоль горизонтали, чтобы избежать лишнего набора высоты.",
+          "canonicalSHA256": "0157692f4c4d7bac672ad9cda27bf54e8c33474e1afc0f640f0ae4dc81908301",
+          "assessment": "Полезное следствие равной высоты вдоль одной линии; не выдаёт широкий шаг линий как ответ wide-gentle. Заметка описывает возможность выбора маршрута, не гарантирует проходимость.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 Reading contours and relief, complete text and landscape diagram",
+              "claim": "Движение вдоль горизонтали избегает изменения высоты",
+              "actualGround": "OS: any single contour line will be at same height all the way along its length. Следствие относится к движению по этой линии на поверхности; заметка не обещает свободный физический проход по любой горизонтали.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Ручьи часто проходят по дну долин и на карте показаны синими линиями.",
+          "canonicalSHA256": "c84170e57f28ad2d2b02e89897889aedbcd28ef4773ef725611c16dd590f76ae",
+          "assessment": "Свойство своего варианта «Долина»: связь с ручьями и их цвет. Не сообщает V или направление его вершины, поэтому не решает77.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 Reading contours and relief, last paragraph",
+              "claim": "Водотоки связаны с долинами",
+              "actualGround": "OS recommends looking for rivers, which usually flow into valleys.",
+              "isReasonedConsequenceOfSource": false
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 Reading Topographic Maps, colors; p3 RIVERS, LAKES, AND CANALS",
+              "claim": "Ручьи обозначаются синими линиями",
+              "actualGround": "USGS относит lakes, streams, irrigation ditches and other hydrographic features к blue; p3 отдельно перечисляет perennial/intermittent stream symbols.",
+              "isReasonedConsequenceOfSource": false
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "Точечная отметка сообщает числовую высоту отдельной точки на карте.",
+          "canonicalSHA256": "60993ed2e86c9c5af8dfc8eeccca4b17452cba96225c66e658316b9b28abfb03",
+          "assessment": "Новый source-grounded факт сверх prompt/key: точечная отметка численно описывает конкретную точку, а не всю линию. Это полезное дополнение к чтению вершины.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p3 CONTROL DATA AND MONUMENTS – continued / Vertical control",
+              "claim": "Числовая высота отдельной точки",
+              "actualGround": "USGS отдельно показывает Spot elevation с числовой отметкой7523, отличая её от контурных линий и реперов; применимость к вершине является обычным частным случаем точки.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        }
+      ],
+      "assessments": [
+        {
+          "answerIndex": 0,
+          "fullPrompt": "Какой вид рельефа показывают замкнутые горизонтали, если отметки растут к центру?",
+          "answerText": "Крутой склон",
+          "noteText": "Чтобы оценить уклон, учитывают высотный интервал карты и расстояние на местности.",
+          "keyAndPlausibilityJudgement": "Не ключ: замкнутость и рост внутрь определяют возвышение, а не степень крутизны; расстояния между горизонталями не заданы. Правдоподобный дистрактор той же темы.",
+          "grammarAssessment": "Ответ «Крутой склон» стоит в именительном падеже как самостоятельное название запрошенного вида/формы рельефа. В заметке «учитывают»/«важны» корректно связывает интервал и расстояние; управление «на местности» верно.",
+          "ownNoteUsefulness": "Новый полезный факт для крутизны: нужны перепад/интервал и наземное расстояние, а не признак замкнутости. Прямой зависимости тесные→крутой, решающей close-steep, не сообщает.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 What is a Topographic Map? / Reading Topographic Maps",
+              "claim": "Контур имеет постоянную высоту; уклон читается по горизонталям и высотному интервалу",
+              "actualGround": "USGS определяет contour как equal elevation; contour interval как elevation difference between adjacent lines; связывает близость линий с крутизной. Наземное расстояние дополняет перепад для оценки уклона.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ],
+          "answerPrimaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 landscape / contour diagram and complete surrounding text",
+              "claim": "Замкнутые повышающиеся горизонтали обозначают холм",
+              "actualGround": "Диаграмма переводит два холма в вложенные замкнутые контуры; подписи10/20/30/40 увеличиваются к вершине. Текст задаёт равенство высот вдоль линии и чтение uphill.",
+              "isReasonedConsequenceOfSource": false
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p12 complete text and Valley / Spur diagram; p11 rivers paragraph",
+              "claim": "V вверх по склону долины и вверх по течению",
+              "actualGround": "OS: if V points uphill it is valley; if downhill it is spur. p11 привязывает водотоки к долинам; направление вверх по течению соответствует вверх по долине.",
+              "isReasonedConsequenceOfSource": true
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 What is a Topographic Map? / Reading Topographic Maps",
+              "claim": "Контур имеет постоянную высоту; уклон читается по горизонталям и высотному интервалу",
+              "actualGround": "USGS определяет contour как equal elevation; contour interval как elevation difference between adjacent lines; связывает близость линий с крутизной. Наземное расстояние дополняет перепад для оценки уклона.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        },
+        {
+          "answerIndex": 1,
+          "fullPrompt": "Какой вид рельефа показывают замкнутые горизонтали, если отметки растут к центру?",
+          "answerText": "Пологий склон",
+          "noteText": "Пешеход может идти вдоль горизонтали, чтобы избежать лишнего набора высоты.",
+          "keyAndPlausibilityJudgement": "Не ключ: по данному признаку нельзя установить пологость, даже если холм может иметь пологий склон. Условие просит опознаваемую форму, а не недоказанную крутизну.",
+          "grammarAssessment": "Ответ «Пологий склон» стоит в именительном падеже как самостоятельное название запрошенного вида/формы рельефа. В заметке подлежащее и сказуемое согласованы; «вдоль горизонтали/горизонталей» управляет родительным падежом, конструкция о наборе/изменении высоты ясна.",
+          "ownNoteUsefulness": "Полезное следствие равной высоты вдоль одной линии; не выдаёт широкий шаг линий как ответ wide-gentle. Заметка описывает возможность выбора маршрута, не гарантирует проходимость.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 Reading contours and relief, complete text and landscape diagram",
+              "claim": "Движение вдоль горизонтали избегает изменения высоты",
+              "actualGround": "OS: any single contour line will be at same height all the way along its length. Следствие относится к движению по этой линии на поверхности; заметка не обещает свободный физический проход по любой горизонтали.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ],
+          "answerPrimaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 landscape / contour diagram and complete surrounding text",
+              "claim": "Замкнутые повышающиеся горизонтали обозначают холм",
+              "actualGround": "Диаграмма переводит два холма в вложенные замкнутые контуры; подписи10/20/30/40 увеличиваются к вершине. Текст задаёт равенство высот вдоль линии и чтение uphill.",
+              "isReasonedConsequenceOfSource": false
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p12 complete text and Valley / Spur diagram; p11 rivers paragraph",
+              "claim": "V вверх по склону долины и вверх по течению",
+              "actualGround": "OS: if V points uphill it is valley; if downhill it is spur. p11 привязывает водотоки к долинам; направление вверх по течению соответствует вверх по долине.",
+              "isReasonedConsequenceOfSource": true
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 What is a Topographic Map? / Reading Topographic Maps",
+              "claim": "Контур имеет постоянную высоту; уклон читается по горизонталям и высотному интервалу",
+              "actualGround": "USGS определяет contour как equal elevation; contour interval как elevation difference between adjacent lines; связывает близость линий с крутизной. Наземное расстояние дополняет перепад для оценки уклона.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        },
+        {
+          "answerIndex": 2,
+          "fullPrompt": "Какой вид рельефа показывают замкнутые горизонтали, если отметки растут к центру?",
+          "answerText": "Долина",
+          "noteText": "Ручьи часто проходят по дну долин и на карте показаны синими линиями.",
+          "keyAndPlausibilityJudgement": "Не ключ: для долины нужен изгиб V вверх по склону/течению; вложенная повышающаяся к центру система показывает возвышение. Сопоставимый вид рельефа.",
+          "grammarAssessment": "Ответ «Долина» стоит в именительном падеже как самостоятельное название запрошенного вида/формы рельефа. Заметка синтаксически завершена; «ручьи … проходят … показаны» согласовано во множественном числе.",
+          "ownNoteUsefulness": "Свойство своего варианта «Долина»: связь с ручьями и их цвет. Не сообщает V или направление его вершины, поэтому не решает77.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 Reading contours and relief, last paragraph",
+              "claim": "Водотоки связаны с долинами",
+              "actualGround": "OS recommends looking for rivers, which usually flow into valleys.",
+              "isReasonedConsequenceOfSource": false
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 Reading Topographic Maps, colors; p3 RIVERS, LAKES, AND CANALS",
+              "claim": "Ручьи обозначаются синими линиями",
+              "actualGround": "USGS относит lakes, streams, irrigation ditches and other hydrographic features к blue; p3 отдельно перечисляет perennial/intermittent stream symbols.",
+              "isReasonedConsequenceOfSource": false
+            }
+          ],
+          "answerPrimaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 landscape / contour diagram and complete surrounding text",
+              "claim": "Замкнутые повышающиеся горизонтали обозначают холм",
+              "actualGround": "Диаграмма переводит два холма в вложенные замкнутые контуры; подписи10/20/30/40 увеличиваются к вершине. Текст задаёт равенство высот вдоль линии и чтение uphill.",
+              "isReasonedConsequenceOfSource": false
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p12 complete text and Valley / Spur diagram; p11 rivers paragraph",
+              "claim": "V вверх по склону долины и вверх по течению",
+              "actualGround": "OS: if V points uphill it is valley; if downhill it is spur. p11 привязывает водотоки к долинам; направление вверх по течению соответствует вверх по долине.",
+              "isReasonedConsequenceOfSource": true
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 What is a Topographic Map? / Reading Topographic Maps",
+              "claim": "Контур имеет постоянную высоту; уклон читается по горизонталям и высотному интервалу",
+              "actualGround": "USGS определяет contour как equal elevation; contour interval как elevation difference between adjacent lines; связывает близость линий с крутизной. Наземное расстояние дополняет перепад для оценки уклона.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        },
+        {
+          "answerIndex": 3,
+          "fullPrompt": "Какой вид рельефа показывают замкнутые горизонтали, если отметки растут к центру?",
+          "answerText": "Холм",
+          "noteText": "Точечная отметка сообщает числовую высоту отдельной точки на карте.",
+          "keyAndPlausibilityJudgement": "Самостоятельный единственный ключ — Холм: повышение к центру замкнутых уровней изображает возвышение. Вывод сделан по картографическому признаку, затем сверен correctIndex=3.",
+          "grammarAssessment": "Ответ «Холм» стоит в именительном падеже как самостоятельное название запрошенного вида/формы рельефа. Заметка синтаксически завершена; «точечная отметка сообщает» согласовано в единственном числе.",
+          "ownNoteUsefulness": "Новый source-grounded факт сверх prompt/key: точечная отметка численно описывает конкретную точку, а не всю линию. Это полезное дополнение к чтению вершины.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p3 CONTROL DATA AND MONUMENTS – continued / Vertical control",
+              "claim": "Числовая высота отдельной точки",
+              "actualGround": "USGS отдельно показывает Spot elevation с числовой отметкой7523, отличая её от контурных линий и реперов; применимость к вершине является обычным частным случаем точки.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ],
+          "answerPrimaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 landscape / contour diagram and complete surrounding text",
+              "claim": "Замкнутые повышающиеся горизонтали обозначают холм",
+              "actualGround": "Диаграмма переводит два холма в вложенные замкнутые контуры; подписи10/20/30/40 увеличиваются к вершине. Текст задаёт равенство высот вдоль линии и чтение uphill.",
+              "isReasonedConsequenceOfSource": false
+            }
+          ]
+        }
+      ],
+      "correctNoteNewFact": "Новый source-grounded факт сверх prompt/key: точечная отметка численно описывает конкретную точку, а не всю линию. Это полезное дополнение к чтению вершины.",
+      "cycle1Resolution": "Прямые признаки V/замкнутых повышающихся линий из wrong notes удалены; близость/широкий шаг линий как готовые ответы59/60 тоже удалены. Новые заметки фактически поддержаны и полезны своим вариантам.",
+      "peerEvidence": "evidence-cycle1-current2/peer-content.json"
+    },
+    {
+      "id": "maps-cartography-v-valley",
+      "topicId": "maps-cartography",
+      "sourceOrder": 77,
+      "currentCard": {
+        "id": "maps-cartography-v-valley",
+        "difficulty": "easy",
+        "prompt": "Какую форму рельефа показывают V-образные горизонтали, направленные вершиной вверх по течению?",
+        "answers": [
+          {
+            "text": "Крутой склон",
+            "note": "Для оценки уклона важны высотный интервал карты и расстояние на местности."
+          },
+          {
+            "text": "Пологий склон",
+            "note": "Маршрут вдоль горизонталей помогает идти, почти не меняя высоту."
+          },
+          {
+            "text": "Холм",
+            "note": "Точечная отметка сообщает числовую высоту отдельной точки на карте."
+          },
+          {
+            "text": "Долина",
+            "note": "Ручьи обычно текут в долинах; на топокарте их показывают синими линиями."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "V-образные изгибы горизонталей указывают на долину, когда вершина V обращена вверх по течению. Ручьи обычно проходят по долинам и обозначаются на топографических картах синими линиями.",
+        "source": {
+          "title": "Topographic Map Symbols",
+          "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "cardCanonicalSHA256": "a2817e51099ebfd8f9fb37d1ec0783646c165e06500533b310fe1601f8383a54",
+      "status": "PASS",
+      "scope": "sole cycle1 final CURRENT; no quality credit before root binding",
+      "independentlyDerivedKey": 3,
+      "difficulty": "easy",
+      "difficultyAssessment": "Абсолютный EASY: распознать один стандартный рисунок горизонталей; нет лишних вычислений/технического интерфейса.",
+      "oneKeyAssessment": "Самостоятельный единственный ключ — Долина: V указывает вверх по её склону, то есть против течения. OS отличает её от выступа с V вниз; correctIndex=3 проверен после вывода.",
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какую форму рельефа показывают V-образные горизонтали, направленные вершиной вверх по течению?",
+            "answers": [
+              "Крутой склон",
+              "Пологий склон",
+              "Холм",
+              "Долина"
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "96444f88cded78f05ae46f92f1afebb76623b865fac1bba04aa35735993f0518",
+          "assessment": "Базовое EASY-узнавание одного стандартного рисунка рельефа. Все варианты грамматически подходят; only key3 доказан по признаку, не по индексу. Дистракторы принадлежат теме рельефа; степень крутизны из условия не выводится.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p12 complete text and Valley / Spur diagram; p11 rivers paragraph",
+              "claim": "V вверх по склону долины и вверх по течению",
+              "actualGround": "OS: if V points uphill it is valley; if downhill it is spur. p11 привязывает водотоки к долинам; направление вверх по течению соответствует вверх по долине.",
+              "isReasonedConsequenceOfSource": true
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 Reading contours and relief, last paragraph",
+              "claim": "Водотоки связаны с долинами",
+              "actualGround": "OS recommends looking for rivers, which usually flow into valleys.",
+              "isReasonedConsequenceOfSource": false
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 Reading Topographic Maps, colors; p3 RIVERS, LAKES, AND CANALS",
+              "claim": "Ручьи обозначаются синими линиями",
+              "actualGround": "USGS относит lakes, streams, irrigation ditches and other hydrographic features к blue; p3 отдельно перечисляет perennial/intermittent stream symbols.",
+              "isReasonedConsequenceOfSource": false
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "V-образные изгибы горизонталей указывают на долину, когда вершина V обращена вверх по течению. Ручьи обычно проходят по долинам и обозначаются на топографических картах синими линиями.",
+          "canonicalSHA256": "fc808a25d2dde03c464424098856f43632b7be599242e22d8a2e94a85659ceb2",
+          "assessment": "Объяснение правильно связывает V вверх по течению с долиной. Цвет ручьёв и их связь с долинами подтверждены отдельными первичными контекстами, а не авторской оценкой.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p12 complete text and Valley / Spur diagram; p11 rivers paragraph",
+              "claim": "V вверх по склону долины и вверх по течению",
+              "actualGround": "OS: if V points uphill it is valley; if downhill it is spur. p11 привязывает водотоки к долинам; направление вверх по течению соответствует вверх по долине.",
+              "isReasonedConsequenceOfSource": true
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 Reading contours and relief, last paragraph",
+              "claim": "Водотоки связаны с долинами",
+              "actualGround": "OS recommends looking for rivers, which usually flow into valleys.",
+              "isReasonedConsequenceOfSource": false
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 Reading Topographic Maps, colors; p3 RIVERS, LAKES, AND CANALS",
+              "claim": "Ручьи обозначаются синими линиями",
+              "actualGround": "USGS относит lakes, streams, irrigation ditches and other hydrographic features к blue; p3 отдельно перечисляет perennial/intermittent stream symbols.",
+              "isReasonedConsequenceOfSource": false
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Для оценки уклона важны высотный интервал карты и расстояние на местности.",
+          "canonicalSHA256": "05d63ce9e8ca113c5752a61dafab9c4f920e839927c1946430e8621e6f3ef482",
+          "assessment": "Полезно объясняет, какие величины участвуют в оценке уклона; не сообщает готовую связь тесных линий с ответом current59.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 What is a Topographic Map? / Reading Topographic Maps",
+              "claim": "Контур имеет постоянную высоту; уклон читается по горизонталям и высотному интервалу",
+              "actualGround": "USGS определяет contour как equal elevation; contour interval как elevation difference between adjacent lines; связывает близость линий с крутизной. Наземное расстояние дополняет перепад для оценки уклона.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Маршрут вдоль горизонталей помогает идти, почти не меняя высоту.",
+          "canonicalSHA256": "32bb15429dd837528804bf3cdc35afcd9ed80dca4239883a7fb6d6bc6e7ab8d4",
+          "assessment": "Содержательное следствие постоянной высоты горизонтали для планирования хода; не воспроизводит признак широких промежутков current60.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 Reading contours and relief, complete text and landscape diagram",
+              "claim": "Движение вдоль горизонтали избегает изменения высоты",
+              "actualGround": "OS: any single contour line will be at same height all the way along its length. Следствие относится к движению по этой линии на поверхности; заметка не обещает свободный физический проход по любой горизонтали.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Точечная отметка сообщает числовую высоту отдельной точки на карте.",
+          "canonicalSHA256": "60993ed2e86c9c5af8dfc8eeccca4b17452cba96225c66e658316b9b28abfb03",
+          "assessment": "Собственное свойство холма как отдельной точки/вершины без утверждения замкнутости и роста отметок. Полного ответа76 здесь больше нет.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p3 CONTROL DATA AND MONUMENTS – continued / Vertical control",
+              "claim": "Числовая высота отдельной точки",
+              "actualGround": "USGS отдельно показывает Spot elevation с числовой отметкой7523, отличая её от контурных линий и реперов; применимость к вершине является обычным частным случаем точки.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "Ручьи обычно текут в долинах; на топокарте их показывают синими линиями.",
+          "canonicalSHA256": "7bd3ba38585aa08fae7d16ee00b9a43d0b2232a9ffb62fa62a6f744c1fe3b344",
+          "assessment": "Новый полезный факт beyond prompt/key: синий цвет водотока; связь ручьёв с долинами также поддержанаOS. Упоминание течения в вопросе не сообщает цвет.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 Reading contours and relief, last paragraph",
+              "claim": "Водотоки связаны с долинами",
+              "actualGround": "OS recommends looking for rivers, which usually flow into valleys.",
+              "isReasonedConsequenceOfSource": false
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 Reading Topographic Maps, colors; p3 RIVERS, LAKES, AND CANALS",
+              "claim": "Ручьи обозначаются синими линиями",
+              "actualGround": "USGS относит lakes, streams, irrigation ditches and other hydrographic features к blue; p3 отдельно перечисляет perennial/intermittent stream symbols.",
+              "isReasonedConsequenceOfSource": false
+            }
+          ]
+        }
+      ],
+      "assessments": [
+        {
+          "answerIndex": 0,
+          "fullPrompt": "Какую форму рельефа показывают V-образные горизонтали, направленные вершиной вверх по течению?",
+          "answerText": "Крутой склон",
+          "noteText": "Для оценки уклона важны высотный интервал карты и расстояние на местности.",
+          "keyAndPlausibilityJudgement": "Не ключ: V-направление описывает форму долины, а не плотность/крутизну склона. Тематически правдоподобная путаница формы и крутизны.",
+          "grammarAssessment": "Ответ «Крутой склон» стоит в именительном падеже как самостоятельное название запрошенного вида/формы рельефа. В заметке «учитывают»/«важны» корректно связывает интервал и расстояние; управление «на местности» верно.",
+          "ownNoteUsefulness": "Полезно объясняет, какие величины участвуют в оценке уклона; не сообщает готовую связь тесных линий с ответом current59.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 What is a Topographic Map? / Reading Topographic Maps",
+              "claim": "Контур имеет постоянную высоту; уклон читается по горизонталям и высотному интервалу",
+              "actualGround": "USGS определяет contour как equal elevation; contour interval как elevation difference between adjacent lines; связывает близость линий с крутизной. Наземное расстояние дополняет перепад для оценки уклона.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ],
+          "answerPrimaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 landscape / contour diagram and complete surrounding text",
+              "claim": "Замкнутые повышающиеся горизонтали обозначают холм",
+              "actualGround": "Диаграмма переводит два холма в вложенные замкнутые контуры; подписи10/20/30/40 увеличиваются к вершине. Текст задаёт равенство высот вдоль линии и чтение uphill.",
+              "isReasonedConsequenceOfSource": false
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p12 complete text and Valley / Spur diagram; p11 rivers paragraph",
+              "claim": "V вверх по склону долины и вверх по течению",
+              "actualGround": "OS: if V points uphill it is valley; if downhill it is spur. p11 привязывает водотоки к долинам; направление вверх по течению соответствует вверх по долине.",
+              "isReasonedConsequenceOfSource": true
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 What is a Topographic Map? / Reading Topographic Maps",
+              "claim": "Контур имеет постоянную высоту; уклон читается по горизонталям и высотному интервалу",
+              "actualGround": "USGS определяет contour как equal elevation; contour interval как elevation difference between adjacent lines; связывает близость линий с крутизной. Наземное расстояние дополняет перепад для оценки уклона.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        },
+        {
+          "answerIndex": 1,
+          "fullPrompt": "Какую форму рельефа показывают V-образные горизонтали, направленные вершиной вверх по течению?",
+          "answerText": "Пологий склон",
+          "noteText": "Маршрут вдоль горизонталей помогает идти, почти не меняя высоту.",
+          "keyAndPlausibilityJudgement": "Не ключ: V вверх по течению не задаёт большие расстояния между линиями; пологость из условия не следует.",
+          "grammarAssessment": "Ответ «Пологий склон» стоит в именительном падеже как самостоятельное название запрошенного вида/формы рельефа. В заметке подлежащее и сказуемое согласованы; «вдоль горизонтали/горизонталей» управляет родительным падежом, конструкция о наборе/изменении высоты ясна.",
+          "ownNoteUsefulness": "Содержательное следствие постоянной высоты горизонтали для планирования хода; не воспроизводит признак широких промежутков current60.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 Reading contours and relief, complete text and landscape diagram",
+              "claim": "Движение вдоль горизонтали избегает изменения высоты",
+              "actualGround": "OS: any single contour line will be at same height all the way along its length. Следствие относится к движению по этой линии на поверхности; заметка не обещает свободный физический проход по любой горизонтали.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ],
+          "answerPrimaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 landscape / contour diagram and complete surrounding text",
+              "claim": "Замкнутые повышающиеся горизонтали обозначают холм",
+              "actualGround": "Диаграмма переводит два холма в вложенные замкнутые контуры; подписи10/20/30/40 увеличиваются к вершине. Текст задаёт равенство высот вдоль линии и чтение uphill.",
+              "isReasonedConsequenceOfSource": false
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p12 complete text and Valley / Spur diagram; p11 rivers paragraph",
+              "claim": "V вверх по склону долины и вверх по течению",
+              "actualGround": "OS: if V points uphill it is valley; if downhill it is spur. p11 привязывает водотоки к долинам; направление вверх по течению соответствует вверх по долине.",
+              "isReasonedConsequenceOfSource": true
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 What is a Topographic Map? / Reading Topographic Maps",
+              "claim": "Контур имеет постоянную высоту; уклон читается по горизонталям и высотному интервалу",
+              "actualGround": "USGS определяет contour как equal elevation; contour interval как elevation difference between adjacent lines; связывает близость линий с крутизной. Наземное расстояние дополняет перепад для оценки уклона.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        },
+        {
+          "answerIndex": 2,
+          "fullPrompt": "Какую форму рельефа показывают V-образные горизонтали, направленные вершиной вверх по течению?",
+          "answerText": "Холм",
+          "noteText": "Точечная отметка сообщает числовую высоту отдельной точки на карте.",
+          "keyAndPlausibilityJudgement": "Не ключ: холм характеризуется замкнутыми повышающимися отметками, а не V вверх по течению. Другой вид рельефа того же тематического класса.",
+          "grammarAssessment": "Ответ «Холм» стоит в именительном падеже как самостоятельное название запрошенного вида/формы рельефа. Заметка синтаксически завершена; «точечная отметка сообщает» согласовано в единственном числе.",
+          "ownNoteUsefulness": "Собственное свойство холма как отдельной точки/вершины без утверждения замкнутости и роста отметок. Полного ответа76 здесь больше нет.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p3 CONTROL DATA AND MONUMENTS – continued / Vertical control",
+              "claim": "Числовая высота отдельной точки",
+              "actualGround": "USGS отдельно показывает Spot elevation с числовой отметкой7523, отличая её от контурных линий и реперов; применимость к вершине является обычным частным случаем точки.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ],
+          "answerPrimaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 landscape / contour diagram and complete surrounding text",
+              "claim": "Замкнутые повышающиеся горизонтали обозначают холм",
+              "actualGround": "Диаграмма переводит два холма в вложенные замкнутые контуры; подписи10/20/30/40 увеличиваются к вершине. Текст задаёт равенство высот вдоль линии и чтение uphill.",
+              "isReasonedConsequenceOfSource": false
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p12 complete text and Valley / Spur diagram; p11 rivers paragraph",
+              "claim": "V вверх по склону долины и вверх по течению",
+              "actualGround": "OS: if V points uphill it is valley; if downhill it is spur. p11 привязывает водотоки к долинам; направление вверх по течению соответствует вверх по долине.",
+              "isReasonedConsequenceOfSource": true
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 What is a Topographic Map? / Reading Topographic Maps",
+              "claim": "Контур имеет постоянную высоту; уклон читается по горизонталям и высотному интервалу",
+              "actualGround": "USGS определяет contour как equal elevation; contour interval как elevation difference between adjacent lines; связывает близость линий с крутизной. Наземное расстояние дополняет перепад для оценки уклона.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        },
+        {
+          "answerIndex": 3,
+          "fullPrompt": "Какую форму рельефа показывают V-образные горизонтали, направленные вершиной вверх по течению?",
+          "answerText": "Долина",
+          "noteText": "Ручьи обычно текут в долинах; на топокарте их показывают синими линиями.",
+          "keyAndPlausibilityJudgement": "Самостоятельный единственный ключ — Долина: V указывает вверх по её склону, то есть против течения. OS отличает её от выступа с V вниз; correctIndex=3 проверен после вывода.",
+          "grammarAssessment": "Ответ «Долина» стоит в именительном падеже как самостоятельное название запрошенного вида/формы рельефа. Заметка синтаксически завершена; «ручьи … текут», «их показывают» корректно построены.",
+          "ownNoteUsefulness": "Новый полезный факт beyond prompt/key: синий цвет водотока; связь ручьёв с долинами также поддержанаOS. Упоминание течения в вопросе не сообщает цвет.",
+          "primaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p11 Reading contours and relief, last paragraph",
+              "claim": "Водотоки связаны с долинами",
+              "actualGround": "OS recommends looking for rivers, which usually flow into valleys.",
+              "isReasonedConsequenceOfSource": false
+            },
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "rawPrimaryByteSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+              "locator": "PDF p1 Reading Topographic Maps, colors; p3 RIVERS, LAKES, AND CANALS",
+              "claim": "Ручьи обозначаются синими линиями",
+              "actualGround": "USGS относит lakes, streams, irrigation ditches and other hydrographic features к blue; p3 отдельно перечисляет perennial/intermittent stream symbols.",
+              "isReasonedConsequenceOfSource": false
+            }
+          ],
+          "answerPrimaryGrounds": [
+            {
+              "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "rawPrimaryByteSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "locator": "PDF p12 complete text and Valley / Spur diagram; p11 rivers paragraph",
+              "claim": "V вверх по склону долины и вверх по течению",
+              "actualGround": "OS: if V points uphill it is valley; if downhill it is spur. p11 привязывает водотоки к долинам; направление вверх по течению соответствует вверх по долине.",
+              "isReasonedConsequenceOfSource": true
+            }
+          ]
+        }
+      ],
+      "correctNoteNewFact": "Новый полезный факт beyond prompt/key: синий цвет водотока; связь ручьёв с долинами также поддержанаOS. Упоминание течения в вопросе не сообщает цвет.",
+      "cycle1Resolution": "Прямые признаки V/замкнутых повышающихся линий из wrong notes удалены; близость/широкий шаг линий как готовые ответы59/60 тоже удалены. Новые заметки фактически поддержаны и полезны своим вариантам.",
+      "peerEvidence": "evidence-cycle1-current2/peer-content.json"
+    }
+  ],
+  "inputFileSnapshots": [
+    {
+      "path": "src/content/topics/maps-cartography.json",
+      "byteSHA256": "2be86ea31075063520084df5a21f7bde9db6098d2615680daa46e929a73c02ca",
+      "bytes": 216193
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/apply-cycle1-76-77.json",
+      "byteSHA256": "905cfb174e8d84622a169a523a27bf7e72e453d27d4aeb0424b18d924808748b",
+      "bytes": 17481
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/qa-cycle1-76-77.json",
+      "byteSHA256": "f56d9e7989dbe72d6225cc22fa8ece561e60f5f5ebbcfa9d17d195e8581d22ae",
+      "bytes": 6708
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/independent-initial7-01a13d50/receipt.json",
+      "byteSHA256": "934a12c28d25f66d22c70c9ec42d701a41f78cffa995a93dbe0477493453bcdf",
+      "bytes": 208930
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author-cycle1-01a13e5e/candidate.json",
+      "byteSHA256": "9fedea36f5334b5dcf6567c725c5d38aba33321c84c9d6d097f72753fb41f300",
+      "bytes": 36898
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author-qualification-01a13e5e/candidate.json",
+      "byteSHA256": "7e26cf510b7b612e71a11d734ccdb7e9f4ada0e585e4945ca362a8409f4f8854",
+      "bytes": 72578
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author-qualification-01a13e5e/remaining4-final/candidate.json",
+      "byteSHA256": "1250deeba5a0bcaed2785450c3aaa7ab2ced4661e8e71af6b5905b4e55acc4e5",
+      "bytes": 30612
+    }
+  ],
+  "initialReceiptPreserved": {
+    "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/independent-initial7-01a13d50/receipt.json",
+    "byteSHA256": "934a12c28d25f66d22c70c9ec42d701a41f78cffa995a93dbe0477493453bcdf"
+  },
+  "evidence": {
+    "primary": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/independent-initial7-01a13d50/evidence-cycle1-current2/primary-context.json",
+    "peerVersions": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/independent-initial7-01a13d50/evidence-cycle1-current2/peer-versions.json",
+    "peerContent": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/independent-initial7-01a13d50/evidence-cycle1-current2/peer-content.json"
+  },
+  "frozenChecks": {
+    "scopeIds": [
+      "maps-cartography-closed-hill",
+      "maps-cartography-v-valley"
+    ],
+    "sourceOrder": [
+      76,
+      77
+    ],
+    "topic": "maps-cartography",
+    "difficulty": [
+      "easy",
+      "easy"
+    ],
+    "numericCorrectIndex": [
+      3,
+      3
+    ],
+    "exactAppliedCurrentMatches": true
+  },
+  "qaEvidenceOnly": {
+    "path": "docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/qa-cycle1-76-77.json",
+    "reportedPassedTests": 19,
+    "reportedFailedTests": 0,
+    "independentReaderRanTests": false
+  },
+  "checksPerformed": "2 exact CURRENT/applied canonical hashes;12 canonical group hashes;8 full prompt/answer/note assessments; saved raw-primary byte hashes; actual/proposed full peer versions dedup with stage labels; bidirectional full-key/semantic checks.",
+  "checksNotRun": [
+    "tests",
+    "runtime",
+    "build",
+    "audio",
+    "deploy",
+    "Git/index mutations"
+  ],
+  "terminalCycleRule": "This is final solecycle1 judgement for2easy only; no additional automatic fix/prospector. No unresolved defect found, therefore PASS2 not terminalHOLD.",
+  "excluded": "No quality re-review/acceptance of5HARD71–75 or81–90.",
+  "ownership": "Only new receipt-cycle1-current2 and evidence-cycle1-current2 written. No claim acquired, background/game process started, or message sent.",
+  "preservation": "Coordinator must bind and commit new evidence. No new commit created by this reader; main integration not checked.",
+  "nextStep": "Root coordinator bind exact current2 hashes/QA/receipt and preserve in Git; existing initial receipts remain immutable."
+}
