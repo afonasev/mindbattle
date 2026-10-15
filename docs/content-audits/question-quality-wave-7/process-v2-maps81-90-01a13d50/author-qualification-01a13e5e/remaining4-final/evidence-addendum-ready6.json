@@ -1,0 +1,899 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "69d1f9402912fed661bbb7c4fee788a2f8eed130",
+  "stage": "initial-author-exact-qualification-addendum",
+  "qualityCredit": 0,
+  "applied": false,
+  "cards": [
+    {
+      "id": "maps-cartography-digital-map",
+      "topicId": "maps-cartography",
+      "sourceOrder": 81,
+      "frozenDifficulty": "easy",
+      "frozenCorrectIndex": 3,
+      "fullPromptLiteral": "USGS сообщает, что данные The National Map доступны через скачивание, веб-сервисы и онлайн-просмотр. Пользователю нужно открыть интерактивную карту в браузере, изучать слои и создать собственную веб-карту. Какой способ доступа выбрать?",
+      "promptGrammarJudgment": "Вопрос естественно сформулирован как выбор пути доступа после явно заданной пользовательской задачи: интерактивное браузерное изучение слоёв и собственная web map.",
+      "fullAnswersAndNotes": [
+        {
+          "slot": 0,
+          "answerLiteral": "Скачать данные и карты через Data Downloader",
+          "answerJudgment": "Data Downloader действительно скачивает data/maps (USGS L23-L25), поэтому это близкий вариант; он не выполняет требование открыть viewer и создавать карту онлайн. Note верно отличает получение набора от browser exploration.",
+          "noteLiteral": "Этот путь загружает наборы данных или карты для дальнейшего использования; в условии требуется интерактивно изучать слои в браузере.",
+          "noteJudgment": "Пояснение о скачивании наборов подтверждается USGS L23-L25; полезно отделяет offline/data delivery от интерактивного просмотра.",
+          "primaryLocator": "USGS L23-L25 describes The National Map Downloader and data/maps."
+        },
+        {
+          "slot": 1,
+          "answerLiteral": "Подключиться к веб-сервисам карт",
+          "answerJudgment": "Web map services действительно отдельный способ доступа (USGS L63), поэтому отвлекают правдоподобно; пользователь запросил готовый интерактивный viewer и его функцию создания web map (L50). Note верно обозначает отдельный маршрут доступа.",
+          "noteLiteral": "USGS называет веб-сервисы отдельным способом доступа; в условии просят открыть именно браузерный просмотрщик и создать веб-карту.",
+          "noteJudgment": "USGS L63 различает web services и online viewer; заметка показывает почему service не тождественен viewer.",
+          "primaryLocator": "USGS L63 identifies web map services as a distinct access route."
+        },
+        {
+          "slot": 2,
+          "answerLiteral": "Заказать карту через topoBuilder",
+          "answerJudgment": "topoBuilder действительно заказывает индивидуальные USGS-style карты (USGS L127-L128); это не просмотрщик GIS-слоёв и создание web map. Note указывает именно разницу задачи.",
+          "noteLiteral": "topoBuilder позволяет запросить индивидуальную топографическую карту, но не является способом открыть интерактивный просмотрщик слоёв.",
+          "noteJudgment": "USGS L127-L128 описывает topoBuilder как приложение запроса custom topographic maps; заметка отделяет заказ листа от поиска слоёв.",
+          "primaryLocator": "USGS L127-L128 describes topoBuilder as a way to request customized USGS-style topographic maps."
+        },
+        {
+          "slot": 3,
+          "answerLiteral": "Открыть онлайн-просмотрщик The National Map",
+          "answerJudgment": "Онлайн Viewer единственный прямо названный на USGS L50 способом изучать GIS layers и создавать own web map. Correct note добавляет масштаб контекста: TNM — free nationally consistent geographic datasets (USGS L58-L60).",
+          "noteLiteral": "USGS описывает The National Map как бесплатную коллекцию географических данных США и территорий, согласованную на национальном уровне.",
+          "noteJudgment": "USGS L58-L60 поддерживает доп. факт о коллекции; note не просто повторяет, что это viewer.",
+          "primaryLocator": "USGS L58-L60 defines TNM as free nationally consistent geographic datasets for the U.S. and territories."
+        }
+      ],
+      "fullExplanationLiteral": "Онлайн-просмотрщик решает обе задачи из условия: интерактивно показывает GIS-слои и позволяет создать веб-карту. Data Downloader получает данные, веб-сервисы предназначены для подключения GIS-слоёв, а topoBuilder создаёт заказные карты.",
+      "oneKeyJudgment": "Только Viewer прямо поддерживает обе цели из условия — explore base-layer GIS и create your own web map (USGS L50).",
+      "sixLiteralGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "USGS сообщает, что данные The National Map доступны через скачивание, веб-сервисы и онлайн-просмотр. Пользователю нужно открыть интерактивную карту в браузере, изучать слои и создать собственную веб-карту. Какой способ доступа выбрать?",
+            "answers": [
+              "Скачать данные и карты через Data Downloader",
+              "Подключиться к веб-сервисам карт",
+              "Заказать карту через topoBuilder",
+              "Открыть онлайн-просмотрщик The National Map"
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "49abb1fc34feac5b732a087ca47baa41ed7e6ce25babded195c54a655d50511c",
+          "sources": [
+            {
+              "path": "usgs-national-map-viewer.response.json",
+              "url": "https://www.usgs.gov/tools/national-map-viewer",
+              "sha256": "500e160069f8e389c74d555a06e4eeceb2faa67a6a5fc4df171a1b09fcd252a3",
+              "specificClaim": "USGS Viewer: L12,L50 support the two requested functions; access methods separated L63."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Онлайн-просмотрщик решает обе задачи из условия: интерактивно показывает GIS-слои и позволяет создать веб-карту. Data Downloader получает данные, веб-сервисы предназначены для подключения GIS-слоёв, а topoBuilder создаёт заказные карты.",
+          "canonicalSHA256": "553aac24953cb6bf74b24b5912fe874a905f147cc1f91b529b7d9f2c41129407",
+          "sources": [
+            {
+              "path": "usgs-national-map-viewer.response.json",
+              "url": "https://www.usgs.gov/tools/national-map-viewer",
+              "sha256": "500e160069f8e389c74d555a06e4eeceb2faa67a6a5fc4df171a1b09fcd252a3",
+              "specificClaim": "USGS Viewer L50 viewer functions; Downloader L23-L25; data/web services/online viewer distinction L63; topoBuilder L127-L128."
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Этот путь загружает наборы данных или карты для дальнейшего использования; в условии требуется интерактивно изучать слои в браузере.",
+          "canonicalSHA256": "622614d300c82ced7784bed12245e4d5fe7ae67c11d492afa75ce8e1713d4239",
+          "sources": [
+            {
+              "path": "usgs-national-map-viewer.response.json",
+              "url": "https://www.usgs.gov/tools/national-map-viewer",
+              "sha256": "500e160069f8e389c74d555a06e4eeceb2faa67a6a5fc4df171a1b09fcd252a3",
+              "specificClaim": "USGS L23-L25 describes The National Map Downloader and data/maps."
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "USGS называет веб-сервисы отдельным способом доступа; в условии просят открыть именно браузерный просмотрщик и создать веб-карту.",
+          "canonicalSHA256": "f5d60d90b8e2ce8256adfd714d694d9dbc8e37e5ea37002075414353d7a3f7a3",
+          "sources": [
+            {
+              "path": "usgs-national-map-viewer.response.json",
+              "url": "https://www.usgs.gov/tools/national-map-viewer",
+              "sha256": "500e160069f8e389c74d555a06e4eeceb2faa67a6a5fc4df171a1b09fcd252a3",
+              "specificClaim": "USGS L63 identifies web map services as a distinct access route."
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "topoBuilder позволяет запросить индивидуальную топографическую карту, но не является способом открыть интерактивный просмотрщик слоёв.",
+          "canonicalSHA256": "2e8c5eabe02a9c78791e865cfff64c0876eecbd612b645316774fb2aa4a1f32b",
+          "sources": [
+            {
+              "path": "usgs-national-map-viewer.response.json",
+              "url": "https://www.usgs.gov/tools/national-map-viewer",
+              "sha256": "500e160069f8e389c74d555a06e4eeceb2faa67a6a5fc4df171a1b09fcd252a3",
+              "specificClaim": "USGS L127-L128 describes topoBuilder as a way to request customized USGS-style topographic maps."
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "USGS описывает The National Map как бесплатную коллекцию географических данных США и территорий, согласованную на национальном уровне.",
+          "canonicalSHA256": "3eaf4defcea9872b9b6a402fb304aeaa98160e64269e081150b6ea311d7ac1eb",
+          "sources": [
+            {
+              "path": "usgs-national-map-viewer.response.json",
+              "url": "https://www.usgs.gov/tools/national-map-viewer",
+              "sha256": "500e160069f8e389c74d555a06e4eeceb2faa67a6a5fc4df171a1b09fcd252a3",
+              "specificClaim": "USGS L58-L60 defines TNM as free nationally consistent geographic datasets for the U.S. and territories."
+            }
+          ]
+        }
+      ],
+      "primaryLocator": "USGS National Map Viewer full page: L12 (viewer tasks), L23-L25 (Downloader), L50 (viewer tasks), L58-L63 (datasets/access routes), L127-L128 (topoBuilder).",
+      "authorQualificationStatus": "READY_FOR_COORDINATOR_EXACT_REVIEW"
+    },
+    {
+      "id": "maps-cartography-orient-align",
+      "topicId": "maps-cartography",
+      "sourceOrder": 82,
+      "frozenDifficulty": "easy",
+      "frozenCorrectIndex": 3,
+      "fullPromptLiteral": "Перед тем как определить по компасу направление к ориентиру, путешественник поворачивает карту так, чтобы её направления совпали с направлениями на местности. Как называется действие с картой?",
+      "promptGrammarJudgment": "Сложноподчинённое условие описывает последовательность до снятия направления; последний вопрос просит название действия, без двусмысленного объекта.",
+      "fullAnswersAndNotes": [
+        {
+          "slot": 0,
+          "answerLiteral": "Снять компасный азимут",
+          "answerJudgment": "Taking a bearing provides a direction to a target; it is plausible because compass use follows orientation, but it is not the preceding alignment itself (OS p.14). Note distinguishes sequence.",
+          "noteLiteral": "Азимут задаёт направление движения к цели; он ещё не совмещает ориентацию карты с местностью.",
+          "noteJudgment": "OS p.14 separates taking compass bearing from aligning map; note explains why the plausible next step is not the current action.",
+          "primaryLocator": "OS p.14: taking a compass bearing is distinct from first orienting the map."
+        },
+        {
+          "slot": 1,
+          "answerLiteral": "Учесть магнитное склонение",
+          "answerJudgment": "Declination correction is relevant to compass bearings (OS p.14) but does not rotate the map to align it with ground/grid. Note correctly distinguishes correction from orientation.",
+          "noteLiteral": "Поправка связывает магнитный север компаса с выбранным севером; сама по себе она не поворачивает карту.",
+          "noteJudgment": "OS p.14 discusses magnetic declination separately from alignment; note accurately identifies the distinction.",
+          "primaryLocator": "OS p.14: magnetic north differs from grid north and declination adjustment is a separate compass step."
+        },
+        {
+          "slot": 2,
+          "answerLiteral": "Определить своё положение по ориентирам",
+          "answerJudgment": "Identifying position by features is a valid map skill (OS pp.15-16) but asks where the traveler is, not to align map directions. Note states the functional distinction.",
+          "noteLiteral": "Так находят точку, где стоит путешественник; здесь требуется изменить ориентацию карты.",
+          "noteJudgment": "OS pp.15-16 covers position fixing from features; note separates location finding from rotation/alignment.",
+          "primaryLocator": "OS pp.15-16: using land features can determine position/orientation, distinct from compass alignment task."
+        },
+        {
+          "slot": 3,
+          "answerLiteral": "Ориентировать карту",
+          "answerJudgment": "OS pp.13-15 shows orienting map by aligning compass orienting lines to map eastings, with declination considered separately; only slot 3 describes the prompt action.",
+          "noteLiteral": "В руководстве OS линии сетки компаса совмещают с вертикальными линиями сетки карты, ориентированными на север.",
+          "noteJudgment": "OS p.14 alignment procedure grounds note; this is a concrete technique beyond the answer phrase.",
+          "primaryLocator": "OS p.14 explicitly says align orienting lines with eastings."
+        }
+      ],
+      "fullExplanationLiteral": "Ориентировать карту — значит совместить её направления с направлениями местности перед навигацией. OS предлагает выровнять компасные ориентирующие линии с вертикальными линиями восточных координат и отдельно учитывать магнитное склонение.",
+      "oneKeyJudgment": "Slot 3 names map orientation, the guide’s explicit operation for making map and compass face the same direction. Other actions are subsequent or distinct navigation tasks.",
+      "sixLiteralGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Перед тем как определить по компасу направление к ориентиру, путешественник поворачивает карту так, чтобы её направления совпали с направлениями на местности. Как называется действие с картой?",
+            "answers": [
+              "Снять компасный азимут",
+              "Учесть магнитное склонение",
+              "Определить своё положение по ориентирам",
+              "Ориентировать карту"
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "7e909968809a1f183568a15b3f70d3fcf916cb703d9c95f9dea1a4a4d8b05a34",
+          "sources": [
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "OS full PDF pp.13-15: compass/map alignment is a named navigation operation; bearing and declination are separate."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Ориентировать карту — значит совместить её направления с направлениями местности перед навигацией. OS предлагает выровнять компасные ориентирующие линии с вертикальными линиями восточных координат и отдельно учитывать магнитное склонение.",
+          "canonicalSHA256": "cc1cbea7d2f814b515b55d0d3cea75fd99306a82b6ae75141a2583c54ba9aed4",
+          "sources": [
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "OS p.14 explains orienting the map by lining compass orienting lines with map eastings; declination is separately handled."
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Азимут задаёт направление движения к цели; он ещё не совмещает ориентацию карты с местностью.",
+          "canonicalSHA256": "ce7c3bd92cd6aec45056f0204d22a2b304b4592636b71e12b73d4d0948c61838",
+          "sources": [
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "OS p.14: taking a compass bearing is distinct from first orienting the map."
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Поправка связывает магнитный север компаса с выбранным севером; сама по себе она не поворачивает карту.",
+          "canonicalSHA256": "45d2e4ac875b3cbf63a5631bd39cdd92a6b914153bb6c60bc2c4a7026f37517f",
+          "sources": [
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "OS p.14: magnetic north differs from grid north and declination adjustment is a separate compass step."
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Так находят точку, где стоит путешественник; здесь требуется изменить ориентацию карты.",
+          "canonicalSHA256": "3f6de9cd6533041f5e6f1e7e64b99e7798db4bb638d1a3b74ce10b0994ebc9a9",
+          "sources": [
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "OS pp.15-16: using land features can determine position/orientation, distinct from compass alignment task."
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "В руководстве OS линии сетки компаса совмещают с вертикальными линиями сетки карты, ориентированными на север.",
+          "canonicalSHA256": "37a9b2121c5ffd06a3b3cf3c48c1e87f54718d18d12273b046f281abc52a2e43",
+          "sources": [
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "OS p.14 explicitly says align orienting lines with eastings."
+            }
+          ]
+        }
+      ],
+      "primaryLocator": "Ordnance Survey full Map Reading PDF pages 13-15: align compass with map grid/eastings; magnetic declination handled separately; land-feature orientation method.",
+      "authorQualificationStatus": "READY_FOR_COORDINATOR_EXACT_REVIEW"
+    },
+    {
+      "id": "maps-cartography-measure-distance",
+      "topicId": "maps-cartography",
+      "sourceOrder": 83,
+      "frozenDifficulty": "easy",
+      "frozenCorrectIndex": 3,
+      "fullPromptLiteral": "На карте извилистая тропа измерена четырьмя участками: 0,8 см, 1,0 см, 0,7 см и 0,5 см. Масштаб — 1:50 000. Какова общая длина тропы на местности?",
+      "promptGrammarJudgment": "Единицы у четырёх сегментов и числовой масштаб заданы; вопрос однозначно спрашивает сумму наземных длин вдоль извилистой линии.",
+      "fullAnswersAndNotes": [
+        {
+          "slot": 0,
+          "answerLiteral": "0,75 км",
+          "answerJudgment": "0.75 km is plausible as an undercount: it corresponds to using 1.5 cm rather than the full 3.0 cm path. It is not the full four-segment sum; note identifies omission.",
+          "noteLiteral": "0,75 км получается, если не сложить все четыре отрезка и перевести на местность только часть тропы.",
+          "noteJudgment": "Usefully diagnoses missing mapped length; it does not repeat the answer alone.",
+          "primaryLocator": "Under-count explanation follows from only using 1.5 cm instead of all four prompt segments."
+        },
+        {
+          "slot": 1,
+          "answerLiteral": "15 км",
+          "answerJudgment": "15 km is a factor-of-ten scale conversion error: 1 cm at 1:50,000 is 0.5 km, not 5 km.",
+          "noteLiteral": "При 1:50 000 один сантиметр — 0,5 км, а не 5 км; здесь десятикратная ошибка перевода.",
+          "noteJudgment": "USGS scale ratio disproves 5km/cm; note names decimal-place error.",
+          "primaryLocator": "USGS scale ratio: at 1:50,000, 1 cm is 500 m (0.5 km), not 5 km."
+        },
+        {
+          "slot": 2,
+          "answerLiteral": "150 км",
+          "answerJudgment": "150 km is a factor-of-100 overstatement; it conflicts with 3.0cm × 0.5km/cm.",
+          "noteLiteral": "Это значение завышено в сто раз: один сантиметр соответствует 500 м, а длина карты равна лишь 3 см.",
+          "noteJudgment": "USGS scale ratio and 3cm total show why a hundredfold value cannot fit; note explains the overstatement.",
+          "primaryLocator": "USGS scale ratio and the prompt total 3 cm show 150 km is hundredfold too high."
+        },
+        {
+          "slot": 3,
+          "answerLiteral": "1,5 км",
+          "answerJudgment": "Sum all four lengths and apply the map ratio; only slot 3 equals 1.5km. OS/USGS scale context supports conversion; note cites 1mm=50m equivalence.",
+          "noteLiteral": "OS указывает, что на карте 1:50 000 каждый миллиметр шкалы компаса соответствует 50 м на местности.",
+          "noteJudgment": "OS scale bar equivalence (1mm on 1:50,000 = 50m) provides independent check, a supplemental scale fact.",
+          "primaryLocator": "OS full Map Reading PDF p.23 scale bar: at 1:50,000 each millimetre represents 50 metres."
+        }
+      ],
+      "fullExplanationLiteral": "Сложите длины участков: 0,8 + 1,0 + 0,7 + 0,5 = 3 см. При масштабе 1:50 000 один сантиметр равен 0,5 км, поэтому тропа имеет длину 1,5 км.",
+      "oneKeyJudgment": "Sum is 3.0 cm; 1:50,000 maps 1 cm to 500 m = 0.5 km, giving 1.5 km (slot 3).",
+      "sixLiteralGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На карте извилистая тропа измерена четырьмя участками: 0,8 см, 1,0 см, 0,7 см и 0,5 см. Масштаб — 1:50 000. Какова общая длина тропы на местности?",
+            "answers": [
+              "0,75 км",
+              "15 км",
+              "150 км",
+              "1,5 км"
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "5f528926e78e18183615e1f4b5f65878e819bb58b40a8979bb8e75ce4648a3bb",
+          "sources": [
+            {
+              "path": "usgs-map-scales.full.body",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "sha256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "specificClaim": "USGS Map Scales: representative fraction maps measured map length to ground distance; all segment values are synthetic prompt data."
+            },
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "USGS Map Scales: representative fraction maps measured map length to ground distance; all segment values are synthetic prompt data."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Сложите длины участков: 0,8 + 1,0 + 0,7 + 0,5 = 3 см. При масштабе 1:50 000 один сантиметр равен 0,5 км, поэтому тропа имеет длину 1,5 км.",
+          "canonicalSHA256": "a5164392abce8a3a0b26b05b86294ea9e89337bd63405858aa5a70160586696a",
+          "sources": [
+            {
+              "path": "usgs-map-scales.full.body",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "sha256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "specificClaim": "USGS Map Scales definition grounds 1:50,000 conversion; 3.0 cm is arithmetic sum of the four supplied segments."
+            },
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "USGS Map Scales definition grounds 1:50,000 conversion; 3.0 cm is arithmetic sum of the four supplied segments."
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "0,75 км получается, если не сложить все четыре отрезка и перевести на местность только часть тропы.",
+          "canonicalSHA256": "33c0a00b2b48da989d7fdb2516aa606a4246ab3f6c7d13da942fd0d47c3847ca",
+          "sources": [
+            {
+              "path": "usgs-map-scales.full.body",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "sha256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "specificClaim": "Under-count explanation follows from only using 1.5 cm instead of all four prompt segments."
+            },
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "Under-count explanation follows from only using 1.5 cm instead of all four prompt segments."
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "При 1:50 000 один сантиметр — 0,5 км, а не 5 км; здесь десятикратная ошибка перевода.",
+          "canonicalSHA256": "eeca8ffe2b9ae066a3be1b347e2aad3a1a8381522447338186f6173fc6923234",
+          "sources": [
+            {
+              "path": "usgs-map-scales.full.body",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "sha256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "specificClaim": "USGS scale ratio: at 1:50,000, 1 cm is 500 m (0.5 km), not 5 km."
+            },
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "USGS scale ratio: at 1:50,000, 1 cm is 500 m (0.5 km), not 5 km."
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Это значение завышено в сто раз: один сантиметр соответствует 500 м, а длина карты равна лишь 3 см.",
+          "canonicalSHA256": "7109c79e3343526a91f02aada3e4ea3c1f6bb2d87d2decc5c06284d2c3b8598a",
+          "sources": [
+            {
+              "path": "usgs-map-scales.full.body",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "sha256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "specificClaim": "USGS scale ratio and the prompt total 3 cm show 150 km is hundredfold too high."
+            },
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "USGS scale ratio and the prompt total 3 cm show 150 km is hundredfold too high."
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "OS указывает, что на карте 1:50 000 каждый миллиметр шкалы компаса соответствует 50 м на местности.",
+          "canonicalSHA256": "7baf97dbc1ceadd777fff266f642ba713bb7b5daa0c8f641a903130176820dc1",
+          "sources": [
+            {
+              "path": "usgs-map-scales.full.body",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "sha256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "specificClaim": "OS full Map Reading PDF p.23 scale bar: at 1:50,000 each millimetre represents 50 metres."
+            },
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "OS full Map Reading PDF p.23 scale bar: at 1:50,000 each millimetre represents 50 metres."
+            }
+          ]
+        }
+      ],
+      "primaryLocator": "USGS Map Scales full saved PDF: scale ratio definition/map-ground relation; OS full PDF pp.8-10,23-25 on scale and measured route distance.",
+      "authorQualificationStatus": "READY_FOR_COORDINATOR_EXACT_REVIEW"
+    },
+    {
+      "id": "maps-cartography-read-coordinates",
+      "topicId": "maps-cartography",
+      "sourceOrder": 84,
+      "frozenDifficulty": "easy",
+      "frozenCorrectIndex": 3,
+      "fullPromptLiteral": "В ГИС слой задан в географической системе координат, а в таблице точка записана как x = −74°, y = 40°. Как прочитать эти значения и где находится точка относительно нулевых меридианов?",
+      "promptGrammarJudgment": "Табличная запись x,y и знаки явно приведены; вопрос уточняет географическую систему координат и просит прочитать координату.",
+      "fullAnswersAndNotes": [
+        {
+          "slot": 0,
+          "answerLiteral": "74° в. д. и 40° с. ш.",
+          "answerJudgment": "This reverses x sign: positive longitude is east, but x is −74 (Esri L14). Note identifies the sign contradiction.",
+          "noteLiteral": "Восток задаётся положительным x; здесь долгота отрицательная.",
+          "noteJudgment": "Esri L14 signs refute east for negative longitude; note is a useful sign correction.",
+          "primaryLocator": "Esri L14 says positive x is east of prime meridian; negative x indicates west."
+        },
+        {
+          "slot": 1,
+          "answerLiteral": "74° з. д. и 40° ю. ш.",
+          "answerJudgment": "South requires negative y, but y=+40 (Esri L14). Note explains sign error.",
+          "noteLiteral": "Юг задаётся отрицательным y; здесь y положительно.",
+          "noteJudgment": "Esri L14 signs refute south for positive y; note pinpoints y.",
+          "primaryLocator": "Esri L14 says positive y is north; negative y is south."
+        },
+        {
+          "slot": 2,
+          "answerLiteral": "40° с. ш. и 74° з. д.",
+          "answerJudgment": "Values are right but reversed: x/y is longitude/latitude, so this answer is latitude/longitude (Esri L14). Note identifies order error.",
+          "noteLiteral": "Порядок x,y в таблице — долгота, широта; в варианте он переставлен.",
+          "noteJudgment": "Esri L14 gives x=longitude, y=latitude; note catches axis swap.",
+          "primaryLocator": "Esri L14 fixes x=longitude and y=latitude, explaining the order error."
+        },
+        {
+          "slot": 3,
+          "answerLiteral": "74° з. д. и 40° с. ш.",
+          "answerJudgment": "Only slot 3 maps negative x to west and positive y to north, consistent with Esri L14. Correct note adds the convention that projected coordinates instead use planar linear measures (Esri L16).",
+          "noteLiteral": "Знак − у x означает западную долготу, а + у y — северную широту.",
+          "noteJudgment": "Esri L16 adds contrast with projected planar coordinates in linear units, beyond repeating the coordinate answer.",
+          "primaryLocator": "Esri L16 contrasts projected planar coordinates using linear measurements with geographic angular coordinates."
+        }
+      ],
+      "fullExplanationLiteral": "В географической системе x — долгота, y — широта; отрицательные x и положительные y соответствуют западу и северу. Значит, точка находится на 74° з. д. и 40° с. ш.",
+      "oneKeyJudgment": "−74° x means west longitude, +40° y means north latitude; slot 3 preserves both axes/signs and the requested order longitude, latitude.",
+      "sixLiteralGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В ГИС слой задан в географической системе координат, а в таблице точка записана как x = −74°, y = 40°. Как прочитать эти значения и где находится точка относительно нулевых меридианов?",
+            "answers": [
+              "74° в. д. и 40° с. ш.",
+              "74° з. д. и 40° ю. ш.",
+              "40° с. ш. и 74° з. д.",
+              "74° з. д. и 40° с. ш."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "c6ac3febff8c9ab321b8021328e6d3a554336275aafb6f7e108659b6e4033355",
+          "sources": [
+            {
+              "path": "esri-coordinate-systems.full.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/mapping/properties/coordinate-systems-and-projections.html",
+              "sha256": "ba55b8c4e0f25c237ecd68eb1f96b39d612fb6072eeaf02502ec3ae4de94e0e8",
+              "specificClaim": "Esri full page L14: longitude is x, latitude y; negative x is west and positive y is north."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "В географической системе x — долгота, y — широта; отрицательные x и положительные y соответствуют западу и северу. Значит, точка находится на 74° з. д. и 40° с. ш.",
+          "canonicalSHA256": "7d24d0ceb287d048d04793c470a0cb4e08e24980c12514cb0ce77b0178a84f9f",
+          "sources": [
+            {
+              "path": "esri-coordinate-systems.full.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/mapping/properties/coordinate-systems-and-projections.html",
+              "sha256": "ba55b8c4e0f25c237ecd68eb1f96b39d612fb6072eeaf02502ec3ae4de94e0e8",
+              "specificClaim": "Esri L14 supports x/y, angular units and signs; statement of a specific point is author-created exercise data."
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Восток задаётся положительным x; здесь долгота отрицательная.",
+          "canonicalSHA256": "4d52f211aff2134a809f16113bd4457a144d6dc2aa83c4e404a6db458dcd117c",
+          "sources": [
+            {
+              "path": "esri-coordinate-systems.full.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/mapping/properties/coordinate-systems-and-projections.html",
+              "sha256": "ba55b8c4e0f25c237ecd68eb1f96b39d612fb6072eeaf02502ec3ae4de94e0e8",
+              "specificClaim": "Esri L14 says positive x is east of prime meridian; negative x indicates west."
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Юг задаётся отрицательным y; здесь y положительно.",
+          "canonicalSHA256": "9a788403853c96b53bff827cb9bd4057ee1cb0bc197861a5b800b1e96b423cbf",
+          "sources": [
+            {
+              "path": "esri-coordinate-systems.full.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/mapping/properties/coordinate-systems-and-projections.html",
+              "sha256": "ba55b8c4e0f25c237ecd68eb1f96b39d612fb6072eeaf02502ec3ae4de94e0e8",
+              "specificClaim": "Esri L14 says positive y is north; negative y is south."
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Порядок x,y в таблице — долгота, широта; в варианте он переставлен.",
+          "canonicalSHA256": "eeaee598a2f863c3d2fefb52665be67724d72c61f56162a768e5032351a100f9",
+          "sources": [
+            {
+              "path": "esri-coordinate-systems.full.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/mapping/properties/coordinate-systems-and-projections.html",
+              "sha256": "ba55b8c4e0f25c237ecd68eb1f96b39d612fb6072eeaf02502ec3ae4de94e0e8",
+              "specificClaim": "Esri L14 fixes x=longitude and y=latitude, explaining the order error."
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "Знак − у x означает западную долготу, а + у y — северную широту.",
+          "canonicalSHA256": "522af21ebd818e94c04a37f899acfcdf2aff38b362236741aab296a0ffa897e5",
+          "sources": [
+            {
+              "path": "esri-coordinate-systems.full.txt",
+              "url": "https://doc.esri.com/en/arcgis-pro/latest/help/mapping/properties/coordinate-systems-and-projections.html",
+              "sha256": "ba55b8c4e0f25c237ecd68eb1f96b39d612fb6072eeaf02502ec3ae4de94e0e8",
+              "specificClaim": "Esri L16 contrasts projected planar coordinates using linear measurements with geographic angular coordinates."
+            }
+          ]
+        }
+      ],
+      "primaryLocator": "Esri coordinate systems full page L13-L16: geographic x=longitude, y=latitude; positive east/north and negative west/south.",
+      "authorQualificationStatus": "READY_FOR_COORDINATOR_EXACT_REVIEW"
+    },
+    {
+      "id": "maps-cartography-follow-route",
+      "topicId": "maps-cartography",
+      "sourceOrder": 85,
+      "frozenDifficulty": "easy",
+      "frozenCorrectIndex": 3,
+      "fullPromptLiteral": "На карте отмечен путь от старта через мост к перевалу. Путешественник сверяется с картой, чтобы выбрать следующий отрезок именно этой последовательности. Какое действие он выполняет?",
+      "promptGrammarJudgment": "Формулировка отделяет заранее отмеченный путь от выбора нового маршрута и спрашивает, какое действие выполняется при движении по последовательности.",
+      "fullAnswersAndNotes": [
+        {
+          "slot": 0,
+          "answerLiteral": "Планировать маршрут",
+          "answerJudgment": "Planning chooses/plots a route before departure (OS p.8); the prompt says the path is already marked, so this stage is past. Note gives temporal distinction.",
+          "noteLiteral": "Планирование выбирает и наносит путь до выхода; в условии путь уже задан и путешественник проходит его.",
+          "noteJudgment": "OS route-planning section places plotting before departure; note makes why it is not current action explicit.",
+          "primaryLocator": "OS p.8 places plotting a route before departure."
+        },
+        {
+          "slot": 1,
+          "answerLiteral": "Оценить время в пути",
+          "answerJudgment": "Estimating time is a different planning calculation; route sequence alone supplies neither walking pace nor duration. OS pp.8-10 recommends preparation and timing, not equating route following with time estimation.",
+          "noteLiteral": "Для оценки времени нужны темп и длина участков, а не только порядок мост—перевал.",
+          "noteJudgment": "Time estimate is not provided by order alone; note identifies missing pace/length input as a concrete reason.",
+          "primaryLocator": "Time/pace inference from missing duration and rate data; OS preparation guidance pp.8-10 separates journey planning from following the plotted route."
+        },
+        {
+          "slot": 2,
+          "answerLiteral": "Найти координаты контрольной точки",
+          "answerJudgment": "Coordinates locate a checkpoint but do not select the next segment in an already plotted sequence; OS grid reference sections distinguish location from route reading.",
+          "noteLiteral": "Координаты задают положение моста или перевала, но не указывают следующий отрезок пути.",
+          "noteJudgment": "OS grid-reference material locates a point; the prompt asks to follow a sequence, not calculate a point.",
+          "primaryLocator": "OS grid-reference sections locate a point; route-following sections pp.8-10 address sequential travel."
+        },
+        {
+          "slot": 3,
+          "answerLiteral": "Проследить маршрут",
+          "answerJudgment": "Following the plotted path matches the scenario. Correct note adds OS advice to choose intermediate checkpoints and account for terrain (OS pp.8-10,23-25).",
+          "noteLiteral": "OS советует выбирать промежуточные контрольные точки и учитывать рельеф, чтобы следовать маршруту с опорой на местность.",
+          "noteJudgment": "OS route section supports supplemental checkpoint/terrain advice, not a restatement of the key.",
+          "primaryLocator": "OS pp.8-10,23-25 recommend checkpoints/land features and attention to terrain."
+        }
+      ],
+      "fullExplanationLiteral": "Планирование предшествует прогулке, а следование маршруту означает сверять своё продвижение с нанесённой последовательностью участков. OS рекомендует выбирать промежуточные контрольные точки, учитывая рельеф.",
+      "oneKeyJudgment": "The route already exists and the traveler follows its next segment, so only slot 3 describes following/tracing it, not planning it.",
+      "sixLiteralGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На карте отмечен путь от старта через мост к перевалу. Путешественник сверяется с картой, чтобы выбрать следующий отрезок именно этой последовательности. Какое действие он выполняет?",
+            "answers": [
+              "Планировать маршрут",
+              "Оценить время в пути",
+              "Найти координаты контрольной точки",
+              "Проследить маршрут"
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "4d1a2ab7627f02a95b2531d6b0efbb17a9e6118305415c7618bfbf896dab8e18",
+          "sources": [
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "OS full PDF pp.8-10 distinguishes pre-planning a route from following it during travel."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Планирование предшествует прогулке, а следование маршруту означает сверять своё продвижение с нанесённой последовательностью участков. OS рекомендует выбирать промежуточные контрольные точки, учитывая рельеф.",
+          "canonicalSHA256": "2f902bb61ce181a0d058ba533296f9a13450ddf7d06b0d5bcbe826640a5cdc77",
+          "sources": [
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "OS route guidance pp.8-10 describes following a planned route and checking features along the journey."
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Планирование выбирает и наносит путь до выхода; в условии путь уже задан и путешественник проходит его.",
+          "canonicalSHA256": "037a04d27a383057512ec58475cc666924036a81d1e9e8dcf11fe73f203cdcc9",
+          "sources": [
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "OS p.8 places plotting a route before departure."
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Для оценки времени нужны темп и длина участков, а не только порядок мост—перевал.",
+          "canonicalSHA256": "42e41fa93eba82bbbca52dd5a90fbf3ecb3069b0a86cf9f7f3c9a6e71804ce48",
+          "sources": [
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "Time/pace inference from missing duration and rate data; OS preparation guidance pp.8-10 separates journey planning from following the plotted route."
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Координаты задают положение моста или перевала, но не указывают следующий отрезок пути.",
+          "canonicalSHA256": "7924ffe54e03779e3065e0b40e2a71ab254d7584f6ac0ad545848c73c314ebc5",
+          "sources": [
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "OS grid-reference sections locate a point; route-following sections pp.8-10 address sequential travel."
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "OS советует выбирать промежуточные контрольные точки и учитывать рельеф, чтобы следовать маршруту с опорой на местность.",
+          "canonicalSHA256": "31727060dc8d9027277150f445f1a5cdf0ebd88fff951cfd2aff09de890e8ed3",
+          "sources": [
+            {
+              "path": "os-map-reading.full.txt",
+              "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+              "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+              "specificClaim": "OS pp.8-10,23-25 recommend checkpoints/land features and attention to terrain."
+            }
+          ]
+        }
+      ],
+      "primaryLocator": "Ordnance Survey full Map Reading PDF pp.8-10,23-25: pre-plan and follow plotted route, checkpoints, terrain/landmarks.",
+      "authorQualificationStatus": "READY_FOR_COORDINATOR_EXACT_REVIEW"
+    },
+    {
+      "id": "maps-cartography-cadastral-parcels",
+      "topicId": "maps-cartography",
+      "sourceOrder": 87,
+      "frozenDifficulty": "medium",
+      "frozenCorrectIndex": 3,
+      "fullPromptLiteral": "Муниципалитет сверяет границы соседних земельных участков с записями о владельцах и результатами съёмки. Для пространственного слоя нужны отдельные контуры участков и устойчивые номера-ссылки на соответствующие записи. Какой картографический продукт подходит?",
+      "promptGrammarJudgment": "Два связанных требования заданы прямо: parcel boundaries and stable identifiers cross-referenced to records; вопрос просит подходящий product type.",
+      "fullAnswersAndNotes": [
+        {
+          "slot": 0,
+          "answerLiteral": "Топографическая карта общего назначения",
+          "answerJudgment": "Topographic maps show physical features but FAO L25 says common 1:50,000 maps are inadequate for cadastral purpose; plausible general map, wrong parcel precision. Note gives source-backed limitation.",
+          "noteLiteral": "Обычная топографическая карта масштаба 1:50 000, как правило, недостаточно подробна для кадастровой идентификации участков.",
+          "noteJudgment": "FAO L25 directly says ordinary topographic maps inadequate for cadastral purposes; specific scale rationale at L26-L28.",
+          "primaryLocator": "FAO L25-L28: familiar 1:50,000 topographic maps are inadequate for cadastral purposes."
+        },
+        {
+          "slot": 1,
+          "answerLiteral": "Карта земного покрова",
+          "answerJudgment": "Land-cover mapping is a plausible neighboring map purpose; however, the specified need is parcel geometry cross-referenced to registers (FAO L7,L10,L40), which this option does not provide.",
+          "noteLiteral": "Карта земного покрова классифицирует поверхность, а не связывает границы участков с реестром.",
+          "noteJudgment": "FAO L7 notes cadastral maps may include vegetation and land use while still requiring parcel boundaries; L10 requires parcel-to-register cross-reference. This identifies why a land-cover layer alone misses the requested linkage.",
+          "primaryLocator": "FAO L6-L7 describes parcel identities and boundaries, unlike land-cover classification."
+        },
+        {
+          "slot": 2,
+          "answerLiteral": "Дорожная карта",
+          "answerJudgment": "Road map depicts transport features; FAO L7,L10 requires parcel boundaries/identifiers, absent from this purpose. Note explains content mismatch.",
+          "noteLiteral": "Дорожная карта описывает транспортную сеть, а не земельные участки.",
+          "noteJudgment": "FAO L7 and L10 distinguish land parcel boundaries and register IDs from unrelated road network.",
+          "primaryLocator": "FAO L7,L10 contrast land-parcel boundary/reference content with the unrelated road-network purpose in this option."
+        },
+        {
+          "slot": 3,
+          "answerLiteral": "Кадастровая карта",
+          "answerJudgment": "Only cadastral map is designed around parcel boundaries and references linked to registers (FAO L4,L7,L10,L40). Correct note adds identifier qualities and subdivision updates (L19,L42).",
+          "noteLiteral": "FAO отмечает, что идентификаторы должны быть уникальными и постоянными, но обновляться при разделе участка.",
+          "noteJudgment": "FAO L19 says identifiers should be unique/permanent but updateable on subdivision; L42 requires boundary changes be recorded promptly. Useful operational fact beyond the correct map type.",
+          "primaryLocator": "FAO L19 identifiers should be unique and permanent but updateable; L42 requires boundary changes to be recorded."
+        }
+      ],
+      "fullExplanationLiteral": "Кадастровая карта показывает границы отдельных земельных участков и входит в систему, связанную с соответствующими реестрами. Номер участка позволяет перейти от контура к данным о съёмке, владении, стоимости или использовании.",
+      "oneKeyJudgment": "Cadastral maps show parcel boundaries and form a linked system with registers; only slot 3 answers both the geometry and record-link requirement (FAO L4,L7,L10,L40).",
+      "sixLiteralGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Муниципалитет сверяет границы соседних земельных участков с записями о владельцах и результатами съёмки. Для пространственного слоя нужны отдельные контуры участков и устойчивые номера-ссылки на соответствующие записи. Какой картографический продукт подходит?",
+            "answers": [
+              "Топографическая карта общего назначения",
+              "Карта земного покрова",
+              "Дорожная карта",
+              "Кадастровая карта"
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "dc97002686783551cb4477dedf9d4039b268a46c8bdd4fcf3e419ff1fd05dd51",
+          "sources": [
+            {
+              "path": "fao-cadastral-maps.full.txt",
+              "url": "https://www.fao.org/4/v4860e/v4860e03.htm",
+              "sha256": "a41954dee241c23effc327f409fcceb5f0c84a22739c6514e914c49f3601995c",
+              "specificClaim": "FAO full page L4,L7,L10,L40: cadastral plans show parcels/boundaries and identifiers connect map to registers."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Кадастровая карта показывает границы отдельных земельных участков и входит в систему, связанную с соответствующими реестрами. Номер участка позволяет перейти от контура к данным о съёмке, владении, стоимости или использовании.",
+          "canonicalSHA256": "838e06b4edfae5b858e6aaf52078752b72b7700b730fd9a0245836b9a79de958",
+          "sources": [
+            {
+              "path": "fao-cadastral-maps.full.txt",
+              "url": "https://www.fao.org/4/v4860e/v4860e03.htm",
+              "sha256": "a41954dee241c23effc327f409fcceb5f0c84a22739c6514e914c49f3601995c",
+              "specificClaim": "FAO L4,L7,L10,L40: maps/registers are complementary, parcel boundaries are shown, identifiers cross-reference survey and ownership records."
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Обычная топографическая карта масштаба 1:50 000, как правило, недостаточно подробна для кадастровой идентификации участков.",
+          "canonicalSHA256": "d5fb1c75f65d99a259ae78ca99ba7f7b5f7516e09da8de1f958d4bfac4d9f4d9",
+          "sources": [
+            {
+              "path": "fao-cadastral-maps.full.txt",
+              "url": "https://www.fao.org/4/v4860e/v4860e03.htm",
+              "sha256": "a41954dee241c23effc327f409fcceb5f0c84a22739c6514e914c49f3601995c",
+              "specificClaim": "FAO L25-L28: familiar 1:50,000 topographic maps are inadequate for cadastral purposes."
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Карта земного покрова классифицирует поверхность, а не связывает границы участков с реестром.",
+          "canonicalSHA256": "f766c220e8d8fdd14f20b32148e7215d4fe71bf5363dbe9872d834a5d8d432c4",
+          "sources": [
+            {
+              "path": "fao-cadastral-maps.full.txt",
+              "url": "https://www.fao.org/4/v4860e/v4860e03.htm",
+              "sha256": "a41954dee241c23effc327f409fcceb5f0c84a22739c6514e914c49f3601995c",
+              "specificClaim": "FAO L6-L7 describes parcel identities and boundaries, unlike land-cover classification."
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Дорожная карта описывает транспортную сеть, а не земельные участки.",
+          "canonicalSHA256": "a6037e7e26c3014a14a290d90c03ba740d6f0bb9650b46ccd11ae6ea55343518",
+          "sources": [
+            {
+              "path": "fao-cadastral-maps.full.txt",
+              "url": "https://www.fao.org/4/v4860e/v4860e03.htm",
+              "sha256": "a41954dee241c23effc327f409fcceb5f0c84a22739c6514e914c49f3601995c",
+              "specificClaim": "FAO L7,L10 contrast land-parcel boundary/reference content with the unrelated road-network purpose in this option."
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "FAO отмечает, что идентификаторы должны быть уникальными и постоянными, но обновляться при разделе участка.",
+          "canonicalSHA256": "72bf87b7ccc50c8473a1a2f3c866080d861627812eabf6a9b8381fdb13b49826",
+          "sources": [
+            {
+              "path": "fao-cadastral-maps.full.txt",
+              "url": "https://www.fao.org/4/v4860e/v4860e03.htm",
+              "sha256": "a41954dee241c23effc327f409fcceb5f0c84a22739c6514e914c49f3601995c",
+              "specificClaim": "FAO L19 identifiers should be unique and permanent but updateable; L42 requires boundary changes to be recorded."
+            }
+          ]
+        }
+      ],
+      "primaryLocator": "FAO full Cadastral Maps page L4-L10 (maps/registers and parcel identifiers), L24-L28 (topographic-map and scale limits), L40-L42 (reference numbers link survey/ownership records; updates).",
+      "authorQualificationStatus": "READY_FOR_COORDINATOR_EXACT_REVIEW"
+    }
+  ],
+  "rawSources": [
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author-qualification-01a13e5e/remaining4-final/sources/usgs-national-map-viewer.response.json",
+      "url": "https://www.usgs.gov/tools/national-map-viewer",
+      "bytes": 13703,
+      "sha256": "500e160069f8e389c74d555a06e4eeceb2faa67a6a5fc4df171a1b09fcd252a3",
+      "locator": "Full native reader output, turn0view0, L0-L225; relevant L12,L23-L25,L50,L58-L63,L127-L128."
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author-qualification-01a13e5e/remaining4-final/sources/os-map-reading.full.txt",
+      "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+      "bytes": 35098,
+      "sha256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa",
+      "locator": "Full saved 27-page PDF text context; pp.8-10,13-16,23-25."
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author-qualification-01a13e5e/remaining4-final/sources/usgs-map-scales.full.body",
+      "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+      "bytes": 365302,
+      "sha256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+      "locator": "Full saved USGS Fact Sheet 015-02 PDF byte body; scale definition and map-ground relationship."
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author-qualification-01a13e5e/remaining4-final/sources/esri-coordinate-systems.full.txt",
+      "url": "https://doc.esri.com/en/arcgis-pro/latest/help/mapping/properties/coordinate-systems-and-projections.html",
+      "bytes": 9159,
+      "sha256": "ba55b8c4e0f25c237ecd68eb1f96b39d612fb6072eeaf02502ec3ae4de94e0e8",
+      "locator": "Full page L0-L58; geographic x/y/signs L13-L16; projection compromises L35-L37."
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author-qualification-01a13e5e/remaining4-final/sources/fao-cadastral-maps.full.txt",
+      "url": "https://www.fao.org/4/v4860e/v4860e03.htm",
+      "bytes": 10517,
+      "sha256": "a41954dee241c23effc327f409fcceb5f0c84a22739c6514e914c49f3601995c",
+      "locator": "Full page L0-L44; parcel/register/cross-reference L4-L10,L19,L40-L42; scale L24-L28."
+    }
+  ],
+  "provenanceNote": "Each prompt/order/key field group includes support for its map/geography premise; scenario values are explicitly synthetic and arithmetic conclusions derive from them. Explanations and every note have option-specific source or calculation locators."
+}

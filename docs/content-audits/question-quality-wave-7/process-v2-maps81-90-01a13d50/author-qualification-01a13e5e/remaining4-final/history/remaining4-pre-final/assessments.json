@@ -1,0 +1,245 @@
+{
+  "schemaVersion": 1,
+  "assessments": [
+    {
+      "id": "maps-cartography-waldseemuller-america",
+      "difficultyBasis": "Medium: integrate two distinct historical cartographic clues to select the supported interpretation; not a recall of the title or one isolated fact.",
+      "frozenDifficulty": "medium",
+      "frozenCorrectIndex": 3,
+      "fullAssessment": {
+        "prompt": {
+          "exact": "Вы готовите этикетку к карте мира 1507 года и хотите показать, что автор учёл географические открытия и изменил изображение мира. Какая пара деталей карты лучше всего подтверждает этот вывод?",
+          "grammar": "Clear natural Russian; one actionable question and all units/conditions stated."
+        },
+        "answers": [
+          {
+            "slot": 0,
+            "text": "Америка названа в честь Веспуччи; западные земли всё ещё включены в Азию.",
+            "judgment": "Plausible distractor: fails the named order/sign/normalization/property distinction."
+          },
+          {
+            "slot": 1,
+            "text": "Показан новый западный материк; Тихий океан включён в Атлантический.",
+            "judgment": "Plausible distractor: fails the named order/sign/normalization/property distinction."
+          },
+          {
+            "slot": 2,
+            "text": "Карта обновляет географические сведения; при этом сохраняет прежнее трёхчастное деление мира.",
+            "judgment": "Plausible distractor: fails the named order/sign/normalization/property distinction."
+          },
+          {
+            "slot": 3,
+            "text": "Западное полушарие отделено от Азии; Тихий океан показан отдельно.",
+            "judgment": "Key: uniquely satisfies every stated condition."
+          }
+        ],
+        "explanation": {
+          "exact": "Две детали вместе показывают новый образ географии: отдельное западное полушарие и отдельный Тихий океан. Название «Америка» связано с признанием нового континента, а не только с авторством карты.",
+          "judgment": "Derivation or factual inference answers the whole prompt and states the relevant limit."
+        },
+        "notes": [
+          {
+            "slot": 0,
+            "exact": "Название связано с признанием Веспуччи нового континента, но вторая часть утверждения неверна.",
+            "judgment": "Option-specific correction; explains why this distractor fails."
+          },
+          {
+            "slot": 1,
+            "exact": "На карте Тихий океан отделён как отдельный океан, а не включён в Атлантический.",
+            "judgment": "Option-specific correction; explains why this distractor fails."
+          },
+          {
+            "slot": 2,
+            "exact": "Карта не сохраняет старое трёхчастное деление: она отделяет западное полушарие от Азии.",
+            "judgment": "Option-specific correction; explains why this distractor fails."
+          },
+          {
+            "slot": 3,
+            "exact": "Эти две детали прямо соответствуют изображению карты 1507 года в каталоге Библиотеки Конгресса.",
+            "judgment": "Explains this option with a specific misconception or an additional grounded fact; does not simply repeat the key."
+          }
+        ]
+      }
+    },
+    {
+      "id": "maps-cartography-area-distortion",
+      "difficultyBasis": "Medium: normalize two unequal mapped areas by unequal ground areas, then compare the resulting ratios.",
+      "frozenDifficulty": "medium",
+      "frozenCorrectIndex": 3,
+      "fullAssessment": {
+        "prompt": {
+          "exact": "В ГИС сравнивают участки с наземными площадями 80 км² (A) и 100 км² (B). На одной проекции их изображения занимают 4 см² и 6 см² соответственно. После нормирования на наземную площадь во сколько раз коэффициент отображения площади B больше, чем A?",
+          "grammar": "Clear natural Russian; one actionable question and all units/conditions stated."
+        },
+        "answers": [
+          {
+            "slot": 0,
+            "text": "В 0,5 раза",
+            "judgment": "Plausible distractor: fails the named order/sign/normalization/property distinction."
+          },
+          {
+            "slot": 1,
+            "text": "В 0,8 раза",
+            "judgment": "Plausible distractor: fails the named order/sign/normalization/property distinction."
+          },
+          {
+            "slot": 2,
+            "text": "В 1 раз",
+            "judgment": "Plausible distractor: fails the named order/sign/normalization/property distinction."
+          },
+          {
+            "slot": 3,
+            "text": "В 1,2 раза",
+            "judgment": "Key: uniquely satisfies every stated condition."
+          }
+        ],
+        "explanation": {
+          "exact": "Сначала найдите коэффициенты: для A это 4/80 = 0,05, для B — 6/100 = 0,06 см²/км². Затем сравните их: 0,06/0,05 = 1,2, поэтому нормированный коэффициент B в 1,2 раза больше.",
+          "judgment": "Derivation or factual inference answers the whole prompt and states the relevant limit."
+        },
+        "notes": [
+          {
+            "slot": 0,
+            "exact": "Коэффициент 0,5 был бы у B, если бы после нормирования он составлял половину A; здесь 0,06/0,05 = 1,2.",
+            "judgment": "Option-specific correction; explains why this distractor fails."
+          },
+          {
+            "slot": 1,
+            "exact": "0,8 — обратное отношение 0,05/0,06, то есть A относительно B.",
+            "judgment": "Option-specific correction; explains why this distractor fails."
+          },
+          {
+            "slot": 2,
+            "exact": "Равные коэффициенты дали бы 1; здесь после нормирования получаются 0,05 и 0,06.",
+            "judgment": "Option-specific correction; explains why this distractor fails."
+          },
+          {
+            "slot": 3,
+            "exact": "Отношение сырых площадей 6/4 = 1,5 не учитывает, что наземные площади участков различны.",
+            "judgment": "Explains this option with a specific misconception or an additional grounded fact; does not simply repeat the key."
+          }
+        ]
+      }
+    },
+    {
+      "id": "maps-cartography-shape-distortion",
+      "difficultyBasis": "Medium: compare four signed angle changes, rank absolute deviations, and report both location and direction.",
+      "frozenDifficulty": "medium",
+      "frozenCorrectIndex": 3,
+      "fullAssessment": {
+        "prompt": {
+          "exact": "При проверке проекции сравнили четыре угла на местности и на карте: P — 90°/84°, Q — 60°/72°, R — 90°/90°, S — 45°/39°. В каком месте абсолютное угловое искажение наибольшее и на сколько градусов угол на карте отличается от исходного?",
+          "grammar": "Clear natural Russian; one actionable question and all units/conditions stated."
+        },
+        "answers": [
+          {
+            "slot": 0,
+            "text": "В P, на 6° меньше",
+            "judgment": "Plausible distractor: fails the named order/sign/normalization/property distinction."
+          },
+          {
+            "slot": 1,
+            "text": "В R, искажения нет, поэтому проекция сохраняет все углы",
+            "judgment": "Plausible distractor: fails the named order/sign/normalization/property distinction."
+          },
+          {
+            "slot": 2,
+            "text": "В S, на 6° меньше",
+            "judgment": "Plausible distractor: fails the named order/sign/normalization/property distinction."
+          },
+          {
+            "slot": 3,
+            "text": "В Q, на 12° больше",
+            "judgment": "Key: uniquely satisfies every stated condition."
+          }
+        ],
+        "explanation": {
+          "exact": "Сравните абсолютные разности: P — 6°, Q — 12°, R — 0°, S — 6°. Наибольшее отклонение у Q: угол на карте больше исходного на 12°; это локальное сравнение не характеризует все свойства проекции.",
+          "judgment": "Derivation or factual inference answers the whole prompt and states the relevant limit."
+        },
+        "notes": [
+          {
+            "slot": 0,
+            "exact": "В P разность составляет 90° − 84° = 6°, меньше, чем в Q.",
+            "judgment": "Option-specific correction; explains why this distractor fails."
+          },
+          {
+            "slot": 1,
+            "exact": "В R угол сохранён, но одно совпадение не доказывает сохранение углов во всех местах.",
+            "judgment": "Option-specific correction; explains why this distractor fails."
+          },
+          {
+            "slot": 2,
+            "exact": "В S разность равна 45° − 39° = 6°, меньше максимума.",
+            "judgment": "Option-specific correction; explains why this distractor fails."
+          },
+          {
+            "slot": 3,
+            "exact": "Для Q разность 72° − 60° = 12°; знак «больше» показывает направление изменения.",
+            "judgment": "Explains this option with a specific misconception or an additional grounded fact; does not simply repeat the key."
+          }
+        ]
+      }
+    },
+    {
+      "id": "maps-cartography-distance-distortion",
+      "difficultyBasis": "Medium: derive each local scale from unequal ground and mapped lengths, then compare normalized values.",
+      "frozenDifficulty": "medium",
+      "frozenCorrectIndex": 3,
+      "fullAssessment": {
+        "prompt": {
+          "exact": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+          "grammar": "Clear natural Russian; one actionable question and all units/conditions stated."
+        },
+        "answers": [
+          {
+            "slot": 0,
+            "text": "В 0,8 раза",
+            "judgment": "Plausible distractor: fails the named order/sign/normalization/property distinction."
+          },
+          {
+            "slot": 1,
+            "text": "В 1 раз",
+            "judgment": "Plausible distractor: fails the named order/sign/normalization/property distinction."
+          },
+          {
+            "slot": 2,
+            "text": "В 1,5 раза",
+            "judgment": "Plausible distractor: fails the named order/sign/normalization/property distinction."
+          },
+          {
+            "slot": 3,
+            "text": "В 1,25 раза",
+            "judgment": "Key: uniquely satisfies every stated condition."
+          }
+        ],
+        "explanation": {
+          "exact": "Нормируйте изображения: A — 3,0/12 = 0,25 см/км, B — 1,6/8 = 0,20 см/км. Отношение 0,25/0,20 = 1,25, значит локальный масштаб A в 1,25 раза больше; сравнение относится к этим участкам.",
+          "judgment": "Derivation or factual inference answers the whole prompt and states the relevant limit."
+        },
+        "notes": [
+          {
+            "slot": 0,
+            "exact": "0,8 — обратное отношение масштаба B к масштабу A.",
+            "judgment": "Option-specific correction; explains why this distractor fails."
+          },
+          {
+            "slot": 1,
+            "exact": "Одинаковые масштабы дали бы одинаковую длину изображения на каждый километр; здесь коэффициенты 0,25 и 0,20 см/км.",
+            "judgment": "Option-specific correction; explains why this distractor fails."
+          },
+          {
+            "slot": 2,
+            "exact": "1,5 получается из необработанного отношения 3,0/1,6; оно не учитывает разные наземные длины.",
+            "judgment": "Option-specific correction; explains why this distractor fails."
+          },
+          {
+            "slot": 3,
+            "exact": "Сначала каждый отрезок нужно нормировать на наземное расстояние; затем сравнить 0,25 с 0,20.",
+            "judgment": "Explains this option with a specific misconception or an additional grounded fact; does not simply repeat the key."
+          }
+        ]
+      }
+    }
+  ]
+}

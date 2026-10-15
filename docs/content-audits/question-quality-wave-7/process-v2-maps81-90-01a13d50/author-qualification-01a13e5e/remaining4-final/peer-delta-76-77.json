@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "stage": "current-peer-delta-only",
+  "commit": "fda00931c11d854e210c03a21d23dbf9e2663b57",
+  "sourceOrder": [
+    76,
+    77
+  ],
+  "peers": [
+    {
+      "version": "CURRENT",
+      "order": 76,
+      "card": {
+        "id": "maps-cartography-closed-hill",
+        "difficulty": "easy",
+        "prompt": "Какой вид рельефа показывают замкнутые горизонтали, если отметки растут к центру?",
+        "answers": [
+          {
+            "text": "Крутой склон",
+            "note": "Чтобы оценить уклон, учитывают высотный интервал карты и расстояние на местности."
+          },
+          {
+            "text": "Пологий склон",
+            "note": "Пешеход может идти вдоль горизонтали, чтобы избежать лишнего набора высоты."
+          },
+          {
+            "text": "Долина",
+            "note": "Ручьи часто проходят по дну долин и на карте показаны синими линиями."
+          },
+          {
+            "text": "Холм",
+            "note": "Точечная отметка сообщает числовую высоту отдельной точки на карте."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Замкнутые горизонтали с ростом высот к центру показывают холм. Отдельная точечная отметка может подписать высоту вершины, а каждая горизонталь соединяет точки одинаковой высоты.",
+        "source": {
+          "title": "Topographic Map Symbols",
+          "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "sha256": "315d5996e7699aa40a722ab01e5dd7e411ed0ddd51bef0556fe14ee9a151b131",
+      "ground": "src/content/topics/maps-cartography.json at fda00931c11d854e210c03a21d23dbf9e2663b57; exact current card"
+    },
+    {
+      "version": "CURRENT",
+      "order": 77,
+      "card": {
+        "id": "maps-cartography-v-valley",
+        "difficulty": "easy",
+        "prompt": "Какую форму рельефа показывают V-образные горизонтали, направленные вершиной вверх по течению?",
+        "answers": [
+          {
+            "text": "Крутой склон",
+            "note": "Для оценки уклона важны высотный интервал карты и расстояние на местности."
+          },
+          {
+            "text": "Пологий склон",
+            "note": "Маршрут вдоль горизонталей помогает идти, почти не меняя высоту."
+          },
+          {
+            "text": "Холм",
+            "note": "Точечная отметка сообщает числовую высоту отдельной точки на карте."
+          },
+          {
+            "text": "Долина",
+            "note": "Ручьи обычно текут в долинах; на топокарте их показывают синими линиями."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "V-образные изгибы горизонталей указывают на долину, когда вершина V обращена вверх по течению. Ручьи обычно проходят по долинам и обозначаются на топографических картах синими линиями.",
+        "source": {
+          "title": "Topographic Map Symbols",
+          "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "sha256": "a2817e51099ebfd8f9fb37d1ec0783646c165e06500533b310fe1601f8383a54",
+      "ground": "src/content/topics/maps-cartography.json at fda00931c11d854e210c03a21d23dbf9e2663b57; exact current card"
+    }
+  ],
+  "assessments": [
+    {
+      "id": "maps-cartography-closed-hill",
+      "order": 76,
+      "currentCardSHA256": "315d5996e7699aa40a722ab01e5dd7e411ed0ddd51bef0556fe14ee9a151b131",
+      "promptLiteral": "Какой вид рельефа показывают замкнутые горизонтали, если отметки растут к центру?",
+      "answerLiterals": [
+        "Крутой склон",
+        "Пологий склон",
+        "Долина",
+        "Холм"
+      ],
+      "correctIndex": 3,
+      "uniquenessAssessment": "The current prompt supplies the diagnostic contour geometry and direction; only the landform in slot 3 fits. The paired neighbor 76/77 tests the complementary hill-versus-valley contour pattern.",
+      "relationshipTo81to90": "Closed contours whose elevations increase inward identify a hill; none of target 81–90 asks contour interpretation. This is adjacent relief-reading vocabulary, distinct from map orientation (82), following a route (85), cadastral boundaries (87), or projection distortion (88–90).",
+      "checkedAgainstTargetIds": [
+        "maps-cartography-digital-map",
+        "maps-cartography-orient-align",
+        "maps-cartography-measure-distance",
+        "maps-cartography-read-coordinates",
+        "maps-cartography-follow-route",
+        "maps-cartography-waldseemuller-america",
+        "maps-cartography-cadastral-parcels",
+        "maps-cartography-area-distortion",
+        "maps-cartography-shape-distortion",
+        "maps-cartography-distance-distortion"
+      ],
+      "targetPairAssessments": [
+        {
+          "targetId": "maps-cartography-digital-map",
+          "relationship": "The digital-viewer task is about access to geographic data and web-map tools; contour cues for landforms are a separate map-reading skill."
+        },
+        {
+          "targetId": "maps-cartography-orient-align",
+          "relationship": "Compass/map alignment is an orientation procedure; this card classifies relief from contour geometry, so neither supplies the other answer."
+        },
+        {
+          "targetId": "maps-cartography-measure-distance",
+          "relationship": "Distance measurement applies a scale to path length; the hill/valley cards interpret contour patterns and do not ask for distance."
+        },
+        {
+          "targetId": "maps-cartography-read-coordinates",
+          "relationship": "Coordinate reading interprets longitude/latitude axes and signs; these cards read elevation-contour shapes, with no coordinate tuple."
+        },
+        {
+          "targetId": "maps-cartography-follow-route",
+          "relationship": "Route following tracks a sequence of waypoints/segments; relief interpretation can inform a route but is not the requested operation in this card."
+        },
+        {
+          "targetId": "maps-cartography-waldseemuller-america",
+          "relationship": "The historical map card assesses a 1507 world-picture change; these assess landform symbols and contain no historical claim."
+        },
+        {
+          "targetId": "maps-cartography-cadastral-parcels",
+          "relationship": "Cadastral identification links parcel boundaries to records; contour-defined landforms do not identify parcels or register entries."
+        },
+        {
+          "targetId": "maps-cartography-area-distortion",
+          "relationship": "Area distortion compares normalized mapped areas; a hill or valley contour pattern is physical relief information, not a relative-area projection test."
+        },
+        {
+          "targetId": "maps-cartography-shape-distortion",
+          "relationship": "Both mention shape-related ideas, but this card uses contour geometry to name landforms while the target measures local angular projection distortion from explicit values."
+        },
+        {
+          "targetId": "maps-cartography-distance-distortion",
+          "relationship": "Distance distortion compares normalized local scales; these cards infer hill/valley from elevation contours, not map/ground length ratios."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-v-valley",
+      "order": 77,
+      "currentCardSHA256": "a2817e51099ebfd8f9fb37d1ec0783646c165e06500533b310fe1601f8383a54",
+      "promptLiteral": "Какую форму рельефа показывают V-образные горизонтали, направленные вершиной вверх по течению?",
+      "answerLiterals": [
+        "Крутой склон",
+        "Пологий склон",
+        "Холм",
+        "Долина"
+      ],
+      "correctIndex": 3,
+      "uniquenessAssessment": "The current prompt supplies the diagnostic contour geometry and direction; only the landform in slot 3 fits. The paired neighbor 76/77 tests the complementary hill-versus-valley contour pattern.",
+      "relationshipTo81to90": "V-shaped contours pointing upstream identify a valley; none of target 81–90 asks drainage/contour interpretation. It is distinct from following an already marked route (85) and from projection shape/distance/area properties (88–90).",
+      "checkedAgainstTargetIds": [
+        "maps-cartography-digital-map",
+        "maps-cartography-orient-align",
+        "maps-cartography-measure-distance",
+        "maps-cartography-read-coordinates",
+        "maps-cartography-follow-route",
+        "maps-cartography-waldseemuller-america",
+        "maps-cartography-cadastral-parcels",
+        "maps-cartography-area-distortion",
+        "maps-cartography-shape-distortion",
+        "maps-cartography-distance-distortion"
+      ],
+      "targetPairAssessments": [
+        {
+          "targetId": "maps-cartography-digital-map",
+          "relationship": "The digital-viewer task is about access to geographic data and web-map tools; contour cues for landforms are a separate map-reading skill."
+        },
+        {
+          "targetId": "maps-cartography-orient-align",
+          "relationship": "Compass/map alignment is an orientation procedure; this card classifies relief from contour geometry, so neither supplies the other answer."
+        },
+        {
+          "targetId": "maps-cartography-measure-distance",
+          "relationship": "Distance measurement applies a scale to path length; the hill/valley cards interpret contour patterns and do not ask for distance."
+        },
+        {
+          "targetId": "maps-cartography-read-coordinates",
+          "relationship": "Coordinate reading interprets longitude/latitude axes and signs; these cards read elevation-contour shapes, with no coordinate tuple."
+        },
+        {
+          "targetId": "maps-cartography-follow-route",
+          "relationship": "Route following tracks a sequence of waypoints/segments; relief interpretation can inform a route but is not the requested operation in this card."
+        },
+        {
+          "targetId": "maps-cartography-waldseemuller-america",
+          "relationship": "The historical map card assesses a 1507 world-picture change; these assess landform symbols and contain no historical claim."
+        },
+        {
+          "targetId": "maps-cartography-cadastral-parcels",
+          "relationship": "Cadastral identification links parcel boundaries to records; contour-defined landforms do not identify parcels or register entries."
+        },
+        {
+          "targetId": "maps-cartography-area-distortion",
+          "relationship": "Area distortion compares normalized mapped areas; a hill or valley contour pattern is physical relief information, not a relative-area projection test."
+        },
+        {
+          "targetId": "maps-cartography-shape-distortion",
+          "relationship": "Both mention shape-related ideas, but this card uses contour geometry to name landforms while the target measures local angular projection distortion from explicit values."
+        },
+        {
+          "targetId": "maps-cartography-distance-distortion",
+          "relationship": "Distance distortion compares normalized local scales; these cards infer hill/valley from elevation contours, not map/ground length ratios."
+        }
+      ]
+    }
+  ],
+  "unchangedScope": "No other current or proposed neighbor was re-read or altered."
+}
