@@ -1,0 +1,676 @@
+{
+  "schemaVersion": 1,
+  "role": "OTHER independent INITIAL reader",
+  "scope": [
+    "maps-cartography-generalization-select",
+    "maps-cartography-classification-groups",
+    "maps-cartography-label-placement"
+  ],
+  "sourceSnapshot": "23f619cb2484a53d2d44a49d16c446a7faa7b3b7",
+  "applyCommit": "4bbbae7e0014fd476b7c1c08b2ea5697a503783f",
+  "actualRead": "working CURRENT cards verified byte-equivalent canonical JSON to exact applied cards",
+  "qualityCredit": 0,
+  "stage": "INITIAL; one separate author cycle1 allowed; no self-fix",
+  "canonicalization": "UTF8 json.dumps(sort_keys=True,separators=(',',':'),ensure_ascii=False) for card and all six groups including scalar strings",
+  "processReference": "git show 12e5581b:.agents/references/question-revision.md",
+  "authorVerdictsInherited": false,
+  "qaVerdictsInherited": false,
+  "technicalFinalNoteBindings": "All 12 substitutions and all 18 groups independently bind to CURRENT final literals. Stale correct-note literals in author fourSubstitutions were not used.",
+  "sourcesIndex": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/primary-index.json",
+  "cards": [
+    {
+      "id": "maps-cartography-generalization-select",
+      "sourceOrder": 92,
+      "status": "FIX",
+      "card": {
+        "id": "maps-cartography-generalization-select",
+        "difficulty": "medium",
+        "prompt": "Слой дорог 1:25 000 нужно подготовить для карты 1:50 000: убрать часть второстепенных дорог, сохранив связность сети, а геометрию оставшихся линий упростить. Какой набор действий выполняет обе задачи?",
+        "answers": [
+          {
+            "text": "Разбить значения атрибута на равные интервалы и окрасить классы.",
+            "note": "Классификация атрибута меняет тематическое отображение, но сама не отбирает и не упрощает объекты."
+          },
+          {
+            "text": "Увеличить символы дорог и переместить подписи населённых пунктов.",
+            "note": "Символы и подписи меняют оформление, но не состав и геометрию дорожных данных."
+          },
+          {
+            "text": "Упростить геометрию всех дорог, оставив каждый объект.",
+            "note": "Упрощение уменьшает число вершин, но само по себе не убирает второстепенные объекты."
+          },
+          {
+            "text": "Сократить набор объектов с сохранением связности, затем удалить лишние вершины оставшихся линий.",
+            "note": "В документационном примере для масштаба 1:50 000 малые здания отбирают по площади, а у оставшихся убирают вогнутости, выступы и лишние вершины."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Для более мелкого масштаба генерализация может сначала сократить число объектов, сохраняя связность, а затем упростить геометрию линий удалением лишних вершин. Классификация и оформление не выполняют эти операции над дорожными данными.",
+        "source": {
+          "title": "Automating conflict resolution and generalization workflows with geoprocessing | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.6/tool-reference/cartography/conflict-resolution-and-generalization-with-geoprocessing.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "canonicalCardSHA256": "1e30c8252c53d15b790cec0910c54ade8a58c046869da927504561581c2df0d0",
+      "exactApplyMatched": true,
+      "sixCanonicalGroups": [
+        {
+          "group": "prompt",
+          "literal": {
+            "prompt": "Слой дорог 1:25 000 нужно подготовить для карты 1:50 000: убрать часть второстепенных дорог, сохранив связность сети, а геометрию оставшихся линий упростить. Какой набор действий выполняет обе задачи?",
+            "answers": [
+              "Разбить значения атрибута на равные интервалы и окрасить классы.",
+              "Увеличить символы дорог и переместить подписи населённых пунктов.",
+              "Упростить геометрию всех дорог, оставив каждый объект.",
+              "Сократить набор объектов с сохранением связности, затем удалить лишние вершины оставшихся линий."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "bcfbaa2299f52d619d5b3e893ae5187cf0322a897fb7fe8683647f1cec8e2e52",
+          "assessment": "Prompt уже прямо задаёт убрать часть дорог с сохранением связности и упростить оставшиеся; ключ повторяет обе операции с термином «вершины». Ни выбор подходящего удаления из сети, ни проверка связности, ни вывод из масштаба не требуются. Масштабы 1:25 000/1:50 000 декоративны: их удаление не меняет ответ. Отбрасывание очевидно неполных действий — недостаточное содержательное применение для frozen medium.",
+          "sourceGrounds": [
+            "class: introductory classification paragraph; gen: Combining generalization tasks",
+            "gen: Combining generalization tasks; label: Position labels",
+            "gen: complexity reduced by removing vertices; sample SimplifyLine",
+            "gen: BUILDINGS, Select footprints Shape_Area > 100; SimplifyBuilding"
+          ],
+          "keyAssessment": [
+            "Неверен для обеих операций.",
+            "Не выполняет ни одну из двух операций над дорожными данными.",
+            "Неверен: все дороги остаются, первое условие не выполнено.",
+            "Ключ 3 содержательно соответствует условию, но практически пересказывает его."
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Для более мелкого масштаба генерализация может сначала сократить число объектов, сохраняя связность, а затем упростить геометрию линий удалением лишних вершин. Классификация и оформление не выполняют эти операции над дорожными данными.",
+          "canonicalSHA256": "12fc9059ed03215d836458885b94fc13ad9b0bf19ca5bd50da8e1c3867813ea1",
+          "assessment": "Последовательность сокращения features без потери connectivity и последующего удаления vertices подтверждена; не исправляет простоту prompt.",
+          "sourceGrounds": [
+            "gen: Combining generalization tasks"
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Классификация атрибута меняет тематическое отображение, но сама не отбирает и не упрощает объекты.",
+          "canonicalSHA256": "46ba1dfe307e3932698eac25e029ec52b4440a47bdfcda5aaa0cfeb06859fcbf",
+          "assessment": "Точна в контексте числовой классификации; классификация поля задаёт классы graduated symbology, а workflow отдельно сокращает features и vertices.",
+          "sourceGrounds": [
+            "class: introductory classification paragraph; gen: Combining generalization tasks"
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Символы и подписи меняют оформление, но не состав и геометрию дорожных данных.",
+          "canonicalSHA256": "b04b46a63c7fbdc12b5e1b9d78b53e181768e8226e5c9c1ae7332273e34d122a",
+          "assessment": "Верна в пределах перечисленных действий: изменение символа/текста не равно изменению геометрии и состава данных. Workflow различает symbology и сокращение features.",
+          "sourceGrounds": [
+            "gen: Combining generalization tasks; label: Position labels"
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Упрощение уменьшает число вершин, но само по себе не убирает второстепенные объекты.",
+          "canonicalSHA256": "b85409bc1343f9a17e0eb9652789ba4ddd2296859cefd481d9ad45bf1bce1980",
+          "assessment": "Точна для удаления вершин при сохранении всех объектов, явно заданном вариантом; не универсальное утверждение о каждом инструменте GIS.",
+          "sourceGrounds": [
+            "gen: complexity reduced by removing vertices; sample SimplifyLine"
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "В документационном примере для масштаба 1:50 000 малые здания отбирают по площади, а у оставшихся убирают вогнутости, выступы и лишние вершины.",
+          "canonicalSHA256": "567e75be6e055f55db06f8ecb568a882eb29ca2433ce9e02ee35445ac0d21b40",
+          "assessment": "Неточна: sample Select выбирает здания БОЛЬШЕ минимальной площади, Shape_Area > 100; комментарий говорит, что small buildings не подходят. «Малые здания отбирают» без «отсеивают»/«исключают» меняет направление отбора. Вторая часть про indentations/extensions/extra vertices подтверждена.",
+          "sourceGrounds": [
+            "gen: BUILDINGS, Select footprints Shape_Area > 100; SimplifyBuilding"
+          ]
+        }
+      ],
+      "fourFullSubstitutions": [
+        {
+          "answerIndex": 0,
+          "fullPrompt": "Слой дорог 1:25 000 нужно подготовить для карты 1:50 000: убрать часть второстепенных дорог, сохранив связность сети, а геометрию оставшихся линий упростить. Какой набор действий выполняет обе задачи?",
+          "answer": "Разбить значения атрибута на равные интервалы и окрасить классы.",
+          "note": "Классификация атрибута меняет тематическое отображение, но сама не отбирает и не упрощает объекты.",
+          "bindingCanonicalSHA256": "9742c60c2642e3e1c5949bbb40474709619dbad5f3ee54372136d42c70ac2635",
+          "grammar": "Глаголы «разбить» и «окрасить» согласованы; законченный ответ-действие.",
+          "plausibility": "Правдоподобное смешение тематического оформления с подготовкой данных, но не затрагивает ни отбор дорог, ни вершины.",
+          "truthAndUniqueKey": "Неверен для обеих операций.",
+          "noteAccuracyAndUsefulness": "Точна в контексте числовой классификации; классификация поля задаёт классы graduated symbology, а workflow отдельно сокращает features и vertices.",
+          "sourceLocator": "class: introductory classification paragraph; gen: Combining generalization tasks"
+        },
+        {
+          "answerIndex": 1,
+          "fullPrompt": "Слой дорог 1:25 000 нужно подготовить для карты 1:50 000: убрать часть второстепенных дорог, сохранив связность сети, а геометрию оставшихся линий упростить. Какой набор действий выполняет обе задачи?",
+          "answer": "Увеличить символы дорог и переместить подписи населённых пунктов.",
+          "note": "Символы и подписи меняют оформление, но не состав и геометрию дорожных данных.",
+          "bindingCanonicalSHA256": "f13471e8250ceaaf8056eb96aee892c31a071773d779c048d6d27a3a3fc8e0cc",
+          "grammar": "Два однородных инфинитива; «символы дорог» и «подписи» употреблены понятно.",
+          "plausibility": "Реальные операции картографического оформления, но перенос названий городов особенно далёк от удаления второстепенных дорог.",
+          "truthAndUniqueKey": "Не выполняет ни одну из двух операций над дорожными данными.",
+          "noteAccuracyAndUsefulness": "Верна в пределах перечисленных действий: изменение символа/текста не равно изменению геометрии и состава данных. Workflow различает symbology и сокращение features.",
+          "sourceLocator": "gen: Combining generalization tasks; label: Position labels"
+        },
+        {
+          "answerIndex": 2,
+          "fullPrompt": "Слой дорог 1:25 000 нужно подготовить для карты 1:50 000: убрать часть второстепенных дорог, сохранив связность сети, а геометрию оставшихся линий упростить. Какой набор действий выполняет обе задачи?",
+          "answer": "Упростить геометрию всех дорог, оставив каждый объект.",
+          "note": "Упрощение уменьшает число вершин, но само по себе не убирает второстепенные объекты.",
+          "bindingCanonicalSHA256": "a6397be2d9fec1042346f98ebf9c049e330b87b7c5b10ea583992e6254cc48e8",
+          "grammar": "Грамматически полное действие; «оставив каждый объект» ясно задаёт ограничение.",
+          "plausibility": "Наиболее близкий distractor: решает упрощение, игнорируя отбор.",
+          "truthAndUniqueKey": "Неверен: все дороги остаются, первое условие не выполнено.",
+          "noteAccuracyAndUsefulness": "Точна для удаления вершин при сохранении всех объектов, явно заданном вариантом; не универсальное утверждение о каждом инструменте GIS.",
+          "sourceLocator": "gen: complexity reduced by removing vertices; sample SimplifyLine"
+        },
+        {
+          "answerIndex": 3,
+          "fullPrompt": "Слой дорог 1:25 000 нужно подготовить для карты 1:50 000: убрать часть второстепенных дорог, сохранив связность сети, а геометрию оставшихся линий упростить. Какой набор действий выполняет обе задачи?",
+          "answer": "Сократить набор объектов с сохранением связности, затем удалить лишние вершины оставшихся линий.",
+          "note": "В документационном примере для масштаба 1:50 000 малые здания отбирают по площади, а у оставшихся убирают вогнутости, выступы и лишние вершины.",
+          "bindingCanonicalSHA256": "6ee320127d6a1f7afb535a50ecf3c603360234056da7e3e7be7174d487a8fe74",
+          "grammar": "Два последовательных действия сформулированы ясно.",
+          "plausibility": "Единственный вариант, явно выполняющий обе прямо заданные операции.",
+          "truthAndUniqueKey": "Ключ 3 содержательно соответствует условию, но практически пересказывает его.",
+          "noteAccuracyAndUsefulness": "Неточна: sample Select выбирает здания БОЛЬШЕ минимальной площади, Shape_Area > 100; комментарий говорит, что small buildings не подходят. «Малые здания отбирают» без «отсеивают»/«исключают» меняет направление отбора. Вторая часть про indentations/extensions/extra vertices подтверждена.",
+          "sourceLocator": "gen: BUILDINGS, Select footprints Shape_Area > 100; SimplifyBuilding"
+        }
+      ],
+      "frozen": {
+        "difficulty": "medium",
+        "correctIndex": 3,
+        "preserved": true
+      },
+      "level": {
+        "status": "FIX",
+        "reason": "Prompt уже прямо задаёт убрать часть дорог с сохранением связности и упростить оставшиеся; ключ повторяет обе операции с термином «вершины». Ни выбор подходящего удаления из сети, ни проверка связности, ни вывод из масштаба не требуются. Масштабы 1:25 000/1:50 000 декоративны: их удаление не меняет ответ. Отбрасывание очевидно неполных действий — недостаточное содержательное применение для frozen medium."
+      },
+      "correctNoteNewFact": {
+        "literal": "В документационном примере для масштаба 1:50 000 малые здания отбирают по площади, а у оставшихся убирают вогнутости, выступы и лишние вершины.",
+        "beyondPromptAndKey": true,
+        "assessment": "Неточна: sample Select выбирает здания БОЛЬШЕ минимальной площади, Shape_Area > 100; комментарий говорит, что small buildings не подходят. «Малые здания отбирают» без «отсеивают»/«исключают» меняет направление отбора. Вторая часть про indentations/extensions/extra vertices подтверждена.",
+        "status": "FIX"
+      },
+      "defects": [
+        "Frozen medium не достигнут: условие и ключ почти эквивалентны.",
+        "Correct note: неясное/обратное направление отбора малых зданий против Select Shape_Area > 100."
+      ],
+      "peers": {
+        "fullCurrentSnapshot": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/full-current-peers.json",
+        "finalPairs": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/final-proposed-pairs.json",
+        "stagedDrafts": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/staged-drafts-separate.json",
+        "bidirectionalResult": "Different task and required decision from both other FINAL target cards and CURRENT symbolization94. Projection/topology/navigation/draft questions do not solve this prompt in either direction. No semantic duplicate found; no verdict on peer quality."
+      }
+    },
+    {
+      "id": "maps-cartography-classification-groups",
+      "sourceOrder": 93,
+      "status": "FIX",
+      "card": {
+        "id": "maps-cartography-classification-groups",
+        "difficulty": "medium",
+        "prompt": "В слое температурных станций значения лежат в диапазоне 0–80 °C. Для карты нужны четыре класса одинаковой ширины по диапазону; одинаковое число станций не требуется. Какой метод даст нужные интервалы?",
+        "answers": [
+          {
+            "text": "Квантиль: распределить станции поровну между классами.",
+            "note": "Квантиль уравнивает число объектов, поэтому ширина интервалов может различаться."
+          },
+          {
+            "text": "Естественные границы: поставить пороги по группировкам и разрывам значений.",
+            "note": "Естественные границы зависят от распределения значений, а не обеспечивают равную ширину."
+          },
+          {
+            "text": "Ручные интервалы: задать пороги по отдельным решениям редактора.",
+            "note": "Ручные интервалы позволяют задать произвольные пороги, но не предписывают равную ширину."
+          },
+          {
+            "text": "Равные интервалы: разделить диапазон 0–80 °C на четыре отрезка по 20 °C.",
+            "note": "ArcGIS рекомендует равные интервалы для знакомых диапазонов, например температуры и процентов; этот метод подчёркивает величину значения относительно остальных."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Метод равных интервалов делит ширину диапазона на число классов: здесь каждый интервал равен 20 °C. Квантильный метод выравнивал бы число станций, а естественные границы зависят от распределения данных.",
+        "source": {
+          "title": "Data classification methods | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.0/help/mapping/layer-properties/data-classification-methods.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "canonicalCardSHA256": "c1fb1bcd102b7a247f5090801f7afa4e3c4dfaa9b02bb04c4b7f2da837c04997",
+      "exactApplyMatched": true,
+      "sixCanonicalGroups": [
+        {
+          "group": "prompt",
+          "literal": {
+            "prompt": "В слое температурных станций значения лежат в диапазоне 0–80 °C. Для карты нужны четыре класса одинаковой ширины по диапазону; одинаковое число станций не требуется. Какой метод даст нужные интервалы?",
+            "answers": [
+              "Квантиль: распределить станции поровну между классами.",
+              "Естественные границы: поставить пороги по группировкам и разрывам значений.",
+              "Ручные интервалы: задать пороги по отдельным решениям редактора.",
+              "Равные интервалы: разделить диапазон 0–80 °C на четыре отрезка по 20 °C."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "510f41816974b33c614b056cc389e07be2f8ab1bd69455899d4c91d43af729ac",
+          "assessment": "«Четыре класса одинаковой ширины» прямо повторено названием «Равные интервалы». Число 20 °C уже рассчитано в ответе, самостоятельно сравнивать границы/распределения не требуется. Четыре definitions позволяют lexical matching; frozen medium не подтверждён.",
+          "sourceGrounds": [
+            "class: Quantile",
+            "class: Natural breaks (Jenks)",
+            "class: Manual interval; Equal interval",
+            "class: Equal interval, both paragraphs"
+          ],
+          "keyAssessment": [
+            "Не гарантирует равную ширину; для неизвестного распределения требование не выполнено.",
+            "Не гарантирует четыре равных по ширине интервала.",
+            "Не предписывает нужные границы, но может их дать. Вопрос не говорит «автоматически по диапазону и числу классов», поэтому как универсальный способ не исключён строго.",
+            "Ключ 3 подходит и является единственным автоматическим правилом равной ширины среди вариантов, но автоматичность не сформулирована в prompt."
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Метод равных интервалов делит ширину диапазона на число классов: здесь каждый интервал равен 20 °C. Квантильный метод выравнивал бы число станций, а естественные границы зависят от распределения данных.",
+          "canonicalSHA256": "71d26f0c8d66c31fcc3218d0583eadfafc7204caea9391f84d93dfa9cad5e768",
+          "assessment": "80/4=20 верно, различие quantile и natural breaks подтверждено. Ручные интервалы не объяснены как исключённый способ.",
+          "sourceGrounds": [
+            "class: Equal interval, Quantile, Natural breaks"
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Квантиль уравнивает число объектов, поэтому ширина интервалов может различаться.",
+          "canonicalSHA256": "8344054b8cdb9949d945f99f05299186f4fbe0611f2f9920b548177eea382cd0",
+          "assessment": "Точна: Quantile assigns same number of data values; interval widths need not be equal.",
+          "sourceGrounds": [
+            "class: Quantile"
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Естественные границы зависят от распределения значений, а не обеспечивают равную ширину.",
+          "canonicalSHA256": "246ebece754e588294789c01ae481c9b8c44e654862c985a4c81f12f9558f4dd",
+          "assessment": "Точна: boundaries where relatively big differences; classes data-specific.",
+          "sourceGrounds": [
+            "class: Natural breaks (Jenks)"
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Ручные интервалы позволяют задать произвольные пороги, но не предписывают равную ширину.",
+          "canonicalSHA256": "9e1c20262972513ff9cce981d3d2d633ae2a06286b86a2c5d4e1d92bc82a2b22",
+          "assessment": "Верна: Manual interval permits own custom ranges and breaks, в том числе равные. Именно поэтому заметка не доказывает невозможность выполнить задачу вручную.",
+          "sourceGrounds": [
+            "class: Manual interval; Equal interval"
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "ArcGIS рекомендует равные интервалы для знакомых диапазонов, например температуры и процентов; этот метод подчёркивает величину значения относительно остальных.",
+          "canonicalSHA256": "3938a6d318613a87570c2519a1d2d24915d7e939e027ad6e3a163a7dd944120c",
+          "assessment": "Точно передаёт familiar ranges temperature/percentages и amount relative to other values. Новый факт сверх чисел и ответа.",
+          "sourceGrounds": [
+            "class: Equal interval, both paragraphs"
+          ]
+        }
+      ],
+      "fourFullSubstitutions": [
+        {
+          "answerIndex": 0,
+          "fullPrompt": "В слое температурных станций значения лежат в диапазоне 0–80 °C. Для карты нужны четыре класса одинаковой ширины по диапазону; одинаковое число станций не требуется. Какой метод даст нужные интервалы?",
+          "answer": "Квантиль: распределить станции поровну между классами.",
+          "note": "Квантиль уравнивает число объектов, поэтому ширина интервалов может различаться.",
+          "bindingCanonicalSHA256": "5b6d1923dfd5e45c6a82076652914646d7aaa10eb838ae46c1b19115e908de54",
+          "grammar": "Определение после двоеточия грамматически корректно.",
+          "plausibility": "Реальный соседний метод и содержательный контраст равенства численности и ширины.",
+          "truthAndUniqueKey": "Не гарантирует равную ширину; для неизвестного распределения требование не выполнено.",
+          "noteAccuracyAndUsefulness": "Точна: Quantile assigns same number of data values; interval widths need not be equal.",
+          "sourceLocator": "class: Quantile"
+        },
+        {
+          "answerIndex": 1,
+          "fullPrompt": "В слое температурных станций значения лежат в диапазоне 0–80 °C. Для карты нужны четыре класса одинаковой ширины по диапазону; одинаковое число станций не требуется. Какой метод даст нужные интервалы?",
+          "answer": "Естественные границы: поставить пороги по группировкам и разрывам значений.",
+          "note": "Естественные границы зависят от распределения значений, а не обеспечивают равную ширину.",
+          "bindingCanonicalSHA256": "678d9a254c91435734f6b7384ddb65eb19ee8ebd083389b1f569ad7c9f847b38",
+          "grammar": "Порогам дано ясное основание, формулировка согласована.",
+          "plausibility": "Реальный метод классификации, но оптимизирует естественные группы.",
+          "truthAndUniqueKey": "Не гарантирует четыре равных по ширине интервала.",
+          "noteAccuracyAndUsefulness": "Точна: boundaries where relatively big differences; classes data-specific.",
+          "sourceLocator": "class: Natural breaks (Jenks)"
+        },
+        {
+          "answerIndex": 2,
+          "fullPrompt": "В слое температурных станций значения лежат в диапазоне 0–80 °C. Для карты нужны четыре класса одинаковой ширины по диапазону; одинаковое число станций не требуется. Какой метод даст нужные интервалы?",
+          "answer": "Ручные интервалы: задать пороги по отдельным решениям редактора.",
+          "note": "Ручные интервалы позволяют задать произвольные пороги, но не предписывают равную ширину.",
+          "bindingCanonicalSHA256": "2d62f4ecfe944b2142b9e5e1bd70806b80a1bfef6405205e6abaf2f74d1dc371",
+          "grammar": "Фраза понятна; «по отдельным решениям редактора» расплывчато, но грамматически допустимо.",
+          "plausibility": "Реальный метод, способный вручную задать также 20/40/60/80; это создаёт оговорку к уникальности вопроса «даст».",
+          "truthAndUniqueKey": "Не предписывает нужные границы, но может их дать. Вопрос не говорит «автоматически по диапазону и числу классов», поэтому как универсальный способ не исключён строго.",
+          "noteAccuracyAndUsefulness": "Верна: Manual interval permits own custom ranges and breaks, в том числе равные. Именно поэтому заметка не доказывает невозможность выполнить задачу вручную.",
+          "sourceLocator": "class: Manual interval; Equal interval"
+        },
+        {
+          "answerIndex": 3,
+          "fullPrompt": "В слое температурных станций значения лежат в диапазоне 0–80 °C. Для карты нужны четыре класса одинаковой ширины по диапазону; одинаковое число станций не требуется. Какой метод даст нужные интервалы?",
+          "answer": "Равные интервалы: разделить диапазон 0–80 °C на четыре отрезка по 20 °C.",
+          "note": "ArcGIS рекомендует равные интервалы для знакомых диапазонов, например температуры и процентов; этот метод подчёркивает величину значения относительно остальных.",
+          "bindingCanonicalSHA256": "a858117958420199437e8166240be1641e528083dd4fa68ea29c54730f4256e4",
+          "grammar": "Название метода и операция выражены ясно; 80/4=20 верно.",
+          "plausibility": "Прямо назван нужный метод и уже выдано вычисление.",
+          "truthAndUniqueKey": "Ключ 3 подходит и является единственным автоматическим правилом равной ширины среди вариантов, но автоматичность не сформулирована в prompt.",
+          "noteAccuracyAndUsefulness": "Точно передаёт familiar ranges temperature/percentages и amount relative to other values. Новый факт сверх чисел и ответа.",
+          "sourceLocator": "class: Equal interval, both paragraphs"
+        }
+      ],
+      "frozen": {
+        "difficulty": "medium",
+        "correctIndex": 3,
+        "preserved": true
+      },
+      "level": {
+        "status": "FIX",
+        "reason": "«Четыре класса одинаковой ширины» прямо повторено названием «Равные интервалы». Число 20 °C уже рассчитано в ответе, самостоятельно сравнивать границы/распределения не требуется. Четыре definitions позволяют lexical matching; frozen medium не подтверждён."
+      },
+      "correctNoteNewFact": {
+        "literal": "ArcGIS рекомендует равные интервалы для знакомых диапазонов, например температуры и процентов; этот метод подчёркивает величину значения относительно остальных.",
+        "beyondPromptAndKey": true,
+        "assessment": "Точно передаёт familiar ranges temperature/percentages и amount relative to other values. Новый факт сверх чисел и ответа.",
+        "status": "PASS"
+      },
+      "defects": [
+        "Frozen medium не достигнут: распознавание определения, вычисление уже дано.",
+        "Уникальность следует уточнить: ручные границы могут быть равными; требование автоматического правила по диапазону/числу классов отсутствует."
+      ],
+      "peers": {
+        "fullCurrentSnapshot": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/full-current-peers.json",
+        "finalPairs": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/final-proposed-pairs.json",
+        "stagedDrafts": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/staged-drafts-separate.json",
+        "bidirectionalResult": "Different task and required decision from both other FINAL target cards and CURRENT symbolization94. Projection/topology/navigation/draft questions do not solve this prompt in either direction. No semantic duplicate found; no verdict on peer quality."
+      }
+    },
+    {
+      "id": "maps-cartography-label-placement",
+      "sourceOrder": 95,
+      "status": "FIX",
+      "card": {
+        "id": "maps-cartography-label-placement",
+        "difficulty": "medium",
+        "prompt": "На городской карте три конфликтующие подписи: больница имеет наивысший приоритет и обязана остаться; вокзал важен, но может быть передвинут; название парка имеет низший приоритет и допустимо убрать, если места нет. Как настроить подписи, чтобы разрешать конфликты согласно этим условиям?",
+        "answers": [
+          {
+            "text": "Включить размещение с перекрытием для всех подписей и отключить приоритеты.",
+            "note": "Принудительное перекрытие допускает наложения и противоречит требованию разрешать конфликты."
+          },
+          {
+            "text": "Упростить геометрию объектов, удаляя вершины линий до исчезновения конфликтов.",
+            "note": "Упрощение геометрии не задаёт ранги и не управляет альтернативными позициями подписей."
+          },
+          {
+            "text": "Назначить всем трём подписям одинаковый высокий вес.",
+            "note": "Одинаковый ранг не выражает заданную разницу важности и не подсказывает, какую подпись можно убрать."
+          },
+          {
+            "text": "Задать ранги приоритета и разрешить движку менять положение или убирать конфликтующие подписи низшего ранга.",
+            "note": "Вес объекта применяется при конфликте подписи с объектом; для конфликта двух подписей порядок размещения задаёт приоритет подписей."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Задайте ранги «больница, вокзал, парк» и оставьте включённым разрешение конфликтов стандартного движка. Он размещает максимально возможное число подписей без наложения; для низшего ранга можно предусмотреть альтернативное положение или снятие.",
+        "source": {
+          "title": "Label with the Standard Label Engine | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.4/help/mapping/text/label-with-the-standard-label-engine.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "canonicalCardSHA256": "05ad5be898ad7b09303383765402e9a018a96baa5291cd3c023c9f980605ce3b",
+      "exactApplyMatched": true,
+      "sixCanonicalGroups": [
+        {
+          "group": "prompt",
+          "literal": {
+            "prompt": "На городской карте три конфликтующие подписи: больница имеет наивысший приоритет и обязана остаться; вокзал важен, но может быть передвинут; название парка имеет низший приоритет и допустимо убрать, если места нет. Как настроить подписи, чтобы разрешать конфликты согласно этим условиям?",
+            "answers": [
+              "Включить размещение с перекрытием для всех подписей и отключить приоритеты.",
+              "Упростить геометрию объектов, удаляя вершины линий до исчезновения конфликтов.",
+              "Назначить всем трём подписям одинаковый высокий вес.",
+              "Задать ранги приоритета и разрешить движку менять положение или убирать конфликтующие подписи низшего ранга."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "36d9b780a2d9e6fba9114f45285bdd0c363fc1ceceb39607c5b6685ac64b491f",
+          "assessment": "Сценарий мог бы требовать применения политики размещения, однако ключ повторяет заданные ранги/перенос/снятие и не обрабатывает обязательность. Содержательная задача выбора гарантированного поведения пока не имеет корректного решения; medium нельзя зачесть на неисправной политике.",
+          "sourceGrounds": [
+            "label: Place overlapping labels",
+            "gen: SimplifyLine sample; label: Position labels and Prioritize labels",
+            "label: Weight labels and features versus Prioritize labels",
+            "label: opening; Weight labels and features; Prioritize labels"
+          ],
+          "keyAssessment": [
+            "Не задаёт иерархию и допускает наложение всех подписей; не решает задачу выбора при конфликте.",
+            "Не назначает приоритет и не гарантирует больницу; отбрасывается.",
+            "Одинаковый label weight не кодирует порядок приоритета для label-label conflicts. Не выполняет задачу.",
+            "Недостаточен для жёсткого «обязана остаться»: source says higher labels are GENERALLY placed before others, lower labels CAN be repositioned or removed. Нет гарантии размещения top label при нехватке места, feature conflict или неподходящих positions. Ни один ответ полностью не обеспечивает все условия."
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Задайте ранги «больница, вокзал, парк» и оставьте включённым разрешение конфликтов стандартного движка. Он размещает максимально возможное число подписей без наложения; для низшего ранга можно предусмотреть альтернативное положение или снятие.",
+          "canonicalSHA256": "f4f37c5daf5ac51914776ea1d9520cf671c41b1d1262b1936d12a61429ab7130",
+          "assessment": "Первая часть про ранги подтверждена лишь как порядок placement, а не гарантия. Максимально возможное число без overlap описано источником; может оставлять непоставленные подписи. Объяснение не выполняет обязательность из prompt.",
+          "sourceGrounds": [
+            "label: opening and Prioritize labels"
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Принудительное перекрытие допускает наложения и противоречит требованию разрешать конфликты.",
+          "canonicalSHA256": "740d9a26503193eabb32a10281cf85102d2b91f1083f3b57d8e7ce7053a12997",
+          "assessment": "В части overlap точна: forces placement regardless of overlap. «Противоречит» предполагает ожидаемое устранение наложений; явного запрета перекрытий в prompt нет, но иерархию вариант всё равно не обеспечивает.",
+          "sourceGrounds": [
+            "label: Place overlapping labels"
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Упрощение геометрии не задаёт ранги и не управляет альтернативными позициями подписей.",
+          "canonicalSHA256": "afed799f145d0f167505c9772b31b3b3da7fed5d823b8c65b4491f3b8e7808e9",
+          "assessment": "Точна: SimplifyLine удаляет вершины; правила/позиции текста задаются отдельно. Косвенное изменение доступного места не означает управление рангами.",
+          "sourceGrounds": [
+            "gen: SimplifyLine sample; label: Position labels and Prioritize labels"
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Одинаковый ранг не выражает заданную разницу важности и не подсказывает, какую подпись можно убрать.",
+          "canonicalSHA256": "4950ec938484de63833fa9245d2484e65c33a9eed5ceb4243cd4d916567cf233",
+          "assessment": "Дефект терминологии: вариант задаёт ВЕС, заметка начинает с «Одинаковый РАНГ». Source отдельно определяет weights (label-feature) и Label Priority Ranking (order). Итог о невыраженной иерархии верен, основание подменяет параметр.",
+          "sourceGrounds": [
+            "label: Weight labels and features versus Prioritize labels"
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "Вес объекта применяется при конфликте подписи с объектом; для конфликта двух подписей порядок размещения задаёт приоритет подписей.",
+          "canonicalSHA256": "43541bb8773cb03b3d0c25d218e5bc28d86bb1128d5310cee9910e257527f7b2",
+          "assessment": "Точна: feature/label weights are only for label-feature overlap; priority controls order for labels. Это дополнительный технический факт сверх prompt/key, но не доказывает обязательное сохранение больницы.",
+          "sourceGrounds": [
+            "label: opening; Weight labels and features; Prioritize labels"
+          ]
+        }
+      ],
+      "fourFullSubstitutions": [
+        {
+          "answerIndex": 0,
+          "fullPrompt": "На городской карте три конфликтующие подписи: больница имеет наивысший приоритет и обязана остаться; вокзал важен, но может быть передвинут; название парка имеет низший приоритет и допустимо убрать, если места нет. Как настроить подписи, чтобы разрешать конфликты согласно этим условиям?",
+          "answer": "Включить размещение с перекрытием для всех подписей и отключить приоритеты.",
+          "note": "Принудительное перекрытие допускает наложения и противоречит требованию разрешать конфликты.",
+          "bindingCanonicalSHA256": "83d610fbec200cec2c9fae8c084084bb56eb046df988aad3751feda837b65051",
+          "grammar": "Грамматически полное действие.",
+          "plausibility": "Существующая настройка, но распространять её на всех значит сохранить коллизии.",
+          "truthAndUniqueKey": "Не задаёт иерархию и допускает наложение всех подписей; не решает задачу выбора при конфликте.",
+          "noteAccuracyAndUsefulness": "В части overlap точна: forces placement regardless of overlap. «Противоречит» предполагает ожидаемое устранение наложений; явного запрета перекрытий в prompt нет, но иерархию вариант всё равно не обеспечивает.",
+          "sourceLocator": "label: Place overlapping labels"
+        },
+        {
+          "answerIndex": 1,
+          "fullPrompt": "На городской карте три конфликтующие подписи: больница имеет наивысший приоритет и обязана остаться; вокзал важен, но может быть передвинут; название парка имеет низший приоритет и допустимо убрать, если места нет. Как настроить подписи, чтобы разрешать конфликты согласно этим условиям?",
+          "answer": "Упростить геометрию объектов, удаляя вершины линий до исчезновения конфликтов.",
+          "note": "Упрощение геометрии не задаёт ранги и не управляет альтернативными позициями подписей.",
+          "bindingCanonicalSHA256": "ec41a6b0201c35f9a4250b8936a57c15b735d4be4722ab6ca03c6cdd42b69a18",
+          "grammar": "Грамматически согласовано.",
+          "plausibility": "Слабый distractor: физическое изменение линий не является настройкой подписей.",
+          "truthAndUniqueKey": "Не назначает приоритет и не гарантирует больницу; отбрасывается.",
+          "noteAccuracyAndUsefulness": "Точна: SimplifyLine удаляет вершины; правила/позиции текста задаются отдельно. Косвенное изменение доступного места не означает управление рангами.",
+          "sourceLocator": "gen: SimplifyLine sample; label: Position labels and Prioritize labels"
+        },
+        {
+          "answerIndex": 2,
+          "fullPrompt": "На городской карте три конфликтующие подписи: больница имеет наивысший приоритет и обязана остаться; вокзал важен, но может быть передвинут; название парка имеет низший приоритет и допустимо убрать, если места нет. Как настроить подписи, чтобы разрешать конфликты согласно этим условиям?",
+          "answer": "Назначить всем трём подписям одинаковый высокий вес.",
+          "note": "Одинаковый ранг не выражает заданную разницу важности и не подсказывает, какую подпись можно убрать.",
+          "bindingCanonicalSHA256": "986078cc9039e90fdae3cbcf990b29924d3e6b40278675b45aefce3f86c6de26",
+          "grammar": "Грамматика корректна; термин «вес» должен сохранять технический смысл.",
+          "plausibility": "Реальная настройка, но иной механизм; хороший контраст только при точном объяснении различия.",
+          "truthAndUniqueKey": "Одинаковый label weight не кодирует порядок приоритета для label-label conflicts. Не выполняет задачу.",
+          "noteAccuracyAndUsefulness": "Дефект терминологии: вариант задаёт ВЕС, заметка начинает с «Одинаковый РАНГ». Source отдельно определяет weights (label-feature) и Label Priority Ranking (order). Итог о невыраженной иерархии верен, основание подменяет параметр.",
+          "sourceLocator": "label: Weight labels and features versus Prioritize labels"
+        },
+        {
+          "answerIndex": 3,
+          "fullPrompt": "На городской карте три конфликтующие подписи: больница имеет наивысший приоритет и обязана остаться; вокзал важен, но может быть передвинут; название парка имеет низший приоритет и допустимо убрать, если места нет. Как настроить подписи, чтобы разрешать конфликты согласно этим условиям?",
+          "answer": "Задать ранги приоритета и разрешить движку менять положение или убирать конфликтующие подписи низшего ранга.",
+          "note": "Вес объекта применяется при конфликте подписи с объектом; для конфликта двух подписей порядок размещения задаёт приоритет подписей.",
+          "bindingCanonicalSHA256": "69c371025ed4f25b79ef7c95ad53cec862f82c901700c77efb778ef230f826b7",
+          "grammar": "Формулировка ясная, но «низшего ранга» не задаёт отдельный запрет удаления больницы.",
+          "plausibility": "Наиболее близко к intended задаче, использует настоящий механизм приоритета.",
+          "truthAndUniqueKey": "Недостаточен для жёсткого «обязана остаться»: source says higher labels are GENERALLY placed before others, lower labels CAN be repositioned or removed. Нет гарантии размещения top label при нехватке места, feature conflict или неподходящих positions. Ни один ответ полностью не обеспечивает все условия.",
+          "noteAccuracyAndUsefulness": "Точна: feature/label weights are only for label-feature overlap; priority controls order for labels. Это дополнительный технический факт сверх prompt/key, но не доказывает обязательное сохранение больницы.",
+          "sourceLocator": "label: opening; Weight labels and features; Prioritize labels"
+        }
+      ],
+      "frozen": {
+        "difficulty": "medium",
+        "correctIndex": 3,
+        "preserved": true
+      },
+      "level": {
+        "status": "FIX",
+        "reason": "Сценарий мог бы требовать применения политики размещения, однако ключ повторяет заданные ранги/перенос/снятие и не обрабатывает обязательность. Содержательная задача выбора гарантированного поведения пока не имеет корректного решения; medium нельзя зачесть на неисправной политике."
+      },
+      "correctNoteNewFact": {
+        "literal": "Вес объекта применяется при конфликте подписи с объектом; для конфликта двух подписей порядок размещения задаёт приоритет подписей.",
+        "beyondPromptAndKey": true,
+        "assessment": "Точна: feature/label weights are only for label-feature overlap; priority controls order for labels. Это дополнительный технический факт сверх prompt/key, но не доказывает обязательное сохранение больницы.",
+        "status": "PASS"
+      },
+      "defects": [
+        "Приоритет не гарантирует обязательную подпись больницы; ни один вариант не выполняет весь prompt.",
+        "Note2 подменяет вес рангом, хотя это разные параметры."
+      ],
+      "peers": {
+        "fullCurrentSnapshot": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/full-current-peers.json",
+        "finalPairs": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/final-proposed-pairs.json",
+        "stagedDrafts": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/staged-drafts-separate.json",
+        "bidirectionalResult": "Different task and required decision from both other FINAL target cards and CURRENT symbolization94. Projection/topology/navigation/draft questions do not solve this prompt in either direction. No semantic duplicate found; no verdict on peer quality."
+      }
+    }
+  ],
+  "actionsPerformed": [
+    "read CURRENT3 in full",
+    "read all three saved full official HTML contexts",
+    "read relevant full CURRENT peers and staged proposals separately",
+    "compare both other FINAL cards per target in both directions",
+    "write independent evidence only"
+  ],
+  "notPerformed": [
+    "catalog edits",
+    "review registry writes",
+    "Git/index mutations",
+    "planning/claims",
+    "tests",
+    "runtime/build/deploy",
+    "origin refetch"
+  ],
+  "nextAction": {
+    "owner": "coordinator then separate author",
+    "action": "Adjudicate concrete FIX findings and commission the single allowed targeted cycle1 for 92/93/95; independently re-read changed cards/dependencies afterward.",
+    "continuationPath": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/receipt.json"
+  },
+  "preservation": {
+    "files": "durable task directory; coordinator owns Git preservation, this reader forbidden to commit",
+    "noOwnedProcesses": true,
+    "temporaryFilesCreated": false
+  },
+  "evidenceManifest": [
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/class-full-context.txt",
+      "rawReadBytesSHA256": "9c70bb8169c2a0e835c771b3f2adba843ce0b26139d651c1ca8aa1ee8046ec96",
+      "bytes": 5217
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/current-peer-bidirectional-checks.json",
+      "rawReadBytesSHA256": "bfd02fb90b59f908370cad89d1f396a0477ba5b4ae9f6ffd7eccc91044a87475",
+      "bytes": 1812
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/final-proposed-pairs.json",
+      "rawReadBytesSHA256": "3af3396726dba6db7418a6260591cc2cb38ab63793e8f40d58020ff1bd7d73d3",
+      "bytes": 20307
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/full-current-peers.json",
+      "rawReadBytesSHA256": "2db94f65c01be58d859edab55d4518170bb10d69b9bd56f970361403661bc4d0",
+      "bytes": 56128
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/gen-full-context.txt",
+      "rawReadBytesSHA256": "b501f29e551a9dc752abdecf7ce5c37bf0699dc51fe2b080e0a6864127817025",
+      "bytes": 23800
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/label-full-context.txt",
+      "rawReadBytesSHA256": "3c451269ec75de0b22623c439f34a316848557db85b6252adab6b3550f1198e0",
+      "bytes": 3560
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/primary-index.json",
+      "rawReadBytesSHA256": "b0231bc919c6e2085a880d374507bf761ae01e28e35ee331bb5fbef0e388b9e0",
+      "bytes": 3800
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/staged-drafts-separate.json",
+      "rawReadBytesSHA256": "8be25996125a9433cfc71592bbc6f2daffa9fed58904700432e7e64e8595dfc2",
+      "bytes": 28452
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/apply-initial3-92-93-95.json",
+      "rawReadBytesSHA256": "c5457bd076794f6003ca019734ae419b0b80d2371b3dffdd25d535c175f96e38",
+      "role": "input provenance only; author verdict not inherited"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/qualified/final/candidate.json",
+      "rawReadBytesSHA256": "6d0b6e85d925498795694a74074e7aea41c7cce6bad0273795c1e2e19668fdd7",
+      "role": "input provenance only; author verdict not inherited"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/qualified/final/sourceproof.json",
+      "rawReadBytesSHA256": "68bedafa0f0e734476f50498874fb16c7064f96dd542a26a4f8aced54abd0035",
+      "role": "input provenance only; author verdict not inherited"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/qualified/final/peer-snapshot.json",
+      "rawReadBytesSHA256": "32242a2dacefe6c02710ba8aa83353de6fc1e593bf4566416f1b44a199ad34ca",
+      "role": "input provenance only; author verdict not inherited"
+    }
+  ],
+  "checks": {
+    "sixGroups": 18,
+    "fullSubstitutions": 12,
+    "independentlyComputedCanonicalHashesValid": true,
+    "all3MatchExactAppliedCards": true,
+    "all3PrimaryRawSHA256MatchSourceRegister": true,
+    "testsExecuted": false
+  }
+}

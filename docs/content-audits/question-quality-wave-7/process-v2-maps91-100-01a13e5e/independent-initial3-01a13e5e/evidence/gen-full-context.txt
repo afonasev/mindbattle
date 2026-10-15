@@ -1,0 +1,296 @@
+L0: Automating conflict resolution and generalization workflows with geoprocessing—ArcGIS Pro | Documentation
+L1: Back to Top
+L2: Automating conflict resolution and generalization workflows with geoprocessing
+L3: In this topic
+L4: Combining generalization tasks into cartographic workflows
+L5: Chaining generalization tools in ModelBuilder
+L6: Sample Python script to prepare data for display at a smaller scale
+L7: Generalizing data involves many repetitive, labor-intensive tasks, so it is an ideal candidate for automation. However, the contextual and subjective nature of generalization makes it difficult to automate. The human brain is adept at prioritizing and making contextual concessions simultaneously. It is much more difficult to instruct a computer to do this with a series of discrete commands.
+L8: The geoprocessing environment in ArcGIS is well suited to establishing a generalization framework, since it can manage the transformation of data in distinct, isolated steps directed by data-, scale-, and product-specific variables. These steps can be logically chained together or even looped in scripts or models to create a complex workflow that can be applied to a range of data to produce multiscaled databases for print or screen display. Tasks can be easily  repeated sequentially  on different groups of features  or with different parameters combined in a variety of ways.  Entire workflows can be automated, or they can be subdivided into smaller pieces with manual editing or verification taking place in between.
+L9: Combining generalization tasks into cartographic workflows
+L10: The process of making a map at a smaller scale than that for which the data was intended begins with an understanding of the target scale; the display specifications, including symbology; and the underlying purpose or intent of the map. Next, operations are performed to reduce the overall number of features without impacting the connectivity or character of the dataset. The complexity of individual features is then reduced by removing vertices or other feature details. This may also include simplifying complexity within the feature attributes by combining similar subcategories of features for display with the same symbol. Once map authoring begins and the data is displayed with its final symbology at the final scale, graphical conflicts can be detected and resolved.
+L11: The following flowchart shows a simplified version of a generalization workflow and identifies some key tools from the Cartography toolbox that can assist in generalizing data for display at a smaller scale. A simplified view is shown of the processes and corresponding geoprocessing tools used to generalize data for cartographic display.
+L12: It is important to understand that most geoprocessing tools typically generate new data as an output that can then be used as input for subsequent tools. In contrast to this, cartographers typically follow a workflow that is characterized by incremental improvement of feature layers that are already established in a map document. Symbology, layer properties, and masking relationships are already defined, so it follows that it is preferable to modify input layers as conflict resolution and generalization operations are performed so as not to lose this information. For this reason, some of the tools in the  Cartography toolbox modify input data in symbolized layers rather than creating data.
+L13: Chaining generalization tools in ModelBuilder
+L14: Generalization tools make use of multivalue inputs—that is, a list of one or more feature classes.  Many geoprocessing tools accept multiple values (such as the Union tool), but generalization tools are different in that they also output multivalues.   This requires that you be aware of a few ModelBuilder techniques to produce the model you want.   These techniques are discussed below.
+L15: Chaining tools with multiple inputs and outputs
+L16: The Thin Road Network, Resolve Road Conflicts, and Resolve Building Conflicts tools output multivalues.   This means that only tools that accept multivalue inputs can use the output of these tools directly. For example, if three layers are used as inputs to the Thin Road Network tool, and you want to use these same three layers as inputs into the Resolve Road Conflict tool after they have been thinned, you can chain the output of the Thin Road Network tool directly to the Resolve Road Conflicts tool.Multiple inputs are chained through the Thin Road Network tool to the Resolve Road Conflicts tool.
+L17: You can use the Collect Values tool to add more layers to a multivalue.  The example below shows adding two more layers to the output of Thin Road Network to create the input to Resolve Road Conflicts.This model uses the Collect Values tool to add  additional inputs to the multivalue output from the Thin Road Network tool before chaining to the Resolve Road Conflicts tool.
+L18: Chaining multiple outputs to a single input
+L19: To chain tools that have a multivalue output to a tool that accepts a single input,  use the Append tool to merge multiple feature
+L20: classes. An example of this workflow is appending
+L21: multiple road input layers that were processed by the Thin Road Network tool to use as an input to the Merge Divided Roads tool, which accepts only a single input.This model uses the Append tool to combine multiple outputs into a single input.
+L22: Chaining multiple inputs individually
+L23: In some cases, you want to pass multiple outputs from a tool individually to another tool. This would be the case if you didn't want all the outputs from the first tool to participate in the second tool, or if you wanted to set specific parameters for each input in the second tool.  For example, the Resolve Building Conflicts tool allows  full control over the way each input layer is defined  as a barrier. In these cases, use the same set of layers as inputs to both tools, but set the output of the first tool as a precondition to the second tool to enforce the correct order of processing, as illustrated below. This approach is only applicable when the first tool, like  the Resolve Road Conflicts tool, modifies input layers instead of creating new output layers.
+L24: Learn more about using preconditions in ModelBuilder
+L25: In the example below, the three transportation layers are used as inputs to both tools. This is possible because these layers are modified by the Resolve Road Conflicts tool; new output feature classes are not created. The output of the Resolve Road Conflicts tool is used as a precondition to the processing of the Resolve Building Conflicts tool to ensure that the Resolve Road Conflicts tool completes processing before the Resolve Building Conflicts tool begins. The output of the Resolve Road Conflicts tool is set as a precondition to the Resolve Building Conflicts tool to enforce processing order.
+L26: Symbolized inputs
+L27: To chain tools that only accept symbolized layers, you will need to use the Make Feature Layer  tool and the Apply Symbology From Layer tool to prepare an output layer for chaining purposes in ModelBuilder as well as in scripting environments. The model uses the Make Feature Layer tool and the Apply Symbology From Layer tool to pass symbol information between tools.
+L28: Sample Python script to prepare data for display at a smaller scaleCartography toolbox workflow example (stand-alone script)
+L29: This stand-alone script goes through a sample workflow using a number of tools from the Cartography toolbox to generalize 1:25,000-scale data and resolve graphical conflicts to display at 1:50,000 scale.
+L30: # Name: cartography_workflow_script.py
+L31: # Description: Process features in order to resolve graphic conflicts when
+L32: # changing scales from 25K to 50K.
+L33: #
+L34: # Tools used = Aggregate Polygons, Align Marker To Stroke Or Fill, Apply
+L35: #              Symbology From Layer, Create Overpass, Create Underpass, Calculate
+L36: #              Line Caps, Eliminate Polygon Part, Make Feature Layer, Merge
+L37: #              Divided Roads, Propagate Displacement, Resolve Building Conflicts
+L38: #              Resolve Road Conflicts, Select, Select Layer By Attribute, Set
+L39: #              Control Point At Intersect, Set Control Point By Angle, Simplify
+L40: #              Building, Simplify Line, Simplify Polygon, Smooth Line, Smooth
+L41: #              Polygon, Thin Road Network
+L42: # Minimum ArcGIS Pro version = 2.1
+L43: #
+L44: # The geodatabase used in this workflow is assumed to be in c:\data
+L45: # - please replace this path to your machine specific folder.
+L46: # Import system modules
+L47: import arcpy
+L48: # Start the processing
+L49: arcpy.env.workspace = "C:/data/cartography.gdb"
+L50: # The data was captured at a scale of 1:24000, and this workflow will produce
+L51: # data appropriate for a scale of 1:50000.
+L52: # Most of the geoprocessing tools in this workflow require a reference scale
+L53: arcpy.env.referenceScale = "50000"
+L54: arcpy.env.cartographicCoordinateSystem = ""
+L55: ###############
+L56: # HYDROGRAPHY #
+L57: ###############
+L58: # A subset of linear features (rivers/streams) will be processed
+L59: # for simplification and smoothing
+L60: # A subset of polygonal features (reservoirs/lakes) will be processed
+L61: # for simplification and smoothing
+L62: # The workspace is set to the hydrography feature dataset
+L63: arcpy.env.workspace = "C:/data/cartography.gdb/hydrography"
+L64: # Linear hydrographic features
+L65: arcpy.management.MakeFeatureLayer("streamnetwork", "streamlayer", "", "", "")
+L66: # A selection is made for features which are rivers/streams
+L67: arcpy.management.SelectLayerByAttribute("streamlayer", "NEW_SELECTION",
+L68: '"FCsubtype" = 1')
+L69: # In order to reduce the complexity from the streams, vertices are removed using
+L70: # the Simplify Line tool
+L71: arcpy.cartography.SimplifyLine("streamlayer", "streams_simplified",
+L72: "BEND_SIMPLIFY", "100 meters", "RESOLVE_ERRORS")
+L73: # In order to reduce the amount or severity of sharp angles, Smooth Line is used
+L74: # to improve the shape of the streams
+L75: arcpy.cartography.SmoothLine("streams_simplified", "streams",
+L76: "BEZIER_INTERPOLATION", "#", "0", 'FLAG_ERRORS')
+L77: # Some of the processed features are intermittent rivers or streams and are
+L78: # symbolized as dashed lines. The dashes can be centered around corners to
+L79: # improve the look of the features. The corners are identified as vertices which
+L80: # will be flagged as control points. Symbology from an existing layer containing
+L81: # dashed line symbols is then applied.
+L82: # A new feature layer is created from the streams data to be used as input
+L83: # when setting control points.
+L84: arcpy.management.MakeFeatureLayer("streams", "streamslayer", "", "", "")
+L85: # Dashed line symbology from an existing layer is applied to the new streams
+L86: # feature layer
+L87: arcpy.management.ApplySymbologyFromLayer("streamslayer",
+L88: "C:/data/stream_symbols.lyrx")
+L89: # The dashes in the stream symbol will be placed at control points created
+L90: # anywhere an angle is less than (or equal to) 130 degrees.
+L91: arcpy.cartography.SetControlPointByAngle("streamslayer", "130")
+L92: # Polygonal hydrographic features
+L93: # A selection is made to create a new feature class for reservoirs.
+L94: arcpy.analysis.Select("openwater", "reservoirs", '"FCsubtype" = 4')
+L95: # A selection is made to create a separate feature class for processing in order
+L96: # to generate lakes.
+L97: arcpy.analysis.Select("openwater", "water_select", '"FCsubtype" <> 4')
+L98: # In order to reduce the complexity from the lakes, vertices are removed using
+L99: # the Simplify Line tool.
+L100: arcpy.cartography.SimplifyPolygon("water_select", "water_simplified",
+L101: "BEND_SIMPLIFY", "100 meters", "0",
+L102: "RESOLVE_ERRORS")
+L103: # In order to reduce the amount (or severity) of sharp angles, Smooth Line is
+L104: # used to improve the shape of the lakes.
+L105: arcpy.cartography.SmoothPolygon("water_simplified", "lakes",
+L106: "BEZIER_INTERPOLATION", "0", "", "FLAG_ERRORS")
+L107: #############
+L108: # RAILROADS #
+L109: #############
+L110: # Set the workspace to the transportation feature dataset
+L111: arcpy.env.workspace = "C:/data/cartography.gdb/transportation"
+L112: # In order to reduce the complexity from the railroads, vertices are removed
+L113: # using the Simplify Line tool.
+L114: arcpy.cartography.SimplifyLine("railnetwork", "rail_simplified",
+L115: "BEND_SIMPLIFY", "100 meters", "RESOLVE_ERRORS")
+L116: # The Merge Divided Roads tool requires symbolized features, so a feature layer
+L117: # is created using the simplified rail features, and then pre-made symbology is
+L118: # applied from an existing feature layer.
+L119: # A feature layer is created from the simplified rail features.
+L120: arcpy.management.MakeFeatureLayer("rail_simplified", "railwaylayer", "", "", "")
+L121: # Apply the symbology from an existing layer
+L122: arcpy.management.ApplySymbologyFromLayer("railwaylayer",
+L123: "C:/data/rail_symbols.lyrx")
+L124: # The Merge Divided Roads tool will be used to generates single line railroad
+L125: # features in place of multiple divided railroad lanes.
+L126: arcpy.cartography.MergeDividedRoads("railwaylayer", "level", "25 Meters",
+L127: "railways")
+L128: # Symbolized features are required when adding control points, so a new feature
+L129: # layer is created from the output of the MergeDivvidedRoads tool.
+L130: arcpy.management.MakeFeatureLayer("railways", "railwayslayer", "", "", "")
+L131: # Pre-made railway symbology from an existing layer is applied to the
+L132: # new railway feature layer.
+L133: arcpy.management.ApplySymbologyFromLayer("railwayslayer",
+L134: "C:/data/rail_symbols.lyrx")
+L135: # The tick marks in railroad symbol (markers) will be placed at control points
+L136: # created anywhere an angle is less than (or equal to) 130 degrees.
+L137: arcpy.cartography.SetControlPointByAngle("railwayslayer", "130")
+L138: ###########
+L139: # LANDUSE #
+L140: ###########
+L141: # Set the workspace to the landuse feature dataset
+L142: arcpy.env.workspace = "C:/data/cartography.gdb/landuse"
+L143: # The polygons which represent landcover have holes in them where buildings are
+L144: # located. The holes need to be removed so they will not appear after buildings
+L145: # have moved. In this example, any hole which is less than 50 percent of the
+L146: # feature's area will be removed.
+L147: arcpy.management.EliminatePolygonPart("cultural", "urban_area", "PERCENT", "0",
+L148: "50", "CONTAINED_ONLY")
+L149: ##############
+L150: # BOUNDARIES #
+L151: ##############
+L152: # The boundary features have dashed outlines which are not in phase with each
+L153: # other on shared edges between features. To make the dashed outlines in phase
+L154: # with each other, control points are added wherever features
+L155: # share coincident vertices.
+L156: arcpy.cartography.SetControlPointAtIntersect("C:/data/boundaries.lyrx",
+L157: "C:/data/boundaries.lyrx")
+L158: #########
+L159: # ROADS #
+L160: #########
+L161: # Set the workspace to the transportation feature dataset
+L162: arcpy.env.workspace = "C:/data/cartography.gdb/transportation"
+L163: # Linear features
+L164: # Roads which are dead ends (or cul-de-sacs) should have their Line ending
+L165: # property set to BUTT.
+L166: arcpy.cartography.CalculateLineCaps("C:/data/road_symbols.lyrx", "BUTT",
+L167: "CASED_LINE_DANGLE")
+L168: # Thin Road Network identifies a subset of road segments that can be removed from
+L169: # the display to create a simplified road network that retains the connectivity
+L170: # and general character of the input collection. Features are flagged for removal
+L171: # when their attribute value in the "invisible" field equals one. A layer
+L172: # definition query can be used to display the resulting simplified feature class.
+L173: arcpy.cartography.ThinRoadNetwork("roadnetwork", "500 meters", "invisible",
+L174: "level")
+L175: # The Merge Divided Roads tool will be used to generates single line road
+L176: # features in place of multiple divided road lanes.
+L177: arcpy.cartography.MergeDividedRoads("C:/data/road_symbols.lyrx", "level",
+L178: "25 meters", "roads")
+L179: # The Resolve Road Conflicts tool requires symbolized features, so a feature
+L180: # layer is created from the roads features so that pre-made
+L181: # symbology can the be applied to the new roads feature layer.
+L182: arcpy.management.MakeFeatureLayer("roads", "roadslayer", "", "", "")
+L183: # Pre-made symbology from an existing layer is applied to the roads feature
+L184: # layer.
+L185: arcpy.management.ApplySymbologyFromLayer("roadslayer",
+L186: "C:/data/road_symbols.lyrx")
+L187: # The Resolve Road Conflicts tool does not produce output road layers but instead
+L188: # alters the source feature classes of the input road layers. The Resolve Road
+L189: # Conflicts tool adjusts line features to ensure that they are graphically
+L190: # distinguishable when symbolized at output scale.
+L191: arcpy.cartography.ResolveRoadConflicts("roadslayer",
+L192: "level",
+L193: "C:/data/cartography.gdb/buildings/displacement")
+L194: # The dashes in the road symbols will be placed at control points created
+L195: # anywhere an angle is less than (or equal to) 130 degrees.
+L196: arcpy.cartography.SetControlPointByAngle("roadslayer", "130")
+L197: # Create bridges
+L198: # The Create Overpass tool will create a bridge for the roads and a mask for the
+L199: # streams wherever a road goes over a steam.
+L200: arcpy.cartography.CreateOverpass("roadslayer", "streamslayer", "2 points",
+L201: "1 points", "over_mask_fc", "over_mask_rc",
+L202: '"BridgeCategory" = 1', "bridges",
+L203: "ANGLED", "1 points")
+L204: # Create tunnels
+L205: # The Create Overpass tool will create a tunnel for the railroads and a mask for
+L206: # the railroads wherever a railroad goes under a road.
+L207: arcpy.cartography.CreateUnderpass("roadslayer", "railwayslayer", "2 points",
+L208: "1 points", "under_mask_fc", "under_mask_rc",
+L209: '"RelationshipToSurface" = 3', "tunnels",
+L210: "ANGLED", "1 points")
+L211: #############
+L212: # BUILDINGS #
+L213: #############
+L214: # Set the workspace to the buildings feature dataset
+L215: arcpy.env.workspace = "C:/data/cartography.gdb/buildings"
+L216: # Point features
+L217: # When the road features were adjusted by the Resolve Road Conflicts tool, the
+L218: # spatial relationship with nearby buildings was affected. A displacement feature
+L219: # class was created by that tool in order to record the change applied to the
+L220: # roads. This information can be used by the Propagate Displacement tool to apply
+L221: # the same change to the point buildings.
+L222: # The road displacement is propagated to the point buildings
+L223: arcpy.cartography.PropagateDisplacement("point_bldg", "displacement", "AUTO")
+L224: # Point buildings will be rotated against nearby linear roads
+L225: # The Align Markers To Stroke Or Fill tool can do this with symbolized features.
+L226: # A feature layer is made for point buildings
+L227: arcpy.management.MakeFeatureLayer("point_bldg", "bldglayer", "", "", "")
+L228: # Symbology is applied from an existing layer.
+L229: arcpy.management.ApplySymbologyFromLayer("bldglayer",
+L230: "C:/data/bldg_symbols.lyrx")
+L231: # The Align Marker to Stroke Or Fill tool is used to align point buildings to
+L232: # face road features within 5 points of the buildings
+L233: arcpy.cartography.AlignMarkerToStrokeOrFill("bldglayer", "roadslayer",
+L234: "5 points", "PERPENDICULAR")
+L235: # Polgyonal features
+L236: # When the road features were adjusted by the Resolve Road Conflicts tool, the
+L237: # spatial relationship with nearby buildings was affected. A displacement
+L238: # feature class was created by that tool in order to record the change applied
+L239: # to the roads. This information can be used by the Propagate Displacement tool
+L240: # to apply the same change to the polygonal buildings.
+L241: # The road displacement is propagated to polygon buildings
+L242: arcpy.cartography.PropagateDisplacement("footprints", "displacement", "SOLID")
+L243: # A selection is made to create a feature class with buildings larger than
+L244: # a minimum size
+L245: # The small buildings are not appropriate at the new map scale of 1:50,000
+L246: arcpy.analysis.Select("footprints", "buildings_select", '"Shape_Area" > 100')
+L247: # There is a need to create better spacing between polygon buildings and combine
+L248: # them when they share edges or are very close together
+L249: # The Aggregate Polygons tool is used to accomplish this task
+L250: arcpy.cartography.AggregatePolygons("buildings_select", "large_buildings",
+L251: "20 meters", "", "", "ORTHOGONAL")
+L252: # In order to reduce the complexity of the buildings, indentations, extensions
+L253: # and extra vertices are removed using the Simplify Building tool.
+L254: # Buildings require less visible detail at the new scale of 1:50,000.
+L255: arcpy.cartography.SimplifyBuilding("large_buildings", "area_bldg", "20 meters",
+L256: "0 unknown", "CHECK_CONFLICTS")
+L257: # All buildings require further improvements to achieve better spacing between
+L258: # themselves and other nearby features. At the new scale of 1:50,000 the
+L259: # symbolized buildings may overlap other features and create a visually congested
+L260: # map. To improve the visual congestion, the Resolve Building Conflicts tool is
+L261: # used. Buildings are improved in the context of their surrounding features.
+L262: # These features are considered barriers to buildings. The Resolve Building
+L263: # Conflicts tool requires symbolized features and has several options available
+L264: # to improve the buildings. Options include: moving or resizing the buildings,
+L265: # orienting or snapping the buildings to nearby features, as well as making the
+L266: # buildings invisible. Buildings from multiple feature classes can be used as
+L267: # inputs to the tool. Barriers from multiple feature classes can be used as
+L268: # inputs to the tool. For each barrier, the option is available to specify a snap
+L269: # or orient action for the buildings when they are within a specified distance.
+L270: # For each barrier, the option is available to specify a minimum distance for
+L271: # buildings to maintain between them.
+L272: # A feature layer is made for the polygon buildings
+L273: arcpy.management.MakeFeatureLayer("area_bldg", "footprintlayer", "", "", "")
+L274: # Pre-made symbology is applied from an existing layer.
+L275: arcpy.management.ApplySymbologyFromLayer("footprintlayer",
+L276: "C:/data/footprint_symbols.lyrx")
+L277: # The Resolve Building Conflicts tool is run with point and polygon buildings
+L278: # against roads, streams and railroads. The buildings will be moved away from
+L279: # streams and railroads until they reach a minimum distance. The buildings
+L280: # within a maximum distance from the roads will be rotated. Further movement
+L281: # and rotation may still be required by the tool in order to resolve any
+L282: # remaining graphic conflict.
+L283: arcpy.cartography.ResolveBuildingConflicts("footprintlayer; bldglayer", "invisible",
+L284: "'roadslayer' 'true' '5 meters';'streamslayer' 'false' '5 meters';'railwayslayer' 'false' '10 meters'",
+L285: "10 meters", "20 meters", "level")Related topics
+L286: Understanding conflict resolution and generalization
+L287: An overview of the Generalization toolset
+L288: An overview of the Graphic Conflicts toolset
+L289: Generalizing large datasets using partitions
+L290: Feedback on this topic?
+L291: In this topic
+L292: Combining generalization tasks into cartographic workflows
+L293: Chaining generalization tools in ModelBuilder
+L294: Sample Python script to prepare data for display at a smaller scale
+L295: flist
