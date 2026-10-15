@@ -1,0 +1,330 @@
+{
+  "schema": "mindbattle.qualified-first5-peer-delta-formats66-68.v1",
+  "currentTopicRawSHA256": "a953c30d6ed0262d8f4109ca16798cc8cbc0409f24e6eb46ce571be0f18cccc2",
+  "observedCodeCommit": {
+    "commit": "d75b450ab3a1ed6e30c63419ad3c9a508649d5e8",
+    "reportedBy": "coordinator delegation; not independently verified"
+  },
+  "sourceOwner": {
+    "task": "01a14018-7b8d-7301-ad28-95ee8d812e97",
+    "scope": "qualified-first5 source author; bounded peer reconciliation"
+  },
+  "provenance": {
+    "actualCards": "Read in full from src/content/topics/books-publishing.json at this reconciliation.",
+    "priorCards": "Exact full preimages and hashes from qualified-first5/peer-snapshot.json actualCurrentPeers.",
+    "targetCards": "Full proposed MAIN cards bound from qualified-first5/candidate.json entries[].proposedCard; actual before hashes bound from entries[].beforeHash.",
+    "semanticBasis": "Direct comparison of prompt, correct answer, all answer values, explanation and context for each pair; no source reread or peer discovery."
+  },
+  "actualCurrentPeers": [
+    {
+      "id": "books-publishing-pdf-format",
+      "topicId": "books-publishing",
+      "sourceOrder": 66,
+      "card": {
+        "answers": [
+          {
+            "text": "MediaBox",
+            "note": "MediaBox задаёт границы физического носителя, на котором страницу отображают или печатают."
+          },
+          {
+            "text": "CropBox",
+            "note": "CropBox задаёт видимую область; при отображении или печати содержимое страницы обрезают по этой границе. Если CropBox не задан, используют MediaBox."
+          },
+          {
+            "text": "TrimBox",
+            "note": "TrimBox задаёт предполагаемые размеры готовой страницы после обрезки. Если он не задан, стандарт указывает значение CropBox."
+          },
+          {
+            "text": "BleedBox",
+            "note": "BleedBox задаёт область, до которой содержимое страницы обрезают при выводе в производственной среде."
+          }
+        ],
+        "correctIndex": 2,
+        "difficulty": "medium",
+        "explanation": "TrimBox задаёт предполагаемые размеры готовой страницы после обрезки; если он не задан, стандарт указывает CropBox. MediaBox описывает границы физического носителя, CropBox — видимую область, а BleedBox — границу обрезки содержимого при выводе в производственной среде.",
+        "id": "books-publishing-pdf-format",
+        "prompt": "В PDF для печати какую границу страницы задают как предполагаемый размер готовой страницы после обрезки?",
+        "source": {
+          "title": "PDF 32000-1:2008 — PDF 1.7, Adobe authorized copy of ISO 32000-1:2008",
+          "url": "https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "sha256": "181359291f124c1d62b82be9c4bf2bdccadc5ddd8df944d3a49a049f7605f8e9"
+    },
+    {
+      "id": "books-publishing-azw-format",
+      "topicId": "books-publishing",
+      "sourceOrder": 68,
+      "card": {
+        "answers": [
+          {
+            "note": "Контейнер EPUB 3.3 основан на ZIP и может включать структуру публикации и связанные ресурсы, а не только текст.",
+            "text": "EPUB"
+          },
+          {
+            "note": "Дерево страниц определяет порядок страниц в PDF. Его конечные узлы — объекты Page, каждый из которых задаёт атрибуты отдельной страницы.",
+            "text": "PDF"
+          },
+          {
+            "note": "DAISY DTB может содержать полный текст и аудио с синхронизацией; существуют также DTB с текстом, но без аудио.",
+            "text": "DAISY"
+          },
+          {
+            "note": "В руководстве Kindle перечислены .AZW и .AZW1; Mobipocket .MOBI/.PRC допускаются только без DRM.",
+            "text": "AZW"
+          }
+        ],
+        "correctIndex": 3,
+        "difficulty": "medium",
+        "explanation": "В руководстве Kindle формат AZW указан отдельно от файлов Mobipocket. Для чтения Mobipocket на устройстве руководство требует, чтобы файлы MOBI или PRC не были защищены DRM.",
+        "id": "books-publishing-azw-format",
+        "prompt": "Какой формат в руководстве Kindle с уведомлением об авторских правах 2004–2007 гг. перечислен среди Kindle-файлов отдельно от файлов Mobipocket без DRM?",
+        "source": {
+          "title": "Kindle User's Guide — Amazon Kindle support manual (guide copyright 2004–2007)",
+          "url": "https://s3.amazonaws.com/kindle/Kindle_User_Guide.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "sha256": "d3d74fd2a1f9165d404ecc3c99ff769fc1273d94ea5be6774a8f3f74c03424a1"
+    }
+  ],
+  "priorCurrentPeers": [
+    {
+      "id": "books-publishing-pdf-format",
+      "topicId": "books-publishing",
+      "sourceOrder": 66,
+      "card": {
+        "answers": [
+          {
+            "note": "DAISY DTB может содержать полный текст и аудио с синхронизацией; существуют также DTB с текстом, но без аудио.",
+            "text": "DAISY"
+          },
+          {
+            "note": "В руководстве Kindle перечислены .AZW и .AZW1; Mobipocket .MOBI/.PRC допускаются только без DRM.",
+            "text": "AZW"
+          },
+          {
+            "note": "В ISO 32000-1:2008 MediaBox задаёт границы для отображения и печати; Tagged PDF может описывать порядок для перекомпоновки текста.",
+            "text": "PDF"
+          },
+          {
+            "note": "В OCF-контейнере EPUB файл mimetype должен быть первым и не сжатым; сам контейнер основан на ZIP.",
+            "text": "EPUB"
+          }
+        ],
+        "correctIndex": 2,
+        "difficulty": "medium",
+        "explanation": "PDF задаёт документ как страницы с собственными границами вывода и содержимым, поэтому обычно сохраняет исходное расположение элементов. В ISO 32000-1:2008 Tagged PDF также предусмотрена возможность перекомпоновки текста и графики.",
+        "id": "books-publishing-pdf-format",
+        "prompt": "Какой формат электронного документа обычно сохраняет расположение текста и графики в заданной геометрии страницы?",
+        "source": {
+          "title": "PDF 32000-1:2008 — PDF 1.7, Adobe authorized copy of ISO 32000-1:2008",
+          "url": "https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "sha256": "fbcf3fafbb0e3d46523ed9e43cc8f8dc96e5875da69700bbf98d78f95a936b58"
+    },
+    {
+      "id": "books-publishing-azw-format",
+      "topicId": "books-publishing",
+      "sourceOrder": 68,
+      "card": {
+        "answers": [
+          {
+            "note": "Контейнер EPUB 3.3 основан на ZIP и может включать структуру публикации и связанные ресурсы, а не только текст.",
+            "text": "EPUB"
+          },
+          {
+            "note": "Спецификация PDF 1.7 связывает страницы деревом порядка; каждый конечный узел задаёт атрибуты отдельной страницы.",
+            "text": "PDF"
+          },
+          {
+            "note": "DAISY DTB может содержать полный текст и аудио с синхронизацией; существуют также DTB с текстом, но без аудио.",
+            "text": "DAISY"
+          },
+          {
+            "note": "В руководстве Kindle перечислены .AZW и .AZW1; Mobipocket .MOBI/.PRC допускаются только без DRM.",
+            "text": "AZW"
+          }
+        ],
+        "correctIndex": 3,
+        "difficulty": "medium",
+        "explanation": "В руководстве Kindle формат AZW указан отдельно от файлов Mobipocket. Для чтения Mobipocket на устройстве руководство требует, чтобы файлы MOBI или PRC не были защищены DRM.",
+        "id": "books-publishing-azw-format",
+        "prompt": "Какой формат в руководстве Kindle с уведомлением об авторских правах 2004–2007 гг. перечислен среди Kindle-файлов отдельно от файлов Mobipocket без DRM?",
+        "source": {
+          "title": "Kindle User's Guide — Amazon Kindle support manual (guide copyright 2004–2007)",
+          "url": "https://s3.amazonaws.com/kindle/Kindle_User_Guide.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "sha256": "87db6cffe224522e9983f091997d8b38af1915c9fbb2f035d8acda7194e9e2a7"
+    }
+  ],
+  "targetBindings": [
+    {
+      "targetId": "books-publishing-barcode-id",
+      "sourceOrder": 33,
+      "proposedCardSHA256": "78858610b6882e8513368cc82a6ec557138db24a3c5521db567f6a40525f5bbf",
+      "actualBeforeCardSHA256": "e6ace869ba34d0663c2dde0a077990b3716ca9298457ae5c389b5d3dfde34c49"
+    },
+    {
+      "targetId": "books-publishing-librarycard-id",
+      "sourceOrder": 35,
+      "proposedCardSHA256": "b03bf910d9b1636b96583f816ab32e2f66561db9e4bff52fe37219cf81e86511",
+      "actualBeforeCardSHA256": "fdc85741a4eb7f3421cf7978b7554988cf6d61abf2cf1b5528d5c19ab4845e01"
+    },
+    {
+      "targetId": "books-publishing-isbn-serial",
+      "sourceOrder": 38,
+      "proposedCardSHA256": "10b0920427ffbe8c3ac6fc23523fd4911541dcde9144256194833d5e93f3b631",
+      "actualBeforeCardSHA256": "1c510f6d7068eaa9a8a5d2440ab4617be7f0e7d4ad0589ac07a5b468504b9c0e"
+    },
+    {
+      "targetId": "books-publishing-issn-serial",
+      "sourceOrder": 39,
+      "proposedCardSHA256": "b5802db2646b995ce451ccfdb1321eb99542347e32ced71adb589717c17194fc",
+      "actualBeforeCardSHA256": "f7d3bb6553d261127c30b48ccfef6578b596d577396e2306f8be6378169c44ec"
+    },
+    {
+      "targetId": "books-publishing-doi-serial",
+      "sourceOrder": 40,
+      "proposedCardSHA256": "497ed94ee740e2252e753c5f975dd449737fefc811f742eb98525961557202e4",
+      "actualBeforeCardSHA256": "1db4565c402aae35e716671a7551d569cbd71ce80d6c2f9a24ea332a6d74d0cf"
+    }
+  ],
+  "noteOnlyDelta": {
+    "peerId": "books-publishing-azw-format",
+    "sourceOrder": 68,
+    "priorCardSHA256": "87db6cffe224522e9983f091997d8b38af1915c9fbb2f035d8acda7194e9e2a7",
+    "currentCardSHA256": "d3d74fd2a1f9165d404ecc3c99ff769fc1273d94ea5be6774a8f3f74c03424a1",
+    "mainFieldsUnchanged": true,
+    "deltaDescription": "Only the note attached to the PDF distractor changed to correct the PDF page-tree description. The prompt, ordered answer texts, correct index, difficulty, explanation and ID are unchanged; this is a note-only full-card hash delta, not a MAIN change. The note correction does not prohibit reusing that answer label as a distractor when target meaning and relation remain distinct."
+  },
+  "bilateralMainDecisions": [
+    {
+      "targetId": "books-publishing-barcode-id",
+      "peerId": "books-publishing-pdf-format",
+      "meaningfulBilateralMAIN": {
+        "entity": "The target entity is a barcode pattern; peer entity is a PDF page-boundary box.",
+        "relation": "Target asks what a scanner-readable bars-and-spaces representation is called; peer asks which boundary denotes the expected finished page size after trimming.",
+        "value": "Target key: Штрихкод; peer key: TrimBox. Neither is an answer to the other.",
+        "context": "Barcode/GS1 encoding versus print-production geometry inside PDF page dictionaries.",
+        "directAndReverse": "The target does not ask for a PDF page box; the peer does not ask for a machine-readable pattern."
+      },
+      "decision": "DISTINCT_NONCOLLIDING_MAIN"
+    },
+    {
+      "targetId": "books-publishing-barcode-id",
+      "peerId": "books-publishing-azw-format",
+      "meaningfulBilateralMAIN": {
+        "entity": "The target entity is a barcode pattern; peer entity is a digital book format.",
+        "relation": "Target asks the name of an optical-scanner-readable bars-and-spaces pattern; peer asks which format a specific Kindle guide lists separately from non-DRM Mobipocket files.",
+        "value": "Target key: Штрихкод; peer key: AZW.",
+        "context": "Machine-readable representation versus Kindle file-format classification in a 2004–2007 guide.",
+        "directAndReverse": "The barcode question does not ask for an ebook format, and AZW does not name a bars-and-spaces pattern."
+      },
+      "decision": "DISTINCT_NONCOLLIDING_MAIN"
+    },
+    {
+      "targetId": "books-publishing-librarycard-id",
+      "peerId": "books-publishing-pdf-format",
+      "meaningfulBilateralMAIN": {
+        "entity": "The target entity is a Halifax borrower card/account credential; peer entity is a PDF page boundary.",
+        "relation": "Target asks which credential links loans to a reader account; peer asks which PDF box defines finished trimmed page size.",
+        "value": "Target key: Читательский билет; peer key: TrimBox.",
+        "context": "Library circulation and borrower-account tracking versus document page geometry for print.",
+        "directAndReverse": "A reader card cannot specify PDF trim size, and TrimBox cannot link materials to a library account."
+      },
+      "decision": "DISTINCT_NONCOLLIDING_MAIN"
+    },
+    {
+      "targetId": "books-publishing-librarycard-id",
+      "peerId": "books-publishing-azw-format",
+      "meaningfulBilateralMAIN": {
+        "entity": "The target entity is a library borrower credential/account relation; peer entity is an ebook format.",
+        "relation": "Target asks which Halifax credential links checked-out materials to a reader account; peer asks which Kindle format is listed separately from Mobipocket files.",
+        "value": "Target key: Читательский билет; peer key: AZW.",
+        "context": "Public-library circulation versus historical Kindle file compatibility.",
+        "directAndReverse": "A library card is not AZW, and AZW does not identify a library borrower."
+      },
+      "decision": "DISTINCT_NONCOLLIDING_MAIN"
+    },
+    {
+      "targetId": "books-publishing-isbn-serial",
+      "peerId": "books-publishing-pdf-format",
+      "meaningfulBilateralMAIN": {
+        "entity": "The target concerns a publisher’s publication copy and a library deposit system; peer concerns a PDF page boundary.",
+        "relation": "Target asks the name of the publisher-to-library deposit regime; peer asks the boundary for intended finished page size after trimming.",
+        "value": "Target key: Обязательный экземпляр; peer key: TrimBox.",
+        "context": "Legal deposit across UK/Ireland publication and library delivery versus print-production geometry within a PDF.",
+        "directAndReverse": "Neither the deposit obligation nor delivery copy names a PDF box; TrimBox does not name a deposit system."
+      },
+      "decision": "DISTINCT_NONCOLLIDING_MAIN"
+    },
+    {
+      "targetId": "books-publishing-isbn-serial",
+      "peerId": "books-publishing-azw-format",
+      "meaningfulBilateralMAIN": {
+        "entity": "The target entity is a publisher’s publication copy under a library-deposit system; peer entity is an ebook file format.",
+        "relation": "Target asks the name of the publication-deposit regime; peer asks which format appears in a Kindle manual’s format list.",
+        "value": "Target key: Обязательный экземпляр; peer key: AZW.",
+        "context": "Publisher legal obligation to deposit publications versus file-format naming in a device manual.",
+        "directAndReverse": "The legal-deposit regime is not AZW, while AZW does not name a publisher delivery obligation."
+      },
+      "decision": "DISTINCT_NONCOLLIDING_MAIN"
+    },
+    {
+      "targetId": "books-publishing-issn-serial",
+      "peerId": "books-publishing-pdf-format",
+      "meaningfulBilateralMAIN": {
+        "entity": "The target entity is a continuing serial title/resource; peer entity is a page-box boundary in a PDF document.",
+        "relation": "Target asks which number identifies a serial publication; peer asks which boundary specifies finished page dimensions after trimming.",
+        "value": "Target key: ISSN; peer key: TrimBox.",
+        "context": "Serial-resource identification versus PDF print layout.",
+        "directAndReverse": "ISSN does not specify page trim geometry, and TrimBox is not a serial identifier."
+      },
+      "decision": "DISTINCT_NONCOLLIDING_MAIN"
+    },
+    {
+      "targetId": "books-publishing-issn-serial",
+      "peerId": "books-publishing-azw-format",
+      "meaningfulBilateralMAIN": {
+        "entity": "The target entity is a continuing serial publication/title; peer entity is an ebook format.",
+        "relation": "Target asks the identifier for a continuing serial; peer asks which Kindle file format the guide distinguishes from non-DRM Mobipocket.",
+        "value": "Target key: ISSN; peer key: AZW.",
+        "context": "Serial publication identification versus Kindle file-format naming.",
+        "directAndReverse": "ISSN does not identify the requested Kindle format, and AZW does not identify a serial title."
+      },
+      "decision": "DISTINCT_NONCOLLIDING_MAIN"
+    },
+    {
+      "targetId": "books-publishing-doi-serial",
+      "peerId": "books-publishing-pdf-format",
+      "meaningfulBilateralMAIN": {
+        "entity": "The target entity is a DOI-identified referent; peer entity is a PDF page boundary.",
+        "relation": "Target asks which identifier agencies assign and use in research; peer asks which PDF box defines the finished page size after trim.",
+        "value": "Target key: DOI; peer key: TrimBox.",
+        "context": "Persistent identification across physical/digital/abstract objects versus print geometry.",
+        "directAndReverse": "DOI does not describe a PDF boundary, and TrimBox is not an identifier assigned by a registration agency."
+      },
+      "decision": "DISTINCT_NONCOLLIDING_MAIN"
+    },
+    {
+      "targetId": "books-publishing-doi-serial",
+      "peerId": "books-publishing-azw-format",
+      "meaningfulBilateralMAIN": {
+        "entity": "The target entity is a DOI referent; peer entity is an ebook format.",
+        "relation": "Target asks the identifier assigned by registration agencies and used in scholarly publication; peer asks which file format the Kindle guide lists separately from Mobipocket.",
+        "value": "Target key: DOI; peer key: AZW.",
+        "context": "Identifier assignment and referent resolution versus a Kindle file format in a historical device guide.",
+        "directAndReverse": "DOI is not the requested Kindle format, and AZW is not a persistent identifier assigned by a registration agency."
+      },
+      "decision": "DISTINCT_NONCOLLIDING_MAIN"
+    }
+  ],
+  "qualityCredit": 0,
+  "scopeLimit": "Exactly two changed current peers against the five existing proposed cards; no new authoring, no other-15 review, and no source or peer-snapshot rewrite."
+}
