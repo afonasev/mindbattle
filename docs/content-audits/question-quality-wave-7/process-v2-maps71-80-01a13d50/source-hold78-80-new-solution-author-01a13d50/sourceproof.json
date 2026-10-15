@@ -1,0 +1,626 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "05423a2ed03c7663705ce8b7edc3b142d2f58928",
+  "sources": [
+    {
+      "id": "USGS Map Scales",
+      "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+      "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+      "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+      "bytes": 365302,
+      "completePrimary": true,
+      "personallyRead": "Complete 2-page PDF text extracted and read, p.1-2",
+      "locators": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details."
+    },
+    {
+      "id": "NOAA What is latitude?",
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+      "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+      "byteSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+      "bytes": 7341,
+      "completePrimary": true,
+      "personallyRead": "Full saved primary context read",
+      "locators": "“What is latitude?” intro/body; lines beginning “Latitude measures”; “Lines of latitude…” paragraph; hemisphere explanation.",
+      "claim": "Latitude measures north/south of equator; latitudes north of equator correspond to Northern Hemisphere."
+    },
+    {
+      "id": "NOAA What is longitude?",
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+      "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+      "byteSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+      "bytes": 8002,
+      "completePrimary": true,
+      "personallyRead": "Full saved primary context read",
+      "locators": "“What is longitude?” intro/body; lines beginning “Longitude measures”; paragraph explaining prime meridian 0° and eastern/western hemispheres.",
+      "claim": "Longitude measures east/west of prime meridian; NOAA context explicitly describes western and eastern hemispheres."
+    }
+  ],
+  "cards": [
+    {
+      "id": "maps-cartography-atlas-collection",
+      "status": "FIX",
+      "proposedSHA256": "21c35787d92209a60ec9d2598f58e98ba9d48e189cf5860ca811cc184a792e3b",
+      "evidence": [
+        {
+          "fieldGroup": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Вымышленный указатель атласа для области «Кедровая»: «Юг» — покрывает полностью, 1:100 000; «Восток» — частично, 1:10 000; «Запад» — полностью, 1:50 000; «Север» — полностью, 1:25 000. Какую страницу выбрать для самой подробной карты всей области?",
+            "answers": [
+              "Страницу «Юг».",
+              "Страницу «Восток».",
+              "Страницу «Запад».",
+              "Страницу «Север»."
+            ],
+            "correctIndex": 3
+          },
+          "literalSHA256": "30c6831fa1350358cbb107e6659ff58c6796c83c1b575bfd4f86a4290ce21ef9",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "USGS Map Scales defines representative fraction and explains larger scale/detail relationship.",
+              "support": "The cited primary directly supports the general map-scale relationship; numerical scenario values are explicitly invented in the prompt."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "explanation",
+          "literal": "Подходит страница «Север»: указатель подтверждает полное покрытие, а среди трёх полных страниц масштаб 1:25 000 крупнейший. USGS определяет дробную запись масштаба через одинаковые единицы на карте и местности; названия и значения в вопросе вымышлены.",
+          "literalSHA256": "7e3bdb40853719e667f6665cb4589bcbce3ba4e4bcfc753b32a50a23516a5177",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "USGS Map Scales defines representative fraction and explains larger scale/detail relationship.",
+              "support": "The cited primary directly supports the general map-scale relationship; numerical scenario values are explicitly invented in the prompt."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "note0",
+          "literal": "Страница «Юг» покрывает всю область, но 1:100 000 мельче 1:25 000 у «Севера» и даёт меньше деталей.",
+          "literalSHA256": "19536252f73c8209da412cf0912c2c1919e5559451b7cc9a78c7cb470794a58f",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "USGS Map Scales defines representative fraction and explains larger scale/detail relationship.",
+              "support": "The cited primary directly supports the general map-scale relationship; numerical scenario values are explicitly invented in the prompt."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "note1",
+          "literal": "Масштаб «Востока» крупнее остальных, но эта страница покрывает область лишь частично.",
+          "literalSHA256": "6fd17c6d6c11a30c7b2f0e01e0eb6a0bd0a4e873d3016150c52dc859e18cd106",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "USGS Map Scales defines representative fraction and explains larger scale/detail relationship.",
+              "support": "The cited primary directly supports the general map-scale relationship; numerical scenario values are explicitly invented in the prompt."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "note2",
+          "literal": "Запад охватывает весь участок, однако 1:50 000 мельче 1:25 000 у Севера, поэтому на этой площади он менее подробен.",
+          "literalSHA256": "de3f347bc9fe82a4090f4f95fc11384065a66207c5ec3f070227021ba75823b5",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "USGS Map Scales defines representative fraction and explains larger scale/detail relationship.",
+              "support": "The cited primary directly supports the general map-scale relationship; numerical scenario values are explicitly invented in the prompt."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "note3",
+          "literal": "Север покрывает участок. Запись 1:25 000 означает: одна единица на странице соответствует 25 000 таких же единиц на местности.",
+          "literalSHA256": "5affc471870e26596b9574673ed0bee708e5f40f557dd64d53932d828fa30c65",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "USGS Map Scales defines representative fraction and explains larger scale/detail relationship.",
+              "support": "The cited primary directly supports the general map-scale relationship; numerical scenario values are explicitly invented in the prompt."
+            }
+          ]
+        },
+        {
+          "answerIndex": 0,
+          "actualFullPrompt": "Вымышленный указатель атласа для области «Кедровая»: «Юг» — покрывает полностью, 1:100 000; «Восток» — частично, 1:10 000; «Запад» — полностью, 1:50 000; «Север» — полностью, 1:25 000. Какую страницу выбрать для самой подробной карты всей области?",
+          "actualAnswer": "Страницу «Юг».",
+          "actualNote": "Страница «Юг» покрывает всю область, но 1:100 000 мельче 1:25 000 у «Севера» и даёт меньше деталей.",
+          "ground": "Указатель прямо говорит, что Юг полностью покрывает область; однако 1:100 000 мельче, чем 1:25 000 у Севера, и не даёт наибольшей детализации.",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "",
+              "support": "Supports the rule used to evaluate the stated fictional data, not the data themselves."
+            }
+          ]
+        },
+        {
+          "answerIndex": 1,
+          "actualFullPrompt": "Вымышленный указатель атласа для области «Кедровая»: «Юг» — покрывает полностью, 1:100 000; «Восток» — частично, 1:10 000; «Запад» — полностью, 1:50 000; «Север» — полностью, 1:25 000. Какую страницу выбрать для самой подробной карты всей области?",
+          "actualAnswer": "Страницу «Восток».",
+          "actualNote": "Масштаб «Востока» крупнее остальных, но эта страница покрывает область лишь частично.",
+          "ground": "Восток привлекателен крупнейшим масштабом 1:10 000, но указатель сообщает только частичное покрытие, поэтому вся область не показана.",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "",
+              "support": "Supports the rule used to evaluate the stated fictional data, not the data themselves."
+            }
+          ]
+        },
+        {
+          "answerIndex": 2,
+          "actualFullPrompt": "Вымышленный указатель атласа для области «Кедровая»: «Юг» — покрывает полностью, 1:100 000; «Восток» — частично, 1:10 000; «Запад» — полностью, 1:50 000; «Север» — полностью, 1:25 000. Какую страницу выбрать для самой подробной карты всей области?",
+          "actualAnswer": "Страницу «Запад».",
+          "actualNote": "Запад охватывает весь участок, однако 1:50 000 мельче 1:25 000 у Севера, поэтому на этой площади он менее подробен.",
+          "ground": "Запад покрывает область полностью, но его 1:50 000 мельче, чем 1:25 000 у Севера; выбор верен по покрытию, но не по требуемой детализации.",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "",
+              "support": "Supports the rule used to evaluate the stated fictional data, not the data themselves."
+            }
+          ]
+        },
+        {
+          "answerIndex": 3,
+          "actualFullPrompt": "Вымышленный указатель атласа для области «Кедровая»: «Юг» — покрывает полностью, 1:100 000; «Восток» — частично, 1:10 000; «Запад» — полностью, 1:50 000; «Север» — полностью, 1:25 000. Какую страницу выбрать для самой подробной карты всей области?",
+          "actualAnswer": "Страницу «Север».",
+          "actualNote": "Север покрывает участок. Запись 1:25 000 означает: одна единица на странице соответствует 25 000 таких же единиц на местности.",
+          "ground": "Индекс прямо подтверждает полное покрытие области Севером; среди трёх полных страниц масштаб 1:25 000 крупнейший, так как его знаменатель меньше 50 000 и 100 000.",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "",
+              "support": "Supports the rule used to evaluate the stated fictional data, not the data themselves."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-globe-sphere",
+      "status": "FIX",
+      "proposedSHA256": "23a036b3954ee2643f65871666c9fa191bc5f7350aed3c7aec4e445daefaa780",
+      "evidence": [
+        {
+          "fieldGroup": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На учебном глобусе отмечены вымышленные точки: «Альфа» 40° с. ш., 70° з. д.; «Бета» 20° ю. ш., 30° з. д.; «Гамма» 15° с. ш., 10° в. д.; «Дельта» 5° ю. ш., 80° в. д. Какая точка находится в Северном и Западном полушариях?",
+            "answers": [
+              "Точка «Бета».",
+              "Точка «Гамма».",
+              "Точка «Дельта».",
+              "Точка «Альфа»."
+            ],
+            "correctIndex": 3
+          },
+          "literalSHA256": "b15d146dc83b7634264f2be96a9f4747d16ff9e3fbab571dff3a75809d6311b8",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+              "byteSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+              "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+              "locator": "“What is latitude?” intro/body; lines beginning “Latitude measures”; “Lines of latitude…” paragraph; hemisphere explanation.",
+              "specificClaim": "Latitude measures north/south of equator; latitudes north of equator correspond to Northern Hemisphere.",
+              "support": "NOAA directly defines this coordinate direction and hemisphere; both latitude and longitude contexts are needed for the conjunction."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+              "byteSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+              "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+              "locator": "“What is longitude?” intro/body; lines beginning “Longitude measures”; paragraph explaining prime meridian 0° and eastern/western hemispheres.",
+              "specificClaim": "Longitude measures east/west of prime meridian; NOAA context explicitly describes western and eastern hemispheres.",
+              "support": "NOAA directly defines this coordinate direction and hemisphere; both latitude and longitude contexts are needed for the conjunction."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "explanation",
+          "literal": "Точка «Альфа» задана северной широтой и западной долготой. NOAA определяет широту относительно экватора, а долготу — относительно нулевого меридиана; координаты точек вымышлены.",
+          "literalSHA256": "8127be6b6aeecf84d4dab989efbf3f3885a5a68290a233b065b7705f13f1f355",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+              "byteSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+              "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+              "locator": "“What is latitude?” intro/body; lines beginning “Latitude measures”; “Lines of latitude…” paragraph; hemisphere explanation.",
+              "specificClaim": "Latitude measures north/south of equator; latitudes north of equator correspond to Northern Hemisphere.",
+              "support": "NOAA directly defines this coordinate direction and hemisphere; both latitude and longitude contexts are needed for the conjunction."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+              "byteSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+              "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+              "locator": "“What is longitude?” intro/body; lines beginning “Longitude measures”; paragraph explaining prime meridian 0° and eastern/western hemispheres.",
+              "specificClaim": "Longitude measures east/west of prime meridian; NOAA context explicitly describes western and eastern hemispheres.",
+              "support": "NOAA directly defines this coordinate direction and hemisphere; both latitude and longitude contexts are needed for the conjunction."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "note0",
+          "literal": "Южная широта помещает «Бету» в Южное полушарие, хотя западная долгота подходит.",
+          "literalSHA256": "91a66694bc7e0fd2d91252e30c79e4f602082bd69b02b74f1fed9e28e1a07b02",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+              "byteSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+              "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+              "locator": "“What is latitude?” intro/body; lines beginning “Latitude measures”; “Lines of latitude…” paragraph; hemisphere explanation.",
+              "specificClaim": "Latitude measures north/south of equator; latitudes north of equator correspond to Northern Hemisphere.",
+              "support": "NOAA directly defines this coordinate direction and hemisphere; both latitude and longitude contexts are needed for the conjunction."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+              "byteSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+              "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+              "locator": "“What is longitude?” intro/body; lines beginning “Longitude measures”; paragraph explaining prime meridian 0° and eastern/western hemispheres.",
+              "specificClaim": "Longitude measures east/west of prime meridian; NOAA context explicitly describes western and eastern hemispheres.",
+              "support": "NOAA directly defines this coordinate direction and hemisphere; both latitude and longitude contexts are needed for the conjunction."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "note1",
+          "literal": "Северная широта подходит, но восточная долгота помещает «Гамму» в Восточное полушарие.",
+          "literalSHA256": "1bd1ff014d2859828ff0ccc91cec84c6c9f107ccb53cb4a64bb4cf220fdcd966",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+              "byteSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+              "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+              "locator": "“What is latitude?” intro/body; lines beginning “Latitude measures”; “Lines of latitude…” paragraph; hemisphere explanation.",
+              "specificClaim": "Latitude measures north/south of equator; latitudes north of equator correspond to Northern Hemisphere.",
+              "support": "NOAA directly defines this coordinate direction and hemisphere; both latitude and longitude contexts are needed for the conjunction."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+              "byteSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+              "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+              "locator": "“What is longitude?” intro/body; lines beginning “Longitude measures”; paragraph explaining prime meridian 0° and eastern/western hemispheres.",
+              "specificClaim": "Longitude measures east/west of prime meridian; NOAA context explicitly describes western and eastern hemispheres.",
+              "support": "NOAA directly defines this coordinate direction and hemisphere; both latitude and longitude contexts are needed for the conjunction."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "note2",
+          "literal": "Южная широта и восточная долгота не соответствуют ни одному из двух требуемых полушарий.",
+          "literalSHA256": "8abf775961fa27db7305c9aafb02d2144ba2720b56098a783affbb66f18af04a",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+              "byteSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+              "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+              "locator": "“What is latitude?” intro/body; lines beginning “Latitude measures”; “Lines of latitude…” paragraph; hemisphere explanation.",
+              "specificClaim": "Latitude measures north/south of equator; latitudes north of equator correspond to Northern Hemisphere.",
+              "support": "NOAA directly defines this coordinate direction and hemisphere; both latitude and longitude contexts are needed for the conjunction."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+              "byteSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+              "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+              "locator": "“What is longitude?” intro/body; lines beginning “Longitude measures”; paragraph explaining prime meridian 0° and eastern/western hemispheres.",
+              "specificClaim": "Longitude measures east/west of prime meridian; NOAA context explicitly describes western and eastern hemispheres.",
+              "support": "NOAA directly defines this coordinate direction and hemisphere; both latitude and longitude contexts are needed for the conjunction."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "note3",
+          "literal": "Северная широта и западная долгота соответствуют обоим условиям; NOAA также отмечает, что долгота измеряется в градусах, минутах и секундах.",
+          "literalSHA256": "9c00508ed1486da4720fd4c40b5f410cda6f90001b4bbd3cb2aeb7a381723c15",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+              "byteSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+              "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+              "locator": "“What is latitude?” intro/body; lines beginning “Latitude measures”; “Lines of latitude…” paragraph; hemisphere explanation.",
+              "specificClaim": "Latitude measures north/south of equator; latitudes north of equator correspond to Northern Hemisphere.",
+              "support": "NOAA directly defines this coordinate direction and hemisphere; both latitude and longitude contexts are needed for the conjunction."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+              "byteSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+              "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+              "locator": "“What is longitude?” intro/body; lines beginning “Longitude measures”; paragraph explaining prime meridian 0° and eastern/western hemispheres.",
+              "specificClaim": "Longitude measures east/west of prime meridian; NOAA context explicitly describes western and eastern hemispheres.",
+              "support": "NOAA directly defines this coordinate direction and hemisphere; both latitude and longitude contexts are needed for the conjunction."
+            }
+          ]
+        },
+        {
+          "answerIndex": 0,
+          "actualFullPrompt": "На учебном глобусе отмечены вымышленные точки: «Альфа» 40° с. ш., 70° з. д.; «Бета» 20° ю. ш., 30° з. д.; «Гамма» 15° с. ш., 10° в. д.; «Дельта» 5° ю. ш., 80° в. д. Какая точка находится в Северном и Западном полушариях?",
+          "actualAnswer": "Точка «Бета».",
+          "actualNote": "Южная широта помещает «Бету» в Южное полушарие, хотя западная долгота подходит.",
+          "ground": "20° ю. ш. помещает Бету южнее экватора; она привлекательна верной западной долготой, но нарушает северное условие.",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+              "byteSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+              "locator": "“What is latitude?” intro/body; lines beginning “Latitude measures”; “Lines of latitude…” paragraph; hemisphere explanation.",
+              "specificClaim": "Latitude measures north/south of equator; latitudes north of equator correspond to Northern Hemisphere.",
+              "support": "Supports hemisphere reading; for the correct answer both latitude and longitude sources together are required."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+              "byteSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+              "locator": "“What is longitude?” intro/body; lines beginning “Longitude measures”; paragraph explaining prime meridian 0° and eastern/western hemispheres.",
+              "specificClaim": "Longitude measures east/west of prime meridian; NOAA context explicitly describes western and eastern hemispheres.",
+              "support": "Supports hemisphere reading; for the correct answer both latitude and longitude sources together are required."
+            }
+          ]
+        },
+        {
+          "answerIndex": 1,
+          "actualFullPrompt": "На учебном глобусе отмечены вымышленные точки: «Альфа» 40° с. ш., 70° з. д.; «Бета» 20° ю. ш., 30° з. д.; «Гамма» 15° с. ш., 10° в. д.; «Дельта» 5° ю. ш., 80° в. д. Какая точка находится в Северном и Западном полушариях?",
+          "actualAnswer": "Точка «Гамма».",
+          "actualNote": "Северная широта подходит, но восточная долгота помещает «Гамму» в Восточное полушарие.",
+          "ground": "15° с. ш. удовлетворяет северному условию, а 10° в. д. помещает Гамму восточнее нулевого меридиана; вариант выполняет только половину условия.",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+              "byteSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+              "locator": "“What is latitude?” intro/body; lines beginning “Latitude measures”; “Lines of latitude…” paragraph; hemisphere explanation.",
+              "specificClaim": "Latitude measures north/south of equator; latitudes north of equator correspond to Northern Hemisphere.",
+              "support": "Supports hemisphere reading; for the correct answer both latitude and longitude sources together are required."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+              "byteSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+              "locator": "“What is longitude?” intro/body; lines beginning “Longitude measures”; paragraph explaining prime meridian 0° and eastern/western hemispheres.",
+              "specificClaim": "Longitude measures east/west of prime meridian; NOAA context explicitly describes western and eastern hemispheres.",
+              "support": "Supports hemisphere reading; for the correct answer both latitude and longitude sources together are required."
+            }
+          ]
+        },
+        {
+          "answerIndex": 2,
+          "actualFullPrompt": "На учебном глобусе отмечены вымышленные точки: «Альфа» 40° с. ш., 70° з. д.; «Бета» 20° ю. ш., 30° з. д.; «Гамма» 15° с. ш., 10° в. д.; «Дельта» 5° ю. ш., 80° в. д. Какая точка находится в Северном и Западном полушариях?",
+          "actualAnswer": "Точка «Дельта».",
+          "actualNote": "Южная широта и восточная долгота не соответствуют ни одному из двух требуемых полушарий.",
+          "ground": "5° ю. ш. и 80° в. д. помещают Дельту одновременно в Южное и Восточное полушария; оба знака несовместимы с требованием.",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+              "byteSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+              "locator": "“What is latitude?” intro/body; lines beginning “Latitude measures”; “Lines of latitude…” paragraph; hemisphere explanation.",
+              "specificClaim": "Latitude measures north/south of equator; latitudes north of equator correspond to Northern Hemisphere.",
+              "support": "Supports hemisphere reading; for the correct answer both latitude and longitude sources together are required."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+              "byteSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+              "locator": "“What is longitude?” intro/body; lines beginning “Longitude measures”; paragraph explaining prime meridian 0° and eastern/western hemispheres.",
+              "specificClaim": "Longitude measures east/west of prime meridian; NOAA context explicitly describes western and eastern hemispheres.",
+              "support": "Supports hemisphere reading; for the correct answer both latitude and longitude sources together are required."
+            }
+          ]
+        },
+        {
+          "answerIndex": 3,
+          "actualFullPrompt": "На учебном глобусе отмечены вымышленные точки: «Альфа» 40° с. ш., 70° з. д.; «Бета» 20° ю. ш., 30° з. д.; «Гамма» 15° с. ш., 10° в. д.; «Дельта» 5° ю. ш., 80° в. д. Какая точка находится в Северном и Западном полушариях?",
+          "actualAnswer": "Точка «Альфа».",
+          "actualNote": "Северная широта и западная долгота соответствуют обоим условиям; NOAA также отмечает, что долгота измеряется в градусах, минутах и секундах.",
+          "ground": "40° с. ш. задаёт севернее экватора, а 70° з. д. западнее нулевого меридиана; обе координаты подходят.",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+              "byteSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+              "locator": "“What is latitude?” intro/body; lines beginning “Latitude measures”; “Lines of latitude…” paragraph; hemisphere explanation.",
+              "specificClaim": "Latitude measures north/south of equator; latitudes north of equator correspond to Northern Hemisphere.",
+              "support": "Supports hemisphere reading; for the correct answer both latitude and longitude sources together are required."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+              "byteSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+              "locator": "“What is longitude?” intro/body; lines beginning “Longitude measures”; paragraph explaining prime meridian 0° and eastern/western hemispheres.",
+              "specificClaim": "Longitude measures east/west of prime meridian; NOAA context explicitly describes western and eastern hemispheres.",
+              "support": "Supports hemisphere reading; for the correct answer both latitude and longitude sources together are required."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-wall-map",
+      "status": "FIX",
+      "proposedSHA256": "58afb1f6c0972e5b624cb4ce831704875905ca0db13c4882b27528ddad5029ef",
+      "evidence": [
+        {
+          "fieldGroup": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Для вымышленного настенного плаката исходный масштаб карты — 1 см соответствует 2 км. При печати изображение увеличили ровно в 2 раза по длине и ширине. Сколько километров теперь соответствует 1 см плаката?",
+            "answers": [
+              "4 км.",
+              "2 км.",
+              "0,5 км.",
+              "1 км."
+            ],
+            "correctIndex": 3
+          },
+          "literalSHA256": "5fc8ec0d1f0da49c3968556155a91f8e3c5b93f3c567f2791abf7e6f01e9971c",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "USGS Map Scales defines representative fraction and explains larger scale/detail relationship.",
+              "support": "The cited primary directly supports the general map-scale relationship; numerical scenario values are explicitly invented in the prompt."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "explanation",
+          "literal": "После увеличения исходный отрезок 2 км занимает 2 см плаката, поэтому 1 см соответствует 1 км. Это можно записать как 1:100 000, если расстояния по обе стороны масштаба выражены в сантиметрах; данные примера условны.",
+          "literalSHA256": "ebf3afa2de4be918ec5a1dc163ab1faee88ae90e56a4157df2ad9d99a6c61a73",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "USGS Map Scales defines representative fraction and explains larger scale/detail relationship.",
+              "support": "The cited primary directly supports the general map-scale relationship; numerical scenario values are explicitly invented in the prompt."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "note0",
+          "literal": "4 км на сантиметр означали бы более мелкий масштаб и больше километров на каждом сантиметре; увеличение плаката вдвое должно уменьшить исходные 2 км до 1 км.",
+          "literalSHA256": "25b66a065363da4f5d4c42f72662b633e6b565c1899114a57e01eb0586333799",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "USGS Map Scales defines representative fraction and explains larger scale/detail relationship.",
+              "support": "The cited primary directly supports the general map-scale relationship; numerical scenario values are explicitly invented in the prompt."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "note1",
+          "literal": "2 км — исходное соотношение до печати; после увеличения этот отрезок занимает 2 см плаката, поэтому на сантиметр приходится вдвое меньше.",
+          "literalSHA256": "405a6a4aa82e1d40785500eefc3921f7f00c64166e1f1159060dc7c7345b090d",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "USGS Map Scales defines representative fraction and explains larger scale/detail relationship.",
+              "support": "The cited primary directly supports the general map-scale relationship; numerical scenario values are explicitly invented in the prompt."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "note2",
+          "literal": "0,5 км на сантиметр получилось бы при четырёхкратном увеличении: исходные 2 км распределились бы на 4 см, а не на 2.",
+          "literalSHA256": "e09a0a8dbfb22fabc275abb95bed465a563b10aacc4d254a7fd3cf9c235c5608",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "USGS Map Scales defines representative fraction and explains larger scale/detail relationship.",
+              "support": "The cited primary directly supports the general map-scale relationship; numerical scenario values are explicitly invented in the prompt."
+            }
+          ]
+        },
+        {
+          "fieldGroup": "note3",
+          "literal": "Новый масштаб можно записать как 1:100 000: 1 см плаката соответствует 1 км, то есть 100 000 см на местности.",
+          "literalSHA256": "5b597584f02ee34d7cbc0c04fa725d9a4e94b15527bc96859563959315287b25",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "url": "https://pubs.usgs.gov/fs/2002/0015/report.pdf",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "USGS Map Scales defines representative fraction and explains larger scale/detail relationship.",
+              "support": "The cited primary directly supports the general map-scale relationship; numerical scenario values are explicitly invented in the prompt."
+            }
+          ]
+        },
+        {
+          "answerIndex": 0,
+          "actualFullPrompt": "Для вымышленного настенного плаката исходный масштаб карты — 1 см соответствует 2 км. При печати изображение увеличили ровно в 2 раза по длине и ширине. Сколько километров теперь соответствует 1 см плаката?",
+          "actualAnswer": "4 км.",
+          "actualNote": "4 км на сантиметр означали бы более мелкий масштаб и больше километров на каждом сантиметре; увеличение плаката вдвое должно уменьшить исходные 2 км до 1 км.",
+          "ground": "4 км/см противоречит увеличению: вдвое больший отпечаток делит исходные 2 км на 2 см, а не увеличивает километры на сантиметр.",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "",
+              "support": "Supports the rule used to evaluate the stated fictional data, not the data themselves."
+            }
+          ]
+        },
+        {
+          "answerIndex": 1,
+          "actualFullPrompt": "Для вымышленного настенного плаката исходный масштаб карты — 1 см соответствует 2 км. При печати изображение увеличили ровно в 2 раза по длине и ширине. Сколько километров теперь соответствует 1 см плаката?",
+          "actualAnswer": "2 км.",
+          "actualNote": "2 км — исходное соотношение до печати; после увеличения этот отрезок занимает 2 см плаката, поэтому на сантиметр приходится вдвое меньше.",
+          "ground": "2 км/см — исходное значение до изменения размера; оно заманчиво как прямое копирование числа из условия, но масштаб после печати изменён.",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "",
+              "support": "Supports the rule used to evaluate the stated fictional data, not the data themselves."
+            }
+          ]
+        },
+        {
+          "answerIndex": 2,
+          "actualFullPrompt": "Для вымышленного настенного плаката исходный масштаб карты — 1 см соответствует 2 км. При печати изображение увеличили ровно в 2 раза по длине и ширине. Сколько километров теперь соответствует 1 см плаката?",
+          "actualAnswer": "0,5 км.",
+          "actualNote": "0,5 км на сантиметр получилось бы при четырёхкратном увеличении: исходные 2 км распределились бы на 4 см, а не на 2.",
+          "ground": "0,5 км/см подразумевает, что исходные 2 км занимают 4 см, то есть увеличение в четыре раза, тогда как дано увеличение вдвое.",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "",
+              "support": "Supports the rule used to evaluate the stated fictional data, not the data themselves."
+            }
+          ]
+        },
+        {
+          "answerIndex": 3,
+          "actualFullPrompt": "Для вымышленного настенного плаката исходный масштаб карты — 1 см соответствует 2 км. При печати изображение увеличили ровно в 2 раза по длине и ширине. Сколько километров теперь соответствует 1 см плаката?",
+          "actualAnswer": "1 км.",
+          "actualNote": "Новый масштаб можно записать как 1:100 000: 1 см плаката соответствует 1 км, то есть 100 000 см на местности.",
+          "ground": "Исходные 2 км распределяются на 2 см после увеличения; следовательно 1 см соответствует 1 км, а 1 км равен 100 000 см.",
+          "primaryEvidence": [
+            {
+              "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "byteSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "locator": "p.1 definition of scale as map/ground relation; representative fraction same-units example; larger denominator means smaller scale; large-scale map permits more detail. p.2 small-scale maps cover larger areas but have limited details.",
+              "specificClaim": "",
+              "support": "Supports the rule used to evaluate the stated fictional data, not the data themselves."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
