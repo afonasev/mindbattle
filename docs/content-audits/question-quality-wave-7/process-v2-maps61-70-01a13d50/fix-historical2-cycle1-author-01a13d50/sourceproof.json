@@ -1,0 +1,411 @@
+{
+  "schema": "question-quality-wave7-process-v2-sourceproof-v1",
+  "cycle": 1,
+  "status": "DRAFT_AUTHOR_FIX_CANDIDATES",
+  "baselineCommit": "78c153d2e2a89634c98600171bb49000a7ece90a",
+  "catalogPath": "src/content/topics/maps-cartography.json",
+  "catalogByteSHA256": "95cceafe5284816b7a2aa3b12a0dab99fff1358016d0c36d9d9256aeead15e3c",
+  "requestPath": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/fix-request-historical2-cycle1-01a13d50.json",
+  "requestByteSHA256": "7f1bd5627912c2efc656036e0b30e8aa87449ab9c6751a8fbe5b2d4140aae700",
+  "entries": [
+    {
+      "id": "maps-cartography-peutinger-roads",
+      "status": "FIX_CANDIDATE",
+      "beforeCardSHA256": "2fc8bcada9ae5e4484affe0d2291d45da053c7b1b931b01945543405f3dcf977",
+      "proposedCardSHA256": "15eddad6dd2015d4f1feff9146b652db07e49ae4119340bd34b1538fbb50c57c",
+      "absoluteDifficulty": "medium",
+      "frozenCorrectIndex": 2,
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Для Tabula Peutingeriana проектируют слой ГИС. В исходном описании сохранены связи дорожной сети cursus publicus и различия городов по значимости, но схема не изображает местность как обычная географическая карта. Какой план данных сохранит оба исторических признака, не выдавая схему за координатную основу?",
+            "answers": [
+              "Создать точки городов с классом значимости, а дороги оставить отдельной картинкой без связей между узлами.",
+              "Сохранить дорожные рёбра, но назначить всем городским узлам один символ без поля значимости.",
+              "Создать узлы городов и рёбра дорог; значимость узла хранить отдельным упорядоченным классом.",
+              "Оцифровать схему как географические линии маршрутов и подобрать расстояния по длине промежутков на листе."
+            ],
+            "correctIndex": 2
+          },
+          "literalSHA256": "663b698477835489a562074affda76fb5e2e1704ec9beebe77ef05bacff0eb38",
+          "sources": [
+            {
+              "contextId": "unesco-tabula",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-tabula.txt",
+              "byteSHA256": "8d21c153f4250163ba9482ca7ba6c2e0e15e7ab46b4fe4652962c6c4f36e77f7",
+              "url": "https://www.unesco.org/fr/memory-world/tabula-peutingeriana",
+              "exactLocator": "L69–72",
+              "claim": "The stem requires both road relations and ordinal city importance; only slot 2 explicitly retains both as graph edges plus a rank field. This is GIS design inference from UNESCO’s described network and symbol meaning, not a claim that UNESCO prescribes GIS."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "В описании UNESCO одновременно названы сеть cursus publicus и различия городов по значимости; схема также прямо противопоставлена обычной карте регионов. Поэтому ключ хранит топологические связи и отдельный порядковый класс узла. Это вывод о подходящей модели данных из приведённых признаков: UNESCO не предписывает конкретную GIS-схему.",
+          "literalSHA256": "b870fd2243ea804d02c9df7c65ad0e869e1bbbd9b5efe3d553616f8f7faf50c2",
+          "sources": [
+            {
+              "contextId": "unesco-tabula",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-tabula.txt",
+              "byteSHA256": "8d21c153f4250163ba9482ca7ba6c2e0e15e7ab46b4fe4652962c6c4f36e77f7",
+              "url": "https://www.unesco.org/fr/memory-world/tabula-peutingeriana",
+              "exactLocator": "L69–72",
+              "claim": "Interpretation separates primary facts from the proposed encoding/exhibit inference."
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Французская запись UNESCO отмечает пользу таблицы для историков римского управления и экономики.",
+          "literalSHA256": "9a614194ff2be7747853a5fb243446221fe875d8dcf7143e3f29fb21109c9246",
+          "sources": [
+            {
+              "contextId": "unesco-tabula",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-tabula.txt",
+              "byteSHA256": "8d21c153f4250163ba9482ca7ba6c2e0e15e7ab46b4fe4652962c6c4f36e77f7",
+              "url": "https://www.unesco.org/fr/memory-world/tabula-peutingeriana",
+              "exactLocator": "L71",
+              "claim": "The French record states that it provides information to historians of Roman administration and economy."
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "В описании UNESCO сказано, что карта служит археологам путеводителем при изучении остатков римских дорог и памятников империи.",
+          "literalSHA256": "f5032519ed91f9a6e9b6699fc03807c91768cbc18c0eb38ad268981dc4ea920a",
+          "sources": [
+            {
+              "contextId": "unesco-tabula",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-tabula.txt",
+              "byteSHA256": "8d21c153f4250163ba9482ca7ba6c2e0e15e7ab46b4fe4652962c6c4f36e77f7",
+              "url": "https://www.unesco.org/fr/memory-world/tabula-peutingeriana",
+              "exactLocator": "L70–71",
+              "claim": "UNESCO says archaeologists use it as a guide to Roman road remains and sites dating from the empire."
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "UNESCO указывает охват провинций Рима и восточных территорий, завоёванных Александром Македонским.",
+          "literalSHA256": "4cc090d51cd00134524d5fe57f4e48de6ed7ed4c02601f5102d4055589a60187",
+          "sources": [
+            {
+              "contextId": "unesco-tabula",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-tabula.txt",
+              "byteSHA256": "8d21c153f4250163ba9482ca7ba6c2e0e15e7ab46b4fe4652962c6c4f36e77f7",
+              "url": "https://www.unesco.org/fr/memory-world/tabula-peutingeriana",
+              "exactLocator": "L70",
+              "claim": "UNESCO says it covers all provinces under Rome and eastern territories conquered by Alexander the Great."
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "В реестре UNESCO оригинал хранится в Австрийской национальной библиотеке под шифром Cod. 324.",
+          "literalSHA256": "a94532edd08ef553b5119f3b40adaa84292a906f6091b82e3580d3afc3b4e084",
+          "sources": [
+            {
+              "contextId": "unesco-tabula",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-tabula.txt",
+              "byteSHA256": "8d21c153f4250163ba9482ca7ba6c2e0e15e7ab46b4fe4652962c6c4f36e77f7",
+              "url": "https://www.unesco.org/fr/memory-world/tabula-peutingeriana",
+              "exactLocator": "L65",
+              "claim": "The UNESCO collection entry identifies the Austrian National Library item as shelfmark Cod. 324."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-mappa-mundi",
+      "status": "FIX_CANDIDATE",
+      "beforeCardSHA256": "5e6cf3f706a92b4fbf6d28dac1e96925f18cf63603c599248451c98843364c20",
+      "proposedCardSHA256": "e9eb3c5b1144a527d68a07bdd609151bbf150b3f0cad5ec6e42e108b9acb1ded",
+      "absoluteDifficulty": "medium",
+      "frozenCorrectIndex": 2,
+      "fieldGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Вы готовите маршрут для посетителей у Hereford Mappa Mundi. Какой сценарий чтения поможет увидеть географические места и классические сюжеты внутри христианского представления о мире, где земная жизнь подчинена божественному порядку и суду?",
+            "answers": [
+              "Показать географические места и классические сюжеты как отдельную коллекцию, не связывая их с христианским устройством карты.",
+              "Начать у изображения Христа-судии и объяснить христианский порядок мира, оставив географические места и классические сюжеты вне маршрута.",
+              "Связать места и классические сюжеты с их местом в духовно упорядоченном христианском мире, включая образ Христа-судии.",
+              "Провести посетителя по библейским эпизодам как последовательной истории, не обсуждая географический образ мира и античное наследие."
+            ],
+            "correctIndex": 2
+          },
+          "literalSHA256": "9ea9bd42e877a7d92f028535e9aeb71e59a8f17a9c64f70889f174e456827a06",
+          "sources": [
+            {
+              "contextId": "unesco-hereford",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-hereford.txt",
+              "byteSHA256": "a436aec6bd773af9bcdd3a5aaf0a6510246547ea3e81df936642debd10721461",
+              "url": "https://media.unesco.org/sites/default/files/webform/mow001/uk_hereford.pdf",
+              "exactLocator": "L5–10, L41–53@P0–1",
+              "claim": "Prompt frames inference; all four plans test retention based on stated details."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Номинация описывает географические места и классические сведения, а также образ Христа-судии, выражающий христианское понимание земной жизни как подчинённой смерти, суду и божественному порядку. Она прямо сравнивает mappa mundi с портоланами: те точнее изображают берега, но не имеют той же духовной и дидактической цели. Поэтому сценарий связывает географическое и классическое содержание с духовным устройством карты; это кураторский вывод из источника, а не предписание UNESCO.",
+          "literalSHA256": "d7a5d7079872cafe1d96b09e420a43c8dd2d61c6fd9268bfe916ccd1e7278ae1",
+          "sources": [
+            {
+              "contextId": "unesco-hereford",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-hereford.txt",
+              "byteSHA256": "a436aec6bd773af9bcdd3a5aaf0a6510246547ea3e81df936642debd10721461",
+              "url": "https://media.unesco.org/sites/default/files/webform/mow001/uk_hereford.pdf",
+              "exactLocator": "L5–10@P0; L41–53@P0–1",
+              "claim": "The source names geographic/classical information, the Christ-in-judgement image and divine order, and compares portolans: more realistic coastlines but no same spiritual/didactic purpose."
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "В номинации карта названа единственным полным сохранившимся примером крупной средневековой карты мира, созданной для публичного показа.",
+          "literalSHA256": "775c08f520f0a9bc18ce1d057b97fa7bcd6fa3e473ff2cca9816770fe7c89ca6",
+          "sources": [
+            {
+              "contextId": "unesco-hereford",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-hereford.txt",
+              "byteSHA256": "a436aec6bd773af9bcdd3a5aaf0a6510246547ea3e81df936642debd10721461",
+              "url": "https://media.unesco.org/sites/default/files/webform/mow001/uk_hereford.pdf",
+              "exactLocator": "L45–53@P1",
+              "claim": "The map is a complete public-display survival; it is publicly displayed with interpretative exhibition (also L123@P2)."
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "В номинации сказано, что карта и сейчас находится на виду у публики вместе с интерпретационной выставкой.",
+          "literalSHA256": "334ec2ce6974fb9f19e63ead51f7dccc4e010e51d80aade1723b03ff774bc2ac",
+          "sources": [
+            {
+              "contextId": "unesco-hereford",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-hereford.txt",
+              "byteSHA256": "a436aec6bd773af9bcdd3a5aaf0a6510246547ea3e81df936642debd10721461",
+              "url": "https://media.unesco.org/sites/default/files/webform/mow001/uk_hereford.pdf",
+              "exactLocator": "L123@P2",
+              "claim": "The legal information says it is on public display accompanied by an interpretative exhibition."
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Номинация насчитывает около 420 видов или символов городов и поселений.",
+          "literalSHA256": "0c344165e87c4df8933c19db94e0eb34e76a568a44cd4a34b5a218659bff3d70",
+          "sources": [
+            {
+              "contextId": "unesco-hereford",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-hereford.txt",
+              "byteSHA256": "a436aec6bd773af9bcdd3a5aaf0a6510246547ea3e81df936642debd10721461",
+              "url": "https://media.unesco.org/sites/default/files/webform/mow001/uk_hereford.pdf",
+              "exactLocator": "L37–39@P0",
+              "claim": "The nomination says around 420 views or symbols of cities and towns."
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "На карте около 500 иллюстраций; среди них есть 33 изображения растений, животных, птиц и рыб.",
+          "literalSHA256": "f9db3fcf8c8388a1934c48748fbf6532e3ed08f119a83874438a8eda355c406e",
+          "sources": [
+            {
+              "contextId": "unesco-hereford",
+              "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-hereford.txt",
+              "byteSHA256": "a436aec6bd773af9bcdd3a5aaf0a6510246547ea3e81df936642debd10721461",
+              "url": "https://media.unesco.org/sites/default/files/webform/mow001/uk_hereford.pdf",
+              "exactLocator": "L37–40@P0",
+              "claim": "The nomination lists 33 depictions of plants, animals, birds and fish among around 500 illustrations."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "individualVariantAssessments": [
+    {
+      "id": "maps-cartography-mappa-mundi",
+      "optionIndex": 0,
+      "isKey": false,
+      "fullPrompt": "Вы готовите маршрут для посетителей у Hereford Mappa Mundi. Какой сценарий чтения поможет увидеть географические места и классические сюжеты внутри христианского представления о мире, где земная жизнь подчинена божественному порядку и суду?",
+      "actualAnswer": "Показать географические места и классические сюжеты как отдельную коллекцию, не связывая их с христианским устройством карты.",
+      "actualNote": "В номинации карта названа единственным полным сохранившимся примером крупной средневековой карты мира, созданной для публичного показа.",
+      "grammar": "The infinitive action completes the question about visitor interpretation.",
+      "truthOneKey": "Incorrect: it isolates geographic/classical content and omits the spiritually ordered Christian worldview stated in the nomination.",
+      "plausibilitySameCategory": "Plausible as an object-led museum route: place names and classical imagery invite a geographic/classical reading, but the proposal deliberately severs them from the map’s Christian frame.",
+      "ownNoteUsefulness": "The nomination says this is the only complete surviving example of a large medieval world map intended for public display.",
+      "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-hereford.txt",
+      "primaryByteSHA256": "a436aec6bd773af9bcdd3a5aaf0a6510246547ea3e81df936642debd10721461",
+      "exactLocator": "L45–53@P1",
+      "specificClaim": "The map is a complete public-display survival; it is publicly displayed with interpretative exhibition (also L123@P2)."
+    },
+    {
+      "id": "maps-cartography-mappa-mundi",
+      "optionIndex": 1,
+      "isKey": false,
+      "fullPrompt": "Вы готовите маршрут для посетителей у Hereford Mappa Mundi. Какой сценарий чтения поможет увидеть географические места и классические сюжеты внутри христианского представления о мире, где земная жизнь подчинена божественному порядку и суду?",
+      "actualAnswer": "Начать у изображения Христа-судии и объяснить христианский порядок мира, оставив географические места и классические сюжеты вне маршрута.",
+      "actualNote": "В номинации сказано, что карта и сейчас находится на виду у публики вместе с интерпретационной выставкой.",
+      "grammar": "The infinitive action forms a complete visitor route.",
+      "truthOneKey": "Incorrect: it explains the Christian frame but excludes the geographic places and classical material the prompt requires visitors to consider too.",
+      "plausibilitySameCategory": "Plausible as a focused theological interpretation because the image of Christ in judgement is a prominent organizing feature; the source itself links it to divine order.",
+      "ownNoteUsefulness": "The nomination says the map is publicly displayed alongside an interpretative exhibition.",
+      "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-hereford.txt",
+      "primaryByteSHA256": "a436aec6bd773af9bcdd3a5aaf0a6510246547ea3e81df936642debd10721461",
+      "exactLocator": "L123@P2",
+      "specificClaim": "The legal information says it is on public display accompanied by an interpretative exhibition."
+    },
+    {
+      "id": "maps-cartography-mappa-mundi",
+      "optionIndex": 2,
+      "isKey": true,
+      "fullPrompt": "Вы готовите маршрут для посетителей у Hereford Mappa Mundi. Какой сценарий чтения поможет увидеть географические места и классические сюжеты внутри христианского представления о мире, где земная жизнь подчинена божественному порядку и суду?",
+      "actualAnswer": "Связать места и классические сюжеты с их местом в духовно упорядоченном христианском мире, включая образ Христа-судии.",
+      "actualNote": "Номинация насчитывает около 420 видов или символов городов и поселений.",
+      "grammar": "The infinitive action is a concrete, grammatical exhibit plan.",
+      "truthOneKey": "Key: it relates places and classical material to their position in the Christian worldview, including the judgement motif.",
+      "plausibilitySameCategory": "Correct and complete: unlike a single-theme route, this interpretation lets visitors see classical knowledge within the map’s spiritually ordered medieval worldview.",
+      "ownNoteUsefulness": "The nomination counts about 420 views or symbols of cities and towns, a distinct detail about the map’s visual contents.",
+      "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-hereford.txt",
+      "primaryByteSHA256": "a436aec6bd773af9bcdd3a5aaf0a6510246547ea3e81df936642debd10721461",
+      "exactLocator": "L37–39@P0",
+      "specificClaim": "The nomination says around 420 views or symbols of cities and towns."
+    },
+    {
+      "id": "maps-cartography-mappa-mundi",
+      "optionIndex": 3,
+      "isKey": false,
+      "fullPrompt": "Вы готовите маршрут для посетителей у Hereford Mappa Mundi. Какой сценарий чтения поможет увидеть географические места и классические сюжеты внутри христианского представления о мире, где земная жизнь подчинена божественному порядку и суду?",
+      "actualAnswer": "Провести посетителя по библейским эпизодам как последовательной истории, не обсуждая географический образ мира и античное наследие.",
+      "actualNote": "На карте около 500 иллюстраций; среди них есть 33 изображения растений, животных, птиц и рыб.",
+      "grammar": "The infinitive action is a coherent thematic route.",
+      "truthOneKey": "Incorrect: a biblical sequence alone leaves out the map’s geographical world and classical inheritance, so it cannot explain the synthesis named in the prompt.",
+      "plausibilitySameCategory": "Plausible visitor route around biblical episodes, which are specifically pictured; it remains incomplete because it turns a map into a single-topic narrative.",
+      "ownNoteUsefulness": "The nomination lists 33 illustrations of plants, animals, birds and fish among its approximately 500 illustrations.",
+      "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-hereford.txt",
+      "primaryByteSHA256": "a436aec6bd773af9bcdd3a5aaf0a6510246547ea3e81df936642debd10721461",
+      "exactLocator": "L37–40@P0",
+      "specificClaim": "The nomination lists 33 depictions of plants, animals, birds and fish among around 500 illustrations."
+    },
+    {
+      "id": "maps-cartography-peutinger-roads",
+      "optionIndex": 0,
+      "isKey": false,
+      "fullPrompt": "Для Tabula Peutingeriana проектируют слой ГИС. В исходном описании сохранены связи дорожной сети cursus publicus и различия городов по значимости, но схема не изображает местность как обычная географическая карта. Какой план данных сохранит оба исторических признака, не выдавая схему за координатную основу?",
+      "actualAnswer": "Создать точки городов с классом значимости, а дороги оставить отдельной картинкой без связей между узлами.",
+      "actualNote": "Французская запись UNESCO отмечает пользу таблицы для историков римского управления и экономики.",
+      "grammar": "The infinitive plan is grammatical and answers the GIS-model question.",
+      "truthOneKey": "Incorrect: city points and ordinal importance survive, but storing roads only as an image does not encode node-to-node route relations.",
+      "plausibilitySameCategory": "Plausible archival choice: preserve structured city records and keep the source road drawing as a visual attachment; it fails for route-network analysis.",
+      "ownNoteUsefulness": "The note adds UNESCO’s stated coverage among Roman provinces and eastern territories conquered by Alexander; this contextualizes the map without supplying the missing network links.",
+      "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-tabula.txt",
+      "primaryByteSHA256": "8d21c153f4250163ba9482ca7ba6c2e0e15e7ab46b4fe4652962c6c4f36e77f7",
+      "exactLocator": "L70",
+      "specificClaim": "The note adds UNESCO’s stated coverage among Roman provinces and eastern territories conquered by Alexander; this contextualizes the map without supplying the missing network links.",
+      "sourceAssessesActualNote": true
+    },
+    {
+      "id": "maps-cartography-peutinger-roads",
+      "optionIndex": 1,
+      "isKey": false,
+      "fullPrompt": "Для Tabula Peutingeriana проектируют слой ГИС. В исходном описании сохранены связи дорожной сети cursus publicus и различия городов по значимости, но схема не изображает местность как обычная географическая карта. Какой план данных сохранит оба исторических признака, не выдавая схему за координатную основу?",
+      "actualAnswer": "Сохранить дорожные рёбра, но назначить всем городским узлам один символ без поля значимости.",
+      "actualNote": "В описании UNESCO сказано, что карта служит археологам путеводителем при изучении остатков римских дорог и памятников империи.",
+      "grammar": "The infinitive plan is grammatical and parallels the other proposed encodings.",
+      "truthOneKey": "Incorrect: graph edges retain route connectivity, but identical city nodes discard the source’s explicit ranking by importance.",
+      "plausibilitySameCategory": "Plausible network-analysis simplification: equal node symbols suit routing tasks, although the ranking is historically meaningful data in this prompt.",
+      "ownNoteUsefulness": "The note adds the source’s concrete archaeological use: guidance for studying Roman road remains and imperial sites. It does not restore the omitted city-importance field.",
+      "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-tabula.txt",
+      "primaryByteSHA256": "8d21c153f4250163ba9482ca7ba6c2e0e15e7ab46b4fe4652962c6c4f36e77f7",
+      "exactLocator": "L71",
+      "specificClaim": "The note adds the source’s concrete archaeological use: guidance for studying Roman road remains and imperial sites. It does not restore the omitted city-importance field.",
+      "sourceAssessesActualNote": true
+    },
+    {
+      "id": "maps-cartography-peutinger-roads",
+      "optionIndex": 2,
+      "isKey": true,
+      "fullPrompt": "Для Tabula Peutingeriana проектируют слой ГИС. В исходном описании сохранены связи дорожной сети cursus publicus и различия городов по значимости, но схема не изображает местность как обычная географическая карта. Какой план данных сохранит оба исторических признака, не выдавая схему за координатную основу?",
+      "actualAnswer": "Создать узлы городов и рёбра дорог; значимость узла хранить отдельным упорядоченным классом.",
+      "actualNote": "UNESCO указывает охват провинций Рима и восточных территорий, завоёванных Александром Македонским.",
+      "grammar": "The infinitive plan is grammatical and answers the requested model choice.",
+      "truthOneKey": "Correct: explicit edges encode road relations and a separate ordered class preserves the stated city-importance distinction; no geographic coordinates are inferred.",
+      "plausibilitySameCategory": "A professional graph-plus-attributes model represents both documented dimensions while avoiding the unsupported assumption that diagram spacing is geographic.",
+      "ownNoteUsefulness": "The note adds the documented geographic reach across Roman provinces and eastern territories conquered by Alexander, a useful coverage fact absent from the prompt and encoding.",
+      "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-tabula.txt",
+      "primaryByteSHA256": "8d21c153f4250163ba9482ca7ba6c2e0e15e7ab46b4fe4652962c6c4f36e77f7",
+      "exactLocator": "L70",
+      "specificClaim": "The note adds the documented geographic reach across Roman provinces and eastern territories conquered by Alexander, a useful coverage fact absent from the prompt and encoding.",
+      "sourceAssessesActualNote": true
+    },
+    {
+      "id": "maps-cartography-peutinger-roads",
+      "optionIndex": 3,
+      "isKey": false,
+      "fullPrompt": "Для Tabula Peutingeriana проектируют слой ГИС. В исходном описании сохранены связи дорожной сети cursus publicus и различия городов по значимости, но схема не изображает местность как обычная географическая карта. Какой план данных сохранит оба исторических признака, не выдавая схему за координатную основу?",
+      "actualAnswer": "Оцифровать схему как географические линии маршрутов и подобрать расстояния по длине промежутков на листе.",
+      "actualNote": "В реестре UNESCO оригинал хранится в Австрийской национальной библиотеке под шифром Cod. 324.",
+      "grammar": "The infinitive plan is grammatical and presents a coherent digitization workflow.",
+      "truthOneKey": "Incorrect/unsupported: west-east orientation and schematic spacing do not alone define real coordinates or a distance scale. External control data could support georeferencing, but none is specified in this plan.",
+      "plausibilitySameCategory": "Tempting because the source is oriented east-west and depicts routes; a GIS workflow may seem to invite coordinate fitting, but diagram intervals are not a stated metric.",
+      "ownNoteUsefulness": "The note identifies the preserved manuscript’s shelfmark, Cod. 324, a concrete catalog fact that does not provide spatial calibration.",
+      "primaryPath": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-tabula.txt",
+      "primaryByteSHA256": "8d21c153f4250163ba9482ca7ba6c2e0e15e7ab46b4fe4652962c6c4f36e77f7",
+      "exactLocator": "L65",
+      "specificClaim": "The note identifies the preserved manuscript’s shelfmark, Cod. 324, a concrete catalog fact that does not provide spatial calibration.",
+      "sourceAssessesActualNote": true
+    }
+  ],
+  "primaryContexts": [
+    {
+      "contextId": "unesco-tabula",
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-tabula.txt",
+      "byteSHA256": "8d21c153f4250163ba9482ca7ba6c2e0e15e7ab46b4fe4652962c6c4f36e77f7",
+      "bytes": 5420,
+      "coverage": "L0..L124",
+      "fullContextRead": true,
+      "exactSourceText": "La Table de Peutinger - Memory of the World (https://www.unesco.org/fr/memory-world/tabula-peutingeriana)\nciteturn5view1 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({\"ref_id\":\"turn4search0\",\"lineno\":null}); Total lines: 125\nL0: cite0†iframe†www.googletagmanager.com L1: \nL2: cite1†UNESCO L3: \nL4: [Button: Français]\nL5: \nL6:   * cite2†English L7:   * cite3†Français L8:   * cite4†Español L9: \nL10: cite1†UNESCO L11: \nL12: [Input]\nL13: \nL14: [Input: Recherche]\nL15: \nL16: [Button: Recherche]\nL17: \nL18: [Input]\nL19: \nL20: [Input: Recherche]\nL21: \nL22: [Button: Recherche]\nL23: \nL24: Accès rapide : cite5†Intelligence artificielle cite6†Réponse aux urgences cite7†Défis majeurs L25: \nL26: cite8†Mémoire du monde L27: \nL28:   * cite8†Accueil L29:   * Comment nous travaillons\nL30:     * cite9†À propos de L31:     * cite10†Recommandation de 2015 L32:     * cite11†Secrétariat L33:     * cite12†Comité consultatif international L34:     * cite13†Les Comités L35:     * cite14†The full list of Committees L36: \nL37:   * Ce que nous faisons\nL38: \nL39:     * cite15†Prix UNESCO/Jikji Mémoire du monde L40:     * cite16†Plaidoyer L41:     * cite17†Renforcement des capacités L42:     * cite18†Éducation L43: \nL44:   * Registre\nL45: \nL46:     * cite19†Inscriptions 2025 L47:     * cite20†Registre international L48:     * cite21†Documents à inscrire au registre L49: \nL50:   * Ressources\nL51:     * cite21†Documents à inscrire au registre L52:     * cite22†Publications/livres†unesdoc.unesco.org L53:     * cite23†Documents de réunions et du programme†unesdoc.unesco.org L54:     * cite24†COVID-19†fr.unesco.org L55: \nL56: Retour à la liste :\nL57: \nL58: cite25†map cite26†list cite27†apps L59: \nL60: * * *\nL61: # La Table de Peutinger\nL62: \nL63: Name and identification details of the items being nominated\nL64: \nL65: Tabula Peutingeriana, Austrian National Library, Department of Manuscripts,  Autographs and Closed Collections (Cod. 324)\nL66: \nL67: Description\nL68: \nL69: The Tabula Peutingeriana consists of 11 segments with the map, written on parchment (the size for the 11 segments is 340cm to 6745cm).  The diagram for the road system of the cursus publicus contains symbols for the different cities according to their importance.\nL70: La Table de Peutinger est la seule carte ancienne parvenue jusqu’à nous qui représente le réseau routier du cursus publicus, le service public de communications de l’empire romain. Elle couvre l’ensemble des provinces soumises à l’autorité de Rome, ainsi que les territoires conquis par Alexandre le Grand en Orient. Dessinée sur parchemin à la fin du XIIe siècle, elle se compose de 11 segments. On peut la considérer comme un fac-similé médiéval d’un manuscrit utilisé dans l’Antiquité.\nL71: Entièrement conservée au Département des manuscrits, autographes et fonds d’archives de la Bibliothèque nationale d’Autriche (sous la cote 324), la Table de Peutinger fournit de nombreuses informations aux historiens de l’administration et de l’économie de l’empire romain. Elle sert encore aujourd’hui de guide aux archéologues qui étudient les vestiges des routes romaines et les sites datant de l’empire romain.\nL72: Elle n’avait pas pour but de représenter les régions concernées comme le ferait une carte géographique, mais de montrer la structure et le réseau du cursus publicus, ce qui explique qu’elle ne représente pas la mer et qu’elle soit orientée est-ouest. Elle ressemble aux diagrammes affichés dans les rames du métro des villes européennes.\nL73: cite28†Image L74: \nL75: Tabula Peutingeriana\nL76: \nL77: © Austrian National Library - Cod. 324\nL78: \nL79: Année d'enregistrement : 2007\nL80: \nL81: Année de soumission : 2007\nL82: \nL83: Soumis par: Austria\nL84: \nL85: Comité connexe :\nL86: \nL87: Type de document : cite29†Maps L88: \nL89: Reference documents:\nL90: \nL91: cite30†Nomination form†media.unesco.org cite31†Formulaire de proposition d'inscription†media.unesco.org L92: ## Collection locations\nL93: \nL94: ## Media Gallery\nL95: \nL96:   * cite32†Image: Tabula Peutingeriana L97: \nL98: © Austrian National Library - Cod. 324\nL99: \nL100:   * cite33†Image: Tabula Peutingeriana L101: \nL102: © Austrian National Library - Cod. 324\nL103: \nL104:   * cite34†Image: Tabula Peutingeriana L105: \nL106: © Austrian National Library - Cod. 324\nL107: \nL108:   * cite35†Image: Tabula Peutingeriana L109: \nL110: © Austrian National Library - Cod. 324\nL111: \nL112: 1/\nL113: \nL114: Précédent chevron_left Suivant chevron_right\nL115: ### Thèmes liés\nL116: \nL117:   * cite36†Related Committee: Austria L118:   * cite37†Submitted by: Austria L119:   * cite38†Collection Type: Maps L120:   * cite39†Region: Europe et en Amérique du Nord L121: \nL122: [Input] [Input]\nL123: \nL124: cite40†top --------------------------------------------------------------------------------"
+    },
+    {
+      "contextId": "unesco-hereford",
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/author/completion-exact-tool-evidence/exact-sourcecontext/unesco-hereford.txt",
+      "byteSHA256": "a436aec6bd773af9bcdd3a5aaf0a6510246547ea3e81df936642debd10721461",
+      "bytes": 15374,
+      "coverage": "L0..L203",
+      "fullContextRead": true,
+      "exactSourceText": "MEMORY OF THE WORLD REGISTER (https://media.unesco.org/sites/default/files/webform/mow001/uk_hereford.pdf)\nciteturn3view1 [wordlim: 200] Crawled: 3 days ago; Content type: application/pdf; Number of pages: 5; Source: click({\"ref_id\":\"turn2view6\",\"id\":26}); Total lines: 204\nL0@P0: MEMORY OF THE WORLD REGISTER\nL1@P0: Hereford Mappa Mundi\nL2@P0: Ref N° 2006-32\nL3@P0: PART A – ESSENTIAL INFORMATION\nL4@P0: 1. SUMMARY\nL5@P0: The Hereford Mappa Mundi is the only complete example of a large medieval world map intended for\nL6@P0: public display. It is very different to our modern understanding of a world map as it shows not only\nL7@P0: locations of places and geographic features but also acts as a visual encyclopaedia with historical,\nL8@P0: anthropological, ethnographical, biblical, classical and theological information. The map is pivotal in\nL9@P0: our understanding of medieval cartography and sense of place and still has relevance to all peoples in\nL10@P0: helping them to understand their sense of humanity and self.\nL11@P0: 2 DETAILS OF THE NOMINATOR\nL12@P0: 2.1 Name: (person or organisation)\nL13@P0: United Kingdom Permanent Delegation to UNESCO\nL14@P0: 2.2 Relationship to the documentary heritage nominated:\nL15@P0: UNESCO National Commission on behalf of the owner\nL16@P0: 2.3 Contact person(s):\nL17@P0: Christine Atkinson\nL18@P0: Deputy Permanent Delegate\nL19@P0: Tim Craddock\nL20@P0: Permanent Delegate\nL21@P0: 2.4 Contact details\nL22@P0: United Kingdom Delegation to UNESCO\nL23@P0: Room 3.06, 1 rue Miollis\nL24@P0: 75732 Paris\nL25@P0: Tel: 01 45 68 27 83/4\nL26@P0: c-atkinson@dfid.gov.uk\nL27@P0: t-craddock@dfid.gov.uk\nL28@P0: 3 IDENTITY AND DESCRIPTION OF THE DOCUMENTARY HERITAGE\nL29@P0: 3.1 Name and identification details of the items being nominated:\nL30@P0: The Hereford Mappa Mundi\nL31@P0: 3.2 Description\nL32@P0: The Hereford Mappa Mundi is a medieval map of the world, measuring approximately 1626mm x\nL33@P0: 1346mm and made up of one sheet of vellum. It has been dated on art historical, historical and\nL34@P0: palaeographical grounds to c. 1290-c1310 AD. The map was probably produced at either Lincoln or\nL35@P0: Hereford, an inscription names ‘Richard of Haldingham or Lafford’ as its maker but it is not clear who\nL36@P0: he was or if he created the Hereford map or its exemplar. The text is written in red and black ink in an\nL37@P0: English gothic bookhand. On the map are around 500 illustrations including about 420 views or\nL38@P0: symbols of cities and towns, 15 depictions of biblical events, 33 depictions of plants, animals, birds\nL39@P0: and fish, 32 pictures of the peoples of the earth and 5 images relating stories from classical mythology.\nL40@P0: The illustrations on the map are one of its most remarkable features, both in their variety and number.\nL41@P0-1: 1Outside the boundary of the earth at the top the map depicts Christ in judgement and has the letters\nL42@P1: m,o,r,s (spelling ‘mors’ – Latin for death) around the outside, this reflects the Christian view that all\nL43@P1: earthly life is subject to death and judgement and the map is, above all, a depiction the place of\nL44@P1: humankind in the eternal, divinely-ordained order.\nL45@P1: The Hereford Mappa Mundi is the only complete survival of a genre of large world maps intended for\nL46@P1: display which were once more common. Other examples known to have existed include the Ebstorf\nL47@P1: map (destroyed in 1943) and the Duchy of Cornwall map, which is roughly contemporary with the\nL48@P1: Hereford Mappa Mundi but of which only a small fragment survives.\nL49@P1: It is different from other existing large medieval world maps such as the ‘Catalan world map’, now in\nL50@P1: the Bibliothèque Nationale de France, of about 1375 as these are based on ‘portolan charts’ which\nL51@P1: depict coastlines more realistically and did not have the spiritual and didactic purpose of the mappae\nL52@P1: mundi . In this respect the Hereford Mappa Mundi is our best surviving graphical representation of the\nL53@P1: synthesis of classical knowledge with the medieval worldview.\nL54@P1: The Hereford Mappa Mundi is world renowned as the most famous extant medieval map. Records of\nL55@P1: it having been studied date back to the seventeenth century and it continues to be a source of artistic\nL56@P1: inspiration and fascination to the present day. As the only surviving complete example of its type it is\nL57@P1: unique and as a manuscript and physical object irreplaceable.\nL58@P1: 4 JUSTIFICATION FOR INCLUSION/ ASSESSMENT AGAINST CRITERIA\nL59@P1: 4.1 Authenticity\nL60@P1: The Hereford Mappa Mundi has been dated by experts in palaeography and art history to between\nL61@P1: c1290 and c1310 AD. In addition damage to the map matches the location of nails on a wooden frame\nL62@P1: in which it was housed, and possibly drawn. The frame has been dated by dendrochronology to c1300\nL63@P1: AD.\nL64@P1: 4.2 Wsignificance, uniqueness and irreplaceability\nL65@P1: World significance – see below 4.3\nL66@P1: Uniqueness – as established above the Hereford Mappa Mundi is the only surviving complete example\nL67@P1: of a medieval mappa mundi.\nL68@P1: Irreplaceability – as a medieval manuscript and unique survival the Hereford Mappa Mundi is both\nL69@P1: physically and intellectually irreplaceable.\nL70@P1: 4.3 Criteria of (a) time (b) place (c) people (d) subject and theme (e) form and style\nL71@P1: (a) Time- the Hereford Mappa Mundi provides a graphic representation of the world as\nL72@P1: understood in medieval Europe. It is based on the synthesis of classical and medieval learning\nL73@P1: (b) Place – the Hereford Mappa Mundi is essential to our understanding of medieval awareness of\nL74@P1: other lands. The area of Africa depicted is that of North Africa, known in classical times and aside\nL75@P1: from some cities listed in classical sources it is populated by strange races. Similarly the map shows\nL76@P1: the eastern end of the world as the earthly paradise. Examples of knowledge of other real lands include\nL77@P1: the inclusion of the Seres people who lived north of the Himalayas and exported silk.\nL78@P1: (c) Subject and theme – as the largest and most detailed surviving example of a medieval mappa\nL79@P1: mundi the Hereford Mappa Mundi uniquely represents the culmination of a tradition of mapmaking\nL80@P1: and knowledge which stretches back to the Roman period. The history of cartography after the\nL81@P1: medieval mappae mundi begins to move away from the didactic, spiritual towards an increasingly\nL82@P1: accurate depiction of the known world, relying more on seafarers’ explorations and advances in\nL83@P1: science. It is vital to our understanding of medieval cartography and of medieval perceptions of the\nL84@P1: world.\nL85@P1-2: 2(d) Form and style – as stated in 3.2 the Hereford Mappa Mundi is the only complete surviving\nL86@P2: example of a large ‘traditional’ mappamundi and has been described by Dr Christopher de Hamel, one\nL87@P2: of Britain’s leading experts on medieval manuscripts, as ‘without parallel the most important and\nL88@P2: most celebrated medieval map in any form’. Aside from its status as a unique survival it is also one of\nL89@P2: the most remarkable of surviving medieval manuscripts and has been described by Dr Christopher de\nL90@P2: Hamel as ‘certainly the greatest extant thirteenth century picture’.\nL91@P2: 4.4 Issues of rarity, integrity, threat and management\nL92@P2: Rarity\nL93@P2: As established above the Hereford Mappa Mundi is a unique survival from an important genre of\nL94@P2: maps.\nL95@P2: Integrity\nL96@P2: The map as it is today is extremely good condition, some colours have changed through fading and\nL97@P2: oxidization and patches were added to the map to cover small holes in the nineteenth-century, although\nL98@P2: these were painted to match the medieval surface it is easy to distinguish them from the original.\nL99@P2: Threat\nL100@P2: There is currently no particular threat to the map’s survival. For detailed information on security and\nL101@P2: conservation see the management plan (see Appendix 1).\nL102@P2: 5 LEGAL INFORMATION\nL103@P2: 5.1. Owner of the documentary heritage (name and contact details)\nL104@P2: The Hereford Mappa Mundi Trust\nL105@P2: c/o Mrs Julia Garlick\nL106@P2: Baker Tilly\nL107@P2: Elgar House\nL108@P2: Holmer Road\nL109@P2: Hereford\nL110@P2: HR4 9SF\nL111@P2: Tel: +44 (0)1432 352222\nL112@P2: 5.2 Custodian of the documentary heritage (name and contact details, if different to owner):\nL113@P2: James Anthony\nL114@P2: Hereford Cathedral Library\nL115@P2: 5 College Cloisters\nL116@P2: Hereford\nL117@P2: HR1 2NG\nL118@P2: tel: +44 (0)1432 374200\nL119@P2: fax; +44 (0)1432 374220.\nL120@P2: 5.3 Legal status:\nL121@P2: (a) Category of ownership – owned by a charitable trust, in the event of the trust being dissolved\nL122@P2: ownership of the Hereford Mappa Mundi passes to the British Library, London\nL123@P2: (b) Accessibility – on display to the general public and accompanied by an interpretative exhibition.\nL124@P2: (c) Copyright status – not subject to copyright although the production of images is controlled by the\nL125@P2: Dean and Chapter of Hereford\nL126@P2: (d) Responsible administration – the Hereford Mappa Mundi Trust is required by the terms of its trust\nL127@P2: deed to care for and make available to the public the Hereford Mappa Mundi. It delegates this\nL128@P2: responsibility to the Dean and Chapter of Hereford.\nL129@P2: (e) Other factors - none\nL130@P2-3: 36 MANAGEMENT PLAN\nL131@P3: 6.1 Is there a management plan in existence for this documentary heritage? YES – see Appendix\nL132@P3: 1.\nL133@P3: 7 CONSULTATION\nL134@P3: 7.1 Provide details of consultation about this nomination with (a) the owner of the heritage (b) the\nL135@P3: custodian (c) your national or regional Memory of the World committee\nL136@P3: (a) the owner of the heritage was consulted at their December 2005 meeting.\nL137@P3: (b) the custodian of the heritage supports the nomination.\nL138@P3: (c) no national or regional committee currently exists. The United Kingdom Delegation to UNESCO\nL139@P3: have been consulted and the UK National Commission have been informed.\nL140@P3: PART B – SUBSIDIARY INFORMATION\nL141@P3: 8 ASSESSMENT OF RISK\nL142@P3: 8.1 No particular threats have been identified which are not dealt with in the management plan.\nL143@P3: The long-term future of the map is assured by the deed of trust controlling its ownership.\nL144@P3: 9 ASSESSMENT OF PRESERVATION\nL145@P3: 9.1 Detail the preservation context of the documentary heritage (see 3.3)\nL146@P3: As listed above the map is housed in storage which meets the recommendations of British Standard\nL147@P3: 5454:2000 for the display and storage of archival documents. The condition of the map is assessed\nL148@P3: every two years by a conservator. A detailed file is kept in the Hereford Cathedral Archives listing all\nL149@P3: events which impact on the conservation of the map, including the conservator’s reports.\nL150@P3: PART C - LODGEMENT\nL151@P3: This nomination is lodged by:\nL152@P3: (Please print name)…Christine Atkinson\nL153@P3: (Signature)…Christine Atkinson\nL154@P3: (Date) 31 March 2006\nL155@P3-4: 4Appendix 1\nL156@P4: Hereford Cathedral – Mappa Mundi Management Plan\nL157@P4: Storage\nL158@P4: The Hereford Mappa Mundi is kept permanently on display in an environmentally controlled space.\nL159@P4: The temperature is set to 17°C and the humidity at 55%RH, the environmental conditions. Light levels\nL160@P4: are kept to 25 lux with UV filtering being used on all glass.\nL161@P4: Conservation\nL162@P4: The Dean and Chapter retain Mr Christopher Clarkson as their conservator and the map is inspected\nL163@P4: by him every other year. No treatment of the map is carried out although some work needs to be done\nL164@P4: to remove Victorian repairs. Treatment would be carried out if recommended by the conservator, for\nL165@P4: instance to remove mould if any were found on the map.\nL166@P4: Fire Prevention\nL167@P4: The Mappa Mundi Chamber presents a low fire risk. Electric lights are separated from the Hereford\nL168@P4: Mappa Mundi and fibre optic cables used to provide light for viewing the map. The case used to\nL169@P4: display the map in is made of concrete which will provide some measure of protection from fire.\nL170@P4: Emergency Measures\nL171@P4: The Cathedral Library has a full disaster plan which encompasses the Hereford Mappa Mundi. Any\nL172@P4: emergency will be handled in accordance with the Cathedral Library’s disaster plan and advice taken\nL173@P4: immediately from the contracted conservator. A contract to provide assistance in the event of an\nL174@P4: emergency is held with Harwell Restoration and Drying who will provide equipment and salvage\nL175@P4: expertise.The greatest risk is from fire and in that event the first line of response is to contain the fire\nL176@P4: using the inert gas suppression system and fire brigade resources. Given the difficulties of access to\nL177@P4: the map and the protection offered by the case it will not normally be removed from its case until the\nL178@P4: fire has been contained.\nL179@P4: Budget\nL180@P4: Funding for the conservation of the Hereford Mappa Mundi is provided by the Hereford Mappa Mundi\nL181@P4: Trustees. Currently this is restricted to paying the cost of the conservator’s contract but the trustees\nL182@P4: would if necessary fund interventitive conservation work. The running costs for the plant to maintain\nL183@P4: the environmental conditions are met by the Dean and Chapter of Hereford.\nL184@P4: Access\nL185@P4: The map is on permanent display as part of an exhibition which includes material to assist with the\nL186@P4: interpretation of the map. Material to assist scholars with research is available in the CathedralLibrary\nL187@P4: and Archives. Images of the map are supplied to a wide-range of users from scholars to comercial\nL188@P4: organisations.\nL189@P4: Known Issues\nL190@P4: Access to remove the map is very difficult and places the map at greater risk than is necessary. The\nL191@P4: Victorian parchment patches added to the map may be distorting the medieval vellum. The height of\nL192@P4: the map from the floor can make viewing difficult for children and the disabled in particular. Extremes\nL193@P4: of weather or large numbers of visitors can cause the temperature and humidity to change more than is\nL194@P4: desirable (although the effects of the changes on the map are moderated by the case it is housed in).\nL195@P4: Future Developments\nL196@P4: A feasibility study is currently looking at ways of altering the map’s case to make access for inspection\nL197@P4: easier and improve its visibility for all. If possible the Victorian parchment repairs will be removed\nL198@P4: and replaced with more sensitive repairs, it is not yet clear if this is possible without posing an undue\nL199@P4: risk to the map. Consideration is being given to redeveloping the exhibition to incorporate new\nL200@P4: knowledge and improve its interpretation but no funding has been identified for this. It is hoped that a\nL201@P4: digital facsimile of the Hereford Mappa Mundi will be produced at some stage and initial\nL202@P4: investigations into cost and practicality are underway.\nL203@P4: 5"
+    }
+  ],
+  "requirements": {
+    "frozen": [
+      "id",
+      "topicId",
+      "sourceOrder",
+      "difficulty",
+      "correctIndex"
+    ],
+    "correctIndex": 2,
+    "textFieldsMutable": true,
+    "qualityCredit": 0,
+    "allFourOptionsNeedSpecificReasoning": true
+  },
+  "checks": {
+    "primaryFactsComparedToLiteralSourceText": true,
+    "canonicalJSON": "UTF-8 JSON sort_keys=true separators=(\",\",\":\") ensure_ascii=false",
+    "beforeCardHashesCopiedFromCycle1Request": true,
+    "proposedCardHashesComputedFromCompleteCard": true,
+    "allSixCanonicalGroupsPerIDIncluded": true,
+    "keySlotSemanticsIndependentlyChecked": true,
+    "allVariantAssessmentsBoundToFinalCandidateAnswerAndNoteText": true
+  },
+  "worktreeHeadAtAuthoring": "78c153d2e2a89634c98600171bb49000a7ece90a",
+  "limitations": [
+    "No independent final reader review performed in this author pass.",
+    "No catalog apply, runtime, tests, build, audio, commit, claim or integration performed."
+  ]
+}
