@@ -1,0 +1,945 @@
+{
+  "schemaVersion": 1,
+  "candidatePath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/fix-hard5-cycle1-author-01a13d50/candidate.json",
+  "baselineCommit": "4f850238fa98d47073c615367769e6e0ec06b4dc",
+  "qualityCredit": 0,
+  "entries": [
+    {
+      "id": "maps-cartography-ellipsoid",
+      "stage": "fix-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "27e1c268c0821074c03d7dbbad71f13b36ed82ce2d5add22a9df49f0319b8830",
+      "finalCardHash": "c4f364207d05d8a25dda66edb66d2e6fa1ba505a8750342d88c2cc4825d02578",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В сети две точки должны быть приведены к NAVD 88. В Q получены h=86,4 м и H=52,9 м; модель NOAA даёт N=33,5 м. Для R та же модель в её координатах даёт N=29,2 м, а GNSS — h=78,4 м. Какую отметку R следует передать после проверки, что координаты попадают в область модели?",
+            "answers": [
+              "57,2 м: скорректировать контрольную H(Q) на разность N(Q)−N(R), сохранив знак наблюдённого сдвига.",
+              "49,2 м: для R вычислить H=h−N по локальному значению модели; Q подтверждает знак и величину связи.",
+              "44,9 м: перенести N(Q)=33,5 м на R и вычесть его из h(R).",
+              "107,6 м: сложить h(R) и N(R), поскольку H отсчитывается от эллипсоида."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "703fce65fb0bd27372ce025293bcbc819f66901cbd0a36d4f70d56f2963c58e9",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+            "fileSHA": "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+            "exactlocator": "Full tutorial, What datum are my data in; Geodetic Datums; Referenced Ellipsoid; GEOID; Vertical Datum; ellipsoidal and orthometric height sections.",
+            "specificClaim": "Prompt is an applied choice requiring joined constraints; the four options are credible implementation workflows or variants, not category errors."
+          },
+          "specificClaim": "Prompt is an applied choice requiring joined constraints; the four options are credible implementation workflows or variants, not category errors.",
+          "editorialReason": "Prompt is an applied choice requiring joined constraints; the four options are credible implementation workflows or variants, not category errors."
+        },
+        {
+          "group": "explanation",
+          "literal": "Сначала используйте значение N в координатах R, а не в соседней точке Q: H(R)=78,4−29,2=49,2 м. Контрольная пара Q даёт 86,4−33,5=52,9 м и подтверждает тот же знак преобразования.",
+          "literalSHA256": "64dd4589ba35bec8e067edd57477b1da78be539c176bb323b9174b7397e1c438",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+            "fileSHA": "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+            "exactlocator": "Full tutorial, What datum are my data in; Geodetic Datums; Referenced Ellipsoid; GEOID; Vertical Datum; ellipsoidal and orthometric height sections.",
+            "specificClaim": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition."
+          },
+          "specificClaim": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition.",
+          "editorialReason": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition."
+        },
+        {
+          "group": "note0",
+          "literal": "NOAA связывает эллипсоидальную и ортометрическую высоты через локальную модель; контрольная точка помогает проверить направление применённой поправки.",
+          "literalSHA256": "e0e9ed9979acb90e6c0c13cbad7f5e839f25f28eb46c6edec90a5a580aead41e",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+            "fileSHA": "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+            "exactlocator": "Full tutorial, What datum are my data in; Geodetic Datums; Referenced Ellipsoid; GEOID; Vertical Datum; ellipsoidal and orthometric height sections.",
+            "specificClaim": "NOAA связывает эллипсоидальную и ортометрическую высоты через локальную модель; контрольная точка помогает проверить направление применённой поправки."
+          },
+          "specificClaim": "NOAA связывает эллипсоидальную и ортометрическую высоты через локальную модель; контрольная точка помогает проверить направление применённой поправки.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note1",
+          "literal": "NOAA различает эллипсоидальную h и ортометрическую H; геоидальное разделение связывает их локально, а не как постоянную поправку.",
+          "literalSHA256": "f63fc4e5db32c1fb0823c347d72a976f10e674c04bd6e95688b2c0758b22706f",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+            "fileSHA": "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+            "exactlocator": "Full tutorial, What datum are my data in; Geodetic Datums; Referenced Ellipsoid; GEOID; Vertical Datum; ellipsoidal and orthometric height sections.",
+            "specificClaim": "Для точки R получаем H=78,4−29,2=49,2 м; контроль Q воспроизводит H=52,9 м."
+          },
+          "specificClaim": "Для точки R получаем H=78,4−29,2=49,2 м; контроль Q воспроизводит H=52,9 м.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note2",
+          "literal": "Разделение N меняется по модели и привязано к координате; значение Q нельзя переносить на R.",
+          "literalSHA256": "b3e337639fcaa6efcb25ce3f1a93ed6ecc544a98a703fe7543d46ba7fbcb0a12",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+            "fileSHA": "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+            "exactlocator": "Full tutorial, What datum are my data in; Geodetic Datums; Referenced Ellipsoid; GEOID; Vertical Datum; ellipsoidal and orthometric height sections.",
+            "specificClaim": "В условии для R дана собственная координатная ячейка модели с N=29,2 м; N(Q) ей не эквивалентно."
+          },
+          "specificClaim": "В условии для R дана собственная координатная ячейка модели с N=29,2 м; N(Q) ей не эквивалентно.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note3",
+          "literal": "Ортометрическая H связана с эллипсоидальной h вычитанием геоидального разделения в принятой записи h=H+N.",
+          "literalSHA256": "2580b10f5d746875e28f2931ceef38dbf3ff93af062ecbdf57977613a732edb2",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+            "fileSHA": "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+            "exactlocator": "Full tutorial, What datum are my data in; Geodetic Datums; Referenced Ellipsoid; GEOID; Vertical Datum; ellipsoidal and orthometric height sections.",
+            "specificClaim": "Для принятых здесь величин h=H+N; значит H=78,4−29,2, а сложение удваивает направление смещения."
+          },
+          "specificClaim": "Для принятых здесь величин h=H+N; значит H=78,4−29,2, а сложение удваивает направление смещения.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        }
+      ],
+      "choiceProofs": [
+        {
+          "answerIndex": 0,
+          "answer": "57,2 м: скорректировать контрольную H(Q) на разность N(Q)−N(R), сохранив знак наблюдённого сдвига.",
+          "note": "NOAA связывает эллипсоидальную и ортометрическую высоты через локальную модель; контрольная точка помогает проверить направление применённой поправки.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "Процентный коэффициент здесь размерностно неверен: h, H и N заданы как метры высоты/разделения.",
+          "plausibilityUnderPrompt": "Профессионально заманчиво спутать модельную поправку с масштабным коэффициентом при переносе данных между опорами.",
+          "noteUsefulness": "Уточняет, что локальная модель и контрольная точка служат для проверки направления преобразования, а не что любая разность применяется универсально.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+            "fileSHA": "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+            "exactlocator": "Full tutorial, What datum are my data in; Geodetic Datums; Referenced Ellipsoid; GEOID; Vertical Datum; ellipsoidal and orthometric height sections.",
+            "specificClaim": "Процентный коэффициент здесь размерностно неверен: h, H и N заданы как метры высоты/разделения."
+          },
+          "claimLocatorAssessment": "Процентный коэффициент здесь размерностно неверен: h, H и N заданы как метры высоты/разделения."
+        },
+        {
+          "answerIndex": 1,
+          "answer": "49,2 м: для R вычислить H=h−N по локальному значению модели; Q подтверждает знак и величину связи.",
+          "note": "NOAA различает эллипсоидальную h и ортометрическую H; геоидальное разделение связывает их локально, а не как постоянную поправку.",
+          "truthOneKey": "Correct",
+          "whyTrueOrFalse": "Для точки R получаем H=78,4−29,2=49,2 м; контроль Q воспроизводит H=52,9 м.",
+          "plausibilityUnderPrompt": "Вариант следует локальному преобразованию, использует все данные и независимо проходит контроль Q.",
+          "noteUsefulness": "Добавляет полезную проверку знака через контрольную пару, не подменяя правило простым определением.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+            "fileSHA": "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+            "exactlocator": "Full tutorial, What datum are my data in; Geodetic Datums; Referenced Ellipsoid; GEOID; Vertical Datum; ellipsoidal and orthometric height sections.",
+            "specificClaim": "Для точки R получаем H=78,4−29,2=49,2 м; контроль Q воспроизводит H=52,9 м."
+          },
+          "claimLocatorAssessment": "Для точки R получаем H=78,4−29,2=49,2 м; контроль Q воспроизводит H=52,9 м."
+        },
+        {
+          "answerIndex": 2,
+          "answer": "44,9 м: перенести N(Q)=33,5 м на R и вычесть его из h(R).",
+          "note": "Разделение N меняется по модели и привязано к координате; значение Q нельзя переносить на R.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "В условии для R дана собственная координатная ячейка модели с N=29,2 м; N(Q) ей не эквивалентно.",
+          "plausibilityUnderPrompt": "Переносить уже рассчитанный сдвиг с контрольной точки иногда делают при грубом локальном приближении, но здесь модель даёт конкретное другое значение.",
+          "noteUsefulness": "Поясняет пространственную зависимость разделения и почему точное значение модели R имеет приоритет.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+            "fileSHA": "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+            "exactlocator": "Full tutorial, What datum are my data in; Geodetic Datums; Referenced Ellipsoid; GEOID; Vertical Datum; ellipsoidal and orthometric height sections.",
+            "specificClaim": "В условии для R дана собственная координатная ячейка модели с N=29,2 м; N(Q) ей не эквивалентно."
+          },
+          "claimLocatorAssessment": "В условии для R дана собственная координатная ячейка модели с N=29,2 м; N(Q) ей не эквивалентно."
+        },
+        {
+          "answerIndex": 3,
+          "answer": "107,6 м: сложить h(R) и N(R), поскольку H отсчитывается от эллипсоида.",
+          "note": "Ортометрическая H связана с эллипсоидальной h вычитанием геоидального разделения в принятой записи h=H+N.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "Для принятых здесь величин h=H+N; значит H=78,4−29,2, а сложение удваивает направление смещения.",
+          "plausibilityUnderPrompt": "Операция сложения правдоподобна при неопределённом знаке поправки, но контрольная пара фиксирует знак.",
+          "noteUsefulness": "Показывает, что знак не произволен: Q точно совпадает после вычитания.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+            "fileSHA": "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+            "exactlocator": "Full tutorial, What datum are my data in; Geodetic Datums; Referenced Ellipsoid; GEOID; Vertical Datum; ellipsoidal and orthometric height sections.",
+            "specificClaim": "Для принятых здесь величин h=H+N; значит H=78,4−29,2, а сложение удваивает направление смещения."
+          },
+          "claimLocatorAssessment": "Для принятых здесь величин h=H+N; значит H=78,4−29,2, а сложение удваивает направление смещения."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-datum",
+      "stage": "fix-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "aa69dd9e71adb07f462a14fbca02542bfe699a1f0a34235076b75957b577c584",
+      "finalCardHash": "ec8aea12b86a1566abaa5a84927e13c91a5045a33244245b5df88812c7ff651b",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Два каталога одной станции совпадают по широте и долготе и оба указывают GRS 80. В первом геометрический датум записан как NAD 83 (2011), epoch 2010.00; второй получен в глобальной реализации ITRF, но эпоха наблюдений не указана. Как подготовить объединённую координату, не приписывая ей ложную точность?",
+            "answers": [
+              "Считать координаты тождественными: общий GRS 80 фиксирует и эллипсоид, и начало, и реализацию систем.",
+              "Запросить недостающую эпоху ITRF, уточнить обе реализации и привести координаты преобразованием к одной объявленной системе и эпохе.",
+              "Сначала применить геоидальную модель к обеим широтам и долготам, затем усреднить пары координат.",
+              "Усреднить исходные широту и долготу, сохранив NAD 83 как выходной датум, поскольку расхождение не видно в записи."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "bdcfe51007a2bcad784a877c94784f01e2c796fffccff942ffb6bcd41eb8ef4d",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+            "fileSHA": "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+            "exactlocator": "Full article, opening definition; Table 1 current official datum NAD 83 (2011/PA11/MA11) epoch 2010.00; International Reference Frames; GRS 80 row.",
+            "specificClaim": "Different realizations and epochs are relevant metadata; the same GRS 80 ellipsoid does not identify one coordinate realization."
+          },
+          "specificClaim": "Prompt is an applied choice requiring joined constraints; the four options are credible implementation workflows or variants, not category errors.",
+          "editorialReason": "Metadata evidence grounds the need to identify datum realization/epoch before harmonizing records; the proposed workflow is an editorial consequence, not a numeric transformation claim.",
+          "supportingSource": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+            "fileSHA": "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+            "exactlocator": "Full article, Table 1 NAD 83 (2011) epoch 2010.00 and International Reference Frames."
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "Одинаковый GRS 80 описывает общую модель эллипсоида, но не заменяет сведений о геодезической системе и её реализации. Для корректной общей координаты нужны недостающая эпоха ITRF и преобразование в явно выбранные систему и эпоху; из исходных чисел нельзя честно вывести величину сдвига.",
+          "literalSHA256": "aabc9b04639199f019aa4b09f30a9242706698c1668a995024a000194e218604",
+          "source": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+            "fileSHA": "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+            "exactlocator": "Full article, opening definition; Table 1 current official datum NAD 83 (2011/PA11/MA11) epoch 2010.00; International Reference Frames; GRS 80 row.",
+            "specificClaim": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition."
+          },
+          "specificClaim": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition.",
+          "editorialReason": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition."
+        },
+        {
+          "group": "note0",
+          "literal": "GRS 80 — референц-эллипсоид; общий эллипсоид не делает геодезические датумы и их реализации тождественными.",
+          "literalSHA256": "094d9fe4279b9a72adfa0469ad3b36cc83dabe4127508d529c0a743f4531b847",
+          "source": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+            "fileSHA": "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+            "exactlocator": "Full article, opening definition; Table 1 current official datum NAD 83 (2011/PA11/MA11) epoch 2010.00; International Reference Frames; GRS 80 row.",
+            "specificClaim": "NGS перечисляет GRS 80 как референц-эллипсоид, тогда как NAD 83 и ITRF описаны как геодезические датум/референц-система."
+          },
+          "specificClaim": "NGS перечисляет GRS 80 как референц-эллипсоид, тогда как NAD 83 и ITRF описаны как геодезические датум/референц-система.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note1",
+          "literal": "NGS отдельно называет NAD 83 (2011) с epoch 2010.00 и ITRF глобальной системой; совпадения эллипсоида недостаточно для слияния.",
+          "literalSHA256": "c4a4f82c5819b17b6849e640882f18e22b360e2039068d17801e105f8a521fc3",
+          "source": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+            "fileSHA": "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+            "exactlocator": "Full article, opening definition; Table 1 current official datum NAD 83 (2011/PA11/MA11) epoch 2010.00; International Reference Frames; GRS 80 row.",
+            "specificClaim": "Без эпохи второй записи нельзя установить совместимую координатную реализацию; объединение требует общего declared frame/epoch и преобразования."
+          },
+          "specificClaim": "Без эпохи второй записи нельзя установить совместимую координатную реализацию; объединение требует общего declared frame/epoch и преобразования.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note2",
+          "literal": "Геоидальная модель относится к вертикальной связи высот; она не заменяет горизонтальное преобразование геодезических систем.",
+          "literalSHA256": "ae637054173b76e8665fc0bab7580142c24a387afe4dab73ca16c9e2dbebd8da",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+            "fileSHA": "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+            "exactlocator": "Full tutorial, What datum are my data in; Geodetic Datums; Referenced Ellipsoid; GEOID; Vertical Datum; ellipsoidal and orthometric height sections.",
+            "specificClaim": "Геоидальная связь используется для вертикальных опор; заданные широта и долгота требуют горизонтальной геодезической системы."
+          },
+          "specificClaim": "Геоидальная связь используется для вертикальных опор; заданные широта и долгота требуют горизонтальной геодезической системы.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note3",
+          "literal": "Числовое совпадение без сведений о реализации/эпохе не подтверждает одну координатную основу и не оправдывает среднее.",
+          "literalSHA256": "8d2368014e6efc7aa7e9da8e6f626b71d480c8a45f2644894dc6e907d7e2df41",
+          "source": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+            "fileSHA": "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+            "exactlocator": "Full article, opening definition; Table 1 current official datum NAD 83 (2011/PA11/MA11) epoch 2010.00; International Reference Frames; GRS 80 row.",
+            "specificClaim": "Совпадение напечатанных чисел не доказывает тождество реализации, если эпоха наблюдений и точный frame неизвестны."
+          },
+          "specificClaim": "Совпадение напечатанных чисел не доказывает тождество реализации, если эпоха наблюдений и точный frame неизвестны.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        }
+      ],
+      "choiceProofs": [
+        {
+          "answerIndex": 0,
+          "answer": "Считать координаты тождественными: общий GRS 80 фиксирует и эллипсоид, и начало, и реализацию систем.",
+          "note": "GRS 80 — референц-эллипсоид; общий эллипсоид не делает геодезические датумы и их реализации тождественными.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "NGS перечисляет GRS 80 как референц-эллипсоид, тогда как NAD 83 и ITRF описаны как геодезические датум/референц-система.",
+          "plausibilityUnderPrompt": "Общий эллипсоид часто воспринимают как общую основу координат, хотя это только один компонент.",
+          "noteUsefulness": "Разделяет форму референц-поверхности и полную координатную реализацию.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+            "fileSHA": "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+            "exactlocator": "Full article, opening definition; Table 1 current official datum NAD 83 (2011/PA11/MA11) epoch 2010.00; International Reference Frames; GRS 80 row.",
+            "specificClaim": "NGS перечисляет GRS 80 как референц-эллипсоид, тогда как NAD 83 и ITRF описаны как геодезические датум/референц-система."
+          },
+          "claimLocatorAssessment": "NGS перечисляет GRS 80 как референц-эллипсоид, тогда как NAD 83 и ITRF описаны как геодезические датум/референц-система."
+        },
+        {
+          "answerIndex": 1,
+          "answer": "Запросить недостающую эпоху ITRF, уточнить обе реализации и привести координаты преобразованием к одной объявленной системе и эпохе.",
+          "note": "NGS отдельно называет NAD 83 (2011) с epoch 2010.00 и ITRF глобальной системой; совпадения эллипсоида недостаточно для слияния.",
+          "truthOneKey": "Correct",
+          "whyTrueOrFalse": "Без эпохи второй записи нельзя установить совместимую координатную реализацию; объединение требует общего declared frame/epoch и преобразования.",
+          "plausibilityUnderPrompt": "Процедура не делает численный вывод, которого данных недостаточно для расчёта; это безопасный профессиональный выбор.",
+          "noteUsefulness": "Учит запрашивать недостающий метаданный компонент, прежде чем вычислять трансформацию.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+            "fileSHA": "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+            "exactlocator": "Full article, opening definition; Table 1 current official datum NAD 83 (2011/PA11/MA11) epoch 2010.00; International Reference Frames; GRS 80 row.",
+            "specificClaim": "Без эпохи второй записи нельзя установить совместимую координатную реализацию; объединение требует общего declared frame/epoch и преобразования."
+          },
+          "claimLocatorAssessment": "Без эпохи второй записи нельзя установить совместимую координатную реализацию; объединение требует общего declared frame/epoch и преобразования."
+        },
+        {
+          "answerIndex": 2,
+          "answer": "Сначала применить геоидальную модель к обеим широтам и долготам, затем усреднить пары координат.",
+          "note": "Геоидальная модель относится к вертикальной связи высот; она не заменяет горизонтальное преобразование геодезических систем.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "Геоидальная связь используется для вертикальных опор; заданные широта и долгота требуют горизонтальной геодезической системы.",
+          "plausibilityUnderPrompt": "Вертикальные модели часто доступны в том же пакете геоданных, но их наличие не решает frame mismatch.",
+          "noteUsefulness": "Отделяет горизонтальный datum от вертикального преобразования.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+            "fileSHA": "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+            "exactlocator": "Full tutorial, What datum are my data in; Geodetic Datums; Referenced Ellipsoid; GEOID; Vertical Datum; ellipsoidal and orthometric height sections.",
+            "specificClaim": "Геоидальная связь используется для вертикальных опор; заданные широта и долгота требуют горизонтальной геодезической системы."
+          },
+          "claimLocatorAssessment": "Геоидальная связь используется для вертикальных опор; заданные широта и долгота требуют горизонтальной геодезической системы."
+        },
+        {
+          "answerIndex": 3,
+          "answer": "Усреднить исходные широту и долготу, сохранив NAD 83 как выходной датум, поскольку расхождение не видно в записи.",
+          "note": "Числовое совпадение без сведений о реализации/эпохе не подтверждает одну координатную основу и не оправдывает среднее.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "Совпадение напечатанных чисел не доказывает тождество реализации, если эпоха наблюдений и точный frame неизвестны.",
+          "plausibilityUnderPrompt": "Если metadata скрыты, усреднение кажется нейтральным способом убрать расхождение; оно смешивает неизвестные основы.",
+          "noteUsefulness": "Показывает, почему визуально равные координаты не заменяют metadata перед слиянием.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+            "fileSHA": "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+            "exactlocator": "Full article, opening definition; Table 1 current official datum NAD 83 (2011/PA11/MA11) epoch 2010.00; International Reference Frames; GRS 80 row.",
+            "specificClaim": "Совпадение напечатанных чисел не доказывает тождество реализации, если эпоха наблюдений и точный frame неизвестны."
+          },
+          "claimLocatorAssessment": "Совпадение напечатанных чисел не доказывает тождество реализации, если эпоха наблюдений и точный frame неизвестны."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-benchmark",
+      "stage": "fix-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "0912c53c7b97327a921ad7fc64114662e5bb41b43836786501107bf070fbf76f",
+      "finalCardHash": "bfc492adc5d0c1a9a122e5ccdc7cfb45d9fd188dc87d04abfb3d50ce8ea81824",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Для повторного нивелирования записи-кандидаты должны иметь опубликованную отметку третьего порядка или выше и позволять следующей бригаде восстановить тот же физический пункт. Какой тип отметки из легенды соответствует обоим условиям?",
+            "answers": [
+              "Проверенная точечная отметка 528,0 м: её высота проверена, хотя знак контроля не показан.",
+              "Знак вертикального контроля третьего порядка или выше, recoverable mark без таблички, 528,0 м.",
+              "Найденный угол земельного участка: точка закреплена на местности, но высотная отметка не указана.",
+              "Немонументированная отметка третьего порядка или выше, 528,0 м: класс высоты задан, но mark не восстановим."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "e7290be4e45efae0ebc485c1a07b51cfb5ed37a0bb3559499e09a37223a6acf3",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+            "fileSHA": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+            "exactlocator": "Full PDF rendered pp. 2–3: CONTROL DATA AND MONUMENTS legend; third-order or better elevation marks, recoverable mark, checked spot elevation, found section corner and unmonumented symbols.",
+            "specificClaim": "Prompt is an applied choice requiring joined constraints; the four options are credible implementation workflows or variants, not category errors."
+          },
+          "specificClaim": "Prompt is an applied choice requiring joined constraints; the four options are credible implementation workflows or variants, not category errors.",
+          "editorialReason": "The scenario combines a minimum vertical-control order with recovery of the same physical point; answer options are actual mapped mark/elevation classes."
+        },
+        {
+          "group": "explanation",
+          "literal": "Для исходного нивелирного контроля нужны и высотная контрольная категория, и знак, который можно найти повторно. Указанный recoverable mark третьего порядка или выше удовлетворяет обоим условиям, даже если таблички на нём нет.",
+          "literalSHA256": "3a6c795fbe7a44e9740cdfd5add61c408c1449dd461547663d68b4e630763eca",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+            "fileSHA": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+            "exactlocator": "Full PDF rendered pp. 2–3: CONTROL DATA AND MONUMENTS legend; third-order or better elevation marks, recoverable mark, checked spot elevation, found section corner and unmonumented symbols.",
+            "specificClaim": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition."
+          },
+          "specificClaim": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition.",
+          "editorialReason": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition."
+        },
+        {
+          "group": "note0",
+          "literal": "USGS отличает checked spot elevation от символов вертикального контроля и монументов.",
+          "literalSHA256": "e87bd623e34d7b9673a9f04f89d5ab9ac450f89e018d8c0c89144e3bfbd6eae9",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+            "fileSHA": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+            "exactlocator": "Full PDF rendered pp. 2–3: CONTROL DATA AND MONUMENTS legend; third-order or better elevation marks, recoverable mark, checked spot elevation, found section corner and unmonumented symbols.",
+            "specificClaim": "Проверенная spot elevation — точечная отметка на карте; сама пометка не утверждает, что там есть восстанавливаемый монумент."
+          },
+          "specificClaim": "Проверенная spot elevation — точечная отметка на карте; сама пометка не утверждает, что там есть восстанавливаемый монумент.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note1",
+          "literal": "На карте отдельно показан benchmark, совпадающий с найденным углом земельного участка: одна точка может нести и вертикальную, и земельную контрольную символику.",
+          "literalSHA256": "3495d2742634c50b8af152f0421cf7165c6ab88b6ca16bbd4746c8eb196d5214",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+            "fileSHA": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+            "exactlocator": "Full PDF rendered pp. 2–3: CONTROL DATA AND MONUMENTS legend; third-order or better elevation marks, recoverable mark, checked spot elevation, found section corner and unmonumented symbols.",
+            "specificClaim": "На карте отдельно показан benchmark, совпадающий с найденным углом земельного участка: одна точка может нести и вертикальную, и земельную контрольную символику."
+          },
+          "specificClaim": "На карте отдельно показан benchmark, совпадающий с найденным углом земельного участка: одна точка может нести и вертикальную, и земельную контрольную символику.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note2",
+          "literal": "USGS различает found section corner и benchmark, в том числе знак, совмещённый с найденным углом.",
+          "literalSHA256": "930909f93c1a97ec3c5942af5bdeee16f623221bd0dbfb497162564dce51db0d",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+            "fileSHA": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+            "exactlocator": "Full PDF rendered pp. 2–3: CONTROL DATA AND MONUMENTS legend; third-order or better elevation marks, recoverable mark, checked spot elevation, found section corner and unmonumented symbols.",
+            "specificClaim": "Found section corner является типом земельно-съёмочного угла; отдельный символ показывает benchmark coincident with found section corner."
+          },
+          "specificClaim": "Found section corner является типом земельно-съёмочного угла; отдельный символ показывает benchmark coincident with found section corner.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note3",
+          "literal": "Класс точности отметки и наличие восстанавливаемого физического знака — разные признаки легенды.",
+          "literalSHA256": "489e331941587f4e0b6660dffb44dc97b2e30ca11894e2ea50d4495e3342743d",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+            "fileSHA": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+            "exactlocator": "Full PDF rendered pp. 2–3: CONTROL DATA AND MONUMENTS legend; third-order or better elevation marks, recoverable mark, checked spot elevation, found section corner and unmonumented symbols.",
+            "specificClaim": "Unmonumented обозначает отсутствие монумента; класс отметки не обеспечивает повторное обнаружение физического знака."
+          },
+          "specificClaim": "Unmonumented обозначает отсутствие монумента; класс отметки не обеспечивает повторное обнаружение физического знака.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        }
+      ],
+      "choiceProofs": [
+        {
+          "answerIndex": 0,
+          "answer": "Проверенная точечная отметка 528,0 м: её высота проверена, хотя знак контроля не показан.",
+          "note": "USGS отличает checked spot elevation от символов вертикального контроля и монументов.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "Проверенная spot elevation — точечная отметка на карте; сама пометка не утверждает, что там есть восстанавливаемый монумент.",
+          "plausibilityUnderPrompt": "The criteria are supplied as field requirements; the distractors each satisfy one plausible part, such as checked elevation or recovery, but not both.",
+          "noteUsefulness": "Различает качество отдельной высоты и тип физического контрольного объекта.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+            "fileSHA": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+            "exactlocator": "Full PDF rendered pp. 2–3: CONTROL DATA AND MONUMENTS legend; third-order or better elevation marks, recoverable mark, checked spot elevation, found section corner and unmonumented symbols.",
+            "specificClaim": "Проверенная spot elevation — точечная отметка на карте; сама пометка не утверждает, что там есть восстанавливаемый монумент."
+          },
+          "claimLocatorAssessment": "Проверенная spot elevation — точечная отметка на карте; сама пометка не утверждает, что там есть восстанавливаемый монумент."
+        },
+        {
+          "answerIndex": 1,
+          "answer": "Знак вертикального контроля третьего порядка или выше, recoverable mark без таблички, 528,0 м.",
+          "note": "На карте отдельно показан benchmark, совпадающий с найденным углом земельного участка: одна точка может нести и вертикальную, и земельную контрольную символику.",
+          "truthOneKey": "Correct",
+          "whyTrueOrFalse": "Легенда обозначает vertical control, third-order-or-better elevation и recoverable mark; отсутствие tablet не отменяет восстановимость.",
+          "plausibilityUnderPrompt": "The criteria are supplied as field requirements; the distractors each satisfy one plausible part, such as checked elevation or recovery, but not both.",
+          "noteUsefulness": "Добавляет независимый факт о совмещении вертикального benchmark и найденного земельного угла на легенде USGS.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+            "fileSHA": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+            "exactlocator": "Full PDF rendered pp. 2–3: CONTROL DATA AND MONUMENTS legend; third-order or better elevation marks, recoverable mark, checked spot elevation, found section corner and unmonumented symbols.",
+            "specificClaim": "Легенда обозначает vertical control, third-order-or-better elevation и recoverable mark; отсутствие tablet не отменяет восстановимость."
+          },
+          "claimLocatorAssessment": "Легенда обозначает vertical control, third-order-or-better elevation и recoverable mark; отсутствие tablet не отменяет восстановимость."
+        },
+        {
+          "answerIndex": 2,
+          "answer": "Найденный угол земельного участка: точка закреплена на местности, но высотная отметка не указана.",
+          "note": "USGS различает found section corner и benchmark, в том числе знак, совмещённый с найденным углом.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "Found section corner является типом земельно-съёмочного угла; отдельный символ показывает benchmark coincident with found section corner.",
+          "plausibilityUnderPrompt": "The criteria are supplied as field requirements; the distractors each satisfy one plausible part, such as checked elevation or recovery, but not both.",
+          "noteUsefulness": "Раскрывает важное совмещение двух символов, не меняя условие или ключ.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+            "fileSHA": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+            "exactlocator": "Full PDF rendered pp. 2–3: CONTROL DATA AND MONUMENTS legend; third-order or better elevation marks, recoverable mark, checked spot elevation, found section corner and unmonumented symbols.",
+            "specificClaim": "Found section corner является типом земельно-съёмочного угла; отдельный символ показывает benchmark coincident with found section corner."
+          },
+          "claimLocatorAssessment": "Found section corner является типом земельно-съёмочного угла; отдельный символ показывает benchmark coincident with found section corner."
+        },
+        {
+          "answerIndex": 3,
+          "answer": "Немонументированная отметка третьего порядка или выше, 528,0 м: класс высоты задан, но mark не восстановим.",
+          "note": "Класс точности отметки и наличие восстанавливаемого физического знака — разные признаки легенды.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "Unmonumented обозначает отсутствие монумента; класс отметки не обеспечивает повторное обнаружение физического знака.",
+          "plausibilityUnderPrompt": "The criteria are supplied as field requirements; the distractors each satisfy one plausible part, such as checked elevation or recovery, but not both.",
+          "noteUsefulness": "Разделяет точность высоты и монументирование.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+            "fileSHA": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+            "exactlocator": "Full PDF rendered pp. 2–3: CONTROL DATA AND MONUMENTS legend; third-order or better elevation marks, recoverable mark, checked spot elevation, found section corner and unmonumented symbols.",
+            "specificClaim": "Unmonumented обозначает отсутствие монумента; класс отметки не обеспечивает повторное обнаружение физического знака."
+          },
+          "claimLocatorAssessment": "Unmonumented обозначает отсутствие монумента; класс отметки не обеспечивает повторное обнаружение физического знака."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-gnomonic-great",
+      "stage": "fix-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "f4fc1e53ecfeeb3cbadc4eb570940b1edeb625e6b2ac9cb6ae2e72809d1887ea",
+      "finalCardHash": "cb83cb108a9b5c67ca0de477a17463d945026658a189d60551e5bee47977b09b",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Для карты маршрутов нужна проекция, где кратчайшие пути по большим кругам прямые. Координаты заданы на эллипсоиде и должны остаться в этой модели; центр фиксирован, сектор целиком в пределах 78° от него. Искажения допустимы; полюсность и истинные углы не нужны. Какую реализацию выбрать?",
+            "answers": [
+              "Гномоническую auxiliary-sphere с authalic radius: большие круги прямые, но координаты переводятся на вспомогательную сферу.",
+              "Гномоническую ellipsoidal: большие круги становятся прямыми, а гарантированный сектор остаётся внутри предела проекции.",
+              "Стереографическую: она поддерживает эллипсоид и углы, поэтому любые кратчайшие маршруты также будут прямыми.",
+              "Азимутальную равноудалённую: расстояния и направления от центра истинны, поэтому кратчайшие пути между любыми точками прямые."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "9af653c52e82da63c2acf8fc3947bff0fa05744a7e279ce2a446cf90fcadc84a",
+          "source": {
+            "title": "Esri ArcGIS Pro: Gnomonic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.body",
+            "fileSHA": "354134206ea395cf6845604713df57c054e845d9827348a66b69414cd443c245",
+            "exactlocator": "Full page, Description; Distortion; Usage; Variants; Limitations: great circles straight regardless of aspect; ellipsoidal variant supports ellipsoids; cannot project a line 90 degrees or more from center.",
+            "specificClaim": "Prompt is an applied choice requiring joined constraints; the four options are credible implementation workflows or variants, not category errors."
+          },
+          "specificClaim": "Prompt is an applied choice requiring joined constraints; the four options are credible implementation workflows or variants, not category errors.",
+          "editorialReason": "Prompt is an applied choice requiring joined constraints; the four options are credible implementation workflows or variants, not category errors."
+        },
+        {
+          "group": "explanation",
+          "literal": "Гномоническая проекция отображает большие круги прямыми, и среди её реализаций именно ellipsoidal-вариант поддерживает эллипсоидальную модель исходных данных. Гарантия 78° оставляет сектор внутри предела: линии, удалённые от центра на 90° или более, спроецировать нельзя.",
+          "literalSHA256": "b24f4f1a6ccfd49f1bc7246db63d3bbe1ddd7ed9c0609ad657e3f184a65a1125",
+          "source": {
+            "title": "Esri ArcGIS Pro: Gnomonic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.body",
+            "fileSHA": "354134206ea395cf6845604713df57c054e845d9827348a66b69414cd443c245",
+            "exactlocator": "Full page, Description; Distortion; Usage; Variants; Limitations: great circles straight regardless of aspect; ellipsoidal variant supports ellipsoids; cannot project a line 90 degrees or more from center.",
+            "specificClaim": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition."
+          },
+          "specificClaim": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition.",
+          "editorialReason": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition."
+        },
+        {
+          "group": "note0",
+          "literal": "Эта реализация работает на вспомогательной сфере; она уместна при разрешённой сферической модели, но не сохраняет заданный эллипсоид.",
+          "literalSHA256": "4213d0efab7ed2d68a0a5849ab5baf7fe2e1bfbbf170f2451a1e19dcb7a83c39",
+          "source": {
+            "title": "Esri ArcGIS Pro: Gnomonic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.body",
+            "fileSHA": "354134206ea395cf6845604713df57c054e845d9827348a66b69414cd443c245",
+            "exactlocator": "Full page, Description; Distortion; Usage; Variants; Limitations: great circles straight regardless of aspect; ellipsoidal variant supports ellipsoids; cannot project a line 90 degrees or more from center.",
+            "specificClaim": "Эта реализация работает на вспомогательной сфере; она уместна при разрешённой сферической модели, но не сохраняет заданный эллипсоид."
+          },
+          "specificClaim": "Эта реализация работает на вспомогательной сфере; она уместна при разрешённой сферической модели, но не сохраняет заданный эллипсоид.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note1",
+          "literal": "Гномоническая прямит большие круги; её эллипсоидальная реализация поддерживает эллипсоид, а линии на расстоянии 90° и далее от центра не проецируются.",
+          "literalSHA256": "9c56966fe9afe73a1161b26b421801e7a4d5a264485fad1aa9519390bcc6eb84",
+          "source": {
+            "title": "Esri ArcGIS Pro: Gnomonic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.body",
+            "fileSHA": "354134206ea395cf6845604713df57c054e845d9827348a66b69414cd443c245",
+            "exactlocator": "Full page, Description; Distortion; Usage; Variants; Limitations: great circles straight regardless of aspect; ellipsoidal variant supports ellipsoids; cannot project a line 90 degrees or more from center.",
+            "specificClaim": "Gnomonic проецирует все большие круги прямыми; ellipsoidal-вариант поддерживает эллипсоиды, а предел в 90° превышает заданные 78°."
+          },
+          "specificClaim": "Gnomonic проецирует все большие круги прямыми; ellipsoidal-вариант поддерживает эллипсоиды, а предел в 90° превышает заданные 78°.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note2",
+          "literal": "Стереографическая равноугольна, но сохранение углов не означает, что большие круги отображаются прямыми.",
+          "literalSHA256": "dcafef95f9079093738ac712117d3adc8ce7a7e9fd8822c48292f716e487663e",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+            "fileSHA": "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+            "exactlocator": "Full page, Description; Distortion; Variants; Limitations; Polar stereographic variants A/B/C: only azimuthal conformal projection; B uses standard parallel and grid origin at pole; antipodal point of projection center cannot be shown.",
+            "specificClaim": "Стереографическая сохраняет бесконечно малые углы и формы, но документация не приписывает ей прямолинейность больших кругов."
+          },
+          "specificClaim": "Стереографическая сохраняет бесконечно малые углы и формы, но документация не приписывает ей прямолинейность больших кругов.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note3",
+          "literal": "Её истинные расстояния и направления относятся к центральной точке, а не автоматически к каждой паре точек.",
+          "literalSHA256": "f0415c5a663b9550ee6971dc0cc5469e87c77b3960e0f7d68fe27a209a99a282",
+          "source": {
+            "title": "Esri ArcGIS Pro: Azimuthal Equidistant",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/azimuthal-equidistant.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-azimuthal-equidistant.body",
+            "fileSHA": "a3b079b686c77067bf5814595b756a6aa34558bf6bf224edb9ead71fc8e9eed3",
+            "exactlocator": "Full page, Description and Distortion: preserves distance and direction from central point; properties do not apply to every pair of points.",
+            "specificClaim": "Азимутальная равноудалённая истинна по расстоянию и направлению от центра, а не между всеми произвольными парами точек."
+          },
+          "specificClaim": "Азимутальная равноудалённая истинна по расстоянию и направлению от центра, а не между всеми произвольными парами точек.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        }
+      ],
+      "choiceProofs": [
+        {
+          "answerIndex": 0,
+          "answer": "Гномоническую auxiliary-sphere с authalic radius: большие круги прямые, но координаты переводятся на вспомогательную сферу.",
+          "note": "Эта реализация работает на вспомогательной сфере; она уместна при разрешённой сферической модели, но не сохраняет заданный эллипсоид.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "The auxiliary-sphere implementation can be a legitimate spherical approximation, but it does not retain the required ellipsoid model.",
+          "plausibilityUnderPrompt": "It offers the same great-circle straight-line property and is a realistic alternate when the receiving workflow explicitly accepts a sphere.",
+          "noteUsefulness": "States the model trade-off that makes this otherwise plausible implementation unsuitable here.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "Esri ArcGIS Pro: Gnomonic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.body",
+            "fileSHA": "354134206ea395cf6845604713df57c054e845d9827348a66b69414cd443c245",
+            "exactlocator": "Full page, Description; Distortion; Usage; Variants; Limitations: great circles straight regardless of aspect; ellipsoidal variant supports ellipsoids; cannot project a line 90 degrees or more from center.",
+            "specificClaim": "The auxiliary-sphere implementation can be a legitimate spherical approximation, but it does not retain the required ellipsoid model."
+          },
+          "claimLocatorAssessment": "Вариант auxiliary-sphere задаёт сферическую модель; для корректной поддержки эллипсоидов Esri отдельно описывает ellipsoidal-вариант."
+        },
+        {
+          "answerIndex": 1,
+          "answer": "Гномоническую ellipsoidal: большие круги становятся прямыми, а гарантированный сектор остаётся внутри предела проекции.",
+          "note": "Гномоническая прямит большие круги; её эллипсоидальная реализация поддерживает эллипсоид, а линии на расстоянии 90° и далее от центра не проецируются.",
+          "truthOneKey": "Correct",
+          "whyTrueOrFalse": "Gnomonic проецирует все большие круги прямыми; ellipsoidal-вариант поддерживает эллипсоиды, а предел в 90° превышает заданные 78°.",
+          "plausibilityUnderPrompt": "Одновременно выполняются геометрия маршрута, эллипсоидальная модель и область отображения.",
+          "noteUsefulness": "Собирает три независимых ограничения, не называя термин-ответ в условии.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "Esri ArcGIS Pro: Gnomonic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.body",
+            "fileSHA": "354134206ea395cf6845604713df57c054e845d9827348a66b69414cd443c245",
+            "exactlocator": "Full page, Description; Distortion; Usage; Variants; Limitations: great circles straight regardless of aspect; ellipsoidal variant supports ellipsoids; cannot project a line 90 degrees or more from center.",
+            "specificClaim": "Gnomonic проецирует все большие круги прямыми; ellipsoidal-вариант поддерживает эллипсоиды, а предел в 90° превышает заданные 78°."
+          },
+          "claimLocatorAssessment": "Gnomonic проецирует все большие круги прямыми; ellipsoidal-вариант поддерживает эллипсоиды, а предел в 90° превышает заданные 78°."
+        },
+        {
+          "answerIndex": 2,
+          "answer": "Стереографическую: она поддерживает эллипсоид и углы, поэтому любые кратчайшие маршруты также будут прямыми.",
+          "note": "Стереографическая равноугольна, но сохранение углов не означает, что большие круги отображаются прямыми.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "Стереографическая сохраняет бесконечно малые углы и формы, но документация не приписывает ей прямолинейность больших кругов.",
+          "plausibilityUnderPrompt": "Угловые свойства делают её конкурентом для навигационной карты; здесь требование именно к кратчайшему пути.",
+          "noteUsefulness": "Подчёркивает отдельность конформности и свойства больших кругов.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+            "fileSHA": "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+            "exactlocator": "Full page, Description; Distortion; Variants; Limitations; Polar stereographic variants A/B/C: only azimuthal conformal projection; B uses standard parallel and grid origin at pole; antipodal point of projection center cannot be shown.",
+            "specificClaim": "Стереографическая сохраняет бесконечно малые углы и формы, но документация не приписывает ей прямолинейность больших кругов."
+          },
+          "claimLocatorAssessment": "Стереографическая сохраняет бесконечно малые углы и формы, но документация не приписывает ей прямолинейность больших кругов."
+        },
+        {
+          "answerIndex": 3,
+          "answer": "Азимутальную равноудалённую: расстояния и направления от центра истинны, поэтому кратчайшие пути между любыми точками прямые.",
+          "note": "Её истинные расстояния и направления относятся к центральной точке, а не автоматически к каждой паре точек.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "Азимутальная равноудалённая истинна по расстоянию и направлению от центра, а не между всеми произвольными парами точек.",
+          "plausibilityUnderPrompt": "Радиальные измерения от центра легко принять за кратчайшие пути между любыми двумя объектами.",
+          "noteUsefulness": "Объясняет, почему радиальные свойства не заменяют прямое отображение great circles.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "Esri ArcGIS Pro: Azimuthal Equidistant",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/azimuthal-equidistant.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-azimuthal-equidistant.body",
+            "fileSHA": "a3b079b686c77067bf5814595b756a6aa34558bf6bf224edb9ead71fc8e9eed3",
+            "exactlocator": "Full page, Description and Distortion: preserves distance and direction from central point; properties do not apply to every pair of points.",
+            "specificClaim": "Азимутальная равноудалённая истинна по расстоянию и направлению от центра, а не между всеми произвольными парами точек."
+          },
+          "claimLocatorAssessment": "Азимутальная равноудалённая истинна по расстоянию и направлению от центра, а не между всеми произвольными парами точек."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-stereographic-conformal",
+      "stage": "fix-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "5374d38763632fe96b27b224e06d02e332ea63f386d723f839a5b2df22335ebe",
+      "finalCardHash": "e09c24bf4f3f293a4358972fcb17107f0d91f0751fc71b78496f341be54aa293",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Для северополярной топографической сетки нужна эллипсоидальная модель и истинный масштаб на 81°06′52,3″ с. ш.; экспорт требует хранить эту величину параметром Standard Parallel 1, а начало сетки — на полюсе. Какой вариант реализации выбрать?",
+            "answers": [
+              "Polar stereographic variant A: задать scale factor и считать origin координатной сетки совпадающим с полюсом.",
+              "Polar stereographic variant B: задать стандартную параллель и использовать полюс как grid origin.",
+              "Polar stereographic variant C: задать ту же стандартную параллель и использовать пересечение параллели с центральным меридианом как origin.",
+              "Auxiliary-sphere stereographic: задать радиус и использовать сферические уравнения для spherical-продукта."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "04e7bc25e17312f3bec6cc26436b4736424c7e8c90f4f7cb9567a615483a7045",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+            "fileSHA": "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+            "exactlocator": "Full page, Description; Distortion; Variants; Limitations; Polar stereographic variants A/B/C: only azimuthal conformal projection; B uses standard parallel and grid origin at pole; antipodal point of projection center cannot be shown.",
+            "specificClaim": "Prompt is an applied choice requiring joined constraints; the four options are credible implementation workflows or variants, not category errors."
+          },
+          "specificClaim": "Prompt is an applied choice requiring joined constraints; the four options are credible implementation workflows or variants, not category errors.",
+          "editorialReason": "Prompt is an applied choice requiring joined constraints; the four options are credible implementation workflows or variants, not category errors."
+        },
+        {
+          "group": "explanation",
+          "literal": "Вариант B использует стандартную параллель как параметр масштаба и задаёт начало координатной сетки на полюсе. Поэтому он согласует координатный контракт со стандартной полярной реализацией.",
+          "literalSHA256": "044298cad0a29c64a2f163154b6180f6a5157236545f2e704ebd30ebfeed9343",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+            "fileSHA": "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+            "exactlocator": "Full page, Description; Distortion; Variants; Limitations; Polar stereographic variants A/B/C: only azimuthal conformal projection; B uses standard parallel and grid origin at pole; antipodal point of projection center cannot be shown.",
+            "specificClaim": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition."
+          },
+          "specificClaim": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition.",
+          "editorialReason": "Explains the decisive comparison and uses all decision-relevant facts without restating a definition."
+        },
+        {
+          "group": "note0",
+          "literal": "Вариант A задаёт scale factor; полюсный origin указан документацией для варианта B.",
+          "literalSHA256": "b54c244077f8f8bff4de5b9102d8827a9f6866be2919278fbd27773f41920cff",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+            "fileSHA": "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+            "exactlocator": "Full page, Description; Distortion; Variants; Limitations; Polar stereographic variants A/B/C: only azimuthal conformal projection; B uses standard parallel and grid origin at pole; antipodal point of projection center cannot be shown.",
+            "specificClaim": "Вариант A задаёт scale factor как способ специфицировать дугу без искажения масштаба; grid origin at pole указан для B."
+          },
+          "specificClaim": "Вариант A задаёт scale factor как способ специфицировать дугу без искажения масштаба; grid origin at pole указан для B.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note1",
+          "literal": "Стереографическая проекция не отображает точку, диаметрально противоположную центру карты; это ограничение не означает, что речь идёт о точке перспективного проецирования.",
+          "literalSHA256": "28795075fa81c72bf49e20f1fad45a5ca59cc7f2d5bf877bd044e847be148668",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+            "fileSHA": "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+            "exactlocator": "Full page, Description; Distortion; Variants; Limitations; Polar stereographic variants A/B/C: only azimuthal conformal projection; B uses standard parallel and grid origin at pole; antipodal point of projection center cannot be shown.",
+            "specificClaim": "Стереографическая проекция не отображает точку, диаметрально противоположную центру карты; это ограничение не означает, что речь идёт о точке перспективного проецирования."
+          },
+          "specificClaim": "Стереографическая проекция не отображает точку, диаметрально противоположную центру карты; это ограничение не означает, что речь идёт о точке перспективного проецирования.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note2",
+          "literal": "Вариант C отличается origin: он находится на пересечении стандартной параллели и longitude of origin.",
+          "literalSHA256": "2234dcd489862adf6a4b2dd3d1acdc3a26bd071a9e434faf7a4521ea43328162",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+            "fileSHA": "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+            "exactlocator": "Full page, Description; Distortion; Variants; Limitations; Polar stereographic variants A/B/C: only azimuthal conformal projection; B uses standard parallel and grid origin at pole; antipodal point of projection center cannot be shown.",
+            "specificClaim": "Вариант C задаёт стандартную параллель, но его grid origin — пересечение стандартной параллели с longitude of origin."
+          },
+          "specificClaim": "Вариант C задаёт стандартную параллель, но его grid origin — пересечение стандартной параллели с longitude of origin.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        },
+        {
+          "group": "note3",
+          "literal": "Auxiliary-sphere вариант не поддерживает эллипсоид; при эллипсоидальной модели его конформные свойства не сохраняются.",
+          "literalSHA256": "741992c7628dcf489c31a0ad47fefae0b677053c5b3a94a57298c374f7eeb368",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+            "fileSHA": "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+            "exactlocator": "Full page, Description; Distortion; Variants; Limitations; Polar stereographic variants A/B/C: only azimuthal conformal projection; B uses standard parallel and grid origin at pole; antipodal point of projection center cannot be shown.",
+            "specificClaim": "ArcGIS указывает, что auxiliary-sphere — единственный вариант без поддержки эллипсоида, а конформные свойства при ellipsoid не сохраняются."
+          },
+          "specificClaim": "ArcGIS указывает, что auxiliary-sphere — единственный вариант без поддержки эллипсоида, а конформные свойства при ellipsoid не сохраняются.",
+          "editorialReason": "A concise source-backed clarification that adds a distinct fact or resolves a misconception beyond repeating the option."
+        }
+      ],
+      "choiceProofs": [
+        {
+          "answerIndex": 0,
+          "answer": "Polar stereographic variant A: задать scale factor и считать origin координатной сетки совпадающим с полюсом.",
+          "note": "Вариант A задаёт scale factor; полюсный origin указан документацией для варианта B.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "Вариант A задаёт scale factor как способ специфицировать дугу без искажения масштаба; grid origin at pole указан для B.",
+          "plausibilityUnderPrompt": "Это профессионально допустимая полярная реализация, но не соответствует одновременно заданной форме параметра и origin-контракту.",
+          "noteUsefulness": "Разводит параметризацию масштаба и координатное начало.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+            "fileSHA": "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+            "exactlocator": "Full page, Description; Distortion; Variants; Limitations; Polar stereographic variants A/B/C: only azimuthal conformal projection; B uses standard parallel and grid origin at pole; antipodal point of projection center cannot be shown.",
+            "specificClaim": "Вариант A задаёт scale factor как способ специфицировать дугу без искажения масштаба; grid origin at pole указан для B."
+          },
+          "claimLocatorAssessment": "Вариант A задаёт scale factor как способ специфицировать дугу без искажения масштаба; grid origin at pole указан для B."
+        },
+        {
+          "answerIndex": 1,
+          "answer": "Polar stereographic variant B: задать стандартную параллель и использовать полюс как grid origin.",
+          "note": "Стереографическая проекция не отображает точку, диаметрально противоположную центру карты; это ограничение не означает, что речь идёт о точке перспективного проецирования.",
+          "truthOneKey": "Correct",
+          "whyTrueOrFalse": "Polar stereographic variant B uses the required standard parallel and puts the grid origin at the pole; the separate note records the center-antipode limitation.",
+          "plausibilityUnderPrompt": "Варианты A и C — допустимые близкие параметризации, но только B сочетает заданную стандартную параллель и полюсное начало сетки.",
+          "noteUsefulness": "Correctly locates the unprojectable point at the antipode of the map center, distinguishing it from a perspective projection viewpoint.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+            "fileSHA": "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+            "exactlocator": "Full page, Description; Distortion; Variants; Limitations; Polar stereographic variants A/B/C: only azimuthal conformal projection; B uses standard parallel and grid origin at pole; antipodal point of projection center cannot be shown.",
+            "specificClaim": "Polar stereographic variant B uses the required standard parallel and puts the grid origin at the pole; the separate note records the center-antipode limitation."
+          },
+          "claimLocatorAssessment": "Polar stereographic variant B использует standard parallel без масштабного искажения и grid origin at pole."
+        },
+        {
+          "answerIndex": 2,
+          "answer": "Polar stereographic variant C: задать ту же стандартную параллель и использовать пересечение параллели с центральным меридианом как origin.",
+          "note": "Вариант C отличается origin: он находится на пересечении стандартной параллели и longitude of origin.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "Вариант C задаёт стандартную параллель, но его grid origin — пересечение стандартной параллели с longitude of origin.",
+          "plausibilityUnderPrompt": "Почти совпадает по параметру true-scale, однако не совпадает по требуемому grid origin.",
+          "noteUsefulness": "Помогает различить близкие EPSG-параметризации одного семейства.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+            "fileSHA": "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+            "exactlocator": "Full page, Description; Distortion; Variants; Limitations; Polar stereographic variants A/B/C: only azimuthal conformal projection; B uses standard parallel and grid origin at pole; antipodal point of projection center cannot be shown.",
+            "specificClaim": "Вариант C задаёт стандартную параллель, но его grid origin — пересечение стандартной параллели с longitude of origin."
+          },
+          "claimLocatorAssessment": "Вариант C задаёт стандартную параллель, но его grid origin — пересечение стандартной параллели с longitude of origin."
+        },
+        {
+          "answerIndex": 3,
+          "answer": "Auxiliary-sphere stereographic: задать радиус и использовать сферические уравнения для spherical-продукта.",
+          "note": "Auxiliary-sphere вариант не поддерживает эллипсоид; при эллипсоидальной модели его конформные свойства не сохраняются.",
+          "truthOneKey": "Incorrect",
+          "whyTrueOrFalse": "The auxiliary-sphere variant is a valid spherical implementation but does not support the required ellipsoid.",
+          "plausibilityUnderPrompt": "It is a genuine alternative for products whose coordinate model is spherical; the export contract here requires the ellipsoid.",
+          "noteUsefulness": "Clarifies that this variant belongs to a valid spherical workflow rather than the required ellipsoidal one.",
+          "grammarAssessment": "Фраза грамматически закончена, согласована с профессиональной формулировкой вопроса и естественно читается как самостоятельный вариант ответа.",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+            "fileSHA": "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+            "exactlocator": "Full page, Description; Distortion; Variants; Limitations; Polar stereographic variants A/B/C: only azimuthal conformal projection; B uses standard parallel and grid origin at pole; antipodal point of projection center cannot be shown.",
+            "specificClaim": "The auxiliary-sphere implementation does not support the required ellipsoid and does not maintain its conformal property on an ellipsoid."
+          },
+          "claimLocatorAssessment": "ArcGIS указывает, что auxiliary-sphere — единственный вариант без поддержки эллипсоида, а конформные свойства при ellipsoid не сохраняются."
+        }
+      ]
+    }
+  ]
+}

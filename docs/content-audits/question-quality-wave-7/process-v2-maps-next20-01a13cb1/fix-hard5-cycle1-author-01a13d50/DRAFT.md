@@ -1,0 +1,3 @@
+# DRAFT — hard5 fix cycle 1
+
+Пять карточек перепроектируются как прикладной выбор среди профессионально правдоподобных реализаций. Frozen: ID, topic, order, difficulty=hard, correctIndex=1. Тексты prompt, answers, explanation и notes редактируются полностью. Каждая задача должна требовать совместить минимум два независимых критерия; числа участвуют в решении там, где они заданы. Первичные источники: сохранённые полные NOAA VDatum, NGS Datums, USGS Topographic Map Symbols и полные релевантные страницы ArcGIS по Gnomonic, Stereographic, Azimuthal Equidistant и Mercator. Существующие peers будут сверены по актуальному каталогу.
