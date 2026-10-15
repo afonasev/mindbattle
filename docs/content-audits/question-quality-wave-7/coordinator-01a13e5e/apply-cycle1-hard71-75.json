@@ -1,0 +1,586 @@
+{
+  "stage": "solecycle1 CURRENT5hard71–75 pending affected19 and retained independent reader36; coordinator peer adjudication explicit, no qualitycredit",
+  "authorNativeId": "01a13e63-3568-70d1-bc76-88e6628dcb42",
+  "baseline": "69d1f9402912fed661bbb7c4fee788a2f8eed130",
+  "authorPath": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author-cycle1-01a13e5e",
+  "applied": [
+    {
+      "id": "maps-cartography-orthographic-space",
+      "topicId": "maps-cartography",
+      "sourceOrder": 71,
+      "beforeSHA256": "de0e8b55f22008fdb087cb51b8deb747ec5b98fa6b2aa4a466b5edd3ffd56a34",
+      "proposedSHA256": "7149241c9874862c20ee76a4481c4edfc118b4d49aff90a487746b52c1d76982",
+      "beforeCard": {
+        "id": "maps-cartography-orthographic-space",
+        "difficulty": "hard",
+        "prompt": "В атласе планеты на сферической модели заказчик требует одновременно показать только видимую полусферу и получить ракурс, эквивалентный наблюдению с бесконечно удалённой точки. Площади по этому изображению измерять не будут. Какой вариант удовлетворяет всем условиям?",
+        "answers": [
+          {
+            "text": "Подойдёт гномоническая проекция.",
+            "note": "Она показывает большие круги прямыми, но не проектирует точки, удалённые от центра на 90° и более."
+          },
+          {
+            "text": "Подойдёт стереографическая проекция.",
+            "note": "Её перспективная точка находится на глобусе напротив точки касания, а не в бесконечности."
+          },
+          {
+            "text": "Подойдёт ортографическая проекция.",
+            "note": "Искажение в ней растёт от центра проекции к краям."
+          },
+          {
+            "text": "Подойдёт азимутальная равновеликая проекция Ламберта.",
+            "note": "Она сохраняет площади и может показывать весь мир, но не даёт требуемого ортографического ракурса."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Ортографическая проекция удовлетворяет сразу двум независимым требованиям: использует сферическую модель и показывает только одну полусферу как вид издалека. Гномоническая не охватывает полусферу целиком, а Ламберта предназначена для равновеликого изображения, не для такого ракурса.",
+        "source": {
+          "title": "Orthographic | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/orthographic.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "maps-cartography-orthographic-space",
+        "difficulty": "hard",
+        "prompt": "На сфере нужно показать Землю как из бесконечно удалённой точки. Точки экватора имеют долготы 80°, 100° и 170°. Допустимые центры ортографической проекции: 75°, 150°, 110° и 160°. Сначала все три точки должны оставаться видимыми (угловое расстояние от центра не более 90°); среди допустимых центров минимизируйте искажение у точки 80°. Какой центр выбрать?",
+        "answers": [
+          {
+            "text": "Центр 75°: он ближе всего к приоритетной точке 80° и минимизирует там искажение.",
+            "note": "Но от 75° до точки 170° — 95°; эта точка выходит за предел видимой полусферы."
+          },
+          {
+            "text": "Центр 150°: все три точки видимы, а приоритетная точка удалена на 70°.",
+            "note": "Этот центр проходит проверку видимости, но есть допустимый центр с меньшим расстоянием до 80°."
+          },
+          {
+            "text": "Центр 110°: все три точки видимы, а приоритетная точка удалена на 30°.",
+            "note": "Ортографическая проекция относится к азимутальным перспективным проекциям и подходит для обзорных видов Земли из космоса."
+          },
+          {
+            "text": "Центр 160°: все три точки видимы, а приоритетная точка удалена на 80°.",
+            "note": "Для точки на долготе 170° расстояние от 160° равно 10°; до приоритетной точки на 80° — 80°, поэтому 110° ближе."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Все точки должны находиться не дальше 90° от центра: вариант 75° исключается, поскольку до 170° — 95°. Центры 150°, 110° и 160° проходят это условие; расстояния до приоритетной точки 80° равны 70°, 30° и 80°, поэтому выбираем 110°.",
+        "source": {
+          "title": "Orthographic | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/orthographic.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      }
+    },
+    {
+      "id": "maps-cartography-lambert-azimuthal",
+      "topicId": "maps-cartography",
+      "sourceOrder": 72,
+      "beforeSHA256": "b3278e7e241be7217c6cb0ba427b514afdc8684c35c4a958024dc970770ccd05",
+      "proposedSHA256": "e7cd4c354f20fc4c8e2cf813e1f431bc100b9ef28079a7c10935a84024ced36c",
+      "beforeCard": {
+        "id": "maps-cartography-lambert-azimuthal",
+        "difficulty": "hard",
+        "prompt": "Для полярной тематической карты сравнивают площади двух бассейнов. Техническое задание независимо требует равновеликости и азимутальной сетки с центром на полюсе; расстояния и углы измерять не будут. Какой вариант удовлетворяет обоим требованиям?",
+        "answers": [
+          {
+            "text": "Подойдёт гномоническая проекция.",
+            "note": "Она азимутальная и показывает большие круги прямыми, но не сохраняет площади."
+          },
+          {
+            "text": "Подойдёт проекция Мольвейде.",
+            "note": "Мольвейде равновеликая, но псевдоцилиндрическая; это вариант для тематических карт мира."
+          },
+          {
+            "text": "Подойдёт азимутальная равновеликая проекция Ламберта.",
+            "note": "Она дополнительно сохраняет истинное направление от центра проекции."
+          },
+          {
+            "text": "Подойдёт ортографическая проекция.",
+            "note": "Она не является равновеликой и ограничена одной полусферой."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Ламберта одновременно удовлетворяет азимутальному требованию полярной карты и сохраняет относительные площади. Мольвейде сохраняет площади, но не является азимутальной проекцией; остальные варианты не сохраняют площадь.",
+        "source": {
+          "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "maps-cartography-lambert-azimuthal",
+        "difficulty": "hard",
+        "prompt": "У слоя бассейнов фактическая эллипсоидальная система координат известна, но в метаданных ошибочно записана другая. Нужно исправить сохранённую систему исходного слоя и получить преобразованные координаты в равновеликой полярной проекции на эллипсоиде. Какой рабочий план выполнит оба требования?",
+        "answers": [
+          {
+            "text": "Сразу выполнить Project в обычную эллипсоидальную LAEA, не исправляя метаданные источника.",
+            "note": "Project использует систему координат входа; неверно заданная система приведёт к неверной интерпретации координат."
+          },
+          {
+            "text": "Назначить исходным координатам полярную LAEA через Define Projection и остановиться.",
+            "note": "Define Projection меняет сведения о системе координат, но не преобразует геометрию объектов."
+          },
+          {
+            "text": "Сначала задать известную фактическую систему через Define Projection, затем выполнить Project в обычную полярную LAEA.",
+            "note": "Среди параметров LAEA задаются центральный меридиан и широта начала координат."
+          },
+          {
+            "text": "Исправить метаданные источника, затем спроецировать в LAEA Auxiliary Sphere Type 3.",
+            "note": "Type 3 сохраняет равновеликость, но итоговые координаты не совпадают с истинным эллипсоидальным решением."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Сначала нужно привести метаданные источника к известной фактической системе: Define Projection меняет описание, не геометрию. Затем Project преобразует координаты в обычную полярную LAEA, единственный из двух вариантов Lambert LAEA, который поддерживает эллипсоид; Auxiliary Sphere Type 3 сохраняет площади, но не даёт эллипсоидальные координаты.",
+        "source": {
+          "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      }
+    },
+    {
+      "id": "maps-cartography-sliver-polygon",
+      "topicId": "maps-cartography",
+      "sourceOrder": 73,
+      "beforeSHA256": "5d560385a910b6f83b77b2e810cbf029796b7d970867069ad92457fad18e41e7",
+      "proposedSHA256": "ae9808bde58a1c75f6aa3c9799499eb44a30a75d5d3b3da12faa668b40e9d658",
+      "beforeCard": {
+        "id": "maps-cartography-sliver-polygon",
+        "difficulty": "hard",
+        "prompt": "После обновления ГИС почвенный слой должен оставаться сплошным покрытием одного класса. В диагностике обнаружена узкая линейная ошибка по контуру пустого просвета между соседними полигонами; общей площади пересечения нет. Какое правило включить, чтобы проверить именно такое нарушение?",
+        "answers": [
+          {
+            "text": "Включить правило Must Not Overlap.",
+            "note": "Оно выявляет области, где полигоны одного класса занимают общую площадь."
+          },
+          {
+            "text": "Включить правило Boundary Must Be Covered By.",
+            "note": "Оно проверяет, покрывают ли линейные объекты границы полигонов."
+          },
+          {
+            "text": "Включить правило Must Not Have Gaps.",
+            "note": "Это правило также выявляет пустоты, полностью окружённые одним полигоном."
+          },
+          {
+            "text": "Включить правило Must Cover Each Other.",
+            "note": "Оно требует взаимного покрытия полигонов из двух классов или подтипов."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Для непрерывного покрытия без пустот выбирают Must Not Have Gaps. Esri отмечает линейными ошибками контуры пустых областей внутри полигона или между несовпадающими границами соседних полигонов.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polygon features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polygon-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "maps-cartography-sliver-polygon",
+        "difficulty": "hard",
+        "prompt": "Два полигона одного класса должны без перекрытий заполнить замкнутую маску площадью 100 км². Площадь A — 60 км², B — 45 км², объединение — 94 км²; недостающая часть маски — внутренний, полностью окружённый пустой участок. Нужно обнаруживать и эту пустоту, и общую площадь полигонов. Какой набор правил выбрать?",
+        "answers": [
+          {
+            "text": "Только Must Not Overlap: оно найдёт пересечение площадью 11 км².",
+            "note": "Проверка перекрытий не обнаруживает незаполненные 6 км² маски."
+          },
+          {
+            "text": "Только Must Not Have Gaps: оно найдёт пустую область площадью 6 км².",
+            "note": "Это правило не выявит общую площадь двух полигонов — 11 км²."
+          },
+          {
+            "text": "Must Not Have Gaps вместе с Must Not Overlap для этого класса.",
+            "note": "Must Not Have Gaps создаёт линейные ошибки по контуру пустоты, а Must Not Overlap — полигонные ошибки в области пересечения."
+          },
+          {
+            "text": "Must Not Have Gaps вместе с Must Not Overlap With для того же класса.",
+            "note": "Must Not Overlap With сравнивает разные классы или подтипы, а здесь оба полигона одного класса."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "По маске не покрыто 100−94=6 км²; по формуле включений и исключений полигоны перекрываются на 60+45−94=11 км². Для этих двух независимых отношений нужны Must Not Have Gaps и Must Not Overlap: первое выявляет пустоты, второе — общие области внутри класса.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polygon features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polygon-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      }
+    },
+    {
+      "id": "maps-cartography-overshoot-line",
+      "topicId": "maps-cartography",
+      "sourceOrder": 74,
+      "beforeSHA256": "db19c5974e74660f7d85b3e549fbcc10ad674d0f9414b9adcfd75d14105e49e1",
+      "proposedSHA256": "9295cfbd51f66785c371e6a3e30e50940ad20f1da34a2f1d898cd6bff9201fdd",
+      "beforeCard": {
+        "id": "maps-cartography-overshoot-line",
+        "difficulty": "hard",
+        "prompt": "В сети осевых линий улиц проверяют Must Not Have Dangles: конец A прошёл на 2 м за стык, B не дошёл 3 м до другого. Оба стыка в радиусе 5 м. Регламент запрещает Snap; выберите Trim или Extend по направлению ошибки. Какой план исправит оба конца?",
+        "answers": [
+          {
+            "text": "Следует выполнить Extend для обоих концов.",
+            "note": "Extend продлит короткий конец B, но ещё дальше уведёт за узел уже длинный конец A."
+          },
+          {
+            "text": "Следует выполнить Trim для обоих концов.",
+            "note": "Trim укоротит конец A, но увеличит зазор у короткого конца B."
+          },
+          {
+            "text": "Следует обрезать конец A командой Trim, а конец B продлить командой Extend.",
+            "note": "При массовом исправлении объекты, для которых операция не сработает, останутся ошибками."
+          },
+          {
+            "text": "Следует привязать оба конца командой Snap к ближайшим линиям.",
+            "note": "Snap переносит конец к ближайшему объекту, а регламент требует сохранить указанную геометрию стыков."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Конец A выступает за пересечение, поэтому его нужно обрезать Trim; конец B не достигает пересечения, поэтому его нужно продлить Extend. Оба целевых соединения находятся в допуске, а Snap исключён регламентом.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "maps-cartography-overshoot-line",
+        "difficulty": "hard",
+        "prompt": "Пакетный Trim с максимальным расстоянием 5 м обрабатывает три висячие линии. У A длина 8 м, пересечение находится в 3 м от висячего конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Какой результат и состояние ошибок останутся?",
+        "answers": [
+          {
+            "text": "A обрежется до 5 м; B обрежется до 3 м, а C останется без изменения.",
+            "note": "Чтобы обрезать B на расстоянии 9 м, заданного предела 5 м недостаточно."
+          },
+          {
+            "text": "A и B обрежутся до пересечений; C будет удалена, так как короче предела.",
+            "note": "Предел больше длины C сам по себе не удаляет объект; без пересечения Trim не сработает."
+          },
+          {
+            "text": "A обрежется до 5 м; B и C не изменятся и останутся ошибками.",
+            "note": "При нулевом расстоянии Trim обрезает висячую линию точно до найденного пересечения."
+          },
+          {
+            "text": "A останется длиной 8 м; B и C не изменятся и останутся ошибками.",
+            "note": "У A пересечение в пределах 5 м, поэтому Trim может удалить выступающий отрезок длиной 3 м."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Для A пересечение находится в пределах 5 м, поэтому Trim удалит выступающий отрезок 3 м и оставит длину 5 м. Для B расстояние до пересечения превышает предел, а у C пересечения нет; оба объекта пропускаются и остаются ошибками, причём короткая C не удаляется.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      }
+    },
+    {
+      "id": "maps-cartography-undershoot-line",
+      "topicId": "maps-cartography",
+      "sourceOrder": 75,
+      "beforeSHA256": "a845e20460973bdad49fc72b8c524878fe90166392630313c0064628d6d7d5c3",
+      "proposedSHA256": "b6dbdfdc7785a06493383cba882aa4c0a5d030aa69c03481d9afe8682662a79a",
+      "beforeCard": {
+        "id": "maps-cartography-undershoot-line",
+        "difficulty": "hard",
+        "prompt": "Пакетная проверка Must Not Have Dangles нашла два коротких конца осевых линий: A — в 4 м, B — в 9 м от целевых линий. Радиус исправления — 5 м. Нужно исправить A и оставить B ошибкой; нельзя продлевать без ограничения или привязывать к ближайшему объекту. Какой план выбрать?",
+        "answers": [
+          {
+            "text": "Следует задать нулевой радиус и выполнить Extend для обоих концов.",
+            "note": "При нулевом расстоянии Extend продолжает линию до стыка с найденным объектом, даже если он далеко."
+          },
+          {
+            "text": "Следует выполнить Snap с радиусом 5 м для обоих концов.",
+            "note": "Snap привязывает конец к ближайшей линии в допуске, а не продлевает его до заданной цели."
+          },
+          {
+            "text": "Следует выполнить Extend с радиусом 5 м для обоих концов: A удлинится, а B останется ошибкой.",
+            "note": "Нулевой радиус имеет особую семантику: линия продолжается до найденного стыка."
+          },
+          {
+            "text": "Следует выполнить Trim с радиусом 5 м для обоих концов.",
+            "note": "Trim укорачивает висячую линию при близком пересечении, а не устраняет короткий конец."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Extend с радиусом 5 м обработает A, поскольку целевая линия внутри допуска; B не найдёт подходящий объект в заданном радиусе и останется ошибкой. Нулевой радиус означал бы продление до найденного стыка без ограничения 5 м.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "maps-cartography-undershoot-line",
+        "difficulty": "hard",
+        "prompt": "При проверке Must Not Have Dangles в сети улиц найден A — намеренный тупик с продолжением другой линии в 4 м, B — ошибочный недолёт до проектного узла в 3 м, и C — такой же недолёт в 9 м. Нужно сохранить тупик, исправить B и оставить C нерешённой. Какой план выбрать при лимите Extend 5 м?",
+        "answers": [
+          {
+            "text": "Пометить A, B и C как допустимые тупики; исправление Extend не запускать.",
+            "note": "Так исчезнет и ошибка B, хотя она обозначена как недолёт до обязательного узла."
+          },
+          {
+            "text": "Запустить Extend с нулевым расстоянием для B и C, а A не классифицировать.",
+            "note": "Нулевое расстояние означает продление до найденного стыка без заданного предела."
+          },
+          {
+            "text": "Исключить A как допустимый тупик и применить Extend 5 м к B и C.",
+            "note": "При нулевом расстоянии Extend продолжает линию до найденного стыка без конечного ограничения дистанции."
+          },
+          {
+            "text": "Не отмечать A как допустимую ошибку; применить Extend 5 м ко всем трём.",
+            "note": "Extend может найти линию в пределах 5 м у A и тем самым изменить намеренный тупик."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "A — предусмотренное исключение сети, его нужно сохранить как допустимый тупик. Extend с пределом 5 м соединит B с проектным узлом, а C вне этого расстояния будет пропущена и останется ошибкой; нулевое расстояние сняло бы этот предел.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      }
+    }
+  ],
+  "bindings20": [
+    {
+      "id": "maps-cartography-orthographic-space",
+      "answerIndex": 0,
+      "prompt": "На сфере нужно показать Землю как из бесконечно удалённой точки. Точки экватора имеют долготы 80°, 100° и 170°. Допустимые центры ортографической проекции: 75°, 150°, 110° и 160°. Сначала все три точки должны оставаться видимыми (угловое расстояние от центра не более 90°); среди допустимых центров минимизируйте искажение у точки 80°. Какой центр выбрать?",
+      "answer": "Центр 75°: он ближе всего к приоритетной точке 80° и минимизирует там искажение.",
+      "note": "Но от 75° до точки 170° — 95°; эта точка выходит за предел видимой полусферы.",
+      "tripleSHA256": "5af11d26e8c424a5e3cb81d641654aa9a0bbfdc7b56ff730a8ac415f158828fc",
+      "authorRationale": "Grammar: parallel center proposals. Plausible because 75 is only 5° from priority 80. One-key: target 170 lies 95° away, outside the required hemisphere. Note gives a concrete threshold check."
+    },
+    {
+      "id": "maps-cartography-orthographic-space",
+      "answerIndex": 1,
+      "prompt": "На сфере нужно показать Землю как из бесконечно удалённой точки. Точки экватора имеют долготы 80°, 100° и 170°. Допустимые центры ортографической проекции: 75°, 150°, 110° и 160°. Сначала все три точки должны оставаться видимыми (угловое расстояние от центра не более 90°); среди допустимых центров минимизируйте искажение у точки 80°. Какой центр выбрать?",
+      "answer": "Центр 150°: все три точки видимы, а приоритетная точка удалена на 70°.",
+      "note": "Этот центр проходит проверку видимости, но есть допустимый центр с меньшим расстоянием до 80°.",
+      "tripleSHA256": "551684db1dddf2b988a4e1f6994ed5f8018fc5551d008ad86ca3177e65dc9117",
+      "authorRationale": "Grammar: parallel numeric projection plan. Plausible because all listed targets are within 90° at 150. One-key: priority distance is 70°, versus 30° at 110. Note makes the optimization stage useful."
+    },
+    {
+      "id": "maps-cartography-orthographic-space",
+      "answerIndex": 2,
+      "prompt": "На сфере нужно показать Землю как из бесконечно удалённой точки. Точки экватора имеют долготы 80°, 100° и 170°. Допустимые центры ортографической проекции: 75°, 150°, 110° и 160°. Сначала все три точки должны оставаться видимыми (угловое расстояние от центра не более 90°); среди допустимых центров минимизируйте искажение у точки 80°. Какой центр выбрать?",
+      "answer": "Центр 110°: все три точки видимы, а приоритетная точка удалена на 30°.",
+      "note": "Ортографическая проекция относится к азимутальным перспективным проекциям и подходит для обзорных видов Земли из космоса.",
+      "tripleSHA256": "fc69413aa155365951eda1f17ed9d34141464956225a275f3712c124da5496b2",
+      "authorRationale": "Grammar: same center-plan pattern. Plausible and correct: farthest target is 60° away and priority is 30° away. One-key: passes visibility and minimizes radial distortion at priority. Correct note adds azimuthal-perspective classification/use."
+    },
+    {
+      "id": "maps-cartography-orthographic-space",
+      "answerIndex": 3,
+      "prompt": "На сфере нужно показать Землю как из бесконечно удалённой точки. Точки экватора имеют долготы 80°, 100° и 170°. Допустимые центры ортографической проекции: 75°, 150°, 110° и 160°. Сначала все три точки должны оставаться видимыми (угловое расстояние от центра не более 90°); среди допустимых центров минимизируйте искажение у точки 80°. Какой центр выбрать?",
+      "answer": "Центр 160°: все три точки видимы, а приоритетная точка удалена на 80°.",
+      "note": "Для точки на долготе 170° расстояние от 160° равно 10°; до приоритетной точки на 80° — 80°, поэтому 110° ближе.",
+      "tripleSHA256": "b790e43bbe25e80f371b09877705e332c0d928ab58a857cf5b320da01332277b",
+      "authorRationale": "Grammar: numeric-center plan matches other options. Plausible: all targets pass visibility at 160. One-key: priority distance is 80°, worse than 30° at 110. Corrected note explicitly computes 170°−160°=10° and 160°−80°=80°."
+    },
+    {
+      "id": "maps-cartography-lambert-azimuthal",
+      "answerIndex": 0,
+      "prompt": "У слоя бассейнов фактическая эллипсоидальная система координат известна, но в метаданных ошибочно записана другая. Нужно исправить сохранённую систему исходного слоя и получить преобразованные координаты в равновеликой полярной проекции на эллипсоиде. Какой рабочий план выполнит оба требования?",
+      "answer": "Сразу выполнить Project в обычную эллипсоидальную LAEA, не исправляя метаданные источника.",
+      "note": "Project использует систему координат входа; неверно заданная система приведёт к неверной интерпретации координат.",
+      "tripleSHA256": "312c347e04f7d793b7a8406f93bfc4d133a1793896f6c85f898bd0758ca86df6",
+      "authorRationale": "Grammar: complete tool sequence. Plausible normal projection workflow. One-key: source CRS metadata is wrong, so Project interprets coordinates wrongly. Note cites input CRS dependency."
+    },
+    {
+      "id": "maps-cartography-lambert-azimuthal",
+      "answerIndex": 1,
+      "prompt": "У слоя бассейнов фактическая эллипсоидальная система координат известна, но в метаданных ошибочно записана другая. Нужно исправить сохранённую систему исходного слоя и получить преобразованные координаты в равновеликой полярной проекции на эллипсоиде. Какой рабочий план выполнит оба требования?",
+      "answer": "Назначить исходным координатам полярную LAEA через Define Projection и остановиться.",
+      "note": "Define Projection меняет сведения о системе координат, но не преобразует геометрию объектов.",
+      "tripleSHA256": "ea02eeda137a57be969f755730b9b30b49ff7cc6a5ebdabcc3fbcb1af6cf9ad4",
+      "authorRationale": "Grammar: complete one-tool plan. Plausible response to wrong CRS metadata. One-key: Define Projection changes metadata only, not coordinate geometry. Note explains why transformation is absent."
+    },
+    {
+      "id": "maps-cartography-lambert-azimuthal",
+      "answerIndex": 2,
+      "prompt": "У слоя бассейнов фактическая эллипсоидальная система координат известна, но в метаданных ошибочно записана другая. Нужно исправить сохранённую систему исходного слоя и получить преобразованные координаты в равновеликой полярной проекции на эллипсоиде. Какой рабочий план выполнит оба требования?",
+      "answer": "Сначала задать известную фактическую систему через Define Projection, затем выполнить Project в обычную полярную LAEA.",
+      "note": "Среди параметров LAEA задаются центральный меридиан и широта начала координат.",
+      "tripleSHA256": "fb2539e7474fe1c7abf09830c5c2a34ec03c40a533715a078d647cf230c124d2",
+      "authorRationale": "Grammar: complete ordered two-step workflow. Plausible because actual source CRS is known. One-key: repairs interpretation, then transforms into ellipsoidal polar LAEA. Note adds actual ellipsoid support."
+    },
+    {
+      "id": "maps-cartography-lambert-azimuthal",
+      "answerIndex": 3,
+      "prompt": "У слоя бассейнов фактическая эллипсоидальная система координат известна, но в метаданных ошибочно записана другая. Нужно исправить сохранённую систему исходного слоя и получить преобразованные координаты в равновеликой полярной проекции на эллипсоиде. Какой рабочий план выполнит оба требования?",
+      "answer": "Исправить метаданные источника, затем спроецировать в LAEA Auxiliary Sphere Type 3.",
+      "note": "Type 3 сохраняет равновеликость, но итоговые координаты не совпадают с истинным эллипсоидальным решением.",
+      "tripleSHA256": "2bd17b984f7ca8c584857a3358612aabb37a466f32555d72b9086707abcc2eda",
+      "authorRationale": "Grammar: complete ordered workflow with a named variant. Plausible because Type 3 preserves areas. One-key: coordinates still do not match the ellipsoidal solution. Note distinguishes the two requirements."
+    },
+    {
+      "id": "maps-cartography-sliver-polygon",
+      "answerIndex": 0,
+      "prompt": "Два полигона одного класса должны без перекрытий заполнить замкнутую маску площадью 100 км². Площадь A — 60 км², B — 45 км², объединение — 94 км²; недостающая часть маски — внутренний, полностью окружённый пустой участок. Нужно обнаруживать и эту пустоту, и общую площадь полигонов. Какой набор правил выбрать?",
+      "answer": "Только Must Not Overlap: оно найдёт пересечение площадью 11 км².",
+      "note": "Проверка перекрытий не обнаруживает незаполненные 6 км² маски.",
+      "tripleSHA256": "bf13ffe9b586cc1a9ca0dc8bdf34acca705406ed3fd3f98ec0ae916e956238a3",
+      "authorRationale": "Grammar: short rule selection with a numeric result. Plausible because 11 km2 overlap is real. One-key: misses uncovered 6 km2. Note names the uncovered amount."
+    },
+    {
+      "id": "maps-cartography-sliver-polygon",
+      "answerIndex": 1,
+      "prompt": "Два полигона одного класса должны без перекрытий заполнить замкнутую маску площадью 100 км². Площадь A — 60 км², B — 45 км², объединение — 94 км²; недостающая часть маски — внутренний, полностью окружённый пустой участок. Нужно обнаруживать и эту пустоту, и общую площадь полигонов. Какой набор правил выбрать?",
+      "answer": "Только Must Not Have Gaps: оно найдёт пустую область площадью 6 км².",
+      "note": "Это правило не выявит общую площадь двух полигонов — 11 км².",
+      "tripleSHA256": "af5be7b79554c690f354106a2bafdb6952af104bad473ecc76c5fb3fe274d36c",
+      "authorRationale": "Grammar: parallel one-rule answer. Plausible because 6 km2 is a real mask gap. One-key: misses the 11 km2 intersection. Note names the missing relation."
+    },
+    {
+      "id": "maps-cartography-sliver-polygon",
+      "answerIndex": 2,
+      "prompt": "Два полигона одного класса должны без перекрытий заполнить замкнутую маску площадью 100 км². Площадь A — 60 км², B — 45 км², объединение — 94 км²; недостающая часть маски — внутренний, полностью окружённый пустой участок. Нужно обнаруживать и эту пустоту, и общую площадь полигонов. Какой набор правил выбрать?",
+      "answer": "Must Not Have Gaps вместе с Must Not Overlap для этого класса.",
+      "note": "Must Not Have Gaps создаёт линейные ошибки по контуру пустоты, а Must Not Overlap — полигонные ошибки в области пересечения.",
+      "tripleSHA256": "92154fd4e6b6483fd1e040ad0c5d17b81db10ffdc2917eb02b25c48ae59b4bc9",
+      "authorRationale": "Grammar: parallel two-rule selection. Plausible from both independent calculations. One-key: only pair covers gap and overlap checks. Note shows both calculations."
+    },
+    {
+      "id": "maps-cartography-sliver-polygon",
+      "answerIndex": 3,
+      "prompt": "Два полигона одного класса должны без перекрытий заполнить замкнутую маску площадью 100 км². Площадь A — 60 км², B — 45 км², объединение — 94 км²; недостающая часть маски — внутренний, полностью окружённый пустой участок. Нужно обнаруживать и эту пустоту, и общую площадь полигонов. Какой набор правил выбрать?",
+      "answer": "Must Not Have Gaps вместе с Must Not Overlap With для того же класса.",
+      "note": "Must Not Overlap With сравнивает разные классы или подтипы, а здесь оба полигона одного класса.",
+      "tripleSHA256": "8228d170a0a42a15c5bfb90e5460f44f67fcf0859baf1e453c845f8c7381afb1",
+      "authorRationale": "Grammar: paired rule set. Plausible cross-class rule resembles same-class rule. One-key: only one class is specified; Overlap With is for separate classes/subtypes. Note identifies scope."
+    },
+    {
+      "id": "maps-cartography-overshoot-line",
+      "answerIndex": 0,
+      "prompt": "Пакетный Trim с максимальным расстоянием 5 м обрабатывает три висячие линии. У A длина 8 м, пересечение находится в 3 м от висячего конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Какой результат и состояние ошибок останутся?",
+      "answer": "A обрежется до 5 м; B обрежется до 3 м, а C останется без изменения.",
+      "note": "Чтобы обрезать B на расстоянии 9 м, заданного предела 5 м недостаточно.",
+      "tripleSHA256": "686500e68bc65be6aacd82e4b1c1b05d5d3c3960e562178c6201ec4a1c1a7f9c",
+      "authorRationale": "Grammar: full result prediction for A/B/C. Plausible partial correct Trim. One-key: B is 9 m away, beyond max 5. Note checks distance against cap."
+    },
+    {
+      "id": "maps-cartography-overshoot-line",
+      "answerIndex": 1,
+      "prompt": "Пакетный Trim с максимальным расстоянием 5 м обрабатывает три висячие линии. У A длина 8 м, пересечение находится в 3 м от висячего конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Какой результат и состояние ошибок останутся?",
+      "answer": "A и B обрежутся до пересечений; C будет удалена, так как короче предела.",
+      "note": "Предел больше длины C сам по себе не удаляет объект; без пересечения Trim не сработает.",
+      "tripleSHA256": "1468fbe845aade7c3c2667142c735e38e64f53177b912cea3c2a27baac85677c",
+      "authorRationale": "Grammar: full three-result prediction. Plausible if one confuses limit and deletion. One-key: B is out of range; C lacks intersection and is not deleted just for being short. Note states actual constraints."
+    },
+    {
+      "id": "maps-cartography-overshoot-line",
+      "answerIndex": 2,
+      "prompt": "Пакетный Trim с максимальным расстоянием 5 м обрабатывает три висячие линии. У A длина 8 м, пересечение находится в 3 м от висячего конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Какой результат и состояние ошибок останутся?",
+      "answer": "A обрежется до 5 м; B и C не изменятся и останутся ошибками.",
+      "note": "При нулевом расстоянии Trim обрезает висячую линию точно до найденного пересечения.",
+      "tripleSHA256": "bb6b4331c71bdd741377683d698d3d4d938a6d7e40582f31d145c49f570341a6",
+      "authorRationale": "Grammar: full result prediction. Plausible and correct: A becomes 5; B/C remain unchanged and errors. One-key: applies finite distance plus batch skip behavior. Note contributes batch outcome."
+    },
+    {
+      "id": "maps-cartography-overshoot-line",
+      "answerIndex": 3,
+      "prompt": "Пакетный Trim с максимальным расстоянием 5 м обрабатывает три висячие линии. У A длина 8 м, пересечение находится в 3 м от висячего конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Какой результат и состояние ошибок останутся?",
+      "answer": "A останется длиной 8 м; B и C не изменятся и останутся ошибками.",
+      "note": "У A пересечение в пределах 5 м, поэтому Trim может удалить выступающий отрезок длиной 3 м.",
+      "tripleSHA256": "e9e0059cb0d6c07afdeb7bdbe8027c89c5d85571ab89bfbf226532d318b7aec9",
+      "authorRationale": "Grammar: parallel result prediction differing on A. Plausible if intersection is treated as ineligible. One-key: A intersection is within 5. Note checks this case."
+    },
+    {
+      "id": "maps-cartography-undershoot-line",
+      "answerIndex": 0,
+      "prompt": "При проверке Must Not Have Dangles в сети улиц найден A — намеренный тупик с продолжением другой линии в 4 м, B — ошибочный недолёт до проектного узла в 3 м, и C — такой же недолёт в 9 м. Нужно сохранить тупик, исправить B и оставить C нерешённой. Какой план выбрать при лимите Extend 5 м?",
+      "answer": "Пометить A, B и C как допустимые тупики; исправление Extend не запускать.",
+      "note": "Так исчезнет и ошибка B, хотя она обозначена как недолёт до обязательного узла.",
+      "tripleSHA256": "13a99b349310531d221360cb243a74b76ecdfd63e224f895682ce13e03fde10f",
+      "authorRationale": "Grammar: complete exception/fix plan. Plausible to suppress false positives. One-key: B is explicitly an error, not an approved exception. Note protects a real defect."
+    },
+    {
+      "id": "maps-cartography-undershoot-line",
+      "answerIndex": 1,
+      "prompt": "При проверке Must Not Have Dangles в сети улиц найден A — намеренный тупик с продолжением другой линии в 4 м, B — ошибочный недолёт до проектного узла в 3 м, и C — такой же недолёт в 9 м. Нужно сохранить тупик, исправить B и оставить C нерешённой. Какой план выбрать при лимите Extend 5 м?",
+      "answer": "Запустить Extend с нулевым расстоянием для B и C, а A не классифицировать.",
+      "note": "Нулевое расстояние означает продление до найденного стыка без заданного предела.",
+      "tripleSHA256": "947cf4987f2108481bb2836f0bcc40cbd098bf29d7bde4c2f6c396f9c76efc99",
+      "authorRationale": "Grammar: complete plan with a real documented zero setting. Plausible because it finds distant joins. One-key: uncapped extension contradicts limit and leaves intentional A unprotected. Note documents zero."
+    },
+    {
+      "id": "maps-cartography-undershoot-line",
+      "answerIndex": 2,
+      "prompt": "При проверке Must Not Have Dangles в сети улиц найден A — намеренный тупик с продолжением другой линии в 4 м, B — ошибочный недолёт до проектного узла в 3 м, и C — такой же недолёт в 9 м. Нужно сохранить тупик, исправить B и оставить C нерешённой. Какой план выбрать при лимите Extend 5 м?",
+      "answer": "Исключить A как допустимый тупик и применить Extend 5 м к B и C.",
+      "note": "При нулевом расстоянии Extend продолжает линию до найденного стыка без конечного ограничения дистанции.",
+      "tripleSHA256": "1a35b9cff46d53875ecc4bc4f4710296924857d55c08759f974009b029af5fbe",
+      "authorRationale": "Grammar: complete plan covering exception and bounded operation. Plausible and correct: preserve A, connect B, skip C. One-key: only this honors all declared statuses and 5 m cap. Note documents skip."
+    },
+    {
+      "id": "maps-cartography-undershoot-line",
+      "answerIndex": 3,
+      "prompt": "При проверке Must Not Have Dangles в сети улиц найден A — намеренный тупик с продолжением другой линии в 4 м, B — ошибочный недолёт до проектного узла в 3 м, и C — такой же недолёт в 9 м. Нужно сохранить тупик, исправить B и оставить C нерешённой. Какой план выбрать при лимите Extend 5 м?",
+      "answer": "Не отмечать A как допустимую ошибку; применить Extend 5 м ко всем трём.",
+      "note": "Extend может найти линию в пределах 5 м у A и тем самым изменить намеренный тупик.",
+      "tripleSHA256": "05ff369053761f5b3b52bcfee91dbed87b6c54f8309723a05f77cec53533310e",
+      "authorRationale": "Grammar: complete bounded batch plan. Plausible because Extend is appropriate for short ends. One-key: A has an eligible target 4 m away, so it may be extended. Note links to intentional dead-end."
+    }
+  ],
+  "sources": [
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-orthographic.txt",
+      "rawSHA256": "73479d6077fa644b4b38c5c10e7790ffa5a0b81141c8ec4320b988df89a4debe"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-lambert-azimuthal-equal-area.txt",
+      "rawSHA256": "9080bea0c416975d9ef70c0e8e2fff9d8c5c6ca3230748656e697e5ffcca6d89"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-mollweide.body",
+      "rawSHA256": "72c60c174ba52c54cfabb0e75c9ae4c83ceb69554bed44256da301d55af4f452"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polygon.txt",
+      "rawSHA256": "278c0dc39afd7a70738c6fd5829aed922f4bec84294b0859f277d399e75b347f"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polyline.txt",
+      "rawSHA256": "63e29a307704cf3cbe5a83ba1694f3a6208c82bf786478ca013d0d82a8103c5d"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+      "rawSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+      "rawSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-hard5-initial-01a13d50/evidence/gnomonic.txt",
+      "rawSHA256": "54012fd4bd95c6b0a7782301cba2cbeaa014776c461e1cbcd6a3ab4950778f6f"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-hard5-initial-01a13d50/evidence/stereographic.txt",
+      "rawSHA256": "b70e8b9cb1dc9854275ced6df83b5a61dbbdc5c27fc40271768f69fdd34ee9c4"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/independent-initial7-01a13d50/evidence/usgs-full-text.txt",
+      "rawSHA256": "67843b53633c540a6bdb73fdecdf4d3a93977bc5e8fe11b2b3e1efb6a57310d9"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/evidence-cycle1/os-map-reading.txt",
+      "rawSHA256": "ca1d2b90e0a5f87cd2d35b50429514c844b300da617f45f64404ff3b31edd0fa"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author-cycle1-01a13e5e/sources/define-projection-reader-full.txt",
+      "rawSHA256": "5be5b9bd29d7b8fe647dea110afecd7991410538206fd8e2c581f9cc128b5eb5"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author-cycle1-01a13e5e/sources/project-reader-full.txt",
+      "rawSHA256": "ce3a4ac6d7ad3516f83ac58b54791b58da30d62013af4f06cda954742178024f"
+    }
+  ],
+  "qualityCredit": 0,
+  "qaSelection": {
+    "command": "node node_modules/vitest/vitest.mjs run tests/unit/catalog-topics.test.ts tests/unit/content.test.ts tests/unit/content-answer-notes.test.ts --reporter=json --outputFile=docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/qa-cycle1-hard71-75.json",
+    "reason": "Only5contentcards; catalogschema/uniqueIDs/textconstraints/answer-note contracts; no runtime/build/fullsuite"
+  },
+  "unrelatedCardsPreserved": true,
+  "frozenIDtopicorderdifficultykey": true
+}
