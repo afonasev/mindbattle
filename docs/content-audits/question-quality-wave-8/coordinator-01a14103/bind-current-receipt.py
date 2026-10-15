@@ -35,7 +35,16 @@ for p in peers['actualCurrentPeers']:assert p['card']==cat[p['id']] and sha(p['c
 proposals={}
 for snapshot in peers.get('latestProposalSnapshots',[]):
  p=snapshot['proposal'];sourcePath=C/snapshot['sourcePath'];assert raw(sourcePath)==snapshot['sourceRawSHA256']
- entry=next(e for e in rd(sourcePath)['entries'] if e['id']==p['id']);assert entry['proposedCard']==p['card'] and sha(p['card'])==digest(p)==entry['afterHash'];assert p['id'] not in proposals;proposals[p['id']]=p
+ sourceData=rd(sourcePath)
+ if 'entries' in sourceData:
+  entry=next(e for e in sourceData['entries'] if e['id']==p['id'])
+ else:
+  # The reader retained the author's full MAIN-delta proposal. Bind both that
+  # exact snapshot and its original candidate, without modifying reader evidence.
+  local=next(e for e in sourceData['relevantLocalCards'] if e['id']==p['id'])
+  entry=next(e for e in rd(sourcePath.parent/'candidate.json')['entries'] if e['id']==p['id'])
+  assert local['frozenLocalProposalCard']==entry['proposedCard'] and local['frozenLocalProposalSHA256']==entry['afterHash']
+ assert entry['proposedCard']==p['card'] and sha(p['card'])==digest(p)==entry['afterHash'];assert p['id'] not in proposals;proposals[p['id']]=p
 for pair in peers['bilateralMainComparisons']:
  assert pair['leftToRight'] and pair['rightToLeft']
  for side in ['left','right']:
