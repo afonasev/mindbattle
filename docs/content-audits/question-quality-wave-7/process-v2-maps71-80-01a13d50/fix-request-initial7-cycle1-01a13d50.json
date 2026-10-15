@@ -1,0 +1,354 @@
+{
+  "cycle": 1,
+  "baselineCommit": "3f1ebd1ce5f16cb7d37dd0a25476863fa0c6f130",
+  "readerNativeId": "01a13e36-756e-77b2-8a1e-af5b0428e68a",
+  "readerReceipt": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/independent-initial7-01a13d50/receipt.json",
+  "peerAmendedReceipt": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/independent-initial7-01a13d50/receipt-peer-delta78-80.json",
+  "scopeIds": [
+    "maps-cartography-orthographic-space",
+    "maps-cartography-lambert-azimuthal",
+    "maps-cartography-sliver-polygon",
+    "maps-cartography-overshoot-line",
+    "maps-cartography-undershoot-line",
+    "maps-cartography-closed-hill",
+    "maps-cartography-v-valley"
+  ],
+  "entries": [
+    {
+      "id": "maps-cartography-orthographic-space",
+      "beforeCard": {
+        "id": "maps-cartography-orthographic-space",
+        "difficulty": "hard",
+        "prompt": "В атласе планеты на сферической модели заказчик требует одновременно показать только видимую полусферу и получить ракурс, эквивалентный наблюдению с бесконечно удалённой точки. Площади по этому изображению измерять не будут. Какой вариант удовлетворяет всем условиям?",
+        "answers": [
+          {
+            "text": "Подойдёт гномоническая проекция.",
+            "note": "Она показывает большие круги прямыми, но не проектирует точки, удалённые от центра на 90° и более."
+          },
+          {
+            "text": "Подойдёт стереографическая проекция.",
+            "note": "Её перспективная точка находится на глобусе напротив точки касания, а не в бесконечности."
+          },
+          {
+            "text": "Подойдёт ортографическая проекция.",
+            "note": "Искажение в ней растёт от центра проекции к краям."
+          },
+          {
+            "text": "Подойдёт азимутальная равновеликая проекция Ламберта.",
+            "note": "Она сохраняет площади и может показывать весь мир, но не даёт требуемого ортографического ракурса."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Ортографическая проекция удовлетворяет сразу двум независимым требованиям: использует сферическую модель и показывает только одну полусферу как вид издалека. Гномоническая не охватывает полусферу целиком, а Ламберта предназначена для равновеликого изображения, не для такого ракурса.",
+        "source": {
+          "title": "Orthographic | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/orthographic.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "de0e8b55f22008fdb087cb51b8deb747ec5b98fa6b2aa4a466b5edd3ffd56a34",
+      "defects": [
+        "HARD не обеспечен: «наблюдение с бесконечно удалённой точки» само определяет единственный ответ. Сфера допустима для всех четырёх семейств, а видимая полусфера — следствие того же ортографического построения. Отказ от измерения площадей декоративен."
+      ],
+      "cycle1Target": "За один cycle1 заменить распознавание определения задачей с минимум двумя независимо решающими проверками; одна проекция/реализация должна проходить только одну из них, другая — другую. Не объявлять два следствия одной перспективы независимыми. Переписать объяснение под реальную логику, сохранив ID/hard/key=2.",
+      "sourceCompleteness": "Полные релевантные первичные контексты прочитаны; нового источника для исправления установленного дефекта не требуется."
+    },
+    {
+      "id": "maps-cartography-lambert-azimuthal",
+      "beforeCard": {
+        "id": "maps-cartography-lambert-azimuthal",
+        "difficulty": "hard",
+        "prompt": "Для полярной тематической карты сравнивают площади двух бассейнов. Техническое задание независимо требует равновеликости и азимутальной сетки с центром на полюсе; расстояния и углы измерять не будут. Какой вариант удовлетворяет обоим требованиям?",
+        "answers": [
+          {
+            "text": "Подойдёт гномоническая проекция.",
+            "note": "Она азимутальная и показывает большие круги прямыми, но не сохраняет площади."
+          },
+          {
+            "text": "Подойдёт проекция Мольвейде.",
+            "note": "Мольвейде равновеликая, но псевдоцилиндрическая; это вариант для тематических карт мира."
+          },
+          {
+            "text": "Подойдёт азимутальная равновеликая проекция Ламберта.",
+            "note": "Она дополнительно сохраняет истинное направление от центра проекции."
+          },
+          {
+            "text": "Подойдёт ортографическая проекция.",
+            "note": "Она не является равновеликой и ограничена одной полусферой."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Ламберта одновременно удовлетворяет азимутальному требованию полярной карты и сохраняет относительные площади. Мольвейде сохраняет площади, но не является азимутальной проекцией; остальные варианты не сохраняют площадь.",
+        "source": {
+          "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "b3278e7e241be7217c6cb0ba427b514afdc8684c35c4a958024dc970770ccd05",
+      "defects": [
+        "HARD не обеспечен: два классификационных признака буквально перечислены в имени «азимутальная равновеликая». Бассейны, полярность и отказ от измерения углов не вводят отдельной операции. Варианты остаются голыми названиями, решение — сопоставление термина."
+      ],
+      "cycle1Target": "За один cycle1 дать реальную задачу выбора с независимой проверкой реализации/области/ограничений и площади, с конкурентами, проходящими разные части; убрать прямое совпадение всех требований с названием как достаточный способ решения. Сохранить hard/key=2.",
+      "sourceCompleteness": "Полные релевантные первичные контексты прочитаны; нового источника для исправления установленного дефекта не требуется."
+    },
+    {
+      "id": "maps-cartography-sliver-polygon",
+      "beforeCard": {
+        "id": "maps-cartography-sliver-polygon",
+        "difficulty": "hard",
+        "prompt": "После обновления ГИС почвенный слой должен оставаться сплошным покрытием одного класса. В диагностике обнаружена узкая линейная ошибка по контуру пустого просвета между соседними полигонами; общей площади пересечения нет. Какое правило включить, чтобы проверить именно такое нарушение?",
+        "answers": [
+          {
+            "text": "Включить правило Must Not Overlap.",
+            "note": "Оно выявляет области, где полигоны одного класса занимают общую площадь."
+          },
+          {
+            "text": "Включить правило Boundary Must Be Covered By.",
+            "note": "Оно проверяет, покрывают ли линейные объекты границы полигонов."
+          },
+          {
+            "text": "Включить правило Must Not Have Gaps.",
+            "note": "Это правило также выявляет пустоты, полностью окружённые одним полигоном."
+          },
+          {
+            "text": "Включить правило Must Cover Each Other.",
+            "note": "Оно требует взаимного покрытия полигонов из двух классов или подтипов."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Для непрерывного покрытия без пустот выбирают Must Not Have Gaps. Esri отмечает линейными ошибками контуры пустых областей внутри полигона или между несовпадающими границами соседних полигонов.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polygon features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polygon-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "5d560385a910b6f83b77b2e810cbf029796b7d970867069ad92457fad18e41e7",
+      "defects": [
+        "HARD не обеспечен: пустой просвет прямо переводится в Gaps. Один класс и отсутствие пересечения лишь исключают словарные альтернативы; форма узкой линейной ошибки — описание того же признака, не независимая операция."
+      ],
+      "cycle1Target": "За один cycle1 построить задачу, где требуются диагностика минимум двух различимых отношений/ошибок и выбор согласованного действия или плана, а название Gaps само не решает всё. Сохранить ID/hard/key=2 и подтверждённые заметки.",
+      "sourceCompleteness": "Полные релевантные первичные контексты прочитаны; нового источника для исправления установленного дефекта не требуется."
+    },
+    {
+      "id": "maps-cartography-overshoot-line",
+      "beforeCard": {
+        "id": "maps-cartography-overshoot-line",
+        "difficulty": "hard",
+        "prompt": "В сети осевых линий улиц проверяют Must Not Have Dangles: конец A прошёл на 2 м за стык, B не дошёл 3 м до другого. Оба стыка в радиусе 5 м. Регламент запрещает Snap; выберите Trim или Extend по направлению ошибки. Какой план исправит оба конца?",
+        "answers": [
+          {
+            "text": "Следует выполнить Extend для обоих концов.",
+            "note": "Extend продлит короткий конец B, но ещё дальше уведёт за узел уже длинный конец A."
+          },
+          {
+            "text": "Следует выполнить Trim для обоих концов.",
+            "note": "Trim укоротит конец A, но увеличит зазор у короткого конца B."
+          },
+          {
+            "text": "Следует обрезать конец A командой Trim, а конец B продлить командой Extend.",
+            "note": "При массовом исправлении объекты, для которых операция не сработает, останутся ошибками."
+          },
+          {
+            "text": "Следует привязать оба конца командой Snap к ближайшим линиям.",
+            "note": "Snap переносит конец к ближайшему объекту, а регламент требует сохранить указанную геометрию стыков."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Конец A выступает за пересечение, поэтому его нужно обрезать Trim; конец B не достигает пересечения, поэтому его нужно продлить Extend. Оба целевых соединения находятся в допуске, а Snap исключён регламентом.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "db19c5974e74660f7d85b3e549fbcc10ad674d0f9414b9adcfd75d14105e49e1",
+      "defects": [
+        "HARD не обеспечен: две очевидные разнонаправленные команды для длинного и короткого конца. Оба целевых стыка в 5 м; числа не меняют ни один исход, Snap заранее запрещён. Дополнительно note0/note1 обещают неподтверждённое ухудшение геометрии, note3 выдумывает основание регламента."
+      ],
+      "cycle1Target": "Единый cycle1: переработать задачу так, чтобы направление и независимо решающий допуск/исход реально меняли допустимый план, а не повторяли два определения. Исправить note0/1 на source-grounded failure/skip и note3 на действительное условие. Перепроверить зависимость с №75; frozen hard/key=2.",
+      "sourceCompleteness": "Полные релевантные первичные контексты прочитаны; нового источника для исправления установленного дефекта не требуется."
+    },
+    {
+      "id": "maps-cartography-undershoot-line",
+      "beforeCard": {
+        "id": "maps-cartography-undershoot-line",
+        "difficulty": "hard",
+        "prompt": "Пакетная проверка Must Not Have Dangles нашла два коротких конца осевых линий: A — в 4 м, B — в 9 м от целевых линий. Радиус исправления — 5 м. Нужно исправить A и оставить B ошибкой; нельзя продлевать без ограничения или привязывать к ближайшему объекту. Какой план выбрать?",
+        "answers": [
+          {
+            "text": "Следует задать нулевой радиус и выполнить Extend для обоих концов.",
+            "note": "При нулевом расстоянии Extend продолжает линию до стыка с найденным объектом, даже если он далеко."
+          },
+          {
+            "text": "Следует выполнить Snap с радиусом 5 м для обоих концов.",
+            "note": "Snap привязывает конец к ближайшей линии в допуске, а не продлевает его до заданной цели."
+          },
+          {
+            "text": "Следует выполнить Extend с радиусом 5 м для обоих концов: A удлинится, а B останется ошибкой.",
+            "note": "Нулевой радиус имеет особую семантику: линия продолжается до найденного стыка."
+          },
+          {
+            "text": "Следует выполнить Trim с радиусом 5 м для обоих концов.",
+            "note": "Trim укорачивает висячую линию при близком пересечении, а не устраняет короткий конец."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Extend с радиусом 5 м обработает A, поскольку целевая линия внутри допуска; B не найдёт подходящий объект в заданном радиусе и останется ошибкой. Нулевой радиус означал бы продление до найденного стыка без ограничения 5 м.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "a845e20460973bdad49fc72b8c524878fe90166392630313c0064628d6d7d5c3",
+      "defects": [
+        "HARD не обеспечен: направление операции и желаемые исходы уже даны, Snap/безлимитный Extend запрещены. Остаётся одна команда и прямое сравнение 4≤5<9; не требуется выбирать между несколькими остающимися правдоподобными комплексными планами."
+      ],
+      "cycle1Target": "За один cycle1 дать несколько независимых решающих условий с жизнеспособными частичными планами и настоящим выводом результата, сохранив допуск/ноль по источнику и hard/key=2. Сверить с №74, чтобы не сделать их перефразированными задачами.",
+      "sourceCompleteness": "Полные релевантные первичные контексты прочитаны; нового источника для исправления установленного дефекта не требуется."
+    },
+    {
+      "id": "maps-cartography-closed-hill",
+      "beforeCard": {
+        "id": "maps-cartography-closed-hill",
+        "difficulty": "easy",
+        "prompt": "Какой вид рельефа показывают замкнутые горизонтали, если отметки растут к центру?",
+        "answers": [
+          {
+            "text": "Крутой склон",
+            "note": "Близко расположенные горизонтали указывают на крутой склон."
+          },
+          {
+            "text": "Пологий склон",
+            "note": "Большие интервалы между горизонталями указывают на пологий склон."
+          },
+          {
+            "text": "Долина",
+            "note": "Горизонтали в долине образуют V, направленную вверх по течению."
+          },
+          {
+            "text": "Холм",
+            "note": "Интервал между соседними горизонталями указан в легенде карты."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Замкнутые горизонтали с повышением отметок к центру показывают холм. Каждая горизонталь соединяет точки одной высоты.",
+        "source": {
+          "title": "Topographic Map Symbols",
+          "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "beforeHash": "47e1a859b1ef215bf245759c013708f7dcc7442b65a7b1c16428a575f621cb28",
+      "defects": [
+        "Внутренняя достоверность и EASY проходят, но note2 сообщает полный критерий и ответ №77. Входящая note2 №77 сообщает полный критерий и ответ №76. Note0/1 также раскрывают базовые решения close-steep/wide-gentle."
+      ],
+      "cycle1Target": "За один адресный cycle1 заменить заметки-дистракторы на полезные новые свойства своих вариантов, которые не воспроизводят полные решающие признаки соседей. Совместно проверить №76–77 и CURRENT close-steep/wide-gentle; не усложнять EASY и сохранить key=3.",
+      "sourceCompleteness": "Полные релевантные первичные контексты прочитаны; нового источника для исправления установленного дефекта не требуется."
+    },
+    {
+      "id": "maps-cartography-v-valley",
+      "beforeCard": {
+        "id": "maps-cartography-v-valley",
+        "difficulty": "easy",
+        "prompt": "Какую форму рельефа показывают V-образные горизонтали, направленные вершиной вверх по течению?",
+        "answers": [
+          {
+            "text": "Крутой склон",
+            "note": "Близко расположенные горизонтали указывают на крутой склон."
+          },
+          {
+            "text": "Пологий склон",
+            "note": "Большие интервалы между горизонталями указывают на пологий склон."
+          },
+          {
+            "text": "Холм",
+            "note": "Замкнутые горизонтали с ростом отметок к центру показывают холм."
+          },
+          {
+            "text": "Долина",
+            "note": "Ручьи обычно текут в долинах и помогают проверить чтение рельефа по карте."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "V-образные горизонтали, вершины которых направлены вверх по склону, показывают долину. Если вершина V направлена вниз, это выступающий склон.",
+        "source": {
+          "title": "Topographic Map Symbols",
+          "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+          "verifiedAt": "2026-09-02"
+        }
+      },
+      "beforeHash": "e23381f314745c9a69960f482e9ae80c35c37ebfbc6d07456929b87dbb96af2f",
+      "defects": [
+        "Внутренняя достоверность и EASY проходят, но note2 даёт полный критерий и ключ №76; входящая note2 №76 даёт полный критерий и ключ №77. Note0/1 также сообщают полные признаки соседних склонов."
+      ],
+      "cycle1Target": "За один адресный cycle1 устранить прямые взаимные подсказки в wrong notes, сохранив полезные собственные факты. Проверить обе стороны №76–77 и CURRENT close-steep/wide-gentle; EASY/key=3 сохраняются.",
+      "sourceCompleteness": "Полные релевантные первичные контексты прочитаны; нового источника для исправления установленного дефекта не требуется."
+    }
+  ],
+  "frozen": "ID/topic/order/originaldifficulty/numericcorrectIndex PER ID; all text and answer semantics mutable",
+  "coordinatorDesignSketches": {
+    "orthographic-space": {
+      "route": "Fix projection family as orthographic and require center selection by two actual checks: all target points visible AND least radial distortion at a designated priority point among feasible centers. This replaces bare family-name recognition.",
+      "exampleOnly": {
+        "pointsAtEquatorEastLongitude": [
+          80,
+          100,
+          170
+        ],
+        "priorityLongitude": 80,
+        "candidateCentersAtEquator": [
+          75,
+          150,
+          110,
+          160
+        ],
+        "conditionalResult": "75 fails hemisphere for170 (95deg);110/150/160 are feasible, priority distances30/70/80 respectively, so110 wins. Put the actual winning plan in frozen slot2."
+      },
+      "primary": "author/sources/esri-orthographic.txt L21,L26,L39: equatorial horizon90, radial distortion growth, hemisphere limit. Author personally verify full context and true HARD, no empirical error threshold invented."
+    },
+    "lambert-azimuthal": {
+      "route": "Compare a real multi-step data-preparation plan: layer coordinates are correct but assigned CRS metadata is wrong and actual source CRS known; require a native ellipsoidal equal-area target. Distinguish correcting CRS metadata from transforming coordinates and distinguish ordinary LAEA from auxiliary-sphere Type3, which can preserve area but not native ellipsoidal coordinates.",
+      "plausiblePlanAxes": [
+        "Define Projection only on raw coordinates does not perform the required coordinate transformation",
+        "Project using wrong assigned source metadata is not equivalent to correcting known true source metadata first",
+        "Correct source metadata then Project ordinary LAEA ellipsoidal is candidate complete plan",
+        "Correct metadata then auxiliary-sphere Type3 can satisfy area but not true ellipsoidal coordinates"
+      ],
+      "newPrimaryNeeded": "Personally read COMPLETE official Define Projection and Project documentation if not already captured; candidate official URLs data-management/define-projection.htm and data-management/project.htm under pro.arcgis.com. One bounded origin plus one official alternative; no fake API claims. Existing LAEA L34–38 documents Type3 equal-area yet non-ellipsoidal; stereotype competitors need their actual primary too.",
+      "warning": "Do not assert LAEA antipode is unprojectable: the saved primary L21 explicitly represents it as the map-edge circle. This route is a sketch, not a claimed HARD pass."
+    },
+    "sliver-polygon": {
+      "route": "Diagnose two different topology errors from area observations, not the word gap: two polygons A60 and B45 lie within expected mask100; union is94. Infer uncovered area6 and intersection11, then select/interpret the appropriate inside-mask gap and overlap tests with outer-boundary handling.",
+      "exampleOnly": {
+        "Aarea": 60,
+        "Barea": 45,
+        "maskArea": 100,
+        "unionArea": 94,
+        "derivedGap": 6,
+        "derivedOverlap": 11
+      },
+      "primary": "Complete polygon topology rules plus explicit fictional area data. Keep exactly TWO polygons so inclusion-exclusion is unambiguous; distinguish diagnostics from inventing legal/new boundaries."
+    },
+    "overshoot-line": {
+      "route": "Predict a batch Trim result instead of naming Trim. In a metric layer Trim distance5 acts on A length8 with intersection3 from dangling end, B length12 with intersection9, C length4 with no eligible intersection. Compare four plausible resulting length/error-state plans.",
+      "conditionalExample": "A becomes5; B stays12; C stays4 and is not deleted merely because maxdistance5 exceeds its length; B/C remain errors. Contrast unlimited-distance prediction, false short-feature deletion and false skip-all.",
+      "primary": "Complete polyline rules L83: within-distance trim; no intersection means unchanged, short feature not deleted, zero trims to intersection, batch failures skipped/remain errors. Verify precise endpoint/length interpretation; fictional numbers are input, not a measured Esri example."
+    },
+    "undershoot-line": {
+      "route": "Use both intentional-network meaning and distance behavior, distinct from Trim simulation. A is confirmed designed dead-end with an eligible forward line4m away; B undershoots intended junction3m; C undershoots intended junction9m; configured maximum5m. Compare valid exception+Extend settings rather than obvious direction labels.",
+      "conditionalExample": "Mark A a valid dead-end exception, Extend with5 for remaining B/C: B connects, C remains an unresolved error. Compare Extend0/unbounded, geometric-only autofix A, and unjustified exception hiding C.",
+      "primary": "Complete polyline rules L72 documents cul-de-sac/dead-end exceptions; L82 documents Extend distance, zero/unlimited, skip/remain errors. Define supplied fixture eligibility/direction clearly; do not invent worsening behavior or ban Snap by decree."
+    },
+    "easy76-77": {
+      "route": "Keep basic EASY demands and key3. Replace wrong-note full cues for the other target and CURRENT close-steep/wide-gentle with genuinely useful own-variant facts that do not state those full pattern/spacing criteria. All answer semantics may change if category/plausibility maintained.",
+      "candidateFactDirections": "Only if personally supported by full primary: absolute elevation versus relative depth/relief, use of map scale and vertical interval for numerical slope, or point-height reading. Connect each note to its actual terrain alternative, not random trivia. Do not invent facts or merely paraphrase V-upstream/height-increases-center/dense=steep/wide=gentle.",
+      "primary": "USGS/OS complete contexts already saved; additional complete primary only when actually needed. Actual full peer data must be read."
+    }
+  },
+  "designBoundary": "Proposals within existing all-text revision authority, not separately human-approved final wording or claimed primary/HARD acceptance. Author must independently verify full source, real difficulty, unique key, useful own notes and actual peer relations; if unsupported, honest specificHOLD.",
+  "qualityCredit": 0,
+  "next": "one authorcycle1 exact6groups4variants/source/peers; coordinatorapplyaffected19; retainedindependentfinalCURRENT; unresolvedterminalHOLD"
+}
