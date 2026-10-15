@@ -1,0 +1,9 @@
+"""Apply pre-boundary sealed solecycle1 only; no SOURCE regeneration."""
+import pathlib,importlib.util,subprocess
+C=pathlib.Path(__file__).resolve().parents[4];D=pathlib.Path(__file__).parent;B=D/'qualified-paper55-cycle1'
+def load(n,p):
+ s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+m=load('standard',C/'docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/apply-standard.py');h=load('preserve',D/'preserve-current-slice.py');m.P=h.P;q=m.read(D/'qualification-paper55-cycle1.json')['qualification'];freeze=m.read(D/'source-freeze-paper55-cycle1.json')['freeze'];assert freeze=='4751527f33e3a0d9b701634f44bd142b9029accf';intent=D/'apply-intent-sealed-paper55.json';case=D/'audit-case-sealed-paper55.json';m.write(intent,q);m.write(case,{'sourceFreeze':freeze,'applyPaths':[str(intent.relative_to(C))]});subprocess.run(['python3',str(D/'bind-current-receipt.py'),str(case),'--audit-source-only'],check=True)
+peers=m.read(B/'peer-snapshot.json')['actualCurrentPeers'];same={'actualCurrentPeers':[p for p in peers if p['topicId']=='books-publishing']}
+m.apply(B,q['author'],[55],D/'apply-paper55-cycle1.json',D/'qa-paper55-cycle1.json',pathlib.Path(__file__),peerSnapshot=same,concerns=['Sole substantivecycle1 afterINITIAL MAINduplicate vsmaterials6. New actual relation: vacuumhoses liftindividualsheets andfeedpress, no longer askbookpagesubstrate.','SOURCE protected56/58 unchanged; newPRIMARYspecificL27 fullTePapa body cached. KEYindex2/easy/ID/order/topic frozen; actualEASY/onekey/ownextra/grammar/fullPRIMARY andglobalMAIN requireindependentFINAL.','UnresolvedFINAL->HOLD0 nosecondordinarycycle. Sourceaf nextcycle61/62/64/69 separateunfinishedunit, noimplicitcredit.'])
+print('auditEvidence',h.save(C,'refs/heads/codex/question-quality-wave-6',[intent,case],'Preserve sealed SOURCEpaper55 lineage audit'))
