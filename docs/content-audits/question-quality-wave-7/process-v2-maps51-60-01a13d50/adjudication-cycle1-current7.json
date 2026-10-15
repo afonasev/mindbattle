@@ -1,0 +1,145 @@
+{
+  "readerReceipt": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/independent-initial-01a13d50/receipt-cycle1-current7.json",
+  "readerReceiptSHA256": "803c1390daf94fb7c28f73ba7aaf931efa9c0e5b32a3493d2a411511516fc7b0",
+  "decisions": [
+    {
+      "id": "maps-cartography-ratio-scale",
+      "currentCardSHA256": "8dbb210b02373f68ca9e72d916caabd4f4f5536b9a457f5e47ccc26025c24635",
+      "status": "TERMINAL_HOLD",
+      "defects": [
+        {
+          "code": "LANGUAGE_CURRENT_NOTE3",
+          "field": "answers[3].note",
+          "detail": "В FINAL CURRENT осталась английская заметка «A representative fraction compares matching units on both sides.» Это не stale embedded copy: она присутствует в exact afterHash, sourceproof и реальном каталоге."
+        }
+      ],
+      "qualityCredit": 0
+    },
+    {
+      "id": "maps-cartography-large-scale",
+      "currentCardSHA256": "6d5d94a5f5075852e62fd09d639dae86621822298e579c7e74823ce771d9a187",
+      "status": "TERMINAL_HOLD",
+      "defects": [
+        {
+          "code": "GRAMMAR_PROMPT_ANSWERS",
+          "field": "prompt + answers[0..2].text",
+          "detail": "Вопрос «Какой масштаб подойдёт?» требует именительного; ответы «Мелкого масштаба», «Диапазона…», «Крупного масштаба» оставлены в родительном без слова «карта»."
+        }
+      ],
+      "qualityCredit": 0
+    },
+    {
+      "id": "maps-cartography-grid-square",
+      "currentCardSHA256": "cd91f7b1e9698da604fc72b4076c294d6174209a57b95630037d20638b3b8a84",
+      "status": "TERMINAL_HOLD",
+      "defects": [
+        {
+          "code": "SOURCE_OVERGENERALIZATION",
+          "field": "answers[0].note",
+          "detail": "OS p.6 задаёт зелёный/magenta для public rights of way и явно предупреждает о чёрных footpaths; «тропы» без ограничения переносит правило на все тропы."
+        },
+        {
+          "code": "CROSS_CARD_KEY_LEAK",
+          "field": "answers[3].note",
+          "peerId": "maps-cartography-brown-contours",
+          "detail": "Заметка буквально сообщает, что USGS показывает топографические горизонтали коричневыми, то есть полный CURRENT ключ соседней карточки."
+        }
+      ],
+      "qualityCredit": 0
+    },
+    {
+      "id": "maps-cartography-inset-detail",
+      "currentCardSHA256": "955fc628fa115cb486b8be82794830395392fc209391cafed040a0586d73e7c0",
+      "status": "TERMINAL_HOLD",
+      "defects": [
+        {
+          "code": "UNHELPFUL_DISTRACTOR_NOTE",
+          "field": "answers[0].note",
+          "detail": "Год/учреждения ортофото не объясняют функцию локаторной врезки, выбранную в answer0."
+        },
+        {
+          "code": "NEGATIVE_PLACEHOLDER_UNGROUNDED_INDEX",
+          "field": "answers[1].note",
+          "detail": "Фраза «Figure 10 … не перечень» не даёт собственного полезного факта об указателе и использует отрицание по невидимой игроку подписи; первичная функция name-index по-прежнему не подтверждена этим caption."
+        }
+      ],
+      "qualityCredit": 0
+    },
+    {
+      "id": "maps-cartography-locator-context",
+      "currentCardSHA256": "11915bec0ccee899d4230338cf529d7994855770cb40005907734a349f03bdd5",
+      "status": "TERMINAL_HOLD",
+      "defects": [
+        {
+          "code": "UNHELPFUL_DISTRACTOR_NOTE",
+          "field": "answers[0].note",
+          "detail": "Дата создания/печати в январе 2016 года не объясняет ответ о показе отдельной подробности поверхности. Истинность даты не является полезностью заметки именно этого варианта."
+        }
+      ],
+      "qualityCredit": 0
+    },
+    {
+      "id": "maps-cartography-close-steep",
+      "currentCardSHA256": "41dc2c78b0df8f42ec60ae8d75112659d87871e03bb15a1cd7154ffdd79bcfbf",
+      "status": "TERMINAL_HOLD",
+      "defects": [
+        {
+          "code": "UNHELPFUL_DISTRACTOR_NOTE",
+          "field": "answers[0].note",
+          "detail": "Коричневый цвет не объясняет ошибочный вывод об абсолютной высоте; заметка не связывает высоту с подписями линий."
+        },
+        {
+          "code": "CROSS_CARD_KEY_LEAK",
+          "field": "answers[0].note",
+          "peerId": "maps-cartography-brown-contours",
+          "detail": "Полностью раскрыт коричневый цвет горизонталей USGS, спрашиваемый CURRENT peer."
+        },
+        {
+          "code": "INBOUND_KEY_LEAK",
+          "peerIds": [
+            "maps-cartography-closed-hill",
+            "maps-cartography-v-valley"
+          ],
+          "detail": "Актуальные notes0 этих peers прямо сообщают «Близко расположенные горизонтали указывают на крутой склон», раскрывая проверяемый здесь признак. Чужие карточки не редактируются."
+        }
+      ],
+      "qualityCredit": 0
+    },
+    {
+      "id": "maps-cartography-wide-gentle",
+      "currentCardSHA256": "ff1924218433b497aaa0d4ef3297877ed716da57732c08eb49a81dd6b7375fcc",
+      "status": "TERMINAL_HOLD",
+      "defects": [
+        {
+          "code": "UNHELPFUL_DISTRACTOR_NOTE",
+          "field": "answers[0].note",
+          "detail": "Коричневый цвет не объясняет неверное пересечение линий на поворотах."
+        },
+        {
+          "code": "CROSS_CARD_KEY_LEAK",
+          "field": "answers[0..1].note",
+          "peerIds": [
+            "maps-cartography-brown-contours",
+            "maps-cartography-blue-water"
+          ],
+          "detail": "notes0/1 сообщают коричневые топографические горизонтали; note1 также синий цвет воды — CURRENT ключи двух соседей."
+        },
+        {
+          "code": "INBOUND_KEY_LEAK",
+          "peerIds": [
+            "maps-cartography-closed-hill",
+            "maps-cartography-v-valley"
+          ],
+          "detail": "Актуальные notes1 peers прямо сообщают большие интервалы = пологий склон; это ответ wide-gentle."
+        }
+      ],
+      "qualityCredit": 0
+    }
+  ],
+  "adjudication": "Agree: remaining literal language/grammar, note relevance and cross-card leakage defects after one substantive cycle; no whole-card completion. Partial factual improvements retained.",
+  "priorAuthorSOURCEHOLD": 3,
+  "newQualityCredit": 0,
+  "CURRENT": 668,
+  "remaining": 1332,
+  "next": "No unchanged automatic second cycle. Addressed recovery only upon concrete new source/solution with preserved history; all10 stay in full scope."
+}
