@@ -29,7 +29,19 @@ def rawcheck(x):
  elif isinstance(x,list):
   for v in x:rawcheck(v)
 rawcheck(r);rawcheck(s)
-peers=read(C/r['peerEvidence']);rawcheck(peers)
+peers=read(C/r['peerEvidence'])
+D=R.parent/'receipt-peer-delta81-90.json';delta=read(D);DE=C/delta['evidencePath'];de=read(DE)
+assert byte(D)=='45de15f99ddf918cfbc01ab21d217ec607739e4cac19cc6c82401b2f3e8f2411'
+assert byte(DE)==delta['evidenceRawByteSHA256'] and byte(C/delta['latestPeerCandidatePath'])==delta['latestPeerCandidateRawByteSHA256']
+assert byte(C/de['catalogPath'])==de['catalogRawByteSHA256AtRead']
+assert all(v['status']=='PASS' and not v['unresolvedPeerDefects'] and v['actualCurrentCard']==catalog[v['id']] and v['actualCurrentCardSHA256']==sha(catalog[v['id']]) for v in delta['entries'])
+assert len(delta['entries'])==3 and len(de['peerCards'])==10
+for snapshot in peers['proposalAndHistoricalSnapshots']:
+ if snapshot['path']==delta['latestPeerCandidatePath']:
+  assert snapshot['byteSHA256']==de['previousSnapshotCandidateRawByteSHA256']
+ else:rawcheck(snapshot)
+# Historical source/proposal snapshot preserved; specific live peer drift is explicitly resolved by D/DE.
+
 for p in peers['actualCurrent']:
  assert p['card']==catalog[p['card']['id']] and sha(p['card'])==p['cardSHA256']
 accepted=[]
@@ -39,20 +51,24 @@ for e in r['entries']:
  assert sha(ae['beforeCard'])==ae['beforeHash'];assert topics['maps-cartography'][e['sourceOrder']-1]['id']==i
  assert i not in checkpoint['currentEligibleCompletedIds']
  groups={'prompt_ordered_answers_key':{'prompt':c['prompt'],'answers':[v['text'] for v in c['answers']],'correctIndex':c['correctIndex']},'explanation':c['explanation'],**{'note'+str(k):v['note'] for k,v in enumerate(c['answers'])}}
- for gs,key in [(e['fieldGroups'],'group'),(ae['fieldGroups'],'group'),(pe['evidence'],'fieldGroup')]:
+ for gs,key in [(e['fieldGroups'],'group'),(ae['fieldGroups'],'group'),([x for x in pe['evidence'] if 'fieldGroup'in x],'fieldGroup')]:
   assert len(gs)==6 and {g[key] for g in gs}==set(groups)
   for g in gs:assert g['literal']==groups[g[key]] and g['literalSHA256']==sha(g['literal'])
+ sourcevariants=[x for x in pe['evidence'] if 'answerIndex'in x]
+ assert len(sourcevariants)==4 and {v['answerIndex'] for v in sourcevariants}==set(range(4))
+ for v in sourcevariants:
+  k=v['answerIndex'];assert v['actualFullPrompt']==c['prompt'] and v['actualAnswer']==c['answers'][k]['text'] and v['actualNote']==c['answers'][k]['note'] and v['ground']
  for assessments in [e['assessments'],ae['assessments']]:
   assert len(assessments)==4 and {v['answerIndex'] for v in assessments}==set(range(4))
   for v in assessments:
    k=v['answerIndex'];assert v['fullPrompt']==c['prompt'] and v['answer']==c['answers'][k]['text'] and v['note']==c['answers'][k]['note'] and v['isKey']==(k==c['correctIndex'])
    if 'tripleSHA256'in v:assert v['tripleSHA256']==sha({'prompt':c['prompt'],'answer':v['answer'],'note':v['note']})
  assert e['easyAssessment'] and e['correctNoteAddsUsefulNewFact'] and e['peerComparison']['decision'].startswith('PASS')
- accepted.append({'questionId':i,'cardCanonicalSha256':sha(c),'authorNativeId':'01a13e32-1076-7d13-b329-a1aab08cd3fd','authorReceipt':str(A.relative_to(C)),'authorSourceProof':str(S.relative_to(C)),'authorFreeze':'f9ac6144ba852f5d98a59308db6b7c3d45672d53','readerNativeId':'01a13e47-d40f-7113-b45e-b874fa9d04da','independentReceipt':str(R.relative_to(C)),'readerFreeze':'69d1f9402912fed661bbb7c4fee788a2f8eed130','coordinatorDecision':'Accept exact CURRENT PASS: independently checked fictional coverage plus scale selection, N/W conjunction, and print enlargement;18 literal groups12variants complete primary bytes plus actual/proposed peers. Useful own notes and absolute easy explicitly assessed. Original sourceHOLD retained; no third full semantic rereview.'})
+ accepted.append({'questionId':i,'cardCanonicalSha256':sha(c),'authorNativeId':'01a13e32-1076-7d13-b329-a1aab08cd3fd','authorReceipt':str(A.relative_to(C)),'authorSourceProof':str(S.relative_to(C)),'authorFreeze':'f9ac6144ba852f5d98a59308db6b7c3d45672d53','readerNativeId':'01a13e47-d40f-7113-b45e-b874fa9d04da','independentReceipt':str(R.relative_to(C)),'readerFreeze':'69d1f9402912fed661bbb7c4fee788a2f8eed130','readerPeerDelta':str(D.relative_to(C)),'readerPeerDeltaSHA256':byte(D),'coordinatorDecision':'Accept exact CURRENT PASS: independently checked fictional coverage plus scale selection, N/W conjunction, and print enlargement;18 literal groups12variants complete primary bytes plus actual/proposed peers. Useful own notes and absolute easy explicitly assessed. Original sourceHOLD retained; no third full semantic rereview.'})
 assert len(accepted)==3
-now=datetime.datetime.now(datetime.timezone.utc).isoformat();out=C/'docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/certification78-80.json';report={'schemaVersion':1,'at':now,'owner':OWNER,'accepted':accepted,'newQualityCredit':3,'CURRENT':682,'remaining':1318,'QA':{'path':str(Q.relative_to(C)),'commit':'3f1ebd1ce5f16cb7d37dd0a25476863fa0c6f130','passed':19,'fail':0,'pending':0,'allSelectedTopicBytesUnchanged':True},'verified':{'prior679Hashes':True,'frozen2000Metadata':True,'authorApplyReader3Exact':True,'literalGroups':18,'variantBindings':12,'rawSourcesAndPeers':sorted(sources),'actualCurrentPeers':len(peers['actualCurrent'])},'fullGoalNotComplete':True,'mainIntegrated':False};write(out,report)
+now=datetime.datetime.now(datetime.timezone.utc).isoformat();out=C/'docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/certification78-80.json';report={'schemaVersion':1,'at':now,'owner':OWNER,'accepted':accepted,'newQualityCredit':3,'CURRENT':682,'remaining':1318,'QA':{'path':str(Q.relative_to(C)),'commit':'3f1ebd1ce5f16cb7d37dd0a25476863fa0c6f130','passed':19,'fail':0,'pending':0,'allSelectedTopicBytesUnchanged':True},'verified':{'prior679Hashes':True,'frozen2000Metadata':True,'authorApplyReader3Exact':True,'literalGroups':18,'variantBindings':12,'rawSourcesAndPeers':sorted(sources),'actualCurrentPeers':len(peers['actualCurrent']),'changedPeerDelta':str(D.relative_to(C)),'changedPeerDeltaSHA256':byte(D)},'fullGoalNotComplete':True,'mainIntegrated':False};write(out,report)
 regp=C/'docs/content-audits/question-quality-wave-7/root-certified-source-checkpoint.json';reg=read(regp);assert len(reg['cards'])==179;reg['cards']+=accepted;reg['sourceEditorialCompletedCards']=182;reg['sourceEditorialCompletedFields']=1092;reg['wave7Remaining']=318;reg['ownerNativeId']=OWNER;reg['latestBatch']={'certification':str(out.relative_to(C)),'newQualityCredit':3,'CURRENT':682,'remaining':1318};write(regp,reg)
-idx=C/h.git(C,'rev-parse','--git-path','index');codecommit=h.save(C,'refs/heads/codex/question-quality-wave-6',[str(out.relative_to(C)),str(regp.relative_to(C)),str(pathlib.Path(__file__).resolve().relative_to(C))],'Certify three exact CURRENT map-use cards',byte(idx));print('codeCommit',codecommit)
+idx=C/h.git(C,'rev-parse','--git-path','index');codecommit=h.save(C,'refs/heads/codex/question-quality-wave-6',[str(out.relative_to(C)),str(regp.relative_to(C)),str(pathlib.Path(__file__).resolve().relative_to(C)),str(D.relative_to(C)),str(DE.relative_to(C))],'Certify three exact CURRENT map-use cards',byte(idx));print('codeCommit',codecommit)
 with f.locked():
  assert all(f.get(cid)[1]['owner']==OWNER for cid in ['question-quality-future-waves','question-quality-wave-7']);f.lease('acquire','planning',OWNER)
 try:
@@ -68,7 +84,7 @@ try:
  for k in ['currentEligibleFields','historicalUniqueFields']:sm[k]=4092
  sm['wave7CurrentCertifiedCards']=182
  checkpoint['latestBatch']={'certification':str(out.relative_to(C)),'codeCommit':codecommit,'newQualityCredit':3,'CURRENT':682,'remaining':1318};write(cp,checkpoint)
- statep=P/'evidence/question-revision-process-v2/coordinator-state.json';state=read(statep);state['threadId']=state['activeCoordinator']=OWNER;state['coordinatorProgress'].update(CURRENT=682,newlyCertified=3,remaining=1318);state['currentNativeActors']['savedIndependentInputs']=[];state['currentNativeActors']['activeAuthors']=[{'threadId':'01a13e63-3568-70d1-bc76-88e6628dcb42','hostId':'local','scope':'maps71–77 sole cycle1','output':'docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author-cycle1-01a13e5e','status':'active'}];state['createdNativeThreads']=['01a13e63-3568-70d1-bc76-88e6628dcb42'];state['latestBatch']=checkpoint['latestBatch'];write(statep,state)
+ statep=P/'evidence/question-revision-process-v2/coordinator-state.json';state=read(statep);state['threadId']=state['activeCoordinator']=OWNER;state['coordinatorProgress'].update(CURRENT=682,newlyCertified=3,remaining=1318);state['currentNativeActors']['savedIndependentInputs']=[];state['currentNativeActors']['activeIndependent']=[];state['latestBatch']=checkpoint['latestBatch'];write(statep,state)
  pp=P/'evidence/question-revision-process-v2/certification78-80-01a13e5e.json';write(pp,{'codeBranch':'codex/question-quality-wave-6','codeCommit':codecommit,**report})
  pi=P/h.git(P,'rev-parse','--git-path','index');planningcommit=h.save(P,'refs/heads/codex/question-revision-resume-20261014',[str(p.relative_to(P)) for p in [cp,statep,pp]],'Record CURRENT682 exact-bound certification',byte(pi));print('planningCommit',planningcommit)
 finally:
