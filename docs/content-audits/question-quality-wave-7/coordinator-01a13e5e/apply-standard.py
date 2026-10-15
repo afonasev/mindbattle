@@ -30,6 +30,7 @@ def apply(B,author,orders,out,qa,runner,peerAddendum=None,concerns=None,qualifyO
    for k,v in e['fieldGroups'].items():
     if isinstance(v,dict):assert v['beforeCanonicalSHA256']==sha(bg[k]) and v['afterCanonicalSHA256']==sha(gs[k])
   vs=p['fourFullPromptAnswerNoteAssessments'];assert len(vs)==4 and {v['slot'] for v in vs}==set(range(4))
+  assert len({v['plausibilityUniqueKeyAndNoteTruthUsefulness'].strip() for v in vs})==4,'Four substantive per-slot grounds must be distinct; generic template repetition does not constitute authorreview'
   for v in vs:
    k=v['slot'];tr={'prompt':c['prompt'],'answer':c['answers'][k]['text'],'note':c['answers'][k]['note']};assert v['fullPrompt']==tr['prompt'] and v['answer']==tr['answer'] and v['note']==tr['note'] and v['grammar'] and v['plausibilityUniqueKeyAndNoteTruthUsefulness'] and v['locator'];assert v['sourcePaths'] and all(x in sources for x in v['sourcePaths']);variants.append({'id':i,'slot':k,**tr,'bindingCanonicalSHA256':sha(tr),'authorAssessment':v})
   assert len(c['prompt'].encode('utf-16-le'))//2<=320
