@@ -1,0 +1,460 @@
+{
+  "pairs": [
+    {
+      "version": "CURRENT",
+      "orders": [
+        88,
+        90
+      ],
+      "cards": [
+        {
+          "id": "maps-cartography-area-distortion",
+          "difficulty": "medium",
+          "prompt": "В ГИС сравнивают участки с наземными площадями 80 км² (A) и 100 км² (B). На одной проекции их изображения занимают 4 см² и 6 см² соответственно. После нормирования на наземную площадь во сколько раз коэффициент отображения площади B больше, чем A?",
+          "answers": [
+            {
+              "text": "В 0,5 раза",
+              "note": "Коэффициент 0,5 был бы у B, если бы после нормирования он составлял половину A; здесь 0,06/0,05 = 1,2."
+            },
+            {
+              "text": "В 0,8333… раза",
+              "note": "Обратное нормированное отношение равно 0,05/0,06 = 0,8333…, то есть примерно 0,83. Это коэффициент A относительно B, а в вопросе требуется B относительно A."
+            },
+            {
+              "text": "В 1 раз",
+              "note": "Равные коэффициенты дали бы 1; здесь после нормирования получаются 0,05 и 0,06."
+            },
+            {
+              "text": "В 1,2 раза",
+              "note": "Проекция Ламберта сохраняет относительные площади, но Esri указывает, что вдали от центра обычно искажаются формы, углы, направления и расстояния."
+            }
+          ],
+          "correctIndex": 3,
+          "explanation": "Сначала найдите коэффициенты: для A это 4/80 = 0,05, для B — 6/100 = 0,06 см²/км². Затем сравните их: 0,06/0,05 = 1,2, поэтому нормированный коэффициент B в 1,2 раза больше.",
+          "source": {
+            "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+            "verifiedAt": "2026-10-15"
+          }
+        },
+        {
+          "id": "maps-cartography-distance-distortion",
+          "difficulty": "medium",
+          "prompt": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+          "answers": [
+            {
+              "text": "В 0,8 раза",
+              "note": "0,8 — обратное отношение масштаба B к масштабу A."
+            },
+            {
+              "text": "В 1 раз",
+              "note": "Одинаковые масштабы дали бы одинаковую длину изображения на каждый километр; здесь коэффициенты 0,25 и 0,20 см/км."
+            },
+            {
+              "text": "В 1,5 раза",
+              "note": "Отношение длин на карте 3,0/1,6 = 1,875, а не 1,5; к тому же для локального масштаба длину нужно нормировать на наземное расстояние."
+            },
+            {
+              "text": "В 1,25 раза",
+              "note": "В азимутальной равновеликой проекции Ламберта масштаб убывает по радиусам от центра и растёт перпендикулярно им, поэтому сравнение локального масштаба зависит от направления."
+            }
+          ],
+          "correctIndex": 3,
+          "explanation": "Нормируйте изображения: A — 3,0/12 = 0,25 см/км, B — 1,6/8 = 0,20 см/км. Отношение 0,25/0,20 = 1,25, значит локальный масштаб A в 1,25 раза больше; сравнение относится к этим участкам.",
+          "source": {
+            "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+            "verifiedAt": "2026-10-15"
+          }
+        }
+      ],
+      "canonicalSHA256": [
+        "524d529c3f127907920f94c01a76b712af1ccbeeb72ecac9e05a8323dfd8cb04",
+        "dc24d71536d56c83851f3442260ae8d611ef6a49e9e3ef398cb9e33d0388ac89"
+      ],
+      "assessment": "FIX both CURRENT and FINAL pair: same algorithm, two map/ground normalizations and ratio, only area/linear units and numbers substituted. Prefer retain90 and redesign88 with a genuinely different area-distortion decision. No conditional PASS/quality credit until root exact binding."
+    },
+    {
+      "version": "FINAL-proposed",
+      "orders": [
+        88,
+        90
+      ],
+      "cards": [
+        {
+          "id": "maps-cartography-area-distortion",
+          "difficulty": "medium",
+          "prompt": "В ГИС сравнивают участки с наземными площадями 80 км² (A) и 100 км² (B). На одной проекции их изображения занимают 4 см² и 6 см² соответственно. После нормирования на наземную площадь во сколько раз коэффициент отображения площади B больше, чем A?",
+          "answers": [
+            {
+              "text": "В 0,5 раза",
+              "note": "Коэффициент 0,5 был бы у B, если бы после нормирования он составлял половину A; здесь 0,06/0,05 = 1,2."
+            },
+            {
+              "text": "В 0,8333… раза",
+              "note": "Обратное нормированное отношение равно 0,05/0,06 = 0,8333…, то есть примерно 0,83. Это коэффициент A относительно B, а в вопросе требуется B относительно A."
+            },
+            {
+              "text": "В 1 раз",
+              "note": "Равные коэффициенты дали бы 1; здесь после нормирования получаются 0,05 и 0,06."
+            },
+            {
+              "text": "В 1,2 раза",
+              "note": "Проекция Ламберта сохраняет относительные площади, но Esri указывает, что вдали от центра обычно искажаются формы, углы, направления и расстояния."
+            }
+          ],
+          "correctIndex": 3,
+          "explanation": "Сначала найдите коэффициенты: для A это 4/80 = 0,05, для B — 6/100 = 0,06 см²/км². Затем сравните их: 0,06/0,05 = 1,2, поэтому нормированный коэффициент B в 1,2 раза больше.",
+          "source": {
+            "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+            "verifiedAt": "2026-10-15"
+          }
+        },
+        {
+          "id": "maps-cartography-distance-distortion",
+          "difficulty": "medium",
+          "prompt": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+          "answers": [
+            {
+              "text": "В 0,8 раза",
+              "note": "0,8 — обратное отношение масштаба B к масштабу A."
+            },
+            {
+              "text": "В 1 раз",
+              "note": "Одинаковые масштабы дали бы одинаковую длину изображения на каждый километр; здесь коэффициенты 0,25 и 0,20 см/км."
+            },
+            {
+              "text": "В 1,5 раза",
+              "note": "Отношение длин на карте 3,0/1,6 = 1,875, а не 1,5; к тому же для локального масштаба длину нужно нормировать на наземное расстояние."
+            },
+            {
+              "text": "В 1,25 раза",
+              "note": "В азимутальной равновеликой проекции Ламберта масштаб убывает по радиусам от центра и растёт перпендикулярно им, поэтому сравнение локального масштаба зависит от направления."
+            }
+          ],
+          "correctIndex": 3,
+          "explanation": "Нормируйте изображения: A — 3,0/12 = 0,25 см/км, B — 1,6/8 = 0,20 см/км. Отношение 0,25/0,20 = 1,25, значит локальный масштаб A в 1,25 раза больше; сравнение относится к этим участкам.",
+          "source": {
+            "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+            "verifiedAt": "2026-10-15"
+          }
+        }
+      ],
+      "canonicalSHA256": [
+        "524d529c3f127907920f94c01a76b712af1ccbeeb72ecac9e05a8323dfd8cb04",
+        "dc24d71536d56c83851f3442260ae8d611ef6a49e9e3ef398cb9e33d0388ac89"
+      ],
+      "assessment": "FIX both CURRENT and FINAL pair: same algorithm, two map/ground normalizations and ratio, only area/linear units and numbers substituted. Prefer retain90 and redesign88 with a genuinely different area-distortion decision. No conditional PASS/quality credit until root exact binding."
+    },
+    {
+      "version": "CURRENT",
+      "orders": [
+        83,
+        90
+      ],
+      "cards": [
+        {
+          "id": "maps-cartography-measure-distance",
+          "difficulty": "easy",
+          "prompt": "На карте извилистая тропа измерена четырьмя участками: 0,8 см, 1,0 см, 0,7 см и 0,5 см. Масштаб — 1:50 000. Какова общая длина тропы на местности?",
+          "answers": [
+            {
+              "text": "0,75 км",
+              "note": "0,75 км получается, если не сложить все четыре отрезка и перевести на местность только часть тропы."
+            },
+            {
+              "text": "15 км",
+              "note": "При 1:50 000 один сантиметр — 0,5 км, а не 5 км; здесь десятикратная ошибка перевода."
+            },
+            {
+              "text": "150 км",
+              "note": "Это значение завышено в сто раз: один сантиметр соответствует 500 м, а длина карты равна лишь 3 см."
+            },
+            {
+              "text": "1,5 км",
+              "note": "OS указывает, что на карте 1:50 000 каждый миллиметр шкалы компаса соответствует 50 м на местности."
+            }
+          ],
+          "correctIndex": 3,
+          "explanation": "Сложите длины участков: 0,8 + 1,0 + 0,7 + 0,5 = 3 см. При масштабе 1:50 000 один сантиметр равен 0,5 км, поэтому тропа имеет длину 1,5 км.",
+          "source": {
+            "title": "Map Reading | Ordnance Survey",
+            "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+            "verifiedAt": "2026-10-15"
+          }
+        },
+        {
+          "id": "maps-cartography-distance-distortion",
+          "difficulty": "medium",
+          "prompt": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+          "answers": [
+            {
+              "text": "В 0,8 раза",
+              "note": "0,8 — обратное отношение масштаба B к масштабу A."
+            },
+            {
+              "text": "В 1 раз",
+              "note": "Одинаковые масштабы дали бы одинаковую длину изображения на каждый километр; здесь коэффициенты 0,25 и 0,20 см/км."
+            },
+            {
+              "text": "В 1,5 раза",
+              "note": "Отношение длин на карте 3,0/1,6 = 1,875, а не 1,5; к тому же для локального масштаба длину нужно нормировать на наземное расстояние."
+            },
+            {
+              "text": "В 1,25 раза",
+              "note": "В азимутальной равновеликой проекции Ламберта масштаб убывает по радиусам от центра и растёт перпендикулярно им, поэтому сравнение локального масштаба зависит от направления."
+            }
+          ],
+          "correctIndex": 3,
+          "explanation": "Нормируйте изображения: A — 3,0/12 = 0,25 см/км, B — 1,6/8 = 0,20 см/км. Отношение 0,25/0,20 = 1,25, значит локальный масштаб A в 1,25 раза больше; сравнение относится к этим участкам.",
+          "source": {
+            "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+            "verifiedAt": "2026-10-15"
+          }
+        }
+      ],
+      "canonicalSHA256": [
+        "481d40b1cbb2aea1a7fcad75b70b5f214606e08068d8c4e309faf22c764db7c0",
+        "dc24d71536d56c83851f3442260ae8d611ef6a49e9e3ef398cb9e33d0388ac89"
+      ],
+      "assessment": "Distinct:83 sums a polyline and applies given common scale (easy);90 infers two different scales from unequal ground baselines then compares (medium). Shared topic not a duplicate."
+    },
+    {
+      "version": "FINAL-proposed",
+      "orders": [
+        83,
+        90
+      ],
+      "cards": [
+        {
+          "id": "maps-cartography-measure-distance",
+          "difficulty": "easy",
+          "prompt": "На карте извилистая тропа измерена четырьмя участками: 0,8 см, 1,0 см, 0,7 см и 0,5 см. Масштаб — 1:50 000. Какова общая длина тропы на местности?",
+          "answers": [
+            {
+              "text": "0,75 км",
+              "note": "0,75 км получается, если не сложить все четыре отрезка и перевести на местность только часть тропы."
+            },
+            {
+              "text": "15 км",
+              "note": "При 1:50 000 один сантиметр — 0,5 км, а не 5 км; здесь десятикратная ошибка перевода."
+            },
+            {
+              "text": "150 км",
+              "note": "Это значение завышено в сто раз: один сантиметр соответствует 500 м, а длина карты равна лишь 3 см."
+            },
+            {
+              "text": "1,5 км",
+              "note": "OS указывает, что на карте 1:50 000 каждый миллиметр шкалы компаса соответствует 50 м на местности."
+            }
+          ],
+          "correctIndex": 3,
+          "explanation": "Сложите длины участков: 0,8 + 1,0 + 0,7 + 0,5 = 3 см. При масштабе 1:50 000 один сантиметр равен 0,5 км, поэтому тропа имеет длину 1,5 км.",
+          "source": {
+            "title": "Map Reading | Ordnance Survey",
+            "url": "https://www.ordnancesurvey.co.uk/documents/resources/map-reading.pdf",
+            "verifiedAt": "2026-10-15"
+          }
+        },
+        {
+          "id": "maps-cartography-distance-distortion",
+          "difficulty": "medium",
+          "prompt": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+          "answers": [
+            {
+              "text": "В 0,8 раза",
+              "note": "0,8 — обратное отношение масштаба B к масштабу A."
+            },
+            {
+              "text": "В 1 раз",
+              "note": "Одинаковые масштабы дали бы одинаковую длину изображения на каждый километр; здесь коэффициенты 0,25 и 0,20 см/км."
+            },
+            {
+              "text": "В 1,5 раза",
+              "note": "Отношение длин на карте 3,0/1,6 = 1,875, а не 1,5; к тому же для локального масштаба длину нужно нормировать на наземное расстояние."
+            },
+            {
+              "text": "В 1,25 раза",
+              "note": "В азимутальной равновеликой проекции Ламберта масштаб убывает по радиусам от центра и растёт перпендикулярно им, поэтому сравнение локального масштаба зависит от направления."
+            }
+          ],
+          "correctIndex": 3,
+          "explanation": "Нормируйте изображения: A — 3,0/12 = 0,25 см/км, B — 1,6/8 = 0,20 см/км. Отношение 0,25/0,20 = 1,25, значит локальный масштаб A в 1,25 раза больше; сравнение относится к этим участкам.",
+          "source": {
+            "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+            "verifiedAt": "2026-10-15"
+          }
+        }
+      ],
+      "canonicalSHA256": [
+        "481d40b1cbb2aea1a7fcad75b70b5f214606e08068d8c4e309faf22c764db7c0",
+        "dc24d71536d56c83851f3442260ae8d611ef6a49e9e3ef398cb9e33d0388ac89"
+      ],
+      "assessment": "Distinct:83 sums a polyline and applies given common scale (easy);90 infers two different scales from unequal ground baselines then compares (medium). Shared topic not a duplicate."
+    },
+    {
+      "version": "CURRENT",
+      "orders": [
+        88,
+        89
+      ],
+      "cards": [
+        {
+          "id": "maps-cartography-area-distortion",
+          "difficulty": "medium",
+          "prompt": "В ГИС сравнивают участки с наземными площадями 80 км² (A) и 100 км² (B). На одной проекции их изображения занимают 4 см² и 6 см² соответственно. После нормирования на наземную площадь во сколько раз коэффициент отображения площади B больше, чем A?",
+          "answers": [
+            {
+              "text": "В 0,5 раза",
+              "note": "Коэффициент 0,5 был бы у B, если бы после нормирования он составлял половину A; здесь 0,06/0,05 = 1,2."
+            },
+            {
+              "text": "В 0,8333… раза",
+              "note": "Обратное нормированное отношение равно 0,05/0,06 = 0,8333…, то есть примерно 0,83. Это коэффициент A относительно B, а в вопросе требуется B относительно A."
+            },
+            {
+              "text": "В 1 раз",
+              "note": "Равные коэффициенты дали бы 1; здесь после нормирования получаются 0,05 и 0,06."
+            },
+            {
+              "text": "В 1,2 раза",
+              "note": "Проекция Ламберта сохраняет относительные площади, но Esri указывает, что вдали от центра обычно искажаются формы, углы, направления и расстояния."
+            }
+          ],
+          "correctIndex": 3,
+          "explanation": "Сначала найдите коэффициенты: для A это 4/80 = 0,05, для B — 6/100 = 0,06 см²/км². Затем сравните их: 0,06/0,05 = 1,2, поэтому нормированный коэффициент B в 1,2 раза больше.",
+          "source": {
+            "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+            "verifiedAt": "2026-10-15"
+          }
+        },
+        {
+          "id": "maps-cartography-shape-distortion",
+          "difficulty": "medium",
+          "prompt": "При проверке проекции сравнили четыре угла на местности и на карте: P — 90°/84°, Q — 60°/72°, R — 90°/90°, S — 45°/39°. В каком месте абсолютное угловое искажение наибольшее и на сколько градусов угол на карте отличается от исходного?",
+          "answers": [
+            {
+              "text": "В P, на 6° меньше",
+              "note": "В P разность составляет 90° − 84° = 6°, меньше, чем в Q."
+            },
+            {
+              "text": "В R, искажения нет, поэтому проекция сохраняет все углы",
+              "note": "В R угол сохранён, но одно совпадение не доказывает сохранение углов во всех местах."
+            },
+            {
+              "text": "В S, на 6° меньше",
+              "note": "В S разность равна 45° − 39° = 6°, меньше максимума."
+            },
+            {
+              "text": "В Q, на 12° больше",
+              "note": "Проекция может сохранять площадь, локальные углы, отдельные расстояния или направления; Esri подчёркивает, что выбор зависит от нужного свойства и охвата карты."
+            }
+          ],
+          "correctIndex": 3,
+          "explanation": "Сравните абсолютные разности: P — 6°, Q — 12°, R — 0°, S — 6°. Наибольшее отклонение у Q: угол на карте больше исходного на 12°; это локальное сравнение не характеризует все свойства проекции.",
+          "source": {
+            "title": "Coordinate systems, map projections, and transformations | ArcGIS Pro documentation",
+            "url": "https://doc.esri.com/en/arcgis-pro/latest/help/mapping/properties/coordinate-systems-and-projections.html",
+            "verifiedAt": "2026-10-15"
+          }
+        }
+      ],
+      "canonicalSHA256": [
+        "524d529c3f127907920f94c01a76b712af1ccbeeb72ecac9e05a8323dfd8cb04",
+        "62564e0586316182483d9e873acd5df80d7edd4cb1a0400f4fea3cdd2044aacd"
+      ],
+      "assessment": "Distinct measurements: area normalization versus angular deviation. Their separate source/difficulty issues remain; correcting89 must avoid creating another coefficient-ratio sibling."
+    },
+    {
+      "version": "FINAL-proposed",
+      "orders": [
+        88,
+        89
+      ],
+      "cards": [
+        {
+          "id": "maps-cartography-area-distortion",
+          "difficulty": "medium",
+          "prompt": "В ГИС сравнивают участки с наземными площадями 80 км² (A) и 100 км² (B). На одной проекции их изображения занимают 4 см² и 6 см² соответственно. После нормирования на наземную площадь во сколько раз коэффициент отображения площади B больше, чем A?",
+          "answers": [
+            {
+              "text": "В 0,5 раза",
+              "note": "Коэффициент 0,5 был бы у B, если бы после нормирования он составлял половину A; здесь 0,06/0,05 = 1,2."
+            },
+            {
+              "text": "В 0,8333… раза",
+              "note": "Обратное нормированное отношение равно 0,05/0,06 = 0,8333…, то есть примерно 0,83. Это коэффициент A относительно B, а в вопросе требуется B относительно A."
+            },
+            {
+              "text": "В 1 раз",
+              "note": "Равные коэффициенты дали бы 1; здесь после нормирования получаются 0,05 и 0,06."
+            },
+            {
+              "text": "В 1,2 раза",
+              "note": "Проекция Ламберта сохраняет относительные площади, но Esri указывает, что вдали от центра обычно искажаются формы, углы, направления и расстояния."
+            }
+          ],
+          "correctIndex": 3,
+          "explanation": "Сначала найдите коэффициенты: для A это 4/80 = 0,05, для B — 6/100 = 0,06 см²/км². Затем сравните их: 0,06/0,05 = 1,2, поэтому нормированный коэффициент B в 1,2 раза больше.",
+          "source": {
+            "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+            "verifiedAt": "2026-10-15"
+          }
+        },
+        {
+          "id": "maps-cartography-shape-distortion",
+          "difficulty": "medium",
+          "prompt": "При проверке проекции сравнили четыре угла на местности и на карте: P — 90°/84°, Q — 60°/72°, R — 90°/90°, S — 45°/39°. В каком месте абсолютное угловое искажение наибольшее и на сколько градусов угол на карте отличается от исходного?",
+          "answers": [
+            {
+              "text": "В P, на 6° меньше",
+              "note": "В P разность составляет 90° − 84° = 6°, меньше, чем в Q."
+            },
+            {
+              "text": "В R, искажения нет, поэтому проекция сохраняет все углы",
+              "note": "В R угол сохранён, но одно совпадение не доказывает сохранение углов во всех местах."
+            },
+            {
+              "text": "В S, на 6° меньше",
+              "note": "В S разность равна 45° − 39° = 6°, меньше максимума."
+            },
+            {
+              "text": "В Q, на 12° больше",
+              "note": "Проекция может сохранять площадь, локальные углы, отдельные расстояния или направления; Esri подчёркивает, что выбор зависит от нужного свойства и охвата карты."
+            }
+          ],
+          "correctIndex": 3,
+          "explanation": "Сравните абсолютные разности: P — 6°, Q — 12°, R — 0°, S — 6°. Наибольшее отклонение у Q: угол на карте больше исходного на 12°; это локальное сравнение не характеризует все свойства проекции.",
+          "source": {
+            "title": "Coordinate systems, map projections, and transformations | ArcGIS Pro documentation",
+            "url": "https://doc.esri.com/en/arcgis-pro/latest/help/mapping/properties/coordinate-systems-and-projections.html",
+            "verifiedAt": "2026-10-15"
+          }
+        }
+      ],
+      "canonicalSHA256": [
+        "524d529c3f127907920f94c01a76b712af1ccbeeb72ecac9e05a8323dfd8cb04",
+        "62564e0586316182483d9e873acd5df80d7edd4cb1a0400f4fea3cdd2044aacd"
+      ],
+      "assessment": "Distinct measurements: area normalization versus angular deviation. Their separate source/difficulty issues remain; correcting89 must avoid creating another coefficient-ratio sibling."
+    }
+  ],
+  "fullNeighborSnapshot": "full-current-peers.json",
+  "proposed91to100": "proposed-peers-and-author-binding.json",
+  "peerReasoning": [
+    "81 vs61-63: ready browser interface/access route, not editable vector/raster/table schema;78 chooses scale/coverage, not service. No same question.",
+    "82 vs3/32/35/55/100: physically orient a map vs read direction arrow, coordinate grid or declination diagram. No duplicate.",
+    "84 vs79: signed GIS x/y decoding versus choosing two hemisphere labels from named locations. Related basic coordinate skill, different demanded conversion. 84 current nonetheless fails unique key.",
+    "85 vs7/55/56/59/60/76/77: follow already assigned legs vs map type, grid location or contours. No duplicate.",
+    "86 vs69/70:1507 separation of new continent/ocean vs Roman network data model and Christian mappa-mundi interpretation. Distinct topic, but86 remains source-fact recall inside a curatorial scenario; no inherited medium PASS.",
+    "87 vs54/61/63: definition recognition rather than scale accuracy or table join; lack of medium demand, not exact duplicate.",
+    "89 vs15/18: angular arithmetic versus selecting preservation/compromise property. No exact duplicate; current89 absolute difficulty still fails.",
+    "91 CURRENT is definition of azimuth error; author91 draft is centre-preservation selection and is NOT applied. Neither equals numerical area/linear normalization88/90. Draft bad key is not inherited and outside this review scope."
+  ]
+}
