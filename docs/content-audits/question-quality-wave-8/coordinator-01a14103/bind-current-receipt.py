@@ -62,6 +62,10 @@ actualPeerBindings={p['id']:p for p in peers['actualCurrentPeers']}
 for pair in pairEvidence:
  if 'leftToRight' in pair:
   assert pair['leftToRight'] and pair['rightToLeft']
+ elif 'bilateralGround' in pair:
+  # Reader supplied one joint, explicit two-direction assessment and a verbal
+  # reverse check. Whole cards remain bound by id/hash below.
+  assert pair['bilateralGround'] and pair['directReverseCheck'] and pair['result']=='DISTINCT_MAIN'
  else:
   # Joint bilateral prose names both actual relations; full cards are linked by
   # ID/hash into the personally-read snapshot, rather than duplicated per row.
@@ -72,7 +76,14 @@ for pair in pairEvidence:
   assert known and digest(p)==digest(known)
   card=p.get('card',known['card'])
   assert card==known['card'] and sha(card)==digest(p)
-  if 'MAIN' in p:assert p['MAIN']==card['prompt'] and p['key']==card['answers'][card['correctIndex']]['text']
+  if 'MAIN' in p:
+   if isinstance(p['MAIN'],dict):
+    # A structured semantic model is not a duplicate verbatim prompt. Require
+    # all four dimensions; coordinator reviews alignment against the exact
+    # whole card, whose canonical hash and live bytes are still mandatory.
+    assert set(p['MAIN'])=={'entity','relation','value','context'} and all(p['MAIN'].values())
+    if 'key' in p:assert p['key']==card['answers'][card['correctIndex']]['text']
+   else:assert p['MAIN']==card['prompt'] and p['key']==card['answers'][card['correctIndex']]['text']
   if not p.get('state','').startswith('UNAPPLIED_'):assert card==cat[p['id']]
 for s in src['sources']:
  assert raw(C/s['path'])==s['rawReadSHA256'] and s['personalReadEvidence'] and (s.get('locator') or s.get('locators'))
