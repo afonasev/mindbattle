@@ -5,10 +5,11 @@ def read(p):return json.loads(pathlib.Path(p).read_text())
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
 def write(p,v):pathlib.Path(p).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def fg_after(v):return v if isinstance(v,str) else v['afterCanonicalSHA256']
 def read_issues(topic):
  p=pathlib.Path(__file__).parent/'validate-proposed-topic.cjs';return json.loads(subprocess.check_output(['node',str(p)],input=json.dumps(topic,ensure_ascii=False).encode()))
-def apply(B,author,orders,out,qa,runner,peerAddendum=None,concerns=None,qualifyOnly=False):
- a=read(B/'candidate.json');sp=read(B/'sourceproof.json');ps={e['id']:e for e in sp['entries']};peers=read(B/'peer-snapshot.json');topicId=a['entries'][0]['topicId'];tp=C/f'src/content/topics/{topicId}.json';topic=read(tp);current={q['id']:q for q in topic['questions']};cp=read(P/'openspec/changes/question-quality-future-waves/current-checkpoint.json');selected={e['questionId']:e for e in cp['selectedCards']};sources={s['path']:s for s in sp['rawSources']}
+def apply(B,author,orders,out,qa,runner,peerAddendum=None,concerns=None,qualifyOnly=False,peerSnapshot=None):
+ a=read(B/'candidate.json');sp=read(B/'sourceproof.json');ps={e['id']:e for e in sp['entries']};peers=peerSnapshot if peerSnapshot is not None else read(B/'peer-snapshot.json');topicId=a['entries'][0]['topicId'];tp=C/f'src/content/topics/{topicId}.json';topic=read(tp);current={q['id']:q for q in topic['questions']};cp=read(P/'openspec/changes/question-quality-future-waves/current-checkpoint.json');selected={e['questionId']:e for e in cp['selectedCards']};sources={s['path']:s for s in sp['rawSources']}
  for s in sources.values():assert raw(C/s['path'])==s['sha256']
  delta={p['id']:p for p in read(peerAddendum)['actualCurrentPeers']} if peerAddendum else {}
  for p in peers['actualCurrentPeers']:
@@ -18,12 +19,16 @@ def apply(B,author,orders,out,qa,runner,peerAddendum=None,concerns=None,qualifyO
  for e in a['entries']:
   if e['sourceOrder'] not in orders:continue
   i=e['id'];c=e['proposedCard'];p=dict(ps[i]);p['literalGroups']=p['literalGroups'] if 'literalGroups' in p else p['sixLiteralGroups'];assert e['status']=='READY_FOR_INDEPENDENT_REVIEW' and e['topicId']==topicId;assert current[i]==e['beforeCard'] and sha(current[i])==e['beforeHash'];assert sha(c)==e['afterHash'];assert c['id']==i and c['difficulty']==selected[i]['difficulty'] and c['correctIndex']==selected[i]['correctIndex'];assert topic['questions'][e['sourceOrder']-1]['id']==i and i not in cp['currentEligibleCompletedIds'];gs={'prompt_ordered_answers_key':{'prompt':c['prompt'],'answers':[v['text'] for v in c['answers']],'correctIndex':c['correctIndex']},'explanation':c['explanation'],**{'note'+str(k):v['note'] for k,v in enumerate(c['answers'])}};assert len(p['literalGroups'])==6 and {g['group'] for g in p['literalGroups']}==set(gs)
-  for g in p['literalGroups']:assert g['literal']==gs[g['group']] and sha(g['literal'])==g['literalSHA256'] and (not isinstance(e['fieldGroups'],dict) or e['fieldGroups'][g['group']]==g['literalSHA256']) and g['primaryGround'] and g['locator'];groupbindings.append({'id':i,**g})
+  for g in p['literalGroups']:assert g['literal']==gs[g['group']] and sha(g['literal'])==g['literalSHA256'] and (not isinstance(e['fieldGroups'],dict) or fg_after(e['fieldGroups'][g['group']])==g['literalSHA256']) and g['primaryGround'] and g['locator'];groupbindings.append({'id':i,**g})
   if isinstance(e['fieldGroups'],list) and all(isinstance(v,str) for v in e['fieldGroups']):
    b=e['beforeCard'];bg={'prompt_ordered_answers_key':{'prompt':b['prompt'],'answers':[v['text'] for v in b['answers']],'correctIndex':b['correctIndex']},'explanation':b['explanation'],**{'note'+str(k):v['note'] for k,v in enumerate(b['answers'])}};assert set(e['fieldGroups'])=={k for k in gs if gs[k]!=bg[k]}
   if isinstance(e['fieldGroups'],list) and any(isinstance(v,dict) for v in e['fieldGroups']):
    fg=e['fieldGroups'];assert len(fg)==6 and {g['group'] for g in fg}==set(gs)
    for g in fg:assert g['literal']==gs[g['group']] and sha(g['literal'])==g['literalSHA256']
+  if isinstance(e['fieldGroups'],dict):
+   assert set(e['fieldGroups'])==set(gs);b=e['beforeCard'];bg={'prompt_ordered_answers_key':{'prompt':b['prompt'],'answers':[v['text'] for v in b['answers']],'correctIndex':b['correctIndex']},'explanation':b['explanation'],**{'note'+str(k):v['note'] for k,v in enumerate(b['answers'])}}
+   for k,v in e['fieldGroups'].items():
+    if isinstance(v,dict):assert v['beforeCanonicalSHA256']==sha(bg[k]) and v['afterCanonicalSHA256']==sha(gs[k])
   vs=p['fourFullPromptAnswerNoteAssessments'];assert len(vs)==4 and {v['slot'] for v in vs}==set(range(4))
   for v in vs:
    k=v['slot'];tr={'prompt':c['prompt'],'answer':c['answers'][k]['text'],'note':c['answers'][k]['note']};assert v['fullPrompt']==tr['prompt'] and v['answer']==tr['answer'] and v['note']==tr['note'] and v['grammar'] and v['plausibilityUniqueKeyAndNoteTruthUsefulness'] and v['locator'];assert v['sourcePaths'] and all(x in sources for x in v['sourcePaths']);variants.append({'id':i,'slot':k,**tr,'bindingCanonicalSHA256':sha(tr),'authorAssessment':v})
