@@ -1,0 +1,630 @@
+{
+  "schemaVersion": 1,
+  "role": "OTHER independent FINAL sole cycle1",
+  "scope": [
+    "maps-cartography-generalization-select",
+    "maps-cartography-classification-groups",
+    "maps-cartography-label-placement"
+  ],
+  "branchAsProvided": "codex/question-quality-wave-6",
+  "exactApplyCommit": "1b19d154b0663dff8ec71d0c41645492037b26f5",
+  "affected19PassCommitAsProvided": "9ffef4b0fcd5d07c83f5dbd120083f9d8d2404eb",
+  "gitHistoryNotReverified": "Git/index access prohibited for this review; commit references are caller-provided, no integration/main claim",
+  "qualityCredit": 0,
+  "terminal": true,
+  "secondCycleAllowed": false,
+  "canonicalization": "UTF8 json.dumps(sort_keys=True,separators=(',',':'),ensure_ascii=False), applied to all six groups including five scalar strings",
+  "cards": [
+    {
+      "id": "maps-cartography-generalization-select",
+      "sourceOrder": 92,
+      "status": "PASS",
+      "card": {
+        "id": "maps-cartography-generalization-select",
+        "difficulty": "medium",
+        "prompt": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+        "answers": [
+          {
+            "text": "Выбрать Shape_Area < 100, затем применить Simplify Building.",
+            "note": "Порог <100 оставляет малые здания."
+          },
+          {
+            "text": "Выбрать Shape_Area > 100, затем применить Aggregate Polygons.",
+            "note": "Агрегация не упрощает контуры."
+          },
+          {
+            "text": "Применить Simplify Building ко всему слою без выборки.",
+            "note": "Без отбора малые здания останутся."
+          },
+          {
+            "text": "Выбрать Shape_Area > 100, затем применить Simplify Building.",
+            "note": "В примере включён CHECK_CONFLICTS."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Сначала выражение Shape_Area > 100 отбирает здания больше минимальной площади: малые здания для масштаба 1:50 000 исключаются. Затем Simplify Building убирает у выбранных контуров вогнутости, выступы и лишние вершины. В примере у инструмента также включён параметр CHECK_CONFLICTS.",
+        "source": {
+          "title": "Automating conflict resolution and generalization workflows with geoprocessing | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.6/tool-reference/cartography/conflict-resolution-and-generalization-with-geoprocessing.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "canonicalCardSHA256": "c37a62874f8507a2b99b52be4153d0894b02d7044873b559c55422895015db0c",
+      "sixLiteralCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+            "answers": [
+              "Выбрать Shape_Area < 100, затем применить Simplify Building.",
+              "Выбрать Shape_Area > 100, затем применить Aggregate Polygons.",
+              "Применить Simplify Building ко всему слою без выборки.",
+              "Выбрать Shape_Area > 100, затем применить Simplify Building."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "67b08515ce0bc5e1d686734ce816e1a37db4e243b433bf77fa36069c2246e70c",
+          "independentAssessment": "Medium по точному контракту: знакомый с GIS игрок различает отбор атрибутом, агрегирование соседних полигонов и упрощение контура. Outsider способен отсеять неверный знак, но остаётся правдоподобный инструмент Aggregate Polygons из того же workflow. Для ключа нужно различать роли реальных инструментов. Числовой расчёт/advanced logic не является обязательным требованием medium.",
+          "sourceGrounds": [
+            "gen L243–246",
+            "gen L247–256",
+            "gen L243–256; sample minimum area argument 0 unknown",
+            "gen L255–256"
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Сначала выражение Shape_Area > 100 отбирает здания больше минимальной площади: малые здания для масштаба 1:50 000 исключаются. Затем Simplify Building убирает у выбранных контуров вогнутости, выступы и лишние вершины. В примере у инструмента также включён параметр CHECK_CONFLICTS.",
+          "canonicalSHA256": "991fbf371418ff903c9c3e46097d7ad5efa6efe2582f6b69cb04cd90bc7d052e",
+          "independentAssessment": "Source подтверждает >100, исключение малых в 1:50000 и удаление вогнутостей/выступов/лишних вершин SimplifyBuilding. CHECK_CONFLICTS действительно передан. Полный source содержит Aggregate между Select и Simplify; объяснение перечисляет необходимые этапы отбора и упрощения, не обещает воспроизвести весь source script без промежуточных операций.",
+          "sourceGrounds": [
+            "gen L243–256"
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Порог <100 оставляет малые здания.",
+          "canonicalSHA256": "587ccfe887e1b3fdf560ff3cb2776f38e12eb8366b2f156297a3c0a51c181ed0",
+          "independentAssessment": "Точна и полезна: прямо показывает, какая сторона порога останется; не утверждает, что Simplify Building исправит ошибочный отбор.",
+          "sourceGrounds": [
+            "gen L243–246"
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Агрегация не упрощает контуры.",
+          "canonicalSHA256": "4ec2ea1ffa88a250ded86fffab89266a53c017f6b87b0aa92753460e07093b1a",
+          "independentAssessment": "«Не упрощает контуры» читается в данном вопросе как «не выполняет указанную операцию Simplify Building»: роль Aggregate — объединение/spacing, а удаление деталей source назначает другому инструменту. Полезно различает соседние операции. Не расширяю эту фразу до утверждения, что агрегирование вообще никогда не меняет форму или сложность границы.",
+          "sourceGrounds": [
+            "gen L247–256"
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Без отбора малые здания останутся.",
+          "canonicalSHA256": "0c1f0751a330ab3c4380ca161f3cc2bc1bfabd29d1a7142352a767c13bb98747",
+          "independentAssessment": "В контексте sample верна: без отбора не исключена группа <100. Это не утверждение об отсутствии любых иных параметров фильтрации у всех возможных настроек инструмента.",
+          "sourceGrounds": [
+            "gen L243–256; sample minimum area argument 0 unknown"
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "В примере включён CHECK_CONFLICTS.",
+          "canonicalSHA256": "1910408b993f213b39c4d17fa696d217ad292fcf6f10eb442ab87b31b13a2bd5",
+          "independentAssessment": "Буквально верна: вызов SimplifyBuilding содержит CHECK_CONFLICTS. Даёт конкретную дополнительную настройку воспроизводимого примера сверх prompt/key. Педагогическая польза узкая: называет конфигурацию, не объясняет работу алгоритма; более сильных смыслов этого параметра из одной строки не вывожу.",
+          "sourceGrounds": [
+            "gen L255–256"
+          ]
+        }
+      ],
+      "fourFullPromptVariants": [
+        {
+          "id": "maps-cartography-generalization-select",
+          "slot": 0,
+          "fullPrompt": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+          "answer": "Выбрать Shape_Area < 100, затем применить Simplify Building.",
+          "note": "Порог <100 оставляет малые здания.",
+          "bindingCanonicalSHA256": "331d2c4630872443bba12cc113dda6548378c057684bb344ddd5ed4ca17b95b5",
+          "grammarAssessment": "Операция выбора и последующего вызова названы грамматически ясно.",
+          "plausibilityAssessment": "Реальная ошибка направления неравенства; обе части похожи на правильный workflow.",
+          "truthUniqueKeyAssessment": "Не выполняет исключение малых: <100 выбирает противоположную часть слоя.",
+          "noteLiteralAccuracyAndUsefulness": "Точна и полезна: прямо показывает, какая сторона порога останется; не утверждает, что Simplify Building исправит ошибочный отбор.",
+          "sourceGrounds": "gen L243–246"
+        },
+        {
+          "id": "maps-cartography-generalization-select",
+          "slot": 1,
+          "fullPrompt": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+          "answer": "Выбрать Shape_Area > 100, затем применить Aggregate Polygons.",
+          "note": "Агрегация не упрощает контуры.",
+          "bindingCanonicalSHA256": "09381d6c9ccdfb7e1a5a7fb9f2ef8ee5e7ecda507999eaa9d2ec644431a77cf3",
+          "grammarAssessment": "Однородная с ключом структура: выбрать, затем применить.",
+          "plausibilityAssessment": "Реальный инструмент из того же примера, в отличие от прежнего оформления/подписей; тематически правдоподобен.",
+          "truthUniqueKeyAssessment": "Отбор верен, но Aggregate Polygons объединяет близкие/соприкасающиеся здания; для удаления вогнутостей, выступов и лишних вершин sample отдельно вызывает Simplify Building.",
+          "noteLiteralAccuracyAndUsefulness": "«Не упрощает контуры» читается в данном вопросе как «не выполняет указанную операцию Simplify Building»: роль Aggregate — объединение/spacing, а удаление деталей source назначает другому инструменту. Полезно различает соседние операции. Не расширяю эту фразу до утверждения, что агрегирование вообще никогда не меняет форму или сложность границы.",
+          "sourceGrounds": "gen L247–256"
+        },
+        {
+          "id": "maps-cartography-generalization-select",
+          "slot": 2,
+          "fullPrompt": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+          "answer": "Применить Simplify Building ко всему слою без выборки.",
+          "note": "Без отбора малые здания останутся.",
+          "bindingCanonicalSHA256": "97465469b2bb27b5ee95ab4b66a4a4470cd5242f21ebdd0dd3074e156460d6c8",
+          "grammarAssessment": "Полный инфинитивный ответ, «ко всему слою» задаёт существенное отличие.",
+          "plausibilityAssessment": "Реальный инструмент, но пропущен отбор — правдоподобная неполная последовательность.",
+          "truthUniqueKeyAssessment": "Не реализует явное исключение малых по Shape_Area; sample сначала применяет Select.",
+          "noteLiteralAccuracyAndUsefulness": "В контексте sample верна: без отбора не исключена группа <100. Это не утверждение об отсутствии любых иных параметров фильтрации у всех возможных настроек инструмента.",
+          "sourceGrounds": "gen L243–256; sample minimum area argument 0 unknown"
+        },
+        {
+          "id": "maps-cartography-generalization-select",
+          "slot": 3,
+          "fullPrompt": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+          "answer": "Выбрать Shape_Area > 100, затем применить Simplify Building.",
+          "note": "В примере включён CHECK_CONFLICTS.",
+          "bindingCanonicalSHA256": "4175d52b0055129b1937afd0e6ca2fe33bd6b2c2044d179e4a4f88a1c5e36f9c",
+          "grammarAssessment": "Грамматически параллельно вариантам 0/1.",
+          "plausibilityAssessment": "Правдоподобный рабочий набор операций из source.",
+          "truthUniqueKeyAssessment": "Единственный ответ с нужной стороной порога и нужным инструментом удаления деталей. Промежуточное Aggregate в полном sample не делает остальные ответы достаточными: вопрос спрашивает выбор операций отбора/упрощения, а не полный скрипт целиком.",
+          "noteLiteralAccuracyAndUsefulness": "Буквально верна: вызов SimplifyBuilding содержит CHECK_CONFLICTS. Даёт конкретную дополнительную настройку воспроизводимого примера сверх prompt/key. Педагогическая польза узкая: называет конфигурацию, не объясняет работу алгоритма; более сильных смыслов этого параметра из одной строки не вывожу.",
+          "sourceGrounds": "gen L255–256"
+        }
+      ],
+      "difficultyAssessment": {
+        "status": "PASS",
+        "reason": "Medium по точному контракту: знакомый с GIS игрок различает отбор атрибутом, агрегирование соседних полигонов и упрощение контура. Outsider способен отсеять неверный знак, но остаётся правдоподобный инструмент Aggregate Polygons из того же workflow. Для ключа нужно различать роли реальных инструментов. Числовой расчёт/advanced logic не является обязательным требованием medium."
+      },
+      "frozen": {
+        "difficulty": "medium",
+        "correctIndex": 3,
+        "preserved": true
+      },
+      "correctNoteExtraFact": {
+        "literal": "В примере включён CHECK_CONFLICTS.",
+        "beyondPromptAndKey": true,
+        "alsoAppearsInExplanation": true,
+        "status": "PASS",
+        "accuracyUsefulnessAssessment": "Буквально верна: вызов SimplifyBuilding содержит CHECK_CONFLICTS. Даёт конкретную дополнительную настройку воспроизводимого примера сверх prompt/key. Педагогическая польза узкая: называет конфигурацию, не объясняет работу алгоритма; более сильных смыслов этого параметра из одной строки не вывожу.",
+        "requirementApplied": "additional fact beyond prompt/key; no invented demand for advanced note or numerical calculation"
+      },
+      "residualDefects": []
+    },
+    {
+      "id": "maps-cartography-classification-groups",
+      "sourceOrder": 93,
+      "status": "HOLD",
+      "card": {
+        "id": "maps-cartography-classification-groups",
+        "difficulty": "medium",
+        "prompt": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+        "answers": [
+          {
+            "text": "0–10, >10–30, >30–60 и >60–80 °C.",
+            "note": "Ширины интервалов различны."
+          },
+          {
+            "text": "Поставить границы по квартилям, уравняв число станций.",
+            "note": "Квантили уравнивают число записей."
+          },
+          {
+            "text": "Задать вручную пороги 0, 18, 42, 65 и 80 °C.",
+            "note": "Ручные границы произвольны."
+          },
+          {
+            "text": "0–20, >20–40, >40–60 и >60–80 °C.",
+            "note": "Jenks группирует близкие значения."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Размах значений равен 80 °C; разделив его на четыре класса, получаем ширину 20 °C. Поэтому границы идут через 20: 0, 20, 40, 60 и 80. Метод Jenks, в отличие от этого расчёта, ищет естественные группы похожих значений.",
+        "source": {
+          "title": "Data classification methods | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.0/help/mapping/layer-properties/data-classification-methods.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "canonicalCardSHA256": "687128d09162548a67218b5512c3e94f673ae6ecc84288890d5a9154f5aa4ff5",
+      "sixLiteralCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+            "answers": [
+              "0–10, >10–30, >30–60 и >60–80 °C.",
+              "Поставить границы по квартилям, уравняв число станций.",
+              "Задать вручную пороги 0, 18, 42, 65 и 80 °C.",
+              "0–20, >20–40, >40–60 и >60–80 °C."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "e8d674292aecd5b569d0a665e09cc0df4f69ccb62c1201ae2aa55be9424821d4",
+          "independentAssessment": "Residual terminal difficulty defect: все необходимые данные для выбора уже заданы простым условием «четыре одинаковой ширины» и границами 0..80. Вариант0 даёт 10/20/30/20, вариант2 — 18/24/23/15, вариант3 — 20/20/20/20. Игрок вне картографии получает ключ обычным вычитанием/делением 80/4, не нуждаясь в понимании классификации или температурных станций. Наличие реального слова «квартиль» в одном варианте не делает оставшийся выбор существенно труднее для outsider. Это не требование добавлять расчёт: наоборот, данный расчёт слишком общеизвестен для topic-dependent medium.",
+          "sourceGrounds": [
+            "class L17; elementary arithmetic 10,20,30,20",
+            "class L19–22",
+            "class L12–13, L17; arithmetic 18,24,23,15",
+            "class L23–26"
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Размах значений равен 80 °C; разделив его на четыре класса, получаем ширину 20 °C. Поэтому границы идут через 20: 0, 20, 40, 60 и 80. Метод Jenks, в отличие от этого расчёта, ищет естественные группы похожих значений.",
+          "canonicalSHA256": "32f9b145950ee565cabb8900e393d7f62163e29dc2f8f3e2012e7233dc2022bf",
+          "independentAssessment": "80/4=20 и перечисленные границы верны. Jenks действительно ищет natural groups. Объяснение не исправляет residual difficulty: верная арифметика доступна outsider.",
+          "sourceGrounds": [
+            "class L17,L24; arithmetic"
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Ширины интервалов различны.",
+          "canonicalSHA256": "9ee5cc438d7bc41bbea6846035bb43b383995c2e01cc8d166c4038837e179a1d",
+          "independentAssessment": "Точна: коротко указывает конкретный тип ошибки; численные ширины можно проверить прямо из варианта.",
+          "sourceGrounds": [
+            "class L17; elementary arithmetic 10,20,30,20"
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Квантили уравнивают число записей.",
+          "canonicalSHA256": "de05cd273c0f1b7b6e9de384415b51a735f710063a228cc221f55d0961ad8359",
+          "independentAssessment": "Точна: квантили делят записи по численности. Полезно отделяет число наблюдений от ширины диапазона.",
+          "sourceGrounds": [
+            "class L19–22"
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Ручные границы произвольны.",
+          "canonicalSHA256": "98af3b22b0843c4cc4d4afb5e6f53a5ca7daa01d07f5e029e6309aa5cbd9dc26",
+          "independentAssessment": "«Произвольны» означает задаются пользователем, не случайны. Source Manual interval подтверждает custom ranges; заметка верна, хотя не называет конкретные четыре ширины.",
+          "sourceGrounds": [
+            "class L12–13, L17; arithmetic 18,24,23,15"
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "Jenks группирует близкие значения.",
+          "canonicalSHA256": "640d996fe4c7c03f87a57dd35a792de9c6d1356351d37f10e8063600083be271",
+          "independentAssessment": "Jenks действительно best groups similar values; дополнительный метод не назван ни в prompt, ни в ключе. Факт краток, содержателен и полезен как сравнение классификаций.",
+          "sourceGrounds": [
+            "class L23–26"
+          ]
+        }
+      ],
+      "fourFullPromptVariants": [
+        {
+          "id": "maps-cartography-classification-groups",
+          "slot": 0,
+          "fullPrompt": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+          "answer": "0–10, >10–30, >30–60 и >60–80 °C.",
+          "note": "Ширины интервалов различны.",
+          "bindingCanonicalSHA256": "600df1ef62d5b681a229b7f080818aa70046e7d23fc7e88ca25376df28352259",
+          "grammarAssessment": "Запись четырёх последовательных неперекрывающихся интервалов понятна; > отличает открытую нижнюю границу.",
+          "plausibilityAssessment": "Четыре класса покрывают весь диапазон, но легко проверяются по ширине.",
+          "truthUniqueKeyAssessment": "Ширины 10,20,30,20; условие равной ширины не выполнено.",
+          "noteLiteralAccuracyAndUsefulness": "Точна: коротко указывает конкретный тип ошибки; численные ширины можно проверить прямо из варианта.",
+          "sourceGrounds": "class L17; elementary arithmetic 10,20,30,20"
+        },
+        {
+          "id": "maps-cartography-classification-groups",
+          "slot": 1,
+          "fullPrompt": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+          "answer": "Поставить границы по квартилям, уравняв число станций.",
+          "note": "Квантили уравнивают число записей.",
+          "bindingCanonicalSHA256": "8c23e093d4261a0130a51eed9bf53244f4cc50c4bf68e32a9e3b03b43e712fd1",
+          "grammarAssessment": "Формулировка действия грамматически корректна, но по форме это метод вместо набора числовых границ.",
+          "plausibilityAssessment": "Реальный соседний метод, уравнивающий другую величину — численность.",
+          "truthUniqueKeyAssessment": "Не гарантирует равную ширину при неизвестном распределении; совпадение при особом распределении не превращает его в правило требуемых границ.",
+          "noteLiteralAccuracyAndUsefulness": "Точна: квантили делят записи по численности. Полезно отделяет число наблюдений от ширины диапазона.",
+          "sourceGrounds": "class L19–22"
+        },
+        {
+          "id": "maps-cartography-classification-groups",
+          "slot": 2,
+          "fullPrompt": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+          "answer": "Задать вручную пороги 0, 18, 42, 65 и 80 °C.",
+          "note": "Ручные границы произвольны.",
+          "bindingCanonicalSHA256": "bfbe7ad8f59726cdb4aa4f4652dc80439fb888233a1f4d89758a0373b697bbce",
+          "grammarAssessment": "Фраза с перечислением пяти порогов корректна.",
+          "plausibilityAssessment": "В отличие от INITIAL перечислены точные ручные пороги, поэтому этот вариант теперь можно строго проверить.",
+          "truthUniqueKeyAssessment": "Разности 18,24,23,15, не равные 20; отвергается независимо от возможности ручного метода вообще.",
+          "noteLiteralAccuracyAndUsefulness": "«Произвольны» означает задаются пользователем, не случайны. Source Manual interval подтверждает custom ranges; заметка верна, хотя не называет конкретные четыре ширины.",
+          "sourceGrounds": "class L12–13, L17; arithmetic 18,24,23,15"
+        },
+        {
+          "id": "maps-cartography-classification-groups",
+          "slot": 3,
+          "fullPrompt": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+          "answer": "0–20, >20–40, >40–60 и >60–80 °C.",
+          "note": "Jenks группирует близкие значения.",
+          "bindingCanonicalSHA256": "4525d13559570908fda53a63d4d3186512c1a5ed303604625ed38f1f9c2a68e1",
+          "grammarAssessment": "Та же понятная запись, что у первого варианта.",
+          "plausibilityAssessment": "Единственный числовой набор с одинаковой шириной.",
+          "truthUniqueKeyAssessment": "Ширины 20,20,20,20; диапазон покрыт, границы не дублируют наблюдения. Ключ3 уникален для требуемого набора.",
+          "noteLiteralAccuracyAndUsefulness": "Jenks действительно best groups similar values; дополнительный метод не назван ни в prompt, ни в ключе. Факт краток, содержателен и полезен как сравнение классификаций.",
+          "sourceGrounds": "class L23–26"
+        }
+      ],
+      "difficultyAssessment": {
+        "status": "HOLD",
+        "reason": "Residual terminal difficulty defect: все необходимые данные для выбора уже заданы простым условием «четыре одинаковой ширины» и границами 0..80. Вариант0 даёт 10/20/30/20, вариант2 — 18/24/23/15, вариант3 — 20/20/20/20. Игрок вне картографии получает ключ обычным вычитанием/делением 80/4, не нуждаясь в понимании классификации или температурных станций. Наличие реального слова «квартиль» в одном варианте не делает оставшийся выбор существенно труднее для outsider. Это не требование добавлять расчёт: наоборот, данный расчёт слишком общеизвестен для topic-dependent medium."
+      },
+      "frozen": {
+        "difficulty": "medium",
+        "correctIndex": 3,
+        "preserved": true
+      },
+      "correctNoteExtraFact": {
+        "literal": "Jenks группирует близкие значения.",
+        "beyondPromptAndKey": true,
+        "alsoAppearsInExplanation": true,
+        "status": "PASS",
+        "accuracyUsefulnessAssessment": "Jenks действительно best groups similar values; дополнительный метод не назван ни в prompt, ни в ключе. Факт краток, содержателен и полезен как сравнение классификаций.",
+        "requirementApplied": "additional fact beyond prompt/key; no invented demand for advanced note or numerical calculation"
+      },
+      "residualDefects": [
+        {
+          "code": "FROZEN_MEDIUM_NOT_MET",
+          "severity": "terminal HOLD",
+          "claim": "Residual terminal difficulty defect: все необходимые данные для выбора уже заданы простым условием «четыре одинаковой ширины» и границами 0..80. Вариант0 даёт 10/20/30/20, вариант2 — 18/24/23/15, вариант3 — 20/20/20/20. Игрок вне картографии получает ключ обычным вычитанием/делением 80/4, не нуждаясь в понимании классификации или температурных станций. Наличие реального слова «квартиль» в одном варианте не делает оставшийся выбор существенно труднее для outsider. Это не требование добавлять расчёт: наоборот, данный расчёт слишком общеизвестен для topic-dependent medium.",
+          "notARequestForCycle2": true
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-label-placement",
+      "sourceOrder": 95,
+      "status": "PASS",
+      "card": {
+        "id": "maps-cartography-label-placement",
+        "difficulty": "medium",
+        "prompt": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+        "answers": [
+          {
+            "text": "Задать веса объектов: больнице высокий, вокзалу средний, парку низкий.",
+            "note": "Weight — конфликт с объектом."
+          },
+          {
+            "text": "Дать парку приоритет выше вокзала и больницы.",
+            "note": "Это обратный порядок важности."
+          },
+          {
+            "text": "Установить всем классам одинаковый приоритет.",
+            "note": "Равный ранг не задаёт порядок."
+          },
+          {
+            "text": "Приоритеты: больница > вокзал > парк; разрешить конфликты. Нижние подписи могут сдвигаться или сниматься; показ больницы не гарантирован.",
+            "note": "При зуме движок меняет позиции."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Задайте приоритет классов «больница → вокзал → парк» и оставьте стандартное разрешение конфликтов. Приоритет задаёт очередность размещения, но не гарантирует видимость даже больничной подписи. Нижестоящая конфликтующая подпись может переместиться или исчезнуть; движок также меняет размещение при зуме и панорамировании.",
+        "source": {
+          "title": "Label with the Standard Label Engine | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.4/help/mapping/text/label-with-the-standard-label-engine.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "canonicalCardSHA256": "421d676b174db341902fa65207016e090528ff4f07a88576fa29ba72a9a36428",
+      "sixLiteralCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+            "answers": [
+              "Задать веса объектов: больнице высокий, вокзалу средний, парку низкий.",
+              "Дать парку приоритет выше вокзала и больницы.",
+              "Установить всем классам одинаковый приоритет.",
+              "Приоритеты: больница > вокзал > парк; разрешить конфликты. Нижние подписи могут сдвигаться или сниматься; показ больницы не гарантирован."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "ea16ac6f8927a8e7d605b454712915a52b2458d8a2185b1a82ea23dd552d5738",
+          "independentAssessment": "Medium по точному контракту: игрок вне темы может сузить выбор, отвергнув обратные/равные приоритеты, но для различения 0 и3 требуется тематическое знание feature weight против label priority. Это два реальных механизма контроля конфликтов, а не заведомо абсурдные варианты. Знакомый с engine скорее выберет priority; многошаговые вычисления не требуются.",
+          "sourceGrounds": [
+            "label L16–22 versus L27–28",
+            "label L28; direct comparison to prompt",
+            "label L27–28; direct comparison to prompt",
+            "label L7, L25–28"
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Задайте приоритет классов «больница → вокзал → парк» и оставьте стандартное разрешение конфликтов. Приоритет задаёт очередность размещения, но не гарантирует видимость даже больничной подписи. Нижестоящая конфликтующая подпись может переместиться или исчезнуть; движок также меняет размещение при зуме и панорамировании.",
+          "canonicalSHA256": "34b8d9313d3eed83d74f3beae0876d12eb2ad632754e63f778fd0ff871658153",
+          "independentAssessment": "Приоритет задаёт порядок, «generally placed before» не означает гарантированную видимость; lower-priority conflicting labels can move/remove. Стандартный режим resolves conflicts without overlap; pan/zoom adjustments подтверждены. Теперь нет противоречивого требования обязательно сохранить больницу.",
+          "sourceGrounds": [
+            "label L7,L26,L28"
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Weight — конфликт с объектом.",
+          "canonicalSHA256": "751a079ba04de0a545fae1c7b1050407b4a1f8c1019078c19468b4e11aa7f4ce",
+          "independentAssessment": "Краткая русско-английская запись понятна в контексте вопроса. Точно различает label-feature от label-label; не утверждает, что конфликт происходит между двумя объектами.",
+          "sourceGrounds": [
+            "label L16–22 versus L27–28"
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Это обратный порядок важности.",
+          "canonicalSHA256": "8e411a04cbae325ee21b5fb6db54260a976e88cffb6c71b2f606928a3cb6716b",
+          "independentAssessment": "Точна: именно парк поставлен выше обоих, вопреки prompt.",
+          "sourceGrounds": [
+            "label L28; direct comparison to prompt"
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Равный ранг не задаёт порядок.",
+          "canonicalSHA256": "4e8ce8ee21d18f848c7a21788d720a5df1f497c5f6fc03cc679a9caf2708af05",
+          "independentAssessment": "«Не задаёт порядок» относится к порядку важности этих трёх классов; не утверждает отсутствие технического tie-break или любого фактического порядка размещения. Полезное объяснение ошибки равных рангов.",
+          "sourceGrounds": [
+            "label L27–28; direct comparison to prompt"
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "При зуме движок меняет позиции.",
+          "canonicalSHA256": "638fde29318c17519e8145f8ee88a8088dd63989acac55d32aae1c58d1e7cb5d",
+          "independentAssessment": "Source прямо говорит, что при pan/zoom engine adjusts labels. Утверждение описывает динамический пересчёт позиций, не обещает, что при каждом изменении zoom каждая подпись обязательно сдвинется. Полезный новый факт: размещение динамическое, а не фиксируется навсегда рангом.",
+          "sourceGrounds": [
+            "label L7, L25–28"
+          ]
+        }
+      ],
+      "fourFullPromptVariants": [
+        {
+          "id": "maps-cartography-label-placement",
+          "slot": 0,
+          "fullPrompt": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+          "answer": "Задать веса объектов: больнице высокий, вокзалу средний, парку низкий.",
+          "note": "Weight — конфликт с объектом.",
+          "bindingCanonicalSHA256": "76f6f15cfaef2e26e13f06395658115b5733aedf2df25f24f3036a9ba12fdaea",
+          "grammarAssessment": "Три согласованных значения веса; «объектов» определяет технический тип параметра.",
+          "plausibilityAssessment": "Главный содержательный distractor: weight тоже выглядит как важность, но у engine иной тип конфликта.",
+          "truthUniqueKeyAssessment": "Feature weights относятся к наложению подписи на объект, не задают очередность классов подписей между собой.",
+          "noteLiteralAccuracyAndUsefulness": "Краткая русско-английская запись понятна в контексте вопроса. Точно различает label-feature от label-label; не утверждает, что конфликт происходит между двумя объектами.",
+          "sourceGrounds": "label L16–22 versus L27–28"
+        },
+        {
+          "id": "maps-cartography-label-placement",
+          "slot": 1,
+          "fullPrompt": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+          "answer": "Дать парку приоритет выше вокзала и больницы.",
+          "note": "Это обратный порядок важности.",
+          "bindingCanonicalSHA256": "d05e4897725fe563a48701477b5d4a571bf3ebdc37f23def7ca4b4c423768c49",
+          "grammarAssessment": "Грамматически полный ответ.",
+          "plausibilityAssessment": "Реальная настройка, но намеренно перевёрнутая иерархия; позволяет разумно сузить выбор.",
+          "truthUniqueKeyAssessment": "Противоречит больница>вокзал>парк.",
+          "noteLiteralAccuracyAndUsefulness": "Точна: именно парк поставлен выше обоих, вопреки prompt.",
+          "sourceGrounds": "label L28; direct comparison to prompt"
+        },
+        {
+          "id": "maps-cartography-label-placement",
+          "slot": 2,
+          "fullPrompt": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+          "answer": "Установить всем классам одинаковый приоритет.",
+          "note": "Равный ранг не задаёт порядок.",
+          "bindingCanonicalSHA256": "122b4437f6c1ce73335b1d22169b009dee327e46acb0e4773952692f3613ba37",
+          "grammarAssessment": "Грамматика и термин класса согласованы с prompt.",
+          "plausibilityAssessment": "Реальный режим без выраженной иерархии.",
+          "truthUniqueKeyAssessment": "Не задаёт требуемую разницу приоритетов.",
+          "noteLiteralAccuracyAndUsefulness": "«Не задаёт порядок» относится к порядку важности этих трёх классов; не утверждает отсутствие технического tie-break или любого фактического порядка размещения. Полезное объяснение ошибки равных рангов.",
+          "sourceGrounds": "label L27–28; direct comparison to prompt"
+        },
+        {
+          "id": "maps-cartography-label-placement",
+          "slot": 3,
+          "fullPrompt": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+          "answer": "Приоритеты: больница > вокзал > парк; разрешить конфликты. Нижние подписи могут сдвигаться или сниматься; показ больницы не гарантирован.",
+          "note": "При зуме движок меняет позиции.",
+          "bindingCanonicalSHA256": "ffa8fee8e61fb7ee261dfaa730c70ef30bfd6f7228c66e5d5c3c9dbd2f15f368",
+          "grammarAssessment": "Телеграфная запись приоритетов понятна; «нижние» в этом контексте означает низкоприоритетные.",
+          "plausibilityAssessment": "Совмещает нужную иерархию с нормальной стратегией обработки коллизий.",
+          "truthUniqueKeyAssessment": "Ключ3 уникален. «Разрешить конфликты» в русском здесь значит разрешать/устранять коллизии стандартным механизмом, а не разрешить перекрытия. Это подтверждают следующая фраза про сдвиг/снятие и explanation «оставьте стандартное разрешение конфликтов». Place overlapping labels не требуется и не выбран.",
+          "noteLiteralAccuracyAndUsefulness": "Source прямо говорит, что при pan/zoom engine adjusts labels. Утверждение описывает динамический пересчёт позиций, не обещает, что при каждом изменении zoom каждая подпись обязательно сдвинется. Полезный новый факт: размещение динамическое, а не фиксируется навсегда рангом.",
+          "sourceGrounds": "label L7, L25–28"
+        }
+      ],
+      "difficultyAssessment": {
+        "status": "PASS",
+        "reason": "Medium по точному контракту: игрок вне темы может сузить выбор, отвергнув обратные/равные приоритеты, но для различения 0 и3 требуется тематическое знание feature weight против label priority. Это два реальных механизма контроля конфликтов, а не заведомо абсурдные варианты. Знакомый с engine скорее выберет priority; многошаговые вычисления не требуются."
+      },
+      "frozen": {
+        "difficulty": "medium",
+        "correctIndex": 3,
+        "preserved": true
+      },
+      "correctNoteExtraFact": {
+        "literal": "При зуме движок меняет позиции.",
+        "beyondPromptAndKey": true,
+        "alsoAppearsInExplanation": false,
+        "status": "PASS",
+        "accuracyUsefulnessAssessment": "Source прямо говорит, что при pan/zoom engine adjusts labels. Утверждение описывает динамический пересчёт позиций, не обещает, что при каждом изменении zoom каждая подпись обязательно сдвинется. Полезный новый факт: размещение динамическое, а не фиксируется навсегда рангом.",
+        "requirementApplied": "additional fact beyond prompt/key; no invented demand for advanced note or numerical calculation"
+      },
+      "residualDefects": []
+    }
+  ],
+  "sourcesIndex": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence-cycle1/primary-index.json",
+  "peersIndex": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence-cycle1/full-current-peers.json",
+  "bidirectionalPeerChecks": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence-cycle1/full-final-pairs-and-current-peer-checks.json",
+  "difficultyContract": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence-cycle1/difficulty-contract.json",
+  "exactBindings": {
+    "currentCardsMatchApply": true,
+    "groups18MatchApply": true,
+    "variants12MatchApply": true,
+    "all3RawSourceHashesAndFullReaderTextHashesVerified": true,
+    "all3MatchFinalAuthorCandidate": true
+  },
+  "authorQAOrRootVerdictsInherited": false,
+  "actionsNotPerformed": [
+    "catalog changes",
+    "Git/index",
+    "planning/claims",
+    "tests",
+    "runtime/build/deploy",
+    "new chat",
+    "subagent",
+    "HTTP refetch"
+  ],
+  "nextAction": {
+    "owner": "root coordinator",
+    "action": "Bind PASS92/PASS95 and adjudicate terminal HOLD93; do not commission a second cycle for this packet. Preserve this independent receipt/evidence in Git before archive.",
+    "reasonForHold": "Frozen medium mismatch remains in93; factual arithmetic and source notes are valid."
+  },
+  "resources": {
+    "noOwnRunningProcesses": true,
+    "temporaryFilesOrCachesCreated": false,
+    "evidenceKeptForRootBinding": true,
+    "archiveBeforeRootPreservation": false
+  },
+  "evidenceManifest": [
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence-cycle1/difficulty-contract.json",
+      "bytes": 3572,
+      "rawReadBytesSHA256": "3bfc11e2816005c5bf87abaef178e1007df5dcd8a613361e5a8d8151a76175ef"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence-cycle1/full-current-peers.json",
+      "bytes": 29291,
+      "rawReadBytesSHA256": "d2d4543e0a21301113f9682e01cfe72c695cc0cc6413ce677e4239bf309b1528"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence-cycle1/full-final-pairs-and-current-peer-checks.json",
+      "bytes": 43687,
+      "rawReadBytesSHA256": "08ff16580ed9df93c219da4585e08d52dc097cd7f7e37967dbc8638157bd6f6a"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence-cycle1/primary-index.json",
+      "bytes": 5364,
+      "rawReadBytesSHA256": "08387cea73ac72a943dc05c43b3ce97159c62d50ab9385d66294380ff13f3754"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/apply-cycle1three.json",
+      "bytes": 53565,
+      "rawReadBytesSHA256": "8d9c844c99a1587294488538420a405caa24b17a0d4e1cb7e0b43e3ee90e0271"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author-cycle1-01a13e5e/final/candidate.json",
+      "bytes": 18784,
+      "rawReadBytesSHA256": "da8208ed13943686feb6638d8623b24119e6d4adc436930e3f34947d2b392688"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author-cycle1-01a13e5e/final/sourceproof.json",
+      "bytes": 31168,
+      "rawReadBytesSHA256": "8bb1762f99d98e69838775ff5be96e9bf198399ffd326e81e676d380ff9368bd"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author-cycle1-01a13e5e/final/peer-snapshot.json",
+      "bytes": 62637,
+      "rawReadBytesSHA256": "ff4f1d32fff56f2cc9557f4d36b41726d919bb872d499112a6754236726eee88"
+    }
+  ],
+  "verification": "3 current cards re-read unchanged at completion; 18 canonical group hashes and 12 exact literal variant bindings independently recomputed. No tests/runtime launched."
+}

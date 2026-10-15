@@ -1,0 +1,231 @@
+{
+  "terminalHOLD93": [
+    {
+      "id": "maps-cartography-classification-groups",
+      "sourceOrder": 93,
+      "status": "HOLD",
+      "card": {
+        "id": "maps-cartography-classification-groups",
+        "difficulty": "medium",
+        "prompt": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+        "answers": [
+          {
+            "text": "0–10, >10–30, >30–60 и >60–80 °C.",
+            "note": "Ширины интервалов различны."
+          },
+          {
+            "text": "Поставить границы по квартилям, уравняв число станций.",
+            "note": "Квантили уравнивают число записей."
+          },
+          {
+            "text": "Задать вручную пороги 0, 18, 42, 65 и 80 °C.",
+            "note": "Ручные границы произвольны."
+          },
+          {
+            "text": "0–20, >20–40, >40–60 и >60–80 °C.",
+            "note": "Jenks группирует близкие значения."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Размах значений равен 80 °C; разделив его на четыре класса, получаем ширину 20 °C. Поэтому границы идут через 20: 0, 20, 40, 60 и 80. Метод Jenks, в отличие от этого расчёта, ищет естественные группы похожих значений.",
+        "source": {
+          "title": "Data classification methods | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.0/help/mapping/layer-properties/data-classification-methods.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "canonicalCardSHA256": "687128d09162548a67218b5512c3e94f673ae6ecc84288890d5a9154f5aa4ff5",
+      "sixLiteralCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+            "answers": [
+              "0–10, >10–30, >30–60 и >60–80 °C.",
+              "Поставить границы по квартилям, уравняв число станций.",
+              "Задать вручную пороги 0, 18, 42, 65 и 80 °C.",
+              "0–20, >20–40, >40–60 и >60–80 °C."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "e8d674292aecd5b569d0a665e09cc0df4f69ccb62c1201ae2aa55be9424821d4",
+          "independentAssessment": "Residual terminal difficulty defect: все необходимые данные для выбора уже заданы простым условием «четыре одинаковой ширины» и границами 0..80. Вариант0 даёт 10/20/30/20, вариант2 — 18/24/23/15, вариант3 — 20/20/20/20. Игрок вне картографии получает ключ обычным вычитанием/делением 80/4, не нуждаясь в понимании классификации или температурных станций. Наличие реального слова «квартиль» в одном варианте не делает оставшийся выбор существенно труднее для outsider. Это не требование добавлять расчёт: наоборот, данный расчёт слишком общеизвестен для topic-dependent medium.",
+          "sourceGrounds": [
+            "class L17; elementary arithmetic 10,20,30,20",
+            "class L19–22",
+            "class L12–13, L17; arithmetic 18,24,23,15",
+            "class L23–26"
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Размах значений равен 80 °C; разделив его на четыре класса, получаем ширину 20 °C. Поэтому границы идут через 20: 0, 20, 40, 60 и 80. Метод Jenks, в отличие от этого расчёта, ищет естественные группы похожих значений.",
+          "canonicalSHA256": "32f9b145950ee565cabb8900e393d7f62163e29dc2f8f3e2012e7233dc2022bf",
+          "independentAssessment": "80/4=20 и перечисленные границы верны. Jenks действительно ищет natural groups. Объяснение не исправляет residual difficulty: верная арифметика доступна outsider.",
+          "sourceGrounds": [
+            "class L17,L24; arithmetic"
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Ширины интервалов различны.",
+          "canonicalSHA256": "9ee5cc438d7bc41bbea6846035bb43b383995c2e01cc8d166c4038837e179a1d",
+          "independentAssessment": "Точна: коротко указывает конкретный тип ошибки; численные ширины можно проверить прямо из варианта.",
+          "sourceGrounds": [
+            "class L17; elementary arithmetic 10,20,30,20"
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Квантили уравнивают число записей.",
+          "canonicalSHA256": "de05cd273c0f1b7b6e9de384415b51a735f710063a228cc221f55d0961ad8359",
+          "independentAssessment": "Точна: квантили делят записи по численности. Полезно отделяет число наблюдений от ширины диапазона.",
+          "sourceGrounds": [
+            "class L19–22"
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Ручные границы произвольны.",
+          "canonicalSHA256": "98af3b22b0843c4cc4d4afb5e6f53a5ca7daa01d07f5e029e6309aa5cbd9dc26",
+          "independentAssessment": "«Произвольны» означает задаются пользователем, не случайны. Source Manual interval подтверждает custom ranges; заметка верна, хотя не называет конкретные четыре ширины.",
+          "sourceGrounds": [
+            "class L12–13, L17; arithmetic 18,24,23,15"
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "Jenks группирует близкие значения.",
+          "canonicalSHA256": "640d996fe4c7c03f87a57dd35a792de9c6d1356351d37f10e8063600083be271",
+          "independentAssessment": "Jenks действительно best groups similar values; дополнительный метод не назван ни в prompt, ни в ключе. Факт краток, содержателен и полезен как сравнение классификаций.",
+          "sourceGrounds": [
+            "class L23–26"
+          ]
+        }
+      ],
+      "fourFullPromptVariants": [
+        {
+          "id": "maps-cartography-classification-groups",
+          "slot": 0,
+          "fullPrompt": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+          "answer": "0–10, >10–30, >30–60 и >60–80 °C.",
+          "note": "Ширины интервалов различны.",
+          "bindingCanonicalSHA256": "600df1ef62d5b681a229b7f080818aa70046e7d23fc7e88ca25376df28352259",
+          "grammarAssessment": "Запись четырёх последовательных неперекрывающихся интервалов понятна; > отличает открытую нижнюю границу.",
+          "plausibilityAssessment": "Четыре класса покрывают весь диапазон, но легко проверяются по ширине.",
+          "truthUniqueKeyAssessment": "Ширины 10,20,30,20; условие равной ширины не выполнено.",
+          "noteLiteralAccuracyAndUsefulness": "Точна: коротко указывает конкретный тип ошибки; численные ширины можно проверить прямо из варианта.",
+          "sourceGrounds": "class L17; elementary arithmetic 10,20,30,20"
+        },
+        {
+          "id": "maps-cartography-classification-groups",
+          "slot": 1,
+          "fullPrompt": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+          "answer": "Поставить границы по квартилям, уравняв число станций.",
+          "note": "Квантили уравнивают число записей.",
+          "bindingCanonicalSHA256": "8c23e093d4261a0130a51eed9bf53244f4cc50c4bf68e32a9e3b03b43e712fd1",
+          "grammarAssessment": "Формулировка действия грамматически корректна, но по форме это метод вместо набора числовых границ.",
+          "plausibilityAssessment": "Реальный соседний метод, уравнивающий другую величину — численность.",
+          "truthUniqueKeyAssessment": "Не гарантирует равную ширину при неизвестном распределении; совпадение при особом распределении не превращает его в правило требуемых границ.",
+          "noteLiteralAccuracyAndUsefulness": "Точна: квантили делят записи по численности. Полезно отделяет число наблюдений от ширины диапазона.",
+          "sourceGrounds": "class L19–22"
+        },
+        {
+          "id": "maps-cartography-classification-groups",
+          "slot": 2,
+          "fullPrompt": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+          "answer": "Задать вручную пороги 0, 18, 42, 65 и 80 °C.",
+          "note": "Ручные границы произвольны.",
+          "bindingCanonicalSHA256": "bfbe7ad8f59726cdb4aa4f4652dc80439fb888233a1f4d89758a0373b697bbce",
+          "grammarAssessment": "Фраза с перечислением пяти порогов корректна.",
+          "plausibilityAssessment": "В отличие от INITIAL перечислены точные ручные пороги, поэтому этот вариант теперь можно строго проверить.",
+          "truthUniqueKeyAssessment": "Разности 18,24,23,15, не равные 20; отвергается независимо от возможности ручного метода вообще.",
+          "noteLiteralAccuracyAndUsefulness": "«Произвольны» означает задаются пользователем, не случайны. Source Manual interval подтверждает custom ranges; заметка верна, хотя не называет конкретные четыре ширины.",
+          "sourceGrounds": "class L12–13, L17; arithmetic 18,24,23,15"
+        },
+        {
+          "id": "maps-cartography-classification-groups",
+          "slot": 3,
+          "fullPrompt": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+          "answer": "0–20, >20–40, >40–60 и >60–80 °C.",
+          "note": "Jenks группирует близкие значения.",
+          "bindingCanonicalSHA256": "4525d13559570908fda53a63d4d3186512c1a5ed303604625ed38f1f9c2a68e1",
+          "grammarAssessment": "Та же понятная запись, что у первого варианта.",
+          "plausibilityAssessment": "Единственный числовой набор с одинаковой шириной.",
+          "truthUniqueKeyAssessment": "Ширины 20,20,20,20; диапазон покрыт, границы не дублируют наблюдения. Ключ3 уникален для требуемого набора.",
+          "noteLiteralAccuracyAndUsefulness": "Jenks действительно best groups similar values; дополнительный метод не назван ни в prompt, ни в ключе. Факт краток, содержателен и полезен как сравнение классификаций.",
+          "sourceGrounds": "class L23–26"
+        }
+      ],
+      "difficultyAssessment": {
+        "status": "HOLD",
+        "reason": "Residual terminal difficulty defect: все необходимые данные для выбора уже заданы простым условием «четыре одинаковой ширины» и границами 0..80. Вариант0 даёт 10/20/30/20, вариант2 — 18/24/23/15, вариант3 — 20/20/20/20. Игрок вне картографии получает ключ обычным вычитанием/делением 80/4, не нуждаясь в понимании классификации или температурных станций. Наличие реального слова «квартиль» в одном варианте не делает оставшийся выбор существенно труднее для outsider. Это не требование добавлять расчёт: наоборот, данный расчёт слишком общеизвестен для topic-dependent medium."
+      },
+      "frozen": {
+        "difficulty": "medium",
+        "correctIndex": 3,
+        "preserved": true
+      },
+      "correctNoteExtraFact": {
+        "literal": "Jenks группирует близкие значения.",
+        "beyondPromptAndKey": true,
+        "alsoAppearsInExplanation": true,
+        "status": "PASS",
+        "accuracyUsefulnessAssessment": "Jenks действительно best groups similar values; дополнительный метод не назван ни в prompt, ни в ключе. Факт краток, содержателен и полезен как сравнение классификаций.",
+        "requirementApplied": "additional fact beyond prompt/key; no invented demand for advanced note or numerical calculation"
+      },
+      "residualDefects": [
+        {
+          "code": "FROZEN_MEDIUM_NOT_MET",
+          "severity": "terminal HOLD",
+          "claim": "Residual terminal difficulty defect: все необходимые данные для выбора уже заданы простым условием «четыре одинаковой ширины» и границами 0..80. Вариант0 даёт 10/20/30/20, вариант2 — 18/24/23/15, вариант3 — 20/20/20/20. Игрок вне картографии получает ключ обычным вычитанием/делением 80/4, не нуждаясь в понимании классификации или температурных станций. Наличие реального слова «квартиль» в одном варианте не делает оставшийся выбор существенно труднее для outsider. Это не требование добавлять расчёт: наоборот, данный расчёт слишком общеизвестен для topic-dependent medium.",
+          "notARequestForCycle2": true
+        }
+      ]
+    }
+  ],
+  "verified": {
+    "reader18groups12variants": true,
+    "authorApplyReaderFullcard": true,
+    "fullPrimaryBodyReaderBytes": true,
+    "actualRelevantPeers": true
+  },
+  "QA": {
+    "commit": "9ffef4b0fcd5d07c83f5dbd120083f9d8d2404eb",
+    "passed": 19,
+    "failed": 0,
+    "pending": 0,
+    "sourceBytesUnchanged": true
+  },
+  "owner": "01a13e5e-e7e9-7f33-8165-57a15db42e1c",
+  "at": "2026-10-15T09:16:48.844052+00:00",
+  "accepted": [
+    {
+      "questionId": "maps-cartography-generalization-select",
+      "cardCanonicalSha256": "c37a62874f8507a2b99b52be4153d0894b02d7044873b559c55422895015db0c",
+      "authorNativeId": "01a13ec5-e0f7-7e32-8179-2749ad143ad4",
+      "authorReceipt": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author-cycle1-01a13e5e/final/sourceproof.json",
+      "authorFreeze": "1b19d154b0663dff8ec71d0c41645492037b26f5",
+      "readerNativeId": "01a13ead-5dc9-7842-aca6-b0b4bb96a183",
+      "independentReceipt": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/receipt-cycle1-current3-01a13e5e.json",
+      "readerReceiptRawSHA256": "27277aac86181478ac249e5359e511dc6bd189d50c06e73d3591794046c4d6d6",
+      "coordinatorDecision": "Accept exact FINALsolecycle1 CURRENT PASS after source/6groups/4variants/actualpeers/frozenlevel and correct-note newfact independentbinding; source implementation extra context separately judged byOTHER, not hashonlyquality."
+    },
+    {
+      "questionId": "maps-cartography-label-placement",
+      "cardCanonicalSha256": "421d676b174db341902fa65207016e090528ff4f07a88576fa29ba72a9a36428",
+      "authorNativeId": "01a13ec5-e0f7-7e32-8179-2749ad143ad4",
+      "authorReceipt": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author-cycle1-01a13e5e/final/sourceproof.json",
+      "authorFreeze": "1b19d154b0663dff8ec71d0c41645492037b26f5",
+      "readerNativeId": "01a13ead-5dc9-7842-aca6-b0b4bb96a183",
+      "independentReceipt": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/receipt-cycle1-current3-01a13e5e.json",
+      "readerReceiptRawSHA256": "27277aac86181478ac249e5359e511dc6bd189d50c06e73d3591794046c4d6d6",
+      "coordinatorDecision": "Accept exact FINALsolecycle1 CURRENT PASS after source/6groups/4variants/actualpeers/frozenlevel and correct-note newfact independentbinding; source implementation extra context separately judged byOTHER, not hashonlyquality."
+    }
+  ],
+  "newQualityCredit": 2,
+  "CURRENT": 699,
+  "remaining": 1301,
+  "mainIntegrated": false,
+  "fullGoalNotComplete": true
+}
