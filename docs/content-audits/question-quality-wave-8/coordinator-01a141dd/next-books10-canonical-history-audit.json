@@ -1,0 +1,141 @@
+{
+  "owner": "01a141dd-92a3-7ad3-a762-def3551bbda8",
+  "canonicalReceiptsExamined": 48,
+  "orders": [
+    5,
+    6,
+    53,
+    57,
+    62,
+    70,
+    71,
+    72,
+    86,
+    87
+  ],
+  "matchingHistoricalReviews": [
+    {
+      "sourceOrder": 6,
+      "id": "books-publishing-paperback-form",
+      "stage": "INITIAL",
+      "status": "FIX",
+      "receipt": "docs/content-audits/question-quality-wave-8/coordinator-01a13f31/independent-books8-initial/receipt.json",
+      "receiptRawSHA256": "ee7ab1e647fb38b5063e59734a9a6a136d6d28a00a17620f9c0d626fc110cf5a",
+      "reviewedHash": "47bac658f1537387b9aac3affec3d5d250b5f98821735b751ff084020dc15c1b",
+      "currentHash": "47bac658f1537387b9aac3affec3d5d250b5f98821735b751ff084020dc15c1b",
+      "defects": [
+        {
+          "code": "LABEL_SHORTCUT_DISTRACTORS",
+          "field": "prompt_ordered_answers_key",
+          "detail": "Три неверных варианта прямо названы твёрдыми, prompt требует не жёсткие крышки; key единственный со словом «мягкой». Незнающему не нужно различать способы переплёта.",
+          "action": "Один адресный цикл: сохранить key/level, переработать prompt/названия альтернатив, чтобы выбор не решался антонимами в ярлыках; перепроверить MAIN с actual5 и технологическими соседями."
+        }
+      ]
+    },
+    {
+      "sourceOrder": 5,
+      "id": "books-publishing-hardcover-form",
+      "stage": "FINAL",
+      "status": "HOLD",
+      "receipt": "docs/content-audits/question-quality-wave-8/coordinator-01a13f31/independent-books8-initial/final-cycle1-ready5/receipt.json",
+      "receiptRawSHA256": "da60ea446ed1d819ebef05fd8ee5336e402e10d5302b99a15c2b4ae7828ed15f",
+      "reviewedHash": "3bbd6845bc0a8e5f645e6f1fd64650066a84c7bfc5c214d39f17624dcc342222",
+      "currentHash": "3bbd6845bc0a8e5f645e6f1fd64650066a84c7bfc5c214d39f17624dcc342222",
+      "defects": [
+        {
+          "code": "FINAL_PHYSICAL_JACKET_WITH_DIGITAL_DISTRACTORS",
+          "field": "prompt_ordered_answers_key",
+          "detail": "E-book и audiobook как форматы не имеют собственной физической суперобложки. Это два очевидно невозможных ответа на заявленное физическое свойство, вместо четырёх правдоподобных вариантов.",
+          "nextOwner": "coordinator",
+          "nextAction": "HOLD0 после solecycle1; без автоматического cycle2."
+        },
+        {
+          "code": "FINAL_COMPANY_OFFERING_NOT_BROAD_EASY",
+          "field": "prompt_ordered_answers_key",
+          "detail": "IngramSpark product offering — конкретная профессиональная информация; SOURCE не показал широкую adult аудиторию, знающую её без предметного погружения. Исключение цифровых форматов не доказывает подходящий уровень.",
+          "nextOwner": "coordinator",
+          "nextAction": "Фиксировать нерешённую калибровку с точным CURRENT hash."
+        }
+      ]
+    },
+    {
+      "sourceOrder": 62,
+      "id": "books-publishing-revised-edition",
+      "stage": "INITIAL",
+      "status": "FIX",
+      "receipt": "docs/content-audits/question-quality-wave-8/coordinator-01a14018/independent-editions61-64-scroll69-sourceaf-initial/receipt.json",
+      "receiptRawSHA256": "1966a22e19df72f24b071a462ca5e06b822aef7ea0c715a7d51dc7787c6ea49d",
+      "reviewedHash": "0145d429f1d48ad2fc90bb8623a27ca0cfd5ad40fa05e0a21214ff76c48f84e0",
+      "currentHash": "a59e86a3ef4b837f54add44318d038f16adb0f18a133f834ddf0ff7e6465e0e4",
+      "defects": [
+        {
+          "field": "difficulty/prompt-tested-knowledge",
+          "issue": "Updating/reworking is an ordinary-language synonym selection. Actual question does not ask whether named revision changes edition designation or how unchanged impression is handled. SOURCE cites a distinction absent from literal. Frozen difficulty is MEDIUM; actual EASY is not a pass.",
+          "directedFix": "One addressed cycle: make the named-revision versus wholly new-edition/unchanged-impression distinction actually necessary in the question, within primary scope. Preserve ID/order/key0/MEDIUM, true own-option notes and extra beyond revised prompt.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/process-v2-books-remaining10-source2-01a14018/author/sources/dcrmr-named-revision-edition.html",
+              "url": "https://bsc.rbms.info/DCRMR/edition/Designation-of-named-revision-of-edition/",
+              "locator": "Full DCRMR3.24 body read:3.24.2.1/3.24.21.1 update of named edition not enough for entirely new edition;3.24.3 transcription and First American edition revised-from-British example;3.24.32 default unchanged-impression omission and alternative separate-description examples (First edition/fourth printing etc);3.24.33 multilingual order."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/process-v2-books51-70-01a14018/author/source-completion/remaining16/sources/dcrmr-glossary.html",
+              "url": "https://bsc.rbms.info/DCRMR/glossary/",
+              "locator": "Full saved DCRMR glossary body personally read, not just facsimile search hit. Edition=same composition/master; impression=one printing event; issue planned group; state/variant conditions; item=single exemplar; expression/manifestation/work; facsimile exact copy usually same dimensions, often photographically/digitally today, historically engraving/printmaking; leaf/signature/gathering/letterpress context."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/process-v2-books-remaining10-fresh-source-01a14018/author/sources/british-library-critical-edition-example.html",
+              "url": "https://searcharchives.bl.uk/catalog/032-004343520",
+              "locator": "Complete retained BL Or16490 record read including full TEI Contents/physical description/history: present manuscript is early13th/20th-century critical edition with numerous variants and marginal annotations, produced from11manuscripts, editor unknown; red variants/black definitions,1919Iran colophon. It is a manuscript example, not a universal claim all critical editions are printed or use11witnesses."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceOrder": 62,
+      "id": "books-publishing-revised-edition",
+      "stage": "FINAL",
+      "status": "HOLD",
+      "receipt": "docs/content-audits/question-quality-wave-8/coordinator-01a14103/independent-editions4-sourcefb-final/receipt.json",
+      "receiptRawSHA256": "38be9a1902c53d81c45cb4b1f5e3bddf5a9485ff890ac77be688331f4906e5e5",
+      "reviewedHash": "a59e86a3ef4b837f54add44318d038f16adb0f18a133f834ddf0ff7e6465e0e4",
+      "currentHash": "a59e86a3ef4b837f54add44318d038f16adb0f18a133f834ddf0ff7e6465e0e4",
+      "defects": [
+        {
+          "field": "difficulty/prompt-tested-knowledge",
+          "issue": "Требуется точная специальная альтернативная процедура rare-material cataloging3.24.32.2: unchanged impression при отдельной записи и имеющемся edition записывают в поле named revision. Это не вывод из обычного знания обновлённого издания и не регулярное знание широкой книжно-издательской аудитории. По действующему guide точная экспертная деталь — HARD; frozen MEDIUM не достигнут.",
+          "owner": "Координатор01a14103; новый SOURCE/новое решение вне завершённого обычного cycle1.",
+          "nextNewSourceOrSolution": "Сохранить HOLD0. Нужен новый авторский маршрут с реальным MEDIUM-различием из книгоиздательской практики вместо точной специальной альтернативы rare-book cataloging; либо отдельное явное решение о смене frozen уровня. Сейчас не переименовывать HARD в MEDIUM и не запускать второй обычный цикл.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/process-v2-books-remaining10-source2-01a14018/author/sources/dcrmr-named-revision-edition.html",
+              "url": "https://bsc.rbms.info/DCRMR/edition/Designation-of-named-revision-of-edition/",
+              "locator": "Полный body DCRMR3.24 лично перечитан: определение/scope3.24.2/.21, обновление недостаточно для entirely new edition;3.24.3 corrected and improved и first American edition;3.24.32.1 обычное опускание substantially unchanged impression с возможным item note;3.24.32.2 отдельное описание + имеющееся designation edition → named revision, при отсутствии edition → designation edition; все First edition/fourth printing,1st-50th,fifth thousand,First Ace/third printing примеры;3.24.32.3 number line и3.24.33 языковые правила."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a14018/independent-editions61-64-scroll69-sourceaf-initial/dcrmr322-complete-official-output.json",
+              "url": "https://bsc.rbms.info/DCRMR/edition/Designation-of-edition/",
+              "locator": "Полный сохранённый официальный DCRMR3.22 output L152–254 лично прочитан ранее и перечитан в FINAL:3.22.32.1 ручная печать обычно новое edition/issue;3.22.32.2 машинная/гравировальная печать скорее новый impression того же edition; примеры second impression/Third impression of first edition;3.22.33 default/alternative отдельного описания;3.22.35 number-line и3.22.36 многоязычные обозначения. Оговорки usually/more likely сохранены."
+            }
+          ]
+        },
+        {
+          "field": "orderedAnswers/parallel-language",
+          "issue": "Варианты смешивают названия полей и инструкции; explanation/notes используют необъяснённые английские названия DCRMR. Сам перевод или форматирование не исправят основной HARD/MEDIUM разрыв.",
+          "owner": "Координатор нового решения; не дополнительный обычный цикл этого пакета.",
+          "nextNewSourceOrSolution": "При новом решении дать параллельные читаемые русские варианты и оставить ровно необходимые термины, затем заново проверить аудиторию/один ключ.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/process-v2-books-remaining10-source2-01a14018/author/sources/dcrmr-named-revision-edition.html",
+              "url": "https://bsc.rbms.info/DCRMR/edition/Designation-of-named-revision-of-edition/",
+              "locator": "Полный body DCRMR3.24 лично перечитан: определение/scope3.24.2/.21, обновление недостаточно для entirely new edition;3.24.3 corrected and improved и first American edition;3.24.32.1 обычное опускание substantially unchanged impression с возможным item note;3.24.32.2 отдельное описание + имеющееся designation edition → named revision, при отсутствии edition → designation edition; все First edition/fourth printing,1st-50th,fifth thousand,First Ace/third printing примеры;3.24.32.3 number line и3.24.33 языковые правила."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "routingCorrection": "Handoff terminalHOLDlist45/62/69 omittedolderFINALHOLD5. 5mustnotresetasINITIAL;6INITIALFIXrequiressoleaddressedcycle1/FINAL, notfreshINITIAL. 62alreadyexplicitnewconcreteroute officialISBN; allhistoryimmutable. Others7no canonicalexactreceiptfound, notclaimglobalabsenceoutsidecanonicalreceiptformat.",
+  "qualityCredit": 0
+}
