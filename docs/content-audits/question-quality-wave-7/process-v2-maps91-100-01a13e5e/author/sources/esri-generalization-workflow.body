@@ -1,0 +1,632 @@
+
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>  <html class="ie lt-ie9 lt-ie8 lt-ie7 ie6" dir="ltr"> <![endif]-->
+<!--[if IE 7]>     <html class="ie lt-ie9 lt-ie8 ie7" dir="ltr"> <![endif]-->
+<!--[if IE 8]>     <html class="ie lt-ie9 ie8" dir="ltr"> <![endif]-->
+<!--[if IE 9]>     <html class="ie ie9" dir="ltr"> <![endif]-->
+<!--[if !IE]><!--> <html dir="ltr" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>Automating conflict resolution and generalization workflows with geoprocessing&mdash;ArcGIS Pro | Documentation</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <script>
+      var appOverviewURL = "/content/esri-sites/en-us/arcgis/products/arcgis-pro/overview";
+    </script>
+
+    <script>
+      var docConfig = {
+        locale: 'en'
+        ,localedir: 'en'
+        ,langSelector: ''
+        
+        ,relativeUrl: false
+        
+
+        ,searchformUrl: '/search/'
+        ,tertiaryNavIndex: '3'
+
+        
+      };
+    </script>
+	 
+
+
+    
+    <!--[if lt IE 9]>
+      <script src="/cdn/js/libs/html5shiv.js" type="text/javascript"></script>
+      <script src="/cdn/js/libs/selectivizr-min.js" type="text/javascript"></script>
+      <script src="/cdn/js/libs/json2.js" type="text/javascript"></script>
+      <script src="/cdn/js/libs/html5shiv-printshiv.js" type="text/javascript" >
+
+    <![endif]-->
+
+     <!--[if lt IE 11]>
+    <script>
+      $$(document).ready(function(){
+        $$(".hideOnIE").hide();
+      });
+    </script>
+    <![endif]-->
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<link href="/assets/img/favicon.ico" rel="shortcut icon" >
+	<link href="/assets/css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="/cdn/calcite/css/documentation.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="/assets/css/print.css" media="print" type="text/css" rel="stylesheet" />
+
+	<!--
+	<link href="/assets/css/screen_l10n.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="/assets/css/documentation/base_l10n.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="/assets/css/print_l10n.css" media="print" type="text/css" rel="stylesheet" />
+	-->
+	<script src="/cdn/js/libs/latest/jquery.latest.min.js" type="text/javascript"></script>
+    <script src="/cdn/js/libs/latest/jquery-migrate-latest.min.js" type="text/javascript"></script>
+	<script src="/cdn/js/libs/jquery.cookie.js" type="text/javascript"></script>
+	<link href="/cdn/css/colorbox.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="/cdn/css/colorbox_l10n.css" media="screen" rel="stylesheet" type="text/css" />
+	<script src="/cdn/js/libs/jquery.colorbox-min.js" type="text/javascript"></script>
+	<script src="/assets/js/video-init.js" type="text/javascript"></script>
+	<script src="/assets/js/sitecfg.js" type="text/javascript"></script>
+	
+		<script src="/assets/js/signIn.js" type="text/javascript"></script>
+	
+	
+
+	<!--- Language Picker -->
+	<script src="/assets/js/locale/l10NStrings.js" type="text/javascript"></script>
+	
+		<script src="/assets/js/locale/langSelector.js" type="text/javascript"></script>
+	
+
+	<script src="/assets/js/calcite-web.js" type="text/javascript"></script>
+
+
+
+  <!--- search MD -->
+    <META name="description" content="The geoprocessing  tools of the Graphic Conflicts and Generalization toolsets in the Cartography toolbox can be combined into common workflows that prepare data for display at a smaller scale."><META name="last-modified" content="2025-10-13"><META name="product" content="arcgis-pro"><META name="version" content="pro3.6"><META name="search-collection" content="help"><META name="search-category" content="help-general"><META name="subject" content="MAPPING"><META name="sub_category" content="ArcGIS Pro"><META name="content_type" content="Tool Reference"><META name="subject_label" content="MAPPING"><META name="sub_category_label" content="ArcGIS Pro"><META name="content_type_label" content="Tool Reference"><META name="content-language" content="en">
+    <!--- search MD -->
+      
+    <!-- Add in Global Nav -->
+    <link rel="stylesheet" href="//webapps-cdn.esri.com/CDN/components/global-nav/css/gn.css" />
+    <!--<script src="//webapps-cdn.esri.com/CDN/components/global-nav/test_data.js"></script>-->
+    <script src="//webapps-cdn.esri.com/CDN/components/global-nav/js/gn.js"></script>
+    <!-- End Add in Global Nav -->
+
+</head>
+
+<!--
+      pub: GUID-D4A34D31-F7BC-4B3C-B7AB-51216A2D0CBC=46
+      tpc: GUID-2C010E24-6FF5-4EE5-B93F-91883CECB951=4
+      help-ids: []
+      -->
+
+
+<!-- variable declaration, if any -->
+
+<body class="claro en pro esrilocalnav">
+  <!-- Secondary nav -->
+  <script>
+     insertCss(_esriAEMHost+"/etc.clientlibs/esri-sites/components/content/local-navigation/clientlibs.css")
+     insertElem("div", "local-navigation", '<nav id="second-nav" navtype="existingNavigation" domain="'+_esriAEMHost+'" path="'+appOverviewURL+'"></nav>' )
+  </script>
+
+  
+<!-- End of drawer -->
+
+  
+  <div class="wrapper">
+      <!--googleoff: all-->
+
+
+      <div id="skip-to-content">
+        <!--googleoff: all-->
+        <div class="search">
+        <div class="esri-search-box">
+          <div class="search-component">
+            <form id="helpSearchForm">
+              <input class="esri-search-textfield leader" name="q" placeholder="Search ArcGIS Pro help" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Search ArcGIS Pro help">
+  <input type="hidden" name="collection" value="help" />
+  <input type="hidden" name="product" value="arcgis-pro" />
+  <input type="hidden" name="version" value="pro3.6" />
+  <input type="hidden" name="language" value="en" />
+  <button class="esri-search-button-submit" type="submit" aria-label="Search"></button>
+            </form>
+          </div>
+        </div>
+      </div>
+        <!--googleon: all-->
+       
+        <!-- content goes here -->
+        <div class="grid-container ">
+          
+
+            
+              
+  <!--BREADCRUMB-BEG--><div id="bigmac" class="sticky-breadcrumbs trailer-2" data-spy="affix" data-offset-top="180"> </div><!--BREADCRUMB-END-->
+  <!--googleoff: all-->
+    <div class="column-5 tablet-column-12 trailer-2 ">
+      <aside class="js-accordion accordion reference-index" aria-live="polite" role="tablist">
+        <div></div>
+      </aside>
+
+      <div class="js-sticky scroll-show tablet-hide leader-1 back-to-top" data-top="0" style="top: 0px;">
+        <a href="#" class="btn btn-fill btn-clear">Back to Top</a>
+      </div>
+    </div>
+  <!--googleon: all-->
+  
+            
+            
+            
+	
+		<div class="column-13  pre-1 content-section">
+	
+		<header class="trailer-1"><h1>Automating conflict resolution and generalization workflows with geoprocessing</h1></header>
+
+		 
+	<!--googleoff: all-->
+	
+		
+				<aside id="main-toc-small" class="js-accordion accordion tablet-show trailer-1">
+			      <div class="accordion-section">
+			        <h4 class="accordion-title">In this topic</h4>
+			        <div class="accordion-content list-plain">
+			          <ol class="list-plain pre-0 trailer-0"><li><a href="#ESRI_SECTION1_DD2D205FD601468AA6F1734C07591696">Combining generalization tasks into cartographic workflows</a></li><li><a href="#ESRI_SECTION1_65DA46C7F1B24A4DB726215F6410F192">Chaining generalization tools in <ph varid="Modelbuilder_win">ModelBuilder</ph></a></li><li><a href="#ESRI_SECTION1_0145B7CF908644D7B6CDFE696CF1A237">Sample Python script to prepare data for display at a smaller scale</a></li></ol>
+			        </div>
+			      </div>
+			     </aside>
+		
+    
+   <!--googleon: all-->
+
+
+		<main>
+			
+	
+    	
+    
+
+
+			
+
+
+<p id="GUID-DB44382F-2D8C-41F7-8BB2-C2EFF48CD32F">Generalizing data involves many repetitive, labor-intensive tasks, so it is an ideal candidate for automation. However, the contextual and subjective nature of generalization makes it difficult to automate. The human brain is adept at prioritizing and making contextual concessions simultaneously. It is much more difficult to instruct a computer to do this with a series of discrete commands.</p><p id="GUID-05CCF3D0-714B-44AC-B0A0-87AC03DBBF06">The geoprocessing environment in ArcGIS is well suited to establishing a generalization framework, since it can manage the transformation of data in distinct, isolated steps directed by data-, scale-, and product-specific variables. These steps can be logically chained together or even looped in scripts or models to create a complex workflow that can be applied to a range of data to produce multiscaled databases for print or screen display. Tasks can be easily  repeated sequentially  on different groups of features  or with different parameters combined in a variety of ways.  Entire workflows can be automated, or they can be subdivided into smaller pieces with manual editing or verification taking place in between.</p><section class="section1 padded-anchor" id="ESRI_SECTION1_DD2D205FD601468AA6F1734C07591696" purpose="section1"><h2>Combining generalization tasks into cartographic workflows</h2><p id="GUID-7D1C1B4E-6601-47E0-A604-FF4D6B8BA15B">The process of making a map at a smaller scale than that for which the data was intended begins with an understanding of the target scale; the display specifications, including symbology; and the underlying purpose or intent of the map. Next, operations are performed to reduce the overall number of features without impacting the connectivity or character of the dataset. The complexity of individual features is then reduced by removing vertices or other feature details. This may also include simplifying complexity within the feature attributes by combining similar subcategories of features for display with the same symbol. Once map authoring begins and the data is displayed with its final symbology at the final scale, graphical conflicts can be detected and resolved. </p><p id="GUID-FD1DAA23-A3AB-4E18-A0BC-285F1F075EAB">The following flowchart shows a simplified version of a generalization workflow and identifies some key tools from the <a class="xref xref" href="/en/pro-app/3.6/tool-reference/cartography/an-overview-of-the-cartography-toolbox.htm">Cartography toolbox</a> that can assist in generalizing data for display at a smaller scale. <figure class="fig" href="#"><img src="GUID-A3FD545E-98C8-45F9-A1C9-EB9B44CB5C5D-web.png" alt="Diagram of the generalization workflow" title="Diagram of the generalization workflow" loading="lazy"><figcaption class="fig-caption">A simplified view is shown of the processes and corresponding geoprocessing tools used to generalize data for cartographic display.</figcaption></figure></p><p ishcondition="product_filter=pro" id="GUID-D589F420-5EE4-4172-9DA2-71D04153AF1D">It is important to understand that most geoprocessing tools typically generate new data as an output that can then be used as input for subsequent tools. In contrast to this, cartographers typically follow a workflow that is characterized by incremental improvement of feature layers that are already established in a map document. Symbology, layer properties, and masking relationships are already defined, so it follows that it is preferable to modify input layers as conflict resolution and generalization operations are performed so as not to lose this information. For this reason, some of the tools in the  Cartography toolbox modify input data in symbolized layers rather than creating data.  </p></section>
+<section class="section1 padded-anchor" id="ESRI_SECTION1_65DA46C7F1B24A4DB726215F6410F192" purpose="section1"><h2>Chaining generalization tools in <span class="ph">ModelBuilder</span></h2><p id="GUID-5622CEE7-45B5-4AC8-82F9-DD61E9E90E68">Generalization tools make use of multivalue inputs—that is, a list of one or more feature classes.  Many geoprocessing tools accept multiple values (such as the <span purpose="gptoolref">Union</span> tool), but generalization tools are different in that they also output multivalues.   This requires that you be aware of a few <span class="ph">ModelBuilder</span> techniques to produce the model you want.   These techniques are discussed below.</p><section class="section2 padded-anchor" id="ESRI_SECTION2_B32C9378063D48928B6C5EA90F94D36A" purpose="section2"><h3>Chaining tools with multiple inputs and outputs</h3><p id="GUID-B8FAA531-C191-44AE-97AD-81EEA3279A8F">The <span purpose="gptoolref"><a class="xref xref" href="/en/pro-app/3.6/tool-reference/cartography/thin-road-network.htm">Thin Road Network</a></span>, <span purpose="gptoolref">Resolve Road Conflicts</span>, and <span purpose="gptoolref">Resolve Building Conflicts</span> tools output multivalues.   This means that only tools that accept multivalue inputs can use the output of these tools directly. For example, if three layers are used as inputs to the <span purpose="gptoolref">Thin Road Network</span> tool, and you want to use these same three layers as inputs into the <span purpose="gptoolref">Resolve Road Conflict</span> tool after they have been thinned, you can chain the output of the <span purpose="gptoolref">Thin Road Network</span> tool directly to the <span purpose="gptoolref">Resolve Road Conflicts</span> tool.<figure class="fig" href="#"><img src="GUID-7AD47270-6AD8-4071-8154-ED3437C6E1D5-web.png" alt="Model containing multiple inputs for generalization" title="Model containing multiple inputs for generalization" loading="lazy"><figcaption class="fig-caption">Multiple inputs are chained through the Thin Road Network tool to the Resolve Road Conflicts tool.</figcaption></figure></p><p id="GUID-EBA77880-53DC-4250-A233-3A56D66C8FD3"> You can use the <span purpose="gptoolref"><a class="xref xref" esrisubtype="extrel" hrefpfx="/en/pro-app/3.6/tool-reference" href="/en/pro-app/3.6/tool-reference/modelbuilder-toolbox/collect-values.htm">Collect Values</a></span> tool to add more layers to a multivalue.  The example below shows adding two more layers to the output of <span purpose="gptoolref">Thin Road Network</span> to create the input to <span purpose="gptoolref">Resolve Road Conflicts</span>.<figure class="fig" href="#"><img src="GUID-35522A66-F017-4A30-BB9A-DB35D2B41348-web.png" alt="Model using the Collect Values tool" title="Model using the Collect Values tool" loading="lazy"><figcaption class="fig-caption">This model uses the Collect Values tool to add  additional inputs to the multivalue output from the Thin Road Network tool before chaining to the Resolve Road Conflicts tool.</figcaption></figure></p></section><section class="section2 padded-anchor" id="ESRI_SECTION2_EDAE895A67FB43A8B69D8916DC67C849" purpose="section2"><h3>Chaining multiple outputs to a single input</h3><p id="GUID-E12CBB37-318B-499B-BF55-ECAF2831F31B">  To chain tools that have a multivalue output to a tool that accepts a single input,  use the <span purpose="gptoolref"><a class="xref xref" esrisubtype="extrel" hrefpfx="/en/pro-app/3.6/tool-reference" href="/en/pro-app/3.6/tool-reference/data-management/append.htm">Append</a></span> tool to merge multiple feature
+classes. An example of this workflow is appending
+multiple road input layers that were processed by the <span purpose="gptoolref">Thin Road Network</span> tool to use as an input to the <span purpose="gptoolref"><a class="xref xref" href="/en/pro-app/3.6/tool-reference/cartography/merge-divided-roads.htm">Merge Divided Roads</a></span> tool, which accepts only a single input.<figure class="fig" href="#"><img src="GUID-4F328851-5418-4712-BD17-4302FCC28776-web.png" alt="Model using the Append tool" title="Model using the Append tool" loading="lazy"><figcaption class="fig-caption">This model uses the Append tool to combine multiple outputs into a single input.</figcaption></figure></p></section><section class="section2 padded-anchor" id="ESRI_SECTION2_B45D01723EF547C3A54E066B5AA69C25" purpose="section2"><h3>Chaining multiple inputs individually</h3><p id="GUID-5762BEB3-999B-4F5E-A6DE-45E7605B5890">In some cases, you want to pass multiple outputs from a tool individually to another tool. This would be the case if you didn't want all the outputs from the first tool to participate in the second tool, or if you wanted to set specific parameters for each input in the second tool.  For example, the <span purpose="gptoolref">Resolve Building Conflicts</span> tool allows  full control over the way each input layer is defined  as a barrier. In these cases, use the same set of layers as inputs to both tools, but set the output of the first tool as a precondition to the second tool to enforce the correct order of processing, as illustrated below. This approach is only applicable when the first tool, like  the <span purpose="gptoolref">Resolve Road Conflicts</span> tool, modifies input layers instead of creating new output layers.</p><p ishcondition="product_filter=pro" id="GUID-E71FDEED-31E7-4CAA-B9E6-1D56DB7F3FB3"><a class="xref xref" esrisubtype="extrel" hrefpfx="/en/pro-app/3.6/help/analysis/geoprocessing" href="/en/pro-app/3.6/help/analysis/geoprocessing/modelbuilder/using-preconditions.htm">Learn more about using preconditions in <span class="ph">ModelBuilder</span></a></p><p id="GUID-1E62DD07-211A-4F94-BF2B-D96124E3EC1B">In the example below, the three transportation layers are used as inputs to both tools. This is possible because these layers are modified by the <span purpose="gptoolref">Resolve Road Conflicts</span> tool; new output feature classes are not created. The output of the <span purpose="gptoolref">Resolve Road Conflicts</span> tool is used as a precondition to the processing of the <span purpose="gptoolref">Resolve Building Conflicts</span> tool to ensure that the <span purpose="gptoolref">Resolve Road Conflicts</span> tool completes processing before the <span purpose="gptoolref">Resolve Building Conflicts</span> tool begins. <figure class="fig" href="#"><img src="GUID-589EFBA7-9233-4ADB-9B83-7EF24E3A2E7B-web.png" alt="Model that uses a precondition" title="Model that uses a precondition" loading="lazy"><figcaption class="fig-caption">The output of the Resolve Road Conflicts tool is set as a precondition to the Resolve Building Conflicts tool to enforce processing order.</figcaption></figure></p></section><section class="section2 padded-anchor" id="ESRI_SECTION2_5C67504A8EFB4EF5B77EB3BA61A2C89C" purpose="section2"><h3>Symbolized inputs</h3><p id="GUID-FA406532-0001-40EC-BFEF-0241F858F5EF">  To chain tools that only accept symbolized layers, you will need to use the <span purpose="gptoolref"><a class="xref xref" esrisubtype="extrel" hrefpfx="/en/pro-app/3.6/tool-reference" href="/en/pro-app/3.6/tool-reference/data-management/make-feature-layer.htm">Make Feature Layer</a></span>  tool and the <span purpose="gptoolref"><a class="xref xref" esrisubtype="extrel" hrefpfx="/en/pro-app/3.6/tool-reference" href="/en/pro-app/3.6/tool-reference/data-management/apply-symbology-from-layer.htm">Apply Symbology From Layer</a></span> tool to prepare an output layer for chaining purposes in <span class="ph">ModelBuilder</span> as well as in scripting environments. <figure class="fig" href="#"><img src="GUID-D52CB978-2275-415E-8DF3-D030C5F4A5DE-web.png" alt="Model with a symbolized layer as an input" title="Model with a symbolized layer as an input" loading="lazy"><figcaption class="fig-caption">The model uses the Make Feature Layer tool and the Apply Symbology From Layer tool to pass symbol information between tools.</figcaption></figure></p></section></section><section class="section1 padded-anchor" id="ESRI_SECTION1_0145B7CF908644D7B6CDFE696CF1A237" purpose="section1"><h2>Sample Python script to prepare data for display at a smaller scale</h2><section class="codeblock padded-anchor" purpose="codeblock">Cartography toolbox workflow example (stand-alone script)
+<div class="codeblockdesc" purpose="codeblockdesc"><p id="GUID-E3A37A2F-9F7E-4C69-B798-B59028087B73">This stand-alone script goes through a sample workflow using a number of tools from the Cartography toolbox to generalize 1:25,000-scale data and resolve graphical conflicts to display at 1:50,000 scale.</p></div><div class="codeblockbody"><pre><code class="python"># Name: cartography_workflow_script.py
+# Description: Process features in order to resolve graphic conflicts when
+# changing scales from 25K to 50K.
+#
+# Tools used = Aggregate Polygons, Align Marker To Stroke Or Fill, Apply
+#              Symbology From Layer, Create Overpass, Create Underpass, Calculate
+#              Line Caps, Eliminate Polygon Part, Make Feature Layer, Merge
+#              Divided Roads, Propagate Displacement, Resolve Building Conflicts
+#              Resolve Road Conflicts, Select, Select Layer By Attribute, Set
+#              Control Point At Intersect, Set Control Point By Angle, Simplify 
+#              Building, Simplify Line, Simplify Polygon, Smooth Line, Smooth 
+#              Polygon, Thin Road Network
+# Minimum ArcGIS Pro version = 2.1
+#
+# The geodatabase used in this workflow is assumed to be in c:\data
+# - please replace this path to your machine specific folder.
+
+
+# Import system modules
+import arcpy
+
+# Start the processing
+arcpy.env.workspace = &quot;C:/data/cartography.gdb&quot;
+
+# The data was captured at a scale of 1:24000, and this workflow will produce
+# data appropriate for a scale of 1:50000.
+# Most of the geoprocessing tools in this workflow require a reference scale
+arcpy.env.referenceScale = &quot;50000&quot;
+arcpy.env.cartographicCoordinateSystem = &quot;&quot;
+
+###############
+# HYDROGRAPHY #
+###############
+
+# A subset of linear features (rivers/streams) will be processed
+# for simplification and smoothing
+# A subset of polygonal features (reservoirs/lakes) will be processed
+# for simplification and smoothing
+
+# The workspace is set to the hydrography feature dataset
+arcpy.env.workspace = &quot;C:/data/cartography.gdb/hydrography&quot;
+
+# Linear hydrographic features
+arcpy.management.MakeFeatureLayer(&quot;streamnetwork&quot;, &quot;streamlayer&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;)
+
+# A selection is made for features which are rivers/streams
+arcpy.management.SelectLayerByAttribute(&quot;streamlayer&quot;, &quot;NEW_SELECTION&quot;,
+                                        '&quot;FCsubtype&quot; = 1')
+
+# In order to reduce the complexity from the streams, vertices are removed using
+# the Simplify Line tool
+arcpy.cartography.SimplifyLine(&quot;streamlayer&quot;, &quot;streams_simplified&quot;,
+                               &quot;BEND_SIMPLIFY&quot;, &quot;100 meters&quot;, &quot;RESOLVE_ERRORS&quot;)
+
+# In order to reduce the amount or severity of sharp angles, Smooth Line is used
+# to improve the shape of the streams
+arcpy.cartography.SmoothLine(&quot;streams_simplified&quot;, &quot;streams&quot;,
+                             &quot;BEZIER_INTERPOLATION&quot;, &quot;#&quot;, &quot;0&quot;, 'FLAG_ERRORS')
+
+# Some of the processed features are intermittent rivers or streams and are
+# symbolized as dashed lines. The dashes can be centered around corners to 
+# improve the look of the features. The corners are identified as vertices which 
+# will be flagged as control points. Symbology from an existing layer containing
+# dashed line symbols is then applied. 
+
+# A new feature layer is created from the streams data to be used as input 
+# when setting control points. 
+arcpy.management.MakeFeatureLayer(&quot;streams&quot;, &quot;streamslayer&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;)
+
+# Dashed line symbology from an existing layer is applied to the new streams 
+# feature layer 
+arcpy.management.ApplySymbologyFromLayer(&quot;streamslayer&quot;,
+                                         &quot;C:/data/stream_symbols.lyrx&quot;)
+
+# The dashes in the stream symbol will be placed at control points created
+# anywhere an angle is less than (or equal to) 130 degrees.
+arcpy.cartography.SetControlPointByAngle(&quot;streamslayer&quot;, &quot;130&quot;)
+
+# Polygonal hydrographic features
+# A selection is made to create a new feature class for reservoirs.
+arcpy.analysis.Select(&quot;openwater&quot;, &quot;reservoirs&quot;, '&quot;FCsubtype&quot; = 4')
+
+# A selection is made to create a separate feature class for processing in order
+# to generate lakes.
+arcpy.analysis.Select(&quot;openwater&quot;, &quot;water_select&quot;, '&quot;FCsubtype&quot; &lt;&gt; 4')
+
+# In order to reduce the complexity from the lakes, vertices are removed using
+# the Simplify Line tool.
+arcpy.cartography.SimplifyPolygon(&quot;water_select&quot;, &quot;water_simplified&quot;, 
+                                  &quot;BEND_SIMPLIFY&quot;, &quot;100 meters&quot;, &quot;0&quot;,
+                                  &quot;RESOLVE_ERRORS&quot;)
+
+# In order to reduce the amount (or severity) of sharp angles, Smooth Line is
+# used to improve the shape of the lakes.
+arcpy.cartography.SmoothPolygon(&quot;water_simplified&quot;, &quot;lakes&quot;,
+                                &quot;BEZIER_INTERPOLATION&quot;, &quot;0&quot;, &quot;&quot;, &quot;FLAG_ERRORS&quot;)
+
+
+#############
+# RAILROADS #
+#############
+
+# Set the workspace to the transportation feature dataset
+arcpy.env.workspace = &quot;C:/data/cartography.gdb/transportation&quot;
+# In order to reduce the complexity from the railroads, vertices are removed 
+# using the Simplify Line tool.
+arcpy.cartography.SimplifyLine(&quot;railnetwork&quot;, &quot;rail_simplified&quot;,
+                               &quot;BEND_SIMPLIFY&quot;, &quot;100 meters&quot;, &quot;RESOLVE_ERRORS&quot;)
+
+# The Merge Divided Roads tool requires symbolized features, so a feature layer
+# is created using the simplified rail features, and then pre-made symbology is 
+# applied from an existing feature layer.
+
+# A feature layer is created from the simplified rail features. 
+arcpy.management.MakeFeatureLayer(&quot;rail_simplified&quot;, &quot;railwaylayer&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;)
+
+# Apply the symbology from an existing layer
+arcpy.management.ApplySymbologyFromLayer(&quot;railwaylayer&quot;,
+                                         &quot;C:/data/rail_symbols.lyrx&quot;)
+
+# The Merge Divided Roads tool will be used to generates single line railroad
+# features in place of multiple divided railroad lanes.
+arcpy.cartography.MergeDividedRoads(&quot;railwaylayer&quot;, &quot;level&quot;, &quot;25 Meters&quot;,
+                                    &quot;railways&quot;)
+
+# Symbolized features are required when adding control points, so a new feature
+# layer is created from the output of the MergeDivvidedRoads tool.
+arcpy.management.MakeFeatureLayer(&quot;railways&quot;, &quot;railwayslayer&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;)
+
+# Pre-made railway symbology from an existing layer is applied to the 
+# new railway feature layer.
+arcpy.management.ApplySymbologyFromLayer(&quot;railwayslayer&quot;, 
+                                         &quot;C:/data/rail_symbols.lyrx&quot;)
+
+# The tick marks in railroad symbol (markers) will be placed at control points
+# created anywhere an angle is less than (or equal to) 130 degrees.
+arcpy.cartography.SetControlPointByAngle(&quot;railwayslayer&quot;, &quot;130&quot;)
+
+
+###########
+# LANDUSE #
+###########
+
+# Set the workspace to the landuse feature dataset
+arcpy.env.workspace = &quot;C:/data/cartography.gdb/landuse&quot;
+# The polygons which represent landcover have holes in them where buildings are
+# located. The holes need to be removed so they will not appear after buildings
+# have moved. In this example, any hole which is less than 50 percent of the 
+# feature's area will be removed.
+arcpy.management.EliminatePolygonPart(&quot;cultural&quot;, &quot;urban_area&quot;, &quot;PERCENT&quot;, &quot;0&quot;,
+                                      &quot;50&quot;, &quot;CONTAINED_ONLY&quot;)
+
+
+##############
+# BOUNDARIES #
+##############
+
+# The boundary features have dashed outlines which are not in phase with each
+# other on shared edges between features. To make the dashed outlines in phase
+# with each other, control points are added wherever features 
+# share coincident vertices.
+arcpy.cartography.SetControlPointAtIntersect(&quot;C:/data/boundaries.lyrx&quot;, 
+                                             &quot;C:/data/boundaries.lyrx&quot;)
+
+
+#########
+# ROADS #
+#########
+
+# Set the workspace to the transportation feature dataset
+arcpy.env.workspace = &quot;C:/data/cartography.gdb/transportation&quot;
+# Linear features
+
+# Roads which are dead ends (or cul-de-sacs) should have their Line ending
+# property set to BUTT.
+arcpy.cartography.CalculateLineCaps(&quot;C:/data/road_symbols.lyrx&quot;, &quot;BUTT&quot;,
+                                    &quot;CASED_LINE_DANGLE&quot;)
+
+# Thin Road Network identifies a subset of road segments that can be removed from
+# the display to create a simplified road network that retains the connectivity 
+# and general character of the input collection. Features are flagged for removal
+# when their attribute value in the &quot;invisible&quot; field equals one. A layer
+# definition query can be used to display the resulting simplified feature class.
+arcpy.cartography.ThinRoadNetwork(&quot;roadnetwork&quot;, &quot;500 meters&quot;, &quot;invisible&quot;,
+                                  &quot;level&quot;)
+
+# The Merge Divided Roads tool will be used to generates single line road
+# features in place of multiple divided road lanes.
+arcpy.cartography.MergeDividedRoads(&quot;C:/data/road_symbols.lyrx&quot;, &quot;level&quot;,
+                                    &quot;25 meters&quot;, &quot;roads&quot;)
+
+# The Resolve Road Conflicts tool requires symbolized features, so a feature
+# layer is created from the roads features so that pre-made
+# symbology can the be applied to the new roads feature layer.
+arcpy.management.MakeFeatureLayer(&quot;roads&quot;, &quot;roadslayer&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;)
+
+# Pre-made symbology from an existing layer is applied to the roads feature 
+# layer.
+arcpy.management.ApplySymbologyFromLayer(&quot;roadslayer&quot;,
+                                         &quot;C:/data/road_symbols.lyrx&quot;)
+
+# The Resolve Road Conflicts tool does not produce output road layers but instead
+# alters the source feature classes of the input road layers. The Resolve Road
+# Conflicts tool adjusts line features to ensure that they are graphically
+# distinguishable when symbolized at output scale.
+arcpy.cartography.ResolveRoadConflicts(&quot;roadslayer&quot;,
+                                                   &quot;level&quot;,
+                                                   &quot;C:/data/cartography.gdb/buildings/displacement&quot;)
+
+# The dashes in the road symbols will be placed at control points created
+# anywhere an angle is less than (or equal to) 130 degrees.
+arcpy.cartography.SetControlPointByAngle(&quot;roadslayer&quot;, &quot;130&quot;)
+
+# Create bridges
+# The Create Overpass tool will create a bridge for the roads and a mask for the
+# streams wherever a road goes over a steam.
+arcpy.cartography.CreateOverpass(&quot;roadslayer&quot;, &quot;streamslayer&quot;, &quot;2 points&quot;,
+                                 &quot;1 points&quot;, &quot;over_mask_fc&quot;, &quot;over_mask_rc&quot;,
+                                 '&quot;BridgeCategory&quot; = 1', &quot;bridges&quot;,
+                                 &quot;ANGLED&quot;, &quot;1 points&quot;)
+
+# Create tunnels
+# The Create Overpass tool will create a tunnel for the railroads and a mask for
+# the railroads wherever a railroad goes under a road.
+arcpy.cartography.CreateUnderpass(&quot;roadslayer&quot;, &quot;railwayslayer&quot;, &quot;2 points&quot;,
+                                  &quot;1 points&quot;, &quot;under_mask_fc&quot;, &quot;under_mask_rc&quot;,
+                                  '&quot;RelationshipToSurface&quot; = 3', &quot;tunnels&quot;,
+                                  &quot;ANGLED&quot;, &quot;1 points&quot;)
+
+
+#############
+# BUILDINGS #
+#############
+
+# Set the workspace to the buildings feature dataset
+arcpy.env.workspace = &quot;C:/data/cartography.gdb/buildings&quot;
+# Point features
+
+# When the road features were adjusted by the Resolve Road Conflicts tool, the
+# spatial relationship with nearby buildings was affected. A displacement feature
+# class was created by that tool in order to record the change applied to the
+# roads. This information can be used by the Propagate Displacement tool to apply
+# the same change to the point buildings.
+
+# The road displacement is propagated to the point buildings
+arcpy.cartography.PropagateDisplacement(&quot;point_bldg&quot;, &quot;displacement&quot;, &quot;AUTO&quot;)
+
+# Point buildings will be rotated against nearby linear roads
+# The Align Markers To Stroke Or Fill tool can do this with symbolized features.
+
+# A feature layer is made for point buildings
+arcpy.management.MakeFeatureLayer(&quot;point_bldg&quot;, &quot;bldglayer&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;)
+
+# Symbology is applied from an existing layer.
+arcpy.management.ApplySymbologyFromLayer(&quot;bldglayer&quot;, 
+                                         &quot;C:/data/bldg_symbols.lyrx&quot;)
+
+# The Align Marker to Stroke Or Fill tool is used to align point buildings to
+# face road features within 5 points of the buildings
+arcpy.cartography.AlignMarkerToStrokeOrFill(&quot;bldglayer&quot;, &quot;roadslayer&quot;,
+                                            &quot;5 points&quot;, &quot;PERPENDICULAR&quot;)
+
+# Polgyonal features
+# When the road features were adjusted by the Resolve Road Conflicts tool, the
+# spatial relationship with nearby buildings was affected. A displacement
+# feature class was created by that tool in order to record the change applied
+# to the roads. This information can be used by the Propagate Displacement tool
+# to apply the same change to the polygonal buildings.
+
+# The road displacement is propagated to polygon buildings
+arcpy.cartography.PropagateDisplacement(&quot;footprints&quot;, &quot;displacement&quot;, &quot;SOLID&quot;)
+
+# A selection is made to create a feature class with buildings larger than
+# a minimum size
+# The small buildings are not appropriate at the new map scale of 1:50,000
+arcpy.analysis.Select(&quot;footprints&quot;, &quot;buildings_select&quot;, '&quot;Shape_Area&quot; &gt; 100')
+
+# There is a need to create better spacing between polygon buildings and combine
+# them when they share edges or are very close together
+# The Aggregate Polygons tool is used to accomplish this task
+arcpy.cartography.AggregatePolygons(&quot;buildings_select&quot;, &quot;large_buildings&quot;,
+                                    &quot;20 meters&quot;, &quot;&quot;, &quot;&quot;, &quot;ORTHOGONAL&quot;)
+
+# In order to reduce the complexity of the buildings, indentations, extensions
+# and extra vertices are removed using the Simplify Building tool.
+# Buildings require less visible detail at the new scale of 1:50,000.
+arcpy.cartography.SimplifyBuilding(&quot;large_buildings&quot;, &quot;area_bldg&quot;, &quot;20 meters&quot;,
+                                   &quot;0 unknown&quot;, &quot;CHECK_CONFLICTS&quot;)
+
+# All buildings require further improvements to achieve better spacing between
+# themselves and other nearby features. At the new scale of 1:50,000 the
+# symbolized buildings may overlap other features and create a visually congested
+# map. To improve the visual congestion, the Resolve Building Conflicts tool is
+# used. Buildings are improved in the context of their surrounding features.
+# These features are considered barriers to buildings. The Resolve Building
+# Conflicts tool requires symbolized features and has several options available
+# to improve the buildings. Options include: moving or resizing the buildings,
+# orienting or snapping the buildings to nearby features, as well as making the
+# buildings invisible. Buildings from multiple feature classes can be used as
+# inputs to the tool. Barriers from multiple feature classes can be used as
+# inputs to the tool. For each barrier, the option is available to specify a snap
+# or orient action for the buildings when they are within a specified distance.
+# For each barrier, the option is available to specify a minimum distance for
+# buildings to maintain between them.
+
+# A feature layer is made for the polygon buildings
+arcpy.management.MakeFeatureLayer(&quot;area_bldg&quot;, &quot;footprintlayer&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;)
+
+# Pre-made symbology is applied from an existing layer.
+arcpy.management.ApplySymbologyFromLayer(&quot;footprintlayer&quot;,
+                                         &quot;C:/data/footprint_symbols.lyrx&quot;)
+
+# The Resolve Building Conflicts tool is run with point and polygon buildings
+# against roads, streams and railroads. The buildings will be moved away from
+# streams and railroads until they reach a minimum distance. The buildings
+# within a maximum distance from the roads will be rotated. Further movement
+# and rotation may still be required by the tool in order to resolve any
+# remaining graphic conflict.
+arcpy.cartography.ResolveBuildingConflicts(&quot;footprintlayer; bldglayer&quot;, &quot;invisible&quot;,
+                                           &quot;'roadslayer' 'true' '5 meters';'streamslayer' 'false' '5 meters';'railwayslayer' 'false' '10 meters'&quot;,
+                                           &quot;10 meters&quot;, &quot;20 meters&quot;, &quot;level&quot;)</code></pre></div></section></section><section class="section2 leader-1" purpose="relatedtopics"><h4 class="trailer-0">Related topics</h4><ul class="pre-0 trailer-2"><li><a class="xref relatedtopic" href="/en/pro-app/3.6/tool-reference/cartography/understanding-conflict-resolution-and-generalization.htm">Understanding conflict resolution and generalization</a></li><li><a class="xref relatedtopic" href="/en/pro-app/3.6/tool-reference/cartography/an-overview-of-the-generalization-toolset.htm">An overview of the Generalization toolset</a></li><li><a class="xref relatedtopic" href="/en/pro-app/3.6/tool-reference/cartography/an-overview-of-the-graphic-conflicts-toolset.htm">An overview of the Graphic Conflicts toolset</a></li><li><a class="xref relatedtopic" href="/en/pro-app/3.6/tool-reference/cartography/generalizing-large-datasets-using-partitions.htm">Generalizing large datasets using partitions</a></li></ul></section>
+			
+				<hr>
+				<!--googleoff: all-->
+				
+	
+        
+		    <p class="feedback right">
+		        <a id="afb" class="icon-ui-contact" href="/feedback/" data-langlabel="feedback-on-this-topic" >Feedback on this topic?</a>
+		    </p>
+        
+	
+
+				<!--googleon: all-->
+			
+		</main>
+	</div>
+	
+	<!--googleoff: all-->
+	
+		
+			<div id="main-toc-large" class="column-5">
+			    <div class="panel font-size--2 tablet-hide trailer-1">
+			      <h5 class="trailer-half">In this topic</h5>
+			      <ol class="list-plain pre-0 trailer-0"><li><a href="#ESRI_SECTION1_DD2D205FD601468AA6F1734C07591696">Combining generalization tasks into cartographic workflows</a></li><li><a href="#ESRI_SECTION1_65DA46C7F1B24A4DB726215F6410F192">Chaining generalization tools in <ph varid="Modelbuilder_win">ModelBuilder</ph></a></li><li><a href="#ESRI_SECTION1_0145B7CF908644D7B6CDFE696CF1A237">Sample Python script to prepare data for display at a smaller scale</a></li></ol>
+			    </div>
+			    
+			    
+	  		</div>
+		
+    
+   <!--googleon: all-->
+
+
+
+
+          
+        </div>
+        <!-- ENDPAGECONTENT -->
+
+      </div>
+
+    </div>  <!-- End of wrapper -->
+
+    <div id="globalfooter"></div>
+
+  <!--googleoff: all-->
+
+  
+	<script src="/assets/js/init.js" type="text/javascript"></script>
+	<!--<script src="/assets/js/drop-down.js" type="text/javascript"></script>-->
+	<script src="/assets/js/search/searchform.js" type="text/javascript"></script>
+	<script src="/cdn/js/link-modifier.js" type="text/javascript"></script>
+	<script src="/cdn/js/sitewide.js" type="text/javascript"></script>
+	<script src="/cdn/js/libs/highlight.pack.js" type="text/javascript"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+    
+
+  <script src="/cdn/js/affix.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    $(function () {
+          var appendFlg = true;
+
+          $("#bigmac")
+          .on("affixed.bs.affix", function (evt) {
+            if (appendFlg) {
+              $("<a class='crumb' href='#'>Automating conflict resolution and generalization workflows with geoprocessing</a>").insertAfter ($("#bigmac nav a").last());
+              appendFlg = false;
+            }
+          })
+          .on ("affix-top.bs.affix", function(evt) {
+            if (!appendFlg) {
+              $("#bigmac nav a").last().remove();
+            }
+            appendFlg = true;
+          })
+    })
+  </script>
+  
+        <script type="text/javascript">
+          window.doctoc = {
+            pubID: "1490",
+            tpcID: "55",
+            
+            hideToc : false
+          }
+        </script>
+
+        <script type="text/javascript" src="/en/pro-app/3.6/tool-reference/main/1518.js" ></script>
+        <script type="text/javascript" src="/en/pro-app/3.6/tool-reference/cartography/1490.js" ></script>
+        <script type="text/javascript" src="/cdn/calcite/js/protoc.js" ></script>
+
+        
+
+  <noscript>
+        <p>
+            <a href="flisting.htm">flist</a>
+        </p>
+    </noscript>
+    
+	<script src="//mtags.arcgis.com/tags-min.js"></script>
+
+  
+  
+    
+    
+    <script>
+      document.write("<script src='" + _esriAEMHost+"/etc.clientlibs/esri-sites/clientlibs/localNav.js'><\/script>");
+    </script>
+
+  </body>
+</html>
