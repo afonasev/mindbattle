@@ -12,3 +12,30 @@
 - Фиксируй inline-замечания, доказательства, ресурсы и уборку в общем change. Не удаляй чужие worktree, ветки или процессы. Прерванную финализацию показывай в inbox.
 - После проверок и коммита фичи отправляй её ветку в `origin` и записывай удалённый ref/SHA в `remote_push`; только затем интегрируй. После интеграции отправляй `main` в `origin` и проверяй SHA. Удалённую ветку сохраняй до ручной приёмки, если пользователь явно не попросил иначе.
 - Предпочтения по моделям записаны в профиле, но явный выбор пользователя имеет приоритет и проектного pin нет.
+
+## Расположение planning после переноса 2026-10-15
+
+- Единственный planning root: `/Users/eaafonasev/Projects/mindbattle/planning`.
+  Store ID остаётся `mindbattle-planning`. `/planning/` исключён из Git кода;
+  внутри сохранён самостоятельный Git-репозиторий с отдельной историей, индексом
+  и незакоммиченным состоянием. Не добавляй его через `git add -f`, как submodule
+  или как вторую копию OpenSpec.
+- Во всех кодовых worktree используй этот общий абсолютный root. Относительный
+  `./planning` верен только в основном checkout. В старом worktree профиль может
+  ещё содержать прежний путь; сверяй его с актуальным профилем основного checkout
+  и регистрацией `openspec store list --json` до записи. Не создавай старый каталог
+  заново и не меняй чужой worktree без согласования с владельцем.
+- Команды: `openspec list --store mindbattle-planning`;
+  `python3 /Users/eaafonasev/Projects/mindbattle/tools/flow.py --root /Users/eaafonasev/Projects/mindbattle/planning inbox`;
+  `git -C /Users/eaafonasev/Projects/mindbattle/planning status --short`.
+  Для многофайловых изменений и коммитов сохраняется planning lease.
+- Исторические evidence, delivery records и отчёты могут содержать префикс
+  `/Users/eaafonasev/Projects/mindbattle-planning/`. При чтении такого пути
+  подставляй `/Users/eaafonasev/Projects/mindbattle/planning/`, сохраняя суффикс.
+  Содержимое исторических записей, статусы, claims и приёмку из-за переноса
+  не переписывай. Новые записи используют новый путь.
+- На другой машине восстанови отдельный planning-репозиторий в `<project>/planning`,
+  укажи фактические абсолютные пути в профиле и зарегистрируй его через
+  `openspec store register <project>/planning --id mindbattle-planning`.
+  Игнорирование в Git кода не сохраняет планы: их изменения коммить отдельно;
+  исходный code clone сам по себе planning-историю не содержит.
