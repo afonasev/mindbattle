@@ -1,0 +1,287 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "4bbbae7e0014fd476b7c1c08b2ea5697a503783f",
+  "canonicalization": "UTF-8 bytes of json.dumps(value, sort_keys=True, separators=(',',':'), ensure_ascii=False).",
+  "sourceRegister": [
+    {
+      "id": "orthographic",
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-orthographic.txt",
+      "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/orthographic.htm",
+      "rawBytes": 5017,
+      "rawSHA256": "73479d6077fa644b4b38c5c10e7790ffa5a0b81141c8ec4320b988df89a4debe",
+      "provenance": "saved full official primary context, read directly",
+      "sourceKind": "saved full official primary context, read directly",
+      "fullContext": true,
+      "locators": "L7 projection definition; L26 radial distortion; L39 one-hemisphere limit."
+    },
+    {
+      "id": "polygon",
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polygon.txt",
+      "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polygon-features.html",
+      "rawBytes": 12258,
+      "rawSHA256": "278c0dc39afd7a70738c6fd5829aed922f4bec84294b0859f277d399e75b347f",
+      "provenance": "saved full official primary context, read directly",
+      "sourceKind": "saved full official primary context, read directly",
+      "fullContext": true,
+      "locators": "L28 same-class overlap; L33 polygon overlap errors; L44 gap rule; L49 line gap errors; L59 different-class Overlap With."
+    },
+    {
+      "id": "polyline",
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/author/sources/esri-topology-polyline.txt",
+      "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+      "rawBytes": 17486,
+      "rawSHA256": "63e29a307704cf3cbe5a83ba1694f3a6208c82bf786478ca013d0d82a8103c5d",
+      "provenance": "saved full official primary context, read directly",
+      "sourceKind": "saved full official primary context, read directly",
+      "fullContext": true,
+      "locators": "L83 full Trim behavior including within-distance, no match, non-deletion, zero distance and skipped errors."
+    }
+  ],
+  "cards": [
+    {
+      "id": "maps-cartography-orthographic-space",
+      "proposedCardSHA256": "5c3ddc411aa8a0c6dc891cf492ee6a97d0a59375ffabce67cb3c904b39529041",
+      "sixLiteralGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На сфере точки заданы координатами (широта, восточная долгота): P=(0°,80°), Q=(0°,100°), R=(0°,170°). Центры ортографической проекции-кандидаты: A=(0°,75°), B=(0°,150°), C=(0°,110°), D=(0°,160°). Оставьте только центры, от которых все три точки не дальше 90°; затем среди них выберите центр с наименьшим искажением в P.",
+            "answers": [
+              "A=(0°,75°): расстояния 5°, 25° и 95°; центр не подходит.",
+              "B=(0°,150°): расстояния 70°, 50° и 20°; из допустимых центр ближе C к P.",
+              "C=(0°,110°): расстояния 30°, 10° и 60°; выбираем C.",
+              "D=(0°,160°): расстояния 80°, 60° и 10°; центр не лучший для P."
+            ],
+            "correctIndex": 2
+          },
+          "sha256": "a266021bfe61f6aba9035b73807979425df2fc8fbce96c8267992da1e272ccb6"
+        },
+        {
+          "group": "explanation",
+          "literal": "Поскольку все широты равны нулю, центральное угловое расстояние здесь равно меньшей разности долгот. Для A получаем 5°, 25° и 95°, поэтому он исключается; B, C и D проходят порог 90°. Их расстояния до P равны 70°, 30° и 80°, значит, минимум искажения у P даёт C.",
+          "sha256": "e66a312c2e972f3de922f43c6daa41ae40d889776c4408cd42547672fc704de0"
+        },
+        {
+          "group": "note0",
+          "literal": "Точка R удалена на 95°, поэтому A не показывает все данные в пределах одной полусферы.",
+          "sha256": "be3efba9efc79bc93596a8d8fd8bf09d4a81d1b8fab8c8da34cc7c9427d4e0b9"
+        },
+        {
+          "group": "note1",
+          "literal": "B проходит порог видимости, но до P — 70°; у C расстояние до P меньше.",
+          "sha256": "1207c9b11289032210e6b999cdae2a662c464a6a4b2a014beba0d1a4cf4c7e00"
+        },
+        {
+          "group": "note2",
+          "literal": "Ортографическая проекция искажает площади и углы; искажения быстро растут от центра к краям.",
+          "sha256": "40bab19d76484ce83c5b22a6f5c980fb381fb7da378e36caaf2ecd8acd16a1d9"
+        },
+        {
+          "group": "note3",
+          "literal": "D проходит порог, но P удалена на 80° — дальше, чем от C на 30°.",
+          "sha256": "06f57bf0f9d7d4a8cbd352522bd1879eaf9a7d231f7163f8056629e9b2213aa3"
+        }
+      ],
+      "groupAssessments": {
+        "prompt_ordered_answers_key": "Final wording creates the stated computation; primary locator: L7 projection definition; L26 radial distortion; L39 one-hemisphere limit.",
+        "explanation": "Final explanation checks all data and results; primary locator: L7 projection definition; L26 radial distortion; L39 one-hemisphere limit."
+      },
+      "fourSubstitutions": [
+        {
+          "slot": 0,
+          "finalText": "A=(0°,75°): расстояния 5°, 25° и 95°; центр не подходит.",
+          "finalNote": "Точка R удалена на 95°, поэтому A не показывает все данные в пределах одной полусферы.",
+          "assessment": "Грамматика: тот же шаблон координатного плана, что и остальные слоты. Правдоподобно: A всего в 5° от P. Единственный ключ: расстояние до R равно 95° и нарушает фильтр. Заметка называет конкретное превышение."
+        },
+        {
+          "slot": 1,
+          "finalText": "B=(0°,150°): расстояния 70°, 50° и 20°; из допустимых центр ближе C к P.",
+          "finalNote": "B проходит порог видимости, но до P — 70°; у C расстояние до P меньше.",
+          "assessment": "Грамматика: параллельное предложение с координатами и расстояниями. Правдоподобно: B проходит порог для всех точек. Ключ не проходит второй этап: 70° до P против 30° у C. Заметка объясняет оптимизацию."
+        },
+        {
+          "slot": 2,
+          "finalText": "C=(0°,110°): расстояния 30°, 10° и 60°; выбираем C.",
+          "finalNote": "Ортографическая проекция искажает площади и углы; искажения быстро растут от центра к краям.",
+          "assessment": "Грамматика: тот же план координат и рассчитанных расстояний. Ключ уникален: C проходит фильтр с 30° до P, меньше B=70° и D=80°. Заметка добавляет подтверждённое Esri свойство: проекция не сохраняет площади и углы, искажение растёт от центра радиально (L26)."
+        },
+        {
+          "slot": 3,
+          "finalText": "D=(0°,160°): расстояния 80°, 60° и 10°; центр не лучший для P.",
+          "finalNote": "D проходит порог, но P удалена на 80° — дальше, чем от C на 30°.",
+          "assessment": "Грамматика: тот же числовой шаблон. Правдоподобно: D близок к R. Ключ неверен, поскольку 80° до P больше 30° у C. Заметка сравнивает конкретные расстояния."
+        }
+      ],
+      "absoluteHARD": {
+        "status": "author-assessed-HARD",
+        "reason": "Resolve 12 center-to-point angular comparisons (4 candidates × 3 points), remove the 95° candidate, then compare P distances among the remaining three.",
+        "independentReaderMustVerify": "Solve exact final card unaided and confirm complexity merits frozen HARD."
+      },
+      "correctNoteAdditionalFact": "Esri says orthographic is neither conformal nor equal-area; distortion increases radially from origin (source L26), an additional projection property."
+    },
+    {
+      "id": "maps-cartography-sliver-polygon",
+      "proposedCardSHA256": "2af9f9650cbcf0fe72434d08933f4a7097e58a73a2143c756a7e88b8b5175b70",
+      "sixLiteralGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Два полигона одного класса целиком лежат внутри замкнутой маски площадью 100 км². Их площади — 60 и 45 км², площадь объединения — 94 км². Рассчитайте отдельно площадь незаполненной части маски и площадь пересечения полигонов, затем выберите правила для выявления обеих ошибок.",
+            "answers": [
+              "Пустота 6 км², пересечение 5 км²; Must Not Have Gaps + Must Not Overlap.",
+              "Пустота 0 км², пересечение 11 км²; только Must Not Overlap.",
+              "Пустота 6 км², пересечение 11 км²; Must Not Have Gaps + Must Not Overlap.",
+              "Пустота 11 км², пересечение 6 км²; Must Not Have Gaps + Must Not Overlap With."
+            ],
+            "correctIndex": 2
+          },
+          "sha256": "58dd78b07cf1a31066965ffc04e1b35d3dffb8a638b0c309259d888ca07d3111"
+        },
+        {
+          "group": "explanation",
+          "literal": "Незаполненная часть маски равна 100−94=6 км². Пересечение равно 60+45−94=11 км² по формуле включения–исключения, поэтому нужны оба правила: Must Not Have Gaps для пустоты и Must Not Overlap для пересечения полигонов одного класса.",
+          "sha256": "cd5d216e2940e33d420d11556080334d3ca9289bcca99e68a2de398aa4127dee"
+        },
+        {
+          "group": "note0",
+          "literal": "Пересечение по включению–исключению равно 60+45−94; число 5 — лишь превышение суммы над площадью маски.",
+          "sha256": "874a58a58e1f68ed3fe85fb415c27a9c100c5d8dba84c0e865ce896115a305c7"
+        },
+        {
+          "group": "note1",
+          "literal": "Объединение 94 км² оставляет незаполненную часть маски площадью 6 км².",
+          "sha256": "b83c32651ae9b8dc2814cc4f8cae80a091f912a81dde829f0a4f7f5a44298281"
+        },
+        {
+          "group": "note2",
+          "literal": "Esri показывает ошибку Must Not Have Gaps контуром пустоты как линейную ошибку; пересечение даёт полигонную ошибку.",
+          "sha256": "b3bfa745a61a2891213fb4d362fcdac86b1616fb5d1e8da42127f48280c69602"
+        },
+        {
+          "group": "note3",
+          "literal": "Must Not Overlap With относится к разным классам или подтипам, а здесь оба полигона одного класса.",
+          "sha256": "29a50e0b9ac85dfa36a23cdeecbc01e122186e4e60d70df3e241654013af4be2"
+        }
+      ],
+      "groupAssessments": {
+        "prompt_ordered_answers_key": "Final wording creates the stated computation; primary locator: L28 same-class overlap; L33 polygon overlap errors; L44 gap rule; L49 line gap errors; L59 different-class Overlap With.",
+        "explanation": "Final explanation checks all data and results; primary locator: L28 same-class overlap; L33 polygon overlap errors; L44 gap rule; L49 line gap errors; L59 different-class Overlap With."
+      },
+      "fourSubstitutions": [
+        {
+          "slot": 0,
+          "finalText": "Пустота 6 км², пересечение 5 км²; Must Not Have Gaps + Must Not Overlap.",
+          "finalNote": "Пересечение по включению–исключению равно 60+45−94; число 5 — лишь превышение суммы над площадью маски.",
+          "assessment": "Грамматика: каждая опция содержит пару площадей и набор правил. Первое число верно, но пересечение ошибочно: 60+45−94=11, а не 5. Заметка называет точную формулу и источник ошибки 5."
+        },
+        {
+          "slot": 1,
+          "finalText": "Пустота 0 км², пересечение 11 км²; только Must Not Overlap.",
+          "finalNote": "Объединение 94 км² оставляет незаполненную часть маски площадью 6 км².",
+          "assessment": "Грамматика параллельна остальным комбинациям. Пересечение 11 верно, однако объединение 94 оставляет 6 км² пустоты; единственность ключа сохраняется. Заметка указывает конкретную разность 100−94."
+        },
+        {
+          "slot": 2,
+          "finalText": "Пустота 6 км², пересечение 11 км²; Must Not Have Gaps + Must Not Overlap.",
+          "finalNote": "Esri показывает ошибку Must Not Have Gaps контуром пустоты как линейную ошибку; пересечение даёт полигонную ошибку.",
+          "assessment": "Грамматика: пара значений плюс пара названий правил. Оба расчёта верны (100−94=6; 60+45−94=11), и правила охватывают обе ошибки. Заметка добавляет тип геометрии ошибок Esri: контур пустоты линейный (L49), область перекрытия полигонная (L33)."
+        },
+        {
+          "slot": 3,
+          "finalText": "Пустота 11 км², пересечение 6 км²; Must Not Have Gaps + Must Not Overlap With.",
+          "finalNote": "Must Not Overlap With относится к разным классам или подтипам, а здесь оба полигона одного класса.",
+          "assessment": "Грамматика: тот же парный ответ. Числа переставлены, а Overlap With сравнивает разные классы/подтипы, но условие задаёт один класс (L59); опция однозначно неверна. Заметка привязана к ограничению правила."
+        }
+      ],
+      "absoluteHARD": {
+        "status": "author-assessed-HARD",
+        "reason": "Compute two independent set-area relations and map them to two same-class topology rules; distractors isolate the wrong relation or omit one check.",
+        "independentReaderMustVerify": "Solve exact final card unaided and confirm complexity merits frozen HARD."
+      },
+      "correctNoteAdditionalFact": "Esri represents gap errors by their outlines as line errors (L49), an additional implementation detail."
+    },
+    {
+      "id": "maps-cartography-overshoot-line",
+      "proposedCardSHA256": "f5e21822195e8a5d4307fa058c4081718a63ed76e0e53f68ef526dae1a0a4ca5",
+      "sixLiteralGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Trim задан максимум 5 м. У висячей линии A длина 8 м, а найденное пересечение находится в 3 м от её свободного конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Для каждой линии определите итоговую длину или удаление и укажите, какие ошибки останутся.",
+            "answers": [
+              "A: 5 м; B: 3 м; C удаляется.",
+              "A: 8 м; B: 12 м; C: 4 м; все ошибки остаются.",
+              "A: 5 м; B: 12 м; C: 4 м; B и C остаются ошибками.",
+              "A: 5 м; B: 12 м; C удаляется."
+            ],
+            "correctIndex": 2
+          },
+          "sha256": "d99b56589a0995e9c2ee3ae37952e9b9f0b5a4ffad3c732b2345281048e503ac"
+        },
+        {
+          "group": "explanation",
+          "literal": "Для A выступ за пересечение равен 8−3=5 м, поэтому после обрезки останется 5 м. У B пересечение дальше лимита, значит, длина остаётся 12 м; C не обрезается без найденного объекта и сохраняется длиной 4 м. При пакетном применении неудачно исправленные B и C остаются ошибками.",
+          "sha256": "4b92a23a884f5bbde3e331c253efdf561bc149f9b18b6f7c73ee34379e941e82"
+        },
+        {
+          "group": "note0",
+          "literal": "9 м до пересечения для B превышают предел 5 м, поэтому такой Trim её не укорачивает.",
+          "sha256": "68ad84a2300942bca419d0bb2e59814b15ff9cb1c6f8fee448260f0913e2dbbd"
+        },
+        {
+          "group": "note1",
+          "literal": "Для A найдено пересечение в пределах 5 м, так что свободный выступ длиной 3 м можно обрезать.",
+          "sha256": "7eab1be3f948323301733cde4450a3bb4d0a814ac20d9231919a70b83193b47c"
+        },
+        {
+          "group": "note2",
+          "literal": "При нулевом пределе Trim обрезает линию точно до найденного пересечения.",
+          "sha256": "d433809140d5d14d4060a3a9692d0946f6971dcec8e04b9383b0cf1a70eecb5d"
+        },
+        {
+          "group": "note3",
+          "literal": "Отсутствие подходящего пересечения у C не даёт Trim точки, до которой можно обрезать линию.",
+          "sha256": "c2bf08fc92c94e68fdabe7a2b9039f7e903efa2dbecbcfb12605729cf557cec5"
+        }
+      ],
+      "groupAssessments": {
+        "prompt_ordered_answers_key": "Final wording creates the stated computation; primary locator: L83 full Trim behavior including within-distance, no match, non-deletion, zero distance and skipped errors.",
+        "explanation": "Final explanation checks all data and results; primary locator: L83 full Trim behavior including within-distance, no match, non-deletion, zero distance and skipped errors."
+      },
+      "fourSubstitutions": [
+        {
+          "slot": 0,
+          "finalText": "A: 5 м; B: 3 м; C удаляется.",
+          "finalNote": "9 м до пересечения для B превышают предел 5 м, поэтому такой Trim её не укорачивает.",
+          "assessment": "Грамматика: компактная тройка результата. A рассчитана правильно, но B не может быть обрезана до точки за лимитом 5 м. Заметка указывает конкретный конфликт 9>5."
+        },
+        {
+          "slot": 1,
+          "finalText": "A: 8 м; B: 12 м; C: 4 м; все ошибки остаются.",
+          "finalNote": "Для A найдено пересечение в пределах 5 м, так что свободный выступ длиной 3 м можно обрезать.",
+          "assessment": "Грамматика: одинаковый формат для трёх линий. B и C посчитаны корректно, но найденное пересечение A в 3 м находится в пределах 5 м, поэтому A укорачивается до 5 м. Заметка объясняет почему."
+        },
+        {
+          "slot": 2,
+          "finalText": "A: 5 м; B: 12 м; C: 4 м; B и C остаются ошибками.",
+          "finalNote": "При нулевом пределе Trim обрезает линию точно до найденного пересечения.",
+          "assessment": "Грамматика: тройка фактических длин и статусов ошибок. Единственный ключ требует одновременно A=8−3=5, B за пределом остаётся 12, C без встречи остаётся 4; именно B/C остаются ошибками. Заметка добавляет boundary fact: Trim с нулевым расстоянием достигает встречи (L83)."
+        },
+        {
+          "slot": 3,
+          "finalText": "A: 5 м; B: 12 м; C удаляется.",
+          "finalNote": "Отсутствие подходящего пересечения у C не даёт Trim точки, до которой можно обрезать линию.",
+          "assessment": "Грамматика: та же тройка результатов. A/B верны, C ошибочно удалена: без найденного пересечения Trim ничего не обрезает и пропускает объект (L83). Заметка называет причину."
+        }
+      ],
+      "absoluteHARD": {
+        "status": "author-assessed-HARD",
+        "reason": "For three lines combine length, intersection offset, and 5 m bound into a result vector and remaining-error state; each component is necessary.",
+        "independentReaderMustVerify": "Solve exact final card unaided and confirm complexity merits frozen HARD."
+      },
+      "correctNoteAdditionalFact": "At distance 0, Trim reaches the intersection exactly (L83), a useful boundary case beyond the 5 m prompt."
+    }
+  ],
+  "qualityCredit": 0,
+  "note": "Hypothetical numbers for item 73 are conditional inputs, not an empirical Esri example. Old terminal HOLD receipt remains unchanged and is not a PASS."
+}

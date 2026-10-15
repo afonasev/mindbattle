@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 1,
+  "topicId": "maps-cartography",
+  "baselineCommit": "4bbbae7e0014fd476b7c1c08b2ea5697a503783f",
+  "qualityCredit": 0,
+  "entries": [
+    {
+      "id": "maps-cartography-orthographic-space",
+      "topicId": "maps-cartography",
+      "sourceOrder": 71,
+      "status": "READY",
+      "beforeCard": {
+        "id": "maps-cartography-orthographic-space",
+        "difficulty": "hard",
+        "prompt": "На сфере точки экватора имеют долготы 80°, 100° и 170°. Для ортографической карты доступны центры 75°, 150°, 110° и 160°. Все точки должны быть видимы: не дальше 90° от центра. Среди подходящих центров выберите дающий наименьшее искажение у точки 80°.",
+        "answers": [
+          {
+            "text": "Центр 75°: он ближе всего к приоритетной точке 80° и минимизирует там искажение.",
+            "note": "Но от 75° до точки 170° — 95°; эта точка выходит за предел видимой полусферы."
+          },
+          {
+            "text": "Центр 150°: все три точки видимы, а приоритетная точка удалена на 70°.",
+            "note": "Этот центр проходит проверку видимости, но есть допустимый центр с меньшим расстоянием до 80°."
+          },
+          {
+            "text": "Центр 110°: все три точки видимы, а приоритетная точка удалена на 30°.",
+            "note": "Ортографическая проекция относится к азимутальным перспективным проекциям и подходит для обзорных видов Земли из космоса."
+          },
+          {
+            "text": "Центр 160°: все три точки видимы, а приоритетная точка удалена на 80°.",
+            "note": "Для точки на долготе 170° расстояние от 160° равно 10°; до приоритетной точки на 80° — 80°, поэтому 110° ближе."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Все точки должны находиться не дальше 90° от центра: вариант 75° исключается, поскольку до 170° — 95°. Центры 150°, 110° и 160° проходят это условие; расстояния до приоритетной точки 80° равны 70°, 30° и 80°, поэтому выбираем 110°.",
+        "source": {
+          "title": "Orthographic | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/orthographic.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "maps-cartography-orthographic-space",
+        "difficulty": "hard",
+        "prompt": "На сфере точки заданы координатами (широта, восточная долгота): P=(0°,80°), Q=(0°,100°), R=(0°,170°). Центры ортографической проекции-кандидаты: A=(0°,75°), B=(0°,150°), C=(0°,110°), D=(0°,160°). Оставьте только центры, от которых все три точки не дальше 90°; затем среди них выберите центр с наименьшим искажением в P.",
+        "answers": [
+          {
+            "text": "A=(0°,75°): расстояния 5°, 25° и 95°; центр не подходит.",
+            "note": "Точка R удалена на 95°, поэтому A не показывает все данные в пределах одной полусферы."
+          },
+          {
+            "text": "B=(0°,150°): расстояния 70°, 50° и 20°; из допустимых центр ближе C к P.",
+            "note": "B проходит порог видимости, но до P — 70°; у C расстояние до P меньше."
+          },
+          {
+            "text": "C=(0°,110°): расстояния 30°, 10° и 60°; выбираем C.",
+            "note": "Ортографическая проекция искажает площади и углы; искажения быстро растут от центра к краям."
+          },
+          {
+            "text": "D=(0°,160°): расстояния 80°, 60° и 10°; центр не лучший для P.",
+            "note": "D проходит порог, но P удалена на 80° — дальше, чем от C на 30°."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Поскольку все широты равны нулю, центральное угловое расстояние здесь равно меньшей разности долгот. Для A получаем 5°, 25° и 95°, поэтому он исключается; B, C и D проходят порог 90°. Их расстояния до P равны 70°, 30° и 80°, значит, минимум искажения у P даёт C.",
+        "source": {
+          "title": "Orthographic | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/orthographic.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeCanonicalSHA256": "e55dbaac4d3c9d7c386059a46d61669a83296d782eee5b29f69aa1dfdd122530",
+      "proposedCanonicalSHA256": "5c3ddc411aa8a0c6dc891cf492ee6a97d0a59375ffabce67cb3c904b39529041",
+      "sixGroupHashes": {
+        "prompt_ordered_answers_key": {
+          "beforeSHA256": "8e195dfb0e43f6eb0801d772ae5aaf941adbfee650ef68bae0cb04d56680f2a3",
+          "proposedSHA256": "a266021bfe61f6aba9035b73807979425df2fc8fbce96c8267992da1e272ccb6"
+        },
+        "explanation": {
+          "beforeSHA256": "1fa176a99f766eb5c01e490eda9faf3e0f2defcfc0c8388f8a86346943f2c1c2",
+          "proposedSHA256": "e66a312c2e972f3de922f43c6daa41ae40d889776c4408cd42547672fc704de0"
+        },
+        "note0": {
+          "beforeSHA256": "27ac4f4cf6b79e1f999225a8e4c231a3402954c6e0bb7ca3a77166b443dd0005",
+          "proposedSHA256": "be3efba9efc79bc93596a8d8fd8bf09d4a81d1b8fab8c8da34cc7c9427d4e0b9"
+        },
+        "note1": {
+          "beforeSHA256": "afb307db7ce3656febbb6886d48d67864126572b04bb1bb6c6b335856931868a",
+          "proposedSHA256": "1207c9b11289032210e6b999cdae2a662c464a6a4b2a014beba0d1a4cf4c7e00"
+        },
+        "note2": {
+          "beforeSHA256": "5a9abfdaf1474ba374b87cbe7924e534d71e3641f206562334b8d3bad7b3226d",
+          "proposedSHA256": "40bab19d76484ce83c5b22a6f5c980fb381fb7da378e36caaf2ecd8acd16a1d9"
+        },
+        "note3": {
+          "beforeSHA256": "65cf2bdea359a6afb8824231906a4caec682bad0940ff6e56f9006fc8642d250",
+          "proposedSHA256": "06f57bf0f9d7d4a8cbd352522bd1879eaf9a7d231f7163f8056629e9b2213aa3"
+        }
+      }
+    },
+    {
+      "id": "maps-cartography-sliver-polygon",
+      "topicId": "maps-cartography",
+      "sourceOrder": 73,
+      "status": "READY",
+      "beforeCard": {
+        "id": "maps-cartography-sliver-polygon",
+        "difficulty": "hard",
+        "prompt": "Два полигона одного класса должны без перекрытий заполнить замкнутую маску площадью 100 км². Площадь A — 60 км², B — 45 км², объединение — 94 км²; недостающая часть маски — внутренний, полностью окружённый пустой участок. Нужно обнаруживать и эту пустоту, и общую площадь полигонов. Какой набор правил выбрать?",
+        "answers": [
+          {
+            "text": "Только Must Not Overlap: оно найдёт пересечение площадью 11 км².",
+            "note": "Проверка перекрытий не обнаруживает незаполненные 6 км² маски."
+          },
+          {
+            "text": "Только Must Not Have Gaps: оно найдёт пустую область площадью 6 км².",
+            "note": "Это правило не выявит общую площадь двух полигонов — 11 км²."
+          },
+          {
+            "text": "Must Not Have Gaps вместе с Must Not Overlap для этого класса.",
+            "note": "Must Not Have Gaps создаёт линейные ошибки по контуру пустоты, а Must Not Overlap — полигонные ошибки в области пересечения."
+          },
+          {
+            "text": "Must Not Have Gaps вместе с Must Not Overlap With для того же класса.",
+            "note": "Must Not Overlap With сравнивает разные классы или подтипы, а здесь оба полигона одного класса."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "По маске не покрыто 100−94=6 км²; по формуле включений и исключений полигоны перекрываются на 60+45−94=11 км². Для этих двух независимых отношений нужны Must Not Have Gaps и Must Not Overlap: первое выявляет пустоты, второе — общие области внутри класса.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polygon features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polygon-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "maps-cartography-sliver-polygon",
+        "difficulty": "hard",
+        "prompt": "Два полигона одного класса целиком лежат внутри замкнутой маски площадью 100 км². Их площади — 60 и 45 км², площадь объединения — 94 км². Рассчитайте отдельно площадь незаполненной части маски и площадь пересечения полигонов, затем выберите правила для выявления обеих ошибок.",
+        "answers": [
+          {
+            "text": "Пустота 6 км², пересечение 5 км²; Must Not Have Gaps + Must Not Overlap.",
+            "note": "Пересечение по включению–исключению равно 60+45−94; число 5 — лишь превышение суммы над площадью маски."
+          },
+          {
+            "text": "Пустота 0 км², пересечение 11 км²; только Must Not Overlap.",
+            "note": "Объединение 94 км² оставляет незаполненную часть маски площадью 6 км²."
+          },
+          {
+            "text": "Пустота 6 км², пересечение 11 км²; Must Not Have Gaps + Must Not Overlap.",
+            "note": "Esri показывает ошибку Must Not Have Gaps контуром пустоты как линейную ошибку; пересечение даёт полигонную ошибку."
+          },
+          {
+            "text": "Пустота 11 км², пересечение 6 км²; Must Not Have Gaps + Must Not Overlap With.",
+            "note": "Must Not Overlap With относится к разным классам или подтипам, а здесь оба полигона одного класса."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Незаполненная часть маски равна 100−94=6 км². Пересечение равно 60+45−94=11 км² по формуле включения–исключения, поэтому нужны оба правила: Must Not Have Gaps для пустоты и Must Not Overlap для пересечения полигонов одного класса.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polygon features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polygon-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeCanonicalSHA256": "ae9808bde58a1c75f6aa3c9799499eb44a30a75d5d3b3da12faa668b40e9d658",
+      "proposedCanonicalSHA256": "2af9f9650cbcf0fe72434d08933f4a7097e58a73a2143c756a7e88b8b5175b70",
+      "sixGroupHashes": {
+        "prompt_ordered_answers_key": {
+          "beforeSHA256": "2218ab936fab283014f3c29978791d71f5c5df012468cb9f852f276de6ad0e12",
+          "proposedSHA256": "58dd78b07cf1a31066965ffc04e1b35d3dffb8a638b0c309259d888ca07d3111"
+        },
+        "explanation": {
+          "beforeSHA256": "1cfbbe8cf21f2f22b452e10cb5d4b81192b305c59b6d27d46acd98c84c4c1343",
+          "proposedSHA256": "cd5d216e2940e33d420d11556080334d3ca9289bcca99e68a2de398aa4127dee"
+        },
+        "note0": {
+          "beforeSHA256": "c38c2820b27cc4d6dbe615afae96c1ab126f288e74e58845d7e9cd7db8714ce2",
+          "proposedSHA256": "874a58a58e1f68ed3fe85fb415c27a9c100c5d8dba84c0e865ce896115a305c7"
+        },
+        "note1": {
+          "beforeSHA256": "cdbf08ca903d0cea8b9a1c2fd04c6c75a49c52a525a7c02d995d06a657e86710",
+          "proposedSHA256": "b83c32651ae9b8dc2814cc4f8cae80a091f912a81dde829f0a4f7f5a44298281"
+        },
+        "note2": {
+          "beforeSHA256": "544031b13b23b3e5a582a41051573554f8d43905b29782dccfd7b49b9bad6a1e",
+          "proposedSHA256": "b3bfa745a61a2891213fb4d362fcdac86b1616fb5d1e8da42127f48280c69602"
+        },
+        "note3": {
+          "beforeSHA256": "5f93c188c6dc8ade750be0925eccfeaa96ec0bb401b27d01358e076371b3fd50",
+          "proposedSHA256": "29a50e0b9ac85dfa36a23cdeecbc01e122186e4e60d70df3e241654013af4be2"
+        }
+      }
+    },
+    {
+      "id": "maps-cartography-overshoot-line",
+      "topicId": "maps-cartography",
+      "sourceOrder": 74,
+      "status": "READY",
+      "beforeCard": {
+        "id": "maps-cartography-overshoot-line",
+        "difficulty": "hard",
+        "prompt": "Пакетный Trim с максимальным расстоянием 5 м обрабатывает три висячие линии. У A длина 8 м, пересечение находится в 3 м от висячего конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Какой результат и состояние ошибок останутся?",
+        "answers": [
+          {
+            "text": "A обрежется до 5 м; B обрежется до 3 м, а C останется без изменения.",
+            "note": "Чтобы обрезать B на расстоянии 9 м, заданного предела 5 м недостаточно."
+          },
+          {
+            "text": "A и B обрежутся до пересечений; C будет удалена, так как короче предела.",
+            "note": "Предел больше длины C сам по себе не удаляет объект; без пересечения Trim не сработает."
+          },
+          {
+            "text": "A обрежется до 5 м; B и C не изменятся и останутся ошибками.",
+            "note": "При нулевом расстоянии Trim обрезает висячую линию точно до найденного пересечения."
+          },
+          {
+            "text": "A останется длиной 8 м; B и C не изменятся и останутся ошибками.",
+            "note": "У A пересечение в пределах 5 м, поэтому Trim может удалить выступающий отрезок длиной 3 м."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Для A пересечение находится в пределах 5 м, поэтому Trim удалит выступающий отрезок 3 м и оставит длину 5 м. Для B расстояние до пересечения превышает предел, а у C пересечения нет; оба объекта пропускаются и остаются ошибками, причём короткая C не удаляется.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "proposedCard": {
+        "id": "maps-cartography-overshoot-line",
+        "difficulty": "hard",
+        "prompt": "Trim задан максимум 5 м. У висячей линии A длина 8 м, а найденное пересечение находится в 3 м от её свободного конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Для каждой линии определите итоговую длину или удаление и укажите, какие ошибки останутся.",
+        "answers": [
+          {
+            "text": "A: 5 м; B: 3 м; C удаляется.",
+            "note": "9 м до пересечения для B превышают предел 5 м, поэтому такой Trim её не укорачивает."
+          },
+          {
+            "text": "A: 8 м; B: 12 м; C: 4 м; все ошибки остаются.",
+            "note": "Для A найдено пересечение в пределах 5 м, так что свободный выступ длиной 3 м можно обрезать."
+          },
+          {
+            "text": "A: 5 м; B: 12 м; C: 4 м; B и C остаются ошибками.",
+            "note": "При нулевом пределе Trim обрезает линию точно до найденного пересечения."
+          },
+          {
+            "text": "A: 5 м; B: 12 м; C удаляется.",
+            "note": "Отсутствие подходящего пересечения у C не даёт Trim точки, до которой можно обрезать линию."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Для A выступ за пересечение равен 8−3=5 м, поэтому после обрезки останется 5 м. У B пересечение дальше лимита, значит, длина остаётся 12 м; C не обрезается без найденного объекта и сохраняется длиной 4 м. При пакетном применении неудачно исправленные B и C остаются ошибками.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeCanonicalSHA256": "9295cfbd51f66785c371e6a3e30e50940ad20f1da34a2f1d898cd6bff9201fdd",
+      "proposedCanonicalSHA256": "f5e21822195e8a5d4307fa058c4081718a63ed76e0e53f68ef526dae1a0a4ca5",
+      "sixGroupHashes": {
+        "prompt_ordered_answers_key": {
+          "beforeSHA256": "c958dc026a94c160cafc2a0ce3fcd41960c90112fe0e7866966aa7d8dd5bb002",
+          "proposedSHA256": "d99b56589a0995e9c2ee3ae37952e9b9f0b5a4ffad3c732b2345281048e503ac"
+        },
+        "explanation": {
+          "beforeSHA256": "414a70ff061794c11f56867c572c29febc7cc907655873e503518b102bed6ec2",
+          "proposedSHA256": "4b92a23a884f5bbde3e331c253efdf561bc149f9b18b6f7c73ee34379e941e82"
+        },
+        "note0": {
+          "beforeSHA256": "00312a35452e9ac48e99ccf14fba63753e61d6aa998f7ed70adc7a59379e6589",
+          "proposedSHA256": "68ad84a2300942bca419d0bb2e59814b15ff9cb1c6f8fee448260f0913e2dbbd"
+        },
+        "note1": {
+          "beforeSHA256": "b2014d9fad8e8bc02a7ea23a266c0a21acd4fc4974ac4a7eeb029b2a501d90b2",
+          "proposedSHA256": "7eab1be3f948323301733cde4450a3bb4d0a814ac20d9231919a70b83193b47c"
+        },
+        "note2": {
+          "beforeSHA256": "8d612bc3b4a74cfd5f441abbb501e32021afdf3cc8176702424b345683c05eb0",
+          "proposedSHA256": "d433809140d5d14d4060a3a9692d0946f6971dcec8e04b9383b0cf1a70eecb5d"
+        },
+        "note3": {
+          "beforeSHA256": "a8dc23c14c544bb0f83f600e29e8e330e3cfe6cc90121369995a524365b70a3d",
+          "proposedSHA256": "c2bf08fc92c94e68fdabe7a2b9039f7e903efa2dbecbcfb12605729cf557cec5"
+        }
+      }
+    }
+  ],
+  "qualification": "Author READY only; no CURRENT PASS or credit until independent review."
+}
