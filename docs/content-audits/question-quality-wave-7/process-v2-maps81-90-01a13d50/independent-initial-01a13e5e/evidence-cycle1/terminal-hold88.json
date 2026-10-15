@@ -1,0 +1,76 @@
+{
+  "id": "maps-cartography-area-distortion",
+  "sourceOrder": 88,
+  "status": "HOLD",
+  "qualityCredit": 0,
+  "stage": "Separate author solecycle1 terminalHOLD0; not one of five applied cards",
+  "authorHoldReceipt": {
+    "path": "docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author-cycle1-01a13e5e/final/peer-current-final6-addendum.json",
+    "rawSHA256": "5b3dc1fd891db09f597a27a47c6067241b204f4abc37564c71400dc1e5a553be",
+    "applyStatement": "Not applied, prior CURRENT retained, terminal solecycle1 authorHOLD0"
+  },
+  "actualCurrentCard": {
+    "id": "maps-cartography-area-distortion",
+    "difficulty": "medium",
+    "prompt": "В ГИС сравнивают участки с наземными площадями 80 км² (A) и 100 км² (B). На одной проекции их изображения занимают 4 см² и 6 см² соответственно. После нормирования на наземную площадь во сколько раз коэффициент отображения площади B больше, чем A?",
+    "answers": [
+      {
+        "text": "В 0,5 раза",
+        "note": "Коэффициент 0,5 был бы у B, если бы после нормирования он составлял половину A; здесь 0,06/0,05 = 1,2."
+      },
+      {
+        "text": "В 0,8333… раза",
+        "note": "Обратное нормированное отношение равно 0,05/0,06 = 0,8333…, то есть примерно 0,83. Это коэффициент A относительно B, а в вопросе требуется B относительно A."
+      },
+      {
+        "text": "В 1 раз",
+        "note": "Равные коэффициенты дали бы 1; здесь после нормирования получаются 0,05 и 0,06."
+      },
+      {
+        "text": "В 1,2 раза",
+        "note": "Проекция Ламберта сохраняет относительные площади, но Esri указывает, что вдали от центра обычно искажаются формы, углы, направления и расстояния."
+      }
+    ],
+    "correctIndex": 3,
+    "explanation": "Сначала найдите коэффициенты: для A это 4/80 = 0,05, для B — 6/100 = 0,06 см²/км². Затем сравните их: 0,06/0,05 = 1,2, поэтому нормированный коэффициент B в 1,2 раза больше.",
+    "source": {
+      "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+      "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+      "verifiedAt": "2026-10-15"
+    }
+  },
+  "actualCurrentCardCanonicalSHA256": "524d529c3f127907920f94c01a76b712af1ccbeeb72ecac9e05a8323dfd8cb04",
+  "unappliedAuthorFinalCard": {
+    "id": "maps-cartography-area-distortion",
+    "difficulty": "medium",
+    "prompt": "Для карты, охватывающей полушарие, команда сравнивает площади регионов. Ей важно сохранить относительные площади, хотя форма объектов может искажаться. Какую проекцию следует выбрать и какой вывод об этом свойстве корректен?",
+    "answers": [
+      {
+        "text": "Конформную: она сохраняет местные углы, значит сохраняет и площади.",
+        "note": "Сохранение местных углов само по себе не означает сохранения площади."
+      },
+      {
+        "text": "Равноудалённую: сохранение некоторых расстояний гарантирует верные площади всех регионов.",
+        "note": "Равноудалённость относится к определённым расстояниям, а не автоматически ко всем площадям."
+      },
+      {
+        "text": "Азимутальную равновеликую проекцию Ламберта: она сохраняет локальные углы и форму повсюду.",
+        "note": "Равновеликость сохраняет площадь; локальная форма при этом не обязана сохраняться повсюду."
+      },
+      {
+        "text": "Азимутальную равновеликую проекцию Ламберта: для этой задачи приоритетом является сохранение относительных площадей, не формы.",
+        "note": "Эта проекция предназначена для сохранения площади; на удалении от центра форма и другие свойства могут искажаться."
+      }
+    ],
+    "correctIndex": 3,
+    "explanation": "Для сравнения относительных площадей нужна равновеликая проекция. Документация Esri называет Lambert azimuthal equal-area проекцией, сохраняющей относительную площадь; это не означает сохранения формы или всех углов. Поэтому выбор отвечает заданной цели, но не позволяет делать вывод, что формы регионов останутся неизменными.",
+    "source": {
+      "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+      "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+      "verifiedAt": "2026-10-15"
+    }
+  },
+  "unappliedAuthorFinalCardCanonicalSHA256": "37ba317ecb706757425af992b2fe01db9e9696d6191df6a7c8a409fce7085b2b",
+  "reason": "Author FINAL88 directly cues equal-area preservation and is held for medium demand; it was NOT applied. CURRENT88 remains old normalization task, retains initial broad Lambert-name note defect and duplicate withCURRENT90. Unapplied proposal cannot resolve CURRENT dependency.",
+  "nextAction": "Coordinator records terminal HOLD0 without quality credit; no second fix-cycle under this assignment."
+}

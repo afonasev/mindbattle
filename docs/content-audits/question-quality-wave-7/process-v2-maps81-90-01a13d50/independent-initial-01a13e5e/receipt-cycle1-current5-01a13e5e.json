@@ -1,0 +1,1106 @@
+{
+  "schemaVersion": 1,
+  "stage": "OTHER independent FINAL CURRENT solecycle1 five; no second fix-cycle",
+  "reviewerThreadId": "01a13e84-63e8-7210-8e31-a933cf00aef8",
+  "scopeOrders": [
+    84,
+    86,
+    87,
+    89,
+    90
+  ],
+  "applyCommitProvided": "0708bbfcf00bc2fd52df17dd0c19c364f5154e19",
+  "affected19QaCommitProvided": "f238ee339002f63c481da1aabd997cceb448141e",
+  "qaPolicy": "Provided QA result not inherited as content PASS; no tests rerun by this reviewer.",
+  "observedBranch": "codex/question-quality-wave-6",
+  "observedHEAD": "6f7d98eeb3386bdf2d7970ad036573ba1a41338a",
+  "sourceBaseline": "0393b80cbed86a147cfc3b63aae95874a13101a5",
+  "canonicalContract": "SHA256 of UTF8 json.dumps(sort_keys=True,separators=(',',':'),ensure_ascii=False), strings included as JSON strings",
+  "catalogRawSHA256": "eb9fe03b22f253e74c6e9644b20f3a4a414c2526453df2162db37bcb979506d4",
+  "applyReceiptPath": "docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/apply-cycle1five-newthree.json",
+  "applyReceiptRawSHA256": "69529a304ff2e28784f27d909da8c49421f7b6946c53145b0804d0f290bbd35b",
+  "initialReceiptPath": "docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/independent-initial-01a13e5e/receipt.json",
+  "initialReceiptRawSHA256": "2cd2e69a6b9c4b5b1d1712bae096789cac45a060e00ab2477589c8dce044b6d8",
+  "authorFinalPath": "docs/content-audits/question-quality-wave-7/process-v2-maps81-90-01a13d50/author-cycle1-01a13e5e/final/",
+  "authorFinalCandidateRawSHA256": "fbd41d506f0cf71a37e273adeb6935ca1737e2d3c81b540a300403cf2ead7619",
+  "entries": [
+    {
+      "id": "maps-cartography-read-coordinates",
+      "sourceOrder": 84,
+      "currentCard": {
+        "id": "maps-cartography-read-coordinates",
+        "difficulty": "easy",
+        "prompt": "Географические координаты точки: x = −74°, y = 40°. Дайте ответ именно в порядке x, затем y, и укажите стороны света относительно нулевого меридиана и экватора.",
+        "answers": [
+          {
+            "text": "74° в. д.; 40° с. ш.",
+            "note": "Знак x положителен для востока; здесь x отрицателен."
+          },
+          {
+            "text": "74° з. д.; 40° ю. ш.",
+            "note": "Отрицательная широта означала бы юг; заданный y положителен."
+          },
+          {
+            "text": "40° с. ш.; 74° з. д.",
+            "note": "Это та же точка, но порядок ответа здесь широта, затем долгота, вопреки условию."
+          },
+          {
+            "text": "74° з. д.; 40° с. ш.",
+            "note": "Минус у долготы означает запад, плюс у широты — север; географическая система опирается на сферу или эллипсоид."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "В географической системе x задаёт долготу, а y — широту; координаты являются угловыми величинами. Поэтому −74° означает 74° к западу от нулевого меридиана, а +40° — 40° к северу от экватора. В порядке x, затем y это долгота 74° к западу и широта 40° к северу.",
+        "source": {
+          "title": "Coordinate systems, map projections, and transformations | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/mapping/properties/coordinate-systems-and-projections.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "currentCardCanonicalSHA256": "5b3a88de500f86f75f06105609f341bf937e3734bf5f1dad6085bbbaa5d2d2c7",
+      "status": "PASS",
+      "qualityCredit": 0,
+      "sixLiteralCanonicalJSONGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Географические координаты точки: x = −74°, y = 40°. Дайте ответ именно в порядке x, затем y, и укажите стороны света относительно нулевого меридиана и экватора.",
+            "answers": [
+              "74° в. д.; 40° с. ш.",
+              "74° з. д.; 40° ю. ш.",
+              "40° с. ш.; 74° з. д.",
+              "74° з. д.; 40° с. ш."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "ea93cda20229e1b12d72cdb788c52671197445ff0dc9d080e2e155945e0b7b36",
+          "specificSourceGrounds": "Только3 выполняет одновременно знаки и явно заданный порядок.2 обозначает ту же точку, но теперь не удовлетворяет требованию порядка; note2 честно признаёт это. PASS easy: декодирование двух осей/знаков и соблюдение порядка. Числа служат конкретными координатами, не декором.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L14 geographic coordinates",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "explanation",
+          "literal": "В географической системе x задаёт долготу, а y — широту; координаты являются угловыми величинами. Поэтому −74° означает 74° к западу от нулевого меридиана, а +40° — 40° к северу от экватора. В порядке x, затем y это долгота 74° к западу и широта 40° к северу.",
+          "canonicalSHA256": "862e370cc44140a51fe168d448cf7b8eed385514239a6debe3d3fb66db5bcf17",
+          "specificSourceGrounds": "Только3 выполняет одновременно знаки и явно заданный порядок.2 обозначает ту же точку, но теперь не удовлетворяет требованию порядка; note2 честно признаёт это. Esri full L14 geographic coordinates",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L14 geographic coordinates",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note0",
+          "literal": "Знак x положителен для востока; здесь x отрицателен.",
+          "canonicalSHA256": "9dc2f3734b823e00bd9899e58b6543bda5708c74f4695eba2a4b4c7970a115a4",
+          "specificSourceGrounds": "Положительный x означает восток, но исходный x отрицателен; note0 верно исправляет знак по L14.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L14 geographic coordinates",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note1",
+          "literal": "Отрицательная широта означала бы юг; заданный y положителен.",
+          "canonicalSHA256": "c2019073b1f1f964e583df176ea54e0261ca5b543db6b089b193df49bfccae6d",
+          "specificSourceGrounds": "Южная широта требует отрицательного y, а здесь+40; note1 верна по L14.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L14 geographic coordinates",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note2",
+          "literal": "Это та же точка, но порядок ответа здесь широта, затем долгота, вопреки условию.",
+          "canonicalSHA256": "e52ace079eaab66f2e678003d7a15375dbf891d401e0d4f8c20f5adeb70a005c",
+          "specificSourceGrounds": "Запись в привычном порядке широта/долгота правдоподобна, но нарушает явно заданный x,y. Note2 не объявляет точку другой и тем самым исправляет initial multi-key.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L14 geographic coordinates",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note3",
+          "literal": "Минус у долготы означает запад, плюс у широты — север; географическая система опирается на сферу или эллипсоид.",
+          "canonicalSHA256": "f64eace7abdd26bd9a208d8eed6e3a51e3c39c489a74773c2c49d6313f313e8b",
+          "specificSourceGrounds": "Ключ3 правильно упорядочивает долготу/широту. Note3 даёт оба знака и действительно новый сферический/эллипсоидальный базис L14.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L14 geographic coordinates",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        }
+      ],
+      "fourFullPromptAnswerNoteAssessments": [
+        {
+          "slot": 0,
+          "fullPromptLiteral": "Географические координаты точки: x = −74°, y = 40°. Дайте ответ именно в порядке x, затем y, и укажите стороны света относительно нулевого меридиана и экватора.",
+          "answerLiteral": "74° в. д.; 40° с. ш.",
+          "noteLiteral": "Знак x положителен для востока; здесь x отрицателен.",
+          "bindingCanonicalSHA256": "09cb40c91bb802e86ceda46042ba0910ebaa7ce975530e3e45acd7e25b712289",
+          "grammarJudgment": "Условие ясно требует именно порядок x затем y; четыре записи разделены точкой с запятой и грамматически подходят. Меридиан и экватор названы правильно.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "Положительный x означает восток, но исходный x отрицателен; note0 верно исправляет знак по L14.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L14 geographic coordinates"
+        },
+        {
+          "slot": 1,
+          "fullPromptLiteral": "Географические координаты точки: x = −74°, y = 40°. Дайте ответ именно в порядке x, затем y, и укажите стороны света относительно нулевого меридиана и экватора.",
+          "answerLiteral": "74° з. д.; 40° ю. ш.",
+          "noteLiteral": "Отрицательная широта означала бы юг; заданный y положителен.",
+          "bindingCanonicalSHA256": "b85c028d7985a2456e6cf4c176027ffc892755d1e7c11e735d33e24a0e3f5b47",
+          "grammarJudgment": "Условие ясно требует именно порядок x затем y; четыре записи разделены точкой с запятой и грамматически подходят. Меридиан и экватор названы правильно.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "Южная широта требует отрицательного y, а здесь+40; note1 верна по L14.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L14 geographic coordinates"
+        },
+        {
+          "slot": 2,
+          "fullPromptLiteral": "Географические координаты точки: x = −74°, y = 40°. Дайте ответ именно в порядке x, затем y, и укажите стороны света относительно нулевого меридиана и экватора.",
+          "answerLiteral": "40° с. ш.; 74° з. д.",
+          "noteLiteral": "Это та же точка, но порядок ответа здесь широта, затем долгота, вопреки условию.",
+          "bindingCanonicalSHA256": "5ab13e38439db92bcda371ef632fe70b639dfa30f116bb021b58420db5b362ab",
+          "grammarJudgment": "Условие ясно требует именно порядок x затем y; четыре записи разделены точкой с запятой и грамматически подходят. Меридиан и экватор названы правильно.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "Запись в привычном порядке широта/долгота правдоподобна, но нарушает явно заданный x,y. Note2 не объявляет точку другой и тем самым исправляет initial multi-key.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L14 geographic coordinates"
+        },
+        {
+          "slot": 3,
+          "fullPromptLiteral": "Географические координаты точки: x = −74°, y = 40°. Дайте ответ именно в порядке x, затем y, и укажите стороны света относительно нулевого меридиана и экватора.",
+          "answerLiteral": "74° з. д.; 40° с. ш.",
+          "noteLiteral": "Минус у долготы означает запад, плюс у широты — север; географическая система опирается на сферу или эллипсоид.",
+          "bindingCanonicalSHA256": "b57aea61bbd0303bc1b1abc9100b6a4ea3a409f2b98ea00875e6f58da19808d7",
+          "grammarJudgment": "Условие ясно требует именно порядок x затем y; четыре записи разделены точкой с запятой и грамматически подходят. Меридиан и экватор названы правильно.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "Ключ3 правильно упорядочивает долготу/широту. Note3 даёт оба знака и действительно новый сферический/эллипсоидальный базис L14.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L14 geographic coordinates"
+        }
+      ],
+      "grammar": "Условие ясно требует именно порядок x затем y; четыре записи разделены точкой с запятой и грамматически подходят. Меридиан и экватор названы правильно.",
+      "uniqueKey": "Только3 выполняет одновременно знаки и явно заданный порядок.2 обозначает ту же точку, но теперь не удовлетворяет требованию порядка; note2 честно признаёт это.",
+      "absoluteFrozenDifficulty": {
+        "value": "easy",
+        "assessment": "PASS easy: декодирование двух осей/знаков и соблюдение порядка. Числа служат конкретными координатами, не декором."
+      },
+      "extraCorrectNoteFact": "PASS: опора географической системы на сферу или эллипсоид — дополнительный факт L14, не нужный для расшифровки знаков и не повторяет ключ.",
+      "peerBindings": [
+        {
+          "sourceOrder": 28,
+          "id": "maps-cartography-equator-zero-lat",
+          "currentCardCanonicalSHA256": "28c3014ec8bccdaf14dab9a7ebabca9b2476eafa508f9f2ebd38fe9890716f35"
+        },
+        {
+          "sourceOrder": 29,
+          "id": "maps-cartography-prime-zero-long",
+          "currentCardCanonicalSHA256": "9e0d5ed15efd77d5ebcd0cb518ea70134b4c099894de4314e667e38aa757123c"
+        },
+        {
+          "sourceOrder": 42,
+          "id": "maps-cartography-latitude-ns",
+          "currentCardCanonicalSHA256": "b7709cb9664b16295dd92076e1e26a47e941ded8784f856c5baec63608f8f0b7"
+        },
+        {
+          "sourceOrder": 43,
+          "id": "maps-cartography-longitude-ew",
+          "currentCardCanonicalSHA256": "de10f3becee08d52867fc39df42325e362666a676179ec616805f4c97b6d5515"
+        },
+        {
+          "sourceOrder": 44,
+          "id": "maps-cartography-utm-zones",
+          "currentCardCanonicalSHA256": "dba59c5dcf9eee487c61f7955b468ec826ee179db1ba26380506cf8dd8d35445"
+        },
+        {
+          "sourceOrder": 79,
+          "id": "maps-cartography-globe-sphere",
+          "currentCardCanonicalSHA256": "23a036b3954ee2643f65871666c9fa191bc5f7350aed3c7aec4e445daefaa780"
+        }
+      ],
+      "conclusion": "Initial unique-key, reference-line and extra-note-fact defects resolved.",
+      "cycleLimit": "Sole cycle1 terminal; no second author fix-cycle."
+    },
+    {
+      "id": "maps-cartography-waldseemuller-america",
+      "sourceOrder": 86,
+      "currentCard": {
+        "id": "maps-cartography-waldseemuller-america",
+        "difficulty": "medium",
+        "prompt": "В описании карты мира 1507 года отмечены два наблюдения: западные земли отделены от Азии, а Тихий океан показан отдельным от Атлантики. В более ранней европейской модели обитаемый мир делился на Европу, Азию и Африку. Какой исторический вывод лучше всего обоснован этими данными?",
+        "answers": [
+          {
+            "text": "Картографы уже точно измерили площадь всех новых земель.",
+            "note": "Разделение областей на карте не сообщает точность площадных измерений."
+          },
+          {
+            "text": "Карта включила Америку в прежнюю трёхчастную модель, не меняя её.",
+            "note": "Наблюдение об отделении западных земель от Азии противоречит сохранению прежней модели без изменений."
+          },
+          {
+            "text": "Карта включает западные земли в Азию и сохраняет прежнее трёхчастное деление мира.",
+            "note": "Оба утверждения противоречат приведённому наблюдению об отделении западных земель от Азии."
+          },
+          {
+            "text": "Карта показывает переход от трёхчастной модели к отдельному западному полушарию с новым материком.",
+            "note": "Сопоставление признаков со старой моделью обосновывает вывод; LOC называет этот экземпляр единственным из примерно 1000 отпечатанных."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Библиотека Конгресса сообщает, что карта 1507 года ясно отделяет западное полушарие от Азии и показывает Тихий океан отдельным; она называет это новым представлением мира. Там же прежняя европейская модель описана как деление на Европу, Азию и Африку. Сопоставление наблюдений с этой моделью подтверждает изменение географической картины, но ничего не говорит о точности площадных измерений или личном авторстве Веспуччи.",
+        "source": {
+          "title": "1507 World Map - Waldseemüller Maps | Library of Congress",
+          "url": "https://www.loc.gov/exhibits/exploring-the-early-americas/interactives/waldseemuller-maps/worldmap1507/index.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "currentCardCanonicalSHA256": "0c341ac1f2fafeb90c58ad4b35049d89945b94f28a35526b57cccf7d421ece34",
+      "status": "HOLD",
+      "qualityCredit": 0,
+      "sixLiteralCanonicalJSONGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В описании карты мира 1507 года отмечены два наблюдения: западные земли отделены от Азии, а Тихий океан показан отдельным от Атлантики. В более ранней европейской модели обитаемый мир делился на Европу, Азию и Африку. Какой исторический вывод лучше всего обоснован этими данными?",
+            "answers": [
+              "Картографы уже точно измерили площадь всех новых земель.",
+              "Карта включила Америку в прежнюю трёхчастную модель, не меняя её.",
+              "Карта включает западные земли в Азию и сохраняет прежнее трёхчастное деление мира.",
+              "Карта показывает переход от трёхчастной модели к отдельному западному полушарию с новым материком."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "c2f043bf15a91fd5d96d22a991b25efd7f198c648b5bb00e2fcabe225d927beb",
+          "specificSourceGrounds": "Только3 согласуется с приведёнными наблюдениями;0 делает неподтверждённый вывод о точных площадях;1 и2 оба отрицают уже явно описанное изменение модели. Фактический ключ3 верен. HOLD frozen medium: статья теперь не нужна для ответа, initial missing-input defect снят. Но ключ почти дословно соединяет три уже данных предложения;1 и2 практически эквивалентны (сохранение трёхчастной модели / включение западных земель в Азию), оба прямо опровергнуты условием. Нет необходимого исторического вывода сверх очевидного пересказа. Сценарий medium не установлен.",
+          "sourceKeys": [
+            "LOC-1507"
+          ],
+          "locator": "LoC full contiguous L19-L21; note3 exact qualifier in L20",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "explanation",
+          "literal": "Библиотека Конгресса сообщает, что карта 1507 года ясно отделяет западное полушарие от Азии и показывает Тихий океан отдельным; она называет это новым представлением мира. Там же прежняя европейская модель описана как деление на Европу, Азию и Африку. Сопоставление наблюдений с этой моделью подтверждает изменение географической картины, но ничего не говорит о точности площадных измерений или личном авторстве Веспуччи.",
+          "canonicalSHA256": "b97b93083d7a7161040a464ffcfcb703e8b3ea51c07c00da4834c6f81ae73bae",
+          "specificSourceGrounds": "Только3 согласуется с приведёнными наблюдениями;0 делает неподтверждённый вывод о точных площадях;1 и2 оба отрицают уже явно описанное изменение модели. Фактический ключ3 верен. LoC full contiguous L19-L21; note3 exact qualifier in L20",
+          "sourceKeys": [
+            "LOC-1507"
+          ],
+          "locator": "LoC full contiguous L19-L21; note3 exact qualifier in L20",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note0",
+          "literal": "Разделение областей на карте не сообщает точность площадных измерений.",
+          "canonicalSHA256": "aa98828c1242eda105dfdc378f1950030a6996edb13833cae4d817e86b2e362d",
+          "specificSourceGrounds": "Точность площади всех новых земель не следует из отделения континента; note0 истинна и полезна, но вариант легко отсеивается вне знания истории.",
+          "sourceKeys": [
+            "LOC-1507"
+          ],
+          "locator": "LoC full contiguous L19-L21; note3 exact qualifier in L20",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note1",
+          "literal": "Наблюдение об отделении западных земель от Азии противоречит сохранению прежней модели без изменений.",
+          "canonicalSHA256": "df2415ff9b82cda14984daa903390997848a17c097904f06202134d75fa10a8d",
+          "specificSourceGrounds": "Западные земли включены в старую модель — прямо противоречит условию; note1 верно объясняет противоречие.",
+          "sourceKeys": [
+            "LOC-1507"
+          ],
+          "locator": "LoC full contiguous L19-L21; note3 exact qualifier in L20",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note2",
+          "literal": "Оба утверждения противоречат приведённому наблюдению об отделении западных земель от Азии.",
+          "canonicalSHA256": "441150e9288ee29095541ec316cff85c1ada28824528f18d7c509e39347bfab1",
+          "specificSourceGrounds": "Почти тот же отказ признать изменение, что в1; note2 правдива, но не создаёт самостоятельной правдоподобной ошибки рассуждения.",
+          "sourceKeys": [
+            "LOC-1507"
+          ],
+          "locator": "LoC full contiguous L19-L21; note3 exact qualifier in L20",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note3",
+          "literal": "Сопоставление признаков со старой моделью обосновывает вывод; LOC называет этот экземпляр единственным из примерно 1000 отпечатанных.",
+          "canonicalSHA256": "5cda2030d90a345c3cd1698719f8bec38dc7a23d99ed9d2384a1e8f1607b58e0",
+          "specificSourceGrounds": "Вывод о переходе верен по L21. Заметка3 добавляет потенциально новый факт тиража, но теряет определяющие слова only known surviving изL20.",
+          "sourceKeys": [
+            "LOC-1507"
+          ],
+          "locator": "LoC full contiguous L19-L21; note3 exact qualifier in L20",
+          "fieldFinding": "HOLD source qualifier"
+        }
+      ],
+      "fourFullPromptAnswerNoteAssessments": [
+        {
+          "slot": 0,
+          "fullPromptLiteral": "В описании карты мира 1507 года отмечены два наблюдения: западные земли отделены от Азии, а Тихий океан показан отдельным от Атлантики. В более ранней европейской модели обитаемый мир делился на Европу, Азию и Африку. Какой исторический вывод лучше всего обоснован этими данными?",
+          "answerLiteral": "Картографы уже точно измерили площадь всех новых земель.",
+          "noteLiteral": "Разделение областей на карте не сообщает точность площадных измерений.",
+          "bindingCanonicalSHA256": "6ed3d3d6ea6201cfd5722d52b02cca26b9f0cb2570457fd91f92f759b93e3ee7",
+          "grammarJudgment": "Каждый вариант — законченное утверждение и сочетается с вопросом о выводе. Языковых препятствий нет.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "Точность площади всех новых земель не следует из отделения континента; note0 истинна и полезна, но вариант легко отсеивается вне знания истории.",
+          "sourceKeys": [
+            "LOC-1507"
+          ],
+          "locator": "LoC full contiguous L19-L21; note3 exact qualifier in L20"
+        },
+        {
+          "slot": 1,
+          "fullPromptLiteral": "В описании карты мира 1507 года отмечены два наблюдения: западные земли отделены от Азии, а Тихий океан показан отдельным от Атлантики. В более ранней европейской модели обитаемый мир делился на Европу, Азию и Африку. Какой исторический вывод лучше всего обоснован этими данными?",
+          "answerLiteral": "Карта включила Америку в прежнюю трёхчастную модель, не меняя её.",
+          "noteLiteral": "Наблюдение об отделении западных земель от Азии противоречит сохранению прежней модели без изменений.",
+          "bindingCanonicalSHA256": "250d06472b7efcf8e587cb75b0da143550f6c940026107315bcacab6977f1235",
+          "grammarJudgment": "Каждый вариант — законченное утверждение и сочетается с вопросом о выводе. Языковых препятствий нет.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "Западные земли включены в старую модель — прямо противоречит условию; note1 верно объясняет противоречие.",
+          "sourceKeys": [
+            "LOC-1507"
+          ],
+          "locator": "LoC full contiguous L19-L21; note3 exact qualifier in L20"
+        },
+        {
+          "slot": 2,
+          "fullPromptLiteral": "В описании карты мира 1507 года отмечены два наблюдения: западные земли отделены от Азии, а Тихий океан показан отдельным от Атлантики. В более ранней европейской модели обитаемый мир делился на Европу, Азию и Африку. Какой исторический вывод лучше всего обоснован этими данными?",
+          "answerLiteral": "Карта включает западные земли в Азию и сохраняет прежнее трёхчастное деление мира.",
+          "noteLiteral": "Оба утверждения противоречат приведённому наблюдению об отделении западных земель от Азии.",
+          "bindingCanonicalSHA256": "f05a91b456cc65df8fe79d856e19fc59a2a490a496ca90cafb13c98bdd93c39d",
+          "grammarJudgment": "Каждый вариант — законченное утверждение и сочетается с вопросом о выводе. Языковых препятствий нет.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "Почти тот же отказ признать изменение, что в1; note2 правдива, но не создаёт самостоятельной правдоподобной ошибки рассуждения.",
+          "sourceKeys": [
+            "LOC-1507"
+          ],
+          "locator": "LoC full contiguous L19-L21; note3 exact qualifier in L20"
+        },
+        {
+          "slot": 3,
+          "fullPromptLiteral": "В описании карты мира 1507 года отмечены два наблюдения: западные земли отделены от Азии, а Тихий океан показан отдельным от Атлантики. В более ранней европейской модели обитаемый мир делился на Европу, Азию и Африку. Какой исторический вывод лучше всего обоснован этими данными?",
+          "answerLiteral": "Карта показывает переход от трёхчастной модели к отдельному западному полушарию с новым материком.",
+          "noteLiteral": "Сопоставление признаков со старой моделью обосновывает вывод; LOC называет этот экземпляр единственным из примерно 1000 отпечатанных.",
+          "bindingCanonicalSHA256": "6b35993ac531d1e724d3212490480aa980900da2ffafea605763082d8f339a2b",
+          "grammarJudgment": "Каждый вариант — законченное утверждение и сочетается с вопросом о выводе. Языковых препятствий нет.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "Вывод о переходе верен по L21. Заметка3 добавляет потенциально новый факт тиража, но теряет определяющие слова only known surviving изL20.",
+          "sourceKeys": [
+            "LOC-1507"
+          ],
+          "locator": "LoC full contiguous L19-L21; note3 exact qualifier in L20"
+        }
+      ],
+      "grammar": "Каждый вариант — законченное утверждение и сочетается с вопросом о выводе. Языковых препятствий нет.",
+      "uniqueKey": "Только3 согласуется с приведёнными наблюдениями;0 делает неподтверждённый вывод о точных площадях;1 и2 оба отрицают уже явно описанное изменение модели. Фактический ключ3 верен.",
+      "absoluteFrozenDifficulty": {
+        "value": "medium",
+        "assessment": "HOLD frozen medium: статья теперь не нужна для ответа, initial missing-input defect снят. Но ключ почти дословно соединяет три уже данных предложения;1 и2 практически эквивалентны (сохранение трёхчастной модели / включение западных земель в Азию), оба прямо опровергнуты условием. Нет необходимого исторического вывода сверх очевидного пересказа. Сценарий medium не установлен."
+      },
+      "extraCorrectNoteFact": "HOLD note3: LoC L20 говорит only known surviving copy из1000 believed printed. Текущая фраза «этот экземпляр единственным из примерно1000 отпечатанных» опускает известность и сохранность; это уже не точная передача основания уникальности. Тираж был бы новым фактом при сохранении существенного уточнения.",
+      "peerBindings": [
+        {
+          "sourceOrder": 69,
+          "id": "maps-cartography-peutinger-roads",
+          "currentCardCanonicalSHA256": "15eddad6dd2015d4f1feff9146b652db07e49ae4119340bd34b1538fbb50c57c"
+        },
+        {
+          "sourceOrder": 70,
+          "id": "maps-cartography-mappa-mundi",
+          "currentCardCanonicalSHA256": "e9eb3c5b1144a527d68a07bdd609151bbf150b3f0cad5ec6e42e108b9acb1ded"
+        },
+        {
+          "sourceOrder": 71,
+          "id": "maps-cartography-orthographic-space",
+          "currentCardCanonicalSHA256": "f9d8a2b5cc805d25fed90108c914c59a79bb4fa97bbf78d107cd8712fc48d62b"
+        }
+      ],
+      "conclusion": "Terminal sole-cycle1 HOLD0: absolute medium/plausibility unresolved and LoC correct-note qualifier lost. No second fix-cycle.",
+      "cycleLimit": "Sole cycle1 terminal; no second author fix-cycle."
+    },
+    {
+      "id": "maps-cartography-cadastral-parcels",
+      "sourceOrder": 87,
+      "currentCard": {
+        "id": "maps-cartography-cadastral-parcels",
+        "difficulty": "medium",
+        "prompt": "Для кадастрового плана нужно различать соседние участки шириной около 18 м. Единственная исходная карта имеет масштаб 1:50 000; её цифровое изображение можно увеличить на экране, но точность первоначальной съёмки неизвестна. Какой вывод о пригодности данных следует сделать?",
+        "answers": [
+          {
+            "text": "Увеличить изображение до масштаба 1:1 000: экранное увеличение уточнит границы.",
+            "note": "Увеличение меняет отображение, а не точность исходных измерений."
+          },
+          {
+            "text": "Взять топографическую карту 1:50 000: этот масштаб достаточен для узких кадастровых участков.",
+            "note": "FAO поясняет, что линия 0,5 мм при 1:50 000 занимает на местности 25 м, уже шире указанных участков."
+          },
+          {
+            "text": "Считать участки точными по экрану, если контуры выглядят раздельными.",
+            "note": "Визуально раздельные цифровые линии не доказывают разрешение или точность исходной съёмки."
+          },
+          {
+            "text": "Не считать увеличение заменой новой съёмки; запросить исходные крупномасштабные данные, пригодные для участков такого размера.",
+            "note": "При 1:50 000 линия толщиной 0,5 мм соответствует 25 м; экранный зум точности не добавляет."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "В масштабе 1:50 000 линия шириной 0,5 мм соответствует 25 м на местности, что превышает ширину участков 18 м. FAO также предупреждает, что увеличение цифровой карты не делает её точнее исходных данных; для кадастровых планов обычно применяют масштабы 1:500–1:2 500, хотя нужный масштаб зависит от местности. Следовательно, требуется подходящая исходная съёмка, а не визуальное увеличение этой карты.",
+        "source": {
+          "title": "Cadastral surveys and records of rights in land | FAO",
+          "url": "https://www.fao.org/4/v4860e/v4860e03.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "currentCardCanonicalSHA256": "d8b8cda76ac5fb5f6c9472d6388b3c34a65228bf0a2923cc46fff43959d0b3a8",
+      "status": "PASS",
+      "qualityCredit": 0,
+      "sixLiteralCanonicalJSONGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Для кадастрового плана нужно различать соседние участки шириной около 18 м. Единственная исходная карта имеет масштаб 1:50 000; её цифровое изображение можно увеличить на экране, но точность первоначальной съёмки неизвестна. Какой вывод о пригодности данных следует сделать?",
+            "answers": [
+              "Увеличить изображение до масштаба 1:1 000: экранное увеличение уточнит границы.",
+              "Взять топографическую карту 1:50 000: этот масштаб достаточен для узких кадастровых участков.",
+              "Считать участки точными по экрану, если контуры выглядят раздельными.",
+              "Не считать увеличение заменой новой съёмки; запросить исходные крупномасштабные данные, пригодные для участков такого размера."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "07f4d224de1169b5c0fab50e9211f5231f34992acc59620dcf7a98fee306ec2b",
+          "specificSourceGrounds": "Только3 не приписывает зуму новую точность и требует пригодный первичный материал. FAO L25-L28 объясняет ограничение1:50 000 и невозможность получить лучшую точность увеличением. PASS medium: применяется связь картографического разрешения с18-метровыми участками и отдельно оценивается происхождение точности при цифровом увеличении. Это реальная оценка пригодности данных, не узнавание слова «кадастр». Числа18м и1:50 000 иллюстрируют ограничение исходника;0,5мм дано как дополнительная опорная величина в note/explanation, а не выдаётся за заданную в prompt.",
+          "sourceKeys": [
+            "FAO-cadastral-maps"
+          ],
+          "locator": "FAO full L8-L9,L24-L30; especially L26 half-mm=25m and L28 enlargement cannot improve original accuracy",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "explanation",
+          "literal": "В масштабе 1:50 000 линия шириной 0,5 мм соответствует 25 м на местности, что превышает ширину участков 18 м. FAO также предупреждает, что увеличение цифровой карты не делает её точнее исходных данных; для кадастровых планов обычно применяют масштабы 1:500–1:2 500, хотя нужный масштаб зависит от местности. Следовательно, требуется подходящая исходная съёмка, а не визуальное увеличение этой карты.",
+          "canonicalSHA256": "9d3fca4f7284dc64350d226702aac5b016576b16484211a5f4cfab4f8c965794",
+          "specificSourceGrounds": "Только3 не приписывает зуму новую точность и требует пригодный первичный материал. FAO L25-L28 объясняет ограничение1:50 000 и невозможность получить лучшую точность увеличением. FAO full L8-L9,L24-L30; especially L26 half-mm=25m and L28 enlargement cannot improve original accuracy",
+          "sourceKeys": [
+            "FAO-cadastral-maps"
+          ],
+          "locator": "FAO full L8-L9,L24-L30; especially L26 half-mm=25m and L28 enlargement cannot improve original accuracy",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note0",
+          "literal": "Увеличение меняет отображение, а не точность исходных измерений.",
+          "canonicalSHA256": "a00456089983b3cb358ad4127009c911f1c4b5ea0a43db140839e99571830d1b",
+          "specificSourceGrounds": "Увеличение до1:1000 — правдоподобная подмена масштаба отображения исходной съёмкой. Note0 верно ограничивает точность L9,L28.",
+          "sourceKeys": [
+            "FAO-cadastral-maps"
+          ],
+          "locator": "FAO full L8-L9,L24-L30; especially L26 half-mm=25m and L28 enlargement cannot improve original accuracy",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note1",
+          "literal": "FAO поясняет, что линия 0,5 мм при 1:50 000 занимает на местности 25 м, уже шире указанных участков.",
+          "canonicalSHA256": "c1cc1a7eb8589488cfa0899bcfc8109e0ccb2cce5f194004b742bba0111312e7",
+          "specificSourceGrounds": "Обычная топокарта1:50 000 как готовый кадастр — типичная подмена назначения; note1 правильно считает0,5×50 000мм=25м, больше18м, поL26.",
+          "sourceKeys": [
+            "FAO-cadastral-maps"
+          ],
+          "locator": "FAO full L8-L9,L24-L30; especially L26 half-mm=25m and L28 enlargement cannot improve original accuracy",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note2",
+          "literal": "Визуально раздельные цифровые линии не доказывают разрешение или точность исходной съёмки.",
+          "canonicalSHA256": "02529c458063b8839770880c17c0d16fa99ceccbb4927f0d4004927b23a94044",
+          "specificSourceGrounds": "Визуальное разделение линий не подтверждает точность измерений. Note2 соответствует предупреждению L9 и исходному ограничению L28.",
+          "sourceKeys": [
+            "FAO-cadastral-maps"
+          ],
+          "locator": "FAO full L8-L9,L24-L30; especially L26 half-mm=25m and L28 enlargement cannot improve original accuracy",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note3",
+          "literal": "При 1:50 000 линия толщиной 0,5 мм соответствует 25 м; экранный зум точности не добавляет.",
+          "canonicalSHA256": "b21ff24b89e35af3cbda9e72e73ccd53e89369c9d2d95ba41fa88119ab8391c7",
+          "specificSourceGrounds": "Запрос пригодных исходных крупномасштабных данных корректен. Не требуется обязательно новая полевая съёмка, если подходящие первичные данные уже существуют; note3 верна и добавляет количественный пример.",
+          "sourceKeys": [
+            "FAO-cadastral-maps"
+          ],
+          "locator": "FAO full L8-L9,L24-L30; especially L26 half-mm=25m and L28 enlargement cannot improve original accuracy",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        }
+      ],
+      "fourFullPromptAnswerNoteAssessments": [
+        {
+          "slot": 0,
+          "fullPromptLiteral": "Для кадастрового плана нужно различать соседние участки шириной около 18 м. Единственная исходная карта имеет масштаб 1:50 000; её цифровое изображение можно увеличить на экране, но точность первоначальной съёмки неизвестна. Какой вывод о пригодности данных следует сделать?",
+          "answerLiteral": "Увеличить изображение до масштаба 1:1 000: экранное увеличение уточнит границы.",
+          "noteLiteral": "Увеличение меняет отображение, а не точность исходных измерений.",
+          "bindingCanonicalSHA256": "afba949e54f10be8ab4e64a46e2fbb0d97205f2cad764a064cd90777a78760af",
+          "grammarJudgment": "Вопрос спрашивает вывод о пригодности; все ответы представляют план/оценку применимости и подходят. Цифровое увеличение и неизвестная исходная точность разведены понятно.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "Увеличение до1:1000 — правдоподобная подмена масштаба отображения исходной съёмкой. Note0 верно ограничивает точность L9,L28.",
+          "sourceKeys": [
+            "FAO-cadastral-maps"
+          ],
+          "locator": "FAO full L8-L9,L24-L30; especially L26 half-mm=25m and L28 enlargement cannot improve original accuracy"
+        },
+        {
+          "slot": 1,
+          "fullPromptLiteral": "Для кадастрового плана нужно различать соседние участки шириной около 18 м. Единственная исходная карта имеет масштаб 1:50 000; её цифровое изображение можно увеличить на экране, но точность первоначальной съёмки неизвестна. Какой вывод о пригодности данных следует сделать?",
+          "answerLiteral": "Взять топографическую карту 1:50 000: этот масштаб достаточен для узких кадастровых участков.",
+          "noteLiteral": "FAO поясняет, что линия 0,5 мм при 1:50 000 занимает на местности 25 м, уже шире указанных участков.",
+          "bindingCanonicalSHA256": "6c1065725d3e92491591b931dba35274457e1f8e978636557679177af92bb221",
+          "grammarJudgment": "Вопрос спрашивает вывод о пригодности; все ответы представляют план/оценку применимости и подходят. Цифровое увеличение и неизвестная исходная точность разведены понятно.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "Обычная топокарта1:50 000 как готовый кадастр — типичная подмена назначения; note1 правильно считает0,5×50 000мм=25м, больше18м, поL26.",
+          "sourceKeys": [
+            "FAO-cadastral-maps"
+          ],
+          "locator": "FAO full L8-L9,L24-L30; especially L26 half-mm=25m and L28 enlargement cannot improve original accuracy"
+        },
+        {
+          "slot": 2,
+          "fullPromptLiteral": "Для кадастрового плана нужно различать соседние участки шириной около 18 м. Единственная исходная карта имеет масштаб 1:50 000; её цифровое изображение можно увеличить на экране, но точность первоначальной съёмки неизвестна. Какой вывод о пригодности данных следует сделать?",
+          "answerLiteral": "Считать участки точными по экрану, если контуры выглядят раздельными.",
+          "noteLiteral": "Визуально раздельные цифровые линии не доказывают разрешение или точность исходной съёмки.",
+          "bindingCanonicalSHA256": "613c90aa444683368c34bd618d8e498be1d7a39bdc59b629d369da2a9f2917ea",
+          "grammarJudgment": "Вопрос спрашивает вывод о пригодности; все ответы представляют план/оценку применимости и подходят. Цифровое увеличение и неизвестная исходная точность разведены понятно.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "Визуальное разделение линий не подтверждает точность измерений. Note2 соответствует предупреждению L9 и исходному ограничению L28.",
+          "sourceKeys": [
+            "FAO-cadastral-maps"
+          ],
+          "locator": "FAO full L8-L9,L24-L30; especially L26 half-mm=25m and L28 enlargement cannot improve original accuracy"
+        },
+        {
+          "slot": 3,
+          "fullPromptLiteral": "Для кадастрового плана нужно различать соседние участки шириной около 18 м. Единственная исходная карта имеет масштаб 1:50 000; её цифровое изображение можно увеличить на экране, но точность первоначальной съёмки неизвестна. Какой вывод о пригодности данных следует сделать?",
+          "answerLiteral": "Не считать увеличение заменой новой съёмки; запросить исходные крупномасштабные данные, пригодные для участков такого размера.",
+          "noteLiteral": "При 1:50 000 линия толщиной 0,5 мм соответствует 25 м; экранный зум точности не добавляет.",
+          "bindingCanonicalSHA256": "c8a47d7bf08a8a171e0671044065bcdf2adab6691f077814f1d794b57cc86187",
+          "grammarJudgment": "Вопрос спрашивает вывод о пригодности; все ответы представляют план/оценку применимости и подходят. Цифровое увеличение и неизвестная исходная точность разведены понятно.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "Запрос пригодных исходных крупномасштабных данных корректен. Не требуется обязательно новая полевая съёмка, если подходящие первичные данные уже существуют; note3 верна и добавляет количественный пример.",
+          "sourceKeys": [
+            "FAO-cadastral-maps"
+          ],
+          "locator": "FAO full L8-L9,L24-L30; especially L26 half-mm=25m and L28 enlargement cannot improve original accuracy"
+        }
+      ],
+      "grammar": "Вопрос спрашивает вывод о пригодности; все ответы представляют план/оценку применимости и подходят. Цифровое увеличение и неизвестная исходная точность разведены понятно.",
+      "uniqueKey": "Только3 не приписывает зуму новую точность и требует пригодный первичный материал. FAO L25-L28 объясняет ограничение1:50 000 и невозможность получить лучшую точность увеличением.",
+      "absoluteFrozenDifficulty": {
+        "value": "medium",
+        "assessment": "PASS medium: применяется связь картографического разрешения с18-метровыми участками и отдельно оценивается происхождение точности при цифровом увеличении. Это реальная оценка пригодности данных, не узнавание слова «кадастр». Числа18м и1:50 000 иллюстрируют ограничение исходника;0,5мм дано как дополнительная опорная величина в note/explanation, а не выдаётся за заданную в prompt."
+      },
+      "extraCorrectNoteFact": "PASS: конкретный физический пример FAO —0,5мм линии соответствуют25м при1:50 000 — отсутствует в prompt/key и даёт новое обоснование разрешения. Не засчитываю повтор «зум точности не добавляет» как новый факт.",
+      "peerBindings": [
+        {
+          "sourceOrder": 54,
+          "id": "maps-cartography-large-scale",
+          "currentCardCanonicalSHA256": "1fdf7a1a569004f93033e50a29535d42bdedc6ce6fc2cc297cb1d92ed344e652"
+        },
+        {
+          "sourceOrder": 78,
+          "id": "maps-cartography-atlas-collection",
+          "currentCardCanonicalSHA256": "21c35787d92209a60ec9d2598f58e98ba9d48e189cf5860ca811cc184a792e3b"
+        },
+        {
+          "sourceOrder": 80,
+          "id": "maps-cartography-wall-map",
+          "currentCardCanonicalSHA256": "58afb1f6c0972e5b624cb4ce831704875905ca0db13c4882b27528ddad5029ef"
+        },
+        {
+          "sourceOrder": 81,
+          "id": "maps-cartography-digital-map",
+          "currentCardCanonicalSHA256": "0f4e7474207c8eba0a8bb179c7eda52c2838553f3c78e37c8c04ebf4e1967a64"
+        },
+        {
+          "sourceOrder": 83,
+          "id": "maps-cartography-measure-distance",
+          "currentCardCanonicalSHA256": "481d40b1cbb2aea1a7fcad75b70b5f214606e08068d8c4e309faf22c764db7c0"
+        },
+        {
+          "sourceOrder": 92,
+          "id": "maps-cartography-generalization-select",
+          "currentCardCanonicalSHA256": "1e30c8252c53d15b790cec0910c54ade8a58c046869da927504561581c2df0d0"
+        },
+        {
+          "sourceOrder": 93,
+          "id": "maps-cartography-classification-groups",
+          "currentCardCanonicalSHA256": "c1fb1bcd102b7a247f5090801f7afa4e3c4dfaa9b02bb04c4b7f2da837c04997"
+        },
+        {
+          "sourceOrder": 95,
+          "id": "maps-cartography-label-placement",
+          "currentCardCanonicalSHA256": "05ad5be898ad7b09303383765402e9a018a96baa5291cd3c023c9f980605ce3b"
+        },
+        {
+          "sourceOrder": 73,
+          "id": "maps-cartography-sliver-polygon",
+          "currentCardCanonicalSHA256": "1b23f859d2a6d38330477d45c959b546173563fbdd337e4d653c3ab7e93b5fc2"
+        }
+      ],
+      "conclusion": "Initial definition-only medium defect resolved by source-resolution and zoom/accuracy application.",
+      "cycleLimit": "Sole cycle1 terminal; no second author fix-cycle."
+    },
+    {
+      "id": "maps-cartography-shape-distortion",
+      "sourceOrder": 89,
+      "currentCard": {
+        "id": "maps-cartography-shape-distortion",
+        "difficulty": "medium",
+        "prompt": "На схеме двух участков направления двух линий на местности равны 0° и 60°. После проецирования в наборе X они равны 20° и 80°, а в наборе Y — 0° и 90°. Какой набор сохраняет измеренный угол между линиями, несмотря на возможный общий поворот всей схемы?",
+        "answers": [
+          {
+            "text": "Ни один: раз направления обеих линий изменились, исходный угол уже не сохраняется.",
+            "note": "Общий поворот меняет направления, но сохраняет разность; в X она остаётся 60°."
+          },
+          {
+            "text": "Y, потому что первая линия сохранила исходное направление 0°.",
+            "note": "Совпадение направления одной линии не сохраняет угол: в Y между линиями 90°, а было 60°."
+          },
+          {
+            "text": "X, потому что обе линии имеют те же абсолютные направления, что и на местности.",
+            "note": "Абсолютные направления изменились с 0°/60° на 20°/80°; сохранена их разность, а не сами направления."
+          },
+          {
+            "text": "X: угол между линиями остаётся 60°, хотя вся пара повёрнута на 20°.",
+            "note": "Любая плоская проекция искажает некоторые свойства; выбор зависит от охвата и свойства, которое нужно сохранить."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Угол между линиями определяется разностью их направлений. В X разность равна 80°−20° = 60°, как и на местности; общий поворот на 20° не меняет этот угол. В Y разность равна 90°, поэтому этот набор не сохраняет исходный локальный угол.",
+        "source": {
+          "title": "Coordinate systems, map projections, and transformations | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/mapping/properties/coordinate-systems-and-projections.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "currentCardCanonicalSHA256": "61215a94ac347454c54b63931189e1f4b9de89506b19ae4f969e618af37937b0",
+      "status": "PASS",
+      "qualityCredit": 0,
+      "sixLiteralCanonicalJSONGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На схеме двух участков направления двух линий на местности равны 0° и 60°. После проецирования в наборе X они равны 20° и 80°, а в наборе Y — 0° и 90°. Какой набор сохраняет измеренный угол между линиями, несмотря на возможный общий поворот всей схемы?",
+            "answers": [
+              "Ни один: раз направления обеих линий изменились, исходный угол уже не сохраняется.",
+              "Y, потому что первая линия сохранила исходное направление 0°.",
+              "X, потому что обе линии имеют те же абсолютные направления, что и на местности.",
+              "X: угол между линиями остаётся 60°, хотя вся пара повёрнута на 20°."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "6a417c1568c880c65e212f6fe6312a95fe34657ed79beee4c68cc4dca3e8885c",
+          "specificSourceGrounds": "X:80−20=60°, исходно60−0=60°.Y:90−0=90°. Общий поворотX на20° сохраняет угол.2 называетX, но даёт ложное основание (абсолютные направления не те же); полностью правильный ответ только3. PASS medium: арифметика нужна, но недостаточна — надо отличить относительный угол от абсолютных направлений. Вариант2 называет тот жеX с ложным объяснением;1 сохраняет направление только одной линии. Это концептуальное применение локальной угловой сохранности, в отличие от initial четырёх разностей и максимума.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L35-L37 projection properties; elementary relative-angle invariance under common rotation derived from input directions",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "explanation",
+          "literal": "Угол между линиями определяется разностью их направлений. В X разность равна 80°−20° = 60°, как и на местности; общий поворот на 20° не меняет этот угол. В Y разность равна 90°, поэтому этот набор не сохраняет исходный локальный угол.",
+          "canonicalSHA256": "1b796e9f2a5a747cec9a1fbe4a4e621dd2fdba55785f83158ffc2004020f2cad",
+          "specificSourceGrounds": "X:80−20=60°, исходно60−0=60°.Y:90−0=90°. Общий поворотX на20° сохраняет угол.2 называетX, но даёт ложное основание (абсолютные направления не те же); полностью правильный ответ только3. Esri full L35-L37 projection properties; elementary relative-angle invariance under common rotation derived from input directions",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L35-L37 projection properties; elementary relative-angle invariance under common rotation derived from input directions",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note0",
+          "literal": "Общий поворот меняет направления, но сохраняет разность; в X она остаётся 60°.",
+          "canonicalSHA256": "b7722947f3fa30d0a95357a6f40ccf91cb88024e16684cdebe8f9075ce53e55e",
+          "specificSourceGrounds": "Типичная путаница абсолютных направлений и относительного угла. Note0 верно показывает, почему общий поворот не меняет разность.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L35-L37 projection properties; elementary relative-angle invariance under common rotation derived from input directions",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note1",
+          "literal": "Совпадение направления одной линии не сохраняет угол: в Y между линиями 90°, а было 60°.",
+          "canonicalSHA256": "0a887c2a9143da405dc73bacf7d43c47c3c651d8064dcdb5d9c2308ebd507fd5",
+          "specificSourceGrounds": "Одна линия сохранила0°, но вторая даёт90° вместо60°. Note1 адресна и арифметически верна.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L35-L37 projection properties; elementary relative-angle invariance under common rotation derived from input directions",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note2",
+          "literal": "Абсолютные направления изменились с 0°/60° на 20°/80°; сохранена их разность, а не сами направления.",
+          "canonicalSHA256": "39624c6bb120582596d4884502d5f344223b74085aa1077d54fb31a50a65fec1",
+          "specificSourceGrounds": "X назван верно, основание неверно:0→20и60→80. Note2 верно отделяет направления от разности и делает этот дистрактор самостоятельным.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L35-L37 projection properties; elementary relative-angle invariance under common rotation derived from input directions",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note3",
+          "literal": "Любая плоская проекция искажает некоторые свойства; выбор зависит от охвата и свойства, которое нужно сохранить.",
+          "canonicalSHA256": "b3180f4471b16dda9521c2b8a39ad6e670b31311abbcf87f2059bd083c179ae0",
+          "specificSourceGrounds": "X с правильным основанием сохраняет именно измеренный угол. Note3 поддержана Esri L36-L37 и не объявляет всю проекцию равноугольной на основании одного наблюдения.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L35-L37 projection properties; elementary relative-angle invariance under common rotation derived from input directions",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        }
+      ],
+      "fourFullPromptAnswerNoteAssessments": [
+        {
+          "slot": 0,
+          "fullPromptLiteral": "На схеме двух участков направления двух линий на местности равны 0° и 60°. После проецирования в наборе X они равны 20° и 80°, а в наборе Y — 0° и 90°. Какой набор сохраняет измеренный угол между линиями, несмотря на возможный общий поворот всей схемы?",
+          "answerLiteral": "Ни один: раз направления обеих линий изменились, исходный угол уже не сохраняется.",
+          "noteLiteral": "Общий поворот меняет направления, но сохраняет разность; в X она остаётся 60°.",
+          "bindingCanonicalSHA256": "c618daca36c7a30aaee699813d72472f9a854024bc7ad0a9b0d401bed9e2b847",
+          "grammarJudgment": "Условие различает направления двух линий и угол между ними. Все варианты отвечают о наборе и основании; формулировка «измеренный угол» ограничивает вывод конкретной парой, не всей проекцией.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "Типичная путаница абсолютных направлений и относительного угла. Note0 верно показывает, почему общий поворот не меняет разность.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L35-L37 projection properties; elementary relative-angle invariance under common rotation derived from input directions"
+        },
+        {
+          "slot": 1,
+          "fullPromptLiteral": "На схеме двух участков направления двух линий на местности равны 0° и 60°. После проецирования в наборе X они равны 20° и 80°, а в наборе Y — 0° и 90°. Какой набор сохраняет измеренный угол между линиями, несмотря на возможный общий поворот всей схемы?",
+          "answerLiteral": "Y, потому что первая линия сохранила исходное направление 0°.",
+          "noteLiteral": "Совпадение направления одной линии не сохраняет угол: в Y между линиями 90°, а было 60°.",
+          "bindingCanonicalSHA256": "a3f7bb2973ffbcc37a8b79f815ff4fc5a2a6c09f7ca828177254af96a82e5c60",
+          "grammarJudgment": "Условие различает направления двух линий и угол между ними. Все варианты отвечают о наборе и основании; формулировка «измеренный угол» ограничивает вывод конкретной парой, не всей проекцией.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "Одна линия сохранила0°, но вторая даёт90° вместо60°. Note1 адресна и арифметически верна.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L35-L37 projection properties; elementary relative-angle invariance under common rotation derived from input directions"
+        },
+        {
+          "slot": 2,
+          "fullPromptLiteral": "На схеме двух участков направления двух линий на местности равны 0° и 60°. После проецирования в наборе X они равны 20° и 80°, а в наборе Y — 0° и 90°. Какой набор сохраняет измеренный угол между линиями, несмотря на возможный общий поворот всей схемы?",
+          "answerLiteral": "X, потому что обе линии имеют те же абсолютные направления, что и на местности.",
+          "noteLiteral": "Абсолютные направления изменились с 0°/60° на 20°/80°; сохранена их разность, а не сами направления.",
+          "bindingCanonicalSHA256": "5ad6a2029f1a5354fbcc434cbc62baf7ce46c74f56f258e988f73419b2f31a83",
+          "grammarJudgment": "Условие различает направления двух линий и угол между ними. Все варианты отвечают о наборе и основании; формулировка «измеренный угол» ограничивает вывод конкретной парой, не всей проекцией.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "X назван верно, основание неверно:0→20и60→80. Note2 верно отделяет направления от разности и делает этот дистрактор самостоятельным.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L35-L37 projection properties; elementary relative-angle invariance under common rotation derived from input directions"
+        },
+        {
+          "slot": 3,
+          "fullPromptLiteral": "На схеме двух участков направления двух линий на местности равны 0° и 60°. После проецирования в наборе X они равны 20° и 80°, а в наборе Y — 0° и 90°. Какой набор сохраняет измеренный угол между линиями, несмотря на возможный общий поворот всей схемы?",
+          "answerLiteral": "X: угол между линиями остаётся 60°, хотя вся пара повёрнута на 20°.",
+          "noteLiteral": "Любая плоская проекция искажает некоторые свойства; выбор зависит от охвата и свойства, которое нужно сохранить.",
+          "bindingCanonicalSHA256": "bd3708c2e21266ab1d554f079e026ce16ff6b46dfd984d512452df68d16c799b",
+          "grammarJudgment": "Условие различает направления двух линий и угол между ними. Все варианты отвечают о наборе и основании; формулировка «измеренный угол» ограничивает вывод конкретной парой, не всей проекцией.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "X с правильным основанием сохраняет именно измеренный угол. Note3 поддержана Esri L36-L37 и не объявляет всю проекцию равноугольной на основании одного наблюдения.",
+          "sourceKeys": [
+            "Esri-coordinate-systems"
+          ],
+          "locator": "Esri full L35-L37 projection properties; elementary relative-angle invariance under common rotation derived from input directions"
+        }
+      ],
+      "grammar": "Условие различает направления двух линий и угол между ними. Все варианты отвечают о наборе и основании; формулировка «измеренный угол» ограничивает вывод конкретной парой, не всей проекцией.",
+      "uniqueKey": "X:80−20=60°, исходно60−0=60°.Y:90−0=90°. Общий поворотX на20° сохраняет угол.2 называетX, но даёт ложное основание (абсолютные направления не те же); полностью правильный ответ только3.",
+      "absoluteFrozenDifficulty": {
+        "value": "medium",
+        "assessment": "PASS medium: арифметика нужна, но недостаточна — надо отличить относительный угол от абсолютных направлений. Вариант2 называет тот жеX с ложным объяснением;1 сохраняет направление только одной линии. Это концептуальное применение локальной угловой сохранности, в отличие от initial четырёх разностей и максимума."
+      },
+      "extraCorrectNoteFact": "PASS: неизбежный компромисс плоской проекции и зависимость выбора от охвата/сохраняемого свойства — дополнительный факт L36-L37, не просто вычисление60° или поворота20°.",
+      "peerBindings": [
+        {
+          "sourceOrder": 15,
+          "id": "maps-cartography-conformal-angle",
+          "currentCardCanonicalSHA256": "ca236c1001d103abacf5463b64b65c307dc7b98dd32cd749831224514a8f816e"
+        },
+        {
+          "sourceOrder": 17,
+          "id": "maps-cartography-equidistant",
+          "currentCardCanonicalSHA256": "c1b1951eadf3f6a9471f3a08c009ac2cd6d29c3aa08ae933df22ceff65caad73"
+        },
+        {
+          "sourceOrder": 71,
+          "id": "maps-cartography-orthographic-space",
+          "currentCardCanonicalSHA256": "f9d8a2b5cc805d25fed90108c914c59a79bb4fa97bbf78d107cd8712fc48d62b"
+        },
+        {
+          "sourceOrder": 86,
+          "id": "maps-cartography-waldseemuller-america",
+          "currentCardCanonicalSHA256": "0c341ac1f2fafeb90c58ad4b35049d89945b94f28a35526b57cccf7d421ece34"
+        },
+        {
+          "sourceOrder": 88,
+          "id": "maps-cartography-area-distortion",
+          "currentCardCanonicalSHA256": "524d529c3f127907920f94c01a76b712af1ccbeeb72ecac9e05a8323dfd8cb04"
+        },
+        {
+          "sourceOrder": 90,
+          "id": "maps-cartography-distance-distortion",
+          "currentCardCanonicalSHA256": "541d69fdf9f3d32697e33c54642559bca4db4a6327fb83f828ac18293f7dd2a8"
+        },
+        {
+          "sourceOrder": 91,
+          "id": "maps-cartography-direction-distortion",
+          "currentCardCanonicalSHA256": "3242a680c6f6f261e649fb2b3c0f399baff9689849909b9ac7750209f91b5efb"
+        }
+      ],
+      "conclusion": "Initial easy maximum-of-differences demand replaced by meaningful angle-versus-direction reasoning.",
+      "cycleLimit": "Sole cycle1 terminal; no second author fix-cycle."
+    },
+    {
+      "id": "maps-cartography-distance-distortion",
+      "sourceOrder": 90,
+      "currentCard": {
+        "id": "maps-cartography-distance-distortion",
+        "difficulty": "medium",
+        "prompt": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+        "answers": [
+          {
+            "text": "В 0,8 раза",
+            "note": "0,8 — обратное отношение масштаба B к масштабу A."
+          },
+          {
+            "text": "В 1 раз",
+            "note": "Одинаковые масштабы дали бы одинаковую длину изображения на каждый километр; здесь коэффициенты 0,25 и 0,20 см/км."
+          },
+          {
+            "text": "В 1,5 раза",
+            "note": "1,5 — это отношение наземных длин 12/8; оно не учитывает длины на карте."
+          },
+          {
+            "text": "В 1,25 раза",
+            "note": "В азимутальной равновеликой проекции Ламберта масштаб убывает по радиусам от центра и растёт перпендикулярно им, поэтому сравнение локального масштаба зависит от направления."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Нормируйте изображения: A — 3,0/12 = 0,25 см/км, B — 1,6/8 = 0,20 см/км. Отношение 0,25/0,20 = 1,25, значит локальный масштаб A в 1,25 раза больше; сравнение относится к этим участкам.",
+        "source": {
+          "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "currentCardCanonicalSHA256": "541d69fdf9f3d32697e33c54642559bca4db4a6327fb83f828ac18293f7dd2a8",
+      "status": "HOLD",
+      "qualityCredit": 0,
+      "sixLiteralCanonicalJSONGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+            "answers": [
+              "В 0,8 раза",
+              "В 1 раз",
+              "В 1,5 раза",
+              "В 1,25 раза"
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "20bd33dccf20604df956139c2246fbe2b0e04c7ab159e80aa435aea99d04657d",
+          "specificSourceGrounds": "3/12=0,25см/км;1,6/8=0,20см/км;0,25/0,20=1,25. Только3. Note2 теперь верно связывает1,5 с12/8, устранив слабую адресность старой заметки. PASS individually medium: две разные наземные базы требуют двух нормирований до сравнения. HOLD at actual-pair gate: CURRENT88 не заменена авторским FINAL88 и по-прежнему требует те же два нормирования и отношение, только с площадями. Изменение note2 не устранило demand-дубль.",
+          "sourceKeys": [
+            "Esri-LAEA"
+          ],
+          "locator": "Esri LAEA full L25; synthetic arithmetic from current prompt; actualCURRENT88 pair",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "explanation",
+          "literal": "Нормируйте изображения: A — 3,0/12 = 0,25 см/км, B — 1,6/8 = 0,20 см/км. Отношение 0,25/0,20 = 1,25, значит локальный масштаб A в 1,25 раза больше; сравнение относится к этим участкам.",
+          "canonicalSHA256": "3016aa1271d81a9cc1a12a9edbb032c4d8f66385b88da5f293ff5f463ec43f9d",
+          "specificSourceGrounds": "3/12=0,25см/км;1,6/8=0,20см/км;0,25/0,20=1,25. Только3. Note2 теперь верно связывает1,5 с12/8, устранив слабую адресность старой заметки. Esri LAEA full L25; synthetic arithmetic from current prompt; actualCURRENT88 pair",
+          "sourceKeys": [
+            "Esri-LAEA"
+          ],
+          "locator": "Esri LAEA full L25; synthetic arithmetic from current prompt; actualCURRENT88 pair",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note0",
+          "literal": "0,8 — обратное отношение масштаба B к масштабу A.",
+          "canonicalSHA256": "3b21dcf96cd7977a299983ae14543e12d6e962fb3b2496afb2433357675e42ab",
+          "specificSourceGrounds": "0,8 — обратноеB/A; note0 правдива, даёт адресное исправление направления отношения.",
+          "sourceKeys": [
+            "Esri-LAEA"
+          ],
+          "locator": "Esri LAEA full L25; synthetic arithmetic from current prompt; actualCURRENT88 pair",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note1",
+          "literal": "Одинаковые масштабы дали бы одинаковую длину изображения на каждый километр; здесь коэффициенты 0,25 и 0,20 см/км.",
+          "canonicalSHA256": "f0aca60e7bf87bda125504046729534ac5b19049fd7889adf1b7fcca605b68ce",
+          "specificSourceGrounds": "1 предполагает одинаковый масштаб; note1 верно показывает0,25и0,20.",
+          "sourceKeys": [
+            "Esri-LAEA"
+          ],
+          "locator": "Esri LAEA full L25; synthetic arithmetic from current prompt; actualCURRENT88 pair",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note2",
+          "literal": "1,5 — это отношение наземных длин 12/8; оно не учитывает длины на карте.",
+          "canonicalSHA256": "846a98d4a9944bb8010c734fdbab9054eecc265be0ff468790a0c50f8d1d1313",
+          "specificSourceGrounds": "1,5 действительно равно12/8 и игнорирует разные картографические длины. Note2 теперь объясняет именно выбранную ошибку, без ложной арифметики.",
+          "sourceKeys": [
+            "Esri-LAEA"
+          ],
+          "locator": "Esri LAEA full L25; synthetic arithmetic from current prompt; actualCURRENT88 pair",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        },
+        {
+          "group": "note3",
+          "literal": "В азимутальной равновеликой проекции Ламберта масштаб убывает по радиусам от центра и растёт перпендикулярно им, поэтому сравнение локального масштаба зависит от направления.",
+          "canonicalSHA256": "892a632cf8d41f9ae107f8af8266494be0e7858190f90fa24bf0c7e4b8821bd9",
+          "specificSourceGrounds": "1,25 верен; note3 точно относится к азимутальной равновеликойЛамберта и верно передаёт L25.",
+          "sourceKeys": [
+            "Esri-LAEA"
+          ],
+          "locator": "Esri LAEA full L25; synthetic arithmetic from current prompt; actualCURRENT88 pair",
+          "fieldFinding": "Reviewed; see card-level absolute difficulty/peer gate"
+        }
+      ],
+      "fourFullPromptAnswerNoteAssessments": [
+        {
+          "slot": 0,
+          "fullPromptLiteral": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+          "answerLiteral": "В 0,8 раза",
+          "noteLiteral": "0,8 — обратное отношение масштаба B к масштабу A.",
+          "bindingCanonicalSHA256": "6dc00c59a1b3e30931c8384935318a80b59aa0e2525de886efb1970332ce85c9",
+          "grammarJudgment": "Вопрос и четыре числовых ответа согласованы; отношениеA/B и единицысм/км определены.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "0,8 — обратноеB/A; note0 правдива, даёт адресное исправление направления отношения.",
+          "sourceKeys": [
+            "Esri-LAEA"
+          ],
+          "locator": "Esri LAEA full L25; synthetic arithmetic from current prompt; actualCURRENT88 pair"
+        },
+        {
+          "slot": 1,
+          "fullPromptLiteral": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+          "answerLiteral": "В 1 раз",
+          "noteLiteral": "Одинаковые масштабы дали бы одинаковую длину изображения на каждый километр; здесь коэффициенты 0,25 и 0,20 см/км.",
+          "bindingCanonicalSHA256": "efaf60e164317afbfd08a132660c54c451eca4648d2e39371c0c36f6edeb2136",
+          "grammarJudgment": "Вопрос и четыре числовых ответа согласованы; отношениеA/B и единицысм/км определены.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "1 предполагает одинаковый масштаб; note1 верно показывает0,25и0,20.",
+          "sourceKeys": [
+            "Esri-LAEA"
+          ],
+          "locator": "Esri LAEA full L25; synthetic arithmetic from current prompt; actualCURRENT88 pair"
+        },
+        {
+          "slot": 2,
+          "fullPromptLiteral": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+          "answerLiteral": "В 1,5 раза",
+          "noteLiteral": "1,5 — это отношение наземных длин 12/8; оно не учитывает длины на карте.",
+          "bindingCanonicalSHA256": "8ac4efeb2fe0257c06c1bb73d2ffa42d0794983ef5421ea48a95f66b4c15efba",
+          "grammarJudgment": "Вопрос и четыре числовых ответа согласованы; отношениеA/B и единицысм/км определены.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "1,5 действительно равно12/8 и игнорирует разные картографические длины. Note2 теперь объясняет именно выбранную ошибку, без ложной арифметики.",
+          "sourceKeys": [
+            "Esri-LAEA"
+          ],
+          "locator": "Esri LAEA full L25; synthetic arithmetic from current prompt; actualCURRENT88 pair"
+        },
+        {
+          "slot": 3,
+          "fullPromptLiteral": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+          "answerLiteral": "В 1,25 раза",
+          "noteLiteral": "В азимутальной равновеликой проекции Ламберта масштаб убывает по радиусам от центра и растёт перпендикулярно им, поэтому сравнение локального масштаба зависит от направления.",
+          "bindingCanonicalSHA256": "8b0fd726620f389d40a6fabef69789267b7b20ea8b89f2b10ea512b4226fb2fc",
+          "grammarJudgment": "Вопрос и четыре числовых ответа согласованы; отношениеA/B и единицысм/км определены.",
+          "plausibilityUniqueKeyOwnNoteTruthAndUsefulness": "1,25 верен; note3 точно относится к азимутальной равновеликойЛамберта и верно передаёт L25.",
+          "sourceKeys": [
+            "Esri-LAEA"
+          ],
+          "locator": "Esri LAEA full L25; synthetic arithmetic from current prompt; actualCURRENT88 pair"
+        }
+      ],
+      "grammar": "Вопрос и четыре числовых ответа согласованы; отношениеA/B и единицысм/км определены.",
+      "uniqueKey": "3/12=0,25см/км;1,6/8=0,20см/км;0,25/0,20=1,25. Только3. Note2 теперь верно связывает1,5 с12/8, устранив слабую адресность старой заметки.",
+      "absoluteFrozenDifficulty": {
+        "value": "medium",
+        "assessment": "PASS individually medium: две разные наземные базы требуют двух нормирований до сравнения. HOLD at actual-pair gate: CURRENT88 не заменена авторским FINAL88 и по-прежнему требует те же два нормирования и отношение, только с площадями. Изменение note2 не устранило demand-дубль."
+      },
+      "extraCorrectNoteFact": "PASS: полное имяLAEA и разная радиальная/поперечная зависимость масштаба подтверждены L25, добавлены сверх численного1,25.",
+      "peerBindings": [
+        {
+          "sourceOrder": 17,
+          "id": "maps-cartography-equidistant",
+          "currentCardCanonicalSHA256": "c1b1951eadf3f6a9471f3a08c009ac2cd6d29c3aa08ae933df22ceff65caad73"
+        },
+        {
+          "sourceOrder": 51,
+          "id": "maps-cartography-bar-scale",
+          "currentCardCanonicalSHA256": "7ea859557fbd3ec6105a8570e9f9c9271c9e7fe888d29ea8bfbeab11ba2cf25b"
+        },
+        {
+          "sourceOrder": 52,
+          "id": "maps-cartography-ratio-scale",
+          "currentCardCanonicalSHA256": "657d4a06c51571a61380171c5faa88154e7afa1a309cd89dc31f89b93833d1ad"
+        },
+        {
+          "sourceOrder": 80,
+          "id": "maps-cartography-wall-map",
+          "currentCardCanonicalSHA256": "58afb1f6c0972e5b624cb4ce831704875905ca0db13c4882b27528ddad5029ef"
+        },
+        {
+          "sourceOrder": 83,
+          "id": "maps-cartography-measure-distance",
+          "currentCardCanonicalSHA256": "481d40b1cbb2aea1a7fcad75b70b5f214606e08068d8c4e309faf22c764db7c0"
+        },
+        {
+          "sourceOrder": 88,
+          "id": "maps-cartography-area-distortion",
+          "currentCardCanonicalSHA256": "524d529c3f127907920f94c01a76b712af1ccbeeb72ecac9e05a8323dfd8cb04"
+        },
+        {
+          "sourceOrder": 89,
+          "id": "maps-cartography-shape-distortion",
+          "currentCardCanonicalSHA256": "61215a94ac347454c54b63931189e1f4b9de89506b19ae4f969e618af37937b0"
+        },
+        {
+          "sourceOrder": 73,
+          "id": "maps-cartography-sliver-polygon",
+          "currentCardCanonicalSHA256": "1b23f859d2a6d38330477d45c959b546173563fbdd337e4d653c3ab7e93b5fc2"
+        },
+        {
+          "sourceOrder": 74,
+          "id": "maps-cartography-overshoot-line",
+          "currentCardCanonicalSHA256": "211965fcec8cc7e832215fe4e583562669fea8f221bfaf4488dde27aa36ff072"
+        }
+      ],
+      "conclusion": "Terminal sole-cycle1 HOLD0 on unresolved CURRENT88/90 duplicate dependency only. No own numerical/source defect and no second fix-cycle.",
+      "cycleLimit": "Sole cycle1 terminal; no second author fix-cycle."
+    }
+  ],
+  "counts": {
+    "PASS": 3,
+    "HOLD": 2,
+    "separateAuthorTerminalHOLD88": 1
+  },
+  "qualityCredit": 0,
+  "separateTerminal88": "evidence-cycle1/terminal-hold88.json",
+  "nextAction": "Coordinator adjudicates and preserves exact receipt;86 and90 terminalHOLD0,88 separate author terminalHOLD0. No second fix-cycle. No conditional PASS90 based on unapplied88.",
+  "notRun": [
+    "Catalog QA/runtime/tests/build/deploy: prohibited by review-only assignment; affected19 result referenced, not rerun.",
+    "Fresh primary fetch: no concrete source gap, unchanged saved full contexts reused."
+  ],
+  "preservation": "Only this new receipt and evidence-cycle1 written; no catalog/Git/index/claims mutation. Archive only after coordinator Git preservation."
+}
