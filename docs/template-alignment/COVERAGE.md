@@ -83,3 +83,5 @@
 | UPDATES-ARGS-01 | Параметры после обновления | desktop/releases.mjs, updateCheck.mjs, content.mjs, shell.mjs, updater/; Node/Go fixtures; реальная установка N→N+1/аварии — pending |
 | UPDATES-RELEASE-01 | Полный и неизменяемый выпуск | desktop/releases.mjs, updateCheck.mjs, content.mjs, shell.mjs, updater/; Node/Go fixtures; реальная установка N→N+1/аварии — pending |
 | UPDATES-QA-01 | Приёмка и публикация | desktop/releases.mjs, updateCheck.mjs, content.mjs, shell.mjs, updater/; Node/Go fixtures; реальная установка N→N+1/аварии — pending |
+
+Исправление F1 (`label-controls-help`): `src/ui/ControlsHelp.tsx` накладывает точные подписи на сгенерированный asset; группы клавиш показаны крупно, лицевые кнопки используют `GAMEPAD_GLYPHS`. Назначения сверены с `input.ts`, `soloInput.ts`, `App.tsx`; проверки: `tests/browser/controls-help.spec.ts`. Графическая справка требует отдельной визуальной приёмки человека.

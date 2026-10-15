@@ -327,6 +327,9 @@ test("uses the team pause dialog and resumes the solo run", async ({ page }, tes
   await page.getByLabel("Громкость музыки").fill("0.4");
   await page.getByRole("button", { name: "Назад", exact: true }).click();
   await expect(page.getByRole("button", { name: "Продолжить", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Настройки", exact: true })).toBeFocused();
+  await page.keyboard.press("ArrowUp");
+  await expect(page.getByRole("button", { name: "Продолжить", exact: true })).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("heading", { name: "Выберите тему" })).toBeVisible();
 });

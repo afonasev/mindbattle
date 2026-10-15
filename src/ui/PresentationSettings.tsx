@@ -1,3 +1,4 @@
+import { ControlsHelp } from "./ControlsHelp";
 import { useState } from "react";
 import { DEFAULT_PREFERENCES, decodePreferences, STORAGE_KEY } from "../adapters/storage";
 import { useStatistics } from './useStatistics';
@@ -73,15 +74,4 @@ export function PresentationSettings({ preferences, setPreferences, back, sessio
 
 export function SettingsDialog(props: Parameters<typeof PresentationSettings>[0] & { readonly back: () => void }) {
   return <MenuDialog wide title="Настройки" back={props.back}><PresentationSettings {...props} /></MenuDialog>;
-}
-
-function ControlsHelp({ back }: { back: () => void }) {
-  const [page, setPage] = useState<"keyboard" | "pad">("keyboard");
-  const [missing, setMissing] = useState(false);
-  return <MenuDialog wide title="Управление в игре" back={back} footer={<MenuAction onClick={back}>Назад</MenuAction>}>
-    <div className="help-tabs"><MenuAction onClick={() => setPage("keyboard")} aria-pressed={page === "keyboard"}>Клавиатура и мышь</MenuAction><MenuAction onClick={() => setPage("pad")} aria-pressed={page === "pad"}>Геймпад</MenuAction></div>
-    <img hidden src="/images/controls-devices-v1.png" alt="" onError={() => setMissing(true)} />
-    {missing ? <p role="status">Не удалось загрузить иллюстрацию управления. Откройте справку снова после восстановления файлов игры.</p> : <div className={`controls-help-art controls-help-art--${page}`} role="img" aria-label={page === "keyboard" ? "Клавиатура и мышь" : "Геймпад"}>{page === "keyboard" ? <><span className="help-callout help-callout--keys">WASD / ↑→↓← · ответы</span><span className="help-callout help-callout--mouse">Клик · выбор</span></> : <><span className="help-callout help-callout--dpad">D-pad · тема</span><span className="help-callout help-callout--answers">Четыре кнопки · ответы</span></>}</div>}
-    {page === "keyboard" ? <div className="controls-help-copy"><p><strong>Ответы по положению:</strong> W / ↑ — верхний, D / → — правый, S / ↓ — нижний, A / ← — левый.</p><p><strong>Командная игра:</strong> WASD и стрелки назначаются разным командам. Space / правый Shift — подтвердить выбор или продолжить раскрытие.</p><p><strong>Одиночная игра:</strong> Enter / Space — подтвердить выбор темы и риска. Esc — пауза. Мышь и касание — выбрать экранный ответ.</p></div> : <div className="controls-help-copy"><p><strong>Ответы:</strong> четыре лицевые кнопки соответствуют четырём положениям ответа на экране.</p><p><strong>Выбор темы:</strong> D-pad влево / вправо; нижняя лицевая кнопка — подтвердить. Start — пауза.</p><p>Обозначения зависят от контроллера: Xbox — A/B/X/Y, PlayStation — ✕/○/□/△, Nintendo — B/A/Y/X по положению.</p></div>}
-  </MenuDialog>;
 }
