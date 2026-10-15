@@ -1,0 +1,108 @@
+Define Projection (Data Management)—ArcGIS Pro | Documentation (https://pro.arcgis.com/en/pro-app/3.4/tool-reference/data-management/define-projection.htm)
+citeturn1view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"turn0search0","lineno":null}); Total lines: 122
+L0: [Input: Search ArcGIS Pro help] [Input] [Input] [Input] [Input]
+L1: 
+L2: cite0†Back to Top L3: 
+L4: # Define Projection (Data Management)
+L5: 
+L6: #### In this topic
+L7: 
+L8:   1. cite1†Summary L9:   2. cite2†Usage L10:   3. cite3†Parameters L11:   4. cite4†Environments L12:   5. cite5†Licensing information L13: 
+L14: ## Summary
+L15: 
+L16: Overwrites the coordinate system information (map projection and datum) stored with a dataset. This tool is intended for datasets that have an unknown or incorrect coordinate system defined.
+L17: ## Usage
+L18: 
+L19:   * All geographic datasets have a coordinate system that is used throughout ArcGIS to display, measure, and transform geographic data. If the coordinate system for a dataset is unknown or incorrect, you can use this tool to specify the correct coordinate system.
+L20: 
+L21:   * This tool only updates the existing coordinate system information; it does not modify any geometry. To transform the geometry to another coordinate system, use the cite6†Project tool.
+L22:   * When a dataset with a known coordinate system is input to this tool, the tool will issue a warning message but will run successfully.
+L23: 
+L24:   * All feature classes in a geodatabase feature dataset are in the same coordinate system. The coordinate system for a feature dataset should be determined when it is created.
+L25: 
+L26:   * The tool does not support the following:
+L27:     * A feature class in an enterprise geodatabase.
+L28:     * A feature class in a feature dataset.
+L29:     * A feature dataset that contains a feature class.
+L30: 
+L31:   * The tool will update the associated .wld file of a CAD or BIM file to retain the data's geographic adjusted position.
+L32: ## Parameters
+L33: 
+L34: DialogPython
+L35: 
+L36: Label  | Explanation  | Data Type
+L37: Input Dataset or Feature Class  | The dataset or feature class whose projection will be defined.  | Feature Layer; Geodataset
+L38: Coordinate System  | The coordinate system that will be applied to the input.  | Coordinate System
+L39: ### Derived Output
+L40: 
+L41: Label  | Explanation  | Data Type
+L42: Update Input Dataset or Feature Class  | The updated input geodataset.  | Geodataset
+L43: 
+L44:     arcpy.management.DefineProjection(in_dataset, coor_system)
+L45: Name  | Explanation  | Data Type
+L46: in_dataset  | The dataset or feature class whose projection will be defined.  | Feature Layer; Geodataset
+L47: coor_system  | The coordinate system that will be applied to the input. Valid values are a cite7†SpatialReference object, a file with a .prj extension, or a string representation of a coordinate system.  | Coordinate System
+L48: ### Derived Output
+L49: 
+L50: Name  | Explanation  | Data Type
+L51: out_dataset  | The updated input geodataset.  | Geodataset
+L52: ### Code sample
+L53: 
+L54: DefineProjection example 1 (Python window)
+L55: 
+L56: The following Python window script demonstrates how to use the DefineProjection function in immediate mode.
+L57: 
+L58:     `import arcpy
+L59:     infc = r"C:\data\citylim_unk.shp"
+L60:     sr = arcpy.SpatialReference("NAD 1983 UTM Zone 11N")
+L61:     arcpy.DefineProjection_management(infc, sr)`
+L62: 
+L63: DefineProjection example 2 (stand-alone script)
+L64: The following stand-alone script uses the DefineProjection function to record coordinate system information for the input dataset.
+L65: 
+L66:     `# Name: DefineProjection.py
+L67:     # Description: Records the coordinate system information for the specified input dataset or feature class
+L68: 
+L69:     # import system modules
+L70:     import arcpy
+L71: 
+L72:     # set workspace environment
+L73:     arcpy.env.workspace = "C:/data"
+L74: 
+L75:     try:
+L76:         # set local variables
+L77:         in_dataset = "citylim_unk.shp" #"forest.shp"
+L78:         # get the coordinate system by describing a feature class
+L79:         dsc = arcpy.Describe("citylim_utm11.shp")
+L80:         coord_sys = dsc.spatialReference
+L81: 
+L82:         # run the tool
+L83:         arcpy.DefineProjection_management(in_dataset, coord_sys)
+L84: 
+L85:         # print messages when the tool runs successfully
+L86:         print(arcpy.GetMessages(0))
+L87: 
+L88:     except arcpy.ExecuteError:
+L89:         print(arcpy.GetMessages(2))
+L90: 
+L91:     except Exception as ex:
+L92:         print(ex.args[0])`
+L93: ## Environments
+L94: 
+L95: cite8†Current Workspace , cite9†Scratch Workspace L96: 
+L97: ## Licensing information
+L98: 
+L99:   * Basic: Yes
+L100:   * Standard: Yes
+L101:   * Advanced: Yes
+L102: 
+L103: #### Related topics
+L104: 
+L105:   * cite10†An overview of the Projections and Transformations toolset L106:   * cite11†Find a geoprocessing tool L107:   * cite12†Spatial reference and geoprocessing L108: 
+L109: * * *
+L110: 
+L111: cite13†Feedback on this topic? L112: 
+L113: ##### In this topic
+L114: 
+L115:   1. cite1†Summary L116:   2. cite2†Usage L117:   3. cite3†Parameters L118:   4. cite4†Environments L119:   5. cite5†Licensing information L120: 
+L121: cite14†flist --------------------------------------------------------------------------------

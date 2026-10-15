@@ -1,0 +1,166 @@
+Project (Data Management)—ArcGIS Pro | Documentation (https://pro.arcgis.com/en/pro-app/3.6/tool-reference/data-management/project.htm)
+citeturn1view1 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"turn0search4","lineno":null}); Total lines: 181
+L0: [Input: Search ArcGIS Pro help] [Input] [Input] [Input] [Input]
+L1: 
+L2: cite0†Back to Top L3: 
+L4: # Project (Data Management)
+L5: 
+L6: #### In this topic
+L7: 
+L8:   1. cite1†Summary L9:   2. cite2†Usage L10:   3. cite3†Parameters L11:   4. cite4†Environments L12:   5. cite5†Licensing information L13: 
+L14: ## Summary
+L15: 
+L16: Projects spatial data from one coordinate system to another.
+L17: ## Usage
+L18: 
+L19:   * If the input feature class or dataset has an unknown or unspecified coordinate system, use the Input Coordinate System parameter to specify one. This parameter allows you to specify the data's coordinate system without having to modify the input data. Use the cite6†Define Projection tool to permanently assign a coordinate system to the dataset.
+L20:   * Coverages, VPF coverages, raster datasets, and raster catalogs are not supported as input to this tool. Use the cite7†Project Raster tool to project raster datasets.
+L21: 
+L22:   * The Geographic Transformation parameter is optional. When no geographic or datum transformation is required, no drop-down list will appear on the parameter, and it is left blank. When a transformation is required, a drop-down list will be generated based on the input and output datums, and a default transformation will be applied.
+L23:     * For example, a geographic transformation is not required when projecting from GCS_North_American_1983 to NAD_1983_UTM_Zone_12N because both the input and output coordinate systems have the NAD_1983 datum. However, projecting from GCS_North_American_1983 to WGS_1984_UTM_Zone_12N requires a geographic transformation because the input coordinate system uses the NAD_1983 datum, while the output coordinate system uses the WGS_1984 datum.
+L24: ##### Tip:
+L25: 
+L26: Transformations are bidirectional. For example, if you're converting data from WGS84 to NAD 1927, you can choose the NAD_1927_to_WGS_1984_3 transformation, and the tool will apply it correctly.
+L27: 
+L28:     * All transformations in ArcGIS Pro can be found in the cite8†geographic_transformations.pdf .
+L29: 
+L30:   * When projecting the complex data types listed below, certain operations must be performed on the resulting data:
+L31:     * A feature dataset containing a network dataset: the network dataset must be rebuilt
+L32:     * A feature dataset containing a topology: the topology should be validated again
+L33: 
+L34:   * If the input participates in relationship classes (as with feature-linked annotation), the relationship class will be transferred to the output. The exception is participating stand-alone tables.
+L35:   * Depending on the input feature's coordinates and the horizon (valid extent) of the output coordinate system, multipoints, lines, and polygons may be clipped or split into more than one part when projecting them. Features that fall completely outside the horizon will be written to the output with a null shape. These can be deleted using the cite9†Repair Geometry tool.
+L36:   * It is recommended that all inputs for a project be projected to the same coordinate system before performing the analysis. When all inputs are in the same coordinate system, you will avoid possible performance and functional issues caused by cite10†projecting data on the fly .
+L37:   * In rare cases, projecting feature geometry may cause features to be transformed in a way that makes them invalid. Use the cite11†Check Geometry tool to detect invalid geometry and the Repair Geometry tool to repair any geometry issues.
+L38: 
+L39:   * Feature classes participating in a geometric network cannot be projected independently; the entire feature dataset containing the network must be projected.
+L40:   * Many geoprocessing tools honor the cite12†Output Coordinate System environment , and in many workflows, you can use this environment instead of the Project tool. For example, the cite13†Union tool honors the Output Coordinate System environment, which means you can union several feature classes together, all of which are in a different coordinate system, and write the output to a feature class in a different coordinate system.
+L41: 
+L42: cite14†Learn more about geoprocessing environments L43:   * Selection and definition queries on layers are supported by this tool. Only selected features in the layer will be projected when the selection or query is defined.
+L44: 
+L45:   * When a feature class in a feature dataset is used as input, the output cannot be written to the same feature dataset. This is because feature classes in a feature dataset must all have the same coordinate system. In this case, the output feature class will be written to the geodatabase containing the feature dataset.
+L46:   * When the Preserve Shape parameter is checked, the tool creates features that accurately represent their projected location. The tool adds extra vertices to the feature when projecting. The extra vertices preserve the projected shape of the feature. This parameter is useful when a line or polygon has few vertices. If the parameter is not checked, the existing vertices will be projected, and an output feature may not be accurately located in the new projection.
+L47: The Maximum Offset Deviation parameter specifies how many vertices are added. The parameter value defines the maximum distance a projected feature can be offset from its exact projected location. The tool adds more vertices if the value is small. Use a value that suits your needs. For example, if the output is for general small-scale cartographic display, a large deviation may be acceptable. If the output is for large-scale, small-area analysis, a smaller deviation may be better.
+L48:   * To perform a vertical transformation, check the Vertical parameter. By default, the Vertical parameter is inactive and becomes active when the input and output coordinate systems have a vertical coordinate system (VCS) and the input feature class coordinates have z-values. Also, additional data (coordinate systems data) setup must be installed on the system.
+L49: When you select the output coordinate system, you can choose the geographic or projected coordinate system and a VCS. If the input and output VCS are different, an appropriate vertical and an optional geographic (datum) transformation are available. If a transformation should be applied in the opposite direction to its definition, choose the entry with the tilde (~) in front of the name.
+L50:   * Parcel fabrics are projected by projecting the feature dataset containing the parcel fabric. Individual feature classes controlled by the parcel fabric cannot be projected separately. Linear units, area units, and point coordinates will be updated to match the units and coordinates of the target spatial reference.
+L51: ## Parameters
+L52: 
+L53: DialogPython
+L54: Label  | Explanation  | Data Type
+L55: Input Dataset or Feature Class  | The feature class, feature layer, feature dataset, scene layer, scene layer package, or OGC Geopackage to be projected.  | Feature Layer; Feature Dataset; Scene Layer; Building Scene Layer; File
+L56: Output Dataset or Feature Class  | The output dataset to which the results will be written.  | Feature Class; Feature Dataset; File
+L57: Output Coordinate System  | The coordinate system to which the input data will be projected.  | Coordinate System
+L58: Geographic Transformation(Optional)  | This method can be used to convert data between two geographic coordinate systems or datums. This optional parameter may be required if the input and output coordinate systems have different datums.
+L59: ##### Tip:
+L60: The tool automatically applies a default transformation. You can choose a different transformation from the drop-down list. Transformations are bidirectional. For example, if you're converting data from WGS84 to NAD 1927, you can choose the NAD_1927_to_WGS_1984_3 transformation, and the tool will apply it correctly.The parameter provides a drop-down list of valid transformation methods. See the usage tips for additional information about how to choose one or more appropriate transformations.  | String
+L61: Input Coordinate System(Optional)  | The coordinate system of the input feature class or dataset. This parameter becomes active when the input has an unknown or unspecified coordinate system. This allows you to specify the data's coordinate system without having to modify the input data (which may not be possible if the input is in read-only format).  | Coordinate System
+L62: Preserve Shape (Optional)  | Specifies whether extra vertices will be added to the output lines or polygons so their projected shape is more accurate.
+L63:   * Unchecked—Extra vertices will not be added to the output lines or polygons. This is the default.
+L64:   * Checked—Extra vertices will be added to the output lines or polygons as needed, so their projected shape is more accurate.
+L65:  | Boolean
+L66: Maximum Offset Deviation (Optional)  | The distance a projected line or polygon can deviate from its exact projected location when the Preserve Shape parameter is checked. The default is 100 times the x,y tolerance of the spatial reference of the output dataset.  | Linear Unit
+L67: Vertical(Optional)  | Specifies whether a vertical transformation will be applied.This parameter is only active when the input and output coordinate systems have a vertical coordinate system and the input feature class coordinates have z-values.
+L68: Also, many vertical transformations require additional data files that must be installed using the ArcGIS Coordinate Systems Data installation package.When this parameter is checked, the Geographic Transformation parameter can include ellipsoidal transformations and transformations between vertical datums.
+L69: For example, ~NAD_1983_To_NAVD88_CONUS_GEOID12B_Height + NAD_1983_To_WGS_1984_1 transforms geometry vertices that are defined on NAD 1983 datum with NAVD 1988 heights into vertices on the WGS84 ellipsoid (with z-values representing ellipsoidal heights). The tilde (~) indicates the reversed direction of transformation. This parameter is not compatible with the Preserve Shape parameter.
+L70:   * Unchecked—A vertical transformation will not be applied. The z-values of geometry coordinates will be ignored and the z-values will not be modified. This is the default.
+L71:   * Checked—The transformation specified in the Geographic Transformation parameter will be applied. The x-, y-, and z-values of geometry coordinates will be transformed.
+L72:  | Boolean
+L73:     arcpy.management.Project(in_dataset, out_dataset, out_coor_system, {transform_method}, {in_coor_system}, {preserve_shape}, {max_deviation}, {vertical})
+L74: Name  | Explanation  | Data Type
+L75: in_dataset  | The feature class, feature layer, feature dataset, scene layer, scene layer package, or OGC Geopackage to be projected.  | Feature Layer; Feature Dataset; Scene Layer; Building Scene Layer; File
+L76: out_dataset  | The output dataset to which the results will be written.  | Feature Class; Feature Dataset; File
+L77: out_coor_system  | Valid values are a cite15†SpatialReference object, a file with a .prj extension, or a string representation of a coordinate system.  | Coordinate System
+L78: transform_method[transform_method,...](Optional)  | This method can be used to convert data between two geographic coordinate systems or datums. This optional parameter may be required if the input and output coordinate systems have different datums.To get a list of valid transformations, use the cite16†arcpy.ListTransformations method. The most appropriate transformation is usually the first one in the returned list.
+L79: The list is sorted by amount of overlap of the data versus the areas of use of the transformations. If two or more transformations have the same amount of overlap with the data, the transformation accuracy values are used as a secondary sort parameter.
+L80: ##### Tip:
+L81: Transformations are bidirectional. For example, if you're converting data from WGS84 to NAD 1927, you can choose the NAD_1927_to_WGS_1984_3 transformation, and the tool will apply it correctly. If no transformation is provided, a default transformation is used. This default transformation is suitable for general mapping applications but may not be suitable for applications that require precise locational accuracy.  | String
+L82: in_coor_system(Optional)  | The coordinate system of the input feature class or dataset. When the input has an unknown or unspecified coordinate system, you can specify the data's coordinate system without having to modify the input data (which may not be possible if the input is in read-only format).  | Coordinate System
+L83: preserve_shape(Optional)  | Specifies whether extra vertices will be added to the output lines or polygons so their projected shape is more accurate.
+L84:   * NO_PRESERVE_SHAPE—Extra vertices will not be added to the output lines or polygons. This is the default.
+L85:   * PRESERVE_SHAPE—Extra vertices will be added to the output lines or polygons as needed, so their projected shape is more accurate.
+L86:  | Boolean
+L87: max_deviation(Optional)  | The distance a projected line or polygon can deviate from its exact projected location when the preserve_shape parameter is set to PRESERVE_SHAPE. The default is 100 times the x,y tolerance of the spatial reference of the output dataset.  | Linear Unit
+L88: vertical(Optional)  | Specifies whether a vertical transformation will be applied.This parameter is only enabled when the input and output coordinate systems have a vertical coordinate system and the input feature class coordinates have z-values. Also, many vertical transformations require additional data files that must be installed using the ArcGIS Coordinate Systems Data installation package. This parameter is not compatible with the preserve_shape parameter.
+L89:   * NO_VERTICAL—A vertical transformation will not be applied. The z-values of geometry coordinates will be ignored and the z-values will not be modified. This is the default.
+L90:   * VERTICAL—The transformation specified in the transform_method parameter will be applied. The x-, y-, and z-values of geometry coordinates will be transformed.
+L91:  | Boolean
+L92: ### Code sample
+L93: 
+L94: Project example 1 (Python window)
+L95: The following Python window script demonstrates how to use the Project function in immediate mode.
+L96: 
+L97:     `import arcpy
+L98: 
+L99:     # input data is in NAD 1983 UTM Zone 11N coordinate system
+L100:     input_features = r"C:/data/Redlands.shp"
+L101: 
+L102:     # output data
+L103:     output_feature_class = r"C:/data/Redlands_Project.shp"
+L104: 
+L105:     # create a spatial reference object for the output coordinate system
+L106:     out_coordinate_system = arcpy.SpatialReference('NAD 1983 StatePlane California V FIPS 0405 (US Feet)')
+L107:     # run the tool
+L108:     arcpy.management.Project(input_features, output_feature_class, out_coordinate_system)`
+L109: Project example 2 (stand-alone script)
+L110: The following stand-alone script demonstrates how to use the Project function in a stand-alone script.
+L111: 
+L112:     `# Name: Project_Example2.py
+L113: 
+L114:     # Description: Project all feature classes in a geodatabase
+L115:     # Requirements: os module
+L116: 
+L117:     # Import system modules
+L118:     import arcpy
+L119:     import os
+L120: 
+L121:     # Set environment settings
+L122:     arcpy.env.workspace = "C:/data/Redlands.gdb"
+L123:     arcpy.env.overwriteOutput = True
+L124: 
+L125:     # Set local variables
+L126:     outWorkspace = "C:/data/Redlands_utm11.gdb"
+L127:     try:
+L128:         # Use ListFeatureClasses to generate a list of inputs
+L129:         for infc in arcpy.ListFeatureClasses():
+L130: 
+L131:             # Determine if the input has a defined coordinate system, can't project it if it does not
+L132:             dsc = arcpy.Describe(infc)
+L133: 
+L134:             if dsc.spatialReference.Name == "Unknown":
+L135:                 print('skipped this fc due to undefined coordinate system: ' + infc)
+L136:             else:
+L137:                 # Determine the new output feature class path and name
+L138:                 outfc = os.path.join(outWorkspace, infc)
+L139: 
+L140:                 # Set output coordinate system
+L141:                 outCS = arcpy.SpatialReference('NAD 1983 UTM Zone 11N')
+L142: 
+L143:                 # run project tool
+L144:                 arcpy.management.Project(infc, outfc, outCS)
+L145: 
+L146:                 # check messages
+L147:                 print(arcpy.GetMessages())
+L148: 
+L149:     except arcpy.ExecuteError:
+L150:         print(arcpy.GetMessages(2))
+L151:     except Exception as ex:
+L152:         print(ex.args[0])`
+L153: ## Environments
+L154: 
+L155: cite17†Current Workspace , cite18†Scratch Workspace , cite19†XY Resolution , cite20†XY Tolerance , cite21†Maintain Attachments , cite22†Transfer field domains, subtypes and attribute rules L156: 
+L157: ## Licensing information
+L158: 
+L159:   * Basic: Yes
+L160:   * Standard: Yes
+L161:   * Advanced: Yes
+L162: 
+L163: #### Related topics
+L164: 
+L165:   * cite23†An overview of the Projections and Transformations toolset L166:   * cite24†Find a geoprocessing tool L167:   * cite25†Spatial reference and geoprocessing L168: 
+L169: * * *
+L170: 
+L171: cite26†Feedback on this topic? L172: ##### In this topic
+L173: 
+L174:   1. cite1†Summary L175:   2. cite2†Usage L176:   3. cite3†Parameters L177:   4. cite4†Environments L178:   5. cite5†Licensing information L179: 
+L180: cite27†flist
