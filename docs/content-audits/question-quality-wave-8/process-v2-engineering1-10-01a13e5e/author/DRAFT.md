@@ -1,0 +1,9 @@
+# Engineering machines, wave 8 author packet
+
+Baseline: a9c7f41173abff295a6bfa9f112f25acf63f5ba0. All 10 frozen before hashes were recomputed and match the current catalog. All ten entries remain HOLD, zero quality credit. No current or proposed PASS is claimed.
+
+New official-source discovery and rendered-page reading were completed. Yale-New Haven Teachers Institute and UMass Lowell provide educational context for the four simple-machine cards; NASA NTRS has the Fastener Design Manual; Otis and Spicer provide manufacturer context for counterweights and universal joints. The rendered web output exposes cited lines or summaries, but not raw HTTP response bodies. A direct Yale HTTPS GET timed out at 15 seconds. No TLS bypass was attempted. Consequently the required complete raw-body archive and raw-read-byte hashes are unavailable, and several source results are only summaries without exact claim locators. Per-card distinctions are recorded in needed-evidence.json; observed output provenance is in sourceRegister.json.
+
+No card was edited: without claim-complete full contexts, changing answers or adding note facts would be unsupported. Candidate before hashes match both the preimage and the actual current catalog. The complete 100-card current catalog snapshot and concrete comparisons for five near-neighbor pairs are in peer-snapshot.json. Proposed-card pair clearance is unresolved because no qualified proposals were produced.
+
+sourceproof.json preserves the six canonical groups for each exact current card and clearly marks absent proposed evidence. candidate.json records all ten as HOLD. The next action is to obtain full official source bodies with raw-byte SHA-256 and locators, starting with the NASA manual and Yale material; then author only cards whose prompt, all options/notes, and explanation are all supported.
