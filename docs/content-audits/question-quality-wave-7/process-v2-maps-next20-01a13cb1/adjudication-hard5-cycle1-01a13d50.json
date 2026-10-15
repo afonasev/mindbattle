@@ -1,0 +1,130 @@
+{
+  "stage": "terminal single cycle1 CURRENT5",
+  "readerNativeId": "01a13d9d-d702-73d2-b357-f231d80ade46",
+  "readerReceipt": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-hard5-initial-01a13d50/receipt-cycle1-current5.json",
+  "readerReceiptSHA256": "33b047e508909a5439f68315de984cafeb95446e7ebabf192d4870f34f4e0b38",
+  "verified": {
+    "exactCurrentCards": 5,
+    "literalGroups": 30,
+    "individualVariants": 20,
+    "sourceHashBindings": 46
+  },
+  "PASS": 0,
+  "terminalHOLD": 5,
+  "qualityCredit": 0,
+  "CURRENT": 668,
+  "remaining": 1332,
+  "entries": [
+    {
+      "id": "maps-cartography-ellipsoid",
+      "currentCardSHA256": "cef47beb92d0bfa51a1a26be997d58bc0baaa3cb950ed514c0a11818a63f8498",
+      "status": "terminalHOLD",
+      "defects": [
+        {
+          "code": "HARD",
+          "finding": "Готовые формулы в ответах и единственное вычитание не создают hard. Q только позволяет проверить знак.",
+          "needed": "Новое содержательное решение с самостоятельным геодезическим выводом и конкурирующими правдоподобными процедурами; не удлинение текста."
+        },
+        {
+          "code": "INPUT-FRAME",
+          "finding": "Prompt не задаёт реализацию GNSS h и конкретную совместимую NOAA-модель. Попадание в область модели не гарантирует datum compatibility. Новая medium elevation-vertical как раз явно задаёт совместимость с NAD83.",
+          "needed": "Согласовать h/модель/целевой NAVD88 либо явно задать применимый контракт h=H+N. Это новое решение вне исчерпанного цикла."
+        }
+      ],
+      "nextAction": "Зафиксировать terminal HOLD; unchanged cycle не повторять. Для возобновления нужны перечисленные новые доказательства/содержательное решение. Это не запрос решения человека о политике difficulty."
+    },
+    {
+      "id": "maps-cartography-datum",
+      "currentCardSHA256": "0b7f98651ba9a6232aac04a62b4331c3e6df2b02d711f7fd6439cfa488e8ef0e",
+      "status": "terminalHOLD",
+      "defects": [
+        {
+          "code": "HARD",
+          "finding": "Ключ повторяет прямо названный недостающий datum/epoch metadata; остальные варианты — очевидное слияние без преобразования или геоид вместо горизонтальной системы.",
+          "needed": "Новое решение с необходимым выводом по реализации/эпохам/допуску и конкурирующими допустимыми процедурами."
+        },
+        {
+          "code": "DUPLICATE-DISTRACTORS",
+          "finding": "Для совпадающих пар A (слияние) и D (усреднение и объявление NAD83) численно эквивалентны и одинаково не выполняют преобразование.",
+          "needed": "Развести альтернативы на разные правдоподобные ошибки, сохранив один ключ."
+        }
+      ],
+      "nextAction": "Зафиксировать terminal HOLD; unchanged cycle не повторять. Для возобновления нужны перечисленные новые доказательства/содержательное решение. Это не запрос решения человека о политике difficulty."
+    },
+    {
+      "id": "maps-cartography-benchmark",
+      "currentCardSHA256": "7695e4fb82bdf7e3d9c227fcfd27b4ed223ce6a3c3b3b3dca79c362633e658bf",
+      "status": "terminalHOLD",
+      "defects": [
+        {
+          "code": "HARD-EXPOSED-CRITERIA",
+          "finding": "Каждая альтернатива сама сообщает соответствие или отсутствие одного из критериев prompt.",
+          "needed": "Новое решение с интерпретацией исходных данных/знаков; варианты не должны разъяснять собственную пригодность."
+        },
+        {
+          "code": "LEGEND-SCOPE",
+          "finding": "D склеивает немонументированность и вертикальный третий порядок. В USGS p2 Unmonumented** — отдельная строка Horizontal control, без утверждённого класса высоты; p3 third-order elevation находится в Vertical control. Note3 не доказывает сконструированное сочетание.",
+          "needed": "Первичный контекст именно такого вертикального типа/класса или новая содержательная альтернатива без смешения разделов."
+        },
+        {
+          "code": "PROOF-BINDING",
+          "finding": "Авторская field-group note0 о USGS checked spot elevation привязана к NOAA datum tutorial, где нет этой легенды.",
+          "needed": "Связать утверждение с USGS p2 Horizontal control/With checked spot elevation; отдельно устранить подмену класса/раздела."
+        }
+      ],
+      "nextAction": "Зафиксировать terminal HOLD; unchanged cycle не повторять. Для возобновления нужны перечисленные новые доказательства/содержательное решение. Это не запрос решения человека о политике difficulty."
+    },
+    {
+      "id": "maps-cartography-gnomonic-great",
+      "currentCardSHA256": "ae93cbe68d9df50e3501109921de06abac68d6890298cb84432fcc222e5c6b09",
+      "status": "terminalHOLD",
+      "defects": [
+        {
+          "code": "SPHERE-ELLIPSOID",
+          "finding": "Prompt смешивает сферические кратчайшие большие круги и сохранение эллипсоидальной модели. B/explanation переносят точную сферическую прямизну на неуточнённое ellipsoidal extension. Supports ellipsoids не доказывает эту связку.",
+          "needed": "Определить поверхность/тип маршрутов, конкретное расширение и допуск; для Esri exact claim нужен метод именно её ellipsoidal implementation. Новый primary или новое согласованное решение, не повтор того же цикла."
+        },
+        {
+          "code": "FALSE-NOTE3",
+          "finding": "Note3 ложно называет и меридианы, и параллели полярной равноудалённой проекции концентрическими дугами. AE Graticule: меридианы — прямые из полюса; параллели — равноотстоящие концентрические дуги.",
+          "needed": "Исправить фактическую геометрию сетки; текущая целая карточка не PASS независимо от ключа."
+        },
+        {
+          "code": "PROOF-BINDINGS",
+          "finding": "Field note0 про auxiliary sphere привязана к NOAA datums; note2 про stereographic и note3 про azimuthal-equidistant привязаны к GNOM. Choice3 имеет AE path, но автор повторяет ложную геометрию.",
+          "needed": "Связать все заметки с полными релевантными primary contexts и устранить ложные утверждения; SHA не доказывает support."
+        },
+        {
+          "code": "HARD-EXPOSED-CRITERIA",
+          "finding": "Варианты сами объявляют выполнение/нарушение требования модели; число78° и редкое название варианта не создают hard.",
+          "needed": "Новое предметное действие над маршрутом/ограничением после согласования модели."
+        }
+      ],
+      "nextAction": "Зафиксировать terminal HOLD; unchanged cycle не повторять. Для возобновления нужны перечисленные новые доказательства/содержательное решение. Это не запрос решения человека о политике difficulty."
+    },
+    {
+      "id": "maps-cartography-stereographic-conformal",
+      "currentCardSHA256": "1cb59f43002ceda6a856c7ea6040b15946fdd9872c12fb63239fbfac9cd796f7",
+      "status": "terminalHOLD",
+      "defects": [
+        {
+          "code": "HARD-EXPOSED-CRITERIA",
+          "finding": "Ключ сам повторяет два export-критерия, неверные ответы сами называют своё отличие; точная широта не участвует в решении.",
+          "needed": "Новое предметное решение/параметрическое преобразование с правдоподобными конфигурациями, без ответных пояснений, сразу раскрывающих критерии."
+        },
+        {
+          "code": "NOTE1-SEMANTICS",
+          "finding": "Антипод центра исправлен, но добавлено неясное «ограничение не означает точку перспективного проецирования». Это не ясный предметный факт; при чтении как отрицание совпадения точек противоречит сферическому perspective description.",
+          "needed": "Однозначный поддержанный факт об антиподе/центре без категориально неверного сравнения ограничения с точкой."
+        },
+        {
+          "code": "PROOF-BINDING",
+          "finding": "Field note0 о true-scale arc и искажениях стереографической привязана к NOAA VDatum вместо STEREO Distortion.",
+          "needed": "Исправить конкретную binding. Правильный сохранённый Esri контекст есть, но нынешний locator не поддерживает literal."
+        }
+      ],
+      "nextAction": "Зафиксировать terminal HOLD; unchanged cycle не повторять. Для возобновления нужны перечисленные новые доказательства/содержательное решение. Это не запрос решения человека о политике difficulty."
+    }
+  ],
+  "next": "Retain terminal history; no unchanged secondfix. Concrete new primary or new substantive solution required per unresolved claim; full2000 goal active."
+}

@@ -1,0 +1,126 @@
+{
+  "ellipsoid": {
+    "hard": "HOLD: по контрольной Q определить знак вычитания и один раз вычесть h(R)−N(R). Все формулы действий напечатаны в вариантах. Это medium-арифметика, а не absolute hard; новая medium elevation-vertical требует ту же формулу со знаковым N и дополнительно различает реализованный NAVD88 и идеальный геоид.",
+    "oneKey": "При намеренном предположении совместимых h/N только B даёт 49,2. A=57,2 использует чужую H, C=44,9 чужое N, D=107,6 неверный знак. Без совместимости исходной эллипсоидальной опоры и конкретной модели физическая пригодность для NAVD88 не доказана; второго правильного ответа не утверждаю.",
+    "explanation": "Обе разности вычислены верно. Q подтверждает знак, но числовое совпадение одной Q не доказывает совместимость всей сети с неизвестной моделью. NOAA GEOIDxx описан для NAD83 three-dimensional heights → NAVD88; spatial coverage не заменяет input datum compatibility.",
+    "correctNote": "PASS отдельного факта: гладкая геометрическая модель против гравитационной поверхности не дана в prompt/key, поддержана NOAA Referenced Ellipsoid/GEOID.",
+    "defects": [
+      {"code":"HARD", "finding":"Готовые формулы в ответах и единственное вычитание не создают hard. Q только позволяет проверить знак.", "needed":"Новое содержательное решение с самостоятельным геодезическим выводом и конкурирующими правдоподобными процедурами; не удлинение текста."},
+      {"code":"INPUT-FRAME", "finding":"Prompt не задаёт реализацию GNSS h и конкретную совместимую NOAA-модель. Попадание в область модели не гарантирует datum compatibility. Новая medium elevation-vertical как раз явно задаёт совместимость с NAD83.", "needed":"Согласовать h/модель/целевой NAVD88 либо явно задать применимый контракт h=H+N. Это новое решение вне исчерпанного цикла."}
+    ],
+    "groupGrounds": [
+      [["NOAA","NOAA-FIG"],"Figure gives h=H+N; GEOID text restricts the example conversion to NAD83 three-dimensional heights and NAVD88. Numeric operations checked independently; compatibility unstated."],
+      [["NOAA","NOAA-FIG"],"Both subtractions correct under compatible input references; one check point cannot establish the missing model/frame contract."],
+      [["NOAA"],"Vertical Datum lists ellipsoidal/orthometric/tidal categories; opening asks for datum metadata."],
+      [["NOAA"],"Referenced Ellipsoid and GEOID distinguish geometric surface and gravity surface."],
+      [["NOAA"],"Opening requires datum metadata. True note, but does not directly explain spatial non-transferability of N(Q)."],
+      [["NOAA"],"GEOID/Vertical Datum supports gravity reference and only approximate mean-sea-level fit."]
+    ],
+    "choices": [
+      ["Грамматически связно; индексы/единицы ясны.","FALSE: 52,9+(33,5−29,2)=57,2, но h(R) проигнорирована.","Правдоподобна ошибочная передача отметки через разность N без учёта h(R).","Note истинна и добавляет категории датумов; не объясняет именно пропуск h(R).","NOAA opening; Vertical Datum."],
+      ["Грамматика нормальна.","INTENDED TRUE: 78,4−29,2=49,2, при допущении совместимых h и модели; Q подтверждает знак.","Готовая формула H=h−N прямо дана ответом, поэтому операция проста.","Истинный отдельный факт о геометрии эллипсоида/гравитационной природе геоида.","NOAA Referenced Ellipsoid/GEOID; heights.gif."],
+      ["Грамматика и вычисление соответствуют фразе.","FALSE: 78,4−33,5=44,9 использует N другой точки при уже данном N(R).","Реальная ошибка постоянной поправки; явное N(R) облегчает отсечение.","Метаданные важны, но note не объясняет, почему местное N(Q) нельзя перенести на R; польза частичная.","NOAA datum identification and GEOID."],
+      ["Грамматически корректно.","FALSE: 78,4+29,2=107,6; H ортометрическая, не эллипсоидальная.","Типичная ошибка знака дополнена неверным определением H, что делает её проще.","Note адресно поправляет определение H и добавляет приближённость MSL.","NOAA GEOID/Vertical Datum; heights.gif."]
+    ]
+  },
+  "datum": {
+    "hard":"HOLD: prompt сообщает «эпоха не указана», B отвечает «уточнить ... эпоху». Ни величина движения, ни точность, ни конкретное преобразование/общее время не выбираются. NAD83/ITRF и эпоха здесь редкие названия без сложной операции.",
+    "oneKey":"B единственно безопасная процедура. A и D сливают одни и те же совпавшие числа без преобразования; C подменяет горизонтальное преобразование геоидальной моделью.",
+    "explanation":"Корректно разделяет эллипсоид и систему/реализацию и не выдумывает величину преобразования. GRS80 в задаче следует читать как выбранный эллипсоид; NGS описывает полную систему GRS80 шире (эллипсоид и gravity model), NOAA таблица допускает ellipsoid usage.",
+    "correctNote":"PASS: скорости контрольных пунктов и движение коры — отдельный факт сверх prompt/key; NOAA ITRFxx прямо сообщает velocities as well as positions.",
+    "defects":[
+      {"code":"HARD","finding":"Ключ повторяет прямо названный недостающий datum/epoch metadata; остальные варианты — очевидное слияние без преобразования или геоид вместо горизонтальной системы.","needed":"Новое решение с необходимым выводом по реализации/эпохам/допуску и конкурирующими допустимыми процедурами."},
+      {"code":"DUPLICATE-DISTRACTORS","finding":"Для совпадающих пар A (слияние) и D (усреднение и объявление NAD83) численно эквивалентны и одинаково не выполняют преобразование.","needed":"Развести альтернативы на разные правдоподобные ошибки, сохранив один ключ."}
+    ],
+    "groupGrounds":[
+      [["NGS","NOAA"],"NGS Table1 supplies NAD83 epoch2010.00; NOAA ITRFxx discusses positions/velocities and frames. Safe metadata check supported; hard operation absent."],
+      [["NOAA","NGS"],"Geodetic Datum separates ellipsoid/origin/orientation/realization; ITRFxx provides temporal context. No numerical shift claimed."],
+      [["NOAA","NGS"],"NOAA ellipsoid table supports GRS80 ellipsoid usage; NGS Table2 calls the broader system ellipsoid plus gravity model, so bare name should not be universally reduced to geometry."],
+      [["NOAA"],"ITRFxx publishes velocities and positions for control points to address crustal motion."],
+      [["NOAA"],"GEOID supplies a vertical-height conversion parameter; Horizontal Datum is a separate coordinate-reference concept."],
+      [["NOAA"],"What datum are my data in requires metadata identifying the reference datum for reuse."]
+    ],
+    "choices":[
+      ["Грамматически связно.","FALSE: общий эллипсоид не задаёт начало/ориентацию/реализацию.","Распространённая ошибка, но по итоговым числам дублирует D.","Note корректно ограничивает роль эллипсоида; bare GRS80 лучше явно назвать эллипсоидом, учитывая широкое NGS значение.","NOAA Geodetic Datum/Referenced Ellipsoid; NGS Table2."],
+      ["Грамматически правильно.","TRUE: конкретизировать реализацию/эпоху и выбрать общую основу; численно преобразовать пока нельзя.","Единственный разумный ответ повторяет названный пробел в метаданных.","Отдельный поддержанный факт о скоростях и движении коры полезен.","NOAA ITRFxx/NAD83(2011); NGS Table1."],
+      ["Грамматически нормально.","FALSE: геоидальная модель высот не преобразует горизонтальные широты/долготы между рамками.","Слабая категориальная подмена вместо профессионального конкурирующего действия.","Note адресно разводит вертикальное и горизонтальное преобразование.","NOAA GEOID/Horizontal Datum."],
+      ["Грамматика понятна; note тяжеловесна, но читается.","FALSE: среднее двух одинаковых пар не восстанавливает реализацию/эпоху и не делает их NAD83.","Функционально то же непреобразованное слияние, что A.","Требование метаданных истинно, но заметка не поясняет специальную роль эпохи.","NOAA datum-identification opening; Geodetic Datum."]
+    ]
+  },
+  "benchmark": {
+    "hard":"HOLD: нужны два признака, ≥третьего порядка и повторно находимый физический пункт. B печатает оба; A сам говорит «знак ... не показан», C «высота не указана», D «восстановить нельзя». Выбор логическим сопоставлением строк без геодезического знания; obscure legend label не hard.",
+    "oneKey":"В намеренной классификации только B отвечает обоим критериям. A/C не гарантируют нужного вертикального контроля, D сам отрицает повторное нахождение. Реальность заявленного в D типа vertical third-order unmonumented не доказана.",
+    "explanation":"USGS p3 даёт third-order or better elevation, recoverable mark, no tablet; именно этот текст поддерживает B. Recoverable означает возможность повторно найти, а не реконструировать утраченный знак; explanation использует «найти» и сохраняет смысл.",
+    "correctNote":"PASS: bench mark coincident with found section corner — отдельный поддержанный факт сверх prompt/key, USGS p3.",
+    "defects":[
+      {"code":"HARD-EXPOSED-CRITERIA","finding":"Каждая альтернатива сама сообщает соответствие или отсутствие одного из критериев prompt.","needed":"Новое решение с интерпретацией исходных данных/знаков; варианты не должны разъяснять собственную пригодность."},
+      {"code":"LEGEND-SCOPE","finding":"D склеивает немонументированность и вертикальный третий порядок. В USGS p2 Unmonumented** — отдельная строка Horizontal control, без утверждённого класса высоты; p3 third-order elevation находится в Vertical control. Note3 не доказывает сконструированное сочетание.","needed":"Первичный контекст именно такого вертикального типа/класса или новая содержательная альтернатива без смешения разделов."},
+      {"code":"PROOF-BINDING","finding":"Авторская field-group note0 о USGS checked spot elevation привязана к NOAA datum tutorial, где нет этой легенды.","needed":"Связать утверждение с USGS p2 Horizontal control/With checked spot elevation; отдельно устранить подмену класса/раздела."}
+    ],
+    "groupGrounds":[
+      [["USGS","USGS-P2","USGS-P3"],"p3 Vertical control has third-order-or-better recoverable/no-tablet mark. p2 checked spot and Unmonumented** belong to Horizontal control; no vertical order certified for Unmonumented row."],
+      [["USGS","USGS-P3"],"Recoverable/no-tablet row supports B; a tablet is not required by that row."],
+      [["USGS","USGS-P2"],"With checked spot elevation occurs under Horizontal control; NOAA author binding is unrelated. It is not automatically vertical control."],
+      [["USGS","USGS-P3"],"Bench mark coincident with found section corner is explicitly pictured and supports dual function."],
+      [["USGS","USGS-P3"],"Land surveys/Found section corner is separate from the combined benchmark symbol; corner alone gives no supplied elevation."],
+      [["USGS","USGS-P2","USGS-P3"],"Partial support only: control/monument distinctions exist, but the horizontal Unmonumented row does not establish third-order vertical elevation in D."]
+    ],
+    "choices":[
+      ["Грамматика ясна; название теряет заголовок horizontal control из источника.","FALSE as anchor: не задан нужный вертикальный порядок/повторно находимый vertical mark.","Реальная путаница checked elevation и vertical control; пояснение само выдаёт недостаток.","Note частично полезна: checked spot есть в horizontal control, но её NOAA field locator неверен.","USGS p2 Horizontal control/With checked spot elevation; p3 Vertical control."],
+      ["«Восстанавливаемый» читается как повторно находимый благодаря explanation.","TRUE по p3: third-order or better elevation, recoverable mark, no tablet.","Дословно перечисляет оба критерия prompt; это не hard.","Совмещённый репер и межевой угол — полезный самостоятельный факт.","USGS p3 Vertical control and combined benchmark/section corner."],
+      ["Грамматически связно.","FALSE: один found section corner не гарантирует контрольную высоту и порядок.","Реальный физический знак, но «высота не указана» делает отсечение автоматическим.","Отдельный combined symbol поддержан и адресно объясняет различие.","USGS p3 Land surveys/Found section corner and Vertical control."],
+      ["Калька «немонументированная» понятна; источник классифицирован иначе.","FALSE по собственному no-recovery clause; заявленный third-order-or-better VERTICAL тип не подтверждён.","Сам сообщает нарушение второго критерия; вдобавок склеен из разных разделов легенды.","Note не доказывает сочетания вертикального порядка и немонументированности: Unmonumented** относится к Horizontal control.","USGS p2 Horizontal control/Unmonumented** versus p3 Vertical control."]
+    ]
+  },
+  "gnomonic-great": {
+    "hard":"HOLD: ключ прямо назван эллипсоидальным, A сам объявляет переход на сферу. C/D повторяют универсализацию прямых путей. 78° только сравнивается с 90°, не участвует в маршруте или допуске. Противоречивая модель не считается сложностью.",
+    "oneKey":"Автор намерен B, но единственный полностью доказанный ответ на всё сочетание требований не установлен. A сам меняет модель, C/D делают ложный вывод; второго правильного ответа не утверждаю. Нужна определённость маршрутов и реализации.",
+    "explanation":"Сочетание сферических shortest great-circle routes с retained ellipsoid и exact straightness не обосновано. Esri отдельно пишет общую straightness и ellipsoid support. GeographicLib показывает отсутствие стандартного ellipsoidal extension и различия точных/приближённых свойств. Это не доказательство, что Esri использует алгоритм GeographicLib; это основание не объединять две общие строки без определения модели.",
+    "correctNote":"PASS: moderate distortion within30° прямо дано Esri Distortion; caution for wide area поддержана Usage/Limitations. Не гарантия качества сектора78°.",
+    "defects":[
+      {"code":"SPHERE-ELLIPSOID","finding":"Prompt смешивает сферические кратчайшие большие круги и сохранение эллипсоидальной модели. B/explanation переносят точную сферическую прямизну на неуточнённое ellipsoidal extension. Supports ellipsoids не доказывает эту связку.","needed":"Определить поверхность/тип маршрутов, конкретное расширение и допуск; для Esri exact claim нужен метод именно её ellipsoidal implementation. Новый primary или новое согласованное решение, не повтор того же цикла."},
+      {"code":"FALSE-NOTE3","finding":"Note3 ложно называет и меридианы, и параллели полярной равноудалённой проекции концентрическими дугами. AE Graticule: меридианы — прямые из полюса; параллели — равноотстоящие концентрические дуги.","needed":"Исправить фактическую геометрию сетки; текущая целая карточка не PASS независимо от ключа."},
+      {"code":"PROOF-BINDINGS","finding":"Field note0 про auxiliary sphere привязана к NOAA datums; note2 про stereographic и note3 про azimuthal-equidistant привязаны к GNOM. Choice3 имеет AE path, но автор повторяет ложную геометрию.","needed":"Связать все заметки с полными релевантными primary contexts и устранить ложные утверждения; SHA не доказывает support."},
+      {"code":"HARD-EXPOSED-CRITERIA","finding":"Варианты сами объявляют выполнение/нарушение требования модели; число78° и редкое название варианта не создают hard.","needed":"Новое предметное действие над маршрутом/ограничением после согласования модели."}
+    ],
+    "groupGrounds":[
+      [["GNOM","KARNEY"],"Esri Variants establishes ellipsoid support, not explicit exact spherical-route behavior with retained ellipsoid. GeographicLib distinguishes possible ellipsoidal extensions and exact versus approximate geodesic straightness; it is not attributed to Esri implementation."],
+      [["GNOM","KARNEY"],"Esri general90° limit is sourced, but does not prove exact straightness/accuracy for an undefined ellipsoid route model at78°."],
+      [["GNOM"],"Variants distinguishes selected auxiliary sphere from the only ellipsoid-supporting variant; NOAA field locator does not discuss this."],
+      [["GNOM"],"Distortion gives moderate within30°; Usage/Limitations warrants caution for wide areas."],
+      [["STEREO","GNOM"],"STEREO Distortion supports local conformality; GNOM has a different straight-great-circle property. GNOM-only author binding does not establish full stereographic note."],
+      [["AE"],"Graticule polar aspect says straight meridians and equally spaced circular parallels, so literal note3 is false. GNOM field locator is wrong."]
+    ],
+    "choices":[
+      ["Грамматически верно.","Не соответствует retained ellipsoid: прямо переходит к selected auxiliary sphere.","Реальная implementation, но сама сообщает запрещённый переход.","Note поддержана GNOM Variants, не авторским NOAA field locator.","GNOM Variants/Parameters auxiliary sphere."],
+      ["Грамматически нормально.","INTENDED KEY UNPROVEN: ellipsoid support есть, exact spherical shortest-path behavior при retained ellipsoid не определено/не доказано.","Имя варианта прямо повторяет модель; не заменяет математическое обоснование.","30° moderate distortion — истинный отдельный факт; нельзя распространить на78°.","GNOM Description/Variants/Distortion/Limitations; GeographicLib Gnomonic detailed description/caution."],
+      ["Грамматически правильно.","FALSE inference: local-angle preservation не означает straight shortest routes; ordinary stereo ellipsoid support истинен.","Тематически реальная projection, но conformal→straight — базовая подмена.","Конформность истинна, однако нужна STЕREO primary вместо GNOM-only binding.","STEREO Description/Distortion/Variants; GNOM Description."],
+      ["Предложение и note грамматически читаются.","FALSE: radial distances/directions не гарантируют прямизны всех путей между любыми точками.","Реальная навигационная альтернатива, но та же универсализация, что C.","FAIL truth: меридианы — прямые лучи, только параллели — концентрические дуги.","AE Graticule polar aspect and Distortion."]
+    ]
+  },
+  "stereographic-conformal": {
+    "hard":"HOLD: prompt требует standard-parallel parameter и pole origin; B печатает оба. A сам вместо параллели даёт scale factor, C сам переносит origin к параллели, D сам меняет модель. Точная широта UPS не используется в вычислении. Это matching из готовых описаний, не hard даже без знания A/B/C.",
+    "oneKey":"B однозначно удовлетворяет export constraints; геометрически эквивалентный scale-factor вариант A не удовлетворяет требованию хранения Standard Parallel1. C отличается origin; D моделью. Второго ключа не найдено.",
+    "explanation":"STEREO Variants/Parameters поддерживают standard parallel и pole origin B. UPS даёт указанную true-scale latitude. Необходимая связь фактически верна, но не требует операции над широтой/масштабом.",
+    "correctNote":"PARTIAL: первая часть верно говорит об антиподе центра и добавляет факт. Вторая «это ограничение не означает точку перспективного проецирования» сравнивает ограничение с точкой и семантически неясна. Если отрицается совпадение excluded point с viewpoint, это противоречит сферическому Description (viewpoint opposite tangency). Всей note PASS нет.",
+    "defects":[
+      {"code":"HARD-EXPOSED-CRITERIA","finding":"Ключ сам повторяет два export-критерия, неверные ответы сами называют своё отличие; точная широта не участвует в решении.","needed":"Новое предметное решение/параметрическое преобразование с правдоподобными конфигурациями, без ответных пояснений, сразу раскрывающих критерии."},
+      {"code":"NOTE1-SEMANTICS","finding":"Антипод центра исправлен, но добавлено неясное «ограничение не означает точку перспективного проецирования». Это не ясный предметный факт; при чтении как отрицание совпадения точек противоречит сферическому perspective description.","needed":"Однозначный поддержанный факт об антиподе/центре без категориально неверного сравнения ограничения с точкой."},
+      {"code":"PROOF-BINDING","finding":"Field note0 о true-scale arc и искажениях стереографической привязана к NOAA VDatum вместо STEREO Distortion.","needed":"Исправить конкретную binding. Правильный сохранённый Esri контекст есть, но нынешний locator не поддерживает literal."}
+    ],
+    "groupGrounds":[
+      [["STEREO"],"Variants/Parameters A/B/C prove B parameter/origin; UPS gives81°06′52.3″; auxiliary sphere does not retain ellipsoid."],
+      [["STEREO"],"VariantB and Distortion support true-scale standard parallel and pole grid origin."],
+      [["STEREO"],"Distortion supports zero-scale-distortion arc and growing area/distance/scale distortion; NOAA author binding is unrelated."],
+      [["STEREO"],"Limitations supports excluded center antipode. Description gives viewpoint opposite tangency; appended negative phrase is semantically unsafe."],
+      [["STEREO"],"A/B/C share implementation and EPSG parameter definitions. Vague formats wording is broader than exact source; EPSG definitions would be clearer."],
+      [["STEREO"],"Auxiliary sphere Variants explicitly excludes ellipsoid support and notes conformality loss on ellipsoid input."]
+    ],
+    "choices":[
+      ["Грамматически правильно; English label в prompt — необходимый exact parameter identifier.","FALSE for export: A stores Scale Factor, not required Standard Parallel1; geometric equivalence does not meet storage contract.","Реальный близкий вариант, но сам сообщает несовпадение поля.","True-scale arc и рост искажений — истинный отдельный факт; NOAA field locator нерелевантен.","STEREO VariantsA/Parameters/Distortion."],
+      ["Грамматика основного ответа нормальна.","TRUE: B has standard-parallel field and pole grid origin.","Повторяет оба критерия prompt; знание редкой буквы B не нужно.","Первая часть note истинна/добавочна; вторая семантически неполноценна и потенциально отрицает supported perspective identity.","STEREO VariantsB/Limitations/Description."],
+      ["Грамматически ясно.","FALSE for required origin: C places it at standard-parallel/longitude-of-origin intersection, not pole.","Близкий variant с тем же standard parallel; отличие origin уже явно напечатано.","Same implementation/different EPSG definitions поддержано. «Форматы координат» расплывчато шире источника.","STEREO VariantsA/B/C."],
+      ["Грамматически верно.","FALSE for retained ellipsoid: auxiliary sphere предназначен для spherical product.","Реальная implementation, но сама объявляет запрещённую модель.","Оговорка о conformality loss на ellipsoid input поддержана и полезна.","STEREO Variants auxiliary sphere."]
+    ]
+  }
+}
