@@ -1,0 +1,2 @@
+SOURCE CAPTURES
+All files here were obtained/read on 2026-10-15 and hashed in sourceproof.json rawSources. The Halifax+ISBN+DCRM JSON context is intentionally referenced once at its original C-relative path, not duplicated here. HTML captures are complete downloaded official page bodies. GS1/OCLC text captures preserve the complete relevant official rendered sections after direct retrieval limitations. ISSN Manual text preserves complete relevant 2025 official PDF passages with page/line locators; full PDF was read through web rendering.
