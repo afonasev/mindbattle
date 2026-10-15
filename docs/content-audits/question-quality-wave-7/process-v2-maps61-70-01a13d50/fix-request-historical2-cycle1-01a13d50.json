@@ -1,0 +1,116 @@
+{
+  "cycle": 1,
+  "baselineCommit": "ae703cae08757ee1b4b5c6aa8acaabed91e9c850",
+  "readerNativeId": "01a13e11-00be-7992-938c-ef639a5da57e",
+  "readerReceipt": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/independent-historical2-initial-01a13d50/receipt.json",
+  "scopeIds": [
+    "maps-cartography-peutinger-roads",
+    "maps-cartography-mappa-mundi"
+  ],
+  "entries": [
+    {
+      "id": "maps-cartography-peutinger-roads",
+      "beforeCard": {
+        "id": "maps-cartography-peutinger-roads",
+        "difficulty": "medium",
+        "prompt": "Tabula Peutingeriana — 11 пергаментных сегментов со схемой cursus publicus; города показаны символами по значимости, карта ориентирована запад–восток, моря и обычного изображения регионов нет. Перенося её в ГИС, какой способ кодирования сохранит исторические сведения?",
+        "answers": [
+          {
+            "text": "Создать полигоны провинций: карта охватывает римские земли, значит очертания сегментов задают их границы.",
+            "note": "UNESCO говорит, что карта показывает структуру cursus publicus, а не регионы как на обычной географической карте."
+          },
+          {
+            "text": "Геопривязать линии по западно-восточной ориентации и измерять расстояния между городами по интервалам схемы.",
+            "note": "UNESCO прямо отличает диаграмму дорожной сети от карты регионов и отмечает, что моря на ней нет."
+          },
+          {
+            "text": "Сохранить дорожные связи как граф, а значимость городов — как класс узла; не трактовать компоновку как региональные координаты.",
+            "note": "UNESCO сообщает, что памятник охватывает римские провинции и восточные земли, завоёванные Александром."
+          },
+          {
+            "text": "Рассчитать население по размеру городских знаков и интерполировать его между узлами.",
+            "note": "UNESCO указывает, что символы различают города по значимости; шкалы численности населения источник не приводит."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "UNESCO описывает Tabula как схему сети cursus publicus с символами городов по значимости и прямо отличает её от карты регионов. Поэтому при переносе следует сохранить связи дорог и класс важности узлов, а не выводить региональную геометрию из компоновки сегментов.",
+        "source": {
+          "title": "UNESCO Memory of the World",
+          "url": "https://www.unesco.org/fr/memory-world/tabula-peutingeriana",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "2fc8bcada9ae5e4484affe0d2291d45da053c7b1b931b01945543405f3dcf977",
+      "review": {
+        "id": "maps-cartography-peutinger-roads",
+        "status": "FIX",
+        "absoluteMedium": "Not proven: graph encoding is a transfer, but all choices except key invent boundaries, metric calibration or numeric population. Stem already denies ordinary regional representation and repeats network + importance, so two given constraints do not create a genuine competing choice. Length/GIS vocabulary does not establish medium.",
+        "defects": [
+          "Three wrong alternatives do not supply balanced plausible encodings; segment-outline equals province-boundary error is conspicuous.",
+          "note1 repeats no-sea fact without explaining missing distance calibration.",
+          "Inherited peer road-network definitions support the same direction, although they alone do not establish node importance or the full key."
+        ],
+        "cycle1Target": "One bounded rewrite within same historical object and frozen fields: require retaining both documented road relations and ordinal city-importance information, offer four comparable encoding plans each preserving at least one real component; distinguish a plausible partial retention from complete retention. Keep inference labelled as reasoning from supplied data, and do not claim UNESCO prescribes a GIS model or prohibits external georeferencing. Replace weak note1 with the precise unsupported inference; source-backed correct-note coverage can stay.",
+        "sourceGap": null
+      }
+    },
+    {
+      "id": "maps-cartography-mappa-mundi",
+      "beforeCard": {
+        "id": "maps-cartography-mappa-mundi",
+        "difficulty": "medium",
+        "prompt": "Hereford Mappa Mundi — один лист пергамента около 1626 × 1346 мм, датированный примерно 1290–1310 годами; в номинации отмечено около 500 изображений, включая виды городов, библейские сцены и классические сюжеты. Какой подход подходит для публичной экспозиции?",
+        "answers": [
+          {
+            "text": "Портоланная навигационная карта: использовать реалистичные берега для морских направлений.",
+            "note": "UNESCO противопоставляет mappa mundi портоланам: у тех берега реалистичнее, но нет той же духовной и дидактической функции."
+          },
+          {
+            "text": "Только богословская схема: географические места и классические сюжеты считать случайными украшениями.",
+            "note": "Номинация насчитывает около 420 видов городов и поселений, а также библейские и классические изображения."
+          },
+          {
+            "text": "Публичная визуальная энциклопедия: география соединена с историей, антропологией, библейскими и классическими знаниями.",
+            "note": "UNESCO также перечисляет этнографические и теологические сведения среди тем карты."
+          },
+          {
+            "text": "Поздняя научная карта: точность географии и морские исследования важнее духовных сюжетов.",
+            "note": "Номинация относит переход к более точному изображению, основанному на морских исследованиях, к периоду после традиции mappae mundi."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Номинация называет Hereford Mappa Mundi картой для публичного показа и визуальной энциклопедией. Сочетание географических мест и многочисленных исторических, библейских и классических изображений требует читать её как целостное представление средневекового знания, а не как навигационный инструмент.",
+        "source": {
+          "title": "UNESCO Memory of the World",
+          "url": "https://media.unesco.org/sites/default/files/webform/mow001/uk_hereford.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "5e6cf3f706a92b4fbf6d28dac1e96925f18cf63603c599248451c98843364c20",
+      "review": {
+        "id": "maps-cartography-mappa-mundi",
+        "status": "FIX",
+        "absoluteMedium": "Fails: direct classification. Size, material, dates, and image count are decorative. Geography + biblical + classical scenes map directly to encyclopaedia. No need to combine competing constraints or select a concrete exhibition action.",
+        "defects": [
+          "Prompt asks approach, options primarily name map types/interpretations; approach suits tautology is awkward.",
+          "Option1 only theology and option3 late scientific map are weak absolutes/anachronism.",
+          "note1 changes about420 views OR symbols into about420 views; literal primary support is narrower.",
+          "Current86/87 note1 already says mappa mundi combines geography with religious/historical world picture, which suffices to select the inclusive encyclopaedia interpretation."
+        ],
+        "cycle1Target": "One bounded rewrite using same complete nomination: ask a concrete exhibit-interpretation decision which must account for both the map geographical/classical content and its spiritually ordered worldview (L41–44, L49–53), with four plausible exhibit choices preserving partial content but only one preserving both. Do not simply rename the synthesis label. Keep new correct-note fact, restore views or symbols in counted note and narrow portolan comparison to source wording. Remove unused measurements unless they affect the decision.",
+        "sourceGap": null
+      }
+    }
+  ],
+  "frozen": [
+    "ID",
+    "topic",
+    "order",
+    "medium",
+    "correctIndex2"
+  ],
+  "allTextFieldsMutable": true,
+  "qualityCredit": 0,
+  "designRoute": "Use precise independent cycle1Target: comparable plausible exhibit/encoding action plans each retaining realpartial content; only key integrates required documented constraints. No empty technicaldecoration/definitionlabel; no newfactualclaimwithoutcompleteprimary. Correct note420 views OR symbols. ExistingcompleteUNESCOcontexts sufficient for proposedroute; partialONBexcluded.",
+  "next": "Lunamedium sourceauthor aftercapacity available; exact6groups4actualvariants/codeapplyaffected19/retainedreader; unresolvedterminalHOLD"
+}
