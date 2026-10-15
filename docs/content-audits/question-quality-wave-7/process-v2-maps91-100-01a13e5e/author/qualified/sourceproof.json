@@ -1,0 +1,402 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "6d679c25615ed1a8a582fbc57113cb36d8be0a5f",
+  "sourceRegister": [
+    {
+      "id": "gen",
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/sources/esri-generalization-workflow.body",
+      "url": "https://pro.arcgis.com/en/pro-app/3.6/tool-reference/cartography/conflict-resolution-and-generalization-with-geoprocessing.htm",
+      "title": "Automating conflict resolution and generalization workflows with geoprocessing | ArcGIS Pro documentation",
+      "provenance": "Complete official primary HTML response reused from existing capture; byte length and SHA256 verified.",
+      "locator": "“Combining generalization tasks in cartographic workflows”: paragraph beginning “The process of making a map at a smaller scale”; following paragraph on removing vertices and combining attribute subcategories.",
+      "rawReadBytes": 41618,
+      "rawReadBytesSHA256": "8ce5c1304f14ef2ba509ba6cbabd973d746e39d6bc73413d7cd78308884b90c3"
+    },
+    {
+      "id": "class",
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-classification.body",
+      "url": "https://pro.arcgis.com/en/pro-app/3.0/help/mapping/layer-properties/data-classification-methods.htm",
+      "title": "Data classification methods | ArcGIS Pro documentation",
+      "provenance": "Complete official primary HTML response reused from existing capture; byte length and SHA256 verified.",
+      "locator": "Sections “Equal interval”, “Quantile”, “Natural breaks”; natural-breaks section describes data-specific suitability.",
+      "rawReadBytes": 19831,
+      "rawReadBytesSHA256": "ac18e0ed09fd62a620d00ebe9b8d995f9328ad4a9e8e0219a413ab21b2556479"
+    },
+    {
+      "id": "label",
+      "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/sources/esri-label-engine.body",
+      "url": "https://pro.arcgis.com/en/pro-app/3.4/help/mapping/text/label-with-the-standard-label-engine.htm",
+      "title": "Label with the Standard Label Engine | ArcGIS Pro documentation",
+      "provenance": "Complete official primary HTML response reused from existing capture; byte length and SHA256 verified.",
+      "locator": "Sections “Resolve conflict between labels” and “Prioritize labels”: fit without overlap, rankings, alternatives/removal of lower priority, and place-overlapping option.",
+      "rawReadBytes": 17383,
+      "rawReadBytesSHA256": "0fb679f0800b447f330c2b5f639206f8e1639709cb78d38caceabb16e7e7251b"
+    }
+  ],
+  "cards": [
+    {
+      "id": "maps-cartography-generalization-select",
+      "proposedCardSHA256": "f1ccce9e1b49d04638ae9022d49597a3b56e70db06034f8b27e44a46b04f70e3",
+      "difficultyBasis": "Applied medium task maps multiple explicit constraints to a method; the correct method is not named in the prompt.",
+      "correctNoteNewFact": "The source workflow also considers target scale, display specifications including symbology, and map purpose.",
+      "sixLiteralGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Слой дорог 1:25 000 нужно подготовить для карты 1:50 000: убрать часть второстепенных дорог, сохранив связность сети, а геометрию оставшихся линий упростить. Какой набор действий выполняет обе задачи?",
+            "answers": [
+              "Разбить значения атрибута на равные интервалы и окрасить классы.",
+              "Увеличить символы дорог и переместить подписи населённых пунктов.",
+              "Упростить геометрию всех дорог, оставив каждый объект.",
+              "Сократить набор объектов с сохранением связности, затем удалить лишние вершины оставшихся линий."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "bcfbaa2299f52d619d5b3e893ae5187cf0322a897fb7fe8683647f1cec8e2e52"
+        },
+        {
+          "group": "explanation",
+          "literal": "Для более мелкого масштаба генерализация может сначала сократить число объектов, сохраняя связность, а затем упростить геометрию линий удалением лишних вершин. Классификация и оформление не выполняют эти операции над дорожными данными.",
+          "canonicalSHA256": "12fc9059ed03215d836458885b94fc13ad9b0bf19ca5bd50da8e1c3867813ea1"
+        },
+        {
+          "group": "note0",
+          "literal": "Классификация атрибута меняет тематическое отображение, но сама не отбирает и не упрощает объекты.",
+          "canonicalSHA256": "46ba1dfe307e3932698eac25e029ec52b4440a47bdfcda5aaa0cfeb06859fcbf"
+        },
+        {
+          "group": "note1",
+          "literal": "Символы и подписи меняют оформление, но не состав и геометрию дорожных данных.",
+          "canonicalSHA256": "b04b46a63c7fbdc12b5e1b9d78b53e181768e8226e5c9c1ae7332273e34d122a"
+        },
+        {
+          "group": "note2",
+          "literal": "Упрощение уменьшает число вершин, но само по себе не убирает второстепенные объекты.",
+          "canonicalSHA256": "b85409bc1343f9a17e0eb9652789ba4ddd2296859cefd481d9ad45bf1bce1980"
+        },
+        {
+          "group": "note3",
+          "literal": "Сокращение набора объектов и упрощение линий решают разные задачи генерализации; связность сети сохраняется.",
+          "canonicalSHA256": "1fdd22a50ab071ce3665a947618b5a564bf2b958b7014f40d8ab4b62c27274c2"
+        }
+      ],
+      "fourSubstitutions": [
+        {
+          "answerSlot": 1,
+          "fullPrompt": "Слой дорог 1:25 000 нужно подготовить для карты 1:50 000: убрать часть второстепенных дорог, сохранив связность сети, а геометрию оставшихся линий упростить. Какой набор действий выполняет обе задачи?",
+          "answer": "Разбить значения атрибута на равные интервалы и окрасить классы.",
+          "note": "Классификация атрибута меняет тематическое отображение, но сама не отбирает и не упрощает объекты.",
+          "grounds": {
+            "grammarGround": "Complete, grammatical Russian response to a singular selection question.",
+            "plausibilityGround": "Numeric styling does not select or simplify roads.",
+            "truthAndUniqueKeyGround": "Supported by the cited primary locator; no other choice meets every stated condition; this text is at frozen correctIndex 3.",
+            "noteUsefulnessGround": "Explains a discriminating consequence or distinction rather than merely repeating the answer."
+          },
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/sources/esri-generalization-workflow.body"
+          ],
+          "locators": [
+            "“Combining generalization tasks in cartographic workflows”: paragraph beginning “The process of making a map at a smaller scale”; following paragraph on removing vertices and combining attribute subcategories."
+          ]
+        },
+        {
+          "answerSlot": 2,
+          "fullPrompt": "Слой дорог 1:25 000 нужно подготовить для карты 1:50 000: убрать часть второстепенных дорог, сохранив связность сети, а геометрию оставшихся линий упростить. Какой набор действий выполняет обе задачи?",
+          "answer": "Увеличить символы дорог и переместить подписи населённых пунктов.",
+          "note": "Символы и подписи меняют оформление, но не состав и геометрию дорожных данных.",
+          "grounds": {
+            "grammarGround": "Complete, grammatical Russian response to a singular selection question.",
+            "plausibilityGround": "Presentation edits do not alter road features.",
+            "truthAndUniqueKeyGround": "Supported by the cited primary locator; no other choice meets every stated condition; this text is at frozen correctIndex 3.",
+            "noteUsefulnessGround": "Explains a discriminating consequence or distinction rather than merely repeating the answer."
+          },
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/sources/esri-generalization-workflow.body"
+          ],
+          "locators": [
+            "“Combining generalization tasks in cartographic workflows”: paragraph beginning “The process of making a map at a smaller scale”; following paragraph on removing vertices and combining attribute subcategories."
+          ]
+        },
+        {
+          "answerSlot": 3,
+          "fullPrompt": "Слой дорог 1:25 000 нужно подготовить для карты 1:50 000: убрать часть второстепенных дорог, сохранив связность сети, а геометрию оставшихся линий упростить. Какой набор действий выполняет обе задачи?",
+          "answer": "Упростить геометрию всех дорог, оставив каждый объект.",
+          "note": "Упрощение уменьшает число вершин, но само по себе не убирает второстепенные объекты.",
+          "grounds": {
+            "grammarGround": "Complete, grammatical Russian response to a singular selection question.",
+            "plausibilityGround": "Simplification handles vertices but not object selection.",
+            "truthAndUniqueKeyGround": "Supported by the cited primary locator; no other choice meets every stated condition; this text is at frozen correctIndex 3.",
+            "noteUsefulnessGround": "Explains a discriminating consequence or distinction rather than merely repeating the answer."
+          },
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/sources/esri-generalization-workflow.body"
+          ],
+          "locators": [
+            "“Combining generalization tasks in cartographic workflows”: paragraph beginning “The process of making a map at a smaller scale”; following paragraph on removing vertices and combining attribute subcategories."
+          ]
+        },
+        {
+          "answerSlot": 4,
+          "fullPrompt": "Слой дорог 1:25 000 нужно подготовить для карты 1:50 000: убрать часть второстепенных дорог, сохранив связность сети, а геометрию оставшихся линий упростить. Какой набор действий выполняет обе задачи?",
+          "answer": "Сократить набор объектов с сохранением связности, затем удалить лишние вершины оставшихся линий.",
+          "note": "Сокращение набора объектов и упрощение линий решают разные задачи генерализации; связность сети сохраняется.",
+          "grounds": {
+            "grammarGround": "Complete, grammatical Russian response to a singular selection question.",
+            "plausibilityGround": "Both required data operations are covered while preserving connectivity.",
+            "truthAndUniqueKeyGround": "Supported by the cited primary locator; no other choice meets every stated condition; this text is at frozen correctIndex 3.",
+            "noteUsefulnessGround": "Explains a discriminating consequence or distinction rather than merely repeating the answer."
+          },
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/sources/esri-generalization-workflow.body"
+          ],
+          "locators": [
+            "“Combining generalization tasks in cartographic workflows”: paragraph beginning “The process of making a map at a smaller scale”; following paragraph on removing vertices and combining attribute subcategories."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-classification-groups",
+      "proposedCardSHA256": "0abe246e9aaf189647acca68ce52675bf68b9b207cdcb6f516f9b834576ba256",
+      "difficultyBasis": "Applied medium task maps multiple explicit constraints to a method; the correct method is not named in the prompt.",
+      "correctNoteNewFact": "Natural Breaks is data-specific and unsuitable for comparing maps with different underlying data distributions.",
+      "sixLiteralGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В слое температурных станций значения лежат в диапазоне 0–80 °C. Для карты нужны четыре класса одинаковой ширины по диапазону; одинаковое число станций не требуется. Какой метод даст нужные интервалы?",
+            "answers": [
+              "Квантиль: распределить станции поровну между классами.",
+              "Естественные границы: поставить пороги по группировкам и разрывам значений.",
+              "Ручные интервалы: задать пороги по отдельным решениям редактора.",
+              "Равные интервалы: разделить диапазон 0–80 °C на четыре отрезка по 20 °C."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "510f41816974b33c614b056cc389e07be2f8ab1bd69455899d4c91d43af729ac"
+        },
+        {
+          "group": "explanation",
+          "literal": "Метод равных интервалов делит ширину диапазона на число классов: здесь каждый интервал равен 20 °C. Квантильный метод выравнивал бы число станций, а естественные границы зависят от распределения данных.",
+          "canonicalSHA256": "71d26f0c8d66c31fcc3218d0583eadfafc7204caea9391f84d93dfa9cad5e768"
+        },
+        {
+          "group": "note0",
+          "literal": "Квантиль уравнивает число объектов, поэтому ширина интервалов может различаться.",
+          "canonicalSHA256": "8344054b8cdb9949d945f99f05299186f4fbe0611f2f9920b548177eea382cd0"
+        },
+        {
+          "group": "note1",
+          "literal": "Естественные границы зависят от распределения значений, а не обеспечивают равную ширину.",
+          "canonicalSHA256": "246ebece754e588294789c01ae481c9b8c44e654862c985a4c81f12f9558f4dd"
+        },
+        {
+          "group": "note2",
+          "literal": "Ручные интервалы позволяют задать произвольные пороги, но не предписывают равную ширину.",
+          "canonicalSHA256": "9e1c20262972513ff9cce981d3d2d633ae2a06286b86a2c5d4e1d92bc82a2b22"
+        },
+        {
+          "group": "note3",
+          "literal": "Равные интервалы делят диапазон на части одинаковой ширины: 80 °C / 4 = 20 °C.",
+          "canonicalSHA256": "5d156fb728530cde18e2db36c2facf44515b0b4a4c27864527d2d6cf41fabe2b"
+        }
+      ],
+      "fourSubstitutions": [
+        {
+          "answerSlot": 1,
+          "fullPrompt": "В слое температурных станций значения лежат в диапазоне 0–80 °C. Для карты нужны четыре класса одинаковой ширины по диапазону; одинаковое число станций не требуется. Какой метод даст нужные интервалы?",
+          "answer": "Квантиль: распределить станции поровну между классами.",
+          "note": "Квантиль уравнивает число объектов, поэтому ширина интервалов может различаться.",
+          "grounds": {
+            "grammarGround": "Complete, grammatical Russian response to a singular selection question.",
+            "plausibilityGround": "Balances object counts rather than numeric widths.",
+            "truthAndUniqueKeyGround": "Supported by the cited primary locator; no other choice meets every stated condition; this text is at frozen correctIndex 3.",
+            "noteUsefulnessGround": "Explains a discriminating consequence or distinction rather than merely repeating the answer."
+          },
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-classification.body"
+          ],
+          "locators": [
+            "Sections “Equal interval”, “Quantile”, “Natural breaks”; natural-breaks section describes data-specific suitability."
+          ]
+        },
+        {
+          "answerSlot": 2,
+          "fullPrompt": "В слое температурных станций значения лежат в диапазоне 0–80 °C. Для карты нужны четыре класса одинаковой ширины по диапазону; одинаковое число станций не требуется. Какой метод даст нужные интервалы?",
+          "answer": "Естественные границы: поставить пороги по группировкам и разрывам значений.",
+          "note": "Естественные границы зависят от распределения значений, а не обеспечивают равную ширину.",
+          "grounds": {
+            "grammarGround": "Complete, grammatical Russian response to a singular selection question.",
+            "plausibilityGround": "Uses data clusters, not equal widths.",
+            "truthAndUniqueKeyGround": "Supported by the cited primary locator; no other choice meets every stated condition; this text is at frozen correctIndex 3.",
+            "noteUsefulnessGround": "Explains a discriminating consequence or distinction rather than merely repeating the answer."
+          },
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-classification.body"
+          ],
+          "locators": [
+            "Sections “Equal interval”, “Quantile”, “Natural breaks”; natural-breaks section describes data-specific suitability."
+          ]
+        },
+        {
+          "answerSlot": 3,
+          "fullPrompt": "В слое температурных станций значения лежат в диапазоне 0–80 °C. Для карты нужны четыре класса одинаковой ширины по диапазону; одинаковое число станций не требуется. Какой метод даст нужные интервалы?",
+          "answer": "Ручные интервалы: задать пороги по отдельным решениям редактора.",
+          "note": "Ручные интервалы позволяют задать произвольные пороги, но не предписывают равную ширину.",
+          "grounds": {
+            "grammarGround": "Complete, grammatical Russian response to a singular selection question.",
+            "plausibilityGround": "Arbitrary thresholds do not guarantee equal widths.",
+            "truthAndUniqueKeyGround": "Supported by the cited primary locator; no other choice meets every stated condition; this text is at frozen correctIndex 3.",
+            "noteUsefulnessGround": "Explains a discriminating consequence or distinction rather than merely repeating the answer."
+          },
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-classification.body"
+          ],
+          "locators": [
+            "Sections “Equal interval”, “Quantile”, “Natural breaks”; natural-breaks section describes data-specific suitability."
+          ]
+        },
+        {
+          "answerSlot": 4,
+          "fullPrompt": "В слое температурных станций значения лежат в диапазоне 0–80 °C. Для карты нужны четыре класса одинаковой ширины по диапазону; одинаковое число станций не требуется. Какой метод даст нужные интервалы?",
+          "answer": "Равные интервалы: разделить диапазон 0–80 °C на четыре отрезка по 20 °C.",
+          "note": "Равные интервалы делят диапазон на части одинаковой ширины: 80 °C / 4 = 20 °C.",
+          "grounds": {
+            "grammarGround": "Complete, grammatical Russian response to a singular selection question.",
+            "plausibilityGround": "80 divided into four yields four 20-degree classes.",
+            "truthAndUniqueKeyGround": "Supported by the cited primary locator; no other choice meets every stated condition; this text is at frozen correctIndex 3.",
+            "noteUsefulnessGround": "Explains a discriminating consequence or distinction rather than merely repeating the answer."
+          },
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-classification.body"
+          ],
+          "locators": [
+            "Sections “Equal interval”, “Quantile”, “Natural breaks”; natural-breaks section describes data-specific suitability."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-label-placement",
+      "proposedCardSHA256": "4ab0a9d0cac14662db5c675d27ea767b40e4b410ccf178e6ee314ca9ddcab59a",
+      "difficultyBasis": "Applied medium task maps multiple explicit constraints to a method; the correct method is not named in the prompt.",
+      "correctNoteNewFact": "The standard label engine fits as many labels as possible without overlap in available space.",
+      "sixLiteralGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На городской карте три конфликтующие подписи: больница имеет наивысший приоритет и обязана остаться; вокзал важен, но может быть передвинут; название парка имеет низший приоритет и допустимо убрать, если места нет. Как настроить подписи, чтобы разрешать конфликты согласно этим условиям?",
+            "answers": [
+              "Включить размещение с перекрытием для всех подписей и отключить приоритеты.",
+              "Упростить геометрию объектов, удаляя вершины линий до исчезновения конфликтов.",
+              "Назначить всем трём подписям одинаковый высокий вес.",
+              "Задать ранги приоритета и разрешить движку менять положение или убирать конфликтующие подписи низшего ранга."
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "36d9b780a2d9e6fba9114f45285bdd0c363fc1ceceb39607c5b6685ac64b491f"
+        },
+        {
+          "group": "explanation",
+          "literal": "Задайте ранги «больница, вокзал, парк» и оставьте включённым разрешение конфликтов стандартного движка. Он размещает максимально возможное число подписей без наложения; для низшего ранга можно предусмотреть альтернативное положение или снятие.",
+          "canonicalSHA256": "f4f37c5daf5ac51914776ea1d9520cf671c41b1d1262b1936d12a61429ab7130"
+        },
+        {
+          "group": "note0",
+          "literal": "Принудительное перекрытие допускает наложения и противоречит требованию разрешать конфликты.",
+          "canonicalSHA256": "740d9a26503193eabb32a10281cf85102d2b91f1083f3b57d8e7ce7053a12997"
+        },
+        {
+          "group": "note1",
+          "literal": "Упрощение геометрии не задаёт ранги и не управляет альтернативными позициями подписей.",
+          "canonicalSHA256": "afed799f145d0f167505c9772b31b3b3da7fed5d823b8c65b4491f3b8e7808e9"
+        },
+        {
+          "group": "note2",
+          "literal": "Одинаковый ранг не выражает заданную разницу важности и не подсказывает, какую подпись можно убрать.",
+          "canonicalSHA256": "4950ec938484de63833fa9245d2484e65c33a9eed5ceb4243cd4d916567cf233"
+        },
+        {
+          "group": "note3",
+          "literal": "Ранги кодируют важность; движок может подбирать альтернативные позиции и снимать подписи более низкого ранга.",
+          "canonicalSHA256": "0ffc39e8fdc7dd7c993ddd6a211216924a712928f6730fe1bd7fdce8e3ca2970"
+        }
+      ],
+      "fourSubstitutions": [
+        {
+          "answerSlot": 1,
+          "fullPrompt": "На городской карте три конфликтующие подписи: больница имеет наивысший приоритет и обязана остаться; вокзал важен, но может быть передвинут; название парка имеет низший приоритет и допустимо убрать, если места нет. Как настроить подписи, чтобы разрешать конфликты согласно этим условиям?",
+          "answer": "Включить размещение с перекрытием для всех подписей и отключить приоритеты.",
+          "note": "Принудительное перекрытие допускает наложения и противоречит требованию разрешать конфликты.",
+          "grounds": {
+            "grammarGround": "Complete, grammatical Russian response to a singular selection question.",
+            "plausibilityGround": "Allows the overlap the task asks to resolve.",
+            "truthAndUniqueKeyGround": "Supported by the cited primary locator; no other choice meets every stated condition; this text is at frozen correctIndex 3.",
+            "noteUsefulnessGround": "Explains a discriminating consequence or distinction rather than merely repeating the answer."
+          },
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/sources/esri-label-engine.body"
+          ],
+          "locators": [
+            "Sections “Resolve conflict between labels” and “Prioritize labels”: fit without overlap, rankings, alternatives/removal of lower priority, and place-overlapping option."
+          ]
+        },
+        {
+          "answerSlot": 2,
+          "fullPrompt": "На городской карте три конфликтующие подписи: больница имеет наивысший приоритет и обязана остаться; вокзал важен, но может быть передвинут; название парка имеет низший приоритет и допустимо убрать, если места нет. Как настроить подписи, чтобы разрешать конфликты согласно этим условиям?",
+          "answer": "Упростить геометрию объектов, удаляя вершины линий до исчезновения конфликтов.",
+          "note": "Упрощение геометрии не задаёт ранги и не управляет альтернативными позициями подписей.",
+          "grounds": {
+            "grammarGround": "Complete, grammatical Russian response to a singular selection question.",
+            "plausibilityGround": "Geometry edits do not manage labels.",
+            "truthAndUniqueKeyGround": "Supported by the cited primary locator; no other choice meets every stated condition; this text is at frozen correctIndex 3.",
+            "noteUsefulnessGround": "Explains a discriminating consequence or distinction rather than merely repeating the answer."
+          },
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/sources/esri-label-engine.body"
+          ],
+          "locators": [
+            "Sections “Resolve conflict between labels” and “Prioritize labels”: fit without overlap, rankings, alternatives/removal of lower priority, and place-overlapping option."
+          ]
+        },
+        {
+          "answerSlot": 3,
+          "fullPrompt": "На городской карте три конфликтующие подписи: больница имеет наивысший приоритет и обязана остаться; вокзал важен, но может быть передвинут; название парка имеет низший приоритет и допустимо убрать, если места нет. Как настроить подписи, чтобы разрешать конфликты согласно этим условиям?",
+          "answer": "Назначить всем трём подписям одинаковый высокий вес.",
+          "note": "Одинаковый ранг не выражает заданную разницу важности и не подсказывает, какую подпись можно убрать.",
+          "grounds": {
+            "grammarGround": "Complete, grammatical Russian response to a singular selection question.",
+            "plausibilityGround": "Equal ranks ignore the specified hierarchy.",
+            "truthAndUniqueKeyGround": "Supported by the cited primary locator; no other choice meets every stated condition; this text is at frozen correctIndex 3.",
+            "noteUsefulnessGround": "Explains a discriminating consequence or distinction rather than merely repeating the answer."
+          },
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/sources/esri-label-engine.body"
+          ],
+          "locators": [
+            "Sections “Resolve conflict between labels” and “Prioritize labels”: fit without overlap, rankings, alternatives/removal of lower priority, and place-overlapping option."
+          ]
+        },
+        {
+          "answerSlot": 4,
+          "fullPrompt": "На городской карте три конфликтующие подписи: больница имеет наивысший приоритет и обязана остаться; вокзал важен, но может быть передвинут; название парка имеет низший приоритет и допустимо убрать, если места нет. Как настроить подписи, чтобы разрешать конфликты согласно этим условиям?",
+          "answer": "Задать ранги приоритета и разрешить движку менять положение или убирать конфликтующие подписи низшего ранга.",
+          "note": "Ранги кодируют важность; движок может подбирать альтернативные позиции и снимать подписи более низкого ранга.",
+          "grounds": {
+            "grammarGround": "Complete, grammatical Russian response to a singular selection question.",
+            "plausibilityGround": "Ranks and conflict resolution provide the stated move/remove behavior.",
+            "truthAndUniqueKeyGround": "Supported by the cited primary locator; no other choice meets every stated condition; this text is at frozen correctIndex 3.",
+            "noteUsefulnessGround": "Explains a discriminating consequence or distinction rather than merely repeating the answer."
+          },
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/sources/esri-label-engine.body"
+          ],
+          "locators": [
+            "Sections “Resolve conflict between labels” and “Prioritize labels”: fit without overlap, rankings, alternatives/removal of lower priority, and place-overlapping option."
+          ]
+        }
+      ]
+    }
+  ],
+  "independentReview": "not performed"
+}
