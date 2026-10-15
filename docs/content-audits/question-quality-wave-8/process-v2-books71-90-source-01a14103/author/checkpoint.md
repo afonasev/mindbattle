@@ -1,0 +1,5 @@
+# Author checkpoint — books 71–90
+
+Baseline: `c1d1936e1cf5de1028b64fbc09c37ca105fa128b`. READY: none currently. A previously transferred source-ready draft for 86 is now HOLD after full MAIN scan found an exact duplicate with `ancient-world-clay`; the authored text was not regenerated. HOLD: 71,72 (source gaps); 73–75 (official FRBR raw-body capture gap); 86 (exact MAIN duplicate); 87 (known duplicate of sourceOrder58). Pending qualification: books-publishing-footnote-aid, books-publishing-bibliography-aid, books-publishing-library-place, books-publishing-bookstore-place, books-publishing-publisher-place, books-publishing-printinghouse-place, books-publishing-pagenumber-nav, books-publishing-bookmark-nav, books-publishing-runninghead-nav, books-publishing-chaptertitle-nav, books-publishing-dewey-class, books-publishing-lcc-class, books-publishing-udc-class.
+
+SourceOrder42/44/45 appear as actual CURRENT peers per commit `0f0d632e05d345d13d093d93ed7d6c8bdc2ecad7`; no literal reread or OTHER status inherited.
