@@ -1,0 +1,250 @@
+{
+  "schemaVersion": 1,
+  "topicId": "maps-cartography",
+  "baselineCommit": "0708bbfcf00bc2fd52df17dd0c19c364f5154e19",
+  "sourceOrderRange": [
+    92,
+    95
+  ],
+  "qualityCredit": 0,
+  "applied": false,
+  "entries": [
+    {
+      "id": "maps-cartography-generalization-select",
+      "topicId": "maps-cartography",
+      "sourceOrder": 92,
+      "stage": "initial3-cycle1-author-final",
+      "status": "READY_FOR_INDEPENDENT_REVIEW",
+      "difficulty": "medium",
+      "correctIndex": 3,
+      "beforeCard": {
+        "id": "maps-cartography-generalization-select",
+        "difficulty": "medium",
+        "prompt": "Слой дорог 1:25 000 нужно подготовить для карты 1:50 000: убрать часть второстепенных дорог, сохранив связность сети, а геометрию оставшихся линий упростить. Какой набор действий выполняет обе задачи?",
+        "answers": [
+          {
+            "text": "Разбить значения атрибута на равные интервалы и окрасить классы.",
+            "note": "Классификация атрибута меняет тематическое отображение, но сама не отбирает и не упрощает объекты."
+          },
+          {
+            "text": "Увеличить символы дорог и переместить подписи населённых пунктов.",
+            "note": "Символы и подписи меняют оформление, но не состав и геометрию дорожных данных."
+          },
+          {
+            "text": "Упростить геометрию всех дорог, оставив каждый объект.",
+            "note": "Упрощение уменьшает число вершин, но само по себе не убирает второстепенные объекты."
+          },
+          {
+            "text": "Сократить набор объектов с сохранением связности, затем удалить лишние вершины оставшихся линий.",
+            "note": "В документационном примере для масштаба 1:50 000 малые здания отбирают по площади, а у оставшихся убирают вогнутости, выступы и лишние вершины."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Для более мелкого масштаба генерализация может сначала сократить число объектов, сохраняя связность, а затем упростить геометрию линий удалением лишних вершин. Классификация и оформление не выполняют эти операции над дорожными данными.",
+        "source": {
+          "title": "Automating conflict resolution and generalization workflows with geoprocessing | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.6/tool-reference/cartography/conflict-resolution-and-generalization-with-geoprocessing.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "1e30c8252c53d15b790cec0910c54ade8a58c046869da927504561581c2df0d0",
+      "proposedCard": {
+        "id": "maps-cartography-generalization-select",
+        "difficulty": "medium",
+        "prompt": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+        "answers": [
+          {
+            "text": "Выбрать Shape_Area < 100, затем применить Simplify Building.",
+            "note": "Порог <100 оставляет малые здания."
+          },
+          {
+            "text": "Выбрать Shape_Area > 100, затем применить Aggregate Polygons.",
+            "note": "Агрегация не упрощает контуры."
+          },
+          {
+            "text": "Применить Simplify Building ко всему слою без выборки.",
+            "note": "Без отбора малые здания останутся."
+          },
+          {
+            "text": "Выбрать Shape_Area > 100, затем применить Simplify Building.",
+            "note": "В примере включён CHECK_CONFLICTS."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Сначала выражение Shape_Area > 100 отбирает здания больше минимальной площади: малые здания для масштаба 1:50 000 исключаются. Затем Simplify Building убирает у выбранных контуров вогнутости, выступы и лишние вершины. В примере у инструмента также включён параметр CHECK_CONFLICTS.",
+        "source": {
+          "title": "Automating conflict resolution and generalization workflows with geoprocessing | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.6/tool-reference/cartography/conflict-resolution-and-generalization-with-geoprocessing.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "c37a62874f8507a2b99b52be4153d0894b02d7044873b559c55422895015db0c",
+      "fieldGroups": {
+        "prompt_ordered_answers_key": "67b08515ce0bc5e1d686734ce816e1a37db4e243b433bf77fa36069c2246e70c",
+        "explanation": "991fbf371418ff903c9c3e46097d7ad5efa6efe2582f6b69cb04cd90bc7d052e",
+        "note0": "587ccfe887e1b3fdf560ff3cb2776f38e12eb8366b2f156297a3c0a51c181ed0",
+        "note1": "4ec2ea1ffa88a250ded86fffab89266a53c017f6b87b0aa92753460e07093b1a",
+        "note2": "0c1f0751a330ab3c4380ca161f3cc2bc1bfabd29d1a7142352a767c13bb98747",
+        "note3": "1910408b993f213b39c4d17fa696d217ad292fcf6f10eb442ab87b31b13a2bd5"
+      }
+    },
+    {
+      "id": "maps-cartography-classification-groups",
+      "topicId": "maps-cartography",
+      "sourceOrder": 93,
+      "stage": "initial3-cycle1-author-final",
+      "status": "READY_FOR_INDEPENDENT_REVIEW",
+      "difficulty": "medium",
+      "correctIndex": 3,
+      "beforeCard": {
+        "id": "maps-cartography-classification-groups",
+        "difficulty": "medium",
+        "prompt": "В слое температурных станций значения лежат в диапазоне 0–80 °C. Для карты нужны четыре класса одинаковой ширины по диапазону; одинаковое число станций не требуется. Какой метод даст нужные интервалы?",
+        "answers": [
+          {
+            "text": "Квантиль: распределить станции поровну между классами.",
+            "note": "Квантиль уравнивает число объектов, поэтому ширина интервалов может различаться."
+          },
+          {
+            "text": "Естественные границы: поставить пороги по группировкам и разрывам значений.",
+            "note": "Естественные границы зависят от распределения значений, а не обеспечивают равную ширину."
+          },
+          {
+            "text": "Ручные интервалы: задать пороги по отдельным решениям редактора.",
+            "note": "Ручные интервалы позволяют задать произвольные пороги, но не предписывают равную ширину."
+          },
+          {
+            "text": "Равные интервалы: разделить диапазон 0–80 °C на четыре отрезка по 20 °C.",
+            "note": "ArcGIS рекомендует равные интервалы для знакомых диапазонов, например температуры и процентов; этот метод подчёркивает величину значения относительно остальных."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Метод равных интервалов делит ширину диапазона на число классов: здесь каждый интервал равен 20 °C. Квантильный метод выравнивал бы число станций, а естественные границы зависят от распределения данных.",
+        "source": {
+          "title": "Data classification methods | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.0/help/mapping/layer-properties/data-classification-methods.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "c1fb1bcd102b7a247f5090801f7afa4e3c4dfaa9b02bb04c4b7f2da837c04997",
+      "proposedCard": {
+        "id": "maps-cartography-classification-groups",
+        "difficulty": "medium",
+        "prompt": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+        "answers": [
+          {
+            "text": "0–10, >10–30, >30–60 и >60–80 °C.",
+            "note": "Ширины интервалов различны."
+          },
+          {
+            "text": "Поставить границы по квартилям, уравняв число станций.",
+            "note": "Квантили уравнивают число записей."
+          },
+          {
+            "text": "Задать вручную пороги 0, 18, 42, 65 и 80 °C.",
+            "note": "Ручные границы произвольны."
+          },
+          {
+            "text": "0–20, >20–40, >40–60 и >60–80 °C.",
+            "note": "Jenks группирует близкие значения."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Размах значений равен 80 °C; разделив его на четыре класса, получаем ширину 20 °C. Поэтому границы идут через 20: 0, 20, 40, 60 и 80. Метод Jenks, в отличие от этого расчёта, ищет естественные группы похожих значений.",
+        "source": {
+          "title": "Data classification methods | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.0/help/mapping/layer-properties/data-classification-methods.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "687128d09162548a67218b5512c3e94f673ae6ecc84288890d5a9154f5aa4ff5",
+      "fieldGroups": {
+        "prompt_ordered_answers_key": "e8d674292aecd5b569d0a665e09cc0df4f69ccb62c1201ae2aa55be9424821d4",
+        "explanation": "32f9b145950ee565cabb8900e393d7f62163e29dc2f8f3e2012e7233dc2022bf",
+        "note0": "9ee5cc438d7bc41bbea6846035bb43b383995c2e01cc8d166c4038837e179a1d",
+        "note1": "de05cd273c0f1b7b6e9de384415b51a735f710063a228cc221f55d0961ad8359",
+        "note2": "98af3b22b0843c4cc4d4afb5e6f53a5ca7daa01d07f5e029e6309aa5cbd9dc26",
+        "note3": "640d996fe4c7c03f87a57dd35a792de9c6d1356351d37f10e8063600083be271"
+      }
+    },
+    {
+      "id": "maps-cartography-label-placement",
+      "topicId": "maps-cartography",
+      "sourceOrder": 95,
+      "stage": "initial3-cycle1-author-final",
+      "status": "READY_FOR_INDEPENDENT_REVIEW",
+      "difficulty": "medium",
+      "correctIndex": 3,
+      "beforeCard": {
+        "id": "maps-cartography-label-placement",
+        "difficulty": "medium",
+        "prompt": "На городской карте три конфликтующие подписи: больница имеет наивысший приоритет и обязана остаться; вокзал важен, но может быть передвинут; название парка имеет низший приоритет и допустимо убрать, если места нет. Как настроить подписи, чтобы разрешать конфликты согласно этим условиям?",
+        "answers": [
+          {
+            "text": "Включить размещение с перекрытием для всех подписей и отключить приоритеты.",
+            "note": "Принудительное перекрытие допускает наложения и противоречит требованию разрешать конфликты."
+          },
+          {
+            "text": "Упростить геометрию объектов, удаляя вершины линий до исчезновения конфликтов.",
+            "note": "Упрощение геометрии не задаёт ранги и не управляет альтернативными позициями подписей."
+          },
+          {
+            "text": "Назначить всем трём подписям одинаковый высокий вес.",
+            "note": "Одинаковый ранг не выражает заданную разницу важности и не подсказывает, какую подпись можно убрать."
+          },
+          {
+            "text": "Задать ранги приоритета и разрешить движку менять положение или убирать конфликтующие подписи низшего ранга.",
+            "note": "Вес объекта применяется при конфликте подписи с объектом; для конфликта двух подписей порядок размещения задаёт приоритет подписей."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Задайте ранги «больница, вокзал, парк» и оставьте включённым разрешение конфликтов стандартного движка. Он размещает максимально возможное число подписей без наложения; для низшего ранга можно предусмотреть альтернативное положение или снятие.",
+        "source": {
+          "title": "Label with the Standard Label Engine | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.4/help/mapping/text/label-with-the-standard-label-engine.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "05ad5be898ad7b09303383765402e9a018a96baa5291cd3c023c9f980605ce3b",
+      "proposedCard": {
+        "id": "maps-cartography-label-placement",
+        "difficulty": "medium",
+        "prompt": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+        "answers": [
+          {
+            "text": "Задать веса объектов: больнице высокий, вокзалу средний, парку низкий.",
+            "note": "Weight — конфликт с объектом."
+          },
+          {
+            "text": "Дать парку приоритет выше вокзала и больницы.",
+            "note": "Это обратный порядок важности."
+          },
+          {
+            "text": "Установить всем классам одинаковый приоритет.",
+            "note": "Равный ранг не задаёт порядок."
+          },
+          {
+            "text": "Приоритеты: больница > вокзал > парк; разрешить конфликты. Нижние подписи могут сдвигаться или сниматься; показ больницы не гарантирован.",
+            "note": "При зуме движок меняет позиции."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Задайте приоритет классов «больница → вокзал → парк» и оставьте стандартное разрешение конфликтов. Приоритет задаёт очередность размещения, но не гарантирует видимость даже больничной подписи. Нижестоящая конфликтующая подпись может переместиться или исчезнуть; движок также меняет размещение при зуме и панорамировании.",
+        "source": {
+          "title": "Label with the Standard Label Engine | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.4/help/mapping/text/label-with-the-standard-label-engine.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "afterHash": "421d676b174db341902fa65207016e090528ff4f07a88576fa29ba72a9a36428",
+      "fieldGroups": {
+        "prompt_ordered_answers_key": "ea16ac6f8927a8e7d605b454712915a52b2458d8a2185b1a82ea23dd552d5738",
+        "explanation": "34b8d9313d3eed83d74f3beae0876d12eb2ad632754e63f778fd0ff871658153",
+        "note0": "751a079ba04de0a545fae1c7b1050407b4a1f8c1019078c19468b4e11aa7f4ce",
+        "note1": "8e411a04cbae325ee21b5fb6db54260a976e88cffb6c71b2f606928a3cb6716b",
+        "note2": "4e8ce8ee21d18f848c7a21788d720a5df1f497c5f6fc03cc679a9caf2708af05",
+        "note3": "638fde29318c17519e8145f8ee88a8088dd63989acac55d32aae1c58d1e7cb5d"
+      }
+    }
+  ]
+}

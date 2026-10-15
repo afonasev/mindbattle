@@ -1,0 +1,592 @@
+{
+  "schemaVersion": 1,
+  "stage": "cycle1-author-final actual CURRENT snapshot",
+  "baselineCommit": "0708bbfcf00bc2fd52df17dd0c19c364f5154e19",
+  "currentCatalogPath": "src/content/topics/maps-cartography.json",
+  "currentCatalogRawSHA256": "eb9fe03b22f253e74c6e9644b20f3a4a414c2526453df2162db37bcb979506d4",
+  "currentCatalogParsedCanonicalSHA256": "d50a1df86c3ac7af19ad0698666f5f6126161b28793cadf7b9939bcdd9db7b4f",
+  "baselineCatalogRawSHA256": "eb9fe03b22f253e74c6e9644b20f3a4a414c2526453df2162db37bcb979506d4",
+  "catalogByteIdenticalToBaseline": true,
+  "actualCurrentPeers": [
+    {
+      "id": "maps-cartography-orthographic-space",
+      "sourceOrder": 71,
+      "card": {
+        "id": "maps-cartography-orthographic-space",
+        "difficulty": "hard",
+        "prompt": "На сфере точки P=(0° широты, 80° в.д.), Q=(0°, 100° в.д.), R=(0°, 170° в.д.). Центры ортографической проекции: A=(0°, 75° в.д.), B=(0°, 150° в.д.), C=(0°, 110° в.д.), D=(0°, 160° в.д.); широта каждого — 0°. Оставьте центры не дальше 90° от каждой точки и минимизируйте искажение в P. Какой центр выбрать?",
+        "answers": [
+          {
+            "text": "Выбрать A=(0°, 75° в.д.).",
+            "note": "До R=(0°, 170° в.д.) угловое расстояние от A равно 95°, поэтому R не видна."
+          },
+          {
+            "text": "Выбрать B=(0°, 150° в.д.).",
+            "note": "B проходит ограничение видимости, но до P — 70°; центр C расположен к P ближе."
+          },
+          {
+            "text": "Выбрать C=(0°, 110° в.д.).",
+            "note": "Ортографическая проекция не сохраняет ни площади, ни углы; искажение быстро растёт от центра к краям."
+          },
+          {
+            "text": "Выбрать D=(0°, 160° в.д.).",
+            "note": "D проходит ограничение видимости, но P удалена на 80°; центр C удалён от неё на 30°."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Все заданные широты равны нулю, поэтому центральное угловое расстояние здесь равно меньшей разности восточных долгот. Для A расстояние до R составляет 95°, а B, C и D проходят предел 90°. До P допустимые центры удалены на 70°, 30° и 80° соответственно, поэтому выбираем C.",
+        "source": {
+          "title": "Orthographic | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/orthographic.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "sha256": "f9d8a2b5cc805d25fed90108c914c59a79bb4fa97bbf78d107cd8712fc48d62b"
+    },
+    {
+      "id": "maps-cartography-sliver-polygon",
+      "sourceOrder": 73,
+      "card": {
+        "id": "maps-cartography-sliver-polygon",
+        "difficulty": "hard",
+        "prompt": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+        "answers": [
+          {
+            "text": "[6, 5] км².",
+            "note": "Площадь пересечения равна 60+45−94=11 км²; 5 км² — превышение суммы площадей над площадью маски."
+          },
+          {
+            "text": "[0, 11] км².",
+            "note": "Объединение занимает 94 км² из 100 км² маски, поэтому остаётся 6 км² незаполненной площади."
+          },
+          {
+            "text": "[6, 11] км².",
+            "note": "Если ошибки проверять топологией Esri, контур пустоты будет линейной ошибкой Must Not Have Gaps, а область перекрытия — полигонной ошибкой Must Not Overlap."
+          },
+          {
+            "text": "[11, 6] км².",
+            "note": "Формулы дают пустоту 100−94=6 км² и пересечение 60+45−94=11 км², в обратном порядке."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Пустота в пределах маски равна 100−94=6 км². Пересечение полигонов равно 60+45−94=11 км² по формуле включения–исключения. Искомая пара в указанном порядке — (6, 11) км².",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polygon features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polygon-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "sha256": "1b23f859d2a6d38330477d45c959b546173563fbdd337e4d653c3ab7e93b5fc2"
+    },
+    {
+      "id": "maps-cartography-overshoot-line",
+      "sourceOrder": 74,
+      "card": {
+        "id": "maps-cartography-overshoot-line",
+        "difficulty": "hard",
+        "prompt": "Trim задан максимум 5 м. У висячей линии A длина 8 м, пересечение находится в 3 м от свободного конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Каковы итоговые длины (или удаление) A, B и C и какие ошибки останутся?",
+        "answers": [
+          {
+            "text": "A — 5 м; B — 12 м, ошибка остаётся; C удаляется.",
+            "note": "Если в пределах заданного расстояния не найдено пересечение, Trim не обрезает линию; отсутствие встречи у C не удаляет её."
+          },
+          {
+            "text": "A — 6 м; B — 12 м; C — 4 м; ошибки остаются у B и C.",
+            "note": "У A выступ до пересечения равен 3 м, поэтому после Trim длина будет 8−3=5 м, а не 6 м."
+          },
+          {
+            "text": "A — 5 м; B — 12 м; C — 4 м; ошибки остаются у B и C.",
+            "note": "При расстоянии 0 Trim обрезает висячую линию точно до найденного пересечения."
+          },
+          {
+            "text": "A — 5 м; B — 3 м; C — 4 м; ошибки остаются у B и C.",
+            "note": "Для B пересечение находится в 9 м от конца, что превышает заданный максимум 5 м; B не укорачивается."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "У A удаляемый выступ равен 3 м, поэтому остаётся 8−3=5 м. У B Trim не достигает пересечения в 9 м при максимуме 5 м, поэтому B остаётся длиной 12 м и ошибкой. У C нет подходящего пересечения: она не удаляется и остаётся длиной 4 м с ошибкой.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "sha256": "211965fcec8cc7e832215fe4e583562669fea8f221bfaf4488dde27aa36ff072"
+    },
+    {
+      "id": "maps-cartography-read-coordinates",
+      "sourceOrder": 84,
+      "card": {
+        "id": "maps-cartography-read-coordinates",
+        "difficulty": "easy",
+        "prompt": "Географические координаты точки: x = −74°, y = 40°. Дайте ответ именно в порядке x, затем y, и укажите стороны света относительно нулевого меридиана и экватора.",
+        "answers": [
+          {
+            "text": "74° в. д.; 40° с. ш.",
+            "note": "Знак x положителен для востока; здесь x отрицателен."
+          },
+          {
+            "text": "74° з. д.; 40° ю. ш.",
+            "note": "Отрицательная широта означала бы юг; заданный y положителен."
+          },
+          {
+            "text": "40° с. ш.; 74° з. д.",
+            "note": "Это та же точка, но порядок ответа здесь широта, затем долгота, вопреки условию."
+          },
+          {
+            "text": "74° з. д.; 40° с. ш.",
+            "note": "Минус у долготы означает запад, плюс у широты — север; географическая система опирается на сферу или эллипсоид."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "В географической системе x задаёт долготу, а y — широту; координаты являются угловыми величинами. Поэтому −74° означает 74° к западу от нулевого меридиана, а +40° — 40° к северу от экватора. В порядке x, затем y это долгота 74° к западу и широта 40° к северу.",
+        "source": {
+          "title": "Coordinate systems, map projections, and transformations | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/mapping/properties/coordinate-systems-and-projections.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "sha256": "5b3a88de500f86f75f06105609f341bf937e3734bf5f1dad6085bbbaa5d2d2c7"
+    },
+    {
+      "id": "maps-cartography-waldseemuller-america",
+      "sourceOrder": 86,
+      "card": {
+        "id": "maps-cartography-waldseemuller-america",
+        "difficulty": "medium",
+        "prompt": "В описании карты мира 1507 года отмечены два наблюдения: западные земли отделены от Азии, а Тихий океан показан отдельным от Атлантики. В более ранней европейской модели обитаемый мир делился на Европу, Азию и Африку. Какой исторический вывод лучше всего обоснован этими данными?",
+        "answers": [
+          {
+            "text": "Картографы уже точно измерили площадь всех новых земель.",
+            "note": "Разделение областей на карте не сообщает точность площадных измерений."
+          },
+          {
+            "text": "Карта включила Америку в прежнюю трёхчастную модель, не меняя её.",
+            "note": "Наблюдение об отделении западных земель от Азии противоречит сохранению прежней модели без изменений."
+          },
+          {
+            "text": "Карта включает западные земли в Азию и сохраняет прежнее трёхчастное деление мира.",
+            "note": "Оба утверждения противоречат приведённому наблюдению об отделении западных земель от Азии."
+          },
+          {
+            "text": "Карта показывает переход от трёхчастной модели к отдельному западному полушарию с новым материком.",
+            "note": "Сопоставление признаков со старой моделью обосновывает вывод; LOC называет этот экземпляр единственным из примерно 1000 отпечатанных."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Библиотека Конгресса сообщает, что карта 1507 года ясно отделяет западное полушарие от Азии и показывает Тихий океан отдельным; она называет это новым представлением мира. Там же прежняя европейская модель описана как деление на Европу, Азию и Африку. Сопоставление наблюдений с этой моделью подтверждает изменение географической картины, но ничего не говорит о точности площадных измерений или личном авторстве Веспуччи.",
+        "source": {
+          "title": "1507 World Map - Waldseemüller Maps | Library of Congress",
+          "url": "https://www.loc.gov/exhibits/exploring-the-early-americas/interactives/waldseemuller-maps/worldmap1507/index.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "sha256": "0c341ac1f2fafeb90c58ad4b35049d89945b94f28a35526b57cccf7d421ece34"
+    },
+    {
+      "id": "maps-cartography-cadastral-parcels",
+      "sourceOrder": 87,
+      "card": {
+        "id": "maps-cartography-cadastral-parcels",
+        "difficulty": "medium",
+        "prompt": "Для кадастрового плана нужно различать соседние участки шириной около 18 м. Единственная исходная карта имеет масштаб 1:50 000; её цифровое изображение можно увеличить на экране, но точность первоначальной съёмки неизвестна. Какой вывод о пригодности данных следует сделать?",
+        "answers": [
+          {
+            "text": "Увеличить изображение до масштаба 1:1 000: экранное увеличение уточнит границы.",
+            "note": "Увеличение меняет отображение, а не точность исходных измерений."
+          },
+          {
+            "text": "Взять топографическую карту 1:50 000: этот масштаб достаточен для узких кадастровых участков.",
+            "note": "FAO поясняет, что линия 0,5 мм при 1:50 000 занимает на местности 25 м, уже шире указанных участков."
+          },
+          {
+            "text": "Считать участки точными по экрану, если контуры выглядят раздельными.",
+            "note": "Визуально раздельные цифровые линии не доказывают разрешение или точность исходной съёмки."
+          },
+          {
+            "text": "Не считать увеличение заменой новой съёмки; запросить исходные крупномасштабные данные, пригодные для участков такого размера.",
+            "note": "При 1:50 000 линия толщиной 0,5 мм соответствует 25 м; экранный зум точности не добавляет."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "В масштабе 1:50 000 линия шириной 0,5 мм соответствует 25 м на местности, что превышает ширину участков 18 м. FAO также предупреждает, что увеличение цифровой карты не делает её точнее исходных данных; для кадастровых планов обычно применяют масштабы 1:500–1:2 500, хотя нужный масштаб зависит от местности. Следовательно, требуется подходящая исходная съёмка, а не визуальное увеличение этой карты.",
+        "source": {
+          "title": "Cadastral surveys and records of rights in land | FAO",
+          "url": "https://www.fao.org/4/v4860e/v4860e03.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "sha256": "d8b8cda76ac5fb5f6c9472d6388b3c34a65228bf0a2923cc46fff43959d0b3a8"
+    },
+    {
+      "id": "maps-cartography-shape-distortion",
+      "sourceOrder": 89,
+      "card": {
+        "id": "maps-cartography-shape-distortion",
+        "difficulty": "medium",
+        "prompt": "На схеме двух участков направления двух линий на местности равны 0° и 60°. После проецирования в наборе X они равны 20° и 80°, а в наборе Y — 0° и 90°. Какой набор сохраняет измеренный угол между линиями, несмотря на возможный общий поворот всей схемы?",
+        "answers": [
+          {
+            "text": "Ни один: раз направления обеих линий изменились, исходный угол уже не сохраняется.",
+            "note": "Общий поворот меняет направления, но сохраняет разность; в X она остаётся 60°."
+          },
+          {
+            "text": "Y, потому что первая линия сохранила исходное направление 0°.",
+            "note": "Совпадение направления одной линии не сохраняет угол: в Y между линиями 90°, а было 60°."
+          },
+          {
+            "text": "X, потому что обе линии имеют те же абсолютные направления, что и на местности.",
+            "note": "Абсолютные направления изменились с 0°/60° на 20°/80°; сохранена их разность, а не сами направления."
+          },
+          {
+            "text": "X: угол между линиями остаётся 60°, хотя вся пара повёрнута на 20°.",
+            "note": "Любая плоская проекция искажает некоторые свойства; выбор зависит от охвата и свойства, которое нужно сохранить."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Угол между линиями определяется разностью их направлений. В X разность равна 80°−20° = 60°, как и на местности; общий поворот на 20° не меняет этот угол. В Y разность равна 90°, поэтому этот набор не сохраняет исходный локальный угол.",
+        "source": {
+          "title": "Coordinate systems, map projections, and transformations | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/mapping/properties/coordinate-systems-and-projections.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "sha256": "61215a94ac347454c54b63931189e1f4b9de89506b19ae4f969e618af37937b0"
+    },
+    {
+      "id": "maps-cartography-distance-distortion",
+      "sourceOrder": 90,
+      "card": {
+        "id": "maps-cartography-distance-distortion",
+        "difficulty": "medium",
+        "prompt": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+        "answers": [
+          {
+            "text": "В 0,8 раза",
+            "note": "0,8 — обратное отношение масштаба B к масштабу A."
+          },
+          {
+            "text": "В 1 раз",
+            "note": "Одинаковые масштабы дали бы одинаковую длину изображения на каждый километр; здесь коэффициенты 0,25 и 0,20 см/км."
+          },
+          {
+            "text": "В 1,5 раза",
+            "note": "1,5 — это отношение наземных длин 12/8; оно не учитывает длины на карте."
+          },
+          {
+            "text": "В 1,25 раза",
+            "note": "В азимутальной равновеликой проекции Ламберта масштаб убывает по радиусам от центра и растёт перпендикулярно им, поэтому сравнение локального масштаба зависит от направления."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Нормируйте изображения: A — 3,0/12 = 0,25 см/км, B — 1,6/8 = 0,20 см/км. Отношение 0,25/0,20 = 1,25, значит локальный масштаб A в 1,25 раза больше; сравнение относится к этим участкам.",
+        "source": {
+          "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "sha256": "541d69fdf9f3d32697e33c54642559bca4db4a6327fb83f828ac18293f7dd2a8"
+    }
+  ],
+  "finalProposedPairs": [
+    {
+      "leftId": "maps-cartography-generalization-select",
+      "rightId": "maps-cartography-orthographic-space",
+      "leftPromptQuote": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+      "rightPromptQuote": "На сфере точки P=(0° широты, 80° в.д.), Q=(0°, 100° в.д.), R=(0°, 170° в.д.). Центры ортографической проекции: A=(0°, 75° в.д.), B=(0°, 150° в.д.), C=(0°, 110° в.д.), D=(0°, 160° в.д.); широта каждого — 0°. Оставьте центры не дальше 90° от каждой точки и минимизируйте искажение в P. Какой центр выбрать?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "filter footprints by area and simplify their contours cannot produce the result required by this peer, which chooses a projection center after visibility and angular-distance checks.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed filter footprints by area and simplify their contours does not perform the distinct peer task, which chooses a projection center after visibility and angular-distance checks.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-generalization-select",
+      "rightId": "maps-cartography-sliver-polygon",
+      "leftPromptQuote": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+      "rightPromptQuote": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "filter footprints by area and simplify their contours cannot produce the result required by this peer, which calculates polygon gap and overlap from mask and union areas.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed filter footprints by area and simplify their contours does not perform the distinct peer task, which calculates polygon gap and overlap from mask and union areas.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-generalization-select",
+      "rightId": "maps-cartography-overshoot-line",
+      "leftPromptQuote": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+      "rightPromptQuote": "Trim задан максимум 5 м. У висячей линии A длина 8 м, пересечение находится в 3 м от свободного конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Каковы итоговые длины (или удаление) A, B и C и какие ошибки останутся?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "filter footprints by area and simplify their contours cannot produce the result required by this peer, which trims dangling lines by distance and reports leftover errors.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed filter footprints by area and simplify their contours does not perform the distinct peer task, which trims dangling lines by distance and reports leftover errors.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-generalization-select",
+      "rightId": "maps-cartography-read-coordinates",
+      "leftPromptQuote": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+      "rightPromptQuote": "Географические координаты точки: x = −74°, y = 40°. Дайте ответ именно в порядке x, затем y, и укажите стороны света относительно нулевого меридиана и экватора.",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "filter footprints by area and simplify their contours cannot produce the result required by this peer, which interprets signed longitude and latitude.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed filter footprints by area and simplify their contours does not perform the distinct peer task, which interprets signed longitude and latitude.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-generalization-select",
+      "rightId": "maps-cartography-waldseemuller-america",
+      "leftPromptQuote": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+      "rightPromptQuote": "В описании карты мира 1507 года отмечены два наблюдения: западные земли отделены от Азии, а Тихий океан показан отдельным от Атлантики. В более ранней европейской модели обитаемый мир делился на Европу, Азию и Африку. Какой исторический вывод лучше всего обоснован этими данными?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "filter footprints by area and simplify their contours cannot produce the result required by this peer, which supports a historical inference from map observations.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed filter footprints by area and simplify their contours does not perform the distinct peer task, which supports a historical inference from map observations.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-generalization-select",
+      "rightId": "maps-cartography-cadastral-parcels",
+      "leftPromptQuote": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+      "rightPromptQuote": "Для кадастрового плана нужно различать соседние участки шириной около 18 м. Единственная исходная карта имеет масштаб 1:50 000; её цифровое изображение можно увеличить на экране, но точность первоначальной съёмки неизвестна. Какой вывод о пригодности данных следует сделать?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "filter footprints by area and simplify their contours cannot produce the result required by this peer, which chooses a cadastral product and stable parcel record references.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed filter footprints by area and simplify their contours does not perform the distinct peer task, which chooses a cadastral product and stable parcel record references.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-generalization-select",
+      "rightId": "maps-cartography-shape-distortion",
+      "leftPromptQuote": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+      "rightPromptQuote": "На схеме двух участков направления двух линий на местности равны 0° и 60°. После проецирования в наборе X они равны 20° и 80°, а в наборе Y — 0° и 90°. Какой набор сохраняет измеренный угол между линиями, несмотря на возможный общий поворот всей схемы?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "filter footprints by area and simplify their contours cannot produce the result required by this peer, which calculates absolute angular deviation.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed filter footprints by area and simplify their contours does not perform the distinct peer task, which calculates absolute angular deviation.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-generalization-select",
+      "rightId": "maps-cartography-distance-distortion",
+      "leftPromptQuote": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+      "rightPromptQuote": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "filter footprints by area and simplify their contours cannot produce the result required by this peer, which normalizes map and ground lengths to compare local scales.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed filter footprints by area and simplify their contours does not perform the distinct peer task, which normalizes map and ground lengths to compare local scales.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-classification-groups",
+      "rightId": "maps-cartography-orthographic-space",
+      "leftPromptQuote": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+      "rightPromptQuote": "На сфере точки P=(0° широты, 80° в.д.), Q=(0°, 100° в.д.), R=(0°, 170° в.д.). Центры ортографической проекции: A=(0°, 75° в.д.), B=(0°, 150° в.д.), C=(0°, 110° в.д.), D=(0°, 160° в.д.); широта каждого — 0°. Оставьте центры не дальше 90° от каждой точки и минимизируйте искажение в P. Какой центр выбрать?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "calculate four equal-width temperature classes cannot produce the result required by this peer, which chooses a projection center after visibility and angular-distance checks.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed calculate four equal-width temperature classes does not perform the distinct peer task, which chooses a projection center after visibility and angular-distance checks.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-classification-groups",
+      "rightId": "maps-cartography-sliver-polygon",
+      "leftPromptQuote": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+      "rightPromptQuote": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "calculate four equal-width temperature classes cannot produce the result required by this peer, which calculates polygon gap and overlap from mask and union areas.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed calculate four equal-width temperature classes does not perform the distinct peer task, which calculates polygon gap and overlap from mask and union areas.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-classification-groups",
+      "rightId": "maps-cartography-overshoot-line",
+      "leftPromptQuote": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+      "rightPromptQuote": "Trim задан максимум 5 м. У висячей линии A длина 8 м, пересечение находится в 3 м от свободного конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Каковы итоговые длины (или удаление) A, B и C и какие ошибки останутся?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "calculate four equal-width temperature classes cannot produce the result required by this peer, which trims dangling lines by distance and reports leftover errors.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed calculate four equal-width temperature classes does not perform the distinct peer task, which trims dangling lines by distance and reports leftover errors.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-classification-groups",
+      "rightId": "maps-cartography-read-coordinates",
+      "leftPromptQuote": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+      "rightPromptQuote": "Географические координаты точки: x = −74°, y = 40°. Дайте ответ именно в порядке x, затем y, и укажите стороны света относительно нулевого меридиана и экватора.",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "calculate four equal-width temperature classes cannot produce the result required by this peer, which interprets signed longitude and latitude.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed calculate four equal-width temperature classes does not perform the distinct peer task, which interprets signed longitude and latitude.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-classification-groups",
+      "rightId": "maps-cartography-waldseemuller-america",
+      "leftPromptQuote": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+      "rightPromptQuote": "В описании карты мира 1507 года отмечены два наблюдения: западные земли отделены от Азии, а Тихий океан показан отдельным от Атлантики. В более ранней европейской модели обитаемый мир делился на Европу, Азию и Африку. Какой исторический вывод лучше всего обоснован этими данными?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "calculate four equal-width temperature classes cannot produce the result required by this peer, which supports a historical inference from map observations.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed calculate four equal-width temperature classes does not perform the distinct peer task, which supports a historical inference from map observations.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-classification-groups",
+      "rightId": "maps-cartography-cadastral-parcels",
+      "leftPromptQuote": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+      "rightPromptQuote": "Для кадастрового плана нужно различать соседние участки шириной около 18 м. Единственная исходная карта имеет масштаб 1:50 000; её цифровое изображение можно увеличить на экране, но точность первоначальной съёмки неизвестна. Какой вывод о пригодности данных следует сделать?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "calculate four equal-width temperature classes cannot produce the result required by this peer, which chooses a cadastral product and stable parcel record references.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed calculate four equal-width temperature classes does not perform the distinct peer task, which chooses a cadastral product and stable parcel record references.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-classification-groups",
+      "rightId": "maps-cartography-shape-distortion",
+      "leftPromptQuote": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+      "rightPromptQuote": "На схеме двух участков направления двух линий на местности равны 0° и 60°. После проецирования в наборе X они равны 20° и 80°, а в наборе Y — 0° и 90°. Какой набор сохраняет измеренный угол между линиями, несмотря на возможный общий поворот всей схемы?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "calculate four equal-width temperature classes cannot produce the result required by this peer, which calculates absolute angular deviation.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed calculate four equal-width temperature classes does not perform the distinct peer task, which calculates absolute angular deviation.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-classification-groups",
+      "rightId": "maps-cartography-distance-distortion",
+      "leftPromptQuote": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+      "rightPromptQuote": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "calculate four equal-width temperature classes cannot produce the result required by this peer, which normalizes map and ground lengths to compare local scales.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed calculate four equal-width temperature classes does not perform the distinct peer task, which normalizes map and ground lengths to compare local scales.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-label-placement",
+      "rightId": "maps-cartography-orthographic-space",
+      "leftPromptQuote": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+      "rightPromptQuote": "На сфере точки P=(0° широты, 80° в.д.), Q=(0°, 100° в.д.), R=(0°, 170° в.д.). Центры ортографической проекции: A=(0°, 75° в.д.), B=(0°, 150° в.д.), C=(0°, 110° в.д.), D=(0°, 160° в.д.); широта каждого — 0°. Оставьте центры не дальше 90° от каждой точки и минимизируйте искажение в P. Какой центр выбрать?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "configure label-class priority and conflict behavior cannot produce the result required by this peer, which chooses a projection center after visibility and angular-distance checks.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed configure label-class priority and conflict behavior does not perform the distinct peer task, which chooses a projection center after visibility and angular-distance checks.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-label-placement",
+      "rightId": "maps-cartography-sliver-polygon",
+      "leftPromptQuote": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+      "rightPromptQuote": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "configure label-class priority and conflict behavior cannot produce the result required by this peer, which calculates polygon gap and overlap from mask and union areas.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed configure label-class priority and conflict behavior does not perform the distinct peer task, which calculates polygon gap and overlap from mask and union areas.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-label-placement",
+      "rightId": "maps-cartography-overshoot-line",
+      "leftPromptQuote": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+      "rightPromptQuote": "Trim задан максимум 5 м. У висячей линии A длина 8 м, пересечение находится в 3 м от свободного конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Каковы итоговые длины (или удаление) A, B и C и какие ошибки останутся?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "configure label-class priority and conflict behavior cannot produce the result required by this peer, which trims dangling lines by distance and reports leftover errors.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed configure label-class priority and conflict behavior does not perform the distinct peer task, which trims dangling lines by distance and reports leftover errors.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-label-placement",
+      "rightId": "maps-cartography-read-coordinates",
+      "leftPromptQuote": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+      "rightPromptQuote": "Географические координаты точки: x = −74°, y = 40°. Дайте ответ именно в порядке x, затем y, и укажите стороны света относительно нулевого меридиана и экватора.",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "configure label-class priority and conflict behavior cannot produce the result required by this peer, which interprets signed longitude and latitude.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed configure label-class priority and conflict behavior does not perform the distinct peer task, which interprets signed longitude and latitude.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-label-placement",
+      "rightId": "maps-cartography-waldseemuller-america",
+      "leftPromptQuote": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+      "rightPromptQuote": "В описании карты мира 1507 года отмечены два наблюдения: западные земли отделены от Азии, а Тихий океан показан отдельным от Атлантики. В более ранней европейской модели обитаемый мир делился на Европу, Азию и Африку. Какой исторический вывод лучше всего обоснован этими данными?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "configure label-class priority and conflict behavior cannot produce the result required by this peer, which supports a historical inference from map observations.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed configure label-class priority and conflict behavior does not perform the distinct peer task, which supports a historical inference from map observations.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-label-placement",
+      "rightId": "maps-cartography-cadastral-parcels",
+      "leftPromptQuote": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+      "rightPromptQuote": "Для кадастрового плана нужно различать соседние участки шириной около 18 м. Единственная исходная карта имеет масштаб 1:50 000; её цифровое изображение можно увеличить на экране, но точность первоначальной съёмки неизвестна. Какой вывод о пригодности данных следует сделать?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "configure label-class priority and conflict behavior cannot produce the result required by this peer, which chooses a cadastral product and stable parcel record references.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed configure label-class priority and conflict behavior does not perform the distinct peer task, which chooses a cadastral product and stable parcel record references.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-label-placement",
+      "rightId": "maps-cartography-shape-distortion",
+      "leftPromptQuote": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+      "rightPromptQuote": "На схеме двух участков направления двух линий на местности равны 0° и 60°. После проецирования в наборе X они равны 20° и 80°, а в наборе Y — 0° и 90°. Какой набор сохраняет измеренный угол между линиями, несмотря на возможный общий поворот всей схемы?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "configure label-class priority and conflict behavior cannot produce the result required by this peer, which calculates absolute angular deviation.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed configure label-class priority and conflict behavior does not perform the distinct peer task, which calculates absolute angular deviation.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-label-placement",
+      "rightId": "maps-cartography-distance-distortion",
+      "leftPromptQuote": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+      "rightPromptQuote": "Для двух участков известны разные наземные отрезки: A — 12 км, его длина на карте 3,0 см; B — 8 км, на карте 1,6 см. После нормирования вычислите локальный линейный масштаб каждого участка в см/км. Во сколько раз масштаб A больше масштаба B?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "configure label-class priority and conflict behavior cannot produce the result required by this peer, which normalizes map and ground lengths to compare local scales.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "The proposed configure label-class priority and conflict behavior does not perform the distinct peer task, which normalizes map and ground lengths to compare local scales.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-generalization-select",
+      "rightId": "maps-cartography-classification-groups",
+      "leftPromptQuote": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+      "rightPromptQuote": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "Building feature selection and simplification do not calculate temperature class breaks.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "Class breaks do not select building footprints or simplify contours.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-generalization-select",
+      "rightId": "maps-cartography-label-placement",
+      "leftPromptQuote": "В примере подготовки слоя зданий к карте 1:50 000 минимальная площадь равна 100. Нужно исключить малые здания и упростить контуры оставшихся. Какую последовательность операций выбрать?",
+      "rightPromptQuote": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "Building polygon operations do not configure label conflicts.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "Label priorities do not filter or simplify building footprints.",
+      "semanticDuplicate": false
+    },
+    {
+      "leftId": "maps-cartography-classification-groups",
+      "rightId": "maps-cartography-label-placement",
+      "leftPromptQuote": "Значения температурных станций лежат от 0 до 80 °C. Нужно получить четыре класса одинаковой ширины; число станций в классах может различаться. Какой набор границ подходит?",
+      "rightPromptQuote": "В трёх классах подписей больница важнее вокзала, а вокзал важнее парка; подпись парка разрешено снять при конфликте. Какую настройку стандартного движка выбрать, учитывая, что ни одна подпись не должна считаться гарантированно видимой?",
+      "leftPromptAnsweredByRight": false,
+      "leftToRightReason": "Numeric class breaks do not order label classes.",
+      "rightPromptAnsweredByLeft": false,
+      "rightToLeftReason": "Label priorities do not calculate numeric intervals.",
+      "semanticDuplicate": false
+    }
+  ],
+  "qualityAcceptanceOfPeers": false
+}

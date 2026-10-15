@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "0708bbfcf00bc2fd52df17dd0c19c364f5154e19",
+  "canonicalization": "UTF-8 json.dumps(sort_keys=True,separators=(\",\",\":\"),ensure_ascii=False); SHA-256 covers complete card and all six literal groups including individual note strings.",
+  "receipt": {
+    "path": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/receipt.json",
+    "rawSHA256": "f5682a8778d471d006c084185304098795d0a5c11790e8961f8429e43dee128e",
+    "sourceSnapshot": "23f619cb2484a53d2d44a49d16c446a7faa7b3b7",
+    "applyCommit": "4bbbae7e0014fd476b7c1c08b2ea5697a503783f",
+    "fullContextsReadByInitialReader": true,
+    "authorAndQAFindingsInherited": false,
+    "originRefetchPerformed": false
+  },
+  "sourceRegister": [
+    {
+      "id": "gen",
+      "fullPath": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/sources/esri-generalization-workflow.body",
+      "url": "https://pro.arcgis.com/en/pro-app/3.6/tool-reference/cartography/conflict-resolution-and-generalization-with-geoprocessing.htm",
+      "title": "Automating conflict resolution and generalization workflows with geoprocessing | ArcGIS Pro documentation",
+      "rawByteLength": 41618,
+      "rawSHA256": "8ce5c1304f14ef2ba509ba6cbabd973d746e39d6bc73413d7cd78308884b90c3",
+      "receiptRawSHA256": "8ce5c1304f14ef2ba509ba6cbabd973d746e39d6bc73413d7cd78308884b90c3",
+      "receiptByteLength": 41618,
+      "fullReaderTextPath": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/gen-full-context.txt",
+      "fullReaderTextRawSHA256": "b501f29e551a9dc752abdecf7ce5c37bf0699dc51fe2b080e0a6864127817025",
+      "readerLineRange": "L0..L295",
+      "originFetchPerformed": false,
+      "locator": "Create buildings sample: Select Shape_Area > 100; small buildings are not appropriate at 1:50,000; Simplify Building removes indentations, extensions and extra vertices."
+    },
+    {
+      "id": "class",
+      "fullPath": "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-classification.body",
+      "url": "https://pro.arcgis.com/en/pro-app/3.0/help/mapping/layer-properties/data-classification-methods.htm",
+      "title": "Data classification methods | ArcGIS Pro documentation",
+      "rawByteLength": 19831,
+      "rawSHA256": "ac18e0ed09fd62a620d00ebe9b8d995f9328ad4a9e8e0219a413ab21b2556479",
+      "receiptRawSHA256": "ac18e0ed09fd62a620d00ebe9b8d995f9328ad4a9e8e0219a413ab21b2556479",
+      "receiptByteLength": 19831,
+      "fullReaderTextPath": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/class-full-context.txt",
+      "fullReaderTextRawSHA256": "9c70bb8169c2a0e835c771b3f2adba843ce0b26139d651c1ca8aa1ee8046ec96",
+      "readerLineRange": "L0..L46",
+      "originFetchPerformed": false,
+      "locator": "Equal interval, Quantile, Natural breaks (Jenks), Manual interval sections."
+    },
+    {
+      "id": "label",
+      "fullPath": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/author/sources/esri-label-engine.body",
+      "url": "https://pro.arcgis.com/en/pro-app/3.4/help/mapping/text/label-with-the-standard-label-engine.htm",
+      "title": "Label with the Standard Label Engine | ArcGIS Pro documentation",
+      "rawByteLength": 17383,
+      "rawSHA256": "0fb679f0800b447f330c2b5f639206f8e1639709cb78d38caceabb16e7e7251b",
+      "receiptRawSHA256": "0fb679f0800b447f330c2b5f639206f8e1639709cb78d38caceabb16e7e7251b",
+      "receiptByteLength": 17383,
+      "fullReaderTextPath": "docs/content-audits/question-quality-wave-7/process-v2-maps91-100-01a13e5e/independent-initial3-01a13e5e/evidence/label-full-context.txt",
+      "fullReaderTextRawSHA256": "3c451269ec75de0b22623c439f34a316848557db85b6252adab6b3550f1198e0",
+      "readerLineRange": "L0..L34",
+      "originFetchPerformed": false,
+      "locator": "Position labels; Weights and conflicts."
+    }
+  ],
+  "claimGrounds": [
+    {
+      "targetId": "maps-cartography-generalization-select",
+      "sourceId": "gen",
+      "claims": [
+        "Shape_Area > 100 selects larger buildings.",
+        "Small buildings are explicitly not appropriate at 1:50,000.",
+        "Simplify Building removes indentations, extensions and extra vertices."
+      ]
+    },
+    {
+      "targetId": "maps-cartography-classification-groups",
+      "sourceId": "class",
+      "claims": [
+        "Equal interval divides the range into equal-width portions.",
+        "Quantile balances observation counts; manual/natural methods do not promise equal width."
+      ]
+    },
+    {
+      "targetId": "maps-cartography-label-placement",
+      "sourceId": "label",
+      "claims": [
+        "Higher priority labels are generally placed earlier.",
+        "Lower-priority conflicting labels can be moved or removed.",
+        "Feature weights apply to label-feature conflicts, unlike label class priority."
+      ]
+    }
+  ]
+}
