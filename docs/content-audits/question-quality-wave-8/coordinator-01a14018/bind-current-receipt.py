@@ -9,7 +9,7 @@ def load(n,p):
  s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 def digest(p):return p.get('sha256',p.get('canonicalSHA256'))
 def compacted(uid):
- fs=list(pathlib.Path('/Users/eaafonasev/.codex/sessions/2026/10/15').glob('*'+uid+'.jsonl'))+list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+uid+'.jsonl'));assert len(fs)==1,(uid,'missing or ambiguous journal')
+ fs=list(pathlib.Path('/Users/eaafonasev/.codex/sessions').rglob('*'+uid+'.jsonl'))+list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').rglob('*'+uid+'.jsonl'));assert len(fs)==1,(uid,'missing or ambiguous journal')
  return sum(json.loads(line).get('type')=='compacted' for line in fs[0].open())
 def verify_source_freeze(applications,freeze):
  frozenSecond=int(subprocess.check_output(['git','-C',str(C),'show','-s','--format=%ct',freeze],text=True));result={}
