@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 1,
+  "catalogPath": "src/content/topics/maps-cartography.json",
+  "catalogRawSHA256": "606ea5b772b4747720dea33ef9299b7861423a9a584e57d163dc388c2fb84dac",
+  "peerSnapshotBasis": "Actual CURRENT working catalog read directly in this author cycle; cards include complete question, answers, notes, explanation and source. No inherited 92/93/95 peer snapshot.",
+  "target": {
+    "fullCard": {
+      "id": "maps-cartography-sliver-polygon",
+      "difficulty": "hard",
+      "prompt": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "answers": [
+        {
+          "text": "[6, 5] км².",
+          "note": "Площадь пересечения равна 60+45−94=11 км²; 5 км² — превышение суммы площадей над площадью маски."
+        },
+        {
+          "text": "[0, 11] км².",
+          "note": "Объединение занимает 94 км² из 100 км² маски, поэтому остаётся 6 км² незаполненной площади."
+        },
+        {
+          "text": "[6, 11] км².",
+          "note": "В топологии Esri, если Must Not Have Gaps выявляет пустую область, ошибка отмечается по её контуру как линейная."
+        },
+        {
+          "text": "[11, 6] км².",
+          "note": "Формулы дают пустоту 100−94=6 км² и пересечение 60+45−94=11 км², в обратном порядке."
+        }
+      ],
+      "correctIndex": 2,
+      "explanation": "Пустота в пределах маски равна 100−94=6 км². Пересечение полигонов равно 60+45−94=11 км² по формуле включения–исключения. Искомая пара в указанном порядке — (6, 11) км².",
+      "source": {
+        "title": "Geodatabase topology rules and fixes for polygon features | ArcGIS Pro documentation",
+        "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polygon-features.html",
+        "verifiedAt": "2026-10-15"
+      }
+    },
+    "canonicalSHA256": "837c98d10b2dc7867b4b2ad08117da9120871abbbfad77493d3afeeb7ce49607"
+  },
+  "relevantPeers": [
+    {
+      "id": "maps-cartography-orthographic-space",
+      "sourceOrder": 71,
+      "canonicalSHA256": "f9d8a2b5cc805d25fed90108c914c59a79bb4fa97bbf78d107cd8712fc48d62b",
+      "fullCard": {
+        "id": "maps-cartography-orthographic-space",
+        "difficulty": "hard",
+        "prompt": "На сфере точки P=(0° широты, 80° в.д.), Q=(0°, 100° в.д.), R=(0°, 170° в.д.). Центры ортографической проекции: A=(0°, 75° в.д.), B=(0°, 150° в.д.), C=(0°, 110° в.д.), D=(0°, 160° в.д.); широта каждого — 0°. Оставьте центры не дальше 90° от каждой точки и минимизируйте искажение в P. Какой центр выбрать?",
+        "answers": [
+          {
+            "text": "Выбрать A=(0°, 75° в.д.).",
+            "note": "До R=(0°, 170° в.д.) угловое расстояние от A равно 95°, поэтому R не видна."
+          },
+          {
+            "text": "Выбрать B=(0°, 150° в.д.).",
+            "note": "B проходит ограничение видимости, но до P — 70°; центр C расположен к P ближе."
+          },
+          {
+            "text": "Выбрать C=(0°, 110° в.д.).",
+            "note": "Ортографическая проекция не сохраняет ни площади, ни углы; искажение быстро растёт от центра к краям."
+          },
+          {
+            "text": "Выбрать D=(0°, 160° в.д.).",
+            "note": "D проходит ограничение видимости, но P удалена на 80°; центр C удалён от неё на 30°."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Все заданные широты равны нулю, поэтому центральное угловое расстояние здесь равно меньшей разности восточных долгот. Для A расстояние до R составляет 95°, а B, C и D проходят предел 90°. До P допустимые центры удалены на 70°, 30° и 80° соответственно, поэтому выбираем C.",
+        "source": {
+          "title": "Orthographic | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/orthographic.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      }
+    },
+    {
+      "id": "maps-cartography-lambert-azimuthal",
+      "sourceOrder": 72,
+      "canonicalSHA256": "e7cd4c354f20fc4c8e2cf813e1f431bc100b9ef28079a7c10935a84024ced36c",
+      "fullCard": {
+        "id": "maps-cartography-lambert-azimuthal",
+        "difficulty": "hard",
+        "prompt": "У слоя бассейнов фактическая эллипсоидальная система координат известна, но в метаданных ошибочно записана другая. Нужно исправить сохранённую систему исходного слоя и получить преобразованные координаты в равновеликой полярной проекции на эллипсоиде. Какой рабочий план выполнит оба требования?",
+        "answers": [
+          {
+            "text": "Сразу выполнить Project в обычную эллипсоидальную LAEA, не исправляя метаданные источника.",
+            "note": "Project использует систему координат входа; неверно заданная система приведёт к неверной интерпретации координат."
+          },
+          {
+            "text": "Назначить исходным координатам полярную LAEA через Define Projection и остановиться.",
+            "note": "Define Projection меняет сведения о системе координат, но не преобразует геометрию объектов."
+          },
+          {
+            "text": "Сначала задать известную фактическую систему через Define Projection, затем выполнить Project в обычную полярную LAEA.",
+            "note": "Среди параметров LAEA задаются центральный меридиан и широта начала координат."
+          },
+          {
+            "text": "Исправить метаданные источника, затем спроецировать в LAEA Auxiliary Sphere Type 3.",
+            "note": "Type 3 сохраняет равновеликость, но итоговые координаты не совпадают с истинным эллипсоидальным решением."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Сначала нужно привести метаданные источника к известной фактической системе: Define Projection меняет описание, не геометрию. Затем Project преобразует координаты в обычную полярную LAEA, единственный из двух вариантов Lambert LAEA, который поддерживает эллипсоид; Auxiliary Sphere Type 3 сохраняет площади, но не даёт эллипсоидальные координаты.",
+        "source": {
+          "title": "Lambert azimuthal equal-area | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/lambert-azimuthal-equal-area.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      }
+    },
+    {
+      "id": "maps-cartography-overshoot-line",
+      "sourceOrder": 74,
+      "canonicalSHA256": "211965fcec8cc7e832215fe4e583562669fea8f221bfaf4488dde27aa36ff072",
+      "fullCard": {
+        "id": "maps-cartography-overshoot-line",
+        "difficulty": "hard",
+        "prompt": "Trim задан максимум 5 м. У висячей линии A длина 8 м, пересечение находится в 3 м от свободного конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Каковы итоговые длины (или удаление) A, B и C и какие ошибки останутся?",
+        "answers": [
+          {
+            "text": "A — 5 м; B — 12 м, ошибка остаётся; C удаляется.",
+            "note": "Если в пределах заданного расстояния не найдено пересечение, Trim не обрезает линию; отсутствие встречи у C не удаляет её."
+          },
+          {
+            "text": "A — 6 м; B — 12 м; C — 4 м; ошибки остаются у B и C.",
+            "note": "У A выступ до пересечения равен 3 м, поэтому после Trim длина будет 8−3=5 м, а не 6 м."
+          },
+          {
+            "text": "A — 5 м; B — 12 м; C — 4 м; ошибки остаются у B и C.",
+            "note": "При расстоянии 0 Trim обрезает висячую линию точно до найденного пересечения."
+          },
+          {
+            "text": "A — 5 м; B — 3 м; C — 4 м; ошибки остаются у B и C.",
+            "note": "Для B пересечение находится в 9 м от конца, что превышает заданный максимум 5 м; B не укорачивается."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "У A удаляемый выступ равен 3 м, поэтому остаётся 8−3=5 м. У B Trim не достигает пересечения в 9 м при максимуме 5 м, поэтому B остаётся длиной 12 м и ошибкой. У C нет подходящего пересечения: она не удаляется и остаётся длиной 4 м с ошибкой.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      }
+    },
+    {
+      "id": "maps-cartography-undershoot-line",
+      "sourceOrder": 75,
+      "canonicalSHA256": "b6dbdfdc7785a06493383cba882aa4c0a5d030aa69c03481d9afe8682662a79a",
+      "fullCard": {
+        "id": "maps-cartography-undershoot-line",
+        "difficulty": "hard",
+        "prompt": "При проверке Must Not Have Dangles в сети улиц найден A — намеренный тупик с продолжением другой линии в 4 м, B — ошибочный недолёт до проектного узла в 3 м, и C — такой же недолёт в 9 м. Нужно сохранить тупик, исправить B и оставить C нерешённой. Какой план выбрать при лимите Extend 5 м?",
+        "answers": [
+          {
+            "text": "Пометить A, B и C как допустимые тупики; исправление Extend не запускать.",
+            "note": "Так исчезнет и ошибка B, хотя она обозначена как недолёт до обязательного узла."
+          },
+          {
+            "text": "Запустить Extend с нулевым расстоянием для B и C, а A не классифицировать.",
+            "note": "Нулевое расстояние означает продление до найденного стыка без заданного предела."
+          },
+          {
+            "text": "Исключить A как допустимый тупик и применить Extend 5 м к B и C.",
+            "note": "При нулевом расстоянии Extend продолжает линию до найденного стыка без конечного ограничения дистанции."
+          },
+          {
+            "text": "Не отмечать A как допустимую ошибку; применить Extend 5 м ко всем трём.",
+            "note": "Extend может найти линию в пределах 5 м у A и тем самым изменить намеренный тупик."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "A — предусмотренное исключение сети, его нужно сохранить как допустимый тупик. Extend с пределом 5 м соединит B с проектным узлом, а C вне этого расстояния будет пропущена и останется ошибкой; нулевое расстояние сняло бы этот предел.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      }
+    }
+  ],
+  "bidirectionalComparisons": [
+    {
+      "peerId": "maps-cartography-orthographic-space",
+      "targetId": "maps-cartography-sliver-polygon",
+      "targetQuote": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "peerQuote": "На сфере точки P=(0° широты, 80° в.д.), Q=(0°, 100° в.д.), R=(0°, 170° в.д.). Центры ортографической проекции: A=(0°, 75° в.д.), B=(0°, 150° в.д.), C=(0°, 110° в.д.), D=(0°, 160° в.д.); широта каждого — 0°. Оставьте центры не дальше 90° от каждой точки и минимизируйте искажение в P. Какой центр выбрать?",
+      "targetToPeer": "Peer asks for a projection center using angular visibility and distortion; this card asks for two polygon areas. Neither rule resolves the other.",
+      "peerToTarget": "Polygon area arithmetic and topology error display do not determine orthographic visibility or distortion.",
+      "collision": "No duplicate prompt or conflicting operative rule; the replacement note states a conditional general topology fact without importing fixture geometry/class assumptions."
+    },
+    {
+      "peerId": "maps-cartography-lambert-azimuthal",
+      "targetId": "maps-cartography-sliver-polygon",
+      "targetQuote": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "peerQuote": "У слоя бассейнов фактическая эллипсоидальная система координат известна, но в метаданных ошибочно записана другая. Нужно исправить сохранённую систему исходного слоя и получить преобразованные координаты в равновеликой полярной проекции на эллипсоиде. Какой рабочий план выполнит оба требования?",
+      "targetToPeer": "Peer concerns correcting CRS metadata and projecting coordinates; this card concerns set areas and Esri topology error geometry.",
+      "peerToTarget": "Projection workflow facts do not establish the union, intersection, void shape or feature class here.",
+      "collision": "No duplicate prompt or conflicting operative rule; the replacement note states a conditional general topology fact without importing fixture geometry/class assumptions."
+    },
+    {
+      "peerId": "maps-cartography-overshoot-line",
+      "targetId": "maps-cartography-sliver-polygon",
+      "targetQuote": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "peerQuote": "Trim задан максимум 5 м. У висячей линии A длина 8 м, пересечение находится в 3 м от свободного конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Каковы итоговые длины (или удаление) A, B и C и какие ошибки останутся?",
+      "targetToPeer": "This card concerns polygon coverage and overlap; peer concerns trimming dangling line ends. Their geometry types and operations differ.",
+      "peerToTarget": "Trim behavior for line ends does not determine polygon gaps or same-class overlap.",
+      "collision": "No duplicate prompt or conflicting operative rule; the replacement note states a conditional general topology fact without importing fixture geometry/class assumptions."
+    },
+    {
+      "peerId": "maps-cartography-undershoot-line",
+      "targetId": "maps-cartography-sliver-polygon",
+      "targetQuote": "Два полигона целиком находятся внутри маски площадью 100 км². Площади A и B равны 60 и 45 км², площадь их объединения — 94 км². Каковы отдельно площадь незаполненной части маски и площадь пересечения A и B? Выберите пару в порядке (пустота, пересечение).",
+      "peerQuote": "При проверке Must Not Have Dangles в сети улиц найден A — намеренный тупик с продолжением другой линии в 4 м, B — ошибочный недолёт до проектного узла в 3 м, и C — такой же недолёт в 9 м. Нужно сохранить тупик, исправить B и оставить C нерешённой. Какой план выбрать при лимите Extend 5 м?",
+      "targetToPeer": "This card concerns polygon area relations; peer concerns extending dangling line features while preserving an exception.",
+      "peerToTarget": "Extend and dangle exceptions do not determine polygon coverage or topology error localization.",
+      "collision": "No duplicate prompt or conflicting operative rule; the replacement note states a conditional general topology fact without importing fixture geometry/class assumptions."
+    }
+  ]
+}
