@@ -1,0 +1,1028 @@
+{
+  "schemaVersion": 1,
+  "candidatePath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/candidate.json",
+  "baselineCommit": "4dd3734e7ffca2ccf91f6a5c203ddd77f4d80269",
+  "qualityCredit": 0,
+  "entries": [
+    {
+      "id": "maps-cartography-bar-scale",
+      "stage": "fix-cycle1-author",
+      "status": "HOLD",
+      "beforeHash": "41acc491e1dff8a7ce31c32910b226559615afd5e910de6cf62dff05791c2c2d",
+      "finalCardHash": null,
+      "fieldGroupProofs": [],
+      "unresolvedSourceDefects": [
+        "SOURCE: National Geographic не содержит определения bar scale или named/verbal scale; USGS Map Scales не определяет графическую форму. Нельзя зачесть основания prompt/explanation/note1/note2.",
+        "LEAKAGE: note0 1:50 000 + численная дробь раскрывает ratio-scale; note1 «1 см — 500 м» раскрывает verbal-scale."
+      ]
+    },
+    {
+      "id": "maps-cartography-ratio-scale",
+      "stage": "fix-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "c6fce6927a7928370f96429441bad1746a95da7e7d7ed7ae597a3f160ff1d0a6",
+      "finalCardHash": "5bf42e6f646741d87e410296039e8c3822b1475a81d207caec513a5565a0e128",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Масштабы двух карт — 1:63 360 и 1:316 800. Где равный отрезок бумаги означает меньшее расстояние на местности?",
+            "answers": [
+              "На карте 1:316 800",
+              "На обеих одинаково",
+              "На карте 1:63 360",
+              "Сравнить нельзя без смены единиц"
+            ],
+            "correctIndex": 2
+          },
+          "literalSHA256": "a0e4dfa01dbebe831da99926c76909f5afc4111c0d3305dcc3bb14e139871ea9",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+          "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+          "exactlocator": "USGS Map Scales, p.1: representative fraction definition and the example comparing 1:63,360 with 1:316,800.",
+          "specificclaim": "USGS defines representative fractions in same units and gives one inch as 1 mile vs 5 miles for the two ratios.",
+          "editorialreason": "Changes label recall into comparison while preserving the ratio-scale meaning.",
+          "optionReviews": [
+            {
+              "answerIndex": 0,
+              "answer": "На карте 1:316 800",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: USGS says 1:316,800 is smaller scale; 1 inch is 5 miles.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "exactlocator": "USGS Map Scales, p.1, 1:63,360 / 1:316,800 comparison.",
+              "specificclaim": "USGS says 1:316,800 is smaller scale; 1 inch is 5 miles."
+            },
+            {
+              "answerIndex": 1,
+              "answer": "На обеих одинаково",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: The two representative fractions produce different ground distances.",
+              "plausibility": "PASS: only the keyed answer fits the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "exactlocator": "USGS Map Scales, p.1, representative-fraction definition.",
+              "specificclaim": "The two representative fractions produce different ground distances."
+            },
+            {
+              "answerIndex": 2,
+              "answer": "На карте 1:63 360",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: USGS gives 1 inch at 1:63,360 as one mile.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "exactlocator": "USGS Map Scales, p.1, 1:63,360 example.",
+              "specificclaim": "USGS gives 1 inch at 1:63,360 as one mile."
+            },
+            {
+              "answerIndex": 3,
+              "answer": "Сравнить нельзя без смены единиц",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: The definition uses the same unit for map and ground distances.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "exactlocator": "USGS Map Scales, p.1, representative-fraction definition.",
+              "specificclaim": "The definition uses the same unit for map and ground distances."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "При 1:63 360 тот же отрезок бумаги соответствует меньшему расстоянию. USGS сравнивает примеры: один дюйм равен одной миле при 1:63 360 и пяти милям при 1:316 800.",
+          "literalSHA256": "86f0211d1600ef2c8c9f4d69bae2b4e8dc4af926f4e52ccfcd5d42bf84f40ea5",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+          "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+          "exactlocator": "USGS Map Scales, p.1: representative fraction definition and the example comparing 1:63,360 with 1:316,800.",
+          "specificclaim": "USGS defines representative fractions in same units and gives one inch as 1 mile vs 5 miles for the two ratios.",
+          "editorialreason": "Changes label recall into comparison while preserving the ratio-scale meaning."
+        },
+        {
+          "group": "note0",
+          "literal": "USGS example: one inch here represents five miles.",
+          "literalSHA256": "4e673a3705217b4f6023c10d9f25a23dfe839fc5eb210193b71f6811f06b8ea7",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+          "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+          "exactlocator": "USGS Map Scales, p.1, 1:63,360 / 1:316,800 comparison.",
+          "specificclaim": "USGS says 1:316,800 is smaller scale; 1 inch is 5 miles.",
+          "editorialreason": "Changes label recall into comparison while preserving the ratio-scale meaning.",
+          "answerIndex": 0,
+          "answerText": "На карте 1:316 800",
+          "noteUsefulnessReview": "PASS: specific additional fact supports understanding of this option."
+        },
+        {
+          "group": "note1",
+          "literal": "Different denominators set different map-to-ground ratios.",
+          "literalSHA256": "14642e18b0fd3a0cb2aa8719c947c0fcd4bce6fc925629c1a0bdb1e0b6aa2c2d",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+          "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+          "exactlocator": "USGS Map Scales, p.1, representative-fraction definition.",
+          "specificclaim": "The two representative fractions produce different ground distances.",
+          "editorialreason": "Changes label recall into comparison while preserving the ratio-scale meaning.",
+          "answerIndex": 1,
+          "answerText": "На обеих одинаково",
+          "noteUsefulnessReview": "PASS: specific additional fact supports understanding of this option."
+        },
+        {
+          "group": "note2",
+          "literal": "USGS example: one inch here represents one mile.",
+          "literalSHA256": "666ee56c9cbac3e7d55bd3cf68059fcfc2c9cace954f25d8e31df940d21d17f3",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+          "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+          "exactlocator": "USGS Map Scales, p.1, 1:63,360 example.",
+          "specificclaim": "USGS gives 1 inch at 1:63,360 as one mile.",
+          "editorialreason": "Changes label recall into comparison while preserving the ratio-scale meaning.",
+          "answerIndex": 2,
+          "answerText": "На карте 1:63 360",
+          "noteUsefulnessReview": "PASS: specific additional fact supports understanding of this option."
+        },
+        {
+          "group": "note3",
+          "literal": "A representative fraction compares matching units on both sides.",
+          "literalSHA256": "89288fa41a3fda7e0af261d5095aebfb33cf455e8df832dec4bfaf152d21efb6",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+          "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+          "exactlocator": "USGS Map Scales, p.1, representative-fraction definition.",
+          "specificclaim": "The definition uses the same unit for map and ground distances.",
+          "editorialreason": "Changes label recall into comparison while preserving the ratio-scale meaning.",
+          "answerIndex": 3,
+          "answerText": "Сравнить нельзя без смены единиц",
+          "noteUsefulnessReview": "PASS: specific additional fact supports understanding of this option."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-verbal-scale",
+      "stage": "fix-cycle1-author",
+      "status": "HOLD",
+      "beforeHash": "fc830c2fbe525a334410bec6e30f17c49baf4c59287747766607cb041470e40d",
+      "finalCardHash": null,
+      "fieldGroupProofs": [],
+      "unresolvedSourceDefects": [
+        "SOURCE: статья National Geographic не содержит словесной формы, bar scale или приписанного cm/km примера; нужен конкретный полный первичный контекст.",
+        "LEAKAGE: note0 описывает bar-scale; note1 содержит буквальный 1:50 000 и численный масштаб из ratio-scale."
+      ]
+    },
+    {
+      "id": "maps-cartography-large-scale",
+      "stage": "fix-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "746396029c95e274bf6c48c2c4993f8d1d3c1fc111d3d55db7c7b8fb52d3304d",
+      "finalCardHash": "320a37766e874cb2d7212b8754a19127acc686bb42290af63db343bc2e327c9f",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Городу нужна карта, где здания и узкие улицы видны подробно; достаточно небольшого охвата. Какой масштаб подойдёт?",
+            "answers": [
+              "Мелкого масштаба",
+              "Диапазона 1:50 000–1:100 000",
+              "Крупного масштаба",
+              "По формату листа выбрать нельзя"
+            ],
+            "correctIndex": 2
+          },
+          "literalSHA256": "a4a289ac9352f7547939b9f3fd0fa8b10556a9c3e2900e4eb7979b48236cd7ef",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+          "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+          "exactlocator": "USGS Map Scales, p.1 “Large Is Small”, intended-use and town-engineer passages; p.2, 1:50,000–1:100,000 range.",
+          "specificclaim": "Large-scale maps provide more detail over less ground; 1:600 is a specific engineering example.",
+          "editorialreason": "Names the desired use and coverage tradeoff. Correct note adds the 1:600 engineering example.",
+          "optionReviews": [
+            {
+              "answerIndex": 0,
+              "answer": "Мелкого масштаба",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: Small-scale maps are less detailed and show larger areas.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "exactlocator": "USGS Map Scales, p.1, small-scale-map paragraph.",
+              "specificclaim": "Small-scale maps are less detailed and show larger areas."
+            },
+            {
+              "answerIndex": 1,
+              "answer": "Диапазона 1:50 000–1:100 000",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: USGS describes this range as broader-area mapping.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "exactlocator": "USGS Map Scales, p.2, 1:50,000–1:100,000 paragraph.",
+              "specificclaim": "USGS describes this range as broader-area mapping."
+            },
+            {
+              "answerIndex": 2,
+              "answer": "Крупного масштаба",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: USGS gives large-scale engineering map 1:600 as detail example.",
+              "plausibility": "PASS: only the keyed answer fits the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "exactlocator": "USGS Map Scales, p.1, town-engineer paragraph.",
+              "specificclaim": "USGS gives large-scale engineering map 1:600 as detail example."
+            },
+            {
+              "answerIndex": 3,
+              "answer": "По формату листа выбрать нельзя",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: Intended use is the source’s primary consideration.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+              "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+              "exactlocator": "USGS Map Scales, p.1, map-selection paragraph.",
+              "specificclaim": "Intended use is the source’s primary consideration."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Для подробного городского плана нужен крупный масштаб: он показывает меньше территории детальнее. USGS приводит инженерный пример 1:600, где здания, дороги и пути рисуют в масштабе.",
+          "literalSHA256": "16768feec7a7c7fe5d3528cc701214c4d561db1d4ea3a2bd3dc03525e649fd25",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+          "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+          "exactlocator": "USGS Map Scales, p.1 “Large Is Small”, intended-use and town-engineer passages; p.2, 1:50,000–1:100,000 range.",
+          "specificclaim": "Large-scale maps provide more detail over less ground; 1:600 is a specific engineering example.",
+          "editorialreason": "Names the desired use and coverage tradeoff. Correct note adds the 1:600 engineering example."
+        },
+        {
+          "group": "note0",
+          "literal": "Small-scale maps show broad areas but omit small features.",
+          "literalSHA256": "3c46d059f1919a89497547894c35d37a2c49b6757ec2bb28095542bcb38b62ce",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+          "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+          "exactlocator": "USGS Map Scales, p.1, small-scale-map paragraph.",
+          "specificclaim": "Small-scale maps are less detailed and show larger areas.",
+          "editorialreason": "Names the desired use and coverage tradeoff. Correct note adds the 1:600 engineering example.",
+          "answerIndex": 0,
+          "answerText": "Мелкого масштаба",
+          "noteUsefulnessReview": "PASS: specific additional fact supports understanding of this option."
+        },
+        {
+          "group": "note1",
+          "literal": "This range covers more area with reasonable detail.",
+          "literalSHA256": "9489ce9a8d2ee6b83c4b2ecb4f3a2a73560ad173ed200719942e2862ada99eac",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+          "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+          "exactlocator": "USGS Map Scales, p.2, 1:50,000–1:100,000 paragraph.",
+          "specificclaim": "USGS describes this range as broader-area mapping.",
+          "editorialreason": "Names the desired use and coverage tradeoff. Correct note adds the 1:600 engineering example.",
+          "answerIndex": 1,
+          "answerText": "Диапазона 1:50 000–1:100 000",
+          "noteUsefulnessReview": "PASS: specific additional fact supports understanding of this option."
+        },
+        {
+          "group": "note2",
+          "literal": "At 1:600, buildings, roads and tracks can be drawn to scale.",
+          "literalSHA256": "d2780ba455d17c10899574be8bf9a141b1f00500fc8c1a635214d4447f84454f",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+          "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+          "exactlocator": "USGS Map Scales, p.1, town-engineer paragraph.",
+          "specificclaim": "USGS gives large-scale engineering map 1:600 as detail example.",
+          "editorialreason": "Names the desired use and coverage tradeoff. Correct note adds the 1:600 engineering example.",
+          "answerIndex": 2,
+          "answerText": "Крупного масштаба",
+          "noteUsefulnessReview": "PASS: specific additional fact supports understanding of this option."
+        },
+        {
+          "group": "note3",
+          "literal": "USGS says intended use is the most important selection factor.",
+          "literalSHA256": "a3de75d421c1ccbe29a5c8a31e66c8ba30f2f869d81764792efb3c35145cf088",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-map-scales.body",
+          "fileSHA256": "85721ed6821223f2f460e17c8365e91a7ccf6bc51f16e5a1f3536eb06248f62a",
+          "exactlocator": "USGS Map Scales, p.1, map-selection paragraph.",
+          "specificclaim": "Intended use is the source’s primary consideration.",
+          "editorialreason": "Names the desired use and coverage tradeoff. Correct note adds the 1:600 engineering example.",
+          "answerIndex": 3,
+          "answerText": "По формату листа выбрать нельзя",
+          "noteUsefulnessReview": "PASS: specific additional fact supports understanding of this option."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-grid-square",
+      "stage": "fix-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "23dd15ff22b4c1686c2a0811b2f75174e15445adf6595b462b79f33aaf54139a",
+      "finalCardHash": "cd91f7b1e9698da604fc72b4076c294d6174209a57b95630037d20638b3b8a84",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Спасателю нужно сообщить четырёхзначный адрес километрового квадрата на карте OS: восточная линия имеет значение 19, северная — 45. Какой элемент карты позволяет считать адрес 1945?",
+            "answers": [
+              "Легенда",
+              "Масштаб",
+              "Координатная сетка",
+              "Горизонтали"
+            ],
+            "correctIndex": 2
+          },
+          "literalSHA256": "5678c48fed2283976e54b7d6d264ddac86f7cdb62cdb5de9be8ba9fe18c8a1b1",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+          "fileSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+          "exactlocator": "OS Map Reading, printed pp.8–9: grid references, reading order and the illustrated 1945 square.",
+          "specificclaim": "The OS guide supports the numeric grid and four-figure 1945; the stem asks which map structure supplies the address.",
+          "editorialreason": "Replaces unsupported D7 with the exact numbered convention in the full OS guide; key remains grid.",
+          "optionReviews": [
+            {
+              "answerIndex": 0,
+              "answer": "Легенда",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: The OS guide gives green rights of way on 1:25,000 maps and magenta on 1:50,000 maps.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: concrete map-specific fact, without restating the legend, grid, or inset peer’s key.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "fileSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "exactlocator": "OS Map Reading, printed p.6, footpaths paragraph.",
+              "specificclaim": "The OS guide gives green rights of way on 1:25,000 maps and magenta on 1:50,000 maps."
+            },
+            {
+              "answerIndex": 1,
+              "answer": "Масштаб",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: The guide compares OS products at 1:25,000 and 1:50,000.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: concrete map-specific fact, without restating the legend, grid, or inset peer’s key.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "fileSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "exactlocator": "OS Map Reading, printed pp.6–7, scale comparison.",
+              "specificclaim": "The guide compares OS products at 1:25,000 and 1:50,000."
+            },
+            {
+              "answerIndex": 2,
+              "answer": "Координатная сетка",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: Six-figure grid references identify a 100 m square within a kilometre square.",
+              "plausibility": "PASS: only the keyed answer fits the exact scenario.",
+              "noteUsefulness": "PASS: concrete map/source detail, not a repeated map-element definition.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+              "fileSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+              "exactlocator": "OS Map Reading, printed pp.8–9: four-figure 1945 identifies 1 km square; six-figure reference identifies a 100 m square.",
+              "specificclaim": "Six-figure grid references identify a 100 m square within a kilometre square."
+            },
+            {
+              "answerIndex": 3,
+              "answer": "Горизонтали",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: USGS maps topographic contours in brown; map colors distinguish feature groups.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: adds a source-backed map-reading fact without restating the neighboring contour-card answer.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "exactlocator": "USGS Topographic Map Symbols, p.1, Reading Topographic Maps and Contours paragraphs.",
+              "specificclaim": "USGS maps topographic contours in brown; map colors distinguish feature groups."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Адрес считывают по координатной сетке: сначала берут восточное значение, затем северное. OS показывает, что 1945 — один квадрат размером один километр.",
+          "literalSHA256": "fc1ea9eea86c2acb12bc5f686018ea1457d95f9546887ac8dc6ff5647a6b790d",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+          "fileSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+          "exactlocator": "OS Map Reading, printed pp.8–9: grid references, reading order and the illustrated 1945 square.",
+          "specificclaim": "The guide supports numbered eastings/northings, four-figure square 1945, and easting-first order.",
+          "editorialreason": "Replaces unsupported D7 with the exact numbered convention in the full OS guide; key remains grid."
+        },
+        {
+          "group": "note0",
+          "literal": "OS показывает на карте 1:25 000 тропы зелёным, а на карте 1:50 000 — пурпурным.",
+          "literalSHA256": "68b4009f3e08a03ee5e825a1ef09b699acb4287137a93580593227d14cf4c77c",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+          "fileSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+          "exactlocator": "OS Map Reading, printed p.6, footpaths paragraph.",
+          "specificclaim": "The OS guide gives green rights of way on 1:25,000 maps and magenta on 1:50,000 maps.",
+          "editorialreason": "Replaces unsupported D7 with the exact numbered convention in the full OS guide; key remains grid.",
+          "answerIndex": 0,
+          "answerText": "Легенда",
+          "noteUsefulnessReview": "PASS: specific primary fact adds useful context without defining a neighboring card."
+        },
+        {
+          "group": "note1",
+          "literal": "Руководство OS сопоставляет карты Explorer 1:25 000 и Landranger 1:50 000.",
+          "literalSHA256": "7587a8837794e2e4372ced5a6b223f204bf55f052f3bde39b5cd82f843905859",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+          "fileSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+          "exactlocator": "OS Map Reading, printed pp.6–7, scale comparison.",
+          "specificclaim": "The guide compares OS products at 1:25,000 and 1:50,000.",
+          "editorialreason": "Replaces unsupported D7 with the exact numbered convention in the full OS guide; key remains grid.",
+          "answerIndex": 1,
+          "answerText": "Масштаб",
+          "noteUsefulnessReview": "PASS: specific primary fact adds useful context without defining a neighboring card."
+        },
+        {
+          "group": "note2",
+          "literal": "Шестизначная ссылка OS уточняет положение до 100-метрового квадрата внутри километрового.",
+          "literalSHA256": "da3d0348573d4646bf73dc4349733bbce77b0c83b313ff74a3de7f592a73cd77",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/fix-cycle1-author-01a13d50/sources/os-map-reading.pdf",
+          "fileSHA256": "bb3b2deaec148751a0a5198eb930d10019d8b4db2ca7c24d115fc3750d9e7eab",
+          "exactlocator": "OS Map Reading, printed pp.8–9: four-figure 1945 identifies 1 km square; six-figure reference identifies a 100 m square.",
+          "specificclaim": "Six-figure grid references identify a 100 m square within a kilometre square.",
+          "editorialreason": "Replaces unsupported D7 with the exact numbered convention in the full OS guide; key remains grid.",
+          "answerIndex": 2,
+          "answerText": "Координатная сетка",
+          "noteUsefulnessReview": "PASS: adds a concrete source fact beyond the stem/key without defining a neighboring card."
+        },
+        {
+          "group": "note3",
+          "literal": "USGS топографические горизонтали показывает коричневыми линиями.",
+          "literalSHA256": "face2bf133cbbe3b073860f2d0b89682f50f656b7792cc4bbafafd9d4c859b6e",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+          "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+          "exactlocator": "USGS Topographic Map Symbols, p.1, Reading Topographic Maps and Contours paragraphs.",
+          "specificclaim": "USGS maps topographic contours in brown; map colors distinguish feature groups.",
+          "editorialreason": "Replaces unsupported D7 with the exact numbered convention in the full OS guide; key remains grid.",
+          "answerIndex": 3,
+          "answerText": "Горизонтали",
+          "noteUsefulnessReview": "PASS: concrete map convention or terrain fact, not a repeated definition from the contour peers."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-index-place",
+      "stage": "fix-cycle1-author",
+      "status": "HOLD",
+      "beforeHash": "1ce3b376ab86b72f18c931285137673abe0b0fe73b5dd6d94b62c0829495c4c0",
+      "finalCardHash": null,
+      "fieldGroupProofs": [],
+      "unresolvedSourceDefects": [
+        "CORRECT_NOTE: note2 повторяет нахождение по названию и отсылку к сетке из prompt; «обычно» без первичного основания.",
+        "SOURCE: NatGeo Index = Customer Information не доказывает перечень топонимов со страницами/квадратами; ни prompt/explanation, ни заметка не покрыты.",
+        "LEAKAGE: notes0/1/3 раскрывают grid-square/inset-detail/locator-context."
+      ]
+    },
+    {
+      "id": "maps-cartography-inset-detail",
+      "stage": "fix-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "3c4f623f3538ddebcd2c24c5ec2562472cd13873d767ddc8eee89255a17af921",
+      "finalCardHash": "b541e76adbffe4d6bddc47b9393f443cf3516537884b78f6bd81e9adfcdc09fd",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Что показывает маленькое окно на батиметрической карте северной части реки Сент-Клэр по подписи USGS Figure 10?",
+            "answers": [
+              "Положение всей карты на планете",
+              "Перечень страниц для поиска названий",
+              "Детали лингуоидальных баров южнее мостов Blue Water",
+              "Показывает линии профилей и геологические разрезы"
+            ],
+            "correctIndex": 2
+          },
+          "literalSHA256": "50c9b08eadc627b8ce6670e7da8f0f87ae68f279ff154860960e6594caa4fd55",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/usgs-inset-detail-example.body",
+          "fileSHA256": "62bc089a9a79d313697d76704f797fe5bab8e40bda97954675cf1ea4d064cec9",
+          "exactlocator": "USGS OFR 2009-1137, Figure 10 caption, full saved HTML passage.",
+          "specificclaim": "Inset shows detail of linguoid bars south of Blue Water Bridges within the northernmost study-area map.",
+          "editorialreason": "Uses an actual named map and its caption rather than a generic purpose claim.",
+          "optionReviews": [
+            {
+              "answerIndex": 0,
+              "answer": "Положение всей карты на планете",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: The Figure 10 base is a 2005 orthophoto from Michigan State University and USDA-FSA.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: concrete map/source detail, not a repeated map-element definition.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/usgs-inset-detail-example.body",
+              "fileSHA256": "62bc089a9a79d313697d76704f797fe5bab8e40bda97954675cf1ea4d064cec9",
+              "exactlocator": "USGS OFR 2009-1137, Figure 10 caption, complete saved source-2 text.",
+              "specificclaim": "The Figure 10 base is a 2005 orthophoto from Michigan State University and USDA-FSA."
+            },
+            {
+              "answerIndex": 1,
+              "answer": "Перечень страниц для поиска названий",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: The caption refers to detail in a bathymetric map.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/usgs-inset-detail-example.body",
+              "fileSHA256": "62bc089a9a79d313697d76704f797fe5bab8e40bda97954675cf1ea4d064cec9",
+              "exactlocator": "USGS Figure 10 caption, source-2 full text.",
+              "specificclaim": "The caption refers to detail in a bathymetric map."
+            },
+            {
+              "answerIndex": 2,
+              "answer": "Детали лингуоидальных баров южнее мостов Blue Water",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: The source caption identifies the wider main-map coverage, beyond the inset subject.",
+              "plausibility": "PASS: only the keyed answer fits the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/usgs-inset-detail-example.body",
+              "fileSHA256": "62bc089a9a79d313697d76704f797fe5bab8e40bda97954675cf1ea4d064cec9",
+              "exactlocator": "USGS OFR 2009-1137, Figure 10 caption, complete saved source-2 text.",
+              "specificclaim": "The source caption identifies the wider main-map coverage, beyond the inset subject."
+            },
+            {
+              "answerIndex": 3,
+              "answer": "Показывает линии профилей и геологические разрезы",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: Figure 10 distinguishes bold black profile lines from narrow geologic-section lines.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: concrete map/source detail, not a repeated map-element definition.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/usgs-inset-detail-example.body",
+              "fileSHA256": "62bc089a9a79d313697d76704f797fe5bab8e40bda97954675cf1ea4d064cec9",
+              "exactlocator": "USGS OFR 2009-1137, Figure 10 caption, full saved source-2 text.",
+              "specificclaim": "Figure 10 distinguishes bold black profile lines from narrow geologic-section lines."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Врезка показывает выбранный участок подробнее. Подпись уточняет, что это лингуоидальные бары к югу от мостов Blue Water; основная карта охватывает северную часть района.",
+          "literalSHA256": "a86a6900e85ae5ae50b48fc9c0963098c54c23d1d5f54ba446ec27706b0c2069",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/usgs-inset-detail-example.body",
+          "fileSHA256": "62bc089a9a79d313697d76704f797fe5bab8e40bda97954675cf1ea4d064cec9",
+          "exactlocator": "USGS OFR 2009-1137, Figure 10 caption, full saved HTML passage.",
+          "specificclaim": "Inset shows detail of linguoid bars south of Blue Water Bridges within the northernmost study-area map.",
+          "editorialreason": "Uses an actual named map and its caption rather than a generic purpose claim."
+        },
+        {
+          "group": "note0",
+          "literal": "Подпись сообщает, что под картой использована ортофотосъёмка 2005 года Michigan State University и USDA-FSA.",
+          "literalSHA256": "47ceb7f722c57e6969d44ebe5a928d9f1fd816579709b0f09e02cd8da3e3ddea",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/usgs-inset-detail-example.body",
+          "fileSHA256": "62bc089a9a79d313697d76704f797fe5bab8e40bda97954675cf1ea4d064cec9",
+          "exactlocator": "USGS OFR 2009-1137, Figure 10 caption, complete saved source-2 text.",
+          "specificclaim": "The Figure 10 base is a 2005 orthophoto from Michigan State University and USDA-FSA.",
+          "editorialreason": "Uses an actual named map and its caption rather than a generic purpose claim.",
+          "answerIndex": 0,
+          "answerText": "Положение всей карты на планете",
+          "noteUsefulnessReview": "PASS: adds a concrete source fact beyond the stem/key without defining a neighboring card."
+        },
+        {
+          "group": "note1",
+          "literal": "Figure 10 describes a pictured map detail, not a name list.",
+          "literalSHA256": "c8dff9f9380d2a9370ade19da5fb40af2bf200b8e6980c8339cc4852eb9389df",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/usgs-inset-detail-example.body",
+          "fileSHA256": "62bc089a9a79d313697d76704f797fe5bab8e40bda97954675cf1ea4d064cec9",
+          "exactlocator": "USGS Figure 10 caption, source-2 full text.",
+          "specificclaim": "The caption refers to detail in a bathymetric map.",
+          "editorialreason": "Uses an actual named map and its caption rather than a generic purpose claim.",
+          "answerIndex": 1,
+          "answerText": "Перечень страниц для поиска названий",
+          "noteUsefulnessReview": "PASS: specific additional fact supports understanding of this option."
+        },
+        {
+          "group": "note2",
+          "literal": "Основная карта охватывает северную часть района исследования на реке Сент-Клэр.",
+          "literalSHA256": "d927df35ac6c465818d825f3d96bc5eb54a9e9c93c8b286e14ce347dc38261f7",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/usgs-inset-detail-example.body",
+          "fileSHA256": "62bc089a9a79d313697d76704f797fe5bab8e40bda97954675cf1ea4d064cec9",
+          "exactlocator": "USGS OFR 2009-1137, Figure 10 caption, complete saved source-2 text.",
+          "specificclaim": "The source caption identifies the wider main-map coverage, beyond the inset subject.",
+          "editorialreason": "Uses an actual named map and its caption rather than a generic purpose claim.",
+          "answerIndex": 2,
+          "answerText": "Детали лингуоидальных баров южнее мостов Blue Water",
+          "noteUsefulnessReview": "PASS: source-backed additional fact useful beyond the stem and correct answer."
+        },
+        {
+          "group": "note3",
+          "literal": "Жирные чёрные линии обозначают профили, а узкие линии — геологические разрезы.",
+          "literalSHA256": "a53133c91551148fd8710037c4df94f68835ef899e51c394c411c439cfda7fe0",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/usgs-inset-detail-example.body",
+          "fileSHA256": "62bc089a9a79d313697d76704f797fe5bab8e40bda97954675cf1ea4d064cec9",
+          "exactlocator": "USGS OFR 2009-1137, Figure 10 caption, full saved source-2 text.",
+          "specificclaim": "Figure 10 distinguishes bold black profile lines from narrow geologic-section lines.",
+          "editorialreason": "Uses an actual named map and its caption rather than a generic purpose claim.",
+          "answerIndex": 3,
+          "answerText": "Показывает линии профилей и геологические разрезы",
+          "noteUsefulnessReview": "PASS: adds a concrete source fact beyond the stem/key without defining a neighboring card."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-locator-context",
+      "stage": "fix-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "fa6193cc94bfe4693b05273d9bdc5875beb27b487403eb750e6d03da346349c7",
+      "finalCardHash": "11915bec0ccee899d4230338cf529d7994855770cb40005907734a349f03bdd5",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Ученик видит на карте Марса отдельное маленькое окно и хочет понять, где показанный участок расположен на всей планете. Какую роль выполняет это окно?",
+            "answers": [
+              "Показывает отдельную подробность поверхности",
+              "Показывает высотные различия цветом",
+              "Показывает участок в более крупном пространстве",
+              "Отмечает места посадок на планете"
+            ],
+            "correctIndex": 2
+          },
+          "literalSHA256": "1ac9e9958da91dd48d638169455f65d542f27a97a7df7f88861e859a12cfb95a",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/national-geographic-inset-example.body",
+          "fileSHA256": "3d09198fef92f6deae07354dc67cda2ba150d84fae2a8378638fc31ca7024e1e",
+          "exactlocator": "NatGeo blog, full Orientation paragraph: inset indicates cardinal directions and the map’s place on the planet.",
+          "specificclaim": "The stem asks the reader to locate a mapped Martian area on the planet; the key names the locator-context function.",
+          "editorialreason": "Separates locator context from enlargement of a local detail and uses the article’s real map.",
+          "optionReviews": [
+            {
+              "answerIndex": 0,
+              "answer": "Показывает отдельную подробность поверхности",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: The article says the OS Mars map was created and printed in January 2016.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: concrete map/source detail, not a repeated map-element definition.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/national-geographic-inset-example.body",
+              "fileSHA256": "3d09198fef92f6deae07354dc67cda2ba150d84fae2a8378638fc31ca7024e1e",
+              "exactlocator": "NatGeo blog, paragraph under Orientation / Customer Information, full saved source-1 text.",
+              "specificclaim": "The article says the OS Mars map was created and printed in January 2016."
+            },
+            {
+              "answerIndex": 1,
+              "answer": "Показывает высотные различия цветом",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: NatGeo explains color coding and relief exaggeration on this map.",
+              "plausibility": "PASS: only the keyed answer fits the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/national-geographic-inset-example.body",
+              "fileSHA256": "3d09198fef92f6deae07354dc67cda2ba150d84fae2a8378638fc31ca7024e1e",
+              "exactlocator": "NatGeo blog, coloration paragraph, full saved source-1 text.",
+              "specificclaim": "NatGeo explains color coding and relief exaggeration on this map."
+            },
+            {
+              "answerIndex": 2,
+              "answer": "Показывает участок в более крупном пространстве",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: The article explicitly says the inset marks the map’s place on the planet.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: map area is about 10 million km2, roughly 7% of Mars, adding spatial context to its locator role.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/national-geographic-inset-example.body",
+              "fileSHA256": "3d09198fef92f6deae07354dc67cda2ba150d84fae2a8378638fc31ca7024e1e",
+              "exactlocator": "NatGeo blog, Orientation paragraph, full saved source-1 text.",
+              "specificclaim": "The article explicitly says the inset marks the map’s place on the planet."
+            },
+            {
+              "answerIndex": 3,
+              "answer": "Отмечает места посадок на планете",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: NatGeo identifies the red points as Pathfinder and Opportunity landing sites.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/national-geographic-inset-example.body",
+              "fileSHA256": "3d09198fef92f6deae07354dc67cda2ba150d84fae2a8378638fc31ca7024e1e",
+              "exactlocator": "NatGeo blog, paragraph on red points, full saved source-1 text.",
+              "specificclaim": "NatGeo identifies the red points as Pathfinder and Opportunity landing sites."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Это обзорная, или локаторная, функция: окно помещает основной участок в более широкий контекст. В примере National Geographic оно также показывает стороны света.",
+          "literalSHA256": "ad07d6efbc2118340d7735dae6ac1ae97fc267496172623adf016edfc99a9d9b",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/national-geographic-inset-example.body",
+          "fileSHA256": "3d09198fef92f6deae07354dc67cda2ba150d84fae2a8378638fc31ca7024e1e",
+          "exactlocator": "NatGeo blog, full Orientation paragraph: inset indicates cardinal directions and the map’s place on the planet.",
+          "specificclaim": "The inset provides larger-area location and orientation context.",
+          "editorialreason": "Separates locator context from enlargement of a local detail and uses the article’s real map."
+        },
+        {
+          "group": "note0",
+          "literal": "National Geographic указывает, что карту Марса создали и напечатали в январе 2016 года.",
+          "literalSHA256": "a4640daa4505193015831deddd6a5e036f4218cbf509817de6237f06cd935867",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/national-geographic-inset-example.body",
+          "fileSHA256": "3d09198fef92f6deae07354dc67cda2ba150d84fae2a8378638fc31ca7024e1e",
+          "exactlocator": "NatGeo blog, paragraph under Orientation / Customer Information, full saved source-1 text.",
+          "specificclaim": "The article says the OS Mars map was created and printed in January 2016.",
+          "editorialreason": "Separates locator context from enlargement of a local detail and uses the article’s real map.",
+          "answerIndex": 0,
+          "answerText": "Показывает отдельную подробность поверхности",
+          "noteUsefulnessReview": "PASS: adds a concrete source fact beyond the stem/key without defining a neighboring card."
+        },
+        {
+          "group": "note1",
+          "literal": "На карте Марса зелёный обозначает низины, пурпурный — возвышенности; затенение усилено в 5–50 раз.",
+          "literalSHA256": "09f76a6586f15e61d57e4e421cfd846970c57f4aab49ebe1a0cbd20e0cdbcbab",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/national-geographic-inset-example.body",
+          "fileSHA256": "3d09198fef92f6deae07354dc67cda2ba150d84fae2a8378638fc31ca7024e1e",
+          "exactlocator": "NatGeo blog, coloration paragraph, full saved source-1 text.",
+          "specificclaim": "NatGeo explains color coding and relief exaggeration on this map.",
+          "editorialreason": "Separates locator context from enlargement of a local detail and uses the article’s real map.",
+          "answerIndex": 1,
+          "answerText": "Показывает высотные различия цветом",
+          "noteUsefulnessReview": "PASS: source-backed additional fact useful beyond the stem and correct answer."
+        },
+        {
+          "group": "note2",
+          "literal": "Карта охватывает около 10 млн км² — примерно 7% поверхности Марса.",
+          "literalSHA256": "816158013ab0ab1a4aeb2c6a39acc45954e4d900c19d4abf559e489edcce3b0e",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/national-geographic-inset-example.body",
+          "fileSHA256": "3d09198fef92f6deae07354dc67cda2ba150d84fae2a8378638fc31ca7024e1e",
+          "exactlocator": "NatGeo blog, opening map description after “Click to enlarge”, complete saved source-1 text.",
+          "specificclaim": "National Geographic says the Mars map covers about 10 million square kilometres, roughly 7% of the planet’s surface.",
+          "editorialreason": "Separates locator context from enlargement of a local detail and uses the article’s real map.",
+          "answerIndex": 2,
+          "answerText": "Показывает участок в более крупном пространстве",
+          "noteUsefulnessReview": "PASS: gives concrete spatial coverage relevant to locating the mapped area, beyond the stem and answer."
+        },
+        {
+          "group": "note3",
+          "literal": "Красные точки обозначают места посадок Pathfinder и марсохода Opportunity.",
+          "literalSHA256": "40324ee5a4339188b08e0baee111c8f6683e89a0c96a3e49a14e64af8865adcf",
+          "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps51-60-01a13d50/author/sources/national-geographic-inset-example.body",
+          "fileSHA256": "3d09198fef92f6deae07354dc67cda2ba150d84fae2a8378638fc31ca7024e1e",
+          "exactlocator": "NatGeo blog, paragraph on red points, full saved source-1 text.",
+          "specificclaim": "NatGeo identifies the red points as Pathfinder and Opportunity landing sites.",
+          "editorialreason": "Separates locator context from enlargement of a local detail and uses the article’s real map.",
+          "answerIndex": 3,
+          "answerText": "Отмечает места посадок на планете",
+          "noteUsefulnessReview": "PASS: source-backed additional fact useful beyond the stem and correct answer."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-close-steep",
+      "stage": "fix-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "4d403e3318ca3ec4cf015784967f3b0c30719fa6c8964046e876c8941f0fba12",
+      "finalCardHash": "47e8f2a877d916cce59e7fb9776edf50f6a7ad833dbd78ac8643f704a68bbed3",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Два маршрута поднимаются на одинаковую высоту. На участке A горизонтали ближе, чем на B. Какой вывод об A обоснован?",
+            "answers": [
+              "Он выше по абсолютной отметке",
+              "Крутизну нельзя определить по горизонталям",
+              "Подъём круче на коротком расстоянии",
+              "Это глубже лежащее дно водоёма"
+            ],
+            "correctIndex": 2
+          },
+          "literalSHA256": "b47fac21acabf70e1545d111bee7a9aa7aa583ac58ccb49ae8e432993c5b7d79",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+          "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+          "exactlocator": "USGS Topographic Map Symbols, p.1, “What is a Topographic Map?”, “Contours” and “Bathymetric contours”.",
+          "specificclaim": "Very close topographic contours indicate steep slopes; contour values label elevation; bathymetric contours show bottom shape and slope.",
+          "editorialreason": "Turns definition into a route comparison and distinguishes slope from absolute height and bathymetric interpretation.",
+          "optionReviews": [
+            {
+              "answerIndex": 0,
+              "answer": "Он выше по абсолютной отметке",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: USGS uses brown for topographic contour lines.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: adds a source-backed map-reading fact without restating the neighboring contour-card answer.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "exactlocator": "USGS Topographic Map Symbols, p.1, Reading Topographic Maps: contour lines are brown.",
+              "specificclaim": "USGS uses brown for topographic contour lines."
+            },
+            {
+              "answerIndex": 1,
+              "answer": "Крутизну нельзя определить по горизонталям",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: The source explicitly supports slope measurement from contours.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "exactlocator": "USGS Topographic Map Symbols, p.1, “What is a Topographic Map?”.",
+              "specificclaim": "The source explicitly supports slope measurement from contours."
+            },
+            {
+              "answerIndex": 2,
+              "answer": "Подъём круче на коротком расстоянии",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: USGS says topographic contours never cross.",
+              "plausibility": "PASS: only the keyed answer fits the exact scenario.",
+              "noteUsefulness": "PASS: adds a source-backed map-reading fact without restating the neighboring contour-card answer.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "exactlocator": "USGS Topographic Map Symbols, p.1, Contours paragraph.",
+              "specificclaim": "USGS says topographic contours never cross."
+            },
+            {
+              "answerIndex": 3,
+              "answer": "Это глубже лежащее дно водоёма",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: Contour spacing alone is not a depth reading.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "exactlocator": "USGS Topographic Map Symbols, p.1, “Bathymetric contours”.",
+              "specificclaim": "Contour spacing alone is not a depth reading."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Горизонтали соединяют точки одинаковой высоты. При том же перепаде на меньшем расстоянии склон круче; абсолютную отметку читают по подписанным индексным линиям.",
+          "literalSHA256": "32bfa3a7cdcff30ea243365d07fc402f12e4d2f997367503c6950dcf96b75c0b",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+          "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+          "exactlocator": "USGS Topographic Map Symbols, p.1, “What is a Topographic Map?”, “Contours” and “Bathymetric contours”.",
+          "specificclaim": "Very close topographic contours indicate steep slopes; contour values label elevation; bathymetric contours show bottom shape and slope.",
+          "editorialreason": "Turns definition into a route comparison and distinguishes slope from absolute height and bathymetric interpretation."
+        },
+        {
+          "group": "note0",
+          "literal": "На USGS топографических картах горизонтали показаны коричневым цветом.",
+          "literalSHA256": "b20c9e87d6405e45b6a1bec23f41c6e904837d3a0c61e48a3097aaaa1c82611e",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+          "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+          "exactlocator": "USGS Topographic Map Symbols, p.1, Reading Topographic Maps: contour lines are brown.",
+          "specificclaim": "USGS uses brown for topographic contour lines.",
+          "editorialreason": "Turns definition into a route comparison and distinguishes slope from absolute height and bathymetric interpretation.",
+          "answerIndex": 0,
+          "answerText": "Он выше по абсолютной отметке",
+          "noteUsefulnessReview": "PASS: concrete map convention or terrain fact, not a repeated definition from the contour peers."
+        },
+        {
+          "group": "note1",
+          "literal": "USGS says contours make it possible to measure slope steepness.",
+          "literalSHA256": "63dd0422c3965b429741bddd9cc960a0365366dec2fa9cc335f30039d61b386b",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+          "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+          "exactlocator": "USGS Topographic Map Symbols, p.1, “What is a Topographic Map?”.",
+          "specificclaim": "The source explicitly supports slope measurement from contours.",
+          "editorialreason": "Turns definition into a route comparison and distinguishes slope from absolute height and bathymetric interpretation.",
+          "answerIndex": 1,
+          "answerText": "Крутизну нельзя определить по горизонталям",
+          "noteUsefulnessReview": "PASS: specific additional fact supports understanding of this option."
+        },
+        {
+          "group": "note2",
+          "literal": "USGS отмечает, что горизонтали не пересекаются.",
+          "literalSHA256": "15d226b15a1d2825b91793ca1bb2d68db7fa006d11ac8364770f29a228a37bc0",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+          "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+          "exactlocator": "USGS Topographic Map Symbols, p.1, Contours paragraph.",
+          "specificclaim": "USGS says topographic contours never cross.",
+          "editorialreason": "Turns definition into a route comparison and distinguishes slope from absolute height and bathymetric interpretation.",
+          "answerIndex": 2,
+          "answerText": "Подъём круче на коротком расстоянии",
+          "noteUsefulnessReview": "PASS: concrete map convention or terrain fact, not a repeated definition from the contour peers."
+        },
+        {
+          "group": "note3",
+          "literal": "Bathymetric contours show the bottom shape and slope.",
+          "literalSHA256": "9eb20f356c6a046bf9a58b89ffa3fcd7f321788aef7ead2e102dae23889a40e6",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+          "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+          "exactlocator": "USGS Topographic Map Symbols, p.1, “Bathymetric contours”.",
+          "specificclaim": "Contour spacing alone is not a depth reading.",
+          "editorialreason": "Turns definition into a route comparison and distinguishes slope from absolute height and bathymetric interpretation.",
+          "answerIndex": 3,
+          "answerText": "Это глубже лежащее дно водоёма",
+          "noteUsefulnessReview": "PASS: specific additional fact supports understanding of this option."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-wide-gentle",
+      "stage": "fix-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "330566a5a0852484ca2b4d28e3f061b132ec1ea090ffb2237490bd96ab3a8057",
+      "finalCardHash": "ff1924218433b497aaa0d4ef3297877ed716da57732c08eb49a81dd6b7375fcc",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Турист ищет место, где высота меняется постепенно. Какой рисунок горизонталей выбрать на топографической карте?",
+            "answers": [
+              "Линии пересекаются на поворотах",
+              "Синие линии",
+              "Линии широко разнесены",
+              "Много линий на коротком участке"
+            ],
+            "correctIndex": 2
+          },
+          "literalSHA256": "1dbbab4bcb2d2d1512a826ab9ec0e01024904feaf27fc4c9ab7e7223d8af15b4",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+          "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+          "exactlocator": "USGS Topographic Map Symbols, p.1, “Contours”: wide spacing/absence, no crossing, index contours and interval.",
+          "specificclaim": "Wide-spaced or absent contours indicate relatively level ground; contour interval is a vertical difference printed in the margin.",
+          "editorialreason": "Makes the task about choosing a route pattern; correct note adds the independent contour-absence clue.",
+          "optionReviews": [
+            {
+              "answerIndex": 0,
+              "answer": "Линии пересекаются на поворотах",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: USGS uses brown for topographic contours.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: adds a source-backed map-reading fact without restating the neighboring contour-card answer.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "exactlocator": "USGS Topographic Map Symbols, p.1, Reading Topographic Maps and Contours paragraphs.",
+              "specificclaim": "USGS uses brown for topographic contours."
+            },
+            {
+              "answerIndex": 1,
+              "answer": "Синие линии",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: USGS uses blue for hydrographic features and brown for topographic contours.",
+              "plausibility": "PASS: only the keyed answer fits the exact scenario.",
+              "noteUsefulness": "PASS: adds a source-backed map-reading fact without restating the neighboring contour-card answer.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "exactlocator": "USGS Topographic Map Symbols, p.1, line-color classes in Reading Topographic Maps.",
+              "specificclaim": "USGS uses blue for hydrographic features and brown for topographic contours."
+            },
+            {
+              "answerIndex": 2,
+              "answer": "Линии широко разнесены",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: USGS says absent contours, like wide spacing, can mean relatively level terrain.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: note gives a checkable source-backed fact, not bare attribution.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "exactlocator": "USGS Topographic Map Symbols, p.1, spacing/absence sentence.",
+              "specificclaim": "USGS says absent contours, like wide spacing, can mean relatively level terrain."
+            },
+            {
+              "answerIndex": 3,
+              "answer": "Много линий на коротком участке",
+              "grammaticality": "PASS: complete grammatical phrase compatible with the stem.",
+              "truthOneKey": "PASS: USGS gives different contour intervals for flat and mountainous terrain.",
+              "plausibility": "PASS: distinct nearby map-reading interpretation but it fails the exact scenario.",
+              "noteUsefulness": "PASS: adds a source-backed map-reading fact without restating the neighboring contour-card answer.",
+              "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "exactlocator": "USGS Topographic Map Symbols, p.1, Contours paragraph, examples of 10 ft or less and 100 ft or more.",
+              "specificclaim": "USGS gives different contour intervals for flat and mountainous terrain."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Большие промежутки между горизонталями указывают на относительно пологий рельеф. USGS также отмечает, что отсутствие горизонталей может означать сравнительно ровную поверхность.",
+          "literalSHA256": "1e54d8275f444f81bdd0ee1a25d745596c2e56b46f8aa3a57f17757c325ec179",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+          "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+          "exactlocator": "USGS Topographic Map Symbols, p.1, “Contours”: wide spacing/absence, no crossing, index contours and interval.",
+          "specificclaim": "Wide-spaced or absent contours indicate relatively level ground; contour interval is a vertical difference printed in the margin.",
+          "editorialreason": "Makes the task about choosing a route pattern; correct note adds the independent contour-absence clue."
+        },
+        {
+          "group": "note0",
+          "literal": "USGS показывает топографические горизонтали коричневыми линиями.",
+          "literalSHA256": "c3201cc05236a3ed012710ea74df421f657709dec6505470cb3d1f7ae0832294",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+          "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+          "exactlocator": "USGS Topographic Map Symbols, p.1, Reading Topographic Maps and Contours paragraphs.",
+          "specificclaim": "USGS uses brown for topographic contours.",
+          "editorialreason": "Makes the task about choosing a route pattern; correct note adds the independent contour-absence clue.",
+          "answerIndex": 0,
+          "answerText": "Линии пересекаются на поворотах",
+          "noteUsefulnessReview": "PASS: concrete map convention or terrain fact, not a repeated definition from the contour peers."
+        },
+        {
+          "group": "note1",
+          "literal": "USGS относит синий цвет к водным объектам; топографические горизонтали показаны коричневым.",
+          "literalSHA256": "7f4cefd900941677bf3becfdb556df682d6c20589d204d31fd71d929db5841d5",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+          "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+          "exactlocator": "USGS Topographic Map Symbols, p.1, line-color classes in Reading Topographic Maps.",
+          "specificclaim": "USGS uses blue for hydrographic features and brown for topographic contours.",
+          "editorialreason": "Makes the task about choosing a route pattern; correct note adds the independent contour-absence clue.",
+          "answerIndex": 1,
+          "answerText": "Синие линии",
+          "noteUsefulnessReview": "PASS: concrete map convention or terrain fact, not a repeated definition from the contour peers."
+        },
+        {
+          "group": "note2",
+          "literal": "Отсутствие горизонталей тоже может указывать на сравнительно ровную поверхность.",
+          "literalSHA256": "6895e038edbf1ca180af2f035dc95633486939f4834735333544d9d48c3fc5ae",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+          "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+          "exactlocator": "USGS Topographic Map Symbols, p.1, spacing/absence sentence.",
+          "specificclaim": "USGS says absent contours, like wide spacing, can mean relatively level terrain.",
+          "editorialreason": "Makes the task about choosing a route pattern; correct note adds the independent contour-absence clue.",
+          "answerIndex": 2,
+          "answerText": "Линии широко разнесены",
+          "noteUsefulnessReview": "PASS: source-backed additional fact useful beyond the stem and correct answer."
+        },
+        {
+          "group": "note3",
+          "literal": "На плоской местности интервал может быть 10 футов или меньше, в горах — 100 футов и больше.",
+          "literalSHA256": "94ef8ec2d78a09406f237d11b56a1c06a15798075788cafec32a5c4d5b04f7c8",
+          "primarypath": "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+          "fileSHA256": "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+          "exactlocator": "USGS Topographic Map Symbols, p.1, Contours paragraph, examples of 10 ft or less and 100 ft or more.",
+          "specificclaim": "USGS gives different contour intervals for flat and mountainous terrain.",
+          "editorialreason": "Makes the task about choosing a route pattern; correct note adds the independent contour-absence clue.",
+          "answerIndex": 3,
+          "answerText": "Много линий на коротком участке",
+          "noteUsefulnessReview": "PASS: concrete map convention or terrain fact, not a repeated definition from the contour peers."
+        }
+      ]
+    }
+  ],
+  "packageStatus": "AUTHOR_COMPLETE_WITH_SOURCE_HOLDS",
+  "readyForIndependentReview": true,
+  "readyForApply": false
+}
