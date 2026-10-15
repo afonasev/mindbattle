@@ -1,0 +1,437 @@
+Graduated symbols—ArcGIS Pro | Documentation
+Back to Top
+Graduated symbols
+In this topic
+Draw a layer with graduated symbols
+Choose the symbol template
+Modify graduated symbols symbology
+Modify class breaks with the histogram
+Vary graduated symbology by transparency, rotation, or color
+Graduated symbols are used to show a quantitative difference
+between mapped features by varying the size of symbols. Data is
+classified into ranges that are each assigned a symbol size to
+represent the range. For instance, if your classification scheme
+has four classes, four symbol sizes are assigned. The
+color of the symbols stays the same by default to emphasize the relative quantitative differences between classes, but you can modify the symbol and color of each symbol class as necessary.
+This map uses graduated symbols to show  which mosquito trap locations in Chicago have the highest counts of mosquitos tested for West Nile virus.
+Symbol size can represent differences in
+magnitude of a phenomenon, because larger
+symbols are naturally associated with a greater amount of something. Using graduated symbols allows you to control the size of each symbol, because they are not
+related directly to data values as they are with
+proportional
+symbols
+. This means you can design a set of symbols that have
+sufficient variation in the size that represents each class of data
+to make them distinguishable from one another.
+Graduated symbols can be based directly on the values in an attribute  field in the dataset, or you can write an
+Arcade
+expression to generate numeric values on which to symbolize.
+Learn more about writing  expressions in the
+Arcade
+language
+Caution:
+When graduated symbology is based directly on the values of an attribute field, the symbols  are drawn in a sorted order in which the  larger features draw first and the smaller features draw above them. When the symbology is based on an expression, this sorting does not occur, and some smaller symbols may be obscured by larger ones.
+Draw a layer with graduated symbols
+To symbolize a feature layer with graduated symbols symbology, you work with the
+Symbology
+pane. The
+Primary symbology
+tab
+has two subtabs to establish graduated symbol symbology:
+The
+Classes
+tab is where you manage the symbol, values, descriptive labels, and grouping of the symbol classes.
+The
+Histogram
+tab is where you  view and edit the data ranges of the symbol classes. See
+Use symbology histograms
+for more information.
+To draw a layer with graduated symbols, complete the following steps:
+Select a feature layer in the
+Contents
+pane.
+On the
+Feature Layer
+tab, in the
+Drawing
+group, click the
+Symbology
+drop-down arrow
+and click
+Graduated Symbols
+.
+The
+Symbology
+pane appears.
+In the
+Symbology
+pane, on the
+Primary symbology
+tab
+, choose the numeric field for the data to be mapped, or write an expression.
+To use an expression, click the expression button
+to open the
+Expression Builder
+dialog box. Write an expression and click
+Verify
+to validate it.
+Note that although an expression is valid, it may not return a valid numeric value. You can filter
+the
+Expression Builder
+dialog box to show only numeric fields to help prevent this.
+To normalize the data, choose a field from the
+Normalization
+menu, or choose
+percentage of total
+to divide the data value to create ratios, or choose
+log
+to symbolize on   the logarithm of each value.
+This allows you to generate a smaller range of values if the dataset includes significant outliers. Normalization is available only when  the graduated symbology is based directly on values in an attribute field. If it is symbolized on an expression, the
+Normalization
+field is unavailable.
+Classify the data using an appropriate classification
+method
+and number of classes.
+Set the minimum and maximum sizes of the symbol representing the data.
+Choose the symbol template
+Click the
+Template
+symbol to open the
+Format Symbol
+pane to
+modify the symbol
+or
+choose a different symbol
+. The template symbol defines the appearance of the symbols that are sized for each class. The appearance includes things like the shape, dash pattern, or profile of a symbol. The size of the template symbol is ignored because it is the minimum and maximum size properties of the graduated symbol symbology that sets the size of the symbol for each symbol class.
+For point and line layers, the template symbol is a point  or a line symbol, respectively. In the case of polygon layers, the template symbol is a point symbol that is sized for each symbol class. Additionally, a background polygon symbol is defined to draw the polygon features themselves.   Click the
+Background
+symbol to change it.
+In the case of polygon layers, use the
+Draw graduated symbols above all layers
+check box to control where the point symbols fall in the draw order of the map.
+When checked, the graduated point symbols draw above all layers in the map, including annotation layers, regardless of the layer draw order specified in the
+Contents
+pane. Only labels draw above the graduated symbols.
+When this option is unchecked, this layer respects the drawing order specified by the arrangement of layers in the
+Contents
+pane, with the graduated point symbols drawing above the polygon background symbols in the layer. This choice ensures that annotation layers in the map are not obscured by graduated symbols.
+Note:
+This option does not apply when the layer is in the 3D Layers category of a scene. In this case, the point symbols always honor the layer draw order.
+Modify graduated symbols symbology
+The
+Primary symbology
+tab of the
+Symbology
+pane
+includes the
+Classes
+and the
+Histogram
+subtabs, both of which also have a
+More
+drop-down menu that contains additional commands.
+The
+Classes
+tab includes an interactive table that lists the graduated symbol classes with their corresponding symbols and headings, as defined by the symbology parameters in the upper portion of the pane.
+In the graduated symbol classes table, you can do the following:
+Task
+Steps
+Highlight a symbol class
+Click in the
+Upper value
+or
+Label
+cell of the row to highlight (select) that symbol class. Click
+Clear
+to deselect symbol class rows as necessary.
+Change the symbol for a single class
+Click a symbol in the
+Symbol
+column of the table to open the
+Format Symbol
+pane and
+modify the symbol
+or
+choose a different symbol
+.
+You can modify common properties of more than one symbol at a time. Highlight the symbol classes in the table, right-click, and click
+Format symbol
+.
+Click the back button
+to return to the
+Symbology
+pane after.
+Edit the label of a class
+Right-click  a non-symbol cell in the table and click
+Edit label
+, or double-click a cell in the
+Label
+column, and type  a new value.
+Edit the upper value of a class
+Right-click a non-symbol cell in the  table, or  double-click a cell in the
+Upper value
+column and type a new value.
+Edit the description of a symbol class
+First, ensure that the
+Description
+column is visible in the table. If not, from the
+More
+menu, check
+Show  description
+to add the column to the table.
+To modify the description, right-click any non-symbol cell in the table, or double-click a cell in the
+Description
+column to open the
+Edit Description
+dialog box to enter or modify the description of the symbol class.
+Symbol class descriptions are included in layout
+legends
+, depending on the legend settings.
+Adjust the legend heading label
+Use the text box under the Symbol column on the
+Classes
+subtab to optionally enter custom text for the heading used in the
+Contents
+pane and layouts. Press
+Enter
+to apply the update. By default, the heading shares the Field name and, if applicable, the Normalization field name. If no text is provided, the heading is removed.
+Add additional symbol classes
+Use the
+Classes
+drop-down menu at the top of the pane to control the number of symbol classes. If the classification method is set to
+Manual Interval
+, you add additional symbol classes manually within the table itself. Right-click a non-symbol cell in the table and click
+Insert break above
+or
+Insert break below
+to position the new symbol class.
+Combine symbol classes
+To combine two or more symbol classes, highlight the rows in the table, right-click, and click
+Combine breaks
+.
+Remove symbol classes
+Use the
+Classes
+drop-down menu at the top of the pane to control the number of symbol classes. To remove a symbol class, right-click a non-symbol cell in  the table and click
+Remove
+.
+From the
+More
+drop-down menu, you can perform the following tasks:
+Task
+Steps
+Show values that are out of range
+Values can end up out of range in the classification scheme when they are  added after the classification was established, when they fall within removed classes, or when they contain null values. You can show values that are out of range in the table and assign a symbol to them to show them on the map.
+Click  the
+More
+menu and check
+Show values out of range
+to add an
+<out of range>
+symbol class.
+Show excluded values
+To specify which features are to be excluded from classification, on the
+Advanced symbology options
+tab
+in the
+Symbology
+pane, enter a clause under the
+Data Exclusion
+heading.
+On the
+More
+menu, check
+Show excluded values
+to add an
+<excluded>
+symbol class.
+Show the feature count of each symbol class
+Click the
+More
+menu and check
+Show count
+to add the
+Count
+column to the table.
+If excluded values or out of range values are not shown in the legend, their respective total counts are listed at the bottom of the
+Symbology
+pane.
+To update the count of features in each classification range (and values out of range), right-click the
+Count
+column in the table and choose
+Refresh count
+.
+Show statistics
+Click the
+More
+menu and check
+Show count
+to add the
+Statistics
+section below the table.
+Statistics include the overall feature count, the minimum and maximum values of the data, and the mean and standard deviation of the values.
+Show class ranges using feature values
+Click the
+More
+menu and check
+Use feature values in labels
+to use  only values that are present in the field as boundaries in the symbol class labels. This can help you identify significant gaps in the data.
+Turn on or off automatic class label updates
+Click the
+More
+menu and check or uncheck
+Always update class labels
+to  control whether the labels of each symbol class updated automatically or manually. Unchecking this option can be useful if your class labels are descriptive in context or do not frequently change, but you cannot
+format labels
+.
+Refresh values
+If the source data has changed or updated, click
+More
+, and click
+Refresh values
+to update the class ranges using the current settings at the top of the pane.
+Include a description of each symbol class
+Click the
+More
+menu and check
+Show description
+to add the
+Description
+column to the table.
+Double-click a  cell in this column to edit or update the description on the
+Edit Description
+dialog box and click
+Update
+to apply the description.
+The description appears with its symbol class  in layout
+legends
+, depending on the legend settings.
+Format all symbols
+Click the
+More
+menu and click
+Format all symbols
+to
+modify the common properties
+of all the symbols in all the symbol classes.  Verify the change to each symbol visually in the
+symbol preview
+.
+Click the back button
+to return to the
+Symbology
+pane after.
+Regenerate all symbols
+Click the
+More
+menu and click
+Regenerate all symbols
+to regenerate all symbols to reset each symbol class to its default symbol based on current symbology parameters.
+You may want to do this to discard individual symbol edits and return all symbol class symbols to a default state.
+Reverse symbol order
+Click the
+More
+menu and click
+Reverse symbol order
+.
+Reversing the symbol order retains the symbol class ranges but flips the order of the symbols assigned to each class so that the symbol that was initially assigned to the lowest symbol class is now assigned to the highest, and vice versa.
+Reverse values
+Click the
+More
+menu and click
+Reverse values
+.
+Reversing the values  flips the order of the symbol classes, leaving the symbols themselves in the original order so that the highest class is not at the top of the table, assigned to the symbol that was previously used with the lowest class, and vice versa.
+From the
+Advanced symbology options
+tab
+, you can do the following:
+Format labels
+Expand the
+Format labels
+heading to change the rounding, alignment, and other formatting of the symbol class labels.
+See the
+Format numbers in legend labels
+topic for detailed instructions.
+Adjust the sample size
+Expand
+Sample size
+to change the maximum sample size used to calculate the symbol class ranges and statistics. The default sample size is 10,000 records.
+Limiting the sample size can improve performance but may inadvertently omit important outliers in the dataset. Generally, the larger the dataset, the larger the sample size you should use.
+Exclude values
+To exclude data values from the classification, expand
+Data exclusion
+to define the query.
+To visualize excluded values on a map, on the
+More
+menu, check
+Show excluded values
+to add an
+<excluded>
+symbol class with a unique symbol.
+Set up feature level masking
+Expand the
+Feature level masking
+heading to set up
+masking  per feature
+.
+Override the default feature drawing order
+To draw features in a different order—usually to avoid smaller symbols getting obscured by larger ones—expand the
+Feature drawing order
+heading. Choose one or more fields, and set a sorting method. See
+Set the feature drawing order
+for detailed instructions.
+Modify class breaks with the histogram
+The symbology histogram provides a visual tool for editing the classes and understanding how the data is represented by different classification methods. Access it by clicking the
+Histogram
+tab on the
+Primary symbology
+tab
+.
+Learn more about symbology histograms
+The gray bars of the histogram represent the distribution of the data. The value stops along the side show how the current classification method applies to the data distribution.
+The histogram for graduated symbols does not display the actual size of your symbols, but rather their size relative to one another as a visual guide.
+To view the distribution and class breaks more easily, use the
+Zoom
+drop-down menu to change the histogram zoom level, or drag the expander bar above the histogram upward to make it larger in the pane.
+Note:
+Making dynamic edits to the histogram switches the
+classification method
+to
+Manual
+.
+Vary graduated symbology by transparency, rotation, or color
+In addition to specifying the magnitude of features with graduated symbology, you can symbolize additional attributes by varying the transparency, rotation, and color of the graduated symbols. These variations are sometimes called visual variables. While all of these visual variables can be applied simultaneously, be aware that too many variations make the layer difficult to interpret. It is recommended that you apply secondary visual  variable symbology sparingly.
+Learn more about symbolization concepts
+In the
+Symbology
+pane, click the
+Vary symbology by attribute
+tab
+.
+Expand
+Transparency
+,
+Rotation
+, or
+Color
+.
+In the case of polygon features,
+Rotation
+is not available.
+Learn more about varying symbology by transparency
+Learn more about varying symbology by rotation
+Learn more about varying symbology by color
+Related topics
+Symbolize feature layers
+Data classification methods
+Use symbology histograms
+Proportional symbols
+Vary symbology by size
+Feedback on this topic?
+In this topic
+Draw a layer with graduated symbols
+Choose the symbol template
+Modify graduated symbols symbology
+Modify class breaks with the histogram
+Vary graduated symbology by transparency, rotation, or color
+flist

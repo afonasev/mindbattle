@@ -1,0 +1,93 @@
+﻿
+Stereographic | ArcGIS Pro documentation
+Skip to main content
+ArcGIS Pro
+Table of Contents
+Stereographic
+Description
+Stereographic is a planar perspective projection, viewed from the point on the globe opposite the point of tangency. It projects points on a spheroid directly to the plane and it is the only azimuthal conformal projection. The projection is most commonly used in polar aspects for topographic maps of polar regions. The most well-known are Universal Polar Stereographic (UPS) maps showing areas north of 84 degrees north and south of 80 degrees south that aren't included in the Universal Transverse Mercator (UTM) coordinate system.
+The stereographic projection is available in ArcGIS Pro 1.0 and later and in ArcGIS Desktop 8.0 and later.
+The stereographic map projection is shown centered on the south pole.
+Projection properties
+The subsections below describe the stereographic projection properties.
+Graticule
+Stereographic is an azimuthal projection.
+In the polar aspect, the meridians project as straight lines originating at the pole and all angles between them are true. The parallels are shown as concentric circular arcs. Their spacing rapidly increases from the pole. All graticule line intersections are 90 degrees. The opposite pole cannot be shown.
+In the equatorial aspect, the equator and the central meridian are projected as two perpendicular straight lines. The other meridians and parallels are unequally spaced curves, concave toward the central meridian and the poles, respectively.
+In the oblique aspect, only the parallel with the opposite sign to the central latitude and the central meridian are straight lines. The other parallels are concave toward the poles on either side of the straight parallel. The other meridians are circular arcs intersecting at the poles. The antipodal point of the projection's center cannot be shown in any aspect.
+Distortion
+Stereographic is a conformal map projection. It does not maintain true directions, but angles and shapes are maintained at infinitesimal scale. The circular arc with no scale distortion is specified with the standard parallel or scale factor parameter. Area, distance, and scale distortions rapidly grow with the distance from the standard parallel. Distortion values are the same along circular arcs surrounding the center point.
+Usage
+The stereographic projection is appropriate for mapping the polar regions at large scales, such as navigational and topographic maps. It is used by UPS maps showing areas north of 84 degrees north and south of 80 degrees south that aren't included in the UTM coordinate system.
+Variants
+There are seven variants available in ArcGIS:
+Stereographic supports any aspect of the projection. It is available in ArcGIS Pro 1.0 and later and in ArcGIS Desktop 8.0 and later.
+Stereographic North Pole is limited to the north pole. It is available in ArcGIS Pro 1.0 and later and in ArcGIS Desktop 8.1.2 and later.
+Stereographic South Pole is limited to the south pole. It is available in ArcGIS Pro 1.0 and later and in ArcGIS Desktop 8.1.2 and later.
+Stereographic auxiliary sphere is the only variant that does not support an ellipsoid, instead using sphere-based equations with a sphere specified by the Auxiliary Sphere Type parameter. The conformal properties are not maintained when an ellipsoid is used in this variant. It is available in ArcGIS Pro 1.0 and later and in ArcGIS Desktop 9.3 and later.
+Polar stereographic variant A shares implementation with the stereographic variant but matches the EPSG parameter definitions. The circular arc with no scale distortion can be specified with the scale factor parameter. It is available in ArcGIS Pro 1.2 and later and in ArcGIS Desktop 10.4 and later.
+Polar stereographic variant B shares implementation with the stereographic variant but matches the EPSG parameter definitions. The standard parallel with no scale distortion can be specified with the standard parallel parameter. The origin of grid coordinates is at the pole. It is available in ArcGIS Pro 1.2 and later and in ArcGIS Desktop 10.4 and later.
+Polar stereographic variant C shares implementation with the stereographic variant but matches the EPSG parameter definitions. The standard parallel with no scale distortion can be specified with the standard parallel parameter. The origin of grid coordinates is at the intersection of the standard parallel with the longitude of origin. It is available in ArcGIS Pro 1.2 and later and in ArcGIS Desktop 10.4 and later.
+Limitations
+The stereographic projection is limited to showing only about three-quarters of the planet. The antipodal point of the projection's center cannot be shown in any aspect, which means that in a polar aspect, the opposite pole cannot be projected and shown on the map. Due to enormous distortion, the use of this projection is normally limited to one hemisphere.
+Parameters
+Stereographic parameters are as follows:
+False Easting
+False Northing
+Central Meridian
+Scale Factor
+Latitude Of Origin
+Stereographic North Pole parameters are as follows:
+False Easting
+False Northing
+Central Meridian
+Standard Parallel 1
+Stereographic South Pole parameters are as follows:
+False Easting
+False Northing
+Central Meridian
+Standard Parallel 1
+Stereographic auxiliary sphere parameters are as follows:
+False Easting
+False Northing
+Central Meridian
+Scale Factor
+Latitude Of Origin
+Auxiliary Sphere Type, with values as follows:
+0 = Use semimajor axis of the geographic coordinate system
+1 = Use semiminor axis
+2 = Calculate and use authalic radius
+3 = Use authalic radius and convert geodetic latitudes to authalic latitudes
+Note:
+If the geographic coordinate system uses a sphere, the Auxiliary Sphere Type uses the radius of the sphere in all four cases.
+Polar stereographic variant A parameters are as follows:
+False Easting
+False Northing
+Longitude of Origin
+Scale Factor
+Latitude Of Origin
+Polar stereographic variant B parameters are as follows:
+False Easting
+False Northing
+Longitude of Origin
+Standard Parallel 1
+Polar stereographic variant C parameters are as follows:
+False Easting
+False Northing
+Longitude of Origin
+Standard Parallel 1
+Universal Polar Stereographic
+UPS maps areas north of 84 degrees north and south of 80 degrees south that aren't included in the UTM coordinate system. There are two coordinate systems centered either on the north or south pole, covering the Arctic and Antarctic regions.
+The meridians are projected as straight lines originating at the pole. Lines of latitude are concentric circles. The distance between circles increases away from the central pole. The latitude of true scale, 81°06'52.3" north or south, corresponds to a scale factor of 0.994 at the pole. The origin at the intersection of meridians is assigned a false easting and false northing of 2,000,000 meters. The UPS map is normally limited to 84 degrees north in the north polar aspect and 80 degrees south in the south polar aspect.
+Sources
+Snyder, J. P. (1987).
+Map Projections: A Working Manual. U.S. Geological Survey Professional Paper 1395.
+Washington, DC: United States Government Printing Office.
+Snyder, J. P. and Voxland, P. M. (1989).
+An Album of Map Projections. U.S. Geological Survey Professional Paper 1453.
+Washington, DC: United States Government Printing Office.
+The Universal Grids and the Transverse Mercator and Polar Stereographic Map Projections.
+NGA.SIG.0012_2.0.0_UTMUPS (2014).
+https://earth-info.nga.mil/
+. (Accessed 2 February 2026)
+Back to top

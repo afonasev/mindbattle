@@ -1,0 +1,693 @@
+{
+  "cycle": 1,
+  "baselineCommit": "9d5b0388539e3be03ddcc3b98e9dc2ce597dd174",
+  "readerNativeId": "01a13d91-e997-7461-bdfd-b102c4c5cd43",
+  "scopeIds": [
+    "maps-cartography-spot-elevation",
+    "maps-cartography-choropleth-shading",
+    "maps-cartography-dot-density",
+    "maps-cartography-isoline-value",
+    "maps-cartography-flow-map",
+    "maps-cartography-latitude-ns",
+    "maps-cartography-longitude-ew",
+    "maps-cartography-utm-zones",
+    "maps-cartography-elevation-vertical"
+  ],
+  "entries": [
+    {
+      "id": "maps-cartography-spot-elevation",
+      "beforeCard": {
+        "id": "maps-cartography-spot-elevation",
+        "difficulty": "medium",
+        "prompt": "На топокарте горизонтали подписаны 700 м и 720 м. Между ними у знака × стоит число 712 м, причём горизонталь через знак не проходит. Что можно заключить о месте знака?",
+        "answers": [
+          {
+            "text": "Все точки ближайшей горизонтали имеют отметку 712 м.",
+            "note": "Контурная линия, в отличие от точечной отметки, объединяет множество мест одной высоты."
+          },
+          {
+            "text": "В самой отмеченной точке высота указана как 712 м.",
+            "note": "USGS показывает spot elevation отдельным точечным знаком, не протяжённой линией."
+          },
+          {
+            "text": "Разность высот соседних горизонталей равна 12 м.",
+            "note": "Сечение рельефа — разность высот соседних линий, которую задаёт легенда карты."
+          },
+          {
+            "text": "Знак × является геодезическим репером с опубликованной контрольной отметкой.",
+            "note": "На карте репер обычно обозначают специальным BM/control symbol, отдельно от spot elevation."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Число у знака × относится к конкретному отмеченному месту и даёт его высоту 712 м. Оно не задаёт отметку целой горизонтали и само по себе не обозначает геодезический репер.",
+        "source": {
+          "title": "USGS: Topographic Map Symbols",
+          "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "065695444bcdf83f734e8435fdb3631ea581a55a2195432e550a002292435da8",
+      "defects": [
+        {
+          "field": "difficulty/prompt",
+          "defect": "Фактическая задача чтения явно названной высоты остаётся easy при frozen medium; сценарные числа 700/720 не участвуют в решении."
+        },
+        {
+          "field": "answers[1].note",
+          "defect": "Correct-note — attribution плюс повтор противопоставления точки и линии, уже содержащегося в prompt/key."
+        },
+        {
+          "field": "answers[1].note, answers[3].note",
+          "defect": "Необъяснённые spot elevation и BM/control symbol; привязка автора к p2 ошибочна: Spot elevation находится на p3."
+        }
+      ],
+      "actualPeers": [
+        {
+          "id": "maps-cartography-contour-line",
+          "currentCardSHA256": "088bdcd0ed53c51fc37538a2cdd0364e4001556dd84b853fc245e87a396f501e",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-contour-line",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-benchmark",
+          "currentCardSHA256": "ff5cc63c684ffc7d38f6bc7c336549411cab71c4e919c9179e6529fa53f6ae31",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-benchmark",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-index-contour",
+          "currentCardSHA256": "c8fb337a35ab18692ee8a47c6c3baf33caf56ec2e8110ac6720dff7cd943948c",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-index-contour",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-choropleth-shading",
+      "beforeCard": {
+        "id": "maps-cartography-choropleth-shading",
+        "difficulty": "medium",
+        "prompt": "В районном отчёте долю домов без водопровода разбили на классы 0–5%, 5–10% и 10–15%; полигоны окрашены от светлого к тёмному. У двух тёмных районов точные доли разные. Что означает одинаковый тёмный цвет?",
+        "answers": [
+          {
+            "text": "В обоих районах одинаковое абсолютное число домов без водопровода.",
+            "note": "Окраска показывает долю на территорию; число домов дополнительно не закодировано."
+          },
+          {
+            "text": "Обе доли попали в один высокий интервал, но их точные значения могут различаться.",
+            "note": "Градуированная цветовая шкала присваивает один цвет диапазону значений класса."
+          },
+          {
+            "text": "Тёмная площадь полигона сама по себе пропорциональна доле показателя.",
+            "note": "В graduated colors цвет варьируется, а размер polygon symbols не кодирует числовое значение."
+          },
+          {
+            "text": "Оба района принадлежат одной категории без числового порядка.",
+            "note": "Уникальные значения предназначены для отдельных категорий; здесь цвета упорядочены по числовым интервалам."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "В этой карте цвет обозначает класс нормированной доли: одинаковый тёмный оттенок означает попадание в один диапазон, а не равенство точных значений. Площадь полигона и абсолютное число домов кодировались бы отдельным визуальным способом.",
+        "source": {
+          "title": "Esri ArcGIS Pro: Graduated colors",
+          "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/graduated-colors.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "e3d1afc372e6f7d0d822b9ddcc0236f27f06b3bd6d37140a56f68016b93cd59e",
+      "defects": [
+        {
+          "field": "answers[1].note",
+          "defect": "Correct-note повторяет prompt/key о присвоении цвета диапазону."
+        },
+        {
+          "field": "difficulty/prompt",
+          "defect": "Ответ раскрыт условием про классы и разные точные значения; medium достигнут только длиной сценария."
+        },
+        {
+          "field": "answers[2].note",
+          "defect": "Оставлены английские graduated colors / polygon symbols вместо русского объяснения."
+        },
+        {
+          "field": "author note3 source binding",
+          "defect": "Unclassed colors не источник определения unique-values qualitative categories; есть сохранённый arcgis-unique-values.body, использован reader."
+        }
+      ],
+      "actualPeers": [
+        {
+          "id": "maps-cartography-natural-breaks",
+          "currentCardSHA256": "f7be328f368af60b6d25a0c198955f07e26f97ac1d5508ddfa474e684bd760bd",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-natural-breaks",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-standard-deviation",
+          "currentCardSHA256": "d465fbd9b64ee6727ce9b3f0218bcfaf706a3acdc777a25590e8ab5fd08650b5",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-standard-deviation",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-dot-density",
+          "currentCardSHA256": "3cdd0b66e7b22e7e77865656eccda1a760b24b18cd0cf19ac6650ccc49966998",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-dot-density",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-dot-density",
+      "beforeCard": {
+        "id": "maps-cartography-dot-density",
+        "difficulty": "medium",
+        "prompt": "На двух переписных участках у каждого кружка значение 200 жителей. Участок A содержит 9 точек, B — 14; после повторной расстановки точки сдвинулись внутри полигонов, но количество не изменилось. Какой вывод выдерживает обе карты?",
+        "answers": [
+          {
+            "text": "В B на пять точек больше, то есть ровно на пять жителей.",
+            "note": "Количество dots нельзя считать числом отдельных людей, когда легенда задаёт 200 жителей на точку."
+          },
+          {
+            "text": "В B представлено 2 800 жителей против 1 800 в A; положение кружков не указывает адреса.",
+            "note": "Каждая точка представляет постоянное число объектов, а размещение внутри полигона носит распределительный, не адресный смысл."
+          },
+          {
+            "text": "В B произошло 2 800 новых заселений, поскольку точки переместились при перерисовке.",
+            "note": "Случайная повторная расстановка меняет рисунок размещения, но не означает перемещение реальных жителей."
+          },
+          {
+            "text": "Каждый кружок фиксирует точный дом одного переписного респондента.",
+            "note": "Dot-density точки размещаются по полигону как агрегированная визуализация, не как точные записи адресов."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Значение точки 200 умножается на число точек: A представляет 1 800, B — 2 800 жителей. Перемещение рисунка при повторной расстановке не меняет подсчёт и не раскрывает индивидуальные адреса.",
+        "source": {
+          "title": "Esri ArcGIS Pro: Dot density",
+          "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/dot-density.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "3cdd0b66e7b22e7e77865656eccda1a760b24b18cd0cf19ac6650ccc49966998",
+      "defects": [
+        {
+          "field": "answers[1].note",
+          "defect": "Correct-note повторяет постоянный вес из prompt и отсутствие адресности из key."
+        },
+        {
+          "field": "answers[0].note, answers[3].note",
+          "defect": "Неотредактированные dots / Dot-density в русском тексте."
+        }
+      ],
+      "actualPeers": [
+        {
+          "id": "maps-cartography-choropleth-shading",
+          "currentCardSHA256": "e3d1afc372e6f7d0d822b9ddcc0236f27f06b3bd6d37140a56f68016b93cd59e",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-choropleth-shading",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        },
+        {
+          "id": "maps-cartography-flow-map",
+          "currentCardSHA256": "fff2f1c242679f4e113275bebd05c170d6353df8deafd49f77709f80657d0e6d",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-flow-map",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        },
+        {
+          "id": "maps-cartography-isoline-value",
+          "currentCardSHA256": "a73b57f1979a239dddde6be75a179d9963128183e3464bfa36e6abe12117f472",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-isoline-value",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-isoline-value",
+      "beforeCard": {
+        "id": "maps-cartography-isoline-value",
+        "difficulty": "medium",
+        "prompt": "Метеослужба строит температурный растр по данным станций и проводит линию с подписью 15 °C между ними. Как интерпретировать участок этой линии вне расположения самих станций?",
+        "answers": [
+          {
+            "text": "Он является границей районов, где температура усреднена по административной территории.",
+            "note": "Административные границы описывают деление территории, а не равенство непрерывного измеряемого поля."
+          },
+          {
+            "text": "По интерполированной поверхности вдоль линии значение составляет 15 °C.",
+            "note": "Изотерма соединяет места равной температуры, в том числе между измерительными точками поверхности."
+          },
+          {
+            "text": "Это ряд пикселей, каждый из которых хранит отдельное и не связанное с соседями измерение.",
+            "note": "Растровые значения лежат в ячейках; contour выводится как линия равного значения из непрерывного поля."
+          },
+          {
+            "text": "Равенство 15 °C действует только на ближайшей станции с таким показанием.",
+            "note": "Контур может соединять равные значения между станциями по модели поверхности, а не только совпадающие наблюдения."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Изотерма — изолиния равных значений температурного поля, поэтому интерпретированная температура вдоль её участка равна 15 °C. Это вывод модели непрерывной поверхности, а не утверждение о наличии датчика в каждой точке.",
+        "source": {
+          "title": "Esri ArcGIS Pro: How contouring works",
+          "url": "https://pro.arcgis.com/en/pro-app/3.4/tool-reference/spatial-analyst/how-contouring-works.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "a73b57f1979a239dddde6be75a179d9963128183e3464bfa36e6abe12117f472",
+      "defects": [
+        {
+          "field": "answers[1].note",
+          "defect": "Correct-note пересказывает key/prompt; locator автора о тесных линиях не относится к literal."
+        },
+        {
+          "field": "answers[2].note",
+          "defect": "Необработанное английское contour в русском объяснении."
+        }
+      ],
+      "actualPeers": [
+        {
+          "id": "maps-cartography-contour-line",
+          "currentCardSHA256": "088bdcd0ed53c51fc37538a2cdd0364e4001556dd84b853fc245e87a396f501e",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-contour-line",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-contour-interval",
+          "currentCardSHA256": "f08ef9d831c2a1c7e85d86d96d8e771ca9307508186572cdd4fbc8c30400dc6c",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-contour-interval",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-dot-density",
+          "currentCardSHA256": "3cdd0b66e7b22e7e77865656eccda1a760b24b18cd0cf19ac6650ccc49966998",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-dot-density",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        },
+        {
+          "id": "maps-cartography-flow-map",
+          "currentCardSHA256": "fff2f1c242679f4e113275bebd05c170d6353df8deafd49f77709f80657d0e6d",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-flow-map",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-flow-map",
+      "beforeCard": {
+        "id": "maps-cartography-flow-map",
+        "difficulty": "medium",
+        "prompt": "В таблице поездок указано 40 пассажиров из A в B и 120 из B в C. На flow map ширина линии пропорциональна потоку, стрелки показывают направление. Какой вывод верен?",
+        "answers": [
+          {
+            "text": "A–B имеет больший поток, потому что его линия длиннее на карте.",
+            "note": "Длина нарисованного сегмента не является заданной величиной потока; по условию его кодирует ширина."
+          },
+          {
+            "text": "Поток B–C втрое больше A–B; стрелка показывает направление отдельно от объёма.",
+            "note": "Ширина выражает относительное число перемещений, а стрелки или arrowheads могут задавать направление."
+          },
+          {
+            "text": "Диаметр узла C обязательно равен потоку B–C и заменяет ширину линии.",
+            "note": "Размер узла может кодировать общее движение, входящее в узел и выходящее из него, а не только один поток."
+          },
+          {
+            "text": "Стрелка с направлением B–C означает, что туда переместилось только 120 километров.",
+            "note": "Условие задаёт пассажирский объём потока; стрелка показывает направление, а не единицу расстояния."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Отношение потоков равно 120/40=3, поэтому линия B–C передаёт больший объём. Стрелки задают направление, а ширина кодирует относительное количество перемещений.",
+        "source": {
+          "title": "ICA-Abs: Origin-destination flow maps",
+          "url": "https://ica-abs.copernicus.org/articles/1/351/2019/",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "fff2f1c242679f4e113275bebd05c170d6353df8deafd49f77709f80657d0e6d",
+      "defects": [
+        {
+          "field": "answers[1].note",
+          "defect": "Correct-note повторяет заданное в prompt кодирование ширины и направления; arrowheads не дополнительный факт."
+        },
+        {
+          "field": "answers[3].text",
+          "defect": "«Переместилось 120 километров» семантически нелепый distractor вместо правдоподобной ошибки чтения flow map."
+        },
+        {
+          "field": "prompt, answers[1].note",
+          "defect": "flow map и arrowheads оставлены английскими фрагментами."
+        }
+      ],
+      "actualPeers": [
+        {
+          "id": "maps-cartography-vector-features",
+          "currentCardSHA256": "401eb84aae517951dd87ce709456f97c628a81927b96736fca35d58a5ac3dc79",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-vector-features",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-dot-density",
+          "currentCardSHA256": "3cdd0b66e7b22e7e77865656eccda1a760b24b18cd0cf19ac6650ccc49966998",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-dot-density",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        },
+        {
+          "id": "maps-cartography-isoline-value",
+          "currentCardSHA256": "a73b57f1979a239dddde6be75a179d9963128183e3464bfa36e6abe12117f472",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-isoline-value",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-latitude-ns",
+      "beforeCard": {
+        "id": "maps-cartography-latitude-ns",
+        "difficulty": "medium",
+        "prompt": "Полевой отряд находится на 37° ю. ш. и перемещается строго на север примерно на 444 км по тому же меридиану; примите 111 км на градус широты. Какую широту записать после перехода?",
+        "answers": [
+          {
+            "text": "41° ю. ш.: северное движение увеличивает число градусов южной широты.",
+            "note": "Знак S задаёт южное направление от экватора; движение к северу уменьшает абсолютную южную широту."
+          },
+          {
+            "text": "33° ю. ш.: четыре градуса к северу уменьшают южное удаление от экватора.",
+            "note": "Один градус широты составляет примерно 111 км; 444 км дают четыре градуса."
+          },
+          {
+            "text": "33° с. ш.: после пересечения экватора знак меняется на северный.",
+            "note": "Переход через экватор сменил бы полушарную букву, но 444 км меньше расстояния от 37° ю. ш. до экватора."
+          },
+          {
+            "text": "37° ю. ш.: движение по меридиану меняет долготу, а не широту.",
+            "note": "Меридиан сохраняет долготу; движение по нему меняет угловое положение north/south."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "444 км соответствуют четырём градусам широты. Движение на север уменьшает южное удаление от экватора: 37° южной широты превращается в 33° южной широты, а не пересекает экватор.",
+        "source": {
+          "title": "NOAA Ocean Service: Latitude",
+          "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "0c53dbd9d665b5cd097ab0ed1cfda3bdca5fb950c894839fbe4802589653b119",
+      "defects": [
+        {
+          "field": "answers[1].note",
+          "defect": "Correct-note повторяет111км из prompt и четыре градуса из key."
+        },
+        {
+          "field": "answers[3].note",
+          "defect": "Необработанное north/south вместо русского описания."
+        },
+        {
+          "field": "author note0/note3 bindings",
+          "defect": "У note0 longitude-locator о east/west не доказывает S latitude; note3 привязан к parallels, хотя речь о меридиане."
+        }
+      ],
+      "actualPeers": [
+        {
+          "id": "maps-cartography-equator-zero-lat",
+          "currentCardSHA256": "28c3014ec8bccdaf14dab9a7ebabca9b2476eafa508f9f2ebd38fe9890716f35",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-equator-zero-lat",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-parallel-latitude",
+          "currentCardSHA256": "688f204436fcad67719ee07dda851e6bc450b6961ece77dc1cb876c65c614665",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-parallel-latitude",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-longitude-ew",
+          "currentCardSHA256": "f61edd3da1ad4a72318dbc0ee4cfd1c375523889615d1d5212993af0b3b91b63",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-longitude-ew",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-longitude-ew",
+      "beforeCard": {
+        "id": "maps-cartography-longitude-ew",
+        "difficulty": "medium",
+        "prompt": "На судне местный солнечный полдень наступил, когда часы Гринвича показывают 14:00. Считая вращение Земли равномерным и 15° долготы за час, какую долготу записать для судна?",
+        "answers": [
+          {
+            "text": "30° в. д.: местный полдень наступил раньше гринвичского времени.",
+            "note": "При 14:00 в Гринвиче там уже позже местного солнечного полудня; восточнее Гринвича местный полдень был бы позже, а не раньше."
+          },
+          {
+            "text": "30° з. д.: разница в два часа соответствует 30° к западу от Гринвича.",
+            "note": "Земля поворачивается на 360° за 24 часа, то есть на 15° за час."
+          },
+          {
+            "text": "2° з. д.: два часа разницы означают два градуса долготы.",
+            "note": "Часы и градусы не равны численно; для перевода используется 15° на каждый час."
+          },
+          {
+            "text": "180° з. д.: любое отличие местного времени от Гринвича указывает на антимеридиан.",
+            "note": "Антимеридиан лежит напротив нулевого меридиана на 180°, а не соответствует любой временной разнице."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Гринвичские часы опережают местный солнечный полдень на два часа, значит судно находится западнее. При 15° за час разница равна 30° западной долготы.",
+        "source": {
+          "title": "NOAA Ocean Service: Longitude",
+          "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "f61edd3da1ad4a72318dbc0ee4cfd1c375523889615d1d5212993af0b3b91b63",
+      "defects": [
+        {
+          "field": "answers[0].note",
+          "defect": "Утверждение «восточнее Гринвича местный полдень был бы позже» неверно:30E →10:00 Greenwich, раньше,30W →14:00,позже."
+        },
+        {
+          "field": "answers[0].text",
+          "defect": "Неясное сравнение «полдень наступил раньше гринвичского времени» следует заменить сравнением двух полудней/показаний."
+        },
+        {
+          "field": "author note0/note2 bindings",
+          "defect": "Locator prime-meridian0 не обосновывает ошибочную временную note0; locator spacing не соответствует note2 про часы/градусы."
+        }
+      ],
+      "actualPeers": [
+        {
+          "id": "maps-cartography-prime-zero-long",
+          "currentCardSHA256": "9e0d5ed15efd77d5ebcd0cb518ea70134b4c099894de4314e667e38aa757123c",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-prime-zero-long",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-parallel-latitude",
+          "currentCardSHA256": "688f204436fcad67719ee07dda851e6bc450b6961ece77dc1cb876c65c614665",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-parallel-latitude",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-latitude-ns",
+          "currentCardSHA256": "0c53dbd9d665b5cd097ab0ed1cfda3bdca5fb950c894839fbe4802589653b119",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-latitude-ns",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        },
+        {
+          "id": "maps-cartography-international-date-line",
+          "currentCardSHA256": "cfcc1bf8c791bb046513161d222781a8f63c3da59342ff48f5d364b3bfb1f922",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-international-date-line",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-utm-zones",
+      "beforeCard": {
+        "id": "maps-cartography-utm-zones",
+        "difficulty": "medium",
+        "prompt": "В базе есть две точки с одинаковыми числовыми координатами easting/northing, но первая записана в зоне UTM 17N, вторая — 18N. Что нужно учесть, прежде чем заключить, что точки совпадают?",
+        "answers": [
+          {
+            "text": "Считать координаты как одну общую сетку: метры делают значения сопоставимыми без зоны.",
+            "note": "UTM использует отдельные продольные зоны; одинаковые числа в разных зонах не гарантируют одинаковое место."
+          },
+          {
+            "text": "Сохранить номер зоны и полушарие: это части пространственной системы координат для этих метровых значений.",
+            "note": "У каждой UTM зоны есть отдельные определения для северного и южного полушария."
+          },
+          {
+            "text": "Преобразовать easting и northing в градусы, просто поставив знак E и N.",
+            "note": "UTM координаты — проецированные линейные величины, а не угловые градусы долготы и широты."
+          },
+          {
+            "text": "Игнорировать зону и назначить UPS, потому что обе координаты выражены в метрах.",
+            "note": "UPS — отдельная система для полярных районов, а не замена зональной UTM-ссылке в обычной широте."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "В UTM численные easting/northing читаются вместе с конкретной шестиградусной зоной и указанием полушария. Зона 17N и 18N — разные локальные проекции, поэтому одинаковые пары чисел сами по себе не означают совпадение мест.",
+        "source": {
+          "title": "Esri ArcGIS Pro SDK: CreateWgs84UtmFromLocation",
+          "url": "https://pro.arcgis.com/en/pro-app/3.4/sdk/api-reference/topic18435.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "f697dc1646a04fe21699f5da2e4795946be9f29668e8e8a89f544ed73c732f43",
+      "defects": [
+        {
+          "field": "answers[1].note",
+          "defect": "Correct-note почти дословно раскрывает уже заявленную в key роль полушария как части CRS, без отдельного факта."
+        },
+        {
+          "field": "prompt/answers",
+          "defect": "easting/northing везде без русского названия/пояснения для medium общего каталога."
+        },
+        {
+          "field": "author note0/note2/note3 evidence",
+          "defect": "Latitude не доказывает UTM note0; SDK не даёт явно метрические easting/northing для note2; reader дополнительно связывает p3 USGS и UPS Esri."
+        }
+      ],
+      "actualPeers": [
+        {
+          "id": "maps-cartography-grid-square",
+          "currentCardSHA256": "23dd15ff22b4c1686c2a0811b2f75174e15445adf6595b462b79f33aaf54139a",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-grid-square",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-longitude-ew",
+          "currentCardSHA256": "f61edd3da1ad4a72318dbc0ee4cfd1c375523889615d1d5212993af0b3b91b63",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-longitude-ew",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        },
+        {
+          "id": "maps-cartography-elevation-vertical",
+          "currentCardSHA256": "181297a983914157d738f1cce4392d6179fff771b59e962396da44b6a587a7c4",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-elevation-vertical",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-elevation-vertical",
+      "beforeCard": {
+        "id": "maps-cartography-elevation-vertical",
+        "difficulty": "medium",
+        "prompt": "GNSS записал h=34,7 м относительно эллипсоида WGS 84. Для проектного отчёта требуется H относительно геоида и вертикального датума NAVD 88; широта и долгота уже заданы в нужной системе. Что преобразовать?",
+        "answers": [
+          {
+            "text": "Широту: геоид задаёт положение на север или юг.",
+            "note": "Геоид используется как вертикальная reference surface; latitude остаётся горизонтальным угловым компонентом."
+          },
+          {
+            "text": "Высоту: перевести ellipsoidal h в orthometric H с учётом модели и целевого вертикального датума.",
+            "note": "VDatum distinguishes ellipsoidal and orthometric heights and can transform among vertical datum references."
+          },
+          {
+            "text": "Долготу: сменить E/W, потому что h записана относительно эллипсоида.",
+            "note": "Долгота задаёт горизонтальное положение east/west; условие фиксирует эти координаты."
+          },
+          {
+            "text": "Координаты UTM: easting/northing заменить высотой H.",
+            "note": "UTM easting/northing describe horizontal projected position; H is a separate vertical value."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Нужно преобразовать вертикальную компоненту: ellipsoidal h относится к эллипсоиду, а orthometric H — к геоидальной/гравитационной опоре и указанному вертикальному датуму. Горизонтальные координаты в условии уже правильны.",
+        "source": {
+          "title": "NOAA VDatum: A tutorial on datums",
+          "url": "https://vdatum.noaa.gov/docs/datums.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "181297a983914157d738f1cce4392d6179fff771b59e962396da44b6a587a7c4",
+      "defects": [
+        {
+          "field": "answers[1].note",
+          "defect": "Полностью английская correct-note повторяет типы высоты/преобразование из prompt/key, не добавляя факта."
+        },
+        {
+          "field": "prompt/answers/explanation",
+          "defect": "Неотредактированное смешение ellipsoidal/orthometric/reference surface/latitude/east-west/easting-northing; note3 целиком английская."
+        },
+        {
+          "field": "difficulty/prompt",
+          "defect": "Число34,7 не используется; prompt исключает горизонтальные координаты и уже требует вертикальнуюH. Жаргон не создаёт medium-операции."
+        },
+        {
+          "field": "prompt/explanation precision",
+          "defect": "Нужна аккуратная формулировка NAVD88: источник прямо отличает его реализацию от ideal global geoid; нельзя подразумевать точное тождество."
+        }
+      ],
+      "actualPeers": [
+        {
+          "id": "maps-cartography-geoid",
+          "currentCardSHA256": "887ddf5634824d6a19456fcad69d2bfda0dc2f24bceea73e14f21d34ae227c98",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-geoid",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-datum",
+          "currentCardSHA256": "5492a0dac02a2cfb250baffb1879f4086e572f2dff9a6b0af1127a95ca4c2661",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-datum",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-benchmark",
+          "currentCardSHA256": "ff5cc63c684ffc7d38f6bc7c336549411cab71c4e919c9179e6529fa53f6ae31",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-benchmark",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": true
+        },
+        {
+          "id": "maps-cartography-utm-zones",
+          "currentCardSHA256": "f697dc1646a04fe21699f5da2e4795946be9f29668e8e8a89f544ed73c732f43",
+          "actualCardEvidence": "evidence/actual-peers.json#maps-cartography-utm-zones",
+          "bothAuthorVersionsEvidence": "evidence/peer-review-input.json",
+          "historicalAuthorCurrentIsActual": false
+        }
+      ]
+    }
+  ],
+  "excludeAlreadyPassed": [
+    "maps-cartography-index-contour",
+    "maps-cartography-international-date-line"
+  ],
+  "frozen": [
+    "ID",
+    "topic",
+    "order",
+    "difficulty",
+    "correctIndex"
+  ],
+  "allTextFieldsMutableSourceBacked": true,
+  "sourceIndex": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-read-index.json",
+  "qualityCredit": 0,
+  "next": "Fresh source author one substantive cycle when capacity; exact newCURRENT/affected19 and retained reader. No unchanged second cycle; real source/level gaps -> HOLD0."
+}
