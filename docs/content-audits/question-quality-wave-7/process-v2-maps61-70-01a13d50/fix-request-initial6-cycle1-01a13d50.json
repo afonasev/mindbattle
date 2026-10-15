@@ -1,0 +1,351 @@
+{
+  "cycle": 1,
+  "baselineCommit": "c2e3283d49eccabbc5ef5c13b7c9f738ae82af72",
+  "readerNativeId": "01a13e09-0c53-75d0-a313-5fe2742bd56d",
+  "readerReceipt": "docs/content-audits/question-quality-wave-7/process-v2-maps61-70-01a13d50/independent-initial6-01a13d50/receipt.json",
+  "scopeIds": [
+    "maps-cartography-vector-features",
+    "maps-cartography-raster-cells",
+    "maps-cartography-attribute-table",
+    "maps-cartography-gnss-positioning",
+    "maps-cartography-total-station",
+    "maps-cartography-lidar-laser"
+  ],
+  "entries": [
+    {
+      "id": "maps-cartography-vector-features",
+      "beforeCard": {
+        "id": "maps-cartography-vector-features",
+        "difficulty": "medium",
+        "prompt": "На карте транспортной сети остановки нужны как отдельные точки, маршруты — как линии, а зоны обслуживания — как полигоны; все объекты должны иметь связанные поля. Какой тип слоя это позволяет?",
+        "answers": [
+          {
+            "text": "Растровый слой",
+            "note": "Растр хранит значения в ячейках регулярной сетки, например высоту или земной покров."
+          },
+          {
+            "text": "Слой тайлов",
+            "note": "Учебный материал Esri относит тайлы к возможному содержимому карты-слоя; этот вариант не задаёт перечисленные геометрии объектов."
+          },
+          {
+            "text": "Векторный слой",
+            "note": "У каждого векторного слоя Esri есть отдельная таблица атрибутов, которую можно открыть кнопкой Show Table."
+          },
+          {
+            "text": "Слой изображений",
+            "note": "Изображение в ГИС может выступать растровым слоем; пиксели изображения не являются записями перечисленных остановок, маршрутов и зон."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Для отдельных остановок, маршрутов и зон подходит векторное представление: Esri связывает точки, линии и полигоны с таблицами атрибутов. В её примерах страны — полигоны, города — точки, реки — линии.",
+        "source": {
+          "title": "Esri, Working with GIS Layers",
+          "url": "https://www.esri.com/content/dam/esrisites/en-us/media/pdf/teach-with-gis/working-with-gis-layers.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "e3dc6125a5c027b2698d73a5cd5721b66804dbc206c2351b592ce54d29bdeda8",
+      "verdict": "FIX",
+      "defects": [
+        {
+          "code": "ABSOLUTE_MEDIUM",
+          "field": "prompt_ordered_answers_key",
+          "finding": "Stops/points, routes/lines and areas/polygons give the defining vector geometries verbatim; linked fields repeat the same textbook relation. No competing constraint or application decision beyond naming vector.",
+          "fixCycle1Request": "Replace definition recognition with a genuine applied choice involving competing constraints; retain frozen id/topic/order/medium/key. Correct notes alone cannot repair difficulty."
+        },
+        {
+          "code": "DISTRACTOR_CATEGORY_AND_NOTE",
+          "field": "answer1/note1",
+          "finding": "Tiles can encode vectors; bare layer categories overlap. Note merely cites source taxonomy and asserts missing geometries; no useful new property is established. Generic vector as a model is acceptable, but do not imply a single homogeneous feature class stores every geometry.",
+          "fixCycle1Request": "Specify representation versus storage level and use genuinely comparable alternatives with substantive supported notes."
+        }
+      ],
+      "sourceReview": "Entire four relevant primary sections read; per-option gaps are not covered by author assertions. No editorial/source PASS awarded.",
+      "absoluteMedium": {
+        "pass": false,
+        "ground": "Stops/points, routes/lines and areas/polygons give the defining vector geometries verbatim; linked fields repeat the same textbook relation. No competing constraint or application decision beyond naming vector."
+      }
+    },
+    {
+      "id": "maps-cartography-raster-cells",
+      "beforeCard": {
+        "id": "maps-cartography-raster-cells",
+        "difficulty": "medium",
+        "prompt": "Нужно построить поверхность, где каждый участок сетки хранит одно значение уклона, а затем выполнить вычисления между соседними ячейками. Какую структуру данных выбрать?",
+        "answers": [
+          {
+            "text": "Точечный векторный слой",
+            "note": "Точечный слой хранит отдельные точечные объекты; ячейки регулярной сетки ему не соответствуют."
+          },
+          {
+            "text": "Полигональный векторный слой",
+            "note": "Полигональный слой задаёт отдельные области геометрией, а не матрицей соседних ячеек."
+          },
+          {
+            "text": "Растровый слой",
+            "note": "В примере Esri растр может хранить высоту, температуру или тип земного покрова в каждой ячейке."
+          },
+          {
+            "text": "Таблица атрибутов объектов",
+            "note": "Таблица атрибутов содержит описательные поля объектов слоя, а не сеточную поверхность."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Растр организован как матрица ячеек со значениями, поэтому подходит для поверхности с вычислениями между соседними ячейками. В Esri примерах значениями ячеек служат высота, температура и тип земного покрова.",
+        "source": {
+          "title": "Esri, Working with GIS Layers",
+          "url": "https://www.esri.com/content/dam/esrisites/en-us/media/pdf/teach-with-gis/working-with-gis-layers.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "ba0e8b086bccc929c87543874fab31dfea6387e2cdba5e60015095662aa5b004",
+      "verdict": "HOLD",
+      "defects": [
+        {
+          "code": "ABSOLUTE_MEDIUM",
+          "field": "prompt_ordered_answers_key",
+          "finding": "“сетка”, one value per cell and neighbouring cells recite the raster definition. Slope is a substituted example, not a reasoning step; no calculation or choice of neighbourhood operation.",
+          "fixCycle1Request": "Replace definition recognition with a genuine applied choice involving competing constraints; retain frozen id/topic/order/medium/key. Correct notes alone cannot repair difficulty."
+        },
+        {
+          "code": "OVERBROAD_NOTE",
+          "field": "note0",
+          "finding": "Point features can be arranged at regular cell centres; source does not prove that regular-grid cells cannot correspond to point features.",
+          "fixCycle1Request": "Contrast native raster matrix/neighbour topology with point samples, rather than deny grid representation."
+        }
+      ],
+      "sourceReview": "Entire four relevant primary sections read; per-option gaps are not covered by author assertions. No editorial/source PASS awarded.",
+      "absoluteMedium": {
+        "pass": false,
+        "ground": "“сетка”, one value per cell and neighbouring cells recite the raster definition. Slope is a substituted example, not a reasoning step; no calculation or choice of neighbourhood operation."
+      }
+    },
+    {
+      "id": "maps-cartography-attribute-table",
+      "beforeCard": {
+        "id": "maps-cartography-attribute-table",
+        "difficulty": "medium",
+        "prompt": "Редактор выбрал полигон парка и хочет увидеть его площадь и тип покрытия, связанные с этим объектом. Какой компонент слоя открыть?",
+        "answers": [
+          {
+            "text": "Геометрию полигона",
+            "note": "Геометрия полигона задаёт форму объекта на карте; описательные значения связаны с ней в таблице."
+          },
+          {
+            "text": "Пиксели растрового слоя",
+            "note": "Значения ячеек растра описывают сетку поверхности, а не поля выбранного парка."
+          },
+          {
+            "text": "Таблицу атрибутов",
+            "note": "В примере Esri в таблице слоя городов есть атрибут Country, а у слоя рек — System."
+          },
+          {
+            "text": "Легенду карты",
+            "note": "Легенда помогает интерпретировать символы карты, но не является таблицей записи парка."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Площадь и тип покрытия здесь рассматриваются как поля, связанные с выбранным полигоном, поэтому редактору нужна таблица атрибутов. В учебном материале Esri у каждого векторного слоя есть собственная таблица.",
+        "source": {
+          "title": "Esri, Working with GIS Layers",
+          "url": "https://www.esri.com/content/dam/esrisites/en-us/media/pdf/teach-with-gis/working-with-gis-layers.pdf",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "15bf09dce754f472e32ce2e0d1931a749302d6f03501e088107303d3a68793f7",
+      "verdict": "HOLD",
+      "defects": [
+        {
+          "code": "ABSOLUTE_MEDIUM",
+          "field": "prompt_ordered_answers_key",
+          "finding": "“поля, связанные с ... объектом” is the definition of attribute table. Park/coverage decoration does not require interpreting a record or relation.",
+          "fixCycle1Request": "Replace definition recognition with a genuine applied choice involving competing constraints; retain frozen id/topic/order/medium/key. Correct notes alone cannot repair difficulty."
+        }
+      ],
+      "sourceReview": "Entire four relevant primary sections read; per-option gaps are not covered by author assertions. No editorial/source PASS awarded.",
+      "absoluteMedium": {
+        "pass": false,
+        "ground": "“поля, связанные с ... объектом” is the definition of attribute table. Park/coverage decoration does not require interpreting a record or relation."
+      }
+    },
+    {
+      "id": "maps-cartography-gnss-positioning",
+      "beforeCard": {
+        "id": "maps-cartography-gnss-positioning",
+        "difficulty": "medium",
+        "prompt": "При обработке контрольных наблюдений геодезист использует спутниковые данные NOAA CORS, чтобы уточнить трёхмерные координаты и привязать их к NSRS. К какому методу относятся эти наблюдения?",
+        "answers": [
+          {
+            "text": "Тахеометрическая съёмка",
+            "note": "Тахеометр использует угловые и электронные дальномерные измерения с наземного прибора."
+          },
+          {
+            "text": "Тригонометрическое нивелирование",
+            "note": "Тригонометрическое нивелирование получает превышения из вертикальных углов и наклонных расстояний."
+          },
+          {
+            "text": "GNSS-съёмка",
+            "note": "Постобработанные координаты сети NOAA могут иметь точность до нескольких сантиметров по горизонтали и вертикали."
+          },
+          {
+            "text": "Лидарная съёмка",
+            "note": "Лидар измеряет дальность световыми импульсами и получает точки поверхности."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Это съёмка глобальной навигационной спутниковой системой (GNSS): сеть непрерывно действующих референцных станций Национального управления океанических и атмосферных исследований США (NOAA) предоставляет спутниковые наблюдения для трёхмерного позиционирования. Постобработанные координаты помогают привязать работу к Национальной пространственной системе отсчёта США (NSRS), а точность может достигать нескольких сантиметров по горизонтали и высоте.",
+        "source": {
+          "title": "NOAA National Geodetic Survey, The NOAA CORS Network",
+          "url": "https://geodesy.noaa.gov/CORS/",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "3a62bfa5574614c57aec7d7a1dc22a569991248a89c633499cba39d64cfa16e0",
+      "verdict": "FIX",
+      "defects": [
+        {
+          "code": "ABSOLUTE_MEDIUM",
+          "field": "prompt_ordered_answers_key",
+          "finding": "“спутниковые данные” directly distinguishes GNSS from all three non-satellite answers. CORS/NSRS/3D terminology adds obscurity, not reasoning.",
+          "fixCycle1Request": "Replace definition recognition with a genuine applied choice involving competing constraints; retain frozen id/topic/order/medium/key. Correct notes alone cannot repair difficulty."
+        }
+      ],
+      "sourceReview": "Entire four relevant primary sections read; per-option gaps are not covered by author assertions. No editorial/source PASS awarded.",
+      "absoluteMedium": {
+        "pass": false,
+        "ground": "“спутниковые данные” directly distinguishes GNSS from all three non-satellite answers. CORS/NSRS/3D terminology adds obscurity, not reasoning."
+      }
+    },
+    {
+      "id": "maps-cartography-total-station",
+      "beforeCard": {
+        "id": "maps-cartography-total-station",
+        "difficulty": "medium",
+        "prompt": "При точной съёмке с известного пункта нужно получить зенитный угол и наклонное расстояние до отражателя. Какой прибор сочетает угловые наблюдения со встроенным электронным дальномером?",
+        "answers": [
+          {
+            "text": "GNSS-приёмник",
+            "note": "Приёмник определяет положение по спутниковым сигналам, без измерения угла и дальности до отражателя."
+          },
+          {
+            "text": "Нивелир",
+            "note": "Нивелир предназначен для измерения превышений, а не сочетания углового визирования и электронной дальности."
+          },
+          {
+            "text": "Электронный тахеометр",
+            "note": "Для точных работ USGS рекомендует угловую неопределённость не более ±5″ и электронный дальномер не хуже ±3 мм + 3 ppm."
+          },
+          {
+            "text": "Воздушная лидарная система",
+            "note": "Воздушный лидар сканирует поверхность лазерными импульсами с платформы, а не с известного наземного пункта."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Это электронный тахеометр: прибор на известном пункте измеряет направления и электронные дальности до отражателя. Геологическая служба США рекомендует для точных полевых ходов усреднять зенитные углы и наклонные расстояния в прямом и обратном положениях прибора.",
+        "source": {
+          "title": "USGS, Procedures and best practices for trigonometric leveling",
+          "url": "https://www.usgs.gov/publications/procedures-and-best-practices-trigonometric-leveling-us-geological-survey",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "f92a55e01e09c30a6f780dab95cddead2fca57e1e54c18a4efe404dcf4f667f5",
+      "verdict": "HOLD",
+      "defects": [
+        {
+          "code": "ABSOLUTE_MEDIUM",
+          "field": "prompt_ordered_answers_key",
+          "finding": "“сочетает угловые наблюдения со встроенным электронным дальномером” is the total-station definition. Known station/reflector do not affect an inference.",
+          "fixCycle1Request": "Replace definition recognition with a genuine applied choice involving competing constraints; retain frozen id/topic/order/medium/key. Correct notes alone cannot repair difficulty."
+        },
+        {
+          "code": "SOURCE_SCOPE",
+          "field": "note2/explanation",
+          "finding": "USGS L13 recommends these instrument uncertainties for trigonometric levelling; current “для точных работ/точных полевых ходов” broadens that scope. Numbers and F1/F2 are supported; universal precise-work recommendation is not.",
+          "fixCycle1Request": "Explicitly restrict USGS recommendation to precision trigonometric levelling."
+        }
+      ],
+      "sourceReview": "Entire four relevant primary sections read; per-option gaps are not covered by author assertions. No editorial/source PASS awarded.",
+      "absoluteMedium": {
+        "pass": false,
+        "ground": "“сочетает угловые наблюдения со встроенным электронным дальномером” is the total-station definition. Known station/reflector do not affect an inference."
+      }
+    },
+    {
+      "id": "maps-cartography-lidar-laser",
+      "beforeCard": {
+        "id": "maps-cartography-lidar-laser",
+        "difficulty": "medium",
+        "prompt": "Самолёт проходит над побережьем: сканер посылает световые импульсы к поверхности и фиксирует их возврат, чтобы получить высоты и множество пространственных точек. Какой метод применён?",
+        "answers": [
+          {
+            "text": "GNSS-позиционирование",
+            "note": "GNSS определяет положение по спутниковым данным и может геопривязать платформу, но не измеряет отражённый лазерный импульс."
+          },
+          {
+            "text": "Съёмка тахеометром",
+            "note": "Тахеометр выполняет угловые и дальномерные наблюдения с наземной станции."
+          },
+          {
+            "text": "Лидарная съёмка",
+            "note": "На самолёте GPS определяет координаты x, y, z, а инерциальная система отслеживает тангаж, крен и курс."
+          },
+          {
+            "text": "Тригонометрическое нивелирование",
+            "note": "Тригонометрическое нивелирование использует углы и наклонные дальности между наземными точками."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Это лидарная съёмка — измерение дальности световыми импульсами. Национальное управление океанических и атмосферных исследований США (NOAA) указывает, что воздушная система также использует глобальную систему позиционирования и инерциальную навигацию, чтобы определить положение и ориентацию платформы.",
+        "source": {
+          "title": "NOAA National Geodetic Survey, Light Detection and Ranging",
+          "url": "https://www.ngs.noaa.gov/RESEARCH/RSD/main/lidar/lidar.shtml",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeHash": "ba6f95320ee2f96228f64e33b4276edb00f39284697688de6fb4c9bc5e7149af",
+      "verdict": "FIX",
+      "defects": [
+        {
+          "code": "ABSOLUTE_MEDIUM",
+          "field": "prompt_ordered_answers_key",
+          "finding": "Light pulses and their return directly name lidar’s defining mechanism. Aircraft/coast context adds no competing measurement requirement.",
+          "fixCycle1Request": "Replace definition recognition with a genuine applied choice involving competing constraints; retain frozen id/topic/order/medium/key. Correct notes alone cannot repair difficulty."
+        }
+      ],
+      "sourceReview": "Entire four relevant primary sections read; per-option gaps are not covered by author assertions. No editorial/source PASS awarded.",
+      "absoluteMedium": {
+        "pass": false,
+        "ground": "Light pulses and their return directly name lidar’s defining mechanism. Aircraft/coast context adds no competing measurement requirement."
+      }
+    }
+  ],
+  "neededEvidence": [
+    {
+      "id": "maps-cartography-attribute-table",
+      "field": "note3",
+      "needed": "Primary substantive legend-function passage, not heading mentioning legends, if note retained."
+    },
+    {
+      "id": "maps-cartography-total-station",
+      "field": "note1",
+      "needed": "Primary definition of conventional level if current absolute contrast retained."
+    },
+    {
+      "id": "maps-cartography-raster-cells",
+      "field": "prompt/explanation/note0",
+      "needed": "Primary raster neighbourhood-operations context and point-grid representation distinction for a revised applied task."
+    }
+  ],
+  "frozen": [
+    "ID",
+    "topic",
+    "order",
+    "medium",
+    "correctIndex"
+  ],
+  "allTextFieldsMutable": true,
+  "qualityCredit": 0,
+  "designRoute": "Use applied interpretation/competing constraints, not method-name recognition dressed in a scene. All text/key-answer semantics may change within frozen slot/topic; no human policy decision needed. Supplied synthetic records/numbers/algorithm conditions may be explicit prompt inputs; external factual assertions require personally read completeprimary. Choose professional samecategory alternatives and correct-note useful additionalfact; resolve actual crosspeer leakage.",
+  "sourceCapture": "Reuse complete exact extractedcontext, not oldparaphrase or partial PDF. New bounded officialsource only when needed; no Python missingCA loop/TLSbypass. Save exact full returned toolresponse, provenance/coverage/byteSHA; not paraphrase.",
+  "next": "Luna medium author exact6group/4variant finalbindings; coordinatorapply/affectedchecks; retained independent final CURRENT6; unresolvedterminalHOLD"
+}
