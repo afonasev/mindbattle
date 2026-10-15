@@ -1,0 +1,60 @@
+{
+  "readerReceipt": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-hard5-initial-01a13d50/receipt.json",
+  "receiptSHA256": "c8c8e5d0501de6e4c52ad8f9a427ae4f9a507e49f780a2204d85d9c44e7de078",
+  "decisions": [
+    {
+      "id": "maps-cartography-ellipsoid",
+      "status": "FIX",
+      "hash": "27e1c268c0821074c03d7dbbad71f13b36ed82ce2d5add22a9df49f0319b8830",
+      "defects": [
+        "Недостаточная абсолютная hard-сложность: определения h/H плюс явно заданная непостоянность N; два дистрактора содержат грубую подмену понятий.",
+        "CURRENT elevation-vertical прямо даёт ellipsoidal h → orthometric H с моделью; отличие от medium сводится к уже сообщённым двум N."
+      ]
+    },
+    {
+      "id": "maps-cartography-datum",
+      "status": "FIX",
+      "hash": "aa69dd9e71adb07f462a14fbca02542bfe699a1f0a34235076b75957b577c584",
+      "defects": [
+        "Недостаточная hard-сложность: единственная профессионально осмысленная процедура противопоставлена категориальным ошибкам.",
+        "CURRENT utm-zones уже учит: одинаковые числовые координаты при разных пространственных ссылках не доказывают совпадение. Ellipsoid/datum notes в hard5 дополнительно раскрывают компонент/систему."
+      ]
+    },
+    {
+      "id": "maps-cartography-benchmark",
+      "status": "FIX",
+      "hash": "0912c53c7b97327a921ad7fc64114662e5bb41b43836786501107bf070fbf76f",
+      "defects": [
+        "Hard отсутствует: prompt и key почти изоморфны, три альтернативы не являются физическими пунктами.",
+        "CURRENT spot-elevation note3 и explanation уже прямо дают отличие BM/control symbol от spot elevation; hard5 key не добавляет необходимой операции.",
+        "Небольшой языковой дефект A0: оборот «любая поверхность близкая к среднему уровню моря» требует обособления «близкая ...»."
+      ]
+    },
+    {
+      "id": "maps-cartography-gnomonic-great",
+      "status": "FIX",
+      "hash": "f4fc1e53ecfeeb3cbadc4eb570940b1edeb625e6b2ac9cb6ae2e72809d1887ea",
+      "defects": [
+        "Не достигает hard: ключ сообщает прямо требуемое свойство, а две альтернативы строятся на одной ложной универсализации.",
+        "Два дистрактора C/D функционально равносильны в решении: оба ошибочно заключают, что все большие круги прямые; различаются только вводным свойством.",
+        "Прямая cross-card утечка: CURRENT orthographic-space.note0, lambert-azimuthal.note0 и stereographic-conformal.note0 называют гномоническую и прямые большие круги."
+      ]
+    },
+    {
+      "id": "maps-cartography-stereographic-conformal",
+      "status": "FIX",
+      "hash": "5374d38763632fe96b27b224e06d02e332ea63f386d723f839a5b2df22335ebe",
+      "defects": [
+        "Недостаточная hard-сложность: условие и B повторяют local angles, а другие ответы содержат легко отделимые ложные свойства.",
+        "Correct note: «антипод точки проекции» неоднозначно/неверно. Description задаёт perspective point на стороне, противоположной точке касания; Limitations запрещает антипод ЦЕНТРА карты. Антипод perspective point — как раз центр, который отображается. Нужно «антипод центра проекции/карты».",
+        "Prompt не требует радиальных расстояний, но D оправдывается «полярной картой с радиальными расстояниями»: это внесённый альтернативой критерий. Лучше сопоставлять варианты по одному явно заданному условию.",
+        "CURRENT orthographic-space.note1 и lambert-azimuthal.note1 прямо называют стереографическую равноугольной; CURRENT gnomonic.note0 также раскрывает ключ."
+      ]
+    }
+  ],
+  "adjudication": "Agree: frozen hard is not established by name/definition matching or category-error distractors. All5 need one addressed cycle; stereographic center term also incorrect. Source/QA integrity not quality credit.",
+  "qualityCredit": 0,
+  "CURRENT": 668,
+  "remaining": 1332,
+  "fixRequest": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/fix-request-hard5-initial-cycle1.json"
+}

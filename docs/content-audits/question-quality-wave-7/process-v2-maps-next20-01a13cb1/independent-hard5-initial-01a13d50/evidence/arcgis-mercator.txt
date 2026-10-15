@@ -1,0 +1,64 @@
+﻿
+Mercator | ArcGIS Pro documentation
+Skip to main content
+ArcGIS Pro
+Table of Contents
+Mercator
+Description
+Mercator is a conformal cylindrical map projection that was originally created to display accurate compass bearings for sea travel. An additional feature of this projection is that all local shapes are accurate and correctly defined at infinitesimal scale.
+It was presented by Gerardus Mercator in 1569. The Web Mercator variant of the projection is the de facto standard for web maps and online services. It is available in ArcGIS Pro 1.0 and later and in ArcGIS Desktop 8.0 and later.
+The Mercator cylindrical map projection is shown centered on Greenwich.
+Projection properties
+The subsections below describe the Mercator projection properties.
+Graticule
+Mercator is a cylindrical projection. The meridians are vertical lines, parallel to each other, and equally spaced, and they extend to infinity when approaching the poles. The lines of latitude are horizontal straight lines, perpendicular to the meridians and the same length as the equator, but they become farther apart toward the poles. The poles project to infinity and cannot be shown on the map. The graticule is symmetric across the equator and the central meridian.
+Distortion
+Mercator is a conformal map projection. Directions, angles, and shapes are maintained at infinitesimal scale.
+Any straight line drawn on this projection represents an actual compass bearing. These true direction lines are rhumb lines and generally do not describe the shortest distance between points.
+Distances are true along the equator or along the secant latitudes (standard parallels).
+Area is increasingly distorted toward the polar regions. For example, although Greenland is only one-eighth the size of South America, Greenland appears to be larger than South America in the Mercator projection. Distortion values are the same along a particular parallel and they are symmetric across the equator and the central meridian.
+Usage
+The projection is appropriate for large-scale mapping of the areas near the equator such as Indonesia and parts of the Pacific Ocean. Due to its property of straight rhumb lines, it is recommended for standard sea navigation charts. Its variant, the Web Mercator projection, is standard for web maps and online services. The projection is often misused for world maps, wall charts, and thematic mapping on web maps.
+Variants
+There are four variants available in ArcGIS:
+Mercator is also known as Mercator variant B. It is available in ArcGIS Pro 1.0 and later and in ArcGIS Desktop 8.0 and later.
+Mercator auxiliary sphere does not support the ellipsoid and uses sphere-based equations with a sphere specified by the Auxiliary Sphere Type parameter. The conformal and straight rhumb lines properties are not maintained when the ellipsoid is used in this variant. It is available in ArcGIS Pro 1.0 and later and in ArcGIS Desktop 9.3 and later.
+Mercator variant A differs from variant B only in projection parameters. They share the same algorithm. It is available in ArcGIS Pro 1.2 and later and in ArcGIS Desktop 10.4 and later.
+Mercator variant C differs from variant B only in projection parameters. They share the same algorithm. It is available in ArcGIS Pro 1.2 and later and in ArcGIS Desktop 10.4 and later.
+Limitations
+The poles cannot be represented on the Mercator projection. All meridians can be projected, but the upper and lower limits of latitude are at 89° north and 89° south. When used for web mapping with EPSG:3857, the upper and lower limits of latitude are at approximately 85°03'04.0636" north and south. Large area distortion makes the Mercator projection unsuitable for general geographic world maps and thematic mapping.
+Parameters
+Mercator parameters are as follows:
+False Easting
+False Northing
+Central Meridian
+Standard Parallel 1
+Mercator auxiliary sphere parameters are as follows:
+False Easting
+False Northing
+Central Meridian
+Standard Parallel 1
+Auxiliary Sphere Type, with values as follows:
+0 = use semimajor axis or radius of the geographic coordinate system
+1 = use semiminor axis or radius
+2 = calculate and use authalic radius
+3 = use authalic radius and convert geodetic latitudes to authalic latitudes
+Mercator variant A parameters are as follows:
+False Easting
+False Northing
+Central Meridian
+Scale Factor
+Mercator variant C parameters are as follows:
+False Easting
+False Northing
+Central Meridian
+Standard Parallel 1
+Latitude Of Origin
+Web Mercator Coordinate System
+The Web Mercator coordinate system is also known as Google Web Mercator, Spherical Mercator, WGS 84 Web Mercator, and Pseudo-Mercator. It is the de facto standard for web maps and online services. With this coordinate system, the geodetic coordinates defined on the WGS 84 datum are projected as if they were defined on a sphere, using a sphere-based version of the Mercator projection. The sphere's radius is equal to the WGS 1984 semimajor axis, 6378137.0 meters. Combining geodetic coordinates on the ellipsoid with spherical equations consequently leads to a coordinate system that does not preserve the scale factor in all directions. Therefore, the Web Mercator coordinate system is not conformal, and besides enormous area and distance distortions away from the equator, it also does not project rhumb lines as straight lines.
+Two methods exist for emulating the Mercator projection used by the web services. If the Mercator implementation supports spheroids (ellipsoids), the projected coordinate system must be based on a sphere-based geographic coordinate system. This will force the use of sphere equations. The implementation of Mercator auxiliary sphere has sphere equations only. In addition, it has a projection parameter that identifies what to use for the sphere radius if the geographic coordinate system is ellipsoidal-based. The default value of zero (0) uses the semimajor axis.
+Sources
+Snyder, J. P. (1987). Map Projections: A Working Manual. U.S. Geological Survey Professional Paper 1395. Washington, DC: United States Government Printing Office.
+Snyder, J. P. and Voxland, P. M. (1989). An Album of Map Projections. U.S. Geological Survey Professional Paper 1453. Washington, DC: United States Government Printing Office.
+Battersby, S., Finn, M. P., Usery, E. L. and Yamamoto, K. (2014). "Implications of Web Mercator and Its Use in Online Mapping." Cartographica, The International Journal for Geographic Information and Geovisualization, 49 (2), p. 85-101. DOI: 10.3138/carto.49.2.2313
+Back to top

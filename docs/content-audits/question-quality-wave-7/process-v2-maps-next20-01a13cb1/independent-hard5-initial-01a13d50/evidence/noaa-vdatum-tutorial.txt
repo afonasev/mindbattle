@@ -1,0 +1,166 @@
+NOAA/NOS's VDatum: A tutorial on datums
+noaa.gov
+Vertical Datum Transformation
+Integrating America's Elevation Data
+Home
+About VDatum
+Revision Log
+Download
+Online
+Docs & Support
+Est. of VDatum Uncertainties
+User FAQs
+User Guide
+Command-line Guide
+API Guide
+Datum Tutorial
+Presentations & Publications
+Interpolation and Transformation Grid Format
+Contact Us
+Your browser does not support Javascript!
+A tutorial on Datums
+What datum are my data in?
+Geodetic Datums
+Referenced Ellipsoid
+GEOID
+Horizontal Datum: NAD83, NAD83(1986), NAD27
+Vertical Datum
+Ellipsoidal Datums: NAD83(HARN), NAD83(CORSxx), NAD83(NSRSxx), NAD83(PACPxx), NAD83(MARPxx), ITRFxx, WGS84
+Orthometric Datums: NAVD88, NGVD29, EGM2008, EGM1996, EGM1984
+Tidal Datums: LMSL, MLLW ,MLW, MHW, MHHW, DTL, MTL, LWD
+IGLD85
+What datum are my data in? What datum do I want?
+These are the key questions that need to be answered. A supplier of geospatial data should provide the appropriate metadata, in this case datum identification, to allow its use. If you generate new data, you should probably provide the datum identification along with those new data.
+When dealing with paper maps and charts, the datums are typically listed in the legend of the map. In fact, both horizontal and vertical datum are usually provided. Topographic maps (from USGS, for example) will have elevations referenced to either NAVD 88 or the older NGVD 29. Except for the largest map scales, the horizontal components of WGS 84 and NAD 83 may be considered equivalent. Even if the features are horizontally referenced to NAD 83, this does not mean the vertical datum is a 3-D vertical datum.
+Nautical charts will have depths referred to different tidal surfaces, which may vary from chart to chart. In the United States, Mean Lower Low Water (MLLW) is the typical low water reference surface. Note: to support harbor and river navigation, bridge clearances are typically referenced to mean high water (MHW); not to a low water. Also note that charts (like maps) have a horizontal datum. On a global basis, the International Hydrographic Organization (IHO) designated the use of the World Geodetic System as the universal datum. Since then, the horizontal features have been based on WGS 84 or in other geodetic reference systems which are compatible, such as NAD 83 or the ITRF combined with the GRS80 ellipsoid. Even if the features are horizontally referenced to NAD 83, this does not mean the vertical datum is a 3-D vertical datum.
+When collecting data georeferenced with autonomous GPS, then you are in the WGS 84 (G1150) datum. However, data collection systems may provide the option of output in different datums. If you selected such an option, then your data will probably be in the selected datum.
+If however, you are collecting data georeferenced by augmented GPS, then you are probably in NAD 83 (86). If the augmentation was one of the U.S. Coast Guard Maritime Differential GPS or National Differential GPS (NDGPS) base stations, then those broadcast pseudorange correctors are established using NAD 83 (86) coordinates, and your output coordinates will be in NAD 83 (86). If you are using National CORS data for carrier phase post-processing, and if you are processing with ITRF2000 coordinates, then your output coordinates will be in ITRF2000. As above, augmented GPS data collection systems may provide the option of output in different datums. If you selected such an option, then your data will probably be in the selected datum.
+Geodetic Datum
+As a general definition, a datum is any quantity or set of quantities that may serve as a reference or basis for calculating other quantities. This broad characterization, in turn, leads to two related definitions of a geodetic datum.
+A geodetic datum is a set of constants specifying the coordinate system used for geodetic control.
+A geodetic datum is as defined above, together with the coordinate system and the set of all points and lines whose coordinates, lengths, and directions have been determined by measurement and calculation.
+The first definition is realized, for example, by specificating an ellipsoid and associated origin and orientation information. The second definition, which is prevalent in mapping and charting, is realized, for example, by specification of ellipsoid, origin, and orientation in combination with a self-consistent set of observed reference coordinates. The first definition represents an idealization of a geodetic datum, and the second definition expresses the realization of a geodetic datum.
+Before the advent of manmade satellites, geodetic positions in surveying were determined separately, either horizontally in two-dimensions as latitudes and longitudes, or vertically in the third dimension as heights or depths. The NAD 27 is an example of horizontal geodetic datums; the NGVD 29 and NAVD 88 are the most two common nationwide vertical datum systems.
+Referenced Ellipsoid
+The earth's surface is approximated in size and shape by the geometric surface that is termed an ellipsoid. An ellipsoid is defined by either the semi-major axis (a) and the semi-minor axis (b), or by a and the flattening (f). The following table lists some of the most common ellipsoids:
+The following table lists three common reference ellipsoids in US:
+Name
+Semi-major a (m)
+Semi-minor b (m)
+Inverse flattening 1/f
+Clarke 1866
+6 378 206.4
+6 356 583.8
+294.978 698 2
+Global Reference System 1980 - GRS 80
+6 378 137
+6 356 752.3141
+298.257 222 101
+World Geodetic System 1984 - WGS 84
+6 378 137
+6 356 752.3142
+298.257 223 563
+The center of the Clarke 1866 ellipsoid as employed in the NAD 27 datum is now known to be approximately 236 meters from the center of the GRS 80 as placed by the NAD83 datums.
+The WGS84 ellipsoid differs very slightly from the GRS 80 ellipsoid. The difference in flattening between these two ellipsoids causes a maximum departure of 0.1 millimeter in ellipsoidal height at the Earth's pole. This difference is considered negligible for VDatum.
+Relationship between Clarke 1866, WGS 84, GRS 80 and GeoidThe GRS 80 ellipsoid's origin is approximately 2 meters away from WGS 84 ellipsoid'sThe Clarke 1866 ellipsoid's origin is approximately 236 meters away from WGS 84 ellipsoid's
+GEOID
+The geoid is a specified  equipotential surface, defined in the Earth's gravity field, which best fits, in a least squares sense, global mean sea level (MSL). It is undulate, smooth and continuous, fictitiously extending under the continents at the same level, and by definition perpendicular at any point to the direction of gravity. It should be noted that due to effects such as atmospheric pressure, temperature, prevailing winds and currents, and salinity variations, MSL can depart from an equipotential surface by a meter or more.
+The geoid is a complex, physically based surface, and can vary by up to 100 meters in height from a geocentric ellipsoid. Thus, national and regional vertical datums around the world, which are locally tied to MSL, are significantly different from one another when considered on a global basis. In addition, due to the realization and orthometric height approximations of various vertical datums, other departures at the meter level or more will be found when comparing elevations to a global geoid reference.
+For the United States, the GEOIDxx geoid models as been developed based on observations by NGS . These geoid models (e.g., GEOID 90, GEOID 93, GEOID 96, GEOID 99, GEOID 03, etc.) provide the parameter "N" in the above equation, from which the ellipsoid height from the NAD 83 three dimensional datum can be directly converted to the NAVD 88 orthometric height. Up to date, the GEOID 06 covers only the state of Alaska. More details about NGS geoid models can be found at NOAA/NOS/NGS Geodetic Tool Kit.
+On a global basis, the Earth Gravitational Model (EGM) 1996 was developed to provide an improved WGS 84 spherical harmonic model of the Earth's gravitational potential. EGM 96 is quoted as accurate to better than one meter in gravity surveyed areas. More details about EGM96 model can be viewed at EGM96: The NASA GSFC and NIMA Joint Geopotential Model.
+Horizontal Datum
+A horizontal datum is a reference system for specifying positions on the Earth's surface. Horizontal datums have been defined by specifying the 2-D geometric surface using a reference ellipsoid and six topocentric parameters expressing origin, and orientation.
+NAD83
+The North American Datum of 1983 (NAD 83) was affirmed as the official civilian horizontal datum for US surveying and mapping activities in the United States performed or financed by the Federal Government in June 14, 1989 (Federal Register/Vol. 54, No. 113/Wednesday, June 14, 1989/page 25318).
+More details about NAD 83 datums, please see the Three-dimension (3-D) datum section.
+NAD83(1986)
+The North American Datum of 1983 (1986)
+While NAD 83 is a 3-D reference system (see below), it also serves as the horizontal control datum for the United States, Canada, Greenland and Central America using the Geodetic Reference System 1980 (GRS 80) ellipsoid, an earth-centered reference ellipsoid. The NAD 83 was readjusted in 1986 by the NOAA/NOS/NGS and is referred to as NAD 83 ((1986)). While NAD 83 (1986) is 3-D in scope, NOAA/NOS/NGS adopted only horizontal coordinates (latitude and longitude) for over 99% of the approximately 250,000 stations to readjust the national network. The longitude origin of NAD 83 is the Greenwich Meridian with a north azimuth orientation. NAD 83 (1986) coordinates have an average relative precision of 1:300,000. With increasingly more accurate uses of GPS, the errors and misalignments in NAD 83 (1986) became more noticeable (approached 1m), hence refinements such as High Accuracy Reference Network (HARN) and Continuously Operating Reference Stations (CORS) have been made to correct the inconsistencies in NAD 83(1986).
+NAD83(2011)
+The North American Datum of 1983 (2011)
+NAD83(2011) is a National Geodetic Survey (NGS) realization of the North American Datum of 1983, completed in 2012, that updated coordinates for U.S. passive control stations. Often called National Adjustment of 2011 (NA2011) or NAD83(2011) epoch 2010.00, it provides improved latitude, longitude, and ellipsoid heights aligned with CORS data to better fit the North American tectonic plate
+The North American Datum of 1927
+The NAD 27 is a horizontal datum for the continental United States based on the Clarke ellipsoid of 1866 (Clarke 1866). The fixed datum reference point is located at Meades Ranch, Kansas.The longitude origin of NAD 27 is the Greenwich Meridian with a south azimuth orientation. The original network adjustment used 25,000 stations. The relative precision between initial point monuments of NAD 27 is by definition 1:100,000, but coordinates on any given monument in the network contain errors of varying degrees. As a result, relative accuracies between points on NAD 27 may be far less than the nominal 1:100,000. The reference units for NAD 27 are US Survey Feet. This datum is no longer supported by NOAA/NOS/NGS. Approximate conversions of points on NAD 27 to NAD 83 (1986) may be performed using the NADCON model. Since NAD 27 contains error approaching 10m, transforming highly accurate GPS observations to this antiquated reference system is not the best approach.
+Vertical Datum
+A vertical datum is a reference system used for specifying elevation of specific points on the Earth's surface. Vertical datums broadly come in two categories:
+Three-dimensional datums: those are defined by using a reference ellipsoid and six geocentric parameters expressing origin, and orientation. Unlike a horizontal datum, a three dimensional datum provides the foundation for accurate determination of ellipsoidal heights. In VDatum, these 3-D datums are also considered as a type of vertical datum.
+Orthometric datums: those employ the Earth's gravity field as their datum. Any height referenced to the Earth's gravity field can be called as "geopotential heights";
+Tidal datums: those based on tidally-derived surfaces of high or low water. Tidal datums are local datums and are referenced to nearby monuments. Tidal datums are referenced to stages of the tide at a particular point. At a point we have tidal datums, such as Mean Low Water (MLW) and a Mean Lower Low Water (MLLW). Both are referencing a low water, but are computed differently due to the definitions of MLW and MLLW. There are many other different definitions of high, low and mean water used around the world.
+NAD83(HARN): The High Accuracy Reference Networks
+Around the same time that NGS adopted NAD 83 (1986), the agency had begun using GPS technology, instead of triangulation and/or trilateration. Starting with Tennessee in 1989, each state - in conjunction with NGS and various other institutions - used GPS to establish regional reference frames that were to be consistent with NAD 83. These networks of GPS control points were originally called High Precision Geodetic Networks (HPGN), and currently are referred to as High Accuracy Reference Networks (HARN).
+It should be noted that the NAD 83(HARN) latitude and/or longitude of a given control point may differ by up to a meter from its corresponding NAD 83(1986) coordinate.
+NAD83(CORSxx): Continuously Operating Reference Stations
+In late 1994, NGS introduced a third realization of NAD 83 when the agency organized a network of continuously operation referencing stations (CORS). Each CORS is located at a fixed point throughout CONUS and at some OCONUS points, and equipped with a GPS receiver whose data NGS collects, processes, and disseminates for public use. Surveyors and other professionals can apply CORS data to position points at which other GPS data have been collected with accuracies approach a few centimeters, both horizontally and vertically. Positional coordinates of the CORS sites are computed by applying Helmert transformation from then-current ITRFxx to NAD 83, and referred to as NAD 83(CORS93), NAD 83(CORS94), and NAD 83(CORS96) realizations.
+NGS continues to use NAD 83(CORS94) positions for all CORS sites, except those that have come online since the fall of 1988 and those whose NAD 83(CORS96) position differs from their corresponding NAD 83(CORS94) position by more than 2cm horizontally or 4 cm vertically.
+The horizontal discrepancy between the NAD 83(CORS93) and NAD 83(HARN) positions for a control point is almost always less than 10cm. The horizontal discrepancy between any two NAD 83(CORSxx) positions for a control point is almost always less than 2cm.
+NAD 83(CORSxx) and NAD 83(NSRS2007) realization addresses plate tectonic motion under the assumption that the North American plate, as a whole, does not move "on average" relative to Earth's interior. This realization of NAD 83 is for CONUS, Alaska, Puerto Rico and the Virgin Islands.
+NAD83(NSRS2007) - The National Spatial Reference System
+NGS has adopted a new realization of NAD 83 called NAD 83(NSRS2007) for the distribution of positional coordinates at approximately 70,000 passive geodetic control monuments. This new realization was created by adjusting GPS data collected during various campaign-style geodetic surveys performed between the mid 1980s and 2005. NAD 83(NSRS2007) approximates (but is not, and can never be, equivalent to) the more rigorously defined NAD 83(CORS96) realization.
+NAD 83(CORSxx) and NAD 83(NSRS2007) realization address plate tectonic motion under the assumption that the North American plate, as a whole, does not move "on average" relative to Earth's interior. This realization of NAD 83 is for CONUS, Alaska, Puerto Rico and the Virgin Islands.
+For more information about NAD 83(NSRS2007), please visit the NOAA/NOS/NGS/ NAD 83(NSRS2007) National Readjustment pages.
+NAD83(PACPxx)
+The NAD 83(PACPxx) realization is adopted for most islands, such as Hawaii, American Samoa, Marshall Islands, etc., on the Pacific tectonic plate. This realization addresses plate motion under the assumption that the Pacific plate, as a whole, does not move "on average" relative to Earth's interior.
+NAD83(MARPxx)
+The NAD 83(MARP00) realization is adopted for most islands, such as Guam, Saipan, etc., on the Mariana tectonic plate. This realization addresses plate motion under the assumption that the Pacific plate, as a whole, does not move "on average" relative to Earth's interior.
+ITRFxx: International Terrestrial Reference Frames
+In the late 1980s, the International Earth Rotation Service (IERS) introduced the International Terrestrial Reference System (ITRS) to support those scientific activities that require highly accurate positional coordinates; for example, monitoring crustal motion and the motion of Earth's rotation axis. The initial realization was called the International Terrestrial Reference Frame of 1988 (ITRF88). The latest is the ITRF2005. ITRS is the first major international reference system to directly address plate tectonics and other forms of crustal motion by publishing velocities as well as positions for its control points.
+The ITRS is a geocentric system that the center of mass is defined for the whole Earth, including oceans and atmosphere. The unit of length is the meter. The ITRF solutions do not directly use an ellipsoid. ITRF coordinates are cartesian equatorial coordinates X, Y, and Z. If needed these coordinates can be transformed to geographical coordinates (Longitude, Latitude, and Height) referred to an ellipsoid. In VDatum, the GRS 80 ellipsoid is used in all 3-D transformations.
+For more information about ITRS and ITRF, please visit the International Terrestrial Reference Frames website at:  http://itrf.ensg.ign.fr/
+The World Geodetic System 1984 - WGS 84 (TRANSIT), WGS 84 (G730), WGS 84 (G873) and WGS 84 (G1150)
+The Department of Defense (DoD) developed the WGS 84 reference system to support global activities involving mapping, charting, positioning and navigation. DoD established the original WGS 84 reference frame in 1987 using Doppler observations from the Navy Navigation Satellite System (NNSS) or TRANSIT and named it as WGS 84(TRANSIT). This original WGS 84 realization essentially agrees with NAD 83(1986). It is generally assumed that WGS 84 (TRANSIT) is identical to NAD 83 (1986) within the conterminous US.
+In 1994, DoD introduced a realization of WGS 84 that is based completely on GPS observations, instead of Doppler observations. This new realization is officially known as WGS 84 (G730) where the letter G stands for "GPS" and "730" denotes the GPS week number (starting at 0h UTC, 2 January 1994) when the National Imagery and Mapping Agency (NIMA) started expressing their derived GPS orbits in this frame. This realization is generally assumed to be identical to ITRF92( epoch 1994.0) at the few centimeter level.
+A third realization of WGS 84, called WGS 84(G873), was introduced in 29 September 1996 and adopted by the GPS Operational Control Segment in 29 January 1997. This realization is also based completely on GPS observations. Again, the letter G stands for "GPS" and "873" refers to the GPS week number starting at 0h UTC, 29 September 1996. This realization is generally assumed to be identical to ITRF 94 (epoch 1997.0) at few centimeter level.
+The latest realization of WGS 84, adopted in 20 January 2002, is termed WGS 84 (G1150). It is generally assumed to be identical to ITRF 2000 (epoch 1997.0) at one centimeter level. This latest realization differs from NAD 83 (1986) by about 2 meters.
+For more information about WGS 84 realization, please visit: NGS: DoD World Geodetic System 1984 page.
+North American Vertical Datum 1988
+The North American Vertical Datum 1988 (NAVD 88) was affirmed as the official civilian vertical datum for surveying and mapping activities in the United States for the United States performed or financed by the Federal Government in June 24, 1993 (Federal Register/Vol. 58, No. 120/Thursday, June 24, 1993/page 34245).
+The NAVD 88 is based on an adopted elevation at Point Rimouski (Father's Point). It uses Helmert orthometric heights as an approximation to true orthometric heights. By contrast, the NGVD 29 was fixed to a set of reference tide gauges, without correction for local sea surface topography departures, and it used normal orthometric heights as an approximation to true orthometric heights. The discrepancies between these two datums are not a simple offset and tilt, but a complex surface that is related to gravity field variations of the Earth. Neither NAVD 88 nor NGVD 29 are in conformance with mean sea level, nor with the geopotential surface that best fits the Earth’s mean sea surface (idealized global geoid). NAVD 88 is a better realization of an orthometric datum based on a geopotential surface; however that geopotential is not the ideal global geoid. In addition, one will have average local departures from global mean sea level due to prevailing winds, currents, atmospheric pressure, temperature, and salinity effects.
+For more information about NAVD 88 and NGVD 29, please visit NOAA / NOS / NGS / NGS FAQ's and NOAA / NOS / NGS / Geodetic Glossary.
+The National Geodetic Vertical Datum 1929
+The vertical control datum, formerly known as the Sea Level Datum of 1929, established for vertical control in the United States by the general adjustment of 1929.
+Mean sea level was held fixed at the sites of 26 tide gauges and by the set of elevations of all bench marks resulting from the adjustment. A total of 106,724km of leveling was involved, constituting 246 closed circuits and 25 circuits at sea level.
+The datum was not mean sea level, the geoid, or any other equipotential surface. The term "National Geodetic Vertical Datum of 1929" was officially adopted by the National Geodetic Survey on May 17,1976. (Geodetic Glossary, NOAA/NOS/NGS, September 2001, Silver Spring, MD)
+EGM2008
+The official Earth Gravitational Model EGM2008 has been publicly released by the National Geospatial-Intelligence Agency (NGA) EGM Development Team. This gravitational model is complete to spherical harmonic degree and order 2159, and contains additional coefficients extending to degree 2190 and order 2159.
+More details about EGM 2008 datums, please see NGA  website.
+EGM1996
+The Geosciences Division provides the normalized, geopotential coefficients for both the new NGA/NASA EGM96 n=m=360 and the WGS 84 n=m=180 Earth Gravitational Model. VDatum software use 15-minute worldwide geoid height file for EGM96 and WGS84 transformation.
+More details about EGM 1996 datums, please see NGA  website.
+EGM1984
+The World Geodetic System 1984 (WGS 84) Earth Gravitational Model (EGM) consists of a set of normalized geopotential coefficients complete through degree (n) and order (m) 180. The first part of the EGM, through degree and order 41, was developed as a weighted least squares combination solution from mean free-air gravity anomalies; geoid undulations derived from satellite radar altimetry; laser, Doppler and NAVSTAR Global Positioning System (GPS) satellite tracking data and 'lumped coefficient' data.
+More details about EGM 1984 datums, please see NGA  website.
+National Tidal Datum Epoch
+Refers to the specific 19-year period adopted by the National Ocean Service as the official time segment over which tide observations are taken and reduced to obtain mean values (e.g., mean lower low water, etc.) for tidal datums. The epoch is designated by the years the period began and ended, e.g., National Tidal Datum Epoch of 1983 through 2001.
+Local Mean Sea Level
+The arithmetic mean of hourly heights observed over the National Tidal Datum Epoch. Shorter series are specified in the name, e.g., monthly mean sea level and yearly mean sea level.
+By these definitions, one can envision that mean sea level, mean tide level, and diurnal tide level are all close to one another, that mean lower low water is lower than mean low water, and that mean higher high water is higher than mean high water. The magnitudes of the high and low waters vary from place to place depending upon the range of the tide, that the local mean sea level at a point will vary due to physical effects, and that the entire set of tidal datums will vary relative to an ellipsoid due to geoidal undulations.
+Mean Sea Level based elevation are used for most construction and topographic surveys - in particular those involving flood control or shoreline improvement or shoreline protection. MLLW elevations are used in referencing coastal navigation projects. MHW elevations are used in construction projects involving bridges and other crossings over navigable waterways.
+For more information about tides, please visit NOAA / NOS / CO-OPS at:
+https://tidesandcurrents.noaa.gov/
+Mean Lower Low Water
+The average of the lower low water height of each tidal day observed over the National Tidal Datum Epoch. For stations with shorter series, comparison of simultaneous observations with a control tide station is made in order to derive the equivalent datum of the National Tidal Datum Epoch.
+Mean Low Water
+The average of all the low water heights of each tidal day observed over the National Tidal Datum Epoch. For stations with shorter series, comparison of simultaneous observations with a control tide station is made in order to derive the equivalent datum of the National Tidal Datum Epoch.
+Mean High Water
+The average of all the high water heights of each tidal day observed over the National Tidal Datum Epoch. For stations with shorter series, comparison of simultaneous observations with a control tide station is made in order to derive the equivalent datum of the National Tidal Datum Epoch.
+Mean Higher High Water
+The average of the higher high water height of each tidal day observed over the National Tidal Datum Epoch. For stations with shorter series, comparison of simultaneous observations with a control tide station is made in order to derive the equivalent datum of the National Tidal Datum Epoch.
+Diurnal Tide Level
+The arithmetic mean of mean higher high water and mean lower low water.
+Mean Tide Level
+The arithmetic mean of mean high water and mean low water.
+Low Water Datum
+In areas where a periodic tide is negligible or has a mean range of less than one half foot, the plance of reference is Low Water Datum(LWD). LWD is determined by subtracting one half foot from the observed Mean Water Level(MWL) in the area.
+The International Great Lakes Datum of 1985
+The IGLD 1985 is the current vertical control reference system that defines water levels within the Great Lakes - St. Lawrence River system. The reference zero point of IGL 1985, the point to which all other elevations are referenced, is located at Father's Point, Rimouski, Quebec, Canada. Therefore, the IGLD 85 and NAVD 88 are one and the same. The only difference between IGLD 85 and NAVD 88 is that IGLD 85 benchmark values are giving in dynamic height units, and NAVD 88 values are given in Helmert orthometric height units. Geopotential numbers for individual benchmarks are the same in both systems.
+The IGLD 1985 is one of common datums between the United States and Canada.
+Home
+Site Map
+Privacy
+Disclaimer
+Website Satisfaction Survey
+Report an Error on This Page
+Web site owner:
+National Ocean Service
+NOAA
+Department of Commerce
