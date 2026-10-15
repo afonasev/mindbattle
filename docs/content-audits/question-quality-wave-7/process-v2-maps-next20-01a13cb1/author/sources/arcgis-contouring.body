@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>  <html class="ie lt-ie9 lt-ie8 lt-ie7 ie6" dir="ltr"> <![endif]-->
+<!--[if IE 7]>     <html class="ie lt-ie9 lt-ie8 ie7" dir="ltr"> <![endif]-->
+<!--[if IE 8]>     <html class="ie lt-ie9 ie8" dir="ltr"> <![endif]-->
+<!--[if IE 9]>     <html class="ie ie9" dir="ltr"> <![endif]-->
+<!--[if !IE]><!--> <html dir="ltr" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>How Contouring works&mdash;ArcGIS Pro | Documentation</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <script>
+      var appOverviewURL = "/content/esri-sites/en-us/arcgis/products/arcgis-pro/overview";
+    </script>
+
+    <script>
+      var docConfig = {
+        locale: 'en'
+        ,localedir: 'en'
+        ,langSelector: ''
+        
+        ,relativeUrl: false
+        
+
+        ,searchformUrl: '/search/'
+        ,tertiaryNavIndex: '3'
+
+        
+      };
+    </script>
+	 
+
+
+    
+    <!--[if lt IE 9]>
+      <script src="/cdn/js/libs/html5shiv.js" type="text/javascript"></script>
+      <script src="/cdn/js/libs/selectivizr-min.js" type="text/javascript"></script>
+      <script src="/cdn/js/libs/json2.js" type="text/javascript"></script>
+      <script src="/cdn/js/libs/html5shiv-printshiv.js" type="text/javascript" >
+
+    <![endif]-->
+
+     <!--[if lt IE 11]>
+    <script>
+      $$(document).ready(function(){
+        $$(".hideOnIE").hide();
+      });
+    </script>
+    <![endif]-->
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<link href="/assets/img/favicon.ico" rel="shortcut icon" >
+	<link href="/assets/css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="/cdn/calcite/css/documentation.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="/assets/css/print.css" media="print" type="text/css" rel="stylesheet" />
+
+	<!--
+	<link href="/assets/css/screen_l10n.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="/assets/css/documentation/base_l10n.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="/assets/css/print_l10n.css" media="print" type="text/css" rel="stylesheet" />
+	-->
+	<script src="/cdn/js/libs/latest/jquery.latest.min.js" type="text/javascript"></script>
+    <script src="/cdn/js/libs/latest/jquery-migrate-latest.min.js" type="text/javascript"></script>
+	<script src="/cdn/js/libs/jquery.cookie.js" type="text/javascript"></script>
+	<link href="/cdn/css/colorbox.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="/cdn/css/colorbox_l10n.css" media="screen" rel="stylesheet" type="text/css" />
+	<script src="/cdn/js/libs/jquery.colorbox-min.js" type="text/javascript"></script>
+	<script src="/assets/js/video-init.js" type="text/javascript"></script>
+	<script src="/assets/js/sitecfg.js" type="text/javascript"></script>
+	
+		<script src="/assets/js/signIn.js" type="text/javascript"></script>
+	
+	
+
+	<!--- Language Picker -->
+	<script src="/assets/js/locale/l10NStrings.js" type="text/javascript"></script>
+	
+		<script src="/assets/js/locale/langSelector.js" type="text/javascript"></script>
+	
+
+	<script src="/assets/js/calcite-web.js" type="text/javascript"></script>
+
+
+
+  <!--- search MD -->
+    <META name="description" content="The contour tools are used to create lines that connect areas of equal value on continuous raster surface."><META name="last-modified" content="2024-10-15"><META name="product" content="arcgis-pro"><META name="version" content="pro3.4"><META name="search-collection" content="help"><META name="search-category" content="help-general"><META name="subject" content="ANALYSIS"><META name="sub_category" content="ArcGIS Pro"><META name="content_type" content="Tool Reference"><META name="subject_label" content="ANALYSIS"><META name="sub_category_label" content="ArcGIS Pro"><META name="content_type_label" content="Tool Reference"><META name="content-language" content="en">
+    <!--- search MD -->
+      
+    <!-- Add in Global Nav -->
+    <link rel="stylesheet" href="//webapps-cdn.esri.com/CDN/components/global-nav/css/gn.css" />
+    <!--<script src="//webapps-cdn.esri.com/CDN/components/global-nav/test_data.js"></script>-->
+    <script src="//webapps-cdn.esri.com/CDN/components/global-nav/js/gn.js"></script>
+    <!-- End Add in Global Nav -->
+
+</head>
+
+<!--
+      pub: GUID-5D1A450E-1858-4716-B713-BFDA97DC14CC=40
+      tpc: GUID-587746E8-65E3-4858-ACC0-037FA4F476B7=7
+      -->
+
+
+<!-- variable declaration, if any -->
+
+<body class="claro en pro esrilocalnav">
+  <!-- Secondary nav -->
+  <script>
+     insertCss(_esriAEMHost+"/etc.clientlibs/esri-sites/components/content/local-navigation/clientlibs.css")
+     insertElem("div", "local-navigation", '<nav id="second-nav" navtype="existingNavigation" domain="'+_esriAEMHost+'" path="'+appOverviewURL+'"></nav>' )
+  </script>
+
+  
+<!-- End of drawer -->
+
+  
+  <div class="wrapper">
+      <!--googleoff: all-->
+
+
+      <div id="skip-to-content">
+        <!--googleoff: all-->
+        <div class="search">
+        <div class="esri-search-box">
+          <div class="search-component">
+            <form id="helpSearchForm">
+              <input class="esri-search-textfield leader" name="q" placeholder="Search ArcGIS Pro help" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Search ArcGIS Pro help">
+  <input type="hidden" name="collection" value="help" />
+  <input type="hidden" name="product" value="arcgis-pro" />
+  <input type="hidden" name="version" value="pro3.4" />
+  <input type="hidden" name="language" value="en" />
+  <button class="esri-search-button-submit" type="submit" aria-label="Search"></button>
+            </form>
+          </div>
+        </div>
+      </div>
+        <!--googleon: all-->
+       
+        <!-- content goes here -->
+        <div class="grid-container ">
+          
+
+            
+              
+  <!--BREADCRUMB-BEG--><div id="bigmac" class="sticky-breadcrumbs trailer-2" data-spy="affix" data-offset-top="180"> </div><!--BREADCRUMB-END-->
+  <!--googleoff: all-->
+    <div class="column-5 tablet-column-12 trailer-2 ">
+      <aside class="js-accordion accordion reference-index" aria-live="polite" role="tablist">
+        <div></div>
+      </aside>
+
+      <div class="js-sticky scroll-show tablet-hide leader-1 back-to-top" data-top="0" style="top: 0px;">
+        <a href="#" class="btn btn-fill btn-clear">Back to Top</a>
+      </div>
+    </div>
+  <!--googleon: all-->
+  
+            
+            
+            
+	
+		<div class="column-13  pre-1 content-section">
+	
+		<header class="trailer-1"><h1>How Contouring works</h1></header>
+
+		 
+	<!--googleoff: all-->
+	
+		
+				<aside id="main-toc-small" class="js-accordion accordion tablet-show trailer-1">
+			      <div class="accordion-section">
+			        <h4 class="accordion-title">In this topic</h4>
+			        <div class="accordion-content list-plain">
+			          <ol class="list-plain pre-0 trailer-0"><li><a href="#GUID-976CC7B0-EDA8-4198-880A-7AEC1E550419">Why create contours?</a></li><li><a href="#ESRI_SECTION1_52E7D2565C634101B8B2B59DE8D70FB8">Example showing how contours are created</a></li><li><a href="#ESRI_SECTION1_0D7482E4C3414939BABC562C016652F3">Contour quality</a></li><li><a href="#ESRI_SECTION1_3103C1863885445FADC6838E0CAE85E3">Controlling contour quality</a></li><li><a href="#ESRI_SECTION1_A481CEA5E27049CF8048C496FEB710C4">Data issue with USGS DEMs</a></li></ol>
+			        </div>
+			      </div>
+			     </aside>
+		
+    
+   <!--googleon: all-->
+
+
+		<main>
+			
+	
+    	<p class="license icon-ui-key text-light trailer-0">Available with Spatial Analyst license.</p><p class="license icon-ui-key text-light ">Available with 3D Analyst license.</p>
+    
+
+
+			
+<p id="GUID-2457F3BB-2BAF-48CF-8263-42397746B039">Contours are lines that connect locations of equal value in a raster dataset that represents continuous phenomena such as elevation, temperature, precipitation, pollution, or atmospheric pressure. The line features connect cells of a constant value in the input. Contour lines are often generally referred to as isolines but can also have specific terms depending on what is being measured. Some examples are isobars for pressure, isotherms for temperature, and isohyets for precipitation.</p><p id="GUID-6BBDFAE4-D94B-4A7A-9BF1-0CE328864B1E">The distribution of the contour lines shows how values change across a surface. Where there is little change in a value, the lines are spaced farther apart. Where the values rise or fall rapidly, the lines are closer together.</p><p id="GUID-D97FD528-97E7-4F7F-AE4F-A2FF6EA56C7E" ishcondition="product_filter=pro"><span class="ph">The contour creation tools, <span purpose="gptoolref"><a class="xref xref" href="/en/pro-app/3.4/tool-reference/spatial-analyst/contour.htm">Contour</a></span>, <span purpose="gptoolref"><a class="xref xref" href="/en/pro-app/3.4/tool-reference/spatial-analyst/contour-list.htm">Contour List</a></span> and <span purpose="gptoolref"><a class="xref xref" href="/en/pro-app/3.4/tool-reference/spatial-analyst/contour-with-barriers.htm">Contour with Barriers</a></span>, are used to create a polyline feature dataset from an input raster.</span></p>
+
+<section class="section1 padded-anchor" id="GUID-976CC7B0-EDA8-4198-880A-7AEC1E550419" purpose="section1"><h2>Why create contours?</h2><p id="GUID-66493E62-D66C-4E05-B8E0-74757468BD44">By following the polyline of a particular contour, you can identify which locations have the same value. Contours are also a useful surface representation, because they allow you to simultaneously visualize flat and steep areas (distance between contours) and ridges and valleys (converging and diverging polylines).</p><p id="GUID-82A1EEE3-F628-46F9-9871-35BEF5AE397A">The example below shows an input elevation dataset and the output contour dataset. The areas where the contours are closer together indicate the steeper locations. They correspond with the areas of higher elevation (in white on the input elevation dataset).</p><figure class="fig" href="#"><img src="GUID-3DD18411-6159-457B-AFF8-2A457C5D123B-web.png" alt="Contours generated from input surface example" title="Contours generated from input surface example" loading="lazy"></figure><p id="GUID-D0965E9F-AF76-40F1-8571-4719BA19F6CC">The contour attribute table contains an elevation attribute for each contour polyline.</p></section>
+<section class="section1 padded-anchor" id="ESRI_SECTION1_52E7D2565C634101B8B2B59DE8D70FB8" purpose="section1"><h2>Example showing how contours are created</h2><p id="GUID-B52F5A59-2356-44AD-B237-586CCAF286C0">To understand how contour lines are created, consider the example of a raster of nine cells, with the values at the cell centers as shown below, for which you want to create a contour line for an elevation of 830 meters. The first step is to use bilinear interpolation to calculate a central value for each group of four adjacent cells. For the group of four cells at the upper left, this value is calculated as follows: (799 + 802 + 825 + 828) / 4 = 813.5, which is then rounded to 814. Once that is done, the values of the existing cell centers and the new intersection locations are used to determine the path of particular contour values. To create the 830 contour, linear interpolation between the points is used to determine where that value falls along the appropriate vertical, horizontal, and diagonal lines. The contour line is constructed by joining these intersection points.</p><p id="GUID-A9C1424F-A724-45DC-8123-E01D4C839E54">Extrapolation is not used to interpolate the outer corner values, and therefore the contour lines do not extend to the edge of the raster.</p><figure class="fig" href="#"><img src="GUID-C2A81977-C276-4C42-A2B4-78331E18691A-web.png" alt="Example illustrating how contours are created." title="Example illustrating how contours are created." loading="lazy"><figcaption class="fig-caption">How the 830 contour line is calculated</figcaption></figure></section>
+
+<section class="section1 padded-anchor" id="ESRI_SECTION1_0D7482E4C3414939BABC562C016652F3" purpose="section1"><h2>Contour quality</h2><p id="GUID-5C4D7F8D-2D52-46BE-903B-8419364872A3">The contour tools produce high-quality contours, representing an exact interpretation of the raster surface. Overall contour accuracy depends on how well the data used to create the input raster represents the actual surface.</p><p id="GUID-343C29D7-3CAF-4290-824A-DF59EB2AA17F">The size of the raster cells used affects the appearance of the output contours. A large cell size may result in coarse, blocky contours.</p><p id="GUID-28180396-69A8-4054-B95F-02CF6D02B8BD">Occasionally, contours may cross, appear to intersect, or form an unclosed branching line. Crossing contours can occur in saddle regions that lie exactly on a contour interval. In other cases, the contours may pass so close to one another that they appear to intersect. Branching contours can occur in cases of intersecting ridges that fall exactly on a contour interval. These are all valid interpretations of the surface that cartographers typically modify for aesthetic purposes.</p></section>
+
+<section class="section1 padded-anchor" id="ESRI_SECTION1_3103C1863885445FADC6838E0CAE85E3" purpose="section1"><h2>Controlling contour quality</h2><p id="GUID-F4F120F0-DEDD-463A-A1C1-910C4E8E3F4F">Occasionally, contours may be created that have square or blocky outlines, appearing to follow raster cell boundaries. This can occur when the raster values are integers and they fall exactly on a contour. This is not a problem, merely an exact contouring of the data.</p><p id="GUID-F57B5EC9-A8C3-4319-B427-5A16E61A1849">If you want smoother contours, some ways to overcome this condition include smoothing the source data or adjusting the base contour.</p><section class="section2 padded-anchor" id="ESRI_SECTION2_C176107D457946E8B690E349DDF960E9" purpose="section2"><h3>Smoothing the data</h3><p ishcondition="product_filter=pro" id="GUID-493E0064-F078-4718-8CD1-9E8D655E2815"><span class="ph">The easiest smoothing approach is to preprocess the input raster with the <span purpose="gptoolref"><a class="xref xref" href="/en/pro-app/3.4/tool-reference/spatial-analyst/focal-statistics.htm">Focal Statistics</a></span> tool, using the Mean statistic.</span></p><p id="GUID-7958AF12-9BCD-4954-B44A-6E9A79A7572F">Another method is to slightly adjust z-values so a contour will no longer pass exactly through the cell centers of the raster. <span class="ph">Again, the <span purpose="gptoolref">Focal Statistics</span> tool is used, but with a custom <a class="xref xref" href="/en/pro-app/3.4/tool-reference/spatial-analyst/how-focal-statistics-works.htm">weighted kernel file</a> and the Sum statistic instead. </span><span class="ph">The structure of the kernel file is as follows:</span></p><pre purpose="pre" id="GUID-90EBF221-736D-48ED-BC04-9CED0D141DF2">3 3
+.005 .005 .005
+.005 .960 .005
+.005 .005 .005</pre><p id="GUID-C067AF47-9161-481F-9D88-9C6ECD61D7CA">The accuracy of the contour will not be significantly affected because the z-value adjustment is small and heavily weighted in favor of the center raster cell.</p></section><section class="section2 padded-anchor" id="ESRI_SECTION2_E28AAF2FA3884C4ABB50608DF251401E" purpose="section2"><h3>Adjusting the base contour</h3><p id="GUID-CE7F1797-805D-46C2-8C21-58FA30A2A1A8">Adjusting the base contour involves offsetting the base contour such that the contours no longer pass exactly through the cell centers. The offset can be very small; values as small as 0.0001 have been effective.
+<div class="panel trailer-1 note" id="GUID-8BADB4D4-D7D8-4F08-93BB-27CD7327C160"><h5 class="icon-ui-comment trailer-0">Note:</h5><p id="GUID-FAE4E42A-28AD-467A-B4E5-A405A5DC1165">To apply this technique to the <span purpose="gptoolref">Contour List</span> tool, adjust the values in the contour list. For example, instead of <span class="usertext">600</span>, <span class="usertext">650</span>, <span class="usertext">700</span>, and so on, use <span class="usertext">600.001</span>, <span class="usertext">650.001</span>, <span class="usertext">700.001</span>, and so on.</p></div></p></section></section>
+
+<section class="section1 padded-anchor" id="ESRI_SECTION1_A481CEA5E27049CF8048C496FEB710C4" purpose="section1"><h2>Data issue with USGS DEMs</h2><div class="panel trailer-1" id="GUID-9E0E582A-238E-4FDF-A69A-CD8AA006B7A5"><h5 class="icon-ui-time-clock trailer-0">Legacy:</h5><p id="GUID-BF9E4EBF-7299-43A7-AB75-397136071447">Tests have revealed that contours generated from rasters created from some older United States Geological Survey (USGS) 7.5-minute digital elevation models (DEMs) may not have the same level of detail as exhibited on the corresponding map sheet available from USGS. This appears to be a factor of the sampling interval inherent in the DEM. USGS 7.5-minute DEMs are sampled at 30-meter intervals, while the contours on the map sheets appear to have been digitized directly from stereo models at a much higher level of detail. The newer SDTS format DEMs from the USGS do not have this problem.</p></div></section>
+<section class="section2 leader-1" purpose="relatedtopics"><h4 class="trailer-0">Related topics</h4><ul class="pre-0 trailer-2"><li><a class="xref relatedtopic" href="/en/pro-app/3.4/tool-reference/spatial-analyst/an-overview-of-the-surface-tools.htm">An overview of the Surface toolset</a></li><li><a class="xref relatedtopic" href="/en/pro-app/3.4/tool-reference/spatial-analyst/contour.htm">Contour</a></li><li><a class="xref relatedtopic" href="/en/pro-app/3.4/tool-reference/spatial-analyst/contour-list.htm">Contour List</a></li><li><a class="xref relatedtopic" href="/en/pro-app/3.4/tool-reference/spatial-analyst/contour-with-barriers.htm">Contour with Barriers</a></li></ul></section>
+			
+				<hr>
+				<!--googleoff: all-->
+				
+	
+        
+		    <p class="feedback right">
+		        <a id="afb" class="icon-ui-contact" href="/feedback/" data-langlabel="feedback-on-this-topic" >Feedback on this topic?</a>
+		    </p>
+        
+	
+
+				<!--googleon: all-->
+			
+		</main>
+	</div>
+	
+	<!--googleoff: all-->
+	
+		
+			<div id="main-toc-large" class="column-5">
+			    <div class="panel font-size--2 tablet-hide trailer-1">
+			      <h5 class="trailer-half">In this topic</h5>
+			      <ol class="list-plain pre-0 trailer-0"><li><a href="#GUID-976CC7B0-EDA8-4198-880A-7AEC1E550419">Why create contours?</a></li><li><a href="#ESRI_SECTION1_52E7D2565C634101B8B2B59DE8D70FB8">Example showing how contours are created</a></li><li><a href="#ESRI_SECTION1_0D7482E4C3414939BABC562C016652F3">Contour quality</a></li><li><a href="#ESRI_SECTION1_3103C1863885445FADC6838E0CAE85E3">Controlling contour quality</a></li><li><a href="#ESRI_SECTION1_A481CEA5E27049CF8048C496FEB710C4">Data issue with USGS DEMs</a></li></ol>
+			    </div>
+			    
+			    
+	  		</div>
+		
+    
+   <!--googleon: all-->
+
+
+
+
+          
+        </div>
+        <!-- ENDPAGECONTENT -->
+
+      </div>
+
+    </div>  <!-- End of wrapper -->
+
+    <div id="globalfooter"></div>
+
+  <!--googleoff: all-->
+
+  
+	<script src="/assets/js/init.js" type="text/javascript"></script>
+	<!--<script src="/assets/js/drop-down.js" type="text/javascript"></script>-->
+	<script src="/assets/js/search/searchform.js" type="text/javascript"></script>
+	<script src="/cdn/js/link-modifier.js" type="text/javascript"></script>
+	<script src="/cdn/js/sitewide.js" type="text/javascript"></script>
+	<script src="/cdn/js/libs/highlight.pack.js" type="text/javascript"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+    
+
+  <script src="/cdn/js/affix.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    $(function () {
+          var appendFlg = true;
+
+          $("#bigmac")
+          .on("affixed.bs.affix", function (evt) {
+            if (appendFlg) {
+              $("<a class='crumb' href='#'>How Contouring works</a>").insertAfter ($("#bigmac nav a").last());
+              appendFlg = false;
+            }
+          })
+          .on ("affix-top.bs.affix", function(evt) {
+            if (!appendFlg) {
+              $("#bigmac nav a").last().remove();
+            }
+            appendFlg = true;
+          })
+    })
+  </script>
+  
+        <script type="text/javascript">
+          window.doctoc = {
+            pubID: "1499",
+            tpcID: "57",
+            
+            hideToc : false
+          }
+        </script>
+
+        <script type="text/javascript" src="/en/pro-app/3.4/tool-reference/main/1518.js" ></script>
+        <script type="text/javascript" src="/en/pro-app/3.4/tool-reference/spatial-analyst/1499.js" ></script>
+        <script type="text/javascript" src="/cdn/calcite/js/protoc.js" ></script>
+
+        
+
+  <noscript>
+        <p>
+            <a href="flisting.htm">flist</a>
+        </p>
+    </noscript>
+    
+	<script src="//mtags.arcgis.com/tags-min.js"></script>
+
+  
+  
+    
+    
+    <script>
+      document.write("<script src='" + _esriAEMHost+"/etc.clientlibs/esri-sites/clientlibs/localNav.js'><\/script>");
+    </script>
+
+  </body>
+</html>
