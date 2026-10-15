@@ -38,6 +38,16 @@ for snapshot in peers.get('latestProposalSnapshots',[]):
  sourceData=rd(sourcePath)
  if 'entries' in sourceData:
   entry=next(e for e in sourceData['entries'] if e['id']==p['id'])
+ elif 'relevantSimultaneousProposals' in sourceData:
+  # SOURCE78 retained full own proposals in its immutable MAIN packet.
+  # Bind the actual body/hash and the original author's candidate at the same
+  # source freeze; a reader pointer alone cannot promote another version.
+  local=next(e for e in sourceData['relevantSimultaneousProposals'] if e['id']==p['id'])
+  assert local['card']==p['card'] and sha(local['card'])==digest(local)==digest(p)
+  original=C/sourceData['originalAuthor'];originalCandidate=original.parent/'candidate.json'
+  assert originalCandidate.read_bytes()==subprocess.check_output(['git','-C',str(C),'show',case['sourceFreeze']+':'+str(originalCandidate.relative_to(C))])
+  entry=next(e for e in rd(originalCandidate)['entries'] if e['id']==p['id'])
+  assert entry['proposedCard']==local['card'] and entry['afterHash']==digest(local)
  else:
   # The reader retained the author's full MAIN-delta proposal. Bind both that
   # exact snapshot and its original candidate, without modifying reader evidence.
