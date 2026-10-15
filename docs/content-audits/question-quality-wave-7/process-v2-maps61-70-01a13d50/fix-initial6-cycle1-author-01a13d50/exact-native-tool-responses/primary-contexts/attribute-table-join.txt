@@ -1,0 +1,148 @@
+Join Field (Data Management)—ArcGIS Pro | Documentation (https://pro.arcgis.com/en/pro-app/3.5/tool-reference/data-management/join-field.htm)
+citeturn2view1 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://pro.arcgis.com/en/pro-app/3.5/tool-reference/data-management/join-field.htm","lineno":null}); Total lines: 164
+L0: [Input: Search ArcGIS Pro help] [Input] [Input] [Input] [Input]
+L1: 
+L2: cite0†Back to Top L3: 
+L4: # Join Field (Data Management)
+L5: 
+L6: #### In this topic
+L7: 
+L8:   1. cite1†Summary L9:   2. cite2†Usage L10:   3. cite3†Parameters L11:   4. cite4†Environments L12:   5. cite5†Licensing information L13: 
+L14: ## Summary
+L15: 
+L16: Permanently joins the contents of a table to another table based on a common attribute field. The input table is updated to contain the fields from the join table. You can select which fields from the join table will be added to the input table.
+L17: ## Usage
+L18: 
+L19:   * The records in the Input Table value are matched to the records in the Join Table value based on the values of the Input Join Field and Join Table Field parameters. You can also select specific fields from the Join Table value to be appended to the Input Table value during the join.
+L20: 
+L21:   * The Input Table value can be a feature class (including a shapefile) or a table.
+L22:   * All fields in the Input Table value will be kept during the join. You can also select specific fields from the Join Table value to be added to the output. Use the Transfer Fields parameter to add these fields.
+L23: 
+L24:   * Records from the Join Table value can be matched to more than one record in the Input Table value.
+L25:   * If no fields are selected for the optional Transfer Fields parameter, all fields from the Join Table value will be joined to the output. To alter field names, aliases, or properties, set the Transfer Method parameter to Use field mapping.
+L26: 
+L27:   * Joins can be based on fields of type text, date, or number.
+L28: 
+L29:   * Joins based on text fields are case sensitive.
+L30:   * Fields of different number formats can be joined as long as the values are equal. For example, a field of type float can be joined to a short integer field.
+L31: 
+L32:   * When joined to an input table, fields from the join table with a Global ID type or an Object ID type will not be transferred.
+L33: 
+L34: The Input Join Field value and the Join Table Field value can have different field names.
+L35:   * If a join field has the same name as a field from the input table, the joined field will be appended with _1 (or _2, or _3, and so on) to make it unique.
+L36: 
+L37:   * If the Input Table and Join Table parameter values have the same name, clicking the Validate Join button will fail with an error. This is a known limitation. However, the tool will run successfully when you click the Run button.
+L38:   * If the Select transfer fields option is specified for the Transfer Method parameter and field values in the Join Table Field parameter value are not unique, only the first occurrence of each value will be used. To account for values other than the first occurrence (a one-to-many join), set the Transfer Method parameter to Use field mapping. To perform a one-to-many join, the Input Table parameter value must have an Object ID field and be in the same workspace as the Join Table parameter value.
+L39:   * Use the cite6†Field Map parameter to manage the fields and their content in the output dataset.
+L40:     * Add and remove fields from the fields list, reorder the fields list, and rename fields.
+L41:     * The default data type of an output field is the same as the data type of the first input field (of that name) it encounters. You can change the data type to another valid data type.
+L42:     * Use an action to determine how the values from one or multiple input fields will be merged into a single output field. The available actions are First, Last, Concatenate, Sum, Mean, Median, Mode, Minimum, Maximum, Standard Deviation, and Count.
+L43:     * When using the Concatenate action, you can specify a delimiter such as a comma or other characters. Click the start of the Delimiter text box to add the delimiter characters.
+L44:     * Standard Deviation is not a valid option for single input values.
+L45:     * Use the Export option cite7†Image: Export to save a field map as a .fieldmap file.
+L46:     * Use the Load option cite8†Image: Import to load a .fieldmap file. The feature layer or dataset specified in the file must match the dataset used in the tool. Otherwise, the Field Map parameter will be reset.
+L47:     * Use the Slice Text button cite9†Image: Cut on text source fields to choose which characters from an input value will be extracted to the output field. To access the Slice Text button, hover over a text field in the input fields list; then specify the start and end character positions.
+L48:     * Fields can also be cite10†mapped in Python script .
+L49:   * If the Field Map parameter is specified with the Join merge rule, there is no way to guarantee that the order of the joined values will be consistent with the row order of the Join Table Field parameter if the values are not unique. For example, if three features with the ANIMAL attribute values of mouse, cat, and dog are joined, the result will not necessarily be in the order mouse, cat, and dog.
+L50:   * The cite11†Validate Join tool can be used to validate a join between two layers or tables to determine if the layers or tables have valid field names and Object ID fields, if the join produces matching records, if the join is a one-to-one or one-to-many join, and other properties of the join.
+L51: 
+L52: A button to validate the join is available on the tool dialog box for ease of use.
+L53:   * cite12†Indexing the input field and join field can improve performance. Use the Index Join Fields parameter to add or replace indexes.
+L54: 
+L55:   * If the join results are unexpected or incomplete, review whether the input field and join field are cite12†indexed . If the fields are not indexed, try adding an index. If the fields are already indexed, try deleting and re-adding the index to correct any problems with the index. Use the Index Join Fields parameter to manage indexes while running the tool.
+L56: ## Parameters
+L57: 
+L58: DialogPython
+L59: Label  | Explanation  | Data Type
+L60: Input Table  | The table or feature class to which the join table will be joined.  | Mosaic Layer; Raster Layer; Table View
+L61: Input Field  | The field in the input table on which the join will be based.  | Field
+L62: Join Table  | The table that will be joined to the input table.  | Mosaic Layer; Raster Layer; Table View
+L63: Join Field  | The field in the join table that contains the values on which the join will be based.  | Field
+L64: Transfer Fields(Optional)  | The fields from the join table that will be transferred to the input table based on a join between the input table and the join table.  | Field
+L65: Transfer Method(Optional)  | Specifies how joining fields and field types will be transferred to the output.
+L66:   * Select transfer fields—Fields and field types from the joined table will be transferred to the output. This is the default.
+L67:   * Use field mapping—The transfer of fields and field types from the joined table to the output will be controlled by the Field Map parameter.
+L68:  | String
+L69: Field Map(Optional)  | The fields that will be joined to the input table with their respective properties and source fields. All fields from the join table will be included by default. Use the field map to add, delete, rename, and reorder fields, as well as change other field properties. The field map can be used to combine values from two or more input fields into a single output field.  | Field Mappings
+L70: Index Join Fields (Optional)  | Specifies whether attribute indexes will be added or replaced for the input field and join field.
+L71:   * Do not add indexes—Attribute indexes will not be added. This is the default.
+L72:   * Add an attribute index for fields that do not have an existing index—An attribute index will be added for any field that does not have an index. Existing attribute indexes will be retained.
+L73:   * Replace indexes for all fields—An attribute index will be added for any field that does not have an index. Existing attribute indexes will be replaced.
+L74:  | String
+L75: ### Derived Output
+L76: 
+L77: Label  | Explanation  | Data Type
+L78: Updated Input Table  | The updated input dataset.  | Table View; Raster Layer; Mosaic Layer
+L79: 
+L80:     arcpy.management.JoinField(in_data, in_field, join_table, join_field, {fields}, {fm_option}, {field_mapping}, {index_join_fields})
+L81: Name  | Explanation  | Data Type
+L82: in_data  | The table or feature class to which the join table will be joined.  | Mosaic Layer; Raster Layer; Table View
+L83: in_field  | The field in the input table on which the join will be based.  | Field
+L84: join_table  | The table that will be joined to the input table.  | Mosaic Layer; Raster Layer; Table View
+L85: join_field  | The field in the join table that contains the values on which the join will be based.  | Field
+L86: fields[fields,...](Optional)  | The fields from the join table that will be transferred to the input table based on a join between the input table and the join table.  | Field
+L87: fm_option(Optional)  | Specifies how joining fields and field types will be transferred to the output.
+L88:   * NOT_USE_FM—Fields and field types from the joined table will be transferred to the output. This is the default.
+L89:   * USE_FM—The transfer of fields and field types from the joined table to the output will be controlled by the field_mapping parameter.
+L90:  | String
+L91: field_mapping(Optional)  | The fields that will be joined to the input table with their respective properties and source fields. All fields from the join table will be included by default. Use the field map to add, delete, rename, and reorder fields, as well as change other field properties. The field map can be used to combine values from two or more input fields into a single output field.In Python, use the cite13†FieldMappings class to define this parameter.  | Field Mappings
+L92: index_join_fields(Optional)  | Specifies whether attribute indexes will be added or replaced for the input field and join field.
+L93:   * NO_INDEXES—Attribute indexes will not be added. This is the default.
+L94:   * NEW_INDEXES—An attribute index will be added for any field that does not have an index. Existing attribute indexes will be retained.
+L95:   * REPLACE_INDEXES—An attribute index will be added for any field that does not have an index. Existing attribute indexes will be replaced.
+L96:  | String
+L97: ### Derived Output
+L98: 
+L99: Name  | Explanation  | Data Type
+L100: out_layer_or_view  | The updated input dataset.  | Table View; Raster Layer; Mosaic Layer
+L101: ### Code sample
+L102: 
+L103: JoinField example 1 (Python window)
+L104: 
+L105: The following Python window script demonstrates how to use the JoinField function in immediate mode.
+L106: 
+L107:     `import arcpy
+L108:     arcpy.env.workspace = "C:/data/data.gdb"
+L109:     arcpy.management.JoinField("zion_park", "zonecode", "zion_zoning", "zonecode",
+L110:                                ["land_use", "land_cover"])`
+L111: 
+L112: JoinField example 2 (stand-alone script)
+L113: This stand-alone Python script shows the JoinField function used to join a table to a feature class and only include two of the table's fields in the join.
+L114: 
+L115:     `# PermanentJoin.py
+L116:     # Purpose: Join two fields from a table to a feature class
+L117: 
+L118:     # Import system modules
+L119:     import arcpy
+L120: 
+L121:     # Set the current workspace
+L122:     arcpy.env.workspace = "c:/data/data.gdb"
+L123: 
+L124:     # Set the local parameters
+L125:     inFeatures = "zion_park"
+L126:     joinField = "zonecode"
+L127:     joinTable = "zion_zoning"
+L128:     fieldList = ["land_use", "land_cover"]
+L129: 
+L130:     # Join two feature classes by the zonecode field and only carry
+L131:     # over the land use and land cover fields
+L132:     arcpy.management.JoinField(inFeatures, joinField, joinTable, joinField,
+L133:                                fieldList)`
+L134: ## Environments
+L135: 
+L136: cite14†Auto Commit , cite15†Current Workspace L137: 
+L138: ## Licensing information
+L139: 
+L140:   * Basic: Yes
+L141:   * Standard: Yes
+L142:   * Advanced: Yes
+L143: 
+L144: #### Related topics
+L145: 
+L146:   * cite16†An overview of the Joins and Relates toolset L147:   * cite17†Find a geoprocessing tool L148:   * cite18†Relationships and ArcGIS L149:   * cite19†Data relationship options L150:   * cite20†Data relationship comparison L151: 
+L152: * * *
+L153: 
+L154: cite21†Feedback on this topic? L155: ##### In this topic
+L156: 
+L157:   1. cite1†Summary L158:   2. cite2†Usage L159:   3. cite3†Parameters L160:   4. cite4†Environments L161:   5. cite5†Licensing information L162: 
+L163: cite22†flist 
