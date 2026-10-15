@@ -1,5 +1,5 @@
 """Case-driven exact SOURCE/CURRENT/reader binding. The planning guard is mandatory."""
-import pathlib,json,hashlib,importlib.util,subprocess,sys
+import pathlib,json,hashlib,importlib.util,subprocess,sys,datetime
 C=pathlib.Path(__file__).resolve().parents[4];D=pathlib.Path(__file__).parent;P=pathlib.Path('/Users/eaafonasev/Projects/mindbattle/planning');O='01a14018-7b8d-7301-ad28-95ee8d812e97'
 def rd(p):return json.loads(pathlib.Path(p).read_text())
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
@@ -11,7 +11,22 @@ def digest(p):return p.get('sha256',p.get('canonicalSHA256'))
 def compacted(uid):
  fs=list(pathlib.Path('/Users/eaafonasev/.codex/sessions/2026/10/15').glob('*'+uid+'.jsonl'))+list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+uid+'.jsonl'));assert len(fs)==1,(uid,'missing or ambiguous journal')
  return sum(json.loads(line).get('type')=='compacted' for line in fs[0].open())
-casePath=pathlib.Path(sys.argv[1]).resolve();case=rd(casePath);R=C/case['readerPath'];rp=R/'receipt.json';r=rd(rp);src=rd(R/'sources.json');peers=rd(R/'peers.json');ver=rd(R/'verification.json');qaPath=C/case['qaPath'];qa=rd(qaPath)
+def verify_source_freeze(applications,freeze):
+ frozenSecond=int(subprocess.check_output(['git','-C',str(C),'show','-s','--format=%ct',freeze],text=True));result={}
+ for a in applications:
+  uid=a['author'];packet=C/a['authorPacket'];critical=[packet/f for f in ['candidate.json','sourceproof.json','peer-snapshot.json']]
+  if a.get('actualPeerDelta'):critical.append(C/a['actualPeerDelta'])
+  for p in critical:assert subprocess.check_output(['git','-C',str(C),'show',freeze+':'+str(p.relative_to(C))])==p.read_bytes(),('SOURCE_FREEZE_BYTES_DRIFT',uid,str(p))
+  for source in rd(packet/'sourceproof.json')['rawSources']:assert raw(C/source['path'])==source['sha256']
+  fs=list(pathlib.Path('/Users/eaafonasev/.codex/sessions').rglob('*'+uid+'.jsonl'))+list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').rglob('*'+uid+'.jsonl'));assert len(fs)==1,(uid,'missing or ambiguous source journal');events=[json.loads(line) for line in fs[0].open()];boundaries=[e['timestamp'] for e in events if e.get('type')=='compacted'];result[uid]={'actualCompactions':len(boundaries),'freeze':freeze,'criticalFilesByteExact':len(critical)}
+  if len(boundaries)>=2:
+   second=datetime.datetime.fromisoformat(boundaries[1].replace('Z','+00:00')).timestamp()
+   assert frozenSecond+1<=second,('SOURCE_PROOF_FREEZE_AFTER_SECOND_COMPACTION_NEEDS_FRESH_ADOPTION',uid,freeze,boundaries[1]);result[uid]['freezeProvenBeforeSecondCompaction']=True
+ return result
+casePath=pathlib.Path(sys.argv[1]).resolve();case=rd(casePath);applications=[rd(C/p) for p in case['applyPaths']];sourceLineage=verify_source_freeze(applications,case['sourceFreeze'])
+if '--audit-source-only' in sys.argv:
+ print(json.dumps({'sourceLineage':sourceLineage,'mutations':False}));raise SystemExit(0)
+R=C/case['readerPath'];rp=R/'receipt.json';r=rd(rp);src=rd(R/'sources.json');peers=rd(R/'peers.json');ver=rd(R/'verification.json');qaPath=C/case['qaPath'];qa=rd(qaPath)
 assert qa['success'] and qa['numPassedTests']==19 and qa['numFailedTests']==qa['numPendingTests']==qa.get('numTodoTests',0)==0
 assert raw(qaPath)==ver['existingQA19']['rawSHA256'];tp=C/'src/content/topics/books-publishing.json';assert raw(tp)==ver['catalogRawSHA256'] and tp.read_bytes()==subprocess.check_output(['git','-C',str(C),'show',case['testedCatalogCommit']+':src/content/topics/books-publishing.json'])
 cat={}
@@ -31,7 +46,7 @@ for pair in peers['bilateralMainComparisons']:
 for s in src['sources']:
  assert raw(C/s['path'])==s['rawReadSHA256'] and s['personalReadEvidence'] and (s.get('locator') or s.get('locators'))
  if s.get('readPath'):assert raw(C/s['readPath'])==s['readTextSHA256']
-applications=[rd(C/p) for p in case['applyPaths']];ag={};av={};authors={}
+ag={};av={};authors={}
 for a in applications:
  for e in a['applied']:assert e['id'] not in authors;authors[e['id']]={'id':a['author'],'packet':a['authorPacket']}
  ag.update({(g['id'],g['group']):g for g in a['finalGroupBindings']});av.update({(v['id'],v['slot']):v for v in a['finalVariantBindings']})
@@ -48,7 +63,7 @@ for e in r['entries']:
   assert e['status']=='PASS' and not e['defects'];author=authors[i];accepted.append({'questionId':i,'cardCanonicalSha256':sha(q),'authorNativeId':author['id'],'authorReceipt':author['packet']+'/sourceproof.json','authorFreeze':case['sourceFreeze'],'readerNativeId':case['readerNativeId'],'independentReceipt':str(rp.relative_to(C)),'readerReceiptRawSHA256':raw(rp),'coordinatorDecision':case['coordinatorDecision']})
 assert len(accepted)==len(acceptedOrders)>0
 audit={'root':compacted(O),'SOURCE':{a['id']:compacted(a['id']) for a in authors.values()},'OTHER':compacted(case['readerNativeId'])};assert audit['root']<2
-report={**case['reportBase'],'scope':case['scope'],'acceptedOrders':case['acceptedOrders'],'verified':{'currentCards':len(r['entries']),'literalGroups':6*len(r['entries']),'wholeVariants':4*len(r['entries']),'acceptedCards':len(accepted),'actualPeers':len(peers['actualCurrentPeers']),'bilateralMainPairs':len(peers['bilateralMainComparisons'])},'QA':{'path':case['qaPath'],'pass':19,'fail':0,'pending':0,'testedCatalogCommit':case['testedCatalogCommit'],'reportCommit':case['qaReportCommit']},'preleaseGuard':True,'actualCompactionAudit':audit,'ownIntakeCURRENT':754}
+report={**case['reportBase'],'scope':case['scope'],'acceptedOrders':case['acceptedOrders'],'verified':{'currentCards':len(r['entries']),'literalGroups':6*len(r['entries']),'wholeVariants':4*len(r['entries']),'acceptedCards':len(accepted),'actualPeers':len(peers['actualCurrentPeers']),'bilateralMainPairs':len(peers['bilateralMainComparisons'])},'QA':{'path':case['qaPath'],'pass':19,'fail':0,'pending':0,'testedCatalogCommit':case['testedCatalogCommit'],'reportCommit':case['qaReportCommit']},'preleaseGuard':True,'sourceFreezeLineage':sourceLineage,'actualCompactionAudit':audit,'ownIntakeCURRENT':754}
 if '--verify-only' in sys.argv:
  print(json.dumps({'verified':report['verified'],'acceptedOrders':case['acceptedOrders'],'audit':audit,'mutations':False}));raise SystemExit(0)
 m=load('certificate',D/'certification-common.py');m.O=O;m.P=P;guard=load('guard',D.parent/'coordinator-01a13f31/planning-certification-guard.py')
