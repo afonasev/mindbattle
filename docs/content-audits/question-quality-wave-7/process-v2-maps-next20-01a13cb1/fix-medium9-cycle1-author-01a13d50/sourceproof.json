@@ -1,0 +1,1241 @@
+{
+  "schemaVersion": 1,
+  "candidatePath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/fix-medium9-cycle1-author-01a13d50/candidate.json",
+  "baselineCommit": "5022fb1fefa636a510d7ddd983673ec3de89dde6",
+  "qualityCredit": 0,
+  "entries": [
+    {
+      "id": "maps-cartography-spot-elevation",
+      "stage": "fix-medium9-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "065695444bcdf83f734e8435fdb3631ea581a55a2195432e550a002292435da8",
+      "afterHash": "0812487f95c6084c59f165b7d83735389f4731ce91317c432c5da7c893cbdd46",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "На USGS-топокарте соседние горизонтали подписаны 700 м и 720 м. Между ними стоит отдельная отметка × 712 м, не на линии. Найдите сечение рельефа и определите, к чему относится 712 м.",
+            "answers": [
+              "Сечение 12 м; 712 м — высота всей нижней горизонтали.",
+              "Сечение 20 м; 712 м — высота отдельной отмеченной точки.",
+              "Сечение 20 м; 712 м — высота всей горизонтали между подписями.",
+              "Сечение 12 м; 712 м — отметка геодезического репера."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "e43ac5293d02acd97aea3fd7903d24f34d8e47cc05816880fdb6484025f63ca9",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-00.txt",
+            "fileSHA256": "4b155716a04ef37127ec5926fa9dfe10b0e913cd4a6081415e24af332a48868f",
+            "exactlocator": "USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols.",
+            "specificClaim": "Задача сводит конкретную операцию к одному ключу; USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols.",
+            "reason": "Варианты 0–3 проверены по отдельным ошибкам: Uses 720−700 to compute the adjacent-contour interval and reads the separate symbol as a point value. Confuses a point-to-contour difference with the interval and assigns an isolated value to a full line. Computes the interval correctly but transfers the 712 m point elevation to the entire contour. Confuses a spot elevation with a benchmark/control mark and repeats the incorrect 12 m interval."
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "Сечение равно 720−700=20 м — разность высот соседних горизонталей. Число 712 м у отдельного знака задаёт высоту одной точки, а не линии. USGS отдельно показывает знаки высотных отметок и реперов.",
+          "literalSHA256": "6f6c14947884fbe0dc91539fd9f54dafc92f4906e1253e51ce6599b8e99f6a46",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-00.txt",
+            "fileSHA256": "4b155716a04ef37127ec5926fa9dfe10b0e913cd4a6081415e24af332a48868f",
+            "exactlocator": "USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols.",
+            "specificClaim": "Расчёт и точные пределы интерпретации: USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols.",
+            "reason": "Explanation раскрывает вычисление и границы утверждения."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "Сечение получают по соседним контурам; spot elevation не переопределяет линию.",
+          "literalSHA256": "4cfa49e1ab8fa9a9e9b04b053456d31196198ae753e4a5a32f83418aebfc795a",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-00.txt",
+            "fileSHA256": "4b155716a04ef37127ec5926fa9dfe10b0e913cd4a6081415e24af332a48868f",
+            "exactlocator": "USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols.",
+            "specificClaim": "Пояснение для варианта 0: Сечение получают по соседним контурам; spot elevation не переопределяет линию. Источник: USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols.",
+            "reason": "Uses 720−700 to compute the adjacent-contour interval and reads the separate symbol as a point value. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "USGS различает контур равной высоты и отдельную точечную spot elevation.",
+          "literalSHA256": "3c56b213debda4f8d16dc32b659358e20e7323c0820c3be2b560c7b5422b4dfc",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-00.txt",
+            "fileSHA256": "4b155716a04ef37127ec5926fa9dfe10b0e913cd4a6081415e24af332a48868f",
+            "exactlocator": "USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols.",
+            "specificClaim": "Пояснение для варианта 1: USGS различает контур равной высоты и отдельную точечную spot elevation. Источник: USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols.",
+            "reason": "Confuses a point-to-contour difference with the interval and assigns an isolated value to a full line. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Контур соединяет точки равной высоты; отдельное число относится к обозначенному месту.",
+          "literalSHA256": "808397198d60042481bc12954ad3255c8223bea090da8aa270cd4c08ada02361",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-00.txt",
+            "fileSHA256": "4b155716a04ef37127ec5926fa9dfe10b0e913cd4a6081415e24af332a48868f",
+            "exactlocator": "USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols.",
+            "specificClaim": "Пояснение для варианта 2: Контур соединяет точки равной высоты; отдельное число относится к обозначенному месту. Источник: USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols.",
+            "reason": "Computes the interval correctly but transfers the 712 m point elevation to the entire contour. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "USGS различает spot elevation и benchmark/control mark как разные знаки.",
+          "literalSHA256": "3288952ac0c128b7cdb6b4402e9094ebbb7af5d63ff9fb9ae067d97f5c312c82",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-00.txt",
+            "fileSHA256": "4b155716a04ef37127ec5926fa9dfe10b0e913cd4a6081415e24af332a48868f",
+            "exactlocator": "USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols.",
+            "specificClaim": "Пояснение для варианта 3: USGS различает spot elevation и benchmark/control mark как разные знаки. Источник: USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols.",
+            "reason": "Confuses a spot elevation with a benchmark/control mark and repeats the incorrect 12 m interval. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "claim": "Сечение 12 м; 712 м — высота всей нижней горизонтали.",
+          "truthOneKeyAndPlausibility": "Uses 720−700 to compute the adjacent-contour interval and reads the separate symbol as a point value.",
+          "note": "Сечение получают по соседним контурам; spot elevation не переопределяет линию.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols."
+        },
+        {
+          "answerIndex": 1,
+          "claim": "Сечение 20 м; 712 м — высота отдельной отмеченной точки.",
+          "truthOneKeyAndPlausibility": "Confuses a point-to-contour difference with the interval and assigns an isolated value to a full line.",
+          "note": "USGS различает контур равной высоты и отдельную точечную spot elevation.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols."
+        },
+        {
+          "answerIndex": 2,
+          "claim": "Сечение 20 м; 712 м — высота всей горизонтали между подписями.",
+          "truthOneKeyAndPlausibility": "Computes the interval correctly but transfers the 712 m point elevation to the entire contour.",
+          "note": "Контур соединяет точки равной высоты; отдельное число относится к обозначенному месту.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols."
+        },
+        {
+          "answerIndex": 3,
+          "claim": "Сечение 12 м; 712 м — отметка геодезического репера.",
+          "truthOneKeyAndPlausibility": "Confuses a spot elevation with a benchmark/control mark and repeats the incorrect 12 m interval.",
+          "note": "USGS различает spot elevation и benchmark/control mark как разные знаки.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "USGS pp. 1–3: contours are equal-elevation lines; interval is the adjacent-contour difference; spot elevation and BM/control use distinct symbols."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-choropleth-shading",
+      "stage": "fix-medium9-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "e3d1afc372e6f7d0d822b9ddcc0236f27f06b3bd6d37140a56f68016b93cd59e",
+      "afterHash": "5e0ca049f75a5b4c8b6bcd815868ca66b7ad8f234f76afd3a43403657b013a21",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Тематическая карта окрашивает полигоны по доле домов без водопровода: 0–5%, 5–10%, 10–15%; на последовательной шкале тёмный цвет означает большую долю. В X из 200 домов 12 без водопровода, в Y из 1 000 — 30. Какой класс получает каждый район?",
+            "answers": [
+              "X: 0–5%, Y: 5–10%; тёмный Y означает более высокую долю.",
+              "X: 5–10%, Y: 0–5%; тёмный X означает более высокую долю.",
+              "X: 5–10%, Y: 5–10%; одинаковый класс означает одинаковые точные проценты.",
+              "X: 12–30 домов, Y: 200–1 000 домов; площадь полигона задаёт класс."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "ebd5c5d9e1bc495e72a47549457c1dffff3526f73058288c88f1a2510488749c",
+          "source": {
+            "title": "Esri ArcGIS Pro: Graduated colors",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/graduated-colors.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-01.txt",
+            "fileSHA256": "0932b1fbe526b9bd9107f3fc488ba673cbf781298f5e4859b31b5098cbeefa8a",
+            "exactlocator": "Opening definition, class ranges/color assignment, constant symbol size, and data normalization section.",
+            "specificClaim": "Задача сводит конкретную операцию к одному ключу; Opening definition, class ranges/color assignment, constant symbol size, and data normalization section.",
+            "reason": "Варианты 0–3 проверены по отдельным ошибкам: Divides raw counts by the proper denominators, then reverses the two resulting percentage classes. Correctly calculates 6% and 3%, assigns the stated bins, and applies the explicitly stated dark-is-higher legend. Confuses a bin with an exact value, although its range contains many percentages. Substitutes raw counts/area for the displayed proportion; neither identifies the classified rate."
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "Для X доля равна 12/200=6%, для Y — 30/1 000=3%. Поэтому X попадает в 5–10%, Y — в 0–5%; X получает более тёмный цвет при последовательной шкале. Сравнивать нужно нормированную долю, а не абсолютные количества.",
+          "literalSHA256": "3f1c4b23118f00bf9fd67ba35d798a066daa3cb02c331e6b5c8ef228a6bb867d",
+          "source": {
+            "title": "Esri ArcGIS Pro: Graduated colors",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/graduated-colors.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-01.txt",
+            "fileSHA256": "0932b1fbe526b9bd9107f3fc488ba673cbf781298f5e4859b31b5098cbeefa8a",
+            "exactlocator": "Opening definition, class ranges/color assignment, constant symbol size, and data normalization section.",
+            "specificClaim": "Расчёт и точные пределы интерпретации: Opening definition, class ranges/color assignment, constant symbol size, and data normalization section.",
+            "reason": "Explanation раскрывает вычисление и границы утверждения."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "Долю считают от числа домов в районе; цвет choropleth кодирует диапазон, не абсолютный счёт.",
+          "literalSHA256": "e1d3b2a4c3b2b2e02710b6f4e9cf121e775d32496d21c978adbb258774ceda98",
+          "source": {
+            "title": "Esri ArcGIS Pro: Graduated colors",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/graduated-colors.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-01.txt",
+            "fileSHA256": "0932b1fbe526b9bd9107f3fc488ba673cbf781298f5e4859b31b5098cbeefa8a",
+            "exactlocator": "Opening definition, class ranges/color assignment, constant symbol size, and data normalization section.",
+            "specificClaim": "Пояснение для варианта 0: Долю считают от числа домов в районе; цвет choropleth кодирует диапазон, не абсолютный счёт. Источник: Opening definition, class ranges/color assignment, constant symbol size, and data normalization section.",
+            "reason": "Divides raw counts by the proper denominators, then reverses the two resulting percentage classes. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "12/200=6%, 30/1 000=3%; окраска классов упорядочена по значению.",
+          "literalSHA256": "a12b0920df0e85473bf1eb88069c5331b7203459e09c11c2f7da651e2039056c",
+          "source": {
+            "title": "Esri ArcGIS Pro: Graduated colors",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/graduated-colors.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-01.txt",
+            "fileSHA256": "0932b1fbe526b9bd9107f3fc488ba673cbf781298f5e4859b31b5098cbeefa8a",
+            "exactlocator": "Opening definition, class ranges/color assignment, constant symbol size, and data normalization section.",
+            "specificClaim": "Пояснение для варианта 1: 12/200=6%, 30/1 000=3%; окраска классов упорядочена по значению. Источник: Opening definition, class ranges/color assignment, constant symbol size, and data normalization section.",
+            "reason": "Correctly calculates 6% and 3%, assigns the stated bins, and applies the explicitly stated dark-is-higher legend. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Один класс содержит диапазон разных значений; одинаковый цвет не доказывает равенство.",
+          "literalSHA256": "cd8a68a24361f7c01a65af31aa104b5602c3441c14db5ad3f8bce456bf5514f9",
+          "source": {
+            "title": "Esri ArcGIS Pro: Graduated colors",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/graduated-colors.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-01.txt",
+            "fileSHA256": "0932b1fbe526b9bd9107f3fc488ba673cbf781298f5e4859b31b5098cbeefa8a",
+            "exactlocator": "Opening definition, class ranges/color assignment, constant symbol size, and data normalization section.",
+            "specificClaim": "Пояснение для варианта 2: Один класс содержит диапазон разных значений; одинаковый цвет не доказывает равенство. Источник: Opening definition, class ranges/color assignment, constant symbol size, and data normalization section.",
+            "reason": "Confuses a bin with an exact value, although its range contains many percentages. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "Градуированная окраска привязывает цвет к диапазону показателя, а не к площади полигона.",
+          "literalSHA256": "ea9013edd7f006eb82bf21ecf9f160ea5657798f1937de709891fc7cc1661f96",
+          "source": {
+            "title": "Esri ArcGIS Pro: Graduated colors",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/graduated-colors.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-01.txt",
+            "fileSHA256": "0932b1fbe526b9bd9107f3fc488ba673cbf781298f5e4859b31b5098cbeefa8a",
+            "exactlocator": "Opening definition, class ranges/color assignment, constant symbol size, and data normalization section.",
+            "specificClaim": "Пояснение для варианта 3: Градуированная окраска привязывает цвет к диапазону показателя, а не к площади полигона. Источник: Opening definition, class ranges/color assignment, constant symbol size, and data normalization section.",
+            "reason": "Substitutes raw counts/area for the displayed proportion; neither identifies the classified rate. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "claim": "X: 0–5%, Y: 5–10%; тёмный Y означает более высокую долю.",
+          "truthOneKeyAndPlausibility": "Divides raw counts by the proper denominators, then reverses the two resulting percentage classes.",
+          "note": "Долю считают от числа домов в районе; цвет choropleth кодирует диапазон, не абсолютный счёт.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Opening definition, class ranges/color assignment, constant symbol size, and data normalization section."
+        },
+        {
+          "answerIndex": 1,
+          "claim": "X: 5–10%, Y: 0–5%; тёмный X означает более высокую долю.",
+          "truthOneKeyAndPlausibility": "Correctly calculates 6% and 3%, assigns the stated bins, and applies the explicitly stated dark-is-higher legend.",
+          "note": "12/200=6%, 30/1 000=3%; окраска классов упорядочена по значению.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Opening definition, class ranges/color assignment, constant symbol size, and data normalization section."
+        },
+        {
+          "answerIndex": 2,
+          "claim": "X: 5–10%, Y: 5–10%; одинаковый класс означает одинаковые точные проценты.",
+          "truthOneKeyAndPlausibility": "Confuses a bin with an exact value, although its range contains many percentages.",
+          "note": "Один класс содержит диапазон разных значений; одинаковый цвет не доказывает равенство.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Opening definition, class ranges/color assignment, constant symbol size, and data normalization section."
+        },
+        {
+          "answerIndex": 3,
+          "claim": "X: 12–30 домов, Y: 200–1 000 домов; площадь полигона задаёт класс.",
+          "truthOneKeyAndPlausibility": "Substitutes raw counts/area for the displayed proportion; neither identifies the classified rate.",
+          "note": "Градуированная окраска привязывает цвет к диапазону показателя, а не к площади полигона.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Opening definition, class ranges/color assignment, constant symbol size, and data normalization section."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-dot-density",
+      "stage": "fix-medium9-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "3cdd0b66e7b22e7e77865656eccda1a760b24b18cd0cf19ac6650ccc49966998",
+      "afterHash": "1f3c5cd978a4586e18d23b10f45f81506be62c00a964a50f52c06cb37820ac38",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В легенде карты одна точка равна 200 жителям. В полигонах A и B нарисованы 9 и 14 точек; при повторной отрисовке их позиции изменились, но количество осталось прежним. Что можно заключить?",
+            "answers": [
+              "В B на 5 жителей больше: сравнивать нужно число точек, не легенду.",
+              "A показывает 1 800 жителей, B — 2 800; сдвиг кружков не задаёт адреса.",
+              "При перерисовке B получил 2 800 новых жителей из-за новых координат кружков.",
+              "Каждая точка фиксирует отдельное жилище респондента."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "25de1f027039cc2444a6abf4117b17605ccac2f1c79013d7292d669eea9ffca9",
+          "source": {
+            "title": "Esri ArcGIS Pro: Dot density",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/dot-density.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-04.txt",
+            "fileSHA256": "e4ace2a5e2f2475e72d8c76ee7f29a87abd31774e53e33b06af81422785ced30",
+            "exactlocator": "Opening definition: each dot represents a constant number; placement section explains randomized positioning.",
+            "specificClaim": "Задача сводит конкретную операцию к одному ключу; Opening definition: each dot represents a constant number; placement section explains randomized positioning.",
+            "reason": "Варианты 0–3 проверены по отдельным ошибкам: Treats each dot as one person rather than the legend’s 200-person unit. Multiplies each polygon’s dot count by 200 and separates aggregate count from point placement. Mistakes randomized cartographic repositioning for new population arrivals. Misreads aggregate dot-density marks as individually geocoded residences."
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "В A изображено 9×200=1 800 жителей, в B — 14×200=2 800. Перестановка точек не меняет счёт и не сообщает расположение конкретных людей. Такая карта показывает агрегированные количества внутри полигонов.",
+          "literalSHA256": "13ba2e38d88e1ae4f6f10399203c92f7091630f75716ccc1c8cf0e5d7bbf7839",
+          "source": {
+            "title": "Esri ArcGIS Pro: Dot density",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/dot-density.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-04.txt",
+            "fileSHA256": "e4ace2a5e2f2475e72d8c76ee7f29a87abd31774e53e33b06af81422785ced30",
+            "exactlocator": "Opening definition: each dot represents a constant number; placement section explains randomized positioning.",
+            "specificClaim": "Расчёт и точные пределы интерпретации: Opening definition: each dot represents a constant number; placement section explains randomized positioning.",
+            "reason": "Explanation раскрывает вычисление и границы утверждения."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "Одна точка соответствует 200 жителям, поэтому её нельзя считать одним человеком.",
+          "literalSHA256": "319965d5f11cb579eb4aeec13be5cb11ba77bdf1c4693fe7ccd42c099f78e665",
+          "source": {
+            "title": "Esri ArcGIS Pro: Dot density",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/dot-density.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-04.txt",
+            "fileSHA256": "e4ace2a5e2f2475e72d8c76ee7f29a87abd31774e53e33b06af81422785ced30",
+            "exactlocator": "Opening definition: each dot represents a constant number; placement section explains randomized positioning.",
+            "specificClaim": "Пояснение для варианта 0: Одна точка соответствует 200 жителям, поэтому её нельзя считать одним человеком. Источник: Opening definition: each dot represents a constant number; placement section explains randomized positioning.",
+            "reason": "Treats each dot as one person rather than the legend’s 200-person unit. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "Умножьте количество точек на 200; повторная случайная раскладка меняет положение, не суммарное значение.",
+          "literalSHA256": "2380aa59a2d122e323242acdcb2e3d31a154ee47ced4a49be65ec0b8f818f842",
+          "source": {
+            "title": "Esri ArcGIS Pro: Dot density",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/dot-density.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-04.txt",
+            "fileSHA256": "e4ace2a5e2f2475e72d8c76ee7f29a87abd31774e53e33b06af81422785ced30",
+            "exactlocator": "Opening definition: each dot represents a constant number; placement section explains randomized positioning.",
+            "specificClaim": "Пояснение для варианта 1: Умножьте количество точек на 200; повторная случайная раскладка меняет положение, не суммарное значение. Источник: Opening definition: each dot represents a constant number; placement section explains randomized positioning.",
+            "reason": "Multiplies each polygon’s dot count by 200 and separates aggregate count from point placement. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Размещение точек внутри полигона может меняться случайно и не означает изменения исходной статистики.",
+          "literalSHA256": "f7a5011e06d1ff860ddb6adf9e00dafdc1e1934f2f8ad2c637e328f1d14c5b0c",
+          "source": {
+            "title": "Esri ArcGIS Pro: Dot density",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/dot-density.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-04.txt",
+            "fileSHA256": "e4ace2a5e2f2475e72d8c76ee7f29a87abd31774e53e33b06af81422785ced30",
+            "exactlocator": "Opening definition: each dot represents a constant number; placement section explains randomized positioning.",
+            "specificClaim": "Пояснение для варианта 2: Размещение точек внутри полигона может меняться случайно и не означает изменения исходной статистики. Источник: Opening definition: each dot represents a constant number; placement section explains randomized positioning.",
+            "reason": "Mistakes randomized cartographic repositioning for new population arrivals. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "Dot-density показывает агрегат по полигону; рисунок размещения не является геокодированием людей.",
+          "literalSHA256": "9623704cf1139d07de672152fd9c80bf91e649ec58ddeb755550a999bd645c63",
+          "source": {
+            "title": "Esri ArcGIS Pro: Dot density",
+            "url": "https://pro.arcgis.com/en/pro-app/3.6/help/mapping/layer-properties/dot-density.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-04.txt",
+            "fileSHA256": "e4ace2a5e2f2475e72d8c76ee7f29a87abd31774e53e33b06af81422785ced30",
+            "exactlocator": "Opening definition: each dot represents a constant number; placement section explains randomized positioning.",
+            "specificClaim": "Пояснение для варианта 3: Dot-density показывает агрегат по полигону; рисунок размещения не является геокодированием людей. Источник: Opening definition: each dot represents a constant number; placement section explains randomized positioning.",
+            "reason": "Misreads aggregate dot-density marks as individually geocoded residences. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "claim": "В B на 5 жителей больше: сравнивать нужно число точек, не легенду.",
+          "truthOneKeyAndPlausibility": "Treats each dot as one person rather than the legend’s 200-person unit.",
+          "note": "Одна точка соответствует 200 жителям, поэтому её нельзя считать одним человеком.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Opening definition: each dot represents a constant number; placement section explains randomized positioning."
+        },
+        {
+          "answerIndex": 1,
+          "claim": "A показывает 1 800 жителей, B — 2 800; сдвиг кружков не задаёт адреса.",
+          "truthOneKeyAndPlausibility": "Multiplies each polygon’s dot count by 200 and separates aggregate count from point placement.",
+          "note": "Умножьте количество точек на 200; повторная случайная раскладка меняет положение, не суммарное значение.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Opening definition: each dot represents a constant number; placement section explains randomized positioning."
+        },
+        {
+          "answerIndex": 2,
+          "claim": "При перерисовке B получил 2 800 новых жителей из-за новых координат кружков.",
+          "truthOneKeyAndPlausibility": "Mistakes randomized cartographic repositioning for new population arrivals.",
+          "note": "Размещение точек внутри полигона может меняться случайно и не означает изменения исходной статистики.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Opening definition: each dot represents a constant number; placement section explains randomized positioning."
+        },
+        {
+          "answerIndex": 3,
+          "claim": "Каждая точка фиксирует отдельное жилище респондента.",
+          "truthOneKeyAndPlausibility": "Misreads aggregate dot-density marks as individually geocoded residences.",
+          "note": "Dot-density показывает агрегат по полигону; рисунок размещения не является геокодированием людей.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Opening definition: each dot represents a constant number; placement section explains randomized positioning."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-isoline-value",
+      "stage": "fix-medium9-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "a73b57f1979a239dddde6be75a179d9963128183e3464bfa36e6abe12117f472",
+      "afterHash": "ada98f18e5f2bcb4cbebcd43100a5941ef49df8915878359d9487f0b670cb081",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Температурный растр интерполирован по станциям. На рассчитанной поверхности между станциями проходит изотерма 15 °C. Что утверждает линия и чего она не подтверждает?",
+            "answers": [
+              "Вне станций линия не имеет значения: линии можно проводить только через измеренные точки.",
+              "На рассчитанной поверхности вдоль линии значение равно 15 °C, хотя там нет станции.",
+              "Любая точка между станциями обязательно измерена ровно как 15 °C.",
+              "Линия показывает только административную границу температурных зон."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "12d7af3c3e6fd17a13cb83b41e66d80e09ad73a1166ff0ed176e18383e481798",
+          "source": {
+            "title": "Esri ArcGIS Pro: How contouring works",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/tool-reference/spatial-analyst/how-contouring-works.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-05.txt",
+            "fileSHA256": "271e03c99d4050983666e575f051778b9a2887389854c7bcc9923f8e93a3750a",
+            "exactlocator": "Full tool explanation: raster interpolation and contour lines connecting equal modeled values.",
+            "specificClaim": "Задача сводит конкретную операцию к одному ключу; Full tool explanation: raster interpolation and contour lines connecting equal modeled values.",
+            "reason": "Варианты 0–3 проверены по отдельным ошибкам: Treats every point between stations as directly measured rather than interpolated. Correctly limits the claim to the modeled surface and distinguishes it from station observations. Overclaims that a modeled contour certifies a thermometer reading at every location. Confuses a data-value contour with an administrative boundary."
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "Изотерма соединяет места, которым рассчитанная растровая поверхность присваивает одно значение — 15 °C. Между станциями это результат интерполяции, а не отдельное наблюдение термометра. Линия не доказывает, что в каждой её точке проводилось измерение.",
+          "literalSHA256": "7884de5cbffb940ea09cc9c05c46276815fa1e9487b1b236fdf09420b53bbcfd",
+          "source": {
+            "title": "Esri ArcGIS Pro: How contouring works",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/tool-reference/spatial-analyst/how-contouring-works.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-05.txt",
+            "fileSHA256": "271e03c99d4050983666e575f051778b9a2887389854c7bcc9923f8e93a3750a",
+            "exactlocator": "Full tool explanation: raster interpolation and contour lines connecting equal modeled values.",
+            "specificClaim": "Расчёт и точные пределы интерпретации: Full tool explanation: raster interpolation and contour lines connecting equal modeled values.",
+            "reason": "Explanation раскрывает вычисление и границы утверждения."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "Изолинии строят по интерполированной поверхности; станция не нужна в каждой точке линии.",
+          "literalSHA256": "99559ab6bda9aa5e9cd00520b6da669607dcad79a1609c3ef97ab229650ca834",
+          "source": {
+            "title": "Esri ArcGIS Pro: How contouring works",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/tool-reference/spatial-analyst/how-contouring-works.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-05.txt",
+            "fileSHA256": "271e03c99d4050983666e575f051778b9a2887389854c7bcc9923f8e93a3750a",
+            "exactlocator": "Full tool explanation: raster interpolation and contour lines connecting equal modeled values.",
+            "specificClaim": "Пояснение для варианта 0: Изолинии строят по интерполированной поверхности; станция не нужна в каждой точке линии. Источник: Full tool explanation: raster interpolation and contour lines connecting equal modeled values.",
+            "reason": "Treats every point between stations as directly measured rather than interpolated. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "Контур соединяет положения растра с одним значением; между измерениями результат зависит от интерполяции.",
+          "literalSHA256": "ac04778c772d5eb3164f22d4a7f841ccb5c32de834093281e34562a81f5a20a0",
+          "source": {
+            "title": "Esri ArcGIS Pro: How contouring works",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/tool-reference/spatial-analyst/how-contouring-works.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-05.txt",
+            "fileSHA256": "271e03c99d4050983666e575f051778b9a2887389854c7bcc9923f8e93a3750a",
+            "exactlocator": "Full tool explanation: raster interpolation and contour lines connecting equal modeled values.",
+            "specificClaim": "Пояснение для варианта 1: Контур соединяет положения растра с одним значением; между измерениями результат зависит от интерполяции. Источник: Full tool explanation: raster interpolation and contour lines connecting equal modeled values.",
+            "reason": "Correctly limits the claim to the modeled surface and distinguishes it from station observations. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Растровая поверхность вычисляет оценки между наблюдениями; изолиния описывает оценённое поле, не новый замер.",
+          "literalSHA256": "683cf4a2e40093b32ffe28389c0f827786a14bd34494d325be6bdafdf2e6fadf",
+          "source": {
+            "title": "Esri ArcGIS Pro: How contouring works",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/tool-reference/spatial-analyst/how-contouring-works.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-05.txt",
+            "fileSHA256": "271e03c99d4050983666e575f051778b9a2887389854c7bcc9923f8e93a3750a",
+            "exactlocator": "Full tool explanation: raster interpolation and contour lines connecting equal modeled values.",
+            "specificClaim": "Пояснение для варианта 2: Растровая поверхность вычисляет оценки между наблюдениями; изолиния описывает оценённое поле, не новый замер. Источник: Full tool explanation: raster interpolation and contour lines connecting equal modeled values.",
+            "reason": "Overclaims that a modeled contour certifies a thermometer reading at every location. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "Административные границы независимы от изолиний равных значений непрерывного поля.",
+          "literalSHA256": "3b0925e201435d7971adc99474a1de78e86ed7377d7eff5a90454073746c1819",
+          "source": {
+            "title": "Esri ArcGIS Pro: How contouring works",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/tool-reference/spatial-analyst/how-contouring-works.htm",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-05.txt",
+            "fileSHA256": "271e03c99d4050983666e575f051778b9a2887389854c7bcc9923f8e93a3750a",
+            "exactlocator": "Full tool explanation: raster interpolation and contour lines connecting equal modeled values.",
+            "specificClaim": "Пояснение для варианта 3: Административные границы независимы от изолиний равных значений непрерывного поля. Источник: Full tool explanation: raster interpolation and contour lines connecting equal modeled values.",
+            "reason": "Confuses a data-value contour with an administrative boundary. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "claim": "Вне станций линия не имеет значения: линии можно проводить только через измеренные точки.",
+          "truthOneKeyAndPlausibility": "Treats every point between stations as directly measured rather than interpolated.",
+          "note": "Изолинии строят по интерполированной поверхности; станция не нужна в каждой точке линии.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Full tool explanation: raster interpolation and contour lines connecting equal modeled values."
+        },
+        {
+          "answerIndex": 1,
+          "claim": "На рассчитанной поверхности вдоль линии значение равно 15 °C, хотя там нет станции.",
+          "truthOneKeyAndPlausibility": "Correctly limits the claim to the modeled surface and distinguishes it from station observations.",
+          "note": "Контур соединяет положения растра с одним значением; между измерениями результат зависит от интерполяции.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Full tool explanation: raster interpolation and contour lines connecting equal modeled values."
+        },
+        {
+          "answerIndex": 2,
+          "claim": "Любая точка между станциями обязательно измерена ровно как 15 °C.",
+          "truthOneKeyAndPlausibility": "Overclaims that a modeled contour certifies a thermometer reading at every location.",
+          "note": "Растровая поверхность вычисляет оценки между наблюдениями; изолиния описывает оценённое поле, не новый замер.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Full tool explanation: raster interpolation and contour lines connecting equal modeled values."
+        },
+        {
+          "answerIndex": 3,
+          "claim": "Линия показывает только административную границу температурных зон.",
+          "truthOneKeyAndPlausibility": "Confuses a data-value contour with an administrative boundary.",
+          "note": "Административные границы независимы от изолиний равных значений непрерывного поля.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Full tool explanation: raster interpolation and contour lines connecting equal modeled values."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-flow-map",
+      "stage": "fix-medium9-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "fff2f1c242679f4e113275bebd05c170d6353df8deafd49f77709f80657d0e6d",
+      "afterHash": "0fe88de42820de3d1ab385bfcedbee220f129937d9d472cbb8c6b0d70b4bb282",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В таблице поездок поток A→B равен 80 пассажирам, B→C — 200. На flow map ширина пропорциональна объёму, стрелки показывают направление. Сравните потоки и смысл стрелки.",
+            "answers": [
+              "A–B больше: линия длиннее, а длина на карте равна числу пассажиров.",
+              "B–C в 2,5 раза больше A–B; ширина кодирует объём, стрелка — направление.",
+              "Узел C обязательно имеет диаметр только по потоку B–C.",
+              "Стрелка B→C измеряет 200 км пути, независимо от таблицы поездок."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "a6acb5cf320b9b30fd5630d3c5baeb9d779d28a3e2289fb7da1972fb0bfb7522",
+          "source": {
+            "title": "ICA-Abs: Origin-destination flow maps",
+            "url": "https://ica-abs.copernicus.org/articles/1/351/2019/",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-06.txt",
+            "fileSHA256": "56293a6c3dcdb16b6a35b49a5247d6e610ec01bbc63a809067f1c5802cc73b86",
+            "exactlocator": "Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction.",
+            "specificClaim": "Задача сводит конкретную операцию к одному ключу; Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction.",
+            "reason": "Варианты 0–3 проверены по отдельным ошибкам: Confuses drawn route length with the quantity explicitly encoded by line width. Calculates 200/80=2.5 and keeps width (amount) distinct from arrowhead (direction). Confuses a node’s total incoming/outgoing flow with one incident route. Confuses a passenger count and flow direction with a distance unit."
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "Отношение объёмов равно 200/80=2,5, следовательно B→C кодируется более широкой линией. Ширина показывает относительное количество перемещений, а стрелка — направление. Длина линии или расстояние между узлами не заменяет числовой поток.",
+          "literalSHA256": "81fd74fb85600da996fd4d2e9a6bcf5b0a6efaceca97e2b0ab6a2fa5716f6d6d",
+          "source": {
+            "title": "ICA-Abs: Origin-destination flow maps",
+            "url": "https://ica-abs.copernicus.org/articles/1/351/2019/",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-06.txt",
+            "fileSHA256": "56293a6c3dcdb16b6a35b49a5247d6e610ec01bbc63a809067f1c5802cc73b86",
+            "exactlocator": "Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction.",
+            "specificClaim": "Расчёт и точные пределы интерпретации: Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction.",
+            "reason": "Explanation раскрывает вычисление и границы утверждения."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "В flow map объём кодируется шириной потока, а не длиной нарисованного маршрута.",
+          "literalSHA256": "75d4ba0bf7776032fd5d9f69121142b825ca247bf0942e2e3bfa5238971113cd",
+          "source": {
+            "title": "ICA-Abs: Origin-destination flow maps",
+            "url": "https://ica-abs.copernicus.org/articles/1/351/2019/",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-06.txt",
+            "fileSHA256": "56293a6c3dcdb16b6a35b49a5247d6e610ec01bbc63a809067f1c5802cc73b86",
+            "exactlocator": "Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction.",
+            "specificClaim": "Пояснение для варианта 0: В flow map объём кодируется шириной потока, а не длиной нарисованного маршрута. Источник: Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction.",
+            "reason": "Confuses drawn route length with the quantity explicitly encoded by line width. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "200 ÷ 80 = 2,5; источник разделяет относительную ширину линии и направление потока.",
+          "literalSHA256": "da6071e8ff4e5e81a71bd10e4bd3a46b9f9eab88c8b6f432877507d414ba442a",
+          "source": {
+            "title": "ICA-Abs: Origin-destination flow maps",
+            "url": "https://ica-abs.copernicus.org/articles/1/351/2019/",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-06.txt",
+            "fileSHA256": "56293a6c3dcdb16b6a35b49a5247d6e610ec01bbc63a809067f1c5802cc73b86",
+            "exactlocator": "Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction.",
+            "specificClaim": "Пояснение для варианта 1: 200 ÷ 80 = 2,5; источник разделяет относительную ширину линии и направление потока. Источник: Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction.",
+            "reason": "Calculates 200/80=2.5 and keeps width (amount) distinct from arrowhead (direction). Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Диаметр узла может показывать сумму входящих и исходящих потоков, а не одну линию.",
+          "literalSHA256": "62bfab67be23bf7a1f680047ccd1c6378fea10a6d034c17d242ca9a1ae934b64",
+          "source": {
+            "title": "ICA-Abs: Origin-destination flow maps",
+            "url": "https://ica-abs.copernicus.org/articles/1/351/2019/",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-06.txt",
+            "fileSHA256": "56293a6c3dcdb16b6a35b49a5247d6e610ec01bbc63a809067f1c5802cc73b86",
+            "exactlocator": "Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction.",
+            "specificClaim": "Пояснение для варианта 2: Диаметр узла может показывать сумму входящих и исходящих потоков, а не одну линию. Источник: Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction.",
+            "reason": "Confuses a node’s total incoming/outgoing flow with one incident route. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "Стрелка задаёт направление перемещения; километры расстояния не следуют из числа пассажиров.",
+          "literalSHA256": "1603dc42b973e6735f9a10e93d39d87c177e1d03eb024e62609390caafe0ee77",
+          "source": {
+            "title": "ICA-Abs: Origin-destination flow maps",
+            "url": "https://ica-abs.copernicus.org/articles/1/351/2019/",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-06.txt",
+            "fileSHA256": "56293a6c3dcdb16b6a35b49a5247d6e610ec01bbc63a809067f1c5802cc73b86",
+            "exactlocator": "Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction.",
+            "specificClaim": "Пояснение для варианта 3: Стрелка задаёт направление перемещения; километры расстояния не следуют из числа пассажиров. Источник: Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction.",
+            "reason": "Confuses a passenger count and flow direction with a distance unit. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "claim": "A–B больше: линия длиннее, а длина на карте равна числу пассажиров.",
+          "truthOneKeyAndPlausibility": "Confuses drawn route length with the quantity explicitly encoded by line width.",
+          "note": "В flow map объём кодируется шириной потока, а не длиной нарисованного маршрута.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction."
+        },
+        {
+          "answerIndex": 1,
+          "claim": "B–C в 2,5 раза больше A–B; ширина кодирует объём, стрелка — направление.",
+          "truthOneKeyAndPlausibility": "Calculates 200/80=2.5 and keeps width (amount) distinct from arrowhead (direction).",
+          "note": "200 ÷ 80 = 2,5; источник разделяет относительную ширину линии и направление потока.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction."
+        },
+        {
+          "answerIndex": 2,
+          "claim": "Узел C обязательно имеет диаметр только по потоку B–C.",
+          "truthOneKeyAndPlausibility": "Confuses a node’s total incoming/outgoing flow with one incident route.",
+          "note": "Диаметр узла может показывать сумму входящих и исходящих потоков, а не одну линию.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction."
+        },
+        {
+          "answerIndex": 3,
+          "claim": "Стрелка B→C измеряет 200 км пути, независимо от таблицы поездок.",
+          "truthOneKeyAndPlausibility": "Confuses a passenger count and flow direction with a distance unit.",
+          "note": "Стрелка задаёт направление перемещения; километры расстояния не следуют из числа пассажиров.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Abstract p. 1: width encodes relative movement quantity; node diameter total in/out; arrowheads indicate direction."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-latitude-ns",
+      "stage": "fix-medium9-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "0c53dbd9d665b5cd097ab0ed1cfda3bdca5fb950c894839fbe4802589653b119",
+      "afterHash": "2dad92b174f265183b26d71de92861b0a8ec8f25b0f4f8d632075e3dacbb6bf7",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Отряд движется строго на север по одному меридиану от 37° ю. ш. на 444 км. Используйте приближение 111 км на градус широты. Как записать конечную широту?",
+            "answers": [
+              "41° ю. ш.: при движении на север южная широта увеличивается.",
+              "33° ю. ш.: 444 км дают около 4°, значит 37° ю. ш. − 4° = 33° ю. ш.",
+              "33° с. ш.: отнять четыре градуса и сразу сменить полушарие.",
+              "37° ю. ш.: движение по меридиану меняет долготу, а не широту."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "ab245977cdc9412dcbb64d9d2eacb3c8bf228093c7809e644cfb54ac581fe9f3",
+          "source": {
+            "title": "NOAA Ocean Service: Latitude",
+            "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+            "fileSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+            "exactlocator": "Latitude definition and north/south direction from equator; one degree latitude is about 111 km.",
+            "specificClaim": "Задача сводит конкретную операцию к одному ключу; Latitude definition and north/south direction from equator; one degree latitude is about 111 km.",
+            "reason": "Варианты 0–3 проверены по отдельным ошибкам: Moves north but increases southern latitude magnitude, reversing the coordinate change. Converts 444 km to 4 degrees, subtracts from 37 south, and correctly stays south of the equator. Changes hemisphere without crossing the equator; four degrees is less than the initial 37-degree separation. Changes longitude even though travel is explicitly along the same meridian."
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "444/111=4°, поэтому от 37° южной широты при движении к северу получаем 33° южной широты. Экватор не пересекается: до него остаётся 33°. Долгота остаётся постоянной, поскольку движение идёт по одному меридиану.",
+          "literalSHA256": "cfcc4fdbf1308ef6638169f8fbc95ccb6481fa0eface5538203d52bcce6854c8",
+          "source": {
+            "title": "NOAA Ocean Service: Latitude",
+            "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+            "fileSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+            "exactlocator": "Latitude definition and north/south direction from equator; one degree latitude is about 111 km.",
+            "specificClaim": "Расчёт и точные пределы интерпретации: Latitude definition and north/south direction from equator; one degree latitude is about 111 km.",
+            "reason": "Explanation раскрывает вычисление и границы утверждения."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "На южном полушарии северное движение приближает точку к экватору и уменьшает модуль широты.",
+          "literalSHA256": "b74ddd0da57589b70c449a3acc989e07b31687c651ba8247be1f5bad5ce72cb5",
+          "source": {
+            "title": "NOAA Ocean Service: Latitude",
+            "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+            "fileSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+            "exactlocator": "Latitude definition and north/south direction from equator; one degree latitude is about 111 km.",
+            "specificClaim": "Пояснение для варианта 0: На южном полушарии северное движение приближает точку к экватору и уменьшает модуль широты. Источник: Latitude definition and north/south direction from equator; one degree latitude is about 111 km.",
+            "reason": "Moves north but increases southern latitude magnitude, reversing the coordinate change. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "Широта отсчитывается от экватора к полюсам; один градус по меридиану приблизительно равен 111 км.",
+          "literalSHA256": "e3ba830b3994ebf34f3493d4a68186696458ea52653e31a94d8c485a2d6806b9",
+          "source": {
+            "title": "NOAA Ocean Service: Latitude",
+            "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+            "fileSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+            "exactlocator": "Latitude definition and north/south direction from equator; one degree latitude is about 111 km.",
+            "specificClaim": "Пояснение для варианта 1: Широта отсчитывается от экватора к полюсам; один градус по меридиану приблизительно равен 111 км. Источник: Latitude definition and north/south direction from equator; one degree latitude is about 111 km.",
+            "reason": "Converts 444 km to 4 degrees, subtracts from 37 south, and correctly stays south of the equator. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Полушарная метка меняется только при пересечении экватора; 4° не покрывают исходные 37° до экватора.",
+          "literalSHA256": "9281537e78076d5b756184fd9d2477904aa80005b40da344ea6b1fe1b18f07bc",
+          "source": {
+            "title": "NOAA Ocean Service: Latitude",
+            "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+            "fileSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+            "exactlocator": "Latitude definition and north/south direction from equator; one degree latitude is about 111 km.",
+            "specificClaim": "Пояснение для варианта 2: Полушарная метка меняется только при пересечении экватора; 4° не покрывают исходные 37° до экватора. Источник: Latitude definition and north/south direction from equator; one degree latitude is about 111 km.",
+            "reason": "Changes hemisphere without crossing the equator; four degrees is less than the initial 37-degree separation. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "Меридиан сохраняет долготу; переход вдоль него меняет широту север/юг.",
+          "literalSHA256": "544cb51a6a5d3a0739bfe725f0b00ed75c17e4d82cf0bc9af3e27bf09af6dd75",
+          "source": {
+            "title": "NOAA Ocean Service: Latitude",
+            "url": "https://oceanservice.noaa.gov/facts/latitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-07.txt",
+            "fileSHA256": "2a5bc5489efb085bb4e7192f160d685c79e8144a56515ed6fb7313c8f5fd3ab3",
+            "exactlocator": "Latitude definition and north/south direction from equator; one degree latitude is about 111 km.",
+            "specificClaim": "Пояснение для варианта 3: Меридиан сохраняет долготу; переход вдоль него меняет широту север/юг. Источник: Latitude definition and north/south direction from equator; one degree latitude is about 111 km.",
+            "reason": "Changes longitude even though travel is explicitly along the same meridian. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "claim": "41° ю. ш.: при движении на север южная широта увеличивается.",
+          "truthOneKeyAndPlausibility": "Moves north but increases southern latitude magnitude, reversing the coordinate change.",
+          "note": "На южном полушарии северное движение приближает точку к экватору и уменьшает модуль широты.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Latitude definition and north/south direction from equator; one degree latitude is about 111 km."
+        },
+        {
+          "answerIndex": 1,
+          "claim": "33° ю. ш.: 444 км дают около 4°, значит 37° ю. ш. − 4° = 33° ю. ш.",
+          "truthOneKeyAndPlausibility": "Converts 444 km to 4 degrees, subtracts from 37 south, and correctly stays south of the equator.",
+          "note": "Широта отсчитывается от экватора к полюсам; один градус по меридиану приблизительно равен 111 км.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Latitude definition and north/south direction from equator; one degree latitude is about 111 km."
+        },
+        {
+          "answerIndex": 2,
+          "claim": "33° с. ш.: отнять четыре градуса и сразу сменить полушарие.",
+          "truthOneKeyAndPlausibility": "Changes hemisphere without crossing the equator; four degrees is less than the initial 37-degree separation.",
+          "note": "Полушарная метка меняется только при пересечении экватора; 4° не покрывают исходные 37° до экватора.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Latitude definition and north/south direction from equator; one degree latitude is about 111 km."
+        },
+        {
+          "answerIndex": 3,
+          "claim": "37° ю. ш.: движение по меридиану меняет долготу, а не широту.",
+          "truthOneKeyAndPlausibility": "Changes longitude even though travel is explicitly along the same meridian.",
+          "note": "Меридиан сохраняет долготу; переход вдоль него меняет широту север/юг.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Latitude definition and north/south direction from equator; one degree latitude is about 111 km."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-longitude-ew",
+      "stage": "fix-medium9-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "f61edd3da1ad4a72318dbc0ee4cfd1c375523889615d1d5212993af0b3b91b63",
+      "afterHash": "5882ab10fce2809c282389259f5b0c18cdffa88d09478a41b06779bda4d55c88",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Местный солнечный полдень на судне наступил, когда в Гринвиче 14:00. Считайте гринвичский полдень 12:00 и 15° долготы за час. Определите долготу и знак.",
+            "answers": [
+              "30° в. д.: местный полдень опережает часы Гринвича на два часа.",
+              "30° з. д.: полдень на судне на 2 ч позже Гринвича, по 15° за час к западу.",
+              "2° з. д.: два часа временной разницы дают два градуса.",
+              "180° з. д.: любая разница времени помещает судно на антимеридиан."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "dcf318a161721007de55790a71a7334fbcd1ef0b741f371a8f64fc83fd4071fc",
+          "source": {
+            "title": "NOAA Ocean Service: Longitude",
+            "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+            "fileSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+            "exactlocator": "Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour.",
+            "specificClaim": "Задача сводит конкретную операцию к одному ключу; Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour.",
+            "reason": "Варианты 0–3 проверены по отдельным ошибкам: Reverses the local-noon offset: Greenwich clock is later, so vessel is west, not east. Reads the two-hour delay as 30 degrees west using NOAA’s stated 15-degree/hour relation. Uses a false one-degree-per-hour conversion. Confuses any time offset with the 180-degree antimeridian."
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "В Гринвиче уже 14:00, а на судне только местный солнечный полдень; судно отстаёт на два часа и находится западнее. При 15° за час это 30° западной долготы. Западнее нулевого меридиана местный полдень наступает позже по гринвичским часам.",
+          "literalSHA256": "d69c993d5154050c11220764381513a9f7bcfbaed58ebf2f5ea1d53c7ff1c985",
+          "source": {
+            "title": "NOAA Ocean Service: Longitude",
+            "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+            "fileSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+            "exactlocator": "Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour.",
+            "specificClaim": "Расчёт и точные пределы интерпретации: Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour.",
+            "reason": "Explanation раскрывает вычисление и границы утверждения."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "Местный полдень при 14:00 UTC отстаёт от гринвичского полудня на два часа, а не опережает его.",
+          "literalSHA256": "4d758bee4318ddd1f0785c2f185dd983a046e464bfad7cee59ce741212c8bcfa",
+          "source": {
+            "title": "NOAA Ocean Service: Longitude",
+            "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+            "fileSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+            "exactlocator": "Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour.",
+            "specificClaim": "Пояснение для варианта 0: Местный полдень при 14:00 UTC отстаёт от гринвичского полудня на два часа, а не опережает его. Источник: Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour.",
+            "reason": "Reverses the local-noon offset: Greenwich clock is later, so vessel is west, not east. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "Местный солнечный полдень позже к западу; 2 × 15° = 30° западной долготы.",
+          "literalSHA256": "099c0d60b9baeae4a73931d86557e416baf74c7830d431974e5c5881a291e4a3",
+          "source": {
+            "title": "NOAA Ocean Service: Longitude",
+            "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+            "fileSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+            "exactlocator": "Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour.",
+            "specificClaim": "Пояснение для варианта 1: Местный солнечный полдень позже к западу; 2 × 15° = 30° западной долготы. Источник: Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour.",
+            "reason": "Reads the two-hour delay as 30 degrees west using NOAA’s stated 15-degree/hour relation. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Угловая скорость Земли даёт 15° долготы на один час, а не 1°.",
+          "literalSHA256": "735a06da059821a30a8c85a10799550625b0d9cf8fdf709132935e3f6e013145",
+          "source": {
+            "title": "NOAA Ocean Service: Longitude",
+            "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+            "fileSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+            "exactlocator": "Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour.",
+            "specificClaim": "Пояснение для варианта 2: Угловая скорость Земли даёт 15° долготы на один час, а не 1°. Источник: Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour.",
+            "reason": "Uses a false one-degree-per-hour conversion. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "180° — противоположный меридиан; он не следует из произвольного двухчасового смещения.",
+          "literalSHA256": "1367c81ed75b45eb2503d3130c4f004ec78bed526927bf9f3a129be0172bf523",
+          "source": {
+            "title": "NOAA Ocean Service: Longitude",
+            "url": "https://oceanservice.noaa.gov/facts/longitude.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-08.txt",
+            "fileSHA256": "87a6b65e232e6b9f7967f2a53f5c7dc8f967eda7a1304750da53d4d468bb1439",
+            "exactlocator": "Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour.",
+            "specificClaim": "Пояснение для варианта 3: 180° — противоположный меридиан; он не следует из произвольного двухчасового смещения. Источник: Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour.",
+            "reason": "Confuses any time offset with the 180-degree antimeridian. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "claim": "30° в. д.: местный полдень опережает часы Гринвича на два часа.",
+          "truthOneKeyAndPlausibility": "Reverses the local-noon offset: Greenwich clock is later, so vessel is west, not east.",
+          "note": "Местный полдень при 14:00 UTC отстаёт от гринвичского полудня на два часа, а не опережает его.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour."
+        },
+        {
+          "answerIndex": 1,
+          "claim": "30° з. д.: полдень на судне на 2 ч позже Гринвича, по 15° за час к западу.",
+          "truthOneKeyAndPlausibility": "Reads the two-hour delay as 30 degrees west using NOAA’s stated 15-degree/hour relation.",
+          "note": "Местный солнечный полдень позже к западу; 2 × 15° = 30° западной долготы.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour."
+        },
+        {
+          "answerIndex": 2,
+          "claim": "2° з. д.: два часа временной разницы дают два градуса.",
+          "truthOneKeyAndPlausibility": "Uses a false one-degree-per-hour conversion.",
+          "note": "Угловая скорость Земли даёт 15° долготы на один час, а не 1°.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour."
+        },
+        {
+          "answerIndex": 3,
+          "claim": "180° з. д.: любая разница времени помещает судно на антимеридиан.",
+          "truthOneKeyAndPlausibility": "Confuses any time offset with the 180-degree antimeridian.",
+          "note": "180° — противоположный меридиан; он не следует из произвольного двухчасового смещения.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Local-noon paragraph: Greenwich 14:00 against local noon gives 30 degrees west at 15 degrees/hour."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-utm-zones",
+      "stage": "fix-medium9-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "f697dc1646a04fe21699f5da2e4795946be9f29668e8e8a89f544ed73c732f43",
+      "afterHash": "c79fd8c0be6f6cdd655af4b837b9fc77bdd7982dc7056dd63142ac38c3d4adb3",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Для точки 75° з. д., 40° с. ш. выберите UTM-зону и полушарие. Учитывайте шестиградусные зоны, начиная зону 1 с 180° з. д.",
+            "answers": [
+              "Выбрать зону 17N: одинаковые метры означают одну зону без долготы.",
+              "Точка на 75° з. д. и 40° с. ш. относится к зоне 18N.",
+              "Назначить зону 18S: широта задаёт лишь число, не полушарие.",
+              "Использовать UPS: любая координата в метрах относится к полярной сетке."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "ef37e8f0b49a942d63624d9977139a52ca6f61d2a82c67977b8c49275d64ed73",
+          "source": {
+            "title": "Esri ArcGIS Pro SDK: CreateWgs84UtmFromLocation",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/sdk/api-reference/topic18435.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-09.txt",
+            "fileSHA256": "9f44f2051662e9106bf88172e0e2507f83c823d7612115cf2854891adc7833f6",
+            "exactlocator": "Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones.",
+            "specificClaim": "Задача сводит конкретную операцию к одному ключу; Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones.",
+            "reason": "Варианты 0–3 проверены по отдельным ошибкам: Ignores that projected coordinates are interpreted within a defined six-degree zone. Uses 75W inside 18 (78W–72W) and 40N to select the northern zone. Selects the southern realization despite a northern latitude. Confuses the polar UPS system with ordinary mid-latitude UTM.",
+            "supportingPrimarySources": [
+              {
+                "title": "Esri ArcGIS Pro: Stereographic",
+                "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+                "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-10.txt",
+                "fileSHA256": "87eebe6c1b8d5ce641b7c9265f5d8852f6216243a1e24c0aa34f046fd92f7e4b",
+                "exactlocator": "Full saved context, heading Universal Polar Stereographic: UPS is used north of 84°N and south of 80°S."
+              }
+            ]
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "Шестиградусная зона 18 простирается от 78° до 72° западной долготы, так что 75° з. д. попадает в неё. Широта 40° с. ш. задаёт северное полушарие: зона 18N. Числа сетки интерпретируют вместе с зоной и полушарием.",
+          "literalSHA256": "28d38c9c86f56944b5525ecc6ee213062c147ed9d7455cc9fec9bc6bdd88390c",
+          "source": {
+            "title": "Esri ArcGIS Pro SDK: CreateWgs84UtmFromLocation",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/sdk/api-reference/topic18435.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-09.txt",
+            "fileSHA256": "9f44f2051662e9106bf88172e0e2507f83c823d7612115cf2854891adc7833f6",
+            "exactlocator": "Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones.",
+            "specificClaim": "Расчёт и точные пределы интерпретации: Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones.",
+            "reason": "Explanation раскрывает вычисление и границы утверждения."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "UTM разбит на 6-градусные зоны; одинаковые eastings/northings читаются внутри конкретной зоны.",
+          "literalSHA256": "76eebe22d1edb3202e48a60100200a04faee319796940e3485c47da979e7c0ec",
+          "source": {
+            "title": "Esri ArcGIS Pro SDK: CreateWgs84UtmFromLocation",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/sdk/api-reference/topic18435.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-09.txt",
+            "fileSHA256": "9f44f2051662e9106bf88172e0e2507f83c823d7612115cf2854891adc7833f6",
+            "exactlocator": "Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones.",
+            "specificClaim": "Пояснение для варианта 0: UTM разбит на 6-градусные зоны; одинаковые eastings/northings читаются внутри конкретной зоны. Источник: Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones.",
+            "reason": "Ignores that projected coordinates are interpreted within a defined six-degree zone. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "Зона 18 охватывает 78°–72° з. д.; северная широта выбирает вариант N этой зоны.",
+          "literalSHA256": "4dec102945c69e576b4a638eac2354c902f40011820e8cbf54bdb199849bdf81",
+          "source": {
+            "title": "Esri ArcGIS Pro SDK: CreateWgs84UtmFromLocation",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/sdk/api-reference/topic18435.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-09.txt",
+            "fileSHA256": "9f44f2051662e9106bf88172e0e2507f83c823d7612115cf2854891adc7833f6",
+            "exactlocator": "Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones.",
+            "specificClaim": "Пояснение для варианта 1: Зона 18 охватывает 78°–72° з. д.; северная широта выбирает вариант N этой зоны. Источник: Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones.",
+            "reason": "Uses 75W inside 18 (78W–72W) and 40N to select the northern zone. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Определение UTM-зоны различает северную и южную половины; 40° с. ш. лежит в северной.",
+          "literalSHA256": "bd3460e3875d0e3f476cbdf868982a82a406a7311328f31e5995022f5379b040",
+          "source": {
+            "title": "Esri ArcGIS Pro SDK: CreateWgs84UtmFromLocation",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/sdk/api-reference/topic18435.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-09.txt",
+            "fileSHA256": "9f44f2051662e9106bf88172e0e2507f83c823d7612115cf2854891adc7833f6",
+            "exactlocator": "Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones.",
+            "specificClaim": "Пояснение для варианта 2: Определение UTM-зоны различает северную и южную половины; 40° с. ш. лежит в северной. Источник: Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones.",
+            "reason": "Selects the southern realization despite a northern latitude. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "Универсальная полярная система применяется у полюсов; точка 40° с. ш. относится к UTM.",
+          "literalSHA256": "c12612aa9e3d443730ad4ee730f6b93b82c6f6e1ae2fa37c834ce1681848674d",
+          "source": {
+            "title": "Esri ArcGIS Pro SDK: CreateWgs84UtmFromLocation",
+            "url": "https://pro.arcgis.com/en/pro-app/3.4/sdk/api-reference/topic18435.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-09.txt",
+            "fileSHA256": "9f44f2051662e9106bf88172e0e2507f83c823d7612115cf2854891adc7833f6",
+            "exactlocator": "Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones.",
+            "specificClaim": "Пояснение для варианта 3: Универсальная полярная система применяется у полюсов; точка 40° с. ш. относится к UTM. Источник: Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones.",
+            "reason": "Confuses the polar UPS system with ordinary mid-latitude UTM. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "claim": "Выбрать зону 17N: одинаковые метры означают одну зону без долготы.",
+          "truthOneKeyAndPlausibility": "Ignores that projected coordinates are interpreted within a defined six-degree zone.",
+          "note": "UTM разбит на 6-градусные зоны; одинаковые eastings/northings читаются внутри конкретной зоны.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones."
+        },
+        {
+          "answerIndex": 1,
+          "claim": "Точка на 75° з. д. и 40° с. ш. относится к зоне 18N.",
+          "truthOneKeyAndPlausibility": "Uses 75W inside 18 (78W–72W) and 40N to select the northern zone.",
+          "note": "Зона 18 охватывает 78°–72° з. д.; северная широта выбирает вариант N этой зоны.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones."
+        },
+        {
+          "answerIndex": 2,
+          "claim": "Назначить зону 18S: широта задаёт лишь число, не полушарие.",
+          "truthOneKeyAndPlausibility": "Selects the southern realization despite a northern latitude.",
+          "note": "Определение UTM-зоны различает северную и южную половины; 40° с. ш. лежит в северной.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones."
+        },
+        {
+          "answerIndex": 3,
+          "claim": "Использовать UPS: любая координата в метрах относится к полярной сетке.",
+          "truthOneKeyAndPlausibility": "Confuses the polar UPS system with ordinary mid-latitude UTM.",
+          "note": "Универсальная полярная система применяется у полюсов; точка 40° с. ш. относится к UTM.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Remarks: 60 north-south zones, six degrees each, zone 1 begins 180W, and hemisphere-specific zones."
+        }
+      ]
+    },
+    {
+      "id": "maps-cartography-elevation-vertical",
+      "stage": "fix-medium9-cycle1-author",
+      "status": "FIX",
+      "beforeHash": "181297a983914157d738f1cce4392d6179fff771b59e962396da44b6a587a7c4",
+      "afterHash": "efc7e77698dcdfa1e4ffe2c2e030750f46c373b938b77f202e9efe077c2e462f",
+      "groups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В точке задана эллипсоидальная высота h=34,7 м и значение геоидальной модели N=−18,2 м. Используйте h=H+N, чтобы найти H для отчёта в NAVD 88, и укажите, чем NAVD 88 является относительно геоида.",
+            "answers": [
+              "H=16,5 м; NAVD 88 тождественен идеальному глобальному геоиду.",
+              "H=52,9 м; NAVD 88 — реализованный ортометрический датум, не идеальный геоид.",
+              "H=52,9 м; геоидальная модель сама и есть вертикальный датум NAVD 88.",
+              "H=34,7 м; вертикальная поправка не нужна при известной широте."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "57f0c7e5890963983d58a1d7d6f3a21de9e7b0249588ba7abb35da368711ab79",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-11.txt",
+            "fileSHA256": "0838bd1ddcf251c3242dfe6574c02c33b09a8cbfadd1e5da9e349688e8144c59",
+            "exactlocator": "Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid.",
+            "specificClaim": "Задача сводит конкретную операцию к одному ключу; Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid.",
+            "reason": "Варианты 0–3 проверены по отдельным ошибкам: Takes absolute N instead of signed N and also falsely equates NAVD 88 to the ideal global geoid. Applies H=h−N with signed N and distinguishes datum realization from ideal geoid. Computes the number but wrongly treats the geoid model as the NAVD 88 datum itself. Ignores N and confuses horizontal latitude with vertical elevation."
+          }
+        },
+        {
+          "group": "explanation",
+          "literal": "Из h=H+N получаем H=34,7−(−18,2)=52,9 м. Геоидальная модель даёт параметр для связи высот, а NAVD 88 — реализованный ортометрический датум. NOAA оговаривает, что NAVD 88 не тождествен идеальному глобальному геоиду.",
+          "literalSHA256": "349704835f1413c9e906c827940f3da4fe0618c357c85ba572590dcde04fd09b",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-11.txt",
+            "fileSHA256": "0838bd1ddcf251c3242dfe6574c02c33b09a8cbfadd1e5da9e349688e8144c59",
+            "exactlocator": "Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid.",
+            "specificClaim": "Расчёт и точные пределы интерпретации: Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid.",
+            "reason": "Explanation раскрывает вычисление и границы утверждения."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "Вычитается знаковое N; NOAA отличает NAVD 88 от идеального глобального геоида.",
+          "literalSHA256": "28af4f1bad8d44474e5488130c88a3a5bc3e52068dfd24d26014cc8a3b03c5a7",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-11.txt",
+            "fileSHA256": "0838bd1ddcf251c3242dfe6574c02c33b09a8cbfadd1e5da9e349688e8144c59",
+            "exactlocator": "Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid.",
+            "specificClaim": "Пояснение для варианта 0: Вычитается знаковое N; NOAA отличает NAVD 88 от идеального глобального геоида. Источник: Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid.",
+            "reason": "Takes absolute N instead of signed N and also falsely equates NAVD 88 to the ideal global geoid. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "Из h=H+N следует H=h−N; модель связывает эллипсоидальную и ортометрическую высоты.",
+          "literalSHA256": "976a84cad0f5ab47407f62b5da69ec56a3025a3eee796c837bff8627e6bd0e60",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-11.txt",
+            "fileSHA256": "0838bd1ddcf251c3242dfe6574c02c33b09a8cbfadd1e5da9e349688e8144c59",
+            "exactlocator": "Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid.",
+            "specificClaim": "Пояснение для варианта 1: Из h=H+N следует H=h−N; модель связывает эллипсоидальную и ортометрическую высоты. Источник: Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid.",
+            "reason": "Applies H=h−N with signed N and distinguishes datum realization from ideal geoid. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Модель даёт параметр преобразования; NAVD 88 — датумная реализация с собственной опорой.",
+          "literalSHA256": "0d8d5514a61164ed9e96b7f1d2b2eb943eaff319bfaee746d46a3ddc4d16d67e",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-11.txt",
+            "fileSHA256": "0838bd1ddcf251c3242dfe6574c02c33b09a8cbfadd1e5da9e349688e8144c59",
+            "exactlocator": "Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid.",
+            "specificClaim": "Пояснение для варианта 2: Модель даёт параметр преобразования; NAVD 88 — датумная реализация с собственной опорой. Источник: Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid.",
+            "reason": "Computes the number but wrongly treats the geoid model as the NAVD 88 datum itself. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "h и H различаются на геоидальный параметр N; широта не заменяет поправку.",
+          "literalSHA256": "22a8de33ab4fe90be8f4d33a238a1b30ef9f8e8809085992fbce364667a1f03c",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "primarypath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/independent-medium10-date1-initial11-01a13d50/evidence/primary-11.txt",
+            "fileSHA256": "0838bd1ddcf251c3242dfe6574c02c33b09a8cbfadd1e5da9e349688e8144c59",
+            "exactlocator": "Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid.",
+            "specificClaim": "Пояснение для варианта 3: h и H различаются на геоидальный параметр N; широта не заменяет поправку. Источник: Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid.",
+            "reason": "Ignores N and confuses horizontal latitude with vertical elevation. Заметка содержит самостоятельную подсказку/коррекцию для этого distractor."
+          }
+        }
+      ],
+      "variantAssessments": [
+        {
+          "answerIndex": 0,
+          "claim": "H=16,5 м; NAVD 88 тождественен идеальному глобальному геоиду.",
+          "truthOneKeyAndPlausibility": "Takes absolute N instead of signed N and also falsely equates NAVD 88 to the ideal global geoid.",
+          "note": "Вычитается знаковое N; NOAA отличает NAVD 88 от идеального глобального геоида.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid."
+        },
+        {
+          "answerIndex": 1,
+          "claim": "H=52,9 м; NAVD 88 — реализованный ортометрический датум, не идеальный геоид.",
+          "truthOneKeyAndPlausibility": "Applies H=h−N with signed N and distinguishes datum realization from ideal geoid.",
+          "note": "Из h=H+N следует H=h−N; модель связывает эллипсоидальную и ортометрическую высоты.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid."
+        },
+        {
+          "answerIndex": 2,
+          "claim": "H=52,9 м; геоидальная модель сама и есть вертикальный датум NAVD 88.",
+          "truthOneKeyAndPlausibility": "Computes the number but wrongly treats the geoid model as the NAVD 88 datum itself.",
+          "note": "Модель даёт параметр преобразования; NAVD 88 — датумная реализация с собственной опорой.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid."
+        },
+        {
+          "answerIndex": 3,
+          "claim": "H=34,7 м; вертикальная поправка не нужна при известной широте.",
+          "truthOneKeyAndPlausibility": "Ignores N and confuses horizontal latitude with vertical elevation.",
+          "note": "h и H различаются на геоидальный параметр N; широта не заменяет поправку.",
+          "noteUsefulness": "Gives a distinct rule or explains the specific misconception, rather than restating the option verbatim.",
+          "sourceLocator": "Lines 121–127 h=H+N and geoid parameter; 152–156 vertical datum; 190–192 NAVD 88 realization differs from ideal global geoid."
+        }
+      ]
+    }
+  ]
+}
