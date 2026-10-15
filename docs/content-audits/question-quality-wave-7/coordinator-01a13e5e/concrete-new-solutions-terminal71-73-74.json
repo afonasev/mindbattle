@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "stage": "CONCRETE_NEW_SOLUTION_BACKLOG_not_dispatched_not_applied",
+  "qualityCredit": 0,
+  "oldTerminalReceipt": "docs/content-audits/question-quality-wave-7/process-v2-maps71-80-01a13d50/independent-initial7-01a13d50/receipt-cycle1-current5hard-01a13e5e.json",
+  "oldTerminalHash": "e17a525785a4187f1986dd4733a89ad8122ba9c5f1e187744e603114ccd64cb6",
+  "boundary": "No unchanged secondcycle. These are specific different solutions/data/demands responding to exact terminal defects. Author must validate primary/absolutelevel/notes/peers; sketches are not author/independentPASS. Fullgoal remains2000.",
+  "entries": [
+    {
+      "id": "maps-cartography-orthographic-space",
+      "beforeCard": {
+        "id": "maps-cartography-orthographic-space",
+        "difficulty": "hard",
+        "prompt": "На сфере точки экватора имеют долготы 80°, 100° и 170°. Для ортографической карты доступны центры 75°, 150°, 110° и 160°. Все точки должны быть видимы: не дальше 90° от центра. Среди подходящих центров выберите дающий наименьшее искажение у точки 80°.",
+        "answers": [
+          {
+            "text": "Центр 75°: он ближе всего к приоритетной точке 80° и минимизирует там искажение.",
+            "note": "Но от 75° до точки 170° — 95°; эта точка выходит за предел видимой полусферы."
+          },
+          {
+            "text": "Центр 150°: все три точки видимы, а приоритетная точка удалена на 70°.",
+            "note": "Этот центр проходит проверку видимости, но есть допустимый центр с меньшим расстоянием до 80°."
+          },
+          {
+            "text": "Центр 110°: все три точки видимы, а приоритетная точка удалена на 30°.",
+            "note": "Ортографическая проекция относится к азимутальным перспективным проекциям и подходит для обзорных видов Земли из космоса."
+          },
+          {
+            "text": "Центр 160°: все три точки видимы, а приоритетная точка удалена на 80°.",
+            "note": "Для точки на долготе 170° расстояние от 160° равно 10°; до приоритетной точки на 80° — 80°, поэтому 110° ближе."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Все точки должны находиться не дальше 90° от центра: вариант 75° исключается, поскольку до 170° — 95°. Центры 150°, 110° и 160° проходят это условие; расстояния до приоритетной точки 80° равны 70°, 30° и 80°, поэтому выбираем 110°.",
+        "source": {
+          "title": "Orthographic | ArcGIS Pro documentation",
+          "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/orthographic.htm",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeCanonicalSHA256": "e55dbaac4d3c9d7c386059a46d61669a83296d782eee5b29f69aa1dfdd122530",
+      "newSolution": "Supply BOTH coordinates of EVERY center, explicitly all latitude0 and east longitude; keep priority and hemispheric filtering as separate decision dimensions. Four center-coordinate plans must retain a visibility-only feasible competitor and a priority-closest infeasible competitor.",
+      "fixture": {
+        "sphere": true,
+        "pointCoordinatesLatLon": [
+          [
+            0,
+            80
+          ],
+          [
+            0,
+            100
+          ],
+          [
+            0,
+            170
+          ]
+        ],
+        "candidateCentersLatLonFrozenSlots": [
+          [
+            0,
+            75
+          ],
+          [
+            0,
+            150
+          ],
+          [
+            0,
+            110
+          ],
+          [
+            0,
+            160
+          ]
+        ],
+        "priorityPoint": [
+          0,
+          80
+        ],
+        "requirements": [
+          "every point angular-distance<=90deg",
+          "among feasible centers minimize radial distortion at priority"
+        ]
+      },
+      "expectedChecks": "75 center fails170distance95;150/110/160 feasible;priority distances70/30/80 -> slot2. New explicit latitude fixes the counterexample, do not silently infer it.",
+      "primary": "Existing complete Esri orthographic plus sourcecenterparameter record fromreader; no need refetch merelyforrole. Actual HARD still author/independentrequired."
+    },
+    {
+      "id": "maps-cartography-sliver-polygon",
+      "beforeCard": {
+        "id": "maps-cartography-sliver-polygon",
+        "difficulty": "hard",
+        "prompt": "Два полигона одного класса должны без перекрытий заполнить замкнутую маску площадью 100 км². Площадь A — 60 км², B — 45 км², объединение — 94 км²; недостающая часть маски — внутренний, полностью окружённый пустой участок. Нужно обнаруживать и эту пустоту, и общую площадь полигонов. Какой набор правил выбрать?",
+        "answers": [
+          {
+            "text": "Только Must Not Overlap: оно найдёт пересечение площадью 11 км².",
+            "note": "Проверка перекрытий не обнаруживает незаполненные 6 км² маски."
+          },
+          {
+            "text": "Только Must Not Have Gaps: оно найдёт пустую область площадью 6 км².",
+            "note": "Это правило не выявит общую площадь двух полигонов — 11 км²."
+          },
+          {
+            "text": "Must Not Have Gaps вместе с Must Not Overlap для этого класса.",
+            "note": "Must Not Have Gaps создаёт линейные ошибки по контуру пустоты, а Must Not Overlap — полигонные ошибки в области пересечения."
+          },
+          {
+            "text": "Must Not Have Gaps вместе с Must Not Overlap With для того же класса.",
+            "note": "Must Not Overlap With сравнивает разные классы или подтипы, а здесь оба полигона одного класса."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "По маске не покрыто 100−94=6 км²; по формуле включений и исключений полигоны перекрываются на 60+45−94=11 км². Для этих двух независимых отношений нужны Must Not Have Gaps и Must Not Overlap: первое выявляет пустоты, второе — общие области внутри класса.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polygon features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polygon-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeCanonicalSHA256": "ae9808bde58a1c75f6aa3c9799499eb44a30a75d5d3b3da12faa668b40e9d658",
+      "newSolution": "Change demand from rule-name recognition to the BOTH computed quantitative relationships. Exactly TWO polygons completely INSIDE mask100, areas60/45, union94. Ask uncovered mask area AND overlap area; alternatives must make each calculation necessary.",
+      "fixture": {
+        "mask": 100,
+        "A": 60,
+        "B": 45,
+        "union": 94,
+        "fullyInsideMask": true,
+        "answerGapAndOverlapFrozenSlots": [
+          [
+            6,
+            5
+          ],
+          [
+            0,
+            11
+          ],
+          [
+            6,
+            11
+          ],
+          [
+            11,
+            6
+          ]
+        ]
+      },
+      "expectedChecks": "Uncovered100−94=6;intersection60+45−94=11;correctslot2. Distractor0 confuses netexcess60+45−100=5 with actual intersection. Distractor1 requires gap computation independently. No explicit answer labels that make numbers decorative.",
+      "primary": "Existing full Esri polygon concepts; numerical values explicit fictional conditional inputs, not purported empiricalsourceexample; extra correct-note errorgeometry fact only if actualfullsource supports."
+    },
+    {
+      "id": "maps-cartography-overshoot-line",
+      "beforeCard": {
+        "id": "maps-cartography-overshoot-line",
+        "difficulty": "hard",
+        "prompt": "Пакетный Trim с максимальным расстоянием 5 м обрабатывает три висячие линии. У A длина 8 м, пересечение находится в 3 м от висячего конца; у B длина 12 м, пересечение — в 9 м от конца; у C длина 4 м, подходящего пересечения нет. Какой результат и состояние ошибок останутся?",
+        "answers": [
+          {
+            "text": "A обрежется до 5 м; B обрежется до 3 м, а C останется без изменения.",
+            "note": "Чтобы обрезать B на расстоянии 9 м, заданного предела 5 м недостаточно."
+          },
+          {
+            "text": "A и B обрежутся до пересечений; C будет удалена, так как короче предела.",
+            "note": "Предел больше длины C сам по себе не удаляет объект; без пересечения Trim не сработает."
+          },
+          {
+            "text": "A обрежется до 5 м; B и C не изменятся и останутся ошибками.",
+            "note": "При нулевом расстоянии Trim обрезает висячую линию точно до найденного пересечения."
+          },
+          {
+            "text": "A останется длиной 8 м; B и C не изменятся и останутся ошибками.",
+            "note": "У A пересечение в пределах 5 м, поэтому Trim может удалить выступающий отрезок длиной 3 м."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Для A пересечение находится в пределах 5 м, поэтому Trim удалит выступающий отрезок 3 м и оставит длину 5 м. Для B расстояние до пересечения превышает предел, а у C пересечения нет; оба объекта пропускаются и остаются ошибками, причём короткая C не удаляется.",
+        "source": {
+          "title": "Geodatabase topology rules and fixes for polyline features | ArcGIS Pro documentation",
+          "url": "https://doc.esri.com/en/arcgis-pro/latest/help/editing/geodatabase-topology-rules-for-polyline-features.html",
+          "verifiedAt": "2026-10-15"
+        }
+      },
+      "beforeCanonicalSHA256": "9295cfbd51f66785c371e6a3e30e50940ad20f1da34a2f1d898cd6bff9201fdd",
+      "newSolution": "Change alternatives so neither threshold-only recognition nor checking one component suffices. Every distractor differs in exactly one independently essential output: trim length, bounded reach, no-intersection short-feature behavior.",
+      "fixture": {
+        "trimMax": 5,
+        "A": {
+          "length": 8,
+          "intersectionFromEnd": 3
+        },
+        "B": {
+          "length": 12,
+          "intersectionFromEnd": 9
+        },
+        "C": {
+          "length": 4,
+          "eligibleIntersection": null
+        },
+        "answerLengthVectorsFrozenSlots": [
+          [
+            5,
+            12,
+            "deleted"
+          ],
+          [
+            6,
+            12,
+            4
+          ],
+          [
+            5,
+            12,
+            4
+          ],
+          [
+            5,
+            3,
+            4
+          ]
+        ]
+      },
+      "expectedChecks": "A needs8−3=5, rather than merely yes-trim. B remains12 beyond5. C remains4 withoutintersection, notdeleted by length<max. Only slot2 satisfies all; bind error-state claims consistently to lengths.",
+      "primary": "Existing full Esri polyline Trim behavior; correctnotezero-distance behavior can be additionalfact. ActualHARD independentlyrequired, not counts ofnumbers."
+    }
+  ],
+  "preserve": "ID/topic/sourceorder/hard/numeric key2 all3; do not edit certified72/75/76/77. Full beforecards and frozen/source hashes must be rebound at actual dispatch.",
+  "nextOwner": "Next authorized freshLuna/medium author when2authorlimit frees; source qualification then affected19 and freshOTHER exactCURRENT reading, preserve oldterminalhistory."
+}
