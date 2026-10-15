@@ -1,0 +1,2465 @@
+{
+  "schemaVersion": 1,
+  "candidatePath": "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/initial-completion-author-01a13d50/hard5-next/candidate.json",
+  "baselineCommit": "61109a6eb7759f2b4ff2a8356d58b1731e8ac588",
+  "qualityCredit": 0,
+  "entries": [
+    {
+      "id": "maps-cartography-ellipsoid",
+      "stage": "initial-source-editorial",
+      "status": "FIX",
+      "finalCardHash": "9cbc7e15cea8bfccea4077793ebd5c0f98910c499b4110bd05ae63dd83860154",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В контрольной сети точка Q имеет GNSS-высоту h=86,4 м в трёхмерном NAD 83 и нивелирную H=52,9 м в NAVD 88; местная модель даёт геоидальное разделение N=33,5 м. В точке R та же модель даёт N=31,0 м. Какая интерпретация согласует все три величины?",
+            "answers": [
+              "Обе высоты отсчитаны от геоида, а N=33,5 м — постоянная поправка, применимая и к точке R.",
+              "h — высота над эллипсоидом, H — ортометрическая в NAVD 88; N связывает их локально и не переносится без модели.",
+              "h отсчитана от геоида, H — от эллипсоида; различие N в Q и R объясняется изменением номера датума.",
+              "N=33,5 м — опубликованная высота репера Q; поэтому она заменяет H и не зависит от вертикальной системы отсчёта."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "d64a4b602c132aff3b8c826b67ab22e0738c496adafec5423aa910f225ec9344",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Полный tutorial, разделы Geodetic Datums, Referenced Ellipsoid, GEOID и Vertical Datum: эллипсоидальные и ортометрические высоты имеют разные опоры, а геоидальная модель задаёт параметр преобразования между ними."
+          },
+          "specificClaim": "Сценарий различает геометрический эллипсоид для h, ортометрическую систему для H и локальное значение геоидальной модели N; локальное разделение меняется по точке.",
+          "whyItFollowsFromFullContext": "Сценарий различает геометрический эллипсоид для h, ортометрическую систему для H и локальное значение геоидальной модели N; локальное разделение меняется по точке.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "explanation",
+          "literal": "В NOAA h относится к эллипсоидальной высоте, а H — к ортометрической вертикальной опоре. Разность связывает эллипсоид с геоидальной моделью в данной точке; поэтому N=33,5 м в Q нельзя автоматически переносить на R, где модель даёт 31,0 м.",
+          "literalSHA256": "f1a0b2d53ab0f51340d1eccb68d8732745c9a1996d708e4f4b03c0a3d2f6a88b",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Полный tutorial, разделы Geodetic Datums, Referenced Ellipsoid, GEOID и Vertical Datum: эллипсоидальные и ортометрические высоты имеют разные опоры, а геоидальная модель задаёт параметр преобразования между ними."
+          },
+          "specificClaim": "NOAA отдельно описывает reference ellipsoid, физический geoid и ортometric vertical datum; GEOID-модели дают локальный параметр для соотнесения эллипсоидальной высоты с NAVD 88.",
+          "whyItFollowsFromFullContext": "NOAA отдельно описывает reference ellipsoid, физический geoid и ортometric vertical datum; GEOID-модели дают локальный параметр для соотнесения эллипсоидальной высоты с NAVD 88.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note0",
+          "literal": "Ортометрические высоты связаны с гравитационной опорой; геоид лишь приближённо соответствует среднему уровню моря.",
+          "literalSHA256": "fedb722d1f6a2891a822bcfc1f2003390562da53843db7f510105890caf227ea",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Full tutorial, GEOID: the geoid is undulating and can differ in height from a geocentric ellipsoid."
+          },
+          "specificClaim": "Заметка добавляет полезное различие: высота по гравитационной опоре не означает, что геоид тождественен местному среднему уровню моря.",
+          "whyItFollowsFromFullContext": "Заметка добавляет полезное различие: высота по гравитационной опоре не означает, что геоид тождественен местному среднему уровню моря.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note1",
+          "literal": "Эллипсоид — геометрическая гладкая поверхность; значения h и H относятся к разным вертикальным опорам.",
+          "literalSHA256": "a714dcf3962b9edd59f3a3d525aa7ef3979d4c28f116141bfa8d9d5c65dcc497",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Full tutorial, Referenced Ellipsoid: ellipsoid is geometric surface approximating Earth size and shape."
+          },
+          "specificClaim": "Заметка поясняет статус эллипсоида как геометрической поверхности, дополняя расчётное соотнесение h и H.",
+          "whyItFollowsFromFullContext": "Заметка поясняет статус эллипсоида как геометрической поверхности, дополняя расчётное соотнесение h и H.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note2",
+          "literal": "Геодезический датум задаёт систему отсчёта и координатный контроль, а не локальную геоидальную поверхность.",
+          "literalSHA256": "f03e8a018f666682d6a1129cc31a6042234c7f3ecef97e7b2f893178980dc6c3",
+          "source": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.headers"
+            ],
+            "fileSHA256": [
+              "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+              "b2eb8cc26e8cee62f6f1183a39a224bb1864572241b1f6f350503bd32d97e087"
+            ],
+            "locator": "Full article opening and Table 1: a geodetic datum/reference frame is an abstract coordinate system with a reference surface and known locations."
+          },
+          "specificClaim": "Заметка отделяет datum/reference frame от одной поверхности отсчёта, что помогает не смешивать модель высот с системой координат.",
+          "whyItFollowsFromFullContext": "Заметка отделяет datum/reference frame от одной поверхности отсчёта, что помогает не смешивать модель высот с системой координат.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note3",
+          "literal": "Репер — закреплённая контрольная точка, а не поверхность, задающая все высоты местности.",
+          "literalSHA256": "fb44c8071aea0ff34c4228401117c474f3a412ac4f2b6378c51dab747ecad94f",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Full PDF pp. 2–3: benchmark/control-mark symbols identify mapped points; they are not geoid surfaces."
+          },
+          "specificClaim": "Заметка уточняет, что геодезический репер представляет контролируемую точку, а не математическую или физическую поверхность высот.",
+          "whyItFollowsFromFullContext": "Заметка уточняет, что геодезический репер представляет контролируемую точку, а не математическую или физическую поверхность высот.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        }
+      ],
+      "choiceProofs": [
+        {
+          "index": 0,
+          "answerIndex": 0,
+          "fullPrompt": "В контрольной сети точка Q имеет GNSS-высоту h=86,4 м в трёхмерном NAD 83 и нивелирную H=52,9 м в NAVD 88; местная модель даёт геоидальное разделение N=33,5 м. В точке R та же модель даёт N=31,0 м. Какая интерпретация согласует все три величины?",
+          "answerText": "Обе высоты отсчитаны от геоида, а N=33,5 м — постоянная поправка, применимая и к точке R.",
+          "noteText": "Ортометрические высоты связаны с гравитационной опорой; геоид лишь приближённо соответствует среднему уровню моря.",
+          "grammarAssessment": "Именная часть «обе высоты» согласована с глаголом во множественном числе «отсчитаны»; дальнейшая часть выражает отдельное следствие.",
+          "truthAssessment": "Параметр N не является единой региональной константой; разные значения модели для Q и R противоречат переносу 33,5 м без повторной оценки.",
+          "plausibilityAssessment": "Геоидальная поверхность неровная и может иметь заметные изменения относительно эллипсоида, поэтому «одна поправка везде» выглядит заманчиво, но неверна.",
+          "keyAssessment": "Вариант смешивает геоидальную и ортoметрическую опору и делает локальное модельное N постоянным; данные R прямо это опровергают.",
+          "noteUsefulnessAssessment": "Заметка добавляет полезное различие: высота по гравитационной опоре не означает, что геоид тождественен местному среднему уровню моря.",
+          "answerSource": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Full tutorial, GEOID and Vertical Datum: geoid is a gravity-field equipotential surface; local geoid models provide N for conversion to NAVD 88 orthometric height.",
+            "specificClaim": "Параметр N не является единой региональной константой; разные значения модели для Q и R противоречат переносу 33,5 м без повторной оценки."
+          },
+          "noteSource": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Full tutorial, GEOID: the geoid is undulating and can differ in height from a geocentric ellipsoid.",
+            "specificClaim": "Заметка добавляет полезное различие: высота по гравитационной опоре не означает, что геоид тождественен местному среднему уровню моря."
+          }
+        },
+        {
+          "index": 1,
+          "answerIndex": 1,
+          "fullPrompt": "В контрольной сети точка Q имеет GNSS-высоту h=86,4 м в трёхмерном NAD 83 и нивелирную H=52,9 м в NAVD 88; местная модель даёт геоидальное разделение N=33,5 м. В точке R та же модель даёт N=31,0 м. Какая интерпретация согласует все три величины?",
+          "answerText": "h — высота над эллипсоидом, H — ортометрическая в NAVD 88; N связывает их локально и не переносится без модели.",
+          "noteText": "Эллипсоид — геометрическая гладкая поверхность; значения h и H относятся к разным вертикальным опорам.",
+          "grammarAssessment": "Обозначения h и H включены в параллельные конструкции «отсчитана» и «высота»; составное предложение ясно связывает данные и вывод.",
+          "truthAssessment": "Условие называет h ellipsoidal, H NAVD 88 orthometric, а локальные N различаются; это сохраняет каждую опору без выдуманного глобального сдвига.",
+          "plausibilityAssessment": "Это единственный вариант, совместимый одновременно с обозначениями h/H и двумя величинами N в разных точках.",
+          "keyAssessment": "Индекс 1 верно распределяет геометрическую поверхность, вертикальный датум и точечную геоидальную модель; все данные задачи получают согласованное значение.",
+          "noteUsefulnessAssessment": "Заметка поясняет статус эллипсоида как геометрической поверхности, дополняя расчётное соотнесение h и H.",
+          "answerSource": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Full tutorial, Referenced Ellipsoid and Vertical Datum sections: ellipsoid defines geometric reference; 3-D datums provide ellipsoidal height, orthometric datums use gravity field.",
+            "specificClaim": "Условие называет h ellipsoidal, H NAVD 88 orthometric, а локальные N различаются; это сохраняет каждую опору без выдуманного глобального сдвига."
+          },
+          "noteSource": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Full tutorial, Referenced Ellipsoid: ellipsoid is geometric surface approximating Earth size and shape.",
+            "specificClaim": "Заметка поясняет статус эллипсоида как геометрической поверхности, дополняя расчётное соотнесение h и H."
+          }
+        },
+        {
+          "index": 2,
+          "answerIndex": 2,
+          "fullPrompt": "В контрольной сети точка Q имеет GNSS-высоту h=86,4 м в трёхмерном NAD 83 и нивелирную H=52,9 м в NAVD 88; местная модель даёт геоидальное разделение N=33,5 м. В точке R та же модель даёт N=31,0 м. Какая интерпретация согласует все три величины?",
+          "answerText": "h отсчитана от геоида, H — от эллипсоида; различие N в Q и R объясняется изменением номера датума.",
+          "noteText": "Геодезический датум задаёт систему отсчёта и координатный контроль, а не локальную геоидальную поверхность.",
+          "grammarAssessment": "Сказуемое «отсчитана» согласовано с h; вторая часть грамматически завершена причинным оборотом.",
+          "truthAssessment": "Текст переставляет местами геоид и эллипсоид и приписывает различие N номеру датума, хотя в сценарии сравнивается одна местная модель.",
+          "plausibilityAssessment": "Путаница между поверхностью и datum правдоподобна: оба участвуют в высотной привязке, но описывают разные части референсной системы.",
+          "keyAssessment": "Вариант противоречит исходному обозначению GNSS h и превращает пространственное изменение модели в смену datum, которой условие не задаёт.",
+          "noteUsefulnessAssessment": "Заметка отделяет datum/reference frame от одной поверхности отсчёта, что помогает не смешивать модель высот с системой координат.",
+          "answerSource": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Full tutorial, Geodetic Datums and Referenced Ellipsoid: datum combines coordinate system and reference-surface parameters; ellipsoid is geometric surface.",
+            "specificClaim": "Текст переставляет местами геоид и эллипсоид и приписывает различие N номеру датума, хотя в сценарии сравнивается одна местная модель."
+          },
+          "noteSource": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.headers"
+            ],
+            "fileSHA256": [
+              "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+              "b2eb8cc26e8cee62f6f1183a39a224bb1864572241b1f6f350503bd32d97e087"
+            ],
+            "locator": "Full article opening and Table 1: a geodetic datum/reference frame is an abstract coordinate system with a reference surface and known locations.",
+            "specificClaim": "Заметка отделяет datum/reference frame от одной поверхности отсчёта, что помогает не смешивать модель высот с системой координат."
+          }
+        },
+        {
+          "index": 3,
+          "answerIndex": 3,
+          "fullPrompt": "В контрольной сети точка Q имеет GNSS-высоту h=86,4 м в трёхмерном NAD 83 и нивелирную H=52,9 м в NAVD 88; местная модель даёт геоидальное разделение N=33,5 м. В точке R та же модель даёт N=31,0 м. Какая интерпретация согласует все три величины?",
+          "answerText": "N=33,5 м — опубликованная высота репера Q; поэтому она заменяет H и не зависит от вертикальной системы отсчёта.",
+          "noteText": "Репер — закреплённая контрольная точка, а не поверхность, задающая все высоты местности.",
+          "grammarAssessment": "Подлежащее «N» со сказуемым «является» образует законченную конструкцию; союз «поэтому» вводит вывод.",
+          "truthAssessment": "Высота репера — значение в закреплённой точке, но не геоидальное разделение модели; кроме того, H уже задана в NAVD 88.",
+          "plausibilityAssessment": "Число в метрах и контрольная точка выглядят как подходящая нивелирная поправка, однако N здесь явно дан геоидальной моделью.",
+          "keyAssessment": "Ответ подменяет model separation высотой отдельной отметки и игнорирует различие между N и H в условии.",
+          "noteUsefulnessAssessment": "Заметка уточняет, что геодезический репер представляет контролируемую точку, а не математическую или физическую поверхность высот.",
+          "answerSource": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Topographic Map Symbols, pp. 2–3, CONTROL DATA AND MONUMENTS: permanent/recoverable marks and benchmark symbols are control marks, separate from surface models.",
+            "specificClaim": "Высота репера — значение в закреплённой точке, но не геоидальное разделение модели; кроме того, H уже задана в NAVD 88."
+          },
+          "noteSource": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Full PDF pp. 2–3: benchmark/control-mark symbols identify mapped points; they are not geoid surfaces.",
+            "specificClaim": "Заметка уточняет, что геодезический репер представляет контролируемую точку, а не математическую или физическую поверхность высот."
+          }
+        }
+      ],
+      "difficultyAssessment": "Нужно сопоставить две системы высот и понять, почему геоидальное разделение дано для каждой точки отдельно; недостаточно назвать одну из геодезических поверхностей.",
+      "peerReview": {
+        "peerIds": [
+          "maps-cartography-geoid",
+          "maps-cartography-datum",
+          "maps-cartography-benchmark"
+        ],
+        "peers": [
+          {
+            "id": "maps-cartography-geoid",
+            "current": {
+              "id": "maps-cartography-geoid",
+              "difficulty": "hard",
+              "prompt": "Какой геодезический термин описан? Он — эквипотенциальная поверхность земного поля тяжести, близкая к среднему уровню моря.",
+              "answers": [
+                {
+                  "text": "Геоид",
+                  "note": "Геоид — эквипотенциальная поверхность земного поля тяжести, близкая к среднему уровню моря."
+                },
+                {
+                  "text": "Референц-эллипсоид",
+                  "note": "Референц-эллипсоид — математически гладкая модель формы Земли."
+                },
+                {
+                  "text": "Геодезический датум",
+                  "note": "Геодезический датум связывает систему координат с моделью и положением Земли."
+                },
+                {
+                  "text": "Геодезический репер",
+                  "note": "Геодезический репер закрепляет точку с точно определённой высотой или координатами."
+                }
+              ],
+              "correctIndex": 0,
+              "explanation": "Правильный ответ — Геоид. Геоид — эквипотенциальная поверхность земного поля тяжести, близкая к среднему уровню моря.",
+              "source": {
+                "title": "Geoid | Britannica",
+                "url": "https://www.britannica.com/science/geoid",
+                "verifiedAt": "2026-09-02"
+              }
+            },
+            "proposed": null,
+            "proposedStatus": "no fresh proposal for this peer in current phase"
+          },
+          {
+            "id": "maps-cartography-datum",
+            "current": {
+              "id": "maps-cartography-datum",
+              "difficulty": "hard",
+              "prompt": "Какой геодезический термин описан? Он связывает систему координат с моделью и положением Земли.",
+              "answers": [
+                {
+                  "text": "Геоид",
+                  "note": "Геоид — эквипотенциальная поверхность земного поля тяжести, близкая к среднему уровню моря."
+                },
+                {
+                  "text": "Геодезический датум",
+                  "note": "Геодезический датум связывает систему координат с моделью и положением Земли."
+                },
+                {
+                  "text": "Референц-эллипсоид",
+                  "note": "Референц-эллипсоид — математически гладкая модель формы Земли."
+                },
+                {
+                  "text": "Геодезический репер",
+                  "note": "Геодезический репер закрепляет точку с точно определённой высотой или координатами."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Правильный ответ — Геодезический датум. Геодезический датум связывает систему координат с моделью и положением Земли.",
+              "source": {
+                "title": "Datums and Reference Frames — NOAA National Geodetic Survey",
+                "url": "https://geodesy.noaa.gov/datums/index.shtml",
+                "verifiedAt": "2026-09-02"
+              }
+            },
+            "proposed": {
+              "id": "maps-cartography-datum",
+              "difficulty": "hard",
+              "prompt": "Два каталога дают одинаковые широту и долготу для одних записей и оба называют GRS 80, но первый указывает NAD 83 (2011), а второй — глобальную реализацию ITRF. Какой вывод безопасен до объединения точек?",
+              "answers": [
+                {
+                  "text": "Точки тождественны: одинаковый эллипсоид полностью задаёт начало, ориентацию и контроль координат.",
+                  "note": "Эллипсоид задаёт геометрическую поверхность, но datum добавляет систему координат и её реализацию."
+                },
+                {
+                  "text": "Нужно сопоставить геодезические датумы/реализации и преобразовать координаты; эллипсоид сам по себе не задаёт всю систему отсчёта.",
+                  "note": "NGS различает NAD 83(2011) как национальный геометрический datum и ITRF как глобальную reference frame."
+                },
+                {
+                  "text": "Нужно заменить GRS 80 на геоид: именно он задаёт широту и долготу обеих записей.",
+                  "note": "Геоид — гравитационная поверхность и вертикальная модель, а не полная горизонтальная система координат."
+                },
+                {
+                  "text": "Достаточно найти ближайший репер: его отметка высоты автоматически определит горизонтальное смещение двух каталогов.",
+                  "note": "Опубликованный геодезический репер закрепляет контрольную точку; одна отметка не трансформирует два набора lat/lon."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Одинаковая модель эллипсоида не делает реализации координатной системы тождественными. В геодезическом datum важны система отсчёта и известные контрольные координаты; NGS отдельно описывает NAD 83(2011) и международную ITRF. Перед слиянием следует использовать определённые datum/реализации и корректное преобразование.",
+              "source": {
+                "title": "NOAA NGS: Datums and Reference Frames",
+                "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+                "verifiedAt": "2026-10-15"
+              }
+            },
+            "proposedStatus": "new proposal in hard5-next"
+          },
+          {
+            "id": "maps-cartography-benchmark",
+            "current": {
+              "id": "maps-cartography-benchmark",
+              "difficulty": "hard",
+              "prompt": "Какой геодезический термин описан? Он закрепляет точку с точно определённой высотой или координатами.",
+              "answers": [
+                {
+                  "text": "Геоид",
+                  "note": "Геоид — эквипотенциальная поверхность земного поля тяжести, близкая к среднему уровню моря."
+                },
+                {
+                  "text": "Геодезический репер",
+                  "note": "Геодезический репер закрепляет точку с точно определённой высотой или координатами."
+                },
+                {
+                  "text": "Референц-эллипсоид",
+                  "note": "Референц-эллипсоид — математически гладкая модель формы Земли."
+                },
+                {
+                  "text": "Геодезический датум",
+                  "note": "Геодезический датум связывает систему координат с моделью и положением Земли."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Правильный ответ — Геодезический репер. Геодезический репер закрепляет точку с точно определённой высотой или координатами.",
+              "source": {
+                "title": "National Geodetic Survey - Survey Marks and Datasheets",
+                "url": "https://geodesy.noaa.gov/datasheets/",
+                "verifiedAt": "2026-09-02"
+              }
+            },
+            "proposed": {
+              "id": "maps-cartography-benchmark",
+              "difficulty": "hard",
+              "prompt": "Перед повторной нивелировкой выбирают одну из двух отметок: на карте у скалы напечатано 213,4 м без знака контроля; второй объект — восстановимый постоянный знак с идентификатором пункта и опубликованной контрольной высотой. Что является надёжной опорной точкой для повторного полевого контроля?",
+              "answers": [
+                {
+                  "text": "Геоид: любая поверхность близкая к среднему уровню моря задаёт конкретную точку, которую можно найти на местности.",
+                  "note": "Геоид — непрерывная гравитационная поверхность; конкретный знак или точку на местности он не заменяет."
+                },
+                {
+                  "text": "Геодезический репер: физический восстановимый контрольный знак с установленной высотой, а не просто числовая высотная отметка.",
+                  "note": "USGS отдельно показывает контрольные реперы и точечные высоты: число на карте ещё не указывает на recoverable monument."
+                },
+                {
+                  "text": "Референц-эллипсоид: гладкая поверхность, от которой GNSS-высоты отсчитывают прямо на местном объекте.",
+                  "note": "Эллипсоид — геометрическая модель Земли; высота поверхности над ним не материализует mark."
+                },
+                {
+                  "text": "Геодезический датум: система координат сама является материальным знаком с опубликованной отметкой.",
+                  "note": "Datum/reference frame задаёт систему координат и контрольные точки, но не является одним физическим пунктом."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Для повторной нивелировки нужен объект, который можно восстановить в поле и чья контрольная высота опубликована. USGS различает постоянный или восстанавливаемый знак вертикального контроля и точечную высоту; сама числовая отметка у скалы не подтверждает, что там есть репер.",
+              "source": {
+                "title": "USGS: Topographic Map Symbols",
+                "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+                "verifiedAt": "2026-10-15"
+              }
+            },
+            "proposedStatus": "new proposal in hard5-next"
+          }
+        ],
+        "crossLeakAssessment": "Geoid identifies a gravity-field surface, datum identifies a coordinate reference system, and benchmark identifies a control point. This item instead diagnoses the local relationship among ellipsoidal h, orthometric H and N."
+      }
+    },
+    {
+      "id": "maps-cartography-datum",
+      "stage": "initial-source-editorial",
+      "status": "FIX",
+      "finalCardHash": "59025e3ddf684917463615be8362facb8f2b32b9012386f8d657ea0e2c9485ae",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Два каталога дают одинаковые широту и долготу для одних записей и оба называют GRS 80, но первый указывает NAD 83 (2011), а второй — глобальную реализацию ITRF. Какой вывод безопасен до объединения точек?",
+            "answers": [
+              "Точки тождественны: одинаковый эллипсоид полностью задаёт начало, ориентацию и контроль координат.",
+              "Нужно сопоставить геодезические датумы/реализации и преобразовать координаты; эллипсоид сам по себе не задаёт всю систему отсчёта.",
+              "Нужно заменить GRS 80 на геоид: именно он задаёт широту и долготу обеих записей.",
+              "Достаточно найти ближайший репер: его отметка высоты автоматически определит горизонтальное смещение двух каталогов."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "0a581a5f516f7dea706925d09a73b19f5ee007152fdc37ec9cc88c2aee6c9d0c",
+          "source": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.headers"
+            ],
+            "fileSHA256": [
+              "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+              "b2eb8cc26e8cee62f6f1183a39a224bb1864572241b1f6f350503bd32d97e087"
+            ],
+            "locator": "Полный NGS Datums and Reference Frames, открывающее определение и Table 1/2: datum/reference frame содержит систему координат с reference surface и известными местами; NAD 83(2011) и ITRF описаны отдельно."
+          },
+          "specificClaim": "Совпадение названия эллипсоида и чисел широты/долготы само по себе не доказывает совпадение систем координат: NGS перечисляет datum и global reference frame как разные reference definitions.",
+          "whyItFollowsFromFullContext": "Совпадение названия эллипсоида и чисел широты/долготы само по себе не доказывает совпадение систем координат: NGS перечисляет datum и global reference frame как разные reference definitions.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "explanation",
+          "literal": "Одинаковая модель эллипсоида не делает реализации координатной системы тождественными. В геодезическом datum важны система отсчёта и известные контрольные координаты; NGS отдельно описывает NAD 83(2011) и международную ITRF. Перед слиянием следует использовать определённые datum/реализации и корректное преобразование.",
+          "literalSHA256": "ca440d94ca487aa7faad3e3245e1a4cb84a9846959ced0a9452f12128ca88d56",
+          "source": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.headers"
+            ],
+            "fileSHA256": [
+              "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+              "b2eb8cc26e8cee62f6f1183a39a224bb1864572241b1f6f350503bd32d97e087"
+            ],
+            "locator": "Полный NGS Datums and Reference Frames, открывающее определение и Table 1/2: datum/reference frame содержит систему координат с reference surface и известными местами; NAD 83(2011) и ITRF описаны отдельно."
+          },
+          "specificClaim": "NGS определяет geodetic datum/reference frame как абстрактную coordinate system с reference surface и известными locations, а NAD 83(2011) и ITRF разносит по разным строкам.",
+          "whyItFollowsFromFullContext": "NGS определяет geodetic datum/reference frame как абстрактную coordinate system с reference surface и известными locations, а NAD 83(2011) и ITRF разносит по разным строкам.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note0",
+          "literal": "Эллипсоид задаёт геометрическую поверхность, но datum добавляет систему координат и её реализацию.",
+          "literalSHA256": "1666d60e20b8e60d25370d7b5fc4cdee40bdea985f615c7524f3d84c0d867e13",
+          "source": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Full tutorial, Referenced Ellipsoid: defined by semimajor/minor axis or flattening; it is a geometric reference surface."
+          },
+          "specificClaim": "Заметка фиксирует точную границу понятия: эллипсоид описывает размер и форму геометрической поверхности, а не все параметры datum.",
+          "whyItFollowsFromFullContext": "Заметка фиксирует точную границу понятия: эллипсоид описывает размер и форму геометрической поверхности, а не все параметры datum.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note1",
+          "literal": "NGS различает NAD 83(2011) как национальный геометрический datum и ITRF как глобальную reference frame.",
+          "literalSHA256": "2cae0a9e1ad03316ce605c1ffc04ffb3abe08acb3185cf1e65cf8f19de9eca6d",
+          "source": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.headers"
+            ],
+            "fileSHA256": [
+              "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+              "b2eb8cc26e8cee62f6f1183a39a224bb1864572241b1f6f350503bd32d97e087"
+            ],
+            "locator": "Full NGS page opening: a geodetic datum/reference frame is an abstract coordinate system with reference surface and known locations."
+          },
+          "specificClaim": "Заметка связывает оба конкретных ярлыка с классификацией NGS и уточняет, почему сравнение не сводится к эллипсоиду.",
+          "whyItFollowsFromFullContext": "Заметка связывает оба конкретных ярлыка с классификацией NGS и уточняет, почему сравнение не сводится к эллипсоиду.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note2",
+          "literal": "Геоид — гравитационная поверхность и вертикальная модель, а не полная горизонтальная система координат.",
+          "literalSHA256": "1567c5e69982021543295f82a5acf414769a0c44f7605f32fcdd93b0bb543a7f",
+          "source": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.headers"
+            ],
+            "fileSHA256": [
+              "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+              "b2eb8cc26e8cee62f6f1183a39a224bb1864572241b1f6f350503bd32d97e087"
+            ],
+            "locator": "Full NGS page: reference frame provides coordinates of surface points; datum definition includes reference surface."
+          },
+          "specificClaim": "Заметка помогает отделить физическую поверхность для высот от координатной reference frame.",
+          "whyItFollowsFromFullContext": "Заметка помогает отделить физическую поверхность для высот от координатной reference frame.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note3",
+          "literal": "Опубликованный геодезический репер закрепляет контрольную точку; одна отметка не трансформирует два набора lat/lon.",
+          "literalSHA256": "2b18c95626f479db942a7a392a2a087493341f0eb4d9d9833b3263820bb821ab",
+          "source": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.headers"
+            ],
+            "fileSHA256": [
+              "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+              "b2eb8cc26e8cee62f6f1183a39a224bb1864572241b1f6f350503bd32d97e087"
+            ],
+            "locator": "Full NGS opening: datum/reference frame is a coordinate system with known locations to begin surveys and create maps."
+          },
+          "specificClaim": "Заметка возвращает роль репера к точечному контролю, отдельному от полной координатной системы.",
+          "whyItFollowsFromFullContext": "Заметка возвращает роль репера к точечному контролю, отдельному от полной координатной системы.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        }
+      ],
+      "choiceProofs": [
+        {
+          "index": 0,
+          "answerIndex": 0,
+          "fullPrompt": "Два каталога дают одинаковые широту и долготу для одних записей и оба называют GRS 80, но первый указывает NAD 83 (2011), а второй — глобальную реализацию ITRF. Какой вывод безопасен до объединения точек?",
+          "answerText": "Точки тождественны: одинаковый эллипсоид полностью задаёт начало, ориентацию и контроль координат.",
+          "noteText": "Эллипсоид задаёт геометрическую поверхность, но datum добавляет систему координат и её реализацию.",
+          "grammarAssessment": "Подлежащее «точки» согласовано со сказуемым «тождественны»; после двоеточия приведено полное обоснование.",
+          "truthAssessment": "Эллипсоид не задаёт полностью origin, orientation и координатный контроль; поэтому одинаковые GRS 80 и числовые координаты ещё не удостоверяют совпадение точек.",
+          "plausibilityAssessment": "Одинаковые значения в таблицах часто ошибочно принимают за одну сетку; внешне это правдоподобно, пока не сравнить reference realization.",
+          "keyAssessment": "Вариант утверждает, что эллипсоид сам определяет datum и координатные реализацию, чего источники не говорят.",
+          "noteUsefulnessAssessment": "Заметка фиксирует точную границу понятия: эллипсоид описывает размер и форму геометрической поверхности, а не все параметры datum.",
+          "answerSource": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Full tutorial, Geodetic Datum and Referenced Ellipsoid: datum includes coordinate-system/control definitions; ellipsoid describes geometric size and shape.",
+            "specificClaim": "Эллипсоид не задаёт полностью origin, orientation и координатный контроль; поэтому одинаковые GRS 80 и числовые координаты ещё не удостоверяют совпадение точек."
+          },
+          "noteSource": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Full tutorial, Referenced Ellipsoid: defined by semimajor/minor axis or flattening; it is a geometric reference surface.",
+            "specificClaim": "Заметка фиксирует точную границу понятия: эллипсоид описывает размер и форму геометрической поверхности, а не все параметры datum."
+          }
+        },
+        {
+          "index": 1,
+          "answerIndex": 1,
+          "fullPrompt": "Два каталога дают одинаковые широту и долготу для одних записей и оба называют GRS 80, но первый указывает NAD 83 (2011), а второй — глобальную реализацию ITRF. Какой вывод безопасен до объединения точек?",
+          "answerText": "Нужно сопоставить геодезические датумы/реализации и преобразовать координаты; эллипсоид сам по себе не задаёт всю систему отсчёта.",
+          "noteText": "NGS различает NAD 83(2011) как национальный геометрический datum и ITRF как глобальную reference frame.",
+          "grammarAssessment": "Безлично-модальная конструкция «нужно сопоставить» управляет однородными терминами; вторая часть — законченное объяснение.",
+          "truthAssessment": "NAD83(2011) и ITRF указаны как разные реализации reference systems; нужно выяснить преобразование между ними, даже при одинаковом эллипсоиде и числах.",
+          "plausibilityAssessment": "Это вариант объясняет и совпадающее имя поверхности, и то, почему каталоги могут давать разные координатные положения.",
+          "keyAssessment": "Индекс 1 единственный сохраняет различие datum/reference frame и не выводит тождество точек из совпадающей только части metadata.",
+          "noteUsefulnessAssessment": "Заметка связывает оба конкретных ярлыка с классификацией NGS и уточняет, почему сравнение не сводится к эллипсоиду.",
+          "answerSource": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.headers"
+            ],
+            "fileSHA256": [
+              "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+              "b2eb8cc26e8cee62f6f1183a39a224bb1864572241b1f6f350503bd32d97e087"
+            ],
+            "locator": "Full NGS page, Table 1 Current official datum and Table 2 International Reference Frames: NAD83(2011) and ITRF are listed as distinct reference systems.",
+            "specificClaim": "NAD83(2011) и ITRF указаны как разные реализации reference systems; нужно выяснить преобразование между ними, даже при одинаковом эллипсоиде и числах."
+          },
+          "noteSource": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.headers"
+            ],
+            "fileSHA256": [
+              "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+              "b2eb8cc26e8cee62f6f1183a39a224bb1864572241b1f6f350503bd32d97e087"
+            ],
+            "locator": "Full NGS page opening: a geodetic datum/reference frame is an abstract coordinate system with reference surface and known locations.",
+            "specificClaim": "Заметка связывает оба конкретных ярлыка с классификацией NGS и уточняет, почему сравнение не сводится к эллипсоиду."
+          }
+        },
+        {
+          "index": 2,
+          "answerIndex": 2,
+          "fullPrompt": "Два каталога дают одинаковые широту и долготу для одних записей и оба называют GRS 80, но первый указывает NAD 83 (2011), а второй — глобальную реализацию ITRF. Какой вывод безопасен до объединения точек?",
+          "answerText": "Нужно заменить GRS 80 на геоид: именно он задаёт широту и долготу обеих записей.",
+          "noteText": "Геоид — гравитационная поверхность и вертикальная модель, а не полная горизонтальная система координат.",
+          "grammarAssessment": "Инфинитив «заменить» имеет дополнение «геоид»; придаточная часть с «именно» оформляет отдельное утверждение.",
+          "truthAssessment": "Геоид описывает gravity-field equipotential surface и вертикальную привязку, а не горизонтальные latitude/longitude datum двух таблиц.",
+          "plausibilityAssessment": "Поскольку и геоид, и эллипсоид фигурируют в геодезии, их можно спутать с системой координат, но вопрос о lat/lon требует datum/frame.",
+          "keyAssessment": "Вариант подменяет горизонтальную систему координат геоидальной поверхностью и не отвечает на вопрос о различии сеток.",
+          "noteUsefulnessAssessment": "Заметка помогает отделить физическую поверхность для высот от координатной reference frame.",
+          "answerSource": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Full tutorial, GEOID and Horizontal Datum sections: geoid is gravity-field surface; horizontal datum specifies surface plus origin/orientation parameters.",
+            "specificClaim": "Геоид описывает gravity-field equipotential surface и вертикальную привязку, а не горизонтальные latitude/longitude datum двух таблиц."
+          },
+          "noteSource": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.headers"
+            ],
+            "fileSHA256": [
+              "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+              "b2eb8cc26e8cee62f6f1183a39a224bb1864572241b1f6f350503bd32d97e087"
+            ],
+            "locator": "Full NGS page: reference frame provides coordinates of surface points; datum definition includes reference surface.",
+            "specificClaim": "Заметка помогает отделить физическую поверхность для высот от координатной reference frame."
+          }
+        },
+        {
+          "index": 3,
+          "answerIndex": 3,
+          "fullPrompt": "Два каталога дают одинаковые широту и долготу для одних записей и оба называют GRS 80, но первый указывает NAD 83 (2011), а второй — глобальную реализацию ITRF. Какой вывод безопасен до объединения точек?",
+          "answerText": "Достаточно найти ближайший репер: его отметка высоты автоматически определит горизонтальное смещение двух каталогов.",
+          "noteText": "Опубликованный геодезический репер закрепляет контрольную точку; одна отметка не трансформирует два набора lat/lon.",
+          "grammarAssessment": "Инфинитив «найти» управляет дополнением; причинная часть грамматически закончена, хотя логически ошибочна.",
+          "truthAssessment": "Контрольный репер может дать известную привязанную точку, но поиск одного ближайшего mark не задаёт корректное преобразование между двумя coordinate frames.",
+          "plausibilityAssessment": "Ближайший известный пункт кажется достаточным практическим ориентиром, хотя преобразование должно соответствовать всему datum/frame и контрольной реализации.",
+          "keyAssessment": "Один репер не заменяет identification обоих datum и не гарантирует совпадение координат сеток.",
+          "noteUsefulnessAssessment": "Заметка возвращает роль репера к точечному контролю, отдельному от полной координатной системы.",
+          "answerSource": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Topographic Map Symbols, pp. 2–3, CONTROL DATA AND MONUMENTS: marks and benchmarks are symbols for discrete mapped control points.",
+            "specificClaim": "Контрольный репер может дать известную привязанную точку, но поиск одного ближайшего mark не задаёт корректное преобразование между двумя coordinate frames."
+          },
+          "noteSource": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.headers"
+            ],
+            "fileSHA256": [
+              "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+              "b2eb8cc26e8cee62f6f1183a39a224bb1864572241b1f6f350503bd32d97e087"
+            ],
+            "locator": "Full NGS opening: datum/reference frame is a coordinate system with known locations to begin surveys and create maps.",
+            "specificClaim": "Заметка возвращает роль репера к точечному контролю, отдельному от полной координатной системы."
+          }
+        }
+      ],
+      "difficultyAssessment": "Нужно отделить форму референсной поверхности от полной системы координат и применить это различие к двум каталогам, которые выглядят одинаково по числам.",
+      "peerReview": {
+        "peerIds": [
+          "maps-cartography-geoid",
+          "maps-cartography-ellipsoid",
+          "maps-cartography-benchmark"
+        ],
+        "peers": [
+          {
+            "id": "maps-cartography-geoid",
+            "current": {
+              "id": "maps-cartography-geoid",
+              "difficulty": "hard",
+              "prompt": "Какой геодезический термин описан? Он — эквипотенциальная поверхность земного поля тяжести, близкая к среднему уровню моря.",
+              "answers": [
+                {
+                  "text": "Геоид",
+                  "note": "Геоид — эквипотенциальная поверхность земного поля тяжести, близкая к среднему уровню моря."
+                },
+                {
+                  "text": "Референц-эллипсоид",
+                  "note": "Референц-эллипсоид — математически гладкая модель формы Земли."
+                },
+                {
+                  "text": "Геодезический датум",
+                  "note": "Геодезический датум связывает систему координат с моделью и положением Земли."
+                },
+                {
+                  "text": "Геодезический репер",
+                  "note": "Геодезический репер закрепляет точку с точно определённой высотой или координатами."
+                }
+              ],
+              "correctIndex": 0,
+              "explanation": "Правильный ответ — Геоид. Геоид — эквипотенциальная поверхность земного поля тяжести, близкая к среднему уровню моря.",
+              "source": {
+                "title": "Geoid | Britannica",
+                "url": "https://www.britannica.com/science/geoid",
+                "verifiedAt": "2026-09-02"
+              }
+            },
+            "proposed": null,
+            "proposedStatus": "no fresh proposal for this peer in current phase"
+          },
+          {
+            "id": "maps-cartography-ellipsoid",
+            "current": {
+              "id": "maps-cartography-ellipsoid",
+              "difficulty": "hard",
+              "prompt": "Какой геодезический термин описан? Он — математически гладкая модель формы Земли.",
+              "answers": [
+                {
+                  "text": "Геоид",
+                  "note": "Геоид — эквипотенциальная поверхность земного поля тяжести, близкая к среднему уровню моря."
+                },
+                {
+                  "text": "Референц-эллипсоид",
+                  "note": "Референц-эллипсоид — математически гладкая модель формы Земли."
+                },
+                {
+                  "text": "Геодезический датум",
+                  "note": "Геодезический датум связывает систему координат с моделью и положением Земли."
+                },
+                {
+                  "text": "Геодезический репер",
+                  "note": "Геодезический репер закрепляет точку с точно определённой высотой или координатами."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Правильный ответ — Референц-эллипсоид. Референц-эллипсоид — математически гладкая модель формы Земли.",
+              "source": {
+                "title": "Reference ellipsoid | Britannica",
+                "url": "https://www.britannica.com/science/reference-ellipsoid",
+                "verifiedAt": "2026-09-02"
+              }
+            },
+            "proposed": {
+              "id": "maps-cartography-ellipsoid",
+              "difficulty": "hard",
+              "prompt": "В контрольной сети точка Q имеет GNSS-высоту h=86,4 м в трёхмерном NAD 83 и нивелирную H=52,9 м в NAVD 88; местная модель даёт геоидальное разделение N=33,5 м. В точке R та же модель даёт N=31,0 м. Какая интерпретация согласует все три величины?",
+              "answers": [
+                {
+                  "text": "Обе высоты отсчитаны от геоида, а N=33,5 м — постоянная поправка, применимая и к точке R.",
+                  "note": "Ортометрические высоты связаны с гравитационной опорой; геоид лишь приближённо соответствует среднему уровню моря."
+                },
+                {
+                  "text": "h — высота над эллипсоидом, H — ортометрическая в NAVD 88; N связывает их локально и не переносится без модели.",
+                  "note": "Эллипсоид — геометрическая гладкая поверхность; значения h и H относятся к разным вертикальным опорам."
+                },
+                {
+                  "text": "h отсчитана от геоида, H — от эллипсоида; различие N в Q и R объясняется изменением номера датума.",
+                  "note": "Геодезический датум задаёт систему отсчёта и координатный контроль, а не локальную геоидальную поверхность."
+                },
+                {
+                  "text": "N=33,5 м — опубликованная высота репера Q; поэтому она заменяет H и не зависит от вертикальной системы отсчёта.",
+                  "note": "Репер — закреплённая контрольная точка, а не поверхность, задающая все высоты местности."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "В NOAA h относится к эллипсоидальной высоте, а H — к ортометрической вертикальной опоре. Разность связывает эллипсоид с геоидальной моделью в данной точке; поэтому N=33,5 м в Q нельзя автоматически переносить на R, где модель даёт 31,0 м.",
+              "source": {
+                "title": "NOAA VDatum: A tutorial on datums",
+                "url": "https://vdatum.noaa.gov/docs/datums.html",
+                "verifiedAt": "2026-10-15"
+              }
+            },
+            "proposedStatus": "new proposal in hard5-next"
+          },
+          {
+            "id": "maps-cartography-benchmark",
+            "current": {
+              "id": "maps-cartography-benchmark",
+              "difficulty": "hard",
+              "prompt": "Какой геодезический термин описан? Он закрепляет точку с точно определённой высотой или координатами.",
+              "answers": [
+                {
+                  "text": "Геоид",
+                  "note": "Геоид — эквипотенциальная поверхность земного поля тяжести, близкая к среднему уровню моря."
+                },
+                {
+                  "text": "Геодезический репер",
+                  "note": "Геодезический репер закрепляет точку с точно определённой высотой или координатами."
+                },
+                {
+                  "text": "Референц-эллипсоид",
+                  "note": "Референц-эллипсоид — математически гладкая модель формы Земли."
+                },
+                {
+                  "text": "Геодезический датум",
+                  "note": "Геодезический датум связывает систему координат с моделью и положением Земли."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Правильный ответ — Геодезический репер. Геодезический репер закрепляет точку с точно определённой высотой или координатами.",
+              "source": {
+                "title": "National Geodetic Survey - Survey Marks and Datasheets",
+                "url": "https://geodesy.noaa.gov/datasheets/",
+                "verifiedAt": "2026-09-02"
+              }
+            },
+            "proposed": {
+              "id": "maps-cartography-benchmark",
+              "difficulty": "hard",
+              "prompt": "Перед повторной нивелировкой выбирают одну из двух отметок: на карте у скалы напечатано 213,4 м без знака контроля; второй объект — восстановимый постоянный знак с идентификатором пункта и опубликованной контрольной высотой. Что является надёжной опорной точкой для повторного полевого контроля?",
+              "answers": [
+                {
+                  "text": "Геоид: любая поверхность близкая к среднему уровню моря задаёт конкретную точку, которую можно найти на местности.",
+                  "note": "Геоид — непрерывная гравитационная поверхность; конкретный знак или точку на местности он не заменяет."
+                },
+                {
+                  "text": "Геодезический репер: физический восстановимый контрольный знак с установленной высотой, а не просто числовая высотная отметка.",
+                  "note": "USGS отдельно показывает контрольные реперы и точечные высоты: число на карте ещё не указывает на recoverable monument."
+                },
+                {
+                  "text": "Референц-эллипсоид: гладкая поверхность, от которой GNSS-высоты отсчитывают прямо на местном объекте.",
+                  "note": "Эллипсоид — геометрическая модель Земли; высота поверхности над ним не материализует mark."
+                },
+                {
+                  "text": "Геодезический датум: система координат сама является материальным знаком с опубликованной отметкой.",
+                  "note": "Datum/reference frame задаёт систему координат и контрольные точки, но не является одним физическим пунктом."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Для повторной нивелировки нужен объект, который можно восстановить в поле и чья контрольная высота опубликована. USGS различает постоянный или восстанавливаемый знак вертикального контроля и точечную высоту; сама числовая отметка у скалы не подтверждает, что там есть репер.",
+              "source": {
+                "title": "USGS: Topographic Map Symbols",
+                "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+                "verifiedAt": "2026-10-15"
+              }
+            },
+            "proposedStatus": "new proposal in hard5-next"
+          }
+        ],
+        "crossLeakAssessment": "Ellipsoid and geoid peers name surfaces; benchmark names a discrete control mark. This item asks whether matching ellipsoids establish the full coordinate frame, which those neighboring definitions do not answer."
+      }
+    },
+    {
+      "id": "maps-cartography-benchmark",
+      "stage": "initial-source-editorial",
+      "status": "FIX",
+      "finalCardHash": "19dcbbc3df5abf9c4f606c858b737a0d4b52b7fbf82759e3939cb1f5a9547b19",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Перед повторной нивелировкой выбирают одну из двух отметок: на карте у скалы напечатано 213,4 м без знака контроля; второй объект — восстановимый постоянный знак с идентификатором пункта и опубликованной контрольной высотой. Что является надёжной опорной точкой для повторного полевого контроля?",
+            "answers": [
+              "Геоид: любая поверхность близкая к среднему уровню моря задаёт конкретную точку, которую можно найти на местности.",
+              "Геодезический репер: физический восстановимый контрольный знак с установленной высотой, а не просто числовая высотная отметка.",
+              "Референц-эллипсоид: гладкая поверхность, от которой GNSS-высоты отсчитывают прямо на местном объекте.",
+              "Геодезический датум: система координат сама является материальным знаком с опубликованной отметкой."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "72ec80b33dc06c664b4a208ed0144839f5e7390e0ac9013c3c9469bf668bf004",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Полный USGS Topographic Map Symbols, pp. 2–3, CONTROL DATA AND MONUMENTS: permanent/recoverable vertical-control marks are shown separately from spot elevations."
+          },
+          "specificClaim": "Опубликованный восстановимый контрольный знак годится как повторно находимая физическая точка; изолированная spot elevation числом не утверждает наличие такого mark.",
+          "whyItFollowsFromFullContext": "Опубликованный восстановимый контрольный знак годится как повторно находимая физическая точка; изолированная spot elevation числом не утверждает наличие такого mark.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "explanation",
+          "literal": "Для повторной нивелировки нужен объект, который можно восстановить в поле и чья контрольная высота опубликована. USGS различает постоянный или восстанавливаемый знак вертикального контроля и точечную высоту; сама числовая отметка у скалы не подтверждает, что там есть репер.",
+          "literalSHA256": "25266b5d51a3d412f3268b927a9592a70345bbff56c3b2fed5131b0a823878ab",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Полный USGS Topographic Map Symbols, pp. 2–3, CONTROL DATA AND MONUMENTS: permanent/recoverable vertical-control marks are shown separately from spot elevations."
+          },
+          "specificClaim": "В легенде USGS разделены benchmark/вертикальные контрольные marks и spot elevation; знак маркирует контрольный объект, а числовая точечная высота описывает высоту точки.",
+          "whyItFollowsFromFullContext": "В легенде USGS разделены benchmark/вертикальные контрольные marks и spot elevation; знак маркирует контрольный объект, а числовая точечная высота описывает высоту точки.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note0",
+          "literal": "Геоид — непрерывная гравитационная поверхность; конкретный знак или точку на местности он не заменяет.",
+          "literalSHA256": "def113cb4a3b6ef64bcf1bb37b289c0e85f94a25084e95c5fb2d3f0856bdd11a",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Topographic Map Symbols pp. 2–3 distinguishes point control marks from terrain and elevation representations."
+          },
+          "specificClaim": "Заметка поясняет, что геоидальная поверхность нужна для интерпретации высот, но не является памятным/измерительным знаком на местности.",
+          "whyItFollowsFromFullContext": "Заметка поясняет, что геоидальная поверхность нужна для интерпретации высот, но не является памятным/измерительным знаком на местности.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note1",
+          "literal": "USGS отдельно показывает контрольные реперы и точечные высоты: число на карте ещё не указывает на recoverable monument.",
+          "literalSHA256": "a1ee8d77a21f16fd896538623aefdeb7af6ee3fad8577419dbe4af5c1af42975",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Topographic Map Symbols p. 3: separate legend entries include “Third-order or better elevation, recoverable mark, no tablet” and “Spot elevation”."
+          },
+          "specificClaim": "Заметка приводит конкретную легендную разницу между permanent/recoverable benchmark marks и checked spot elevations.",
+          "whyItFollowsFromFullContext": "Заметка приводит конкретную легендную разницу между permanent/recoverable benchmark marks и checked spot elevations.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note2",
+          "literal": "Эллипсоид — геометрическая модель Земли; высота поверхности над ним не материализует mark.",
+          "literalSHA256": "0809e61e1cf360746e0d0ce675d342780500ee39647c321fdf772b1d9bbb66a7",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Topographic Map Symbols pp. 2–3: control marks are discrete mapped symbols, separate from surfaces and spot elevations."
+          },
+          "specificClaim": "Заметка отделяет гладкую модель Земли от конкретной метки, которую геодезист может повторно найти.",
+          "whyItFollowsFromFullContext": "Заметка отделяет гладкую модель Земли от конкретной метки, которую геодезист может повторно найти.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note3",
+          "literal": "Datum/reference frame задаёт систему координат и контрольные точки, но не является одним физическим пунктом.",
+          "literalSHA256": "2ca5b640fe7dd88501360baadb1039af46e304560b10070641d105efea1606c1",
+          "source": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Topographic Map Symbols pp. 2–3: map legend distinguishes physical control monuments and benchmark marks."
+          },
+          "specificClaim": "Заметка добавляет, что datum может включать известные контрольные точки, однако остаётся системой координат, не одним знаком.",
+          "whyItFollowsFromFullContext": "Заметка добавляет, что datum может включать известные контрольные точки, однако остаётся системой координат, не одним знаком.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        }
+      ],
+      "choiceProofs": [
+        {
+          "index": 0,
+          "answerIndex": 0,
+          "fullPrompt": "Перед повторной нивелировкой выбирают одну из двух отметок: на карте у скалы напечатано 213,4 м без знака контроля; второй объект — восстановимый постоянный знак с идентификатором пункта и опубликованной контрольной высотой. Что является надёжной опорной точкой для повторного полевого контроля?",
+          "answerText": "Геоид: любая поверхность близкая к среднему уровню моря задаёт конкретную точку, которую можно найти на местности.",
+          "noteText": "Геоид — непрерывная гравитационная поверхность; конкретный знак или точку на местности он не заменяет.",
+          "grammarAssessment": "Двоеточие отделяет краткий термин от полного пояснения; обе части имеют ясные грамматические связи.",
+          "truthAssessment": "Поверхность геоида задаёт вертикальную физическую опору, но не выбирает восстанавливаемый объект скалы с указанным ID.",
+          "plausibilityAssessment": "Отметка репера может быть связана с геоидальной вертикальной системой; поэтому сама поверхность похожа на подходящую «опору», но не решает вопрос поиска пункта.",
+          "keyAssessment": "Вариант смешивает непрерывную поверхность высот с физическим маркером, который можно повторно найти.",
+          "noteUsefulnessAssessment": "Заметка поясняет, что геоидальная поверхность нужна для интерпретации высот, но не является памятным/измерительным знаком на местности.",
+          "answerSource": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Full tutorial, GEOID and Vertical Datum: geoid is an equipotential gravity surface; vertical datums reference elevations, not individual monuments.",
+            "specificClaim": "Поверхность геоида задаёт вертикальную физическую опору, но не выбирает восстанавливаемый объект скалы с указанным ID."
+          },
+          "noteSource": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Topographic Map Symbols pp. 2–3 distinguishes point control marks from terrain and elevation representations.",
+            "specificClaim": "Заметка поясняет, что геоидальная поверхность нужна для интерпретации высот, но не является памятным/измерительным знаком на местности."
+          }
+        },
+        {
+          "index": 1,
+          "answerIndex": 1,
+          "fullPrompt": "Перед повторной нивелировкой выбирают одну из двух отметок: на карте у скалы напечатано 213,4 м без знака контроля; второй объект — восстановимый постоянный знак с идентификатором пункта и опубликованной контрольной высотой. Что является надёжной опорной точкой для повторного полевого контроля?",
+          "answerText": "Геодезический репер: физический восстановимый контрольный знак с установленной высотой, а не просто числовая высотная отметка.",
+          "noteText": "USGS отдельно показывает контрольные реперы и точечные высоты: число на карте ещё не указывает на recoverable monument.",
+          "grammarAssessment": "Инфинитив «использовать» задаёт рекомендацию; однородные признаки с существительными в творительном падеже перечислены параллельно.",
+          "truthAssessment": "У второго объекта есть восстановимый physical control mark и опубликованная высота; одно число 213,4 м у скалы не подтверждает ни mark, ни повторное восстановление.",
+          "plausibilityAssessment": "Вариант одновременно отвечает требованию физического поиска и сохраняет различие между контрольным знаком и spot elevation.",
+          "keyAssessment": "Индекс 1 выбирает единственный объект с установленной контрольной точкой и опубликованными данными; альтернативная высотная подпись не означает benchmark.",
+          "noteUsefulnessAssessment": "Заметка приводит конкретную легендную разницу между permanent/recoverable benchmark marks и checked spot elevations.",
+          "answerSource": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Topographic Map Symbols pp. 2–3, CONTROL DATA AND MONUMENTS: third-order-or-better permanent/recoverable marks and bench marks are separate from spot elevation.",
+            "specificClaim": "У второго объекта есть восстановимый physical control mark и опубликованная высота; одно число 213,4 м у скалы не подтверждает ни mark, ни повторное восстановление."
+          },
+          "noteSource": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Topographic Map Symbols p. 3: separate legend entries include “Third-order or better elevation, recoverable mark, no tablet” and “Spot elevation”.",
+            "specificClaim": "Заметка приводит конкретную легендную разницу между permanent/recoverable benchmark marks и checked spot elevations."
+          }
+        },
+        {
+          "index": 2,
+          "answerIndex": 2,
+          "fullPrompt": "Перед повторной нивелировкой выбирают одну из двух отметок: на карте у скалы напечатано 213,4 м без знака контроля; второй объект — восстановимый постоянный знак с идентификатором пункта и опубликованной контрольной высотой. Что является надёжной опорной точкой для повторного полевого контроля?",
+          "answerText": "Референц-эллипсоид: гладкая поверхность, от которой GNSS-высоты отсчитывают прямо на местном объекте.",
+          "noteText": "Эллипсоид — геометрическая модель Земли; высота поверхности над ним не материализует mark.",
+          "grammarAssessment": "Подлежащее «эллипсоид» согласовано со сказуемым «является»; причинное пояснение завершает мысль.",
+          "truthAssessment": "Эллипсоид — геометрическая поверхность, не восстановимый монумент с контрольной отметкой; GNSS height также требует своей vertical reference.",
+          "plausibilityAssessment": "Геометрический эллипсоид участвует в высотных координатах, но не может физически обозначать местный контрольный знак.",
+          "keyAssessment": "Вариант приписывает поверхности роль закреплённой точки и подменяет опубликованную полевую отметку GNSS-высотой.",
+          "noteUsefulnessAssessment": "Заметка отделяет гладкую модель Земли от конкретной метки, которую геодезист может повторно найти.",
+          "answerSource": {
+            "title": "NOAA VDatum: A tutorial on datums",
+            "url": "https://vdatum.noaa.gov/docs/datums.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/noaa-vdatum-tutorial.headers"
+            ],
+            "fileSHA256": [
+              "c3cb7ec4d2d17d9bddfd53accb1e150f2e8aaaa7430c751b48c4c472f160e4e7",
+              "456fd14bdbe2247393bfb53fe5ff91c064f18e81ec87cb9bff87fc767d72cd1c"
+            ],
+            "locator": "Full tutorial, Referenced Ellipsoid: ellipsoid is geometric surface approximating Earth size and shape; Vertical Datum specifies elevation reference.",
+            "specificClaim": "Эллипсоид — геометрическая поверхность, не восстановимый монумент с контрольной отметкой; GNSS height также требует своей vertical reference."
+          },
+          "noteSource": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Topographic Map Symbols pp. 2–3: control marks are discrete mapped symbols, separate from surfaces and spot elevations.",
+            "specificClaim": "Заметка отделяет гладкую модель Земли от конкретной метки, которую геодезист может повторно найти."
+          }
+        },
+        {
+          "index": 3,
+          "answerIndex": 3,
+          "fullPrompt": "Перед повторной нивелировкой выбирают одну из двух отметок: на карте у скалы напечатано 213,4 м без знака контроля; второй объект — восстановимый постоянный знак с идентификатором пункта и опубликованной контрольной высотой. Что является надёжной опорной точкой для повторного полевого контроля?",
+          "answerText": "Геодезический датум: система координат сама является материальным знаком с опубликованной отметкой.",
+          "noteText": "Datum/reference frame задаёт систему координат и контрольные точки, но не является одним физическим пунктом.",
+          "grammarAssessment": "Подлежащее «система координат» связано со сказуемым «сама является»; именная часть согласована по смыслу.",
+          "truthAssessment": "Datum задаёт coordinate system/reference surface and known control locations, но сам по себе не является материальным знаком на скале.",
+          "plausibilityAssessment": "Известные координаты и высота могут быть опубликованы в датуме, из-за чего систему отсчёта легко спутать с конкретным объектом.",
+          "keyAssessment": "Вариант отвечает, где выражать координаты и высоту, но не указывает повторно находимый материальный контрольный пункт.",
+          "noteUsefulnessAssessment": "Заметка добавляет, что datum может включать известные контрольные точки, однако остаётся системой координат, не одним знаком.",
+          "answerSource": {
+            "title": "NOAA NGS: Datums and Reference Frames",
+            "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/ngs-datums.headers"
+            ],
+            "fileSHA256": [
+              "a1ef01d49c7870a21b614a9d8c7cbca3d0f150d808918e6c458ab896f984d9c9",
+              "b2eb8cc26e8cee62f6f1183a39a224bb1864572241b1f6f350503bd32d97e087"
+            ],
+            "locator": "Full NGS Datums and Reference Frames, opening definition: an abstract coordinate system with reference surface and known locations.",
+            "specificClaim": "Datum задаёт coordinate system/reference surface and known control locations, но сам по себе не является материальным знаком на скале."
+          },
+          "noteSource": {
+            "title": "USGS: Topographic Map Symbols",
+            "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.body",
+              "docs/content-audits/question-quality-wave-7/source-library-v2/maps-hold10/usgs-topographic-symbols.curl.headers",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-1.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-2.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-3.png",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/topographic-symbols-4.png"
+            ],
+            "fileSHA256": [
+              "edb97e137a1831e75f6fddb4971e5e46b9a68cd8ca17ef2c44480b453f49aa59",
+              "36c8e594559caa9440d23957133275903ed9c0ed28de175030a6949c26f29705",
+              "61b27d0e2bb501aeead103721d39696aa343d2a265ac96f1109e8b34cfd9a9bc",
+              "e1f1fa8c058946c34162fd998225e0a7950cef3d55b73adcb4cb7eb11f3c9925",
+              "db11d49cf9daef6b454521c58ef07fb741261e20755f1a325c7c02a2a91ca403",
+              "f0b8b87a2b8cc69520974198420d84bfb319f8cde9fd459ebdb4172686cad99d"
+            ],
+            "locator": "Topographic Map Symbols pp. 2–3: map legend distinguishes physical control monuments and benchmark marks.",
+            "specificClaim": "Заметка добавляет, что datum может включать известные контрольные точки, однако остаётся системой координат, не одним знаком."
+          }
+        }
+      ],
+      "difficultyAssessment": "Требуется оценить надёжность двух разных записей для повторного полевого контроля и не спутать картографическое число высоты с физическим закреплённым пунктом.",
+      "peerReview": {
+        "peerIds": [
+          "maps-cartography-spot-elevation",
+          "maps-cartography-geoid",
+          "maps-cartography-datum"
+        ],
+        "peers": [
+          {
+            "id": "maps-cartography-spot-elevation",
+            "current": {
+              "id": "maps-cartography-spot-elevation",
+              "difficulty": "medium",
+              "prompt": "На топокарте горизонтали подписаны 700 м и 720 м. Между ними у знака × стоит число 712 м, причём горизонталь через знак не проходит. Что можно заключить о месте знака?",
+              "answers": [
+                {
+                  "text": "Все точки ближайшей горизонтали имеют отметку 712 м.",
+                  "note": "Контурная линия, в отличие от точечной отметки, объединяет множество мест одной высоты."
+                },
+                {
+                  "text": "В самой отмеченной точке высота указана как 712 м.",
+                  "note": "USGS показывает spot elevation отдельным точечным знаком, не протяжённой линией."
+                },
+                {
+                  "text": "Разность высот соседних горизонталей равна 12 м.",
+                  "note": "Сечение рельефа — разность высот соседних линий, которую задаёт легенда карты."
+                },
+                {
+                  "text": "Знак × является геодезическим репером с опубликованной контрольной отметкой.",
+                  "note": "На карте репер обычно обозначают специальным BM/control symbol, отдельно от spot elevation."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Число у знака × относится к конкретному отмеченному месту и даёт его высоту 712 м. Оно не задаёт отметку целой горизонтали и само по себе не обозначает геодезический репер.",
+              "source": {
+                "title": "USGS: Topographic Map Symbols",
+                "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+                "verifiedAt": "2026-10-15"
+              }
+            },
+            "proposed": {
+              "id": "maps-cartography-spot-elevation",
+              "difficulty": "medium",
+              "prompt": "На топокарте горизонтали подписаны 700 м и 720 м. Между ними у знака × стоит число 712 м, причём горизонталь через знак не проходит. Что можно заключить о месте знака?",
+              "answers": [
+                {
+                  "text": "Все точки ближайшей горизонтали имеют отметку 712 м.",
+                  "note": "Контурная линия, в отличие от точечной отметки, объединяет множество мест одной высоты."
+                },
+                {
+                  "text": "В самой отмеченной точке высота указана как 712 м.",
+                  "note": "USGS показывает spot elevation отдельным точечным знаком, не протяжённой линией."
+                },
+                {
+                  "text": "Разность высот соседних горизонталей равна 12 м.",
+                  "note": "Сечение рельефа — разность высот соседних линий, которую задаёт легенда карты."
+                },
+                {
+                  "text": "Знак × является геодезическим репером с опубликованной контрольной отметкой.",
+                  "note": "На карте репер обычно обозначают специальным BM/control symbol, отдельно от spot elevation."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Число у знака × относится к конкретному отмеченному месту и даёт его высоту 712 м. Оно не задаёт отметку целой горизонтали и само по себе не обозначает геодезический репер.",
+              "source": {
+                "title": "USGS: Topographic Map Symbols",
+                "url": "https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf",
+                "verifiedAt": "2026-10-15"
+              }
+            },
+            "proposedStatus": "applied medium10 proposal"
+          },
+          {
+            "id": "maps-cartography-geoid",
+            "current": {
+              "id": "maps-cartography-geoid",
+              "difficulty": "hard",
+              "prompt": "Какой геодезический термин описан? Он — эквипотенциальная поверхность земного поля тяжести, близкая к среднему уровню моря.",
+              "answers": [
+                {
+                  "text": "Геоид",
+                  "note": "Геоид — эквипотенциальная поверхность земного поля тяжести, близкая к среднему уровню моря."
+                },
+                {
+                  "text": "Референц-эллипсоид",
+                  "note": "Референц-эллипсоид — математически гладкая модель формы Земли."
+                },
+                {
+                  "text": "Геодезический датум",
+                  "note": "Геодезический датум связывает систему координат с моделью и положением Земли."
+                },
+                {
+                  "text": "Геодезический репер",
+                  "note": "Геодезический репер закрепляет точку с точно определённой высотой или координатами."
+                }
+              ],
+              "correctIndex": 0,
+              "explanation": "Правильный ответ — Геоид. Геоид — эквипотенциальная поверхность земного поля тяжести, близкая к среднему уровню моря.",
+              "source": {
+                "title": "Geoid | Britannica",
+                "url": "https://www.britannica.com/science/geoid",
+                "verifiedAt": "2026-09-02"
+              }
+            },
+            "proposed": null,
+            "proposedStatus": "no fresh proposal for this peer in current phase"
+          },
+          {
+            "id": "maps-cartography-datum",
+            "current": {
+              "id": "maps-cartography-datum",
+              "difficulty": "hard",
+              "prompt": "Какой геодезический термин описан? Он связывает систему координат с моделью и положением Земли.",
+              "answers": [
+                {
+                  "text": "Геоид",
+                  "note": "Геоид — эквипотенциальная поверхность земного поля тяжести, близкая к среднему уровню моря."
+                },
+                {
+                  "text": "Геодезический датум",
+                  "note": "Геодезический датум связывает систему координат с моделью и положением Земли."
+                },
+                {
+                  "text": "Референц-эллипсоид",
+                  "note": "Референц-эллипсоид — математически гладкая модель формы Земли."
+                },
+                {
+                  "text": "Геодезический репер",
+                  "note": "Геодезический репер закрепляет точку с точно определённой высотой или координатами."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Правильный ответ — Геодезический датум. Геодезический датум связывает систему координат с моделью и положением Земли.",
+              "source": {
+                "title": "Datums and Reference Frames — NOAA National Geodetic Survey",
+                "url": "https://geodesy.noaa.gov/datums/index.shtml",
+                "verifiedAt": "2026-09-02"
+              }
+            },
+            "proposed": {
+              "id": "maps-cartography-datum",
+              "difficulty": "hard",
+              "prompt": "Два каталога дают одинаковые широту и долготу для одних записей и оба называют GRS 80, но первый указывает NAD 83 (2011), а второй — глобальную реализацию ITRF. Какой вывод безопасен до объединения точек?",
+              "answers": [
+                {
+                  "text": "Точки тождественны: одинаковый эллипсоид полностью задаёт начало, ориентацию и контроль координат.",
+                  "note": "Эллипсоид задаёт геометрическую поверхность, но datum добавляет систему координат и её реализацию."
+                },
+                {
+                  "text": "Нужно сопоставить геодезические датумы/реализации и преобразовать координаты; эллипсоид сам по себе не задаёт всю систему отсчёта.",
+                  "note": "NGS различает NAD 83(2011) как национальный геометрический datum и ITRF как глобальную reference frame."
+                },
+                {
+                  "text": "Нужно заменить GRS 80 на геоид: именно он задаёт широту и долготу обеих записей.",
+                  "note": "Геоид — гравитационная поверхность и вертикальная модель, а не полная горизонтальная система координат."
+                },
+                {
+                  "text": "Достаточно найти ближайший репер: его отметка высоты автоматически определит горизонтальное смещение двух каталогов.",
+                  "note": "Опубликованный геодезический репер закрепляет контрольную точку; одна отметка не трансформирует два набора lat/lon."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Одинаковая модель эллипсоида не делает реализации координатной системы тождественными. В геодезическом datum важны система отсчёта и известные контрольные координаты; NGS отдельно описывает NAD 83(2011) и международную ITRF. Перед слиянием следует использовать определённые datum/реализации и корректное преобразование.",
+              "source": {
+                "title": "NOAA NGS: Datums and Reference Frames",
+                "url": "https://www.ngs.noaa.gov/datums/index.shtml",
+                "verifiedAt": "2026-10-15"
+              }
+            },
+            "proposedStatus": "new proposal in hard5-next"
+          }
+        ],
+        "crossLeakAssessment": "Spot elevation gives a point value; geoid is a continuous gravity surface; datum is a reference system. This item tests whether a recoverable monument provides the physical control needed to repeat a survey."
+      }
+    },
+    {
+      "id": "maps-cartography-gnomonic-great",
+      "stage": "initial-source-editorial",
+      "status": "FIX",
+      "finalCardHash": "183889c704ec8ca52e2aa3e4daff6169391bd20dcf2879a6c8ea80252565beed",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Для навигационной схемы короткого океанского сектора нужно показать кандидаты на кратчайший маршрут как прямые отрезки между точками. Сектор ограничен областью вокруг центра; истинные площади и углы за его пределами не нужны. Какую проекцию выбрать, если команда принимает быстро растущие искажения вдали от центра?",
+            "answers": [
+              "Стереографическую: она сохраняет локальные углы и формы, хотя большие круги обычно не становятся прямыми.",
+              "Гномоническую: большие круги становятся прямыми, но проекция не равноугольна и не равновелика, а её область ограничена.",
+              "Азимутальную равноудалённую: расстояния и направления от центра истинны, поэтому все большие круги автоматически прямые.",
+              "Меркатора: прямыми становятся линии постоянного курса, значит любые кратчайшие большие круги тоже прямые."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "ba7b9af70a9f3fd91f39014975669574a47aabfa904af3ce54fddf3f9ccb0112",
+          "source": {
+            "title": "Esri ArcGIS Pro: Gnomonic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.headers"
+            ],
+            "fileSHA256": [
+              "354134206ea395cf6845604713df57c054e845d9827348a66b69414cd443c245",
+              "c6b339a7138e91c14561ac3bfc9e723c232f08737d7c4f360260962e55837a6b"
+            ],
+            "locator": "Полная ArcGIS Pro Gnomonic documentation, Description, Distortion and Usage: great circles project as straight lines; the projection is neither conformal nor equal-area and cannot project lines 90 degrees or more from center."
+          },
+          "specificClaim": "Условие требует не равноугольность, равновеликость или радиальное расстояние, а именно прямые большие круги; принятые ограничения соответствуют области применения гномонической проекции.",
+          "whyItFollowsFromFullContext": "Условие требует не равноугольность, равновеликость или радиальное расстояние, а именно прямые большие круги; принятые ограничения соответствуют области применения гномонической проекции.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "explanation",
+          "literal": "Гномоническая проекция отображает все большие круги прямыми линиями, поэтому кратчайшие сферические маршруты читаются прямо. Цена выбора — неравноугольность и неравновеликость; на практике область ограничивают из-за роста искажений и перспективного предела.",
+          "literalSHA256": "147f722e48dc05e41498d00b71254cb99e6fe7dd10404da678a28d7c6f0601f5",
+          "source": {
+            "title": "Esri ArcGIS Pro: Gnomonic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.headers"
+            ],
+            "fileSHA256": [
+              "354134206ea395cf6845604713df57c054e845d9827348a66b69414cd443c245",
+              "c6b339a7138e91c14561ac3bfc9e723c232f08737d7c4f360260962e55837a6b"
+            ],
+            "locator": "Полная ArcGIS Pro Gnomonic documentation, Description, Distortion and Usage: great circles project as straight lines; the projection is neither conformal nor equal-area and cannot project lines 90 degrees or more from center."
+          },
+          "specificClaim": "ArcGIS documents straight great circles, increasing shape/area/distance distortion, and the 90-degree center limit; the chart should stay within a regional extent.",
+          "whyItFollowsFromFullContext": "ArcGIS documents straight great circles, increasing shape/area/distance distortion, and the 90-degree center limit; the chart should stay within a regional extent.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note0",
+          "literal": "Стереографическая равноугольна; местная форма сохраняется, а масштаб и площадь искажаются вдали от standard parallel.",
+          "literalSHA256": "6b6ec48918d8183a65a288988b5c099cb0bff0540bbac39b6ffff6e44c96d93d",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.headers"
+            ],
+            "fileSHA256": [
+              "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+              "178b9194b19f3845eafd5595f2b8ad1d32c8eefe6c3ec05369c7b9a7e796d7fc"
+            ],
+            "locator": "Same full page, Distortion: angles and infinitesimal shapes maintained; distortion increases with distance from standard parallel."
+          },
+          "specificClaim": "Заметка добавляет компромисс стереографической: distortion area/distance/scale растёт от стандартной параллели.",
+          "whyItFollowsFromFullContext": "Заметка добавляет компромисс стереографической: distortion area/distance/scale растёт от стандартной параллели.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note1",
+          "literal": "У гномонической большие круги прямы при любом aspect; нельзя проецировать линии в 90° и дальше от центра.",
+          "literalSHA256": "44d56329e50dada17b74f22513ddf00e039569d7655116a861a5cd9573ec87a6",
+          "source": {
+            "title": "Esri ArcGIS Pro: Gnomonic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.headers"
+            ],
+            "fileSHA256": [
+              "354134206ea395cf6845604713df57c054e845d9827348a66b69414cd443c245",
+              "c6b339a7138e91c14561ac3bfc9e723c232f08737d7c4f360260962e55837a6b"
+            ],
+            "locator": "Full ArcGIS Gnomonic page, Limitations: cannot project a line at 90 degrees or more from center; should not map more than one-third planet."
+          },
+          "specificClaim": "Заметка указывает важный предел: геометрия за 90° от центра не проецируется, поэтому нужен ограниченный охват.",
+          "whyItFollowsFromFullContext": "Заметка указывает важный предел: геометрия за 90° от центра не проецируется, поэтому нужен ограниченный охват.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note2",
+          "literal": "Азимутальная равноудалённая сохраняет расстояние и направление только от центральной точки, а не для всех пар точек.",
+          "literalSHA256": "d0066205eb961d967bca0b93cf69bef95130c536a232ac40b6f520d0707ecd61",
+          "source": {
+            "title": "Esri ArcGIS Pro: Azimuthal Equidistant",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/azimuthal-equidistant.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-azimuthal-equidistant.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-azimuthal-equidistant.headers"
+            ],
+            "fileSHA256": [
+              "a3b079b686c77067bf5814595b756a6aa34558bf6bf224edb9ead71fc8e9eed3",
+              "af6503e2e3695922c2c1fb553649fb7b7fe6e48d4cf56fdefbbd9b49b321a58b"
+            ],
+            "locator": "Full page, Distortion: true scale is limited to straight lines radiating from map center."
+          },
+          "specificClaim": "Заметка уточняет границы сохранения: true distance/direction только от центральной точки и true scale на её радиальных линиях.",
+          "whyItFollowsFromFullContext": "Заметка уточняет границы сохранения: true distance/direction только от центральной точки и true scale на её радиальных линиях.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note3",
+          "literal": "Меркатор сохраняет локальные углы и показывает прямыми линии постоянного компасного курса, но не все большие круги.",
+          "literalSHA256": "fad905031c8347e2ff821bd13062f4f3ee2290f3031c4d69ca4e3fa5aae2a56e",
+          "source": {
+            "title": "ArcGIS Pro Documentation: Mercator",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/mercator.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-mercator.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-mercator.headers"
+            ],
+            "fileSHA256": [
+              "3dd4be401405494a228a3be61f741e5884d1b118d015572dfe024e81aefc95f3",
+              "70a2c21bc84614d48cf648ae22fd68175afb01132a7a7f78ccfb8d7a7a799bb2"
+            ],
+            "locator": "Full ArcGIS Mercator page, Description: straight lines represent lines of constant compass bearing, not all great circles."
+          },
+          "specificClaim": "Заметка объясняет, какой другой тип маршрута именно удобен на Меркаторе и почему он не равен каждому кратчайшему пути.",
+          "whyItFollowsFromFullContext": "Заметка объясняет, какой другой тип маршрута именно удобен на Меркаторе и почему он не равен каждому кратчайшему пути.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        }
+      ],
+      "choiceProofs": [
+        {
+          "index": 0,
+          "answerIndex": 0,
+          "fullPrompt": "Для навигационной схемы короткого океанского сектора нужно показать кандидаты на кратчайший маршрут как прямые отрезки между точками. Сектор ограничен областью вокруг центра; истинные площади и углы за его пределами не нужны. Какую проекцию выбрать, если команда принимает быстро растущие искажения вдали от центра?",
+          "answerText": "Стереографическую: она сохраняет локальные углы и формы, хотя большие круги обычно не становятся прямыми.",
+          "noteText": "Стереографическая равноугольна; местная форма сохраняется, а масштаб и площадь искажаются вдали от standard parallel.",
+          "grammarAssessment": "Подлежащее «она» относится к стереографической проекции; однородные сказуемые «сохраняет» и «не становятся» завершены.",
+          "truthAssessment": "Стереографическая сохраняет локальные углы и формы, но документация не обещает, что любые большие круги станут прямыми.",
+          "plausibilityAssessment": "Она выглядит логичной для навигации из-за свойства сохранять углы, однако задача приоритизирует маршрутную геодезическую линию.",
+          "keyAssessment": "Вариант подменяет отображение больших кругов локальной равноугольностью.",
+          "noteUsefulnessAssessment": "Заметка добавляет компромисс стереографической: distortion area/distance/scale растёт от стандартной параллели.",
+          "answerSource": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.headers"
+            ],
+            "fileSHA256": [
+              "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+              "178b9194b19f3845eafd5595f2b8ad1d32c8eefe6c3ec05369c7b9a7e796d7fc"
+            ],
+            "locator": "Full ArcGIS Stereographic page, Description and Distortion: azimuthal conformal; area, distance and scale distortions grow away from standard parallel.",
+            "specificClaim": "Стереографическая сохраняет локальные углы и формы, но документация не обещает, что любые большие круги станут прямыми."
+          },
+          "noteSource": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.headers"
+            ],
+            "fileSHA256": [
+              "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+              "178b9194b19f3845eafd5595f2b8ad1d32c8eefe6c3ec05369c7b9a7e796d7fc"
+            ],
+            "locator": "Same full page, Distortion: angles and infinitesimal shapes maintained; distortion increases with distance from standard parallel.",
+            "specificClaim": "Заметка добавляет компромисс стереографической: distortion area/distance/scale растёт от стандартной параллели."
+          }
+        },
+        {
+          "index": 1,
+          "answerIndex": 1,
+          "fullPrompt": "Для навигационной схемы короткого океанского сектора нужно показать кандидаты на кратчайший маршрут как прямые отрезки между точками. Сектор ограничен областью вокруг центра; истинные площади и углы за его пределами не нужны. Какую проекцию выбрать, если команда принимает быстро растущие искажения вдали от центра?",
+          "answerText": "Гномоническую: большие круги становятся прямыми, но проекция не равноугольна и не равновелика, а её область ограничена.",
+          "noteText": "У гномонической большие круги прямы при любом aspect; нельзя проецировать линии в 90° и дальше от центра.",
+          "grammarAssessment": "Подлежащее «большие круги» согласовано со сказуемым «становятся»; противительная часть связно задаёт ограничение.",
+          "truthAssessment": "Для гномонической все большие круги являются прямыми; при этом она не conformal/equal-area и ограничена перспективным центром.",
+          "plausibilityAssessment": "Это точно удовлетворяет маршрутам, а условия сектора позволяют работать с локальной областью без глобальной карты.",
+          "keyAssessment": "Индекс 1 единственный удовлетворяет критерию прямых больших кругов и признаёт ограничение вместо обещания глобальной точности.",
+          "noteUsefulnessAssessment": "Заметка указывает важный предел: геометрия за 90° от центра не проецируется, поэтому нужен ограниченный охват.",
+          "answerSource": {
+            "title": "Esri ArcGIS Pro: Gnomonic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.headers"
+            ],
+            "fileSHA256": [
+              "354134206ea395cf6845604713df57c054e845d9827348a66b69414cd443c245",
+              "c6b339a7138e91c14561ac3bfc9e723c232f08737d7c4f360260962e55837a6b"
+            ],
+            "locator": "Full ArcGIS Gnomonic page, Description and Graticule: every great circle projects as a straight line regardless of aspect.",
+            "specificClaim": "Для гномонической все большие круги являются прямыми; при этом она не conformal/equal-area и ограничена перспективным центром."
+          },
+          "noteSource": {
+            "title": "Esri ArcGIS Pro: Gnomonic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.headers"
+            ],
+            "fileSHA256": [
+              "354134206ea395cf6845604713df57c054e845d9827348a66b69414cd443c245",
+              "c6b339a7138e91c14561ac3bfc9e723c232f08737d7c4f360260962e55837a6b"
+            ],
+            "locator": "Full ArcGIS Gnomonic page, Limitations: cannot project a line at 90 degrees or more from center; should not map more than one-third planet.",
+            "specificClaim": "Заметка указывает важный предел: геометрия за 90° от центра не проецируется, поэтому нужен ограниченный охват."
+          }
+        },
+        {
+          "index": 2,
+          "answerIndex": 2,
+          "fullPrompt": "Для навигационной схемы короткого океанского сектора нужно показать кандидаты на кратчайший маршрут как прямые отрезки между точками. Сектор ограничен областью вокруг центра; истинные площади и углы за его пределами не нужны. Какую проекцию выбрать, если команда принимает быстро растущие искажения вдали от центра?",
+          "answerText": "Азимутальную равноудалённую: расстояния и направления от центра истинны, поэтому все большие круги автоматически прямые.",
+          "noteText": "Азимутальная равноудалённая сохраняет расстояние и направление только от центральной точки, а не для всех пар точек.",
+          "grammarAssessment": "Однородные сказуемые «сохраняет» и «не означает» относятся к азимутальной равноудалённой; придаточная часть завершена.",
+          "truthAssessment": "Азимутальная равноудалённая сохраняет расстояние и направление от центра, но это не означает, что все большие круги будут прямыми.",
+          "plausibilityAssessment": "Для центрального пункта она сильный кандидат: радиальные измерения просты, хотя условие требует прямые сегменты для многих пар точек.",
+          "keyAssessment": "Вариант принимает радиальную метрику за универсальную прямолинейность геодезических маршрутов.",
+          "noteUsefulnessAssessment": "Заметка уточняет границы сохранения: true distance/direction только от центральной точки и true scale на её радиальных линиях.",
+          "answerSource": {
+            "title": "Esri ArcGIS Pro: Azimuthal Equidistant",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/azimuthal-equidistant.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-azimuthal-equidistant.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-azimuthal-equidistant.headers"
+            ],
+            "fileSHA256": [
+              "a3b079b686c77067bf5814595b756a6aa34558bf6bf224edb9ead71fc8e9eed3",
+              "af6503e2e3695922c2c1fb553649fb7b7fe6e48d4cf56fdefbbd9b49b321a58b"
+            ],
+            "locator": "Full ArcGIS Azimuthal Equidistant page, Description and Distortion: distance/direction preserved from center; scale true only along radiating straight lines.",
+            "specificClaim": "Азимутальная равноудалённая сохраняет расстояние и направление от центра, но это не означает, что все большие круги будут прямыми."
+          },
+          "noteSource": {
+            "title": "Esri ArcGIS Pro: Azimuthal Equidistant",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/azimuthal-equidistant.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-azimuthal-equidistant.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-azimuthal-equidistant.headers"
+            ],
+            "fileSHA256": [
+              "a3b079b686c77067bf5814595b756a6aa34558bf6bf224edb9ead71fc8e9eed3",
+              "af6503e2e3695922c2c1fb553649fb7b7fe6e48d4cf56fdefbbd9b49b321a58b"
+            ],
+            "locator": "Full page, Distortion: true scale is limited to straight lines radiating from map center.",
+            "specificClaim": "Заметка уточняет границы сохранения: true distance/direction только от центральной точки и true scale на её радиальных линиях."
+          }
+        },
+        {
+          "index": 3,
+          "answerIndex": 3,
+          "fullPrompt": "Для навигационной схемы короткого океанского сектора нужно показать кандидаты на кратчайший маршрут как прямые отрезки между точками. Сектор ограничен областью вокруг центра; истинные площади и углы за его пределами не нужны. Какую проекцию выбрать, если команда принимает быстро растущие искажения вдали от центра?",
+          "answerText": "Меркатора: прямыми становятся линии постоянного курса, значит любые кратчайшие большие круги тоже прямые.",
+          "noteText": "Меркатор сохраняет локальные углы и показывает прямыми линии постоянного компасного курса, но не все большие круги.",
+          "grammarAssessment": "Подлежащее «прямыми становятся линии» перестроено инверсией; вторая часть завершает вывод о больших кругах.",
+          "truthAssessment": "Меркатор делает прямыми линии постоянного компасного курса, но большие круги в общем случае к ним не относятся.",
+          "plausibilityAssessment": "Обе категории полезны в навигации, поэтому подмена shortest great-circle route постоянным курсом правдоподобна.",
+          "keyAssessment": "Вариант смешивает rhumb lines с большими кругами; условие явно выбирает кратчайший сферический маршрут.",
+          "noteUsefulnessAssessment": "Заметка объясняет, какой другой тип маршрута именно удобен на Меркаторе и почему он не равен каждому кратчайшему пути.",
+          "answerSource": {
+            "title": "ArcGIS Pro Documentation: Mercator",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/mercator.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-mercator.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-mercator.headers"
+            ],
+            "fileSHA256": [
+              "3dd4be401405494a228a3be61f741e5884d1b118d015572dfe024e81aefc95f3",
+              "70a2c21bc84614d48cf648ae22fd68175afb01132a7a7f78ccfb8d7a7a799bb2"
+            ],
+            "locator": "Full ArcGIS Mercator page, Description and Usage: conformal cylindrical projection; constant compass-direction courses are straight.",
+            "specificClaim": "Меркатор делает прямыми линии постоянного компасного курса, но большие круги в общем случае к ним не относятся."
+          },
+          "noteSource": {
+            "title": "ArcGIS Pro Documentation: Mercator",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/mercator.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-mercator.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-mercator.headers"
+            ],
+            "fileSHA256": [
+              "3dd4be401405494a228a3be61f741e5884d1b118d015572dfe024e81aefc95f3",
+              "70a2c21bc84614d48cf648ae22fd68175afb01132a7a7f78ccfb8d7a7a799bb2"
+            ],
+            "locator": "Full ArcGIS Mercator page, Description: straight lines represent lines of constant compass bearing, not all great circles.",
+            "specificClaim": "Заметка объясняет, какой другой тип маршрута именно удобен на Меркаторе и почему он не равен каждому кратчайшему пути."
+          }
+        }
+      ],
+      "difficultyAssessment": "Нужно выбрать проекцию по требуемой геометрии маршрута и одновременно учесть пространственное ограничение и приемлемый тип искажения.",
+      "peerReview": {
+        "peerIds": [
+          "maps-cartography-stereographic-conformal",
+          "maps-cartography-mercator-cylindrical",
+          "maps-cartography-robinson-compromise"
+        ],
+        "peers": [
+          {
+            "id": "maps-cartography-stereographic-conformal",
+            "current": {
+              "id": "maps-cartography-stereographic-conformal",
+              "difficulty": "hard",
+              "prompt": "Какая азимутальная проекция сохраняет углы, а окружности вне точки проекции отображает окружностями?",
+              "answers": [
+                {
+                  "text": "Гномоническая",
+                  "note": "В гномонической проекции все большие круги изображаются прямыми линиями."
+                },
+                {
+                  "text": "Стереографическая",
+                  "note": "Стереографическая проекция равноугольна; окружности, не проходящие через точку проекции, переходят в окружности."
+                },
+                {
+                  "text": "Ортографическая",
+                  "note": "Ортографическая проекция выглядит как вид глобуса из очень далёкой точки."
+                },
+                {
+                  "text": "Азимутальная Ламберта",
+                  "note": "Азимутальная проекция Ламберта сохраняет площади."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Стереографическая проекция равноугольна. Окружности, не проходящие через точку проекции, отображаются окружностями, а проходящие через неё — прямыми.",
+              "source": {
+                "title": "Stereographic projection | Britannica",
+                "url": "https://www.britannica.com/science/stereographic-projection",
+                "verifiedAt": "2026-09-02"
+              }
+            },
+            "proposed": {
+              "id": "maps-cartography-stereographic-conformal",
+              "difficulty": "hard",
+              "prompt": "Для крупномасштабной полярной схемы нужно сохранять локальные углы и формы небольших объектов во всех отображённых точках. Площадь и расстояние можно исказить по мере удаления от выбранной стандартной параллели; прямые большие круги не являются требованием. Какой вариант удовлетворяет задаче?",
+              "answers": [
+                {
+                  "text": "Гномоническая: она делает все большие круги прямыми и сохраняет углы вдоль всей карты.",
+                  "note": "Гномоническая прямит большие круги, но углы и направления точны только в центре проекции."
+                },
+                {
+                  "text": "Стереографическая: азимутальная конформная; локальные углы сохраняются, но площадь и расстояния искажаются.",
+                  "note": "Стереографическая — единственная азимутальная conformal в документации ArcGIS; antipodal point отображён быть не может."
+                },
+                {
+                  "text": "Азимутальная равноудалённая: расстояния и направления истинны от центра, поэтому локальные углы сохраняются во всех точках.",
+                  "note": "Азимутальная равноудалённая сохраняет расстояние и направление от центра, но искажения остальных свойств растут наружу."
+                },
+                {
+                  "text": "Меркатора: цилиндрическая равноугольная проекция, наиболее подходящая для полярной карты с радиальными расстояниями.",
+                  "note": "Меркатор — цилиндрическая и равноугольная; прямая линия показывает курс постоянного компаса, а не радиальное расстояние."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Стереографическая проекция равноугольна: углы и формы на бесконечно малом масштабе сохраняются по всей карте. Она подходит для крупномасштабных полярных схем; площадь, расстояние и масштаб искажаются дальше от стандартной параллели, а антипод центра не отображается.",
+              "source": {
+                "title": "Esri ArcGIS Pro: Stereographic",
+                "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+                "verifiedAt": "2026-10-15"
+              }
+            },
+            "proposedStatus": "new proposal in hard5-next"
+          },
+          {
+            "id": "maps-cartography-mercator-cylindrical",
+            "current": {
+              "id": "maps-cartography-mercator-cylindrical",
+              "difficulty": "medium",
+              "prompt": "Какая проекция является цилиндрической и равноугольной, сохраняя локальные формы и показывая прямым курс постоянного компасного направления?",
+              "answers": [
+                {
+                  "text": "Проекция Меркатора",
+                  "note": "Прямые линии на ней показывают локсодромы — линии постоянного компасного курса; обычно это не кратчайший путь."
+                },
+                {
+                  "text": "Проекция Робинсона",
+                  "note": "Робинсон — компромиссная псевдоцилиндрическая проекция для карт мира."
+                },
+                {
+                  "text": "Проекция Мольвейде",
+                  "note": "Мольвейде сохраняет площади и изображает мир эллипсом с отношением осей 2:1."
+                },
+                {
+                  "text": "Азимутальная равноудалённая",
+                  "note": "Азимутальная равноудалённая сохраняет расстояния и направления от центральной точки карты."
+                }
+              ],
+              "correctIndex": 0,
+              "explanation": "Меркатор — цилиндрическая равноугольная проекция: локальные формы верны в бесконечно малом масштабе. Прямые локсодромы показывают постоянный компасный курс, но обычно не кратчайший путь.",
+              "source": {
+                "title": "ArcGIS Pro Documentation: Mercator",
+                "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/mercator.html",
+                "verifiedAt": "2026-10-15"
+              }
+            },
+            "proposed": null,
+            "proposedStatus": "no fresh proposal for this peer in current phase"
+          },
+          {
+            "id": "maps-cartography-robinson-compromise",
+            "current": {
+              "id": "maps-cartography-robinson-compromise",
+              "difficulty": "medium",
+              "prompt": "Какая проекция псевдоцилиндрического типа разработана как компромисс для карт мира и не сохраняет ни площади, ни углы?",
+              "answers": [
+                {
+                  "text": "Проекция Робинсона",
+                  "note": "Робинсон — псевдоцилиндрическая компромиссная проекция; она искажает форму, площадь, расстояние, направление и углы."
+                },
+                {
+                  "text": "Проекция Меркатора",
+                  "note": "Меркатор сохраняет локальные углы и формы, а прямые линии задают локсодромы."
+                },
+                {
+                  "text": "Проекция Мольвейде",
+                  "note": "Мольвейде сохраняет площади; контур мира — эллипс с отношением осей 2:1."
+                },
+                {
+                  "text": "Азимутальная равноудалённая",
+                  "note": "Азимутальная равноудалённая сохраняет расстояния и направления от центра карты."
+                }
+              ],
+              "correctIndex": 0,
+              "explanation": "Проекция Робинсона является псевдоцилиндрической и компромиссной. Она не сохраняет точно ни углы, ни площади, а распределяет искажения для изображения мира.",
+              "source": {
+                "title": "ArcGIS Pro Documentation: Robinson",
+                "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/robinson.html",
+                "verifiedAt": "2026-10-15"
+              }
+            },
+            "proposed": null,
+            "proposedStatus": "no fresh proposal for this peer in current phase"
+          }
+        ],
+        "crossLeakAssessment": "Stereographic preserves local angles, Mercator straightens constant-bearing routes, and Robinson is a world-map compromise. None of those properties makes every great circle straight; that distinguishes this route-planning task."
+      }
+    },
+    {
+      "id": "maps-cartography-stereographic-conformal",
+      "stage": "initial-source-editorial",
+      "status": "FIX",
+      "finalCardHash": "f7c57af6ecfaa72c118c49177affe32175a07f561b188714803294d730bb9256",
+      "fieldGroupProofs": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Для крупномасштабной полярной схемы нужно сохранять локальные углы и формы небольших объектов во всех отображённых точках. Площадь и расстояние можно исказить по мере удаления от выбранной стандартной параллели; прямые большие круги не являются требованием. Какой вариант удовлетворяет задаче?",
+            "answers": [
+              "Гномоническая: она делает все большие круги прямыми и сохраняет углы вдоль всей карты.",
+              "Стереографическая: азимутальная конформная; локальные углы сохраняются, но площадь и расстояния искажаются.",
+              "Азимутальная равноудалённая: расстояния и направления истинны от центра, поэтому локальные углы сохраняются во всех точках.",
+              "Меркатора: цилиндрическая равноугольная проекция, наиболее подходящая для полярной карты с радиальными расстояниями."
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "9a1549979400b4d7d9480b57df4871592dbf557a0b64a8749c95cbb5d0bf6bfa",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.headers"
+            ],
+            "fileSHA256": [
+              "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+              "178b9194b19f3845eafd5595f2b8ad1d32c8eefe6c3ec05369c7b9a7e796d7fc"
+            ],
+            "locator": "Полная ArcGIS Pro Stereographic documentation, Description, Distortion, Usage and graticule/aspect sections: azimuthal conformal; local angles/shapes maintained; area/distance/scale distortion grows from standard parallel; antipodal point cannot be shown."
+          },
+          "specificClaim": "Региональное требование касается угловой и локальной shape-preservation, не больших кругов, радиального расстояния или площади; стереографическая проекция подтверждённо conformal.",
+          "whyItFollowsFromFullContext": "Региональное требование касается угловой и локальной shape-preservation, не больших кругов, радиального расстояния или площади; стереографическая проекция подтверждённо conformal.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "explanation",
+          "literal": "Стереографическая проекция равноугольна: углы и формы на бесконечно малом масштабе сохраняются по всей карте. Она подходит для крупномасштабных полярных схем; площадь, расстояние и масштаб искажаются дальше от стандартной параллели, а антипод центра не отображается.",
+          "literalSHA256": "630d9632a1025cac459fc140c208030871cd8222f8ce38329c73bfa630f3a522",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.headers"
+            ],
+            "fileSHA256": [
+              "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+              "178b9194b19f3845eafd5595f2b8ad1d32c8eefe6c3ec05369c7b9a7e796d7fc"
+            ],
+            "locator": "Полная ArcGIS Pro Stereographic documentation, Description, Distortion, Usage and graticule/aspect sections: azimuthal conformal; local angles/shapes maintained; area/distance/scale distortion grows from standard parallel; antipodal point cannot be shown."
+          },
+          "specificClaim": "ArcGIS states infinitesimal angles and shapes are maintained, while area, distance and scale distortions increase away from standard parallel; antipodal point cannot be shown.",
+          "whyItFollowsFromFullContext": "ArcGIS states infinitesimal angles and shapes are maintained, while area, distance and scale distortions increase away from standard parallel; antipodal point cannot be shown.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note0",
+          "literal": "Гномоническая прямит большие круги, но углы и направления точны только в центре проекции.",
+          "literalSHA256": "34ff5f63de5085d9eac2e3cf21049cfdded0cb9b535c2ec3db763f818e5736a6",
+          "source": {
+            "title": "Esri ArcGIS Pro: Gnomonic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.headers"
+            ],
+            "fileSHA256": [
+              "354134206ea395cf6845604713df57c054e845d9827348a66b69414cd443c245",
+              "c6b339a7138e91c14561ac3bfc9e723c232f08737d7c4f360260962e55837a6b"
+            ],
+            "locator": "Full page, Description: great circles project as straight lines."
+          },
+          "specificClaim": "Заметка различает критерий кратчайших маршрутов и конформность, ключевое разделение с целевой задачей.",
+          "whyItFollowsFromFullContext": "Заметка различает критерий кратчайших маршрутов и конформность, ключевое разделение с целевой задачей.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note1",
+          "literal": "Стереографическая — единственная азимутальная conformal в документации ArcGIS; antipodal point отображён быть не может.",
+          "literalSHA256": "9008a8119ff4ecbe5c5e2c8865865d07c9bc859ddb46397ea831f44415826e44",
+          "source": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.headers"
+            ],
+            "fileSHA256": [
+              "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+              "178b9194b19f3845eafd5595f2b8ad1d32c8eefe6c3ec05369c7b9a7e796d7fc"
+            ],
+            "locator": "Full page, Graticule and Usage: antipodal point of projection center cannot be shown; polar large-scale maps are a common application."
+          },
+          "specificClaim": "Заметка отмечает предел полного охвата: проекционный центр antipode cannot be shown, что важно для проектирования карты.",
+          "whyItFollowsFromFullContext": "Заметка отмечает предел полного охвата: проекционный центр antipode cannot be shown, что важно для проектирования карты.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note2",
+          "literal": "Азимутальная равноудалённая сохраняет расстояние и направление от центра, но искажения остальных свойств растут наружу.",
+          "literalSHA256": "d6f3c08c76d5fe0fffd5a69e846a90dcc955f794959b9288580619d10b3894a9",
+          "source": {
+            "title": "Esri ArcGIS Pro: Azimuthal Equidistant",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/azimuthal-equidistant.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-azimuthal-equidistant.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-azimuthal-equidistant.headers"
+            ],
+            "fileSHA256": [
+              "a3b079b686c77067bf5814595b756a6aa34558bf6bf224edb9ead71fc8e9eed3",
+              "af6503e2e3695922c2c1fb553649fb7b7fe6e48d4cf56fdefbbd9b49b321a58b"
+            ],
+            "locator": "Full page, Distortion: shape, scale and area distortions increase outward from center."
+          },
+          "specificClaim": "Заметка добавляет, где точен масштаб: на прямых радиальных линиях из центра, а не повсеместно.",
+          "whyItFollowsFromFullContext": "Заметка добавляет, где точен масштаб: на прямых радиальных линиях из центра, а не повсеместно.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        },
+        {
+          "group": "note3",
+          "literal": "Меркатор — цилиндрическая и равноугольная; прямая линия показывает курс постоянного компаса, а не радиальное расстояние.",
+          "literalSHA256": "2a0278d63a53162c82413077de0f87d5b45147b77537382e44e782576d29a0e2",
+          "source": {
+            "title": "ArcGIS Pro Documentation: Mercator",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/mercator.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-mercator.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-mercator.headers"
+            ],
+            "fileSHA256": [
+              "3dd4be401405494a228a3be61f741e5884d1b118d015572dfe024e81aefc95f3",
+              "70a2c21bc84614d48cf648ae22fd68175afb01132a7a7f78ccfb8d7a7a799bb2"
+            ],
+            "locator": "Full ArcGIS Mercator page, Graticule/Distortion: cylindrical graticule and distortions increase toward poles."
+          },
+          "specificClaim": "Заметка уточняет полезный для навигации тип прямых линий Меркатора, который отличается от прямых радиусов.",
+          "whyItFollowsFromFullContext": "Заметка уточняет полезный для навигации тип прямых линий Меркатора, который отличается от прямых радиусов.",
+          "editorialRationale": "Именно этот конкретный фрагмент поддерживает literal данного поля; остальные свойства проекции/системы отсчёта оцениваются отдельно."
+        }
+      ],
+      "choiceProofs": [
+        {
+          "index": 0,
+          "answerIndex": 0,
+          "fullPrompt": "Для крупномасштабной полярной схемы нужно сохранять локальные углы и формы небольших объектов во всех отображённых точках. Площадь и расстояние можно исказить по мере удаления от выбранной стандартной параллели; прямые большие круги не являются требованием. Какой вариант удовлетворяет задаче?",
+          "answerText": "Гномоническая: она делает все большие круги прямыми и сохраняет углы вдоль всей карты.",
+          "noteText": "Гномоническая прямит большие круги, но углы и направления точны только в центре проекции.",
+          "grammarAssessment": "Двоеточие разделяет название проекции и пояснение; причастные определения согласованы с термином.",
+          "truthAssessment": "Гномоническая переводит большие круги в прямые, но не сохраняет углы и формы по всей карте; точны лишь направления и углы в центре.",
+          "plausibilityAssessment": "Её прямые маршруты подходят навигации, однако в вопросе специально требуется локальная форма в каждой точке.",
+          "keyAssessment": "Вариант переносит свойство гномонической проекции на всю область, хотя источник ограничивает точность центром.",
+          "noteUsefulnessAssessment": "Заметка различает критерий кратчайших маршрутов и конформность, ключевое разделение с целевой задачей.",
+          "answerSource": {
+            "title": "Esri ArcGIS Pro: Gnomonic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.headers"
+            ],
+            "fileSHA256": [
+              "354134206ea395cf6845604713df57c054e845d9827348a66b69414cd443c245",
+              "c6b339a7138e91c14561ac3bfc9e723c232f08737d7c4f360260962e55837a6b"
+            ],
+            "locator": "Full ArcGIS Gnomonic page, Description and Distortion: neither conformal nor equal-area; angles/directions accurate only at projection center.",
+            "specificClaim": "Гномоническая переводит большие круги в прямые, но не сохраняет углы и формы по всей карте; точны лишь направления и углы в центре."
+          },
+          "noteSource": {
+            "title": "Esri ArcGIS Pro: Gnomonic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/gnomonic.headers"
+            ],
+            "fileSHA256": [
+              "354134206ea395cf6845604713df57c054e845d9827348a66b69414cd443c245",
+              "c6b339a7138e91c14561ac3bfc9e723c232f08737d7c4f360260962e55837a6b"
+            ],
+            "locator": "Full page, Description: great circles project as straight lines.",
+            "specificClaim": "Заметка различает критерий кратчайших маршрутов и конформность, ключевое разделение с целевой задачей."
+          }
+        },
+        {
+          "index": 1,
+          "answerIndex": 1,
+          "fullPrompt": "Для крупномасштабной полярной схемы нужно сохранять локальные углы и формы небольших объектов во всех отображённых точках. Площадь и расстояние можно исказить по мере удаления от выбранной стандартной параллели; прямые большие круги не являются требованием. Какой вариант удовлетворяет задаче?",
+          "answerText": "Стереографическая: азимутальная конформная; локальные углы сохраняются, но площадь и расстояния искажаются.",
+          "noteText": "Стереографическая — единственная азимутальная conformal в документации ArcGIS; antipodal point отображён быть не может.",
+          "grammarAssessment": "Подлежащее «проекция» согласовано со сказуемым «равноугольная»; однородные свойства перечислены после точки с запятой.",
+          "truthAssessment": "Стереографическая азимутальна и conformal; infinitesimal angles and shapes are maintained, while area/distance scale distortion grows away from standard parallel.",
+          "plausibilityAssessment": "Это удовлетворяет именно требованию локальной формы во всех отображённых точках и явно принимает перечисленные виды искажений.",
+          "keyAssessment": "Индекс 1 единственный даёт равноугольность по всей карте без требования радиального расстояния или прямых больших кругов.",
+          "noteUsefulnessAssessment": "Заметка отмечает предел полного охвата: проекционный центр antipode cannot be shown, что важно для проектирования карты.",
+          "answerSource": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.headers"
+            ],
+            "fileSHA256": [
+              "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+              "178b9194b19f3845eafd5595f2b8ad1d32c8eefe6c3ec05369c7b9a7e796d7fc"
+            ],
+            "locator": "Full ArcGIS Stereographic page, Description and Distortion: only azimuthal conformal; angles/shapes at infinitesimal scale maintained; area/distance/scale distort away from standard parallel.",
+            "specificClaim": "Стереографическая азимутальна и conformal; infinitesimal angles and shapes are maintained, while area/distance scale distortion grows away from standard parallel."
+          },
+          "noteSource": {
+            "title": "Esri ArcGIS Pro: Stereographic",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/stereographic.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps-next20-01a13cb1/author/sources/stereographic.headers"
+            ],
+            "fileSHA256": [
+              "6c616e79d39e9e76ff63d60e4da8b1e9ae5b3f69e1aaf4881206487daafe9a7d",
+              "178b9194b19f3845eafd5595f2b8ad1d32c8eefe6c3ec05369c7b9a7e796d7fc"
+            ],
+            "locator": "Full page, Graticule and Usage: antipodal point of projection center cannot be shown; polar large-scale maps are a common application.",
+            "specificClaim": "Заметка отмечает предел полного охвата: проекционный центр antipode cannot be shown, что важно для проектирования карты."
+          }
+        },
+        {
+          "index": 2,
+          "answerIndex": 2,
+          "fullPrompt": "Для крупномасштабной полярной схемы нужно сохранять локальные углы и формы небольших объектов во всех отображённых точках. Площадь и расстояние можно исказить по мере удаления от выбранной стандартной параллели; прямые большие круги не являются требованием. Какой вариант удовлетворяет задаче?",
+          "answerText": "Азимутальная равноудалённая: расстояния и направления истинны от центра, поэтому локальные углы сохраняются во всех точках.",
+          "noteText": "Азимутальная равноудалённая сохраняет расстояние и направление от центра, но искажения остальных свойств растут наружу.",
+          "grammarAssessment": "Главная и причинная части соединены союзом «поэтому»; грамматическая связь между расстоянием и углами ясна.",
+          "truthAssessment": "Азимутальная равноудалённая сохраняет дистанцию и направление от центра; это не означает сохранение локальных углов во всех точках.",
+          "plausibilityAssessment": "Это сильная альтернатива для радиальных расстояний, но условие явно prioritizes local angles and shapes instead.",
+          "keyAssessment": "Вариант подменяет радиальную равноудалённость конформностью, хотя источник описывает различные сохраняемые свойства.",
+          "noteUsefulnessAssessment": "Заметка добавляет, где точен масштаб: на прямых радиальных линиях из центра, а не повсеместно.",
+          "answerSource": {
+            "title": "Esri ArcGIS Pro: Azimuthal Equidistant",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/azimuthal-equidistant.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-azimuthal-equidistant.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-azimuthal-equidistant.headers"
+            ],
+            "fileSHA256": [
+              "a3b079b686c77067bf5814595b756a6aa34558bf6bf224edb9ead71fc8e9eed3",
+              "af6503e2e3695922c2c1fb553649fb7b7fe6e48d4cf56fdefbbd9b49b321a58b"
+            ],
+            "locator": "Full ArcGIS Azimuthal Equidistant page, Description/Distortion: distance and direction from center are preserved, true scale only on radial lines.",
+            "specificClaim": "Азимутальная равноудалённая сохраняет дистанцию и направление от центра; это не означает сохранение локальных углов во всех точках."
+          },
+          "noteSource": {
+            "title": "Esri ArcGIS Pro: Azimuthal Equidistant",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/azimuthal-equidistant.htm",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-azimuthal-equidistant.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-azimuthal-equidistant.headers"
+            ],
+            "fileSHA256": [
+              "a3b079b686c77067bf5814595b756a6aa34558bf6bf224edb9ead71fc8e9eed3",
+              "af6503e2e3695922c2c1fb553649fb7b7fe6e48d4cf56fdefbbd9b49b321a58b"
+            ],
+            "locator": "Full page, Distortion: shape, scale and area distortions increase outward from center.",
+            "specificClaim": "Заметка добавляет, где точен масштаб: на прямых радиальных линиях из центра, а не повсеместно."
+          }
+        },
+        {
+          "index": 3,
+          "answerIndex": 3,
+          "fullPrompt": "Для крупномасштабной полярной схемы нужно сохранять локальные углы и формы небольших объектов во всех отображённых точках. Площадь и расстояние можно исказить по мере удаления от выбранной стандартной параллели; прямые большие круги не являются требованием. Какой вариант удовлетворяет задаче?",
+          "answerText": "Меркатора: цилиндрическая равноугольная проекция, наиболее подходящая для полярной карты с радиальными расстояниями.",
+          "noteText": "Меркатор — цилиндрическая и равноугольная; прямая линия показывает курс постоянного компаса, а не радиальное расстояние.",
+          "grammarAssessment": "Сказуемые «равноугольная» и «подходящая» согласованы с подразумеваемым словом «проекция»; пояснение после тире закончено.",
+          "truthAssessment": "Меркатор действительно равноугольный, но это цилиндрическая проекция, и источник описывает её прямые как линии постоянного compass bearing.",
+          "plausibilityAssessment": "Её conformality делает её правдоподобной, однако она не отвечает полярной задаче радиальной геометрии и больших областей.",
+          "keyAssessment": "Вариант выводит свойства азимутальной схемы и радиальных расстояний из конформности, чего источник не утверждает.",
+          "noteUsefulnessAssessment": "Заметка уточняет полезный для навигации тип прямых линий Меркатора, который отличается от прямых радиусов.",
+          "answerSource": {
+            "title": "ArcGIS Pro Documentation: Mercator",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/mercator.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-mercator.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-mercator.headers"
+            ],
+            "fileSHA256": [
+              "3dd4be401405494a228a3be61f741e5884d1b118d015572dfe024e81aefc95f3",
+              "70a2c21bc84614d48cf648ae22fd68175afb01132a7a7f78ccfb8d7a7a799bb2"
+            ],
+            "locator": "Full ArcGIS Mercator page, Description: conformal cylindrical projection; Usage: constant compass-bearing courses are straight.",
+            "specificClaim": "Меркатор действительно равноугольный, но это цилиндрическая проекция, и источник описывает её прямые как линии постоянного compass bearing."
+          },
+          "noteSource": {
+            "title": "ArcGIS Pro Documentation: Mercator",
+            "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/mercator.html",
+            "localFiles": [
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-mercator.body",
+              "docs/content-audits/question-quality-wave-7/process-v2-maps20-new/author/sources/arcgis-mercator.headers"
+            ],
+            "fileSHA256": [
+              "3dd4be401405494a228a3be61f741e5884d1b118d015572dfe024e81aefc95f3",
+              "70a2c21bc84614d48cf648ae22fd68175afb01132a7a7f78ccfb8d7a7a799bb2"
+            ],
+            "locator": "Full ArcGIS Mercator page, Graticule/Distortion: cylindrical graticule and distortions increase toward poles.",
+            "specificClaim": "Заметка уточняет полезный для навигации тип прямых линий Меркатора, который отличается от прямых радиусов."
+          }
+        }
+      ],
+      "difficultyAssessment": "Нужно сравнить локальные углы и форму с прямолинейностью маршрутов и радиальными расстояниями, а затем выбрать подходящую азимутальную проекцию с допустимыми искажениями.",
+      "peerReview": {
+        "peerIds": [
+          "maps-cartography-gnomonic-great",
+          "maps-cartography-mercator-cylindrical",
+          "maps-cartography-robinson-compromise"
+        ],
+        "peers": [
+          {
+            "id": "maps-cartography-gnomonic-great",
+            "current": {
+              "id": "maps-cartography-gnomonic-great",
+              "difficulty": "hard",
+              "prompt": "В какой азимутальной проекции все большие круги изображаются прямыми линиями?",
+              "answers": [
+                {
+                  "text": "Стереографическая",
+                  "note": "Стереографическая проекция является равноугольной и отображает окружности окружностями."
+                },
+                {
+                  "text": "Гномоническая",
+                  "note": "В гномонической проекции все большие круги изображаются прямыми линиями."
+                },
+                {
+                  "text": "Ортографическая",
+                  "note": "Ортографическая проекция выглядит как вид глобуса из очень далёкой точки."
+                },
+                {
+                  "text": "Азимутальная Ламберта",
+                  "note": "Азимутальная проекция Ламберта сохраняет площади."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Правильный ответ — Гномоническая. В гномонической проекции все большие круги изображаются прямыми линиями.",
+              "source": {
+                "title": "Gnomonic projection | Britannica",
+                "url": "https://www.britannica.com/science/gnomonic-projection",
+                "verifiedAt": "2026-09-02"
+              }
+            },
+            "proposed": {
+              "id": "maps-cartography-gnomonic-great",
+              "difficulty": "hard",
+              "prompt": "Для навигационной схемы короткого океанского сектора нужно показать кандидаты на кратчайший маршрут как прямые отрезки между точками. Сектор ограничен областью вокруг центра; истинные площади и углы за его пределами не нужны. Какую проекцию выбрать, если команда принимает быстро растущие искажения вдали от центра?",
+              "answers": [
+                {
+                  "text": "Стереографическую: она сохраняет локальные углы и формы, хотя большие круги обычно не становятся прямыми.",
+                  "note": "Стереографическая равноугольна; местная форма сохраняется, а масштаб и площадь искажаются вдали от standard parallel."
+                },
+                {
+                  "text": "Гномоническую: большие круги становятся прямыми, но проекция не равноугольна и не равновелика, а её область ограничена.",
+                  "note": "У гномонической большие круги прямы при любом aspect; нельзя проецировать линии в 90° и дальше от центра."
+                },
+                {
+                  "text": "Азимутальную равноудалённую: расстояния и направления от центра истинны, поэтому все большие круги автоматически прямые.",
+                  "note": "Азимутальная равноудалённая сохраняет расстояние и направление только от центральной точки, а не для всех пар точек."
+                },
+                {
+                  "text": "Меркатора: прямыми становятся линии постоянного курса, значит любые кратчайшие большие круги тоже прямые.",
+                  "note": "Меркатор сохраняет локальные углы и показывает прямыми линии постоянного компасного курса, но не все большие круги."
+                }
+              ],
+              "correctIndex": 1,
+              "explanation": "Гномоническая проекция отображает все большие круги прямыми линиями, поэтому кратчайшие сферические маршруты читаются прямо. Цена выбора — неравноугольность и неравновеликость; на практике область ограничивают из-за роста искажений и перспективного предела.",
+              "source": {
+                "title": "Esri ArcGIS Pro: Gnomonic",
+                "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/gnomonic.htm",
+                "verifiedAt": "2026-10-15"
+              }
+            },
+            "proposedStatus": "new proposal in hard5-next"
+          },
+          {
+            "id": "maps-cartography-mercator-cylindrical",
+            "current": {
+              "id": "maps-cartography-mercator-cylindrical",
+              "difficulty": "medium",
+              "prompt": "Какая проекция является цилиндрической и равноугольной, сохраняя локальные формы и показывая прямым курс постоянного компасного направления?",
+              "answers": [
+                {
+                  "text": "Проекция Меркатора",
+                  "note": "Прямые линии на ней показывают локсодромы — линии постоянного компасного курса; обычно это не кратчайший путь."
+                },
+                {
+                  "text": "Проекция Робинсона",
+                  "note": "Робинсон — компромиссная псевдоцилиндрическая проекция для карт мира."
+                },
+                {
+                  "text": "Проекция Мольвейде",
+                  "note": "Мольвейде сохраняет площади и изображает мир эллипсом с отношением осей 2:1."
+                },
+                {
+                  "text": "Азимутальная равноудалённая",
+                  "note": "Азимутальная равноудалённая сохраняет расстояния и направления от центральной точки карты."
+                }
+              ],
+              "correctIndex": 0,
+              "explanation": "Меркатор — цилиндрическая равноугольная проекция: локальные формы верны в бесконечно малом масштабе. Прямые локсодромы показывают постоянный компасный курс, но обычно не кратчайший путь.",
+              "source": {
+                "title": "ArcGIS Pro Documentation: Mercator",
+                "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/mercator.html",
+                "verifiedAt": "2026-10-15"
+              }
+            },
+            "proposed": null,
+            "proposedStatus": "no fresh proposal for this peer in current phase"
+          },
+          {
+            "id": "maps-cartography-robinson-compromise",
+            "current": {
+              "id": "maps-cartography-robinson-compromise",
+              "difficulty": "medium",
+              "prompt": "Какая проекция псевдоцилиндрического типа разработана как компромисс для карт мира и не сохраняет ни площади, ни углы?",
+              "answers": [
+                {
+                  "text": "Проекция Робинсона",
+                  "note": "Робинсон — псевдоцилиндрическая компромиссная проекция; она искажает форму, площадь, расстояние, направление и углы."
+                },
+                {
+                  "text": "Проекция Меркатора",
+                  "note": "Меркатор сохраняет локальные углы и формы, а прямые линии задают локсодромы."
+                },
+                {
+                  "text": "Проекция Мольвейде",
+                  "note": "Мольвейде сохраняет площади; контур мира — эллипс с отношением осей 2:1."
+                },
+                {
+                  "text": "Азимутальная равноудалённая",
+                  "note": "Азимутальная равноудалённая сохраняет расстояния и направления от центра карты."
+                }
+              ],
+              "correctIndex": 0,
+              "explanation": "Проекция Робинсона является псевдоцилиндрической и компромиссной. Она не сохраняет точно ни углы, ни площади, а распределяет искажения для изображения мира.",
+              "source": {
+                "title": "ArcGIS Pro Documentation: Robinson",
+                "url": "https://pro.arcgis.com/en/pro-app/latest/help/mapping/properties/robinson.html",
+                "verifiedAt": "2026-10-15"
+              }
+            },
+            "proposed": null,
+            "proposedStatus": "no fresh proposal for this peer in current phase"
+          }
+        ],
+        "crossLeakAssessment": "Gnomonic makes great circles straight but is not conformal; Mercator is conformal but cylindrical and straightens rhumb lines; Robinson is a compromise. The polar local-shape criterion selects the remaining conformal azimuthal option."
+      }
+    }
+  ]
+}
