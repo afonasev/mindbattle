@@ -1,0 +1,10 @@
+"""Decode exact serialized SOURCE literal values; canonical hashes/body unchanged."""
+import pathlib,importlib.util,json
+D=pathlib.Path(__file__).parent;C=D.parents[3]
+s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+S=D.parent/'process-v2-parks9-cycle1-fresh-01a14321/author/new-primary-protectedwildlife/proof-completion3critical';B=D/'qualified-parks9-new-primary';B.mkdir(exist_ok=False);a=m.read(S/'candidate.json');sp=m.read(S/'sourceproof.json');ps=m.read(S/'peer-snapshot.json');q=a['entries'][0]['proposedCard'];gs={'prompt_ordered_answers_key':{'prompt':q['prompt'],'answers':[v['text'] for v in q['answers']],'correctIndex':q['correctIndex']},'explanation':q['explanation'],**{'note'+str(k):v['note'] for k,v in enumerate(q['answers'])}}
+for g in sp['entries'][0]['literalGroups']:
+ before=g['literal'];v=json.loads(before);assert v==gs[g['group']] and m.sha(v)==g['literalSHA256'];g['literal']=v
+for o in [a,sp,ps]:o['rootLiteralTransport']={'owner':m.O,'originalPacket':str(S.relative_to(C)),'originalFreeze':'291b13a97907154063bed84ae7e1615197a67a47','transformation':'SOURCE stored canonicalJSON encoding as literalfield string. DecodedexactlyoneJSONlevel; everydecodedvalue equals exactcandidate group and existingcanonicalSHA256. No text/hash/semanticjudgment changed.','semanticEdits':False,'qualityCredit':0}
+for n,x in [('candidate.json',a),('sourceproof.json',sp),('peer-snapshot.json',ps)]:m.write(B/n,x)
+p=D/'qualification-parks9-blocked-literal-encoding.json';m.write(p,{'qualified':False,'applied':False,'qualityCredit':0,'failure':'SOURCEliteralfield contained canonicalJSONserializedvalue ratherthan decodedJSONvalue; all6decodeexactly to actualcandidate andmatch alreadycorrectcanonicalhashes','resolution':'Newroot alias-only losslesssingleJSONdecode; originalsourceunchanged'});print(m.savecode([pathlib.Path(__file__),p,*B.glob('*.json'),D/'apply-parks9-new-primary.py'],'Freeze exactNP9 SOURCE literalJSONdecode transport no semanticedits'))
