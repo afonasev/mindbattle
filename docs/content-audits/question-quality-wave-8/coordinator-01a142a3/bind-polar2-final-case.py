@@ -13,6 +13,8 @@ for fn in ['receipt.json','sources.json','peers.json','verification.json']:
   for p in x['actualCurrentPeers']+x.get('additionalCurrentPeers',[]):
    if p['id'] in by:assert p==by[p['id']]
    by[p['id']]=p
+  for e in m.read(S/'receipt.json')['entries']:
+   if e['id'] not in by:by[e['id']]={'id':e['id'],'topicId':e.get('topicId','polar-regions'),'sourceOrder':e['sourceOrder'],'card':e['currentCard'],'sha256':e['currentCardCanonicalSHA256'],'transportOrigin':'original independent receipt currentCard'}
   x['actualCurrentPeers']=list(by.values())
   for v in x['bilateralMainComparisons']:
    v['left']=copy.deepcopy(v['candidate']);v['right']=copy.deepcopy(v['actualCurrentPeer']);v['leftToRight']=v['candidateToPeer'];v['rightToLeft']=v['peerToCandidate']
