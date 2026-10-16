@@ -1,3 +1,13 @@
+# CURRENT872 OVERRIDE — FULL exact2000 remains ACTIVE
+
+Intake871, newly1, CURRENT872/2000, ALLremaining1128; waves500/198/174/0. HOLD/READY/QAcredit0. Source-onlyslice/handoff neverfullgoalcompletion. Soleowneractual01a14508-c53b-7af2-881a-50801afe7870 native0lastpersonaljournalcheck. ExistingC/D/P below; no newworktree. BothindexesFOREIGN/private rawCAS only; ownPlease BEFOREeachPwrite/privatecommit, releasebeforewait. Foreignintegrationlease13fa1 preserved.
+
+Latest strictcertificate parks24 FIRSTINITIAL aftergenuineNEWsource: codebranch `codex/question-quality-wave-6`, commit `22b4588cce3d7e64a638528cc2623133bd634522`; privateplanningbranch `codex/question-revision-resume-20261014`, projection `cf65e387a9ca7045458bec3ad17e90109a2dbc28`; notmain. ExactrawSOURCE077aa qualified38993/nativeprefixaudit, reader eeeef884 all6/4/22actualbodybindings/22pairs; old24originalSOURCEgradeHOLD historicalresolved, not acceptedoldb7. CP selected2000/completed872/remaining1128/percardhashes authoritative.
+
+Active OTHER83 originalpolar28 FIRSTINITIAL, task reader-polar28-initial-task.json: SOURCE7f raw8a1b882 qualified6e85e, applied77a02a8f9fa6c72a8a3b042c2d11c1d3f506860b, affected19PASS59687fb4a92898fde361315a1c9ebf18407e880e; current465dd8f445d0377dcc99f2a8505efc0c4379481ae253573f0e7babcdfedf410c EASY/key1. Polar-topicmutationfence untilreceiptconsumed. Source7f continuing original29–40 in new source-polar29-40-continuation; Source3a originalparks25–40 in source-parks25-40-original. Bothfirst<=2READY thenEND, ownnative1noreset atSTART. queue.json freshestcursors. Atactor2 preservationSTOP only; rawfirstfreezeafter2 INPUT/noquality exceptfreshadoption. No messagesforACKalone; exactnewstageSTART only.
+
+RemainingtrueHOLD parks14 firstFINALunique-key/grade noordinarycycle2; polar13 SOURCEHOLD sealsmammals; polar21/22Treaty SOURCEHOLD missingfullprimaryIV/VI/VII/IX afteroneoriginal+oneofficialalternative exhausted unsupportedcontenttype notHTTPwebsitefailure; no retry/bypass. Polar23/24 UNREVIEWEDrelateddependency notfakeHOLD. Fullall1128 remains scope. Preserveoldhistories; root55STOPdurable53abebc archivedafterfinalidle. Atownactual2 onlypreserveSTOP/fullgoalfencedhandoff; nevercompleteatslice. No fullsuite/runtime/browser/audio/Player/build/deploy/mainmerge/OpenSpecarchive. AllPython-B. Previoussnapshot below historical.
+
 # ACTIVATED — FULL exact2000 ACTIVE
 
 Owner 01a14508-c53b-7af2-881a-50801afe7870, actual compactions0. Intake/CURRENT871, remaining1129; waves500/198/173/0. HOLD/READY/QA credit0. Full goal remains active, never complete at slice/handoff.
