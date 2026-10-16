@@ -1,0 +1,85 @@
+{
+  "owner": "01a14377-a80a-74c0-9394-604a0c7779b3",
+  "C": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle",
+  "P": "/Users/eaafonasev/Projects/mindbattle/planning",
+  "topicId": "national-parks-nature",
+  "orders": [
+    11
+  ],
+  "cycle": 1,
+  "stage": "SOURCE_DIRECTED_CYCLE1",
+  "id": "national-parks-nature-011",
+  "beforeCard": {
+    "id": "national-parks-nature-011",
+    "difficulty": "easy",
+    "prompt": "В каком национальном парке находится знаменитый гейзер Олд-Фейтфул?",
+    "answers": [
+      {
+        "text": "Банф",
+        "note": "Банф — парк Канадских Скалистых гор; в нём находятся озёра Луиз и Морейн."
+      },
+      {
+        "text": "Торрес-дель-Пайне",
+        "note": "Чилийский парк известен гранитным массивом Паине, созданным ледниковой эрозией."
+      },
+      {
+        "text": "Йеллоустон",
+        "note": "В Йеллоустоне сосредоточено около 60 процентов гейзеров мира."
+      },
+      {
+        "text": "Швейцарский национальный парк",
+        "note": "Основанный в 1914 году парк считается старейшим в Альпах."
+      }
+    ],
+    "correctIndex": 2,
+    "explanation": "Это Йеллоустонский национальный парк. Олд-Фейтфул — один из почти 500 гейзеров парка; рейнджеры сейчас прогнозируют извержения шести из них.",
+    "source": {
+      "title": "Old Faithful — Yellowstone National Park (U.S. National Park Service)",
+      "url": "https://www.nps.gov/yell/planyourvisit/exploreoldfaithful.htm",
+      "verifiedAt": "2026-10-16"
+    }
+  },
+  "beforeHash": "a21135c2f924a7a294501648d02905a3711e43cfbb433f717250c72562c9b0fa",
+  "initialReceipt": "docs/content-audits/question-quality-wave-8/coordinator-01a14377/independent-parks11-initial/receipt.json",
+  "adjudication": "docs/content-audits/question-quality-wave-8/coordinator-01a14377/parks11-initial-fix-adjudication.json",
+  "originalPacket": "docs/content-audits/question-quality-wave-8/coordinator-01a14377/qualified-parks11",
+  "outputDirectory": "docs/content-audits/question-quality-wave-8/coordinator-01a14377/source-parks11-15/parks11-cycle1",
+  "absoluteOutputDirectory": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a14377/source-parks11-15/parks11-cycle1",
+  "defects": [
+    {
+      "id": "NP11-INITIAL-01",
+      "severity": "source-evidence-gap",
+      "fields": [
+        "note0",
+        "wholeVariant0"
+      ],
+      "finding": "Полный предоставленный Parks Canada LakeLouise/MoraineLake подтверждает принадлежность озёр Банфу и положение в Альберте, но не называет Канадские Скалистые горы. Литерал «Банф — парк Канадских Скалистых гор» не имеет конкретного первичного locator в данном комплекте. Это пробел доказательства, не утверждение, что географический факт ложен.",
+      "sourcesLocators": [
+        {
+          "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks1-10-01a13f31/author/sources/banff-lake-louise.json",
+          "locator": "Complete retained L0–L217; substantive L17–L22 and full visitor/location body L23–L144"
+        }
+      ],
+      "requestedAuthorAction": "В единственном адресном fix-cycle дать полный официальный первичный контекст с явной связью Banff–CanadianRockies либо ограничить заметку уже подтверждённой связью Банфа с озёрами Луиз/Морейн. Не ссылаться на повтор этого факта в чужой карточке как на источник.",
+      "owner": "SOURCE author/coordinator"
+    },
+    {
+      "id": "NP11-INITIAL-02",
+      "severity": "substantive-claim-scope",
+      "fields": [
+        "note1",
+        "wholeVariant1"
+      ],
+      "finding": "Заметка называет гранитный массив «созданным ледниковой эрозией». CONAF говорит о гранитных гигантах modelados льдом и отдельно о формах, moldeadas наступлением/отступлением ледников. Формообразование рельефа не равно созданию гранитного массива; текущий русский глагол расширяет утверждение источника.",
+      "sourcesLocators": [
+        {
+          "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks1-10-01a13f31/author/sources/torres-conaf.json",
+          "locator": "L153–L157, specifically L154 granite modelados and L155 formas moldeadas"
+        }
+      ],
+      "requestedAuthorAction": "В том же единственном fix-cycle точно передать формирование/моделирование форм массива ледниками, не происхождение самого гранитного массива; согласовать написание «Пайне» с вариантом «Торрес-дель-Пайне».",
+      "owner": "SOURCE author/coordinator"
+    }
+  ],
+  "contract": "Onlysole11SOURCEcycle1, bothnote0/1 andaffectedwholevariants, fullprimarypersonalread exactclaimscope. Authorchooses supportedrepair, frozenID/topic/order/easy/key2 andapprovedtaxonomy. All6literal4wholevariants exactgrounds/locators/canonicalhash/fullactualpeers/globalMAIN/bothways+latest12proposal mutual. Rootnotauthornewsemantics. No catalog/Git/planning/tests/runtime/newactors. FINALunresolvedHOLD0 noordinarycycle2."
+}
