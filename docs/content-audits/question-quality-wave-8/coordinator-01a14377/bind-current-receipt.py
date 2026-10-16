@@ -53,6 +53,9 @@ for snapshot in peers.get('latestProposalSnapshots',[]):
  elif 'candidates' in sourceData:
   # Historical SOURCE used a candidates wrapper; exact body/hash checks below apply.
   entry=next(e for e in sourceData['candidates'] if e['id']==p['id'])
+ elif 'proposedCard' in sourceData:
+  # Single historical SOURCE record; full exact body and afterHash remain mandatory.
+  assert sourceData['id']==p['id'];entry=sourceData
  elif 'relevantSimultaneousProposals' in sourceData:
   # SOURCE78 retained full own proposals in its immutable MAIN packet.
   # Bind the actual body/hash and the original author's candidate at the same
