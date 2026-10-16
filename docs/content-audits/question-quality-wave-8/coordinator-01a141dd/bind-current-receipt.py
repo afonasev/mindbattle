@@ -28,7 +28,13 @@ if '--audit-source-only' in sys.argv:
  print(json.dumps({'sourceLineage':sourceLineage,'mutations':False}));raise SystemExit(0)
 R=C/case['readerPath'];rp=R/'receipt.json';r=rd(rp);src=rd(R/'sources.json');peers=rd(R/'peers.json');ver=rd(R/'verification.json');qaPath=C/case['qaPath'];qa=rd(qaPath)
 assert qa['success'] and qa['numPassedTests']==19 and qa['numFailedTests']==qa['numPendingTests']==qa.get('numTodoTests',0)==0
-assert raw(qaPath)==ver['existingQA19']['rawSHA256'];tp=C/'src/content/topics/books-publishing.json';assert raw(tp)==ver['catalogRawSHA256'] and tp.read_bytes()==subprocess.check_output(['git','-C',str(C),'show',case['testedCatalogCommit']+':src/content/topics/books-publishing.json'])
+assert raw(qaPath)==ver['existingQA19']['rawSHA256']
+topicId=case.get('topicId','books-publishing')
+assert topicId in {p.stem for p in (C/'src/content/topics').glob('*.json')}
+tp=C/f'src/content/topics/{topicId}.json'
+assert raw(tp)==ver['catalogRawSHA256'] and tp.read_bytes()==subprocess.check_output(['git','-C',str(C),'show',case['testedCatalogCommit']+':'+str(tp.relative_to(C))])
+topicIds={q['id'] for q in rd(tp)['questions']}
+assert all(e['id'] in topicIds for e in r['entries'])
 cat={}
 for t in {p['topicId'] for p in peers['actualCurrentPeers']}:cat.update({q['id']:q for q in rd(C/f'src/content/topics/{t}.json')['questions']})
 for p in peers['actualCurrentPeers']:assert p['card']==cat[p['id']] and sha(p['card'])==digest(p)
