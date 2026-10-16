@@ -1,0 +1,15 @@
+"""Exact SOURCE6 apply after consumedOTHER5 topic fence; no quality credit."""
+import pathlib,importlib.util,subprocess,sys
+D=pathlib.Path(__file__).parent;C=D.parents[3]
+def load(n,p):
+ s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+m=load('own',D/'owned-tools.py');a=load('standard',C/'docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/apply-standard.py');a.P=m.P;B=D.parent/'process-v2-polar5-6-8-10-fresh-01a14321/author/source6-peer-rebind-current842';old=B.parent/'remaining6-8-10-current841';ps=m.read(B/'peer-snapshot.json')
+for name in ['candidate.json','sourceproof.json']:assert (B/name).read_bytes()==(old/name).read_bytes()
+assert ps['rebindProvenance']['personalRead'] and ps['rebindProvenance']['pairAssessment']
+for p in ps['actualCurrentPeers']:assert p['card']==next(q for q in m.read(C/f"src/content/topics/{p['topicId']}.json")['questions'] if q['id']==p['id']) and m.sha(p['card'])==p['sha256']
+tp=C/'src/content/topics/polar-regions.json';assert tp.read_bytes()==subprocess.check_output(['git','-C',str(C),'show','refs/heads/codex/question-quality-wave-6:'+str(tp.relative_to(C))])
+if '--qualify-only' not in sys.argv:
+ fence=m.read(D/'polar5-final-consumed.json');assert fence['consumed'] is True and fence['current5CanonicalSHA256']==m.sha(m.read(tp)['questions'][4])
+r=a.apply(B,'01a14327-fb48-70e1-8d55-3db044c2d83b',[6],D/'apply-polar6.json',D/'qa-polar6.json',pathlib.Path(__file__),qualifyOnly='--qualify-only' in sys.argv,peerSnapshot={'actualCurrentPeers':[p for p in ps['actualCurrentPeers'] if p['topicId']=='polar-regions']},concerns=['SOURCE6originalqualifiedtext+sourceproof byteexactsameauthor recentfullpersonalread; newSOURCEpeer-rebind personallyread actualnew5nightduration/current6/proposal6 and freshbothways/mutualwholecardproof. Initial5latitude near-duplicate replacedby new5MAIN, do not credit6viahypotheticalold5.','IndependentINITIAL6 mustpersonallyread exactCURRENT/completeNOAAlatitude+fullAAPL504 and all6literal4wholevariants. Promptonlypoint90S; geographic/magnetic alternatives actualplausibility/EASY/directNOAAURL/ownSouthPole stationfact mustjudge, no inheritedSOURCE/root/QA PASS.','Newactual5 nightduration body remainsfrozen throughoutunconsumedreader6; allclosestactualpeers/globalMAIN/fullbilateral mustbound. OnlyfrozenID/topic/order/EASY/key1, alltextwithinPolar mutable ifINITIALdefect.'])
+if '--qualify-only' in sys.argv:
+ p=D/'qualification-polar6-rebound.json';m.write(p,{'owner':m.O,'qualified':True,'applied':False,'qualityCredit':0,'sourceFreeze':'92aab583c79a76d6d738513b22ae1e5db3dfe426','groups':len(r['finalGroupBindings']),'wholeVariants':len(r['finalVariantBindings']),'actualFullPeers':len(ps['actualCurrentPeers']),'sourceOwnRecentJudgmentsRetainedByteExact':True,'newPeer5PersonallyRebound':True,'wait':'OTHER5FINAL must beconsumed beforecatalogmutation'});print(m.savecode([p,pathlib.Path(__file__)],'Qualify exactSOURCE6 with freshnew5personalpeerbinding; retain topicfence'))
