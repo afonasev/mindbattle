@@ -96,7 +96,7 @@ export function ControlsHelp({ back }: { back: () => void }) {
           <div><kbd>{glyph.south}</kbd><span>Подтвердить · дальше</span></div>
           {mode==="team"?<div><kbd>D-pad ↑</kbd><span>Отменить выбор в бонусе</span></div>:<div><kbd>{pauseLabel}</kbd><span>Пауза</span></div>}
         </div>
-        {mode==="solo" && <p className="simple-help-note">Крестовина также выбирает ответ по его положению.</p>}
+        <p className="simple-help-note">Крестовина также выбирает ответ по его положению.</p>
       </>}
     </div>
   </MenuDialog>;

@@ -651,10 +651,14 @@ test("supports N+1 public bonus veto for three and four assigned teams", async (
       await expect(page.locator(".question-stage")).toBeVisible();
       const state = await storedState(page);
       const correct = state.phase.round.correctPosition as Position;
+      await expect(page.getByLabel("Клавиши ответа").filter({hasText:"Y / ↑"})).toHaveCount(1);
+      if (teamCount === 3 && round === 0) await page.screenshot({path:testInfo.outputPath("gamepad-answer-alternatives.png")});
       await answer(page, "green", correct);
       await answer(page, "blue", correct);
-      await pressVirtualPad(page, 0, faceButton[correct]);
-      if (teamCount === 4) await pressVirtualPad(page, 1, faceButton[correct]);
+      // Exercise both ways on consecutive ordinary questions, across assigned pads.
+      const dpadButton = {up:12,right:15,down:13,left:14};
+      await pressVirtualPad(page, 0, round === 0 ? dpadButton[correct] : faceButton[correct]);
+      if (teamCount === 4) await pressVirtualPad(page, 1, round === 0 ? faceButton[correct] : dpadButton[correct]);
       await expect(page.locator(".question-stage--reveal")).toBeVisible();
       await waitForInputGate(page);
       await page.keyboard.press("w");
@@ -692,6 +696,13 @@ test("supports N+1 public bonus veto for three and four assigned teams", async (
     await waitForInputGate(page);
     await page.keyboard.press("w");
     await expect(page.locator(".question-stage")).toBeVisible();
+    const bonus = await storedState(page);
+    const bonusCorrect = bonus.phase.round.correctPosition as Position;
+    await answer(page, "green", bonusCorrect);
+    await answer(page, "blue", bonusCorrect);
+    await pressVirtualPad(page, 0, {up:12,right:15,down:13,left:14}[bonusCorrect]);
+    if (teamCount === 4) await pressVirtualPad(page, 1, faceButton[bonusCorrect]);
+    await expect(page.locator(".question-stage--reveal")).toBeVisible();
   }
 });
 

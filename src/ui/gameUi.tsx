@@ -43,7 +43,8 @@ function controlGlyph(
   if (assignment.source.kind === "keyboard") {
     return KEYBOARD_GLYPHS[assignment.source.layout][cardinal[direction]];
   }
-  return GAMEPAD_GLYPHS[assignment.source.profile].answer[cardinal[direction]];
+  const arrow = { up: "↑", right: "→", down: "↓", left: "←" }[direction];
+  return `${GAMEPAD_GLYPHS[assignment.source.profile].answer[cardinal[direction]]} / ${arrow}`;
 }
 
 export function DeviceGlyphs({

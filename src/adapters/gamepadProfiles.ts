@@ -80,6 +80,11 @@ export function answerDirectionForGamepadButton(
   }
 }
 
+/** Physical D-pad aliases for direct answers; other phase mappings stay separate. */
+export function dpadDirectionForGamepadButton(buttonIndex: number): CardinalDirection | undefined {
+  return ({ 12: "north", 15: "east", 13: "south", 14: "west" } as const)[buttonIndex as 12 | 15 | 13 | 14];
+}
+
 export type BonusGamepadAction = "move-left" | "move-right" | "confirm" | "cancel";
 
 export function bonusActionForGamepadButton(
@@ -102,6 +107,7 @@ export function bonusActionForGamepadButton(
 export function isActionableGamepadButton(buttonIndex: number): boolean {
   return (
     answerDirectionForGamepadButton(buttonIndex) !== undefined ||
+    dpadDirectionForGamepadButton(buttonIndex) !== undefined ||
     bonusActionForGamepadButton(buttonIndex) !== undefined
   );
 }

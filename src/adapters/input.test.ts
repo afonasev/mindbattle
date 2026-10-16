@@ -297,6 +297,25 @@ describe("gamepad polling and lifecycle", () => {
     { teamId: "blue", source: gamepadSource(1) },
   ];
 
+  it.each([[3,12,"north"],[1,15,"east"],[0,13,"south"],[2,14,"west"]] as const)(
+    "routes face %i and D-pad %i to %s with edges, assignment isolation and neutral gating",
+    (face, dpad, direction) => {
+      for (const button of [face, dpad]) {
+        let state = pollBaseline(createInputRouterState(), assignments, [pad(0), pad(1)]);
+        const pressed = handleGamepadPoll(state, [pad(0,[button]),pad(1)], assignments,"answer");
+        expect(pressed.actions).toEqual([{type:"answer",teamId:"green",direction}]);
+        expect(handleGamepadPoll(pressed.state,[pad(0,[button]),pad(1)],assignments,"answer").actions).toEqual([]);
+        state = disarmUntilNeutral(pressed.state);
+        const held = handleGamepadPoll(state,[pad(0,[button]),pad(1)],assignments,"answer");
+        expect(held.state.gate).toBe("waiting-neutral");
+        expect(held.actions).toEqual([]);
+        const released = handleGamepadPoll(held.state,[pad(0),pad(1)],assignments,"answer");
+        expect(released.state.gate).toBe("armed");
+        expect(handleGamepadPoll(released.state,[pad(0),pad(1,[button])],assignments,"answer").actions)
+          .toEqual([{type:"answer",teamId:"blue",direction}]);
+      }
+    });
+
   it("emits only rising edges and routes D-pad bonus actions", () => {
     let state = pollBaseline(createInputRouterState(), assignments, [pad(0), pad(1)]);
     const expected = [
@@ -369,6 +388,11 @@ describe("gamepad polling and lifecycle", () => {
       "continue",
     );
     expect(pressedAgain.actions).toEqual([{ type: "continue", teamId: "green" }]);
+  });
+
+  it.each([12,15,13,14])("keeps D-pad %i out of the legacy feedback-direction mapping", button => {
+    const state = pollBaseline(createInputRouterState(), assignments, [pad(0),pad(1)]);
+    expect(handleGamepadPoll(state,[pad(0,[button]),pad(1)],assignments,"difficulty-feedback").actions).toEqual([]);
   });
 
   it("maps positional gamepad buttons to an independent difficulty direction", () => {

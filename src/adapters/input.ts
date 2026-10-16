@@ -1,5 +1,6 @@
 import {
   answerDirectionForGamepadButton,
+  dpadDirectionForGamepadButton,
   bonusActionForGamepadButton,
   detectGamepadProfile,
   type CardinalDirection,
@@ -344,7 +345,7 @@ function semanticGamepadAction(
   mode: InputMode,
 ): SemanticInputAction | undefined {
   if (mode === "answer") {
-    const direction = answerDirectionForGamepadButton(buttonIndex);
+    const direction = answerDirectionForGamepadButton(buttonIndex) ?? dpadDirectionForGamepadButton(buttonIndex);
     return direction ? { type: "answer", teamId, direction } : undefined;
   }
   if (mode === "continue") {
