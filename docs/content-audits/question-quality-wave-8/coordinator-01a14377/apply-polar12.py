@@ -1,0 +1,11 @@
+"""Exact SOURCE12 original apply; independent INITIAL decides marked overlaps."""
+import pathlib,importlib.util,sys
+D=pathlib.Path(__file__).parent;C=D.parents[3]
+def load(n,p):
+ s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+m=load('own',D/'owned-tools.py');a=load('standard',C/'docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/apply-standard.py');a.P=m.P;B=D/'qualified-polar12';ps=m.read(B/'peer-snapshot.json')
+for p in ps['actualCurrentPeers']:
+ q=next(q for q in m.read(C/f"src/content/topics/{p['topicId']}.json")['questions'] if q['id']==p['id']);assert q==p['card'] and m.sha(q)==p['sha256']
+r=a.apply(B,'01a143e8-eb10-75d3-82aa-9f9d866ed6e5',[12],D/'apply-polar12.json',D/'qa-polar12.json',pathlib.Path(__file__),qualifyOnly='--qualify-only' in sys.argv,peerSnapshot={'actualCurrentPeers':[p for p in ps['actualCurrentPeers'] if p['topicId']=='polar-regions']},concerns=['Original12 INITIAL only, no prior OTHER receipt. Candidate exactSOURCE semantic choices only; root path aliases lossless and source fullcurrent7peers checked.', 'SOURCE explicitly acknowledges substantive flightlessmarine clue overlap animals-penguin-flightless and Galapagos/northernmost range with landmarks-wonders-galapagos-ecuador. Judge meaningful MAIN both directions/ERVC/directreverse, no automatic DISTINCT from different questionkeys.', 'Correctnote equator/justnorth soleGalapagosspecies: prompt already names Galapagos exception, reader must judge whether this adds a concrete ownoption fact beyond wholeprompt+key. All4options plausibility under flightlessmarine clause, polar taxonomy vs generalanimal trivia, absoluteEASY.', 'Primary AAP blanket allpenguinsSouthernHemisphere notused as exactrangeproof; CDF/Galapagoscontexts establishexception. Do not assume temporalcontradiction resolved merely bynewdate; inspectauthoritys/coherence/fullcontexts and allsix groups.', 'No independent reader active onpolartopic; priorpolar11FINAL consumed exact851. Tests pureaffected19 no runtime/build/fullsuite.'])
+if '--qualify-only' in sys.argv:
+ m.write(D/'qualification-polar12.json',r);print(m.savecode([D/'qualification-polar12.json',pathlib.Path(__file__)],'Qualify SOURCE12 exactschema/currentbindings withmarkedsemanticconcerns forOTHER'))
