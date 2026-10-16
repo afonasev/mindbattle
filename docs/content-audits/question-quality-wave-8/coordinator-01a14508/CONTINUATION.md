@@ -1,3 +1,9 @@
+# CURRENT874 OVERRIDE — FULL exact2000 ACTIVE
+
+Intake871,newly3,CURRENT874/2000,ALLremaining1126,waves500/198/176/0. FullgoalNOTcomplete/HOLDREADYQAcredit0. Lateststrictcert originalpolar29 FIRSTINITIAL: codebranchcodex/question-quality-wave-6 commit816907f8e7a695075315b66c5c227af1b16ea035; privateplanningbranchcodex/question-revision-resume-20261014 projectionaf715a5b0a6efc5445e411188ca6a68696a22047; notmain. Readerraw1ae18fbf48403e96ddbd3295234b26e483b82dda strict6/4/34actualbodies33pairs PASS, case-polar29-initial.json/bound-independent-polar29-initial. TreatyresourceequalitynewMAIN distinctactualislands45, MEDIUM/key1 andNorwegiansovereigntykeynoteextra, localregulationlimit preserved. Sourcepre2rawd02ff/qualified87ed/exactQA19allretained. Current29hash5b86025d2ea9ca94ca4e44c72e238bdbf704942eec39336932efde781588e04f.
+
+OTHER83 IDLE after29cert; no newreview untilfreshSTART exactnewappliedQA source. SOURCE7f ACTIVE ORIGINAL30–40 tasksource-polar30-40-continuation-task.json/outputsource-polar30-40-continuation. SOURCE3a ACTIVE ORIGINALparks25–40 tasksource-parks25-40-original-task.json/outputsource-parks25-40-original. All3 native1 lastSTARTaudit, root0lastownaudit. No polar-topicfence active now29consumed; nextreview introducesownfence. readyQueueempty, parks14historicalapplieduncertifiedONLY. queue.json currentcursors. Read olderstatusbelow ashistoricalbindingdetail; CURRENT873 and29active snapshots superseded. Atownactual2 onlypreserveSTOP/fullgoalhandoff, nevercompleteatslice. No fullsuite/runtime/browser/audio/Player/build/deploy/mainmerge/OpenSpecarchive.
+
 # CURRENT873 — FULL SOURCE/editorial exact2000 ACTIVE
 
 Intake871, newly2, CURRENT873/2000, ALLremaining1127; waves500/198/175/0. HOLD/READY/QAcredit0. Fullgoal nevercompleteatslice/handoff. Soleactualowner01a14508-c53b-7af2-881a-50801afe7870, native0lastpersonallychecked. Exact3claims future-waves/wave7/wave8 ours. ExplicitACTIVATE received/activation.json; goaltoolACTIVE full2000.
