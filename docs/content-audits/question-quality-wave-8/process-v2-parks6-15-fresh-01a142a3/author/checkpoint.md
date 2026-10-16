@@ -1,0 +1,1 @@
+SOURCE cycle 1 for orders 6-8. Baseline 4db6a0f4cf9f1048dfce8b6344e1913173bc6cf2; freeze 9ade35c7662180d9272ed3b3f377b9cd523c9cae. Candidate, hashes, source reading log, peer snapshot and proof are in this author directory. No changes to catalog, Git, tests, runtime, build or deploy. Orders 9-15 not started; await coordinator queue ACK.
