@@ -1,0 +1,316 @@
+{
+  "readerNativeId": "01a14350-b8d1-7772-8646-7133cbc19d5a",
+  "sourceNativeId": "01a14328-322d-71d0-9b8c-3da31158840f",
+  "stage": "INITIAL",
+  "actualCompactions": 0,
+  "reviewDate": "2026-10-16",
+  "catalogCommit": "1835f4d0c373bc631c26bd6508271394f166ec05",
+  "qaReportCommit": "e85549488e630c472ae96f306d3affdc65324496",
+  "sourceFreeze": "992797fe18822f30526abea8ca02b841a8850ed4",
+  "qualityCredit": 0,
+  "status": "READY",
+  "verdict": "FIX",
+  "entries": [
+    {
+      "id": "national-parks-nature-010",
+      "topicId": "national-parks-nature",
+      "sourceOrder": 10,
+      "stage": "INITIAL",
+      "currentCard": {
+        "id": "national-parks-nature-010",
+        "difficulty": "easy",
+        "prompt": "Что делать, если дикое животное в Йеллоустоне приблизилось к человеку?",
+        "answers": [
+          {
+            "text": "Подойти ближе, чтобы лучше его рассмотреть.",
+            "note": "NPS советует наблюдать издали: бинокль или телеобъектив дают лучший обзор, чем приближение к животному."
+          },
+          {
+            "text": "Отойти назад, чтобы сохранить безопасную дистанцию.",
+            "note": "NPS требует держаться не ближе 100 ярдов от медведей, волков и пум и 25 ярдов от остальных животных."
+          },
+          {
+            "text": "Остаться рядом, если оно выглядит спокойным.",
+            "note": "Даже спокойный на вид зверь остаётся диким и опасным; при его приближении NPS советует отступить."
+          },
+          {
+            "text": "Предложить ему немного еды, чтобы отвлечь.",
+            "note": "NPS запрещает кормить диких животных: привыкнув к человеческой еде, они могут стать агрессивными, и их могут убить."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Правильный ответ — отойти назад, сохраняя безопасную дистанцию. NPS напоминает, что животные остаются дикими и опасными, даже если кажутся спокойными. Для наблюдения издали парк советует пользоваться биноклем или телеобъективом.",
+        "source": {
+          "title": "Safety — Yellowstone National Park (U.S. National Park Service)",
+          "url": "https://www.nps.gov/yell/planyourvisit/safety.htm?pubDate=20250629",
+          "verifiedAt": "2026-10-16"
+        }
+      },
+      "currentCardCanonicalSHA256": "e79768314cd0ab36a02b31396ddedb725e4cc7feab3320de4dbed9f47f32e254",
+      "status": "FIX",
+      "sixLiteralCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Что делать, если дикое животное в Йеллоустоне приблизилось к человеку?",
+            "answers": [
+              "Подойти ближе, чтобы лучше его рассмотреть.",
+              "Отойти назад, чтобы сохранить безопасную дистанцию.",
+              "Остаться рядом, если оно выглядит спокойным.",
+              "Предложить ему немного еды, чтобы отвлечь."
+            ],
+            "correctIndex": 1
+          },
+          "canonicalSHA256": "cfbfd277ced368b61bf4203d094f594457a7a389735fb22f0d654d66f236708b",
+          "status": "FIX",
+          "individualGround": "Все четыре подписи — реальные действия человека при встрече со зверем; key1 буквально соответствует общей строке NPS L73. Однако prompt не ограничивает вид или ситуацию, а L207 для подходящего волка требует удерживать позицию и активно отпугивать его. Нельзя сертифицировать «отойти назад» как безусловное решение точного широкого вопроса только по общей строке, игнорируя полный специальный контекст. Неверность подхода, спокойного ожидания как разрешения и подачки подтверждена L72–L77.",
+          "sourcesLocators": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "NPS full retained312-line Safety page: All Wildlife L67–L83; Bears L118–L129; Wolves & Cougars L198–L210"
+            },
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "NPS Wolves & Cougars L205–L210, specifically approach response at L207; Charging Bears L124–L126"
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Правильный ответ — отойти назад, сохраняя безопасную дистанцию. NPS напоминает, что животные остаются дикими и опасными, даже если кажутся спокойными. Для наблюдения издали парк советует пользоваться биноклем или телеобъективом.",
+          "canonicalSHA256": "140d02e7db797f2224686e054ca044dc988fb15f144cf214055ef1d07d8aa40c",
+          "status": "FIX",
+          "individualGround": "Три предложения правильно называют key1, передают тезис NPS L72 о диких/опасных даже спокойных животных и L74 о бинокле/телеобъективе. Но первое предложение повторяет ответ-отход без видового/ситуативного ограничения того же prompt; специальное волчье условие L207 остаётся неучтённым. Это тот же один дефект NP10-INITIAL-01, а не отдельный запрос произвольной переписи.",
+          "sourcesLocators": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "NPS All Wildlife L69–L74, specifically general instruction L73"
+            },
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "NPS Wolves & Cougars L205–L210, specifically approach response at L207; Charging Bears L124–L126"
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "NPS советует наблюдать издали: бинокль или телеобъектив дают лучший обзор, чем приближение к животному.",
+          "canonicalSHA256": "fb7702b3d1a5cc2eaedd6446af85e8aad6b622a69ef1d0d941c8677e6ae586c3",
+          "status": "PASS",
+          "individualGround": "NPS L74 прямо сравнивает бинокль/телеобъектив с приближением и говорит, что они дают лучший вид. Заметка точно описывает альтернативу действию слота0 и не советует физически приближаться ради обзора.",
+          "sourcesLocators": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "L71–L74"
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "NPS требует держаться не ближе 100 ярдов от медведей, волков и пум и 25 ярдов от остальных животных.",
+          "canonicalSHA256": "39ddba1fc8c77237e916e60d0e3f0a6d87c259ff23af563d2a8e44d600132199",
+          "status": "PASS",
+          "individualGround": "NPS L69 и L73 явно устанавливают минимум100 ярдов для bears,wolves,cougars и25 для всех остальных животных. Перевод «медведи, волки и пумы» корректен; ярды сохранены без ошибочного пересчёта. Конкретные минимальные расстояния — дополнительный собственный факт о действии поддержания дистанции, сверх команды отойти назад.",
+          "sourcesLocators": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "L69; L73; дополнительные подтверждения L92,L172,L189,L204"
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Даже спокойный на вид зверь остаётся диким и опасным; при его приближении NPS советует отступить.",
+          "canonicalSHA256": "964c579018f7a94cb511336a53995bc8fa2cfdaa8a35000bad98e37039d66609",
+          "status": "FIX",
+          "individualGround": "Первая часть про диких и опасных даже спокойных животных точно передаёт L72. Вторая «при его приближении NPS советует отступить» снова без ограничения ссылается на общий L73, тогда как L207 отдельно предписывает не отступление, а удержание позиции/активное отпугивание при подходе волка. Требуется привязать вторую часть к уточнённому условию одного исправления.",
+          "sourcesLocators": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "NPS All Wildlife L69–L74, specifically general instruction L73"
+            },
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "NPS Wolves & Cougars L205–L210, specifically approach response at L207; Charging Bears L124–L126"
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "NPS запрещает кормить диких животных: привыкнув к человеческой еде, они могут стать агрессивными, и их могут убить.",
+          "canonicalSHA256": "8698baa7f002a7edd59683c84340471d5b1fa6f32f9a236b724efef08993acc2",
+          "status": "PASS",
+          "individualGround": "NPS L77 запрещает кормить даже птиц и белок; привыкшие к человеческой пище животные могут стать агрессивны и их приходится убивать. Русская заметка сохраняет «могут», относится к ошибке предложить еду и не выдаёт умерщвление за неизбежный исход каждого кормления.",
+          "sourcesLocators": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "L75–L80"
+            }
+          ]
+        }
+      ],
+      "fourFullPromptAnswerNoteVariants": [
+        {
+          "slot": 0,
+          "prompt": "Что делать, если дикое животное в Йеллоустоне приблизилось к человеку?",
+          "answer": "Подойти ближе, чтобы лучше его рассмотреть.",
+          "note": "NPS советует наблюдать издали: бинокль или телеобъектив дают лучший обзор, чем приближение к животному.",
+          "tripleCanonicalSHA256": "89cd86fc88a6e97ac22374cf31ffa91183647032ce3ab8a59168dfb0529d0d9e",
+          "status": "PASS",
+          "grammar": "«Подойти ближе, чтобы лучше его рассмотреть» — естественный инфинитивный ответ на «Что делать…?»; «его» согласовано с животным.",
+          "plausibility": "Реальное действие любознательного посетителя ради лучшего вида; правдоподобная ошибка, явно связанная с триггером встречи.",
+          "truthUniqueKey": "Дистрактор неверен по NPS L71–L74: не следует приближаться, для обзора есть оптика. Это не устраняет отдельный дефект универсального ключа1.",
+          "noteTruthUsefulness": "Справка точно даёт проверяемую альтернативу для обзора — бинокль/телеобъектив, а не пустое «неправильный ответ».",
+          "sourcesLocators": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "L71–L74"
+            }
+          ]
+        },
+        {
+          "slot": 1,
+          "prompt": "Что делать, если дикое животное в Йеллоустоне приблизилось к человеку?",
+          "answer": "Отойти назад, чтобы сохранить безопасную дистанцию.",
+          "note": "NPS требует держаться не ближе 100 ярдов от медведей, волков и пум и 25 ярдов от остальных животных.",
+          "tripleCanonicalSHA256": "44e2f9215915639ea05d3d6ed056cfb95c812e2c5cbe4fb21de258b2518ce7e1",
+          "status": "FIX",
+          "grammar": "«Отойти назад, чтобы сохранить безопасную дистанцию» — согласованный законченный инфинитивный ответ; грамматика не выдаёт ключ.",
+          "plausibility": "Реальная обычная защитная реакция; для многих видов прямо предусмотрена NPS L73,L172,L189.",
+          "truthUniqueKey": "Общая строка L73 поддерживает слот1, но широкий prompt включает также приближающегося волка, для которого L207 даёт удержание позиции и активное отпугивание. Единственный универсальный ключ exactCURRENT не сертифицирован; требуется уточнение сценария, не смена frozen key.",
+          "noteTruthUsefulness": "Справка о100/25 ярдах сама точна и добавляет конкретные минимумы по видам. Это не исправляет чрезмерно широкую область применения команды отступать.",
+          "sourcesLocators": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "NPS full retained312-line Safety page: All Wildlife L67–L83; Bears L118–L129; Wolves & Cougars L198–L210"
+            },
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "NPS Wolves & Cougars L205–L210, specifically approach response at L207; Charging Bears L124–L126"
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "prompt": "Что делать, если дикое животное в Йеллоустоне приблизилось к человеку?",
+          "answer": "Остаться рядом, если оно выглядит спокойным.",
+          "note": "Даже спокойный на вид зверь остаётся диким и опасным; при его приближении NPS советует отступить.",
+          "tripleCanonicalSHA256": "ee43bf8f4edc4cacc0045203de4d4f7907268dd865803149ffc84ffb643c0285",
+          "status": "FIX",
+          "grammar": "«Остаться рядом, если оно выглядит спокойным» — полная инфинитивная конструкция; «оно» правильно относится к животному.",
+          "plausibility": "Распространённая ошибочная интерпретация спокойного вида как разрешения остаться близко. Это правдоподобное действие той же категории, не абсурдная сущность.",
+          "truthUniqueKey": "Дистрактор не становится верным из-за волчьего исключения: видимое спокойствие не является основанием игнорировать дистанцию по L72–L73. Но заметка и prompt без ограничений обобщают отступление, что конфликтует с L207; это один дефект NP10-INITIAL-01.",
+          "noteTruthUsefulness": "Первая часть заметки точна по L72; вторую про отступление при любом приближении нужно ограничить тем же новым сценарием. Различены буквальная неправота дистрактора и пределы его пояснения.",
+          "sourcesLocators": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "NPS All Wildlife L69–L74, specifically general instruction L73"
+            },
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "NPS Wolves & Cougars L205–L210, specifically approach response at L207; Charging Bears L124–L126"
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "prompt": "Что делать, если дикое животное в Йеллоустоне приблизилось к человеку?",
+          "answer": "Предложить ему немного еды, чтобы отвлечь.",
+          "note": "NPS запрещает кормить диких животных: привыкнув к человеческой еде, они могут стать агрессивными, и их могут убить.",
+          "tripleCanonicalSHA256": "6d8f90a06d9fe5ce0a1742d0f200264aad947332b4634215fa2359c52a5011fc",
+          "status": "PASS",
+          "grammar": "«Предложить ему немного еды, чтобы отвлечь» — грамматически законченный инфинитивный ответ; местоимение относится к зверю.",
+          "plausibility": "Реальная попытка отвлечь животное едой, объяснимая для незнающего; слово «немного» создаёт правдоподобную ошибочную уступку.",
+          "truthUniqueKey": "Неверен по прямому запрету NPS L75–L77; малое количество не разрешает кормление. Это самостоятельное отличие от обязанности поддерживать дистанцию.",
+          "noteTruthUsefulness": "Справка правильно описывает пищевую зависимость, агрессию и возможное убийство животного, сохраняя модальность риска. Это факт именно о пищевом действии слота3.",
+          "sourcesLocators": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "L75–L80"
+            }
+          ]
+        }
+      ],
+      "absoluteLevel": {
+        "difficulty": "easy",
+        "status": "PASS_FOR_INTENDED_GENERAL_KNOWLEDGE",
+        "ground": "Сохранение дистанции от дикого зверя — знакомое широкой взрослой аудитории действие; четыре альтернативы отражают реальное любопытство, отступление, доверие спокойствию и попытку отвлечь едой. Знание точных ярдов для выбора не требуется. Это не отменяет необходимости убрать видовую неоднозначность полного исходного условия."
+      },
+      "correctNoteExtraFact": {
+        "status": "PASS",
+        "fact": "100 ярдов от медведей/волков/пум и25 от остальных — конкретные минимумы, отсутствующие в вопросе и ключе об отходе.",
+        "sourcesLocators": [
+          {
+            "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+            "locator": "L69,L73"
+          }
+        ]
+      },
+      "taxonomyAssessment": {
+        "entry": {
+          "id": "national-parks-nature",
+          "domain": "nature",
+          "title": "Национальные парки и заповедная природа",
+          "scope": "Охраняемые территории, природные памятники и цели их сохранения",
+          "antiOverlap": "Не включает общую экологическую теорию и городские парки",
+          "sourceStrategy": "Начинать с профильных официальных и справочных ресурсов; каждый вопрос получает точную страницу, дату проверки и независимую редактуру.",
+          "sourceInventory": [
+            "https://www.britannica.com/place",
+            "https://whc.unesco.org/",
+            "https://www.nationalgeographic.com/"
+          ],
+          "capacityEvidence": {
+            "independentFacts": 100,
+            "easyCandidates": 40
+          },
+          "targetSize": 100,
+          "quota": {
+            "easy": 40,
+            "medium": 40,
+            "hard": 20
+          }
+        },
+        "status": "PASS",
+        "ground": "Содержание — управление поведением посетителя охраняемой территории при встрече с её дикими животными. NPS L70 прямо связывает правила с безопасностью и людей, и wildlife; L73 запрещает сближение, беспокоящее или смещающее животное. Это содержательная связь с сохранением природы парка, а не только название Йеллоустон; общей экологической теории/городских парков в MAIN нет."
+      },
+      "sourceMetadataReview": "Точная открытая страница NPS Safety и её сохранённый query pubDate=20250629 соответствуют source.url; источник не поиск/главная. Дата личного чтения полного сохранённого контекста2026-10-16.",
+      "defects": [
+        {
+          "id": "NP10-INITIAL-01",
+          "severity": "substantive",
+          "fields": [
+            "prompt_ordered_answers_key",
+            "explanation",
+            "note2",
+            "wholeVariant1",
+            "wholeVariant2"
+          ],
+          "finding": "Неуточнённое «дикое животное … приблизилось» превращает общий совет отойти в безусловный ответ для всех видов и ситуаций. Полный тот же первичный источник содержит прямую специальную рекомендацию для приблизившегося волка: удерживать позицию, махать руками и кричать, а не просто отступать.",
+          "primaryEvidence": "NPS All Wildlife L73 даёт общий back away; Wolves L205–L207 озаглавлен Stand your ground и отдельно описывает If the wolf approaches you. Это конкретный подпадающий под prompt случай. L124–L126 о броске медведя дополнительно показывает, что подход/поведение и вид важны, но волчьего примера уже достаточно.",
+          "scopeLimit": "Это не утверждение, что вариант «Остаться рядом, если выглядит спокойным» становится верным: его обоснование не соответствует NPS. Проблема — неподтверждённая универсальность ключа, не обнаружение второго корректного буквального варианта.",
+          "sourcesLocators": [
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "NPS All Wildlife L69–L74, specifically general instruction L73"
+            },
+            {
+              "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/process-v2-parks10-15-fresh-01a14321/author/order10/source-captures/nps-yellowstone-safety-full-open.txt",
+              "locator": "NPS Wolves & Cougars L205–L210, specifically approach response at L207; Charging Bears L124–L126"
+            }
+          ],
+          "requestedAuthorAction": "Один адресный fix-cycle: сузить условие до конкретного вида/ситуации, для которых полный NPS без противоречия поддерживает отход (например, обычное сближение с бизоном вне броска), и согласовать объяснение/заметку2 с выбранным условием. Frozen ID/topic/order/easy/key1 сохранить. Каталог читатель не правит.",
+          "owner": "SOURCE author/coordinator"
+        }
+      ],
+      "frozen": {
+        "id": "national-parks-nature-010",
+        "topicId": "national-parks-nature",
+        "sourceOrder": 10,
+        "difficulty": "easy",
+        "correctIndex": 1
+      }
+    }
+  ],
+  "independence": "Exact appliedCURRENT10 newly read for quality; earlier read of unapplied10 in own NP9 peer review was not acceptance. Complete312-line primary newly personally read. No inherited SOURCE/root/QA/otherreader PASS.",
+  "stop": "Earliest complete INITIAL receipt; await ACK and one directed authorfix, no catalog mutations by reader."
+}
