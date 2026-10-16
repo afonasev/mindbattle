@@ -7,9 +7,23 @@
     "verify_source_freeze"
   ],
   "rootLessThan2AndPreleasedGuardRetained": true,
-  "targetedVerification": [
-    "case-polar8-initial --verify-only (historical7equalactual)",
-    "case-polar10-initial --verify-only (historical9differentactual)"
-  ],
+  "targetedVerification": {
+    "actualPredicateExecutedAgainstExistingReaderSides": [
+      {
+        "reader": "independent-polar8-initial",
+        "state": "HISTORICAL_PROPOSAL_ALREADY_EQUAL_TO_ACTUAL_CURRENT7_NOT_NEW_UNAPPLIED_CHANGE",
+        "matchesActual": true,
+        "exactSnapshotBinding": true
+      },
+      {
+        "reader": "independent-polar10-initial",
+        "state": "HISTORICAL_SOURCE9_PROPOSAL_NOT_ACTUAL_CURRENT9",
+        "matchesActual": false,
+        "exactSnapshotBinding": true
+      }
+    ],
+    "actualCurrentSidesStillBindActualCards": true,
+    "oldWholeTopicCaseVerification": "Rejected as expected after legitimate later polar10 same-topic mutation: oldpolar8 whole-topicraw is historical. No oldcertification reopened, no extra QA/rebinding performed. Current accepted8cardhash remainschecked by commoncertifier."
+  },
   "qualityCredit": 0
 }
