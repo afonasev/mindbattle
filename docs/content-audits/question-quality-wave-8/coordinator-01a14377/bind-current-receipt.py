@@ -8,6 +8,12 @@ def wr(p,v):pathlib.Path(p).write_text(json.dumps(v,ensure_ascii=False,indent=2)
 def load(n,p):
  s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 def digest(p):return p.get('sha256',p.get('canonicalSHA256'))
+def proposed_peer_state(p):
+ # Historical proposals remain distinct from actual CURRENT and must bind to
+ # the already verified full proposal body/hash and original source raw path.
+ # Actual peer freshness is still checked separately for every actual peer.
+ state=p.get('state','')
+ return state.startswith('UNAPPLIED_') or state.startswith('HISTORICAL_')
 def compacted(uid):
  fs=list(pathlib.Path('/Users/eaafonasev/.codex/sessions').rglob('*'+uid+'.jsonl'))+list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').rglob('*'+uid+'.jsonl'));assert len(fs)==1,(uid,'missing or ambiguous journal')
  return sum(json.loads(line).get('type')=='compacted' for line in fs[0].open())
@@ -78,7 +84,7 @@ for pair in pairEvidence:
   assert pair['bilateralEntityRelationValueContextAssessment'] and isinstance(pair['directReverse'],bool)
  for side in ['left','right']:
   p=pair[side]
-  known=proposals.get(p['id']) if p.get('state','').startswith('UNAPPLIED_') else actualPeerBindings.get(p['id'])
+  known=proposals.get(p['id']) if proposed_peer_state(p) else actualPeerBindings.get(p['id'])
   assert known and digest(p)==digest(known)
   card=p.get('card',known['card'])
   assert card==known['card'] and sha(card)==digest(p)
@@ -90,7 +96,7 @@ for pair in pairEvidence:
     assert set(p['MAIN'])=={'entity','relation','value','context'} and all(p['MAIN'].values())
     if 'key' in p:assert p['key']==card['answers'][card['correctIndex']]['text']
    else:assert p['MAIN']==card['prompt'] and p['key']==card['answers'][card['correctIndex']]['text']
-  if not p.get('state','').startswith('UNAPPLIED_'):assert card==cat[p['id']]
+  if not proposed_peer_state(p):assert card==cat[p['id']]
 for s in src['sources']:
  assert raw(C/s['path'])==s['rawReadSHA256'] and s['personalReadEvidence'] and (s.get('locator') or s.get('locators'))
  if s.get('readPath'):assert raw(C/s['readPath'])==s['readTextSHA256']
