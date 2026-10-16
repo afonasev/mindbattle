@@ -1,0 +1,18 @@
+"""Bind exact independent NP13 FINAL; existing alias/locator transport only."""
+import pathlib,importlib.util,copy
+D=pathlib.Path(__file__).parent;C=D.parents[3]
+s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+S=D/'independent-parks13-cycle1-final';N=D/'bound-independent-parks13-cycle1-final';N.mkdir(exist_ok=False);receipt=m.read(S/'receipt.json');locators=[]
+for e in receipt['entries']:
+ for g in e['sixLiteralCanonicalGroups']:locators+=g['sourcesLocators']
+ for v in e['fourFullPromptAnswerNoteVariants']:locators+=v['sourcesLocators']
+for fn in ['receipt.json','sources.json','peers.json','verification.json']:
+ x=m.read(S/fn)
+ if fn=='sources.json':
+  for v in x['sources']:
+   assert v['personallyRead'] is True;v['rawReadSHA256']=v['rawSHA256'];v['personalReadEvidence']=v['readingScope']
+   matched=[z for z in locators if pathlib.Path(C/z['path']).resolve()==pathlib.Path(C/v['path']).resolve() and z.get('url')==v['url']];assert matched,(v['url'],'noexistingliteral/wholevariantlocator');v['locators']=matched
+ if fn=='peers.json':
+  for v in x['bilateralMainComparisons']:v['left']=copy.deepcopy(v['candidate']);v['right']=copy.deepcopy(v['actualCurrentPeer']);v['leftToRight']=v['candidateToPeer'];v['rightToLeft']=v['peerToCandidate']
+ x['rootTransportProvenance']={'original':str((S/fn).relative_to(C)),'originalRawSHA256':m.raw(S/fn),'schemaAliasesOnly':True,'noSemanticChanges':True,'locatorMapping':'Exact existing personallywritten receipt group/variant locator objects matched source path+URL; no newlocator or sourceground invented'};m.write(N/fn,x)
+case={'scope':'parks13-solecycle1-final','topicId':'national-parks-nature','applyPaths':[str((D/'apply-parks13-cycle1.json').relative_to(C))],'sourceFreeze':'66115e666dc70ff5cd1255367915ce277f80e6cb','readerPath':str(N.relative_to(C)),'qaPath':str((D/'qa-parks13-cycle1.json').relative_to(C)),'testedCatalogCommit':'300e703cce3eda46432bc063f2b0acffd10688bd','qaReportCommit':'ef0c7a2c6ca1dbbbbc7f33307a4cb7070d52a89f','acceptedOrders':[13],'stage':'FINAL','readerNativeId':'01a142fd-779b-70a2-910e-e79decf654cd','expectedCURRENT':841,'wave':8,'reportPath':str((D/'certification-parks13-cycle1-final-pass.json').relative_to(C)),'reportBase':{'SOURCEPrimaryFullContexts':True,'singleDirectedFixCycle':1,'initialDefectResolved':True},'coordinatorDecision':'Accept exact independent FINALPASS NP13 after soleSOURCEcycle1. Reader actually adjudicated originalINITIALalternative/typecue defect withnewfourrealAustralianmarinecoralparks, comparablelabels, twoQueenslandoptions and Australianprompt; no prefix/geographyshortcut, broadadultlargestreef recognition. Fullcompleteofficialprimarycontexts read: park/worldheritage99percent andlargestreefsystem; correctownagencyfact; actualCoralSea/Osprey/Holmes, Ningaloo state/Commonwealth distinction andLordHowe NSWtruecoralreef distinction. All6literal4wholevariants and109fullactualpeers/17bilateralpairs includingclosestphysicalreefhabitat independently bound. Root onlytransports existing fieldaliases/locators and exactoriginalSOURCEweboutputs/quotedstringhashes, no semanticrewrite orthirdfullrootreview. Require exactsourcecriticalfreeze beforetrue2, rootactual<2, exacttestedtopicraw/QA19 and preleasedmandatoryguard. InitialFIX retained, no qualitycredit for ready/QA/metadata.'};m.write(D/'case-parks13-cycle1-final.json',case);print(m.savecode([pathlib.Path(__file__),D/'case-parks13-cycle1-final.json',*S.glob('*.json'),*N.glob('*.json')],'Preserve NP13 FINAL independentPASS exactgrounds and aliaslocator transport'))
