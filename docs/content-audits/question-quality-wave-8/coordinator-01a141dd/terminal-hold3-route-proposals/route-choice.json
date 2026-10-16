@@ -1,0 +1,120 @@
+{
+  "schema": "mindbattle.terminal-hold3-route-proposals.v1",
+  "createdAt": "2026-10-16",
+  "stage": "ROUTE_PROPOSAL_ONLY",
+  "status": "AWAITING_COORDINATOR_ROUTE_SELECTION",
+  "credit": 0,
+  "catalogChanged": false,
+  "mainSnapshot": {
+    "branch": "codex/question-quality-wave-6",
+    "commit": "7597a9574c084631323f674e8223b9eda93b6e34",
+    "method": "Global scan of src/content/topics/*.json at HEAD; prompts and correct-key text searched, then nearest subject/relation peers checked."
+  },
+  "proposals": [
+    {
+      "sourceOrder": 6,
+      "id": "books-publishing-paperback-form",
+      "frozen": {"difficulty": "easy", "correctIndex": 1, "receiptCanonicalSHA256": "b32e2f542ab4da946331d63aff146478db64a5f5e515269b9dcd4a5dbb37e018"},
+      "routeId": "ingramspark-exact-wording-match",
+      "defect": "The held note turns the ambiguous marketing adjective ‘polished’ into an unsupported physical-surface/process claim.",
+      "source": {
+        "title": "IngramSpark — The Ultimate Guide to Master Your Book Cover Design",
+        "url": "https://www.ingramspark.com/master-your-book-cover-design",
+        "retainedContext": "docs/content-audits/question-quality-wave-8/process-v2-books-next10-source-01a141dd/author/sources/ingramspark-cover-textures-binding-2026-10-16.txt",
+        "sha256": "b254d02c9d8c304eef70ee60757fbb3980275d5fdf3db88ea5589545fd582fda",
+        "locator": "Book Textures, complete three-entry list, page lines 57–63; adjacent cover-options and binding context, lines 49–53 and 66–72, retained in the same file.",
+        "fact": "IngramSpark pairs Matte Cover with the exact words ‘Soft feel, no glare, polished’; it does not specify physical polishing.",
+        "access": "Direct page opened successfully and was compared with the retained text."
+      },
+      "proposal": {
+        "difficulty": "easy",
+        "prompt": "Какую пару «фактура — описание IngramSpark» верно приводит в списке Book Textures?",
+        "answers": [
+          "Matte Cover — ‘High shine, smooth finish’.",
+          "Matte Cover — ‘Soft feel, no glare, polished’.",
+          "Gloss Cover — ‘Subtle, cloth-like look’.",
+          "Digital Cloth Cover — ‘High shine, smooth finish’."
+        ],
+        "correctIndex": 1,
+        "rationale": "EASY is retained: this is a direct match to the vendor's description. Quoting the exact adjective resolves the hold without asserting a physical finish.",
+        "frozenFields": ["id", "sourceOrder", "difficulty", "correctIndex"]
+      },
+      "nearestMain": [
+        {"topic": "books-publishing", "sourceOrder": 15, "id": "books-publishing-case-binding", "sha256": "db2419c3cbb84a0bb41a62a34136267071457bc2e07140588790d19617b48d3b", "prompt": "Как IngramSpark называет твёрдую обложку с ламинированным покрытием, наклеенным на переплётные доски и загнутым по краям, если отдельной суперобложки нет?", "key": "Кейс-ламинат (case laminate)", "relation": "Same publisher and cover-treatment vocabulary; different cover fact."},
+        {"topic": "books-publishing", "sourceOrder": 1, "id": "books-publishing-cover-part", "sha256": "8d8ff76015de1118991a272530646ef9d9052332ab78b6cd2d8107e8bcd90a81", "prompt": "На какой стороне обложки обычно размещают штрихкод издания?", "key": "На задней стороне", "relation": "Same book-cover subject; distinct placement fact."}
+      ]
+    },
+    {
+      "sourceOrder": 45,
+      "id": "books-publishing-royalty-right",
+      "frozen": {"difficulty": "medium", "correctIndex": 3, "receiptCanonicalSHA256": "f7999e808d0a5738317be995612dc7f2d866a5d672e9b4c9cfac265c0621c68b"},
+      "routeId": "copyright-choice-to-complete-payment-package",
+      "defect": "The held item can be solved by chronology/category exclusion and mixes a payment label with a statement about payment sequence.",
+      "source": {
+        "title": "Royalty Structure — Publication Division, Government of India",
+        "url": "https://www.publicationsdivision.nic.in/index.php?information_id=20&route=information%2Finformation",
+        "retainedContext": "docs/content-audits/question-quality-wave-8/process-v2-books-remaining15-source-completion-01a14018/author/sources/india-royalty-structure-complete-official-search-response-2026-10-15.txt",
+        "sha256": "dbe4a7d5028e71eff9746578c214f0161233b70a8b258f3485c8b19d8268b012",
+        "locator": "Complete ‘Royalty Structure and Copyright’ section: general rate, copyright-choice paragraph, and both complete conditional payment paragraphs.",
+        "fact": "Transfer pairs a one-time advance based on 75% of the first print order with no further royalty. Retention pairs a 50% advance, adjustment against sales, and 15% of later sales after settlement.",
+        "access": "Official-domain search on 2026-10-16 returned the complete section. A direct open timed out; the full search response and earlier retained source text are preserved."
+      },
+      "proposal": {
+        "difficulty": "medium",
+        "prompt": "Какой полный набор условий Publication Division связывает с автором, который сохраняет copyright книги?",
+        "answers": [
+          "Автор передаёт copyright; аванс рассчитывают на 50% первого тиража, затем после зачёта выплачивают 15% роялти.",
+          "Автор сохраняет copyright; аванс рассчитывают на 75% первого тиража, дальнейшего роялти нет.",
+          "Автор передаёт copyright; получает разовый аванс на 75% первого тиража, дальнейшего роялти нет.",
+          "Автор сохраняет copyright; аванс на 50% первого тиража засчитывают против продаж, а после зачёта платят 15% с последующих продаж."
+        ],
+        "correctIndex": 3,
+        "rationale": "MEDIUM is retained by matching three linked terms—copyright holder, advance basis, and post-settlement royalty. All choices are parallel complete packages; chronology alone does not reveal the key.",
+        "frozenFields": ["id", "sourceOrder", "difficulty", "correctIndex"]
+      },
+      "nearestMain": [
+        {"topic": "books-publishing", "sourceOrder": 43, "id": "books-publishing-publicdomain-right", "sha256": "68feef4331970f05e91d754bfde342c1bbc82fe41d4aa1405fbb2404579560bc", "prompt": "Как называется правовой статус в США для произведения, которое никогда не охранялось авторским правом, например факта или открытия?", "key": "Общественное достояние", "relation": "Same-topic rights status, distinct from contractual payment terms."},
+        {"topic": "law-rights", "sourceOrder": 59, "id": "law-rights-copyright", "sha256": "ca5f4e3d37e99909b5b0e34ba8e0d2077dec8b040a7b616a0ce1e6549870194c", "prompt": "Какой вид правовой охраны автоматически защищает написанный роман?", "key": "Авторское право", "relation": "Same copyright concept, distinct from royalty conditions."}
+      ]
+    },
+    {
+      "sourceOrder": 69,
+      "id": "books-publishing-scroll-form",
+      "frozen": {"difficulty": "medium", "correctIndex": 3, "receiptCanonicalSHA256": "b14698e2a57faf302402443985612b5a070bf3d47b37562feb12a894a8a016c2"},
+      "routeId": "idp-artifact-specific-scroll-fittings",
+      "defect": "The held bamboo-before-paper relation duplicates MAIN ancient-world:58. This route uses a distinct fact about one catalogued scroll.",
+      "source": {
+        "title": "International Dunhuang Programme — Zwalf 1985 catalogue reference",
+        "url": "https://idp.bl.uk/references/Zwalf_1985/",
+        "retainedContext": "docs/content-audits/question-quality-wave-8/process-v2-books-remaining10-source2-01a14018/author/sources/idp-dunhuang-roll-bamboo-relevant-context.txt",
+        "sha256": "89b59acbe54516d7c36a4bb57d71b14a058d705afe4bebe8b83880a4776c8cf7",
+        "locator": "Catalogue number 55, Section R.1, Gem-heap Sutras entry: full item identification and the sentence describing its original attached fittings. The same retained context includes complete Zhong a han jing entry 31 and its wider paper/bamboo context.",
+        "fact": "The Gem-heap Sutras paper scroll is attached to its original wooden roller and silk tie.",
+        "access": "Official-site search on 2026-10-16 returned the catalogue text. Direct open returned 403; the cited fitting statement and surrounding retained catalogue context are saved locally."
+      },
+      "proposal": {
+        "difficulty": "medium",
+        "prompt": "Какие исходные детали прикреплены к бумажному свитку Gem-heap Sutras в описании IDP?",
+        "answers": [
+          "Бамбуковый валик и шёлковая завязка.",
+          "Деревянный валик и бумажная завязка.",
+          "Бамбуковый валик и бумажная завязка.",
+          "Деревянный валик и шёлковая завязка."
+        ],
+        "correctIndex": 3,
+        "rationale": "MEDIUM is retained through the exact two-part identification of fittings on a named manuscript. The alternatives are parallel material pairings. This is not another chronology or reversal of bamboo-before-paper.",
+        "frozenFields": ["id", "sourceOrder", "difficulty", "correctIndex"]
+      },
+      "nearestMain": [
+        {"topic": "ancient-world", "sourceOrder": 58, "id": "ancient-world-bamboo", "sha256": "a53eab14e5a4e6168d6cae7cd8f8c2df0007619d7a2047356b81fc8ea2687a82", "prompt": "До широкого распространения бумаги составляли тяжёлые связки. Какой материал для записи имеется в виду?", "key": "Бамбуковые планки", "relation": "Exact conflict with the held chronology; the proposed artifact-fittings relation is independent."},
+        {"topic": "books-publishing", "sourceOrder": 70, "id": "books-publishing-codex-form", "sha256": "77134595297da63ef76632fba49771df699e8acce329b928297f114b97944483", "prompt": "Как называется книжная форма, составленная из сложенных листов, сшитых вдоль одного края?", "key": "Кодекс", "relation": "Nearest same-topic carrier/form question, but it asks about folded leaves rather than artifact-specific fittings."},
+        {"topic": "books-publishing", "sourceOrder": 87, "id": "books-publishing-bamboo-form", "sha256": "c8e9b9a577ad6a4f5c89604c67eaf906f3e49e0c83a4498d04634744a925fe20", "prompt": "В таблице раздела «Outlining, Compiling & Writing» руководства University of Hawaiʻi at Mānoa OER Publishing Guide кто отвечает за подготовку титульной и copyright-страницы учебника с ISBN и данными издания?", "key": "Издатель", "relation": "Lexical global-search hit from the historical ID only; unrelated copyright/front-matter predicate, not a semantic peer."}
+      ]
+    }
+  ],
+  "guardrails": [
+    "Proposal only: no candidate packet, catalog patch, tests, QA, or quality credit.",
+    "No ordinary cycle2 or INITIAL reset. Coordinator selects a route before new-source packet authoring.",
+    "Frozen IDs, topic, order, difficulty, key indices, FINAL HOLD receipts, and prior history remain unchanged."
+  ]
+}
