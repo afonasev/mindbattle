@@ -1,0 +1,24 @@
+"""Qualify exact original polar25-context-completion SOURCE with fullbody aliases only; zero quality credit."""
+import pathlib,importlib.util,subprocess
+D=pathlib.Path(__file__).parent;C=D.parents[3];OLD=D.parent/'coordinator-01a14377'
+def load(n,p):
+ s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+m=load('own',D/'owned-tools.py');a=load('standard',C/'docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/apply-standard.py');a.P=m.P;g=load('primary',D/'primary-inspectability-preflight.py')
+R=D/'source-polar25-context-completion';B=D/'qualified-polar25-context-completion';B.mkdir(exist_ok=True);freeze='40b0e3e52d43c54f249bf0409b0a34dedcd2d8d5'
+for p in R.rglob('*'):
+ if p.is_file():assert p.read_bytes()==subprocess.check_output(['git','-C',str(C),'show',freeze+':'+str(p.relative_to(C))])
+provenance=[]
+for name in ['candidate.json','sourceproof.json','peer-snapshot.json']:
+ doc=m.read(R/name)
+ if name=='peer-snapshot.json':
+  peers=doc['actualCurrentPeers'];seen=set();combined=[]
+  for p in peers:
+   p=dict(p);p['sha256']=p.get('sha256',p.get('canonicalSHA256'));assert p['id'] not in seen;seen.add(p['id']);assert m.sha(p['card'])==p['sha256']
+   live=next(q for q in m.read(C/f"src/content/topics/{p['topicId']}.json")['questions'] if q['id']==p['id']);assert p['card']==live;combined.append(p)
+  doc['actualCurrentPeers']=combined
+ m.write(B/name,doc);provenance.append({'file':name,'rawSource':str((R/name).relative_to(C)),'rawSHA256':m.raw(R/name),'normalizedSHA256':m.raw(B/name)})
+m.write(B/'normalization-provenance.json',{'owner':m.O,'originalSOURCEfreeze':freeze,'operations':'Only existing full actual body/hash rows copied without semantic change. All judgments and candidate unchanged.','files':provenance})
+pre=g.inspect_packet(C,B);assert not any(x['headerOnlyNoVisiblePageBody'] for x in pre)
+concerns=['PREINITIAL SOURCE25 FULL PRIMARY CONTEXT COMPLETION EVIDENCEONLY before=afterexactCURRENT066c, no catalogrewrite/contentchange/gradechange/testrepeat/noINITIALcyclespent. Earlierraw0dbc/qualified663d hadcompleteoriginalvisiblewindow0-227butnotfullTotal541page; preserveincorrectfullpageclaimashistory with explicitcorrection. NewSOURCE7f personallyfullarticleacrossoriginalreference+2normalcachedrefcontinuationoutputs, all541lineIDs0-540/nooverlaptextconflicts independentlyrecomputed rootaudit, no failedURLretry/newalternative/accessbypass. WMOlibraryshell diagnostic thenoneofficialNSIDCroute unchanged.', 'All6literal4wholevariants personallyreestablished afterfullprimarycontextread, sameactual25HARDkey3/body066c, fullNSIDCScienceSeaIce physicaldefinition/salinity/fastice andlatermotion/research/data context no missingremainder. Initialfrazilneedlelikecrystals L84/floataccumulatebond; nilascontinuoussheetL85/pancakewaveedgesL88/fasticeshorebottomL171/194/228. Ownsaltcrystalnearlyfresh expulsionfact beyondWHOLEprompt/key morphologicaldescription, liquidbrinepocketsL116-L117 explicitlydifferentfrombulknewseaicesalinity. No importedunrelatedhistoricalfuturemission/trendclaims.', 'SameRussiankeyледяныеиглы descriptivemappingneedlelikefrazil inmarinecontext notverifiedWMORussiantranslation, independentlyjudgeHARDspecificvocab/unique4credibletypes/grammar/polartaxonomy/global11000/same100/fullactualclosestbodyhashes/bothdirectionERVC/directreverse. CURRENT26cf49 fullbodyactual, genuineUNAPPLIED26cycle1proposal55ca personallywholebody/hash comparedsameMAINdifferentexplanationnotnewentry/no26acceptance. No templatealoneban/no crossnoteban.', 'Rootqualifyandbindevidenceonlyactual25unchanged no catalogwrite, reuseexistingaffectedQA19bf5/tested9af SAMEcurrentpolartopic25new+26cf49 unchanged. Update25FIRSTINITIALtasktonewSOURCEfreeze/bindreceipt/full3windowindex beforeSTART, independentreaderfull541context required notinheritSOURCEPASS. OnlyAFTER25INITIALconsumed apply26solecycle1fix55ca withQA19/FIRSTFINAL, exactpeerfences. SOURCEraw40bcritical3pre2/native0, root<2 andlaterpreleasedCASbeforecredit mandatory. One directedSOURCEfixafterINITIALthenFINAL unresolvedHOLD0/noordinary2/reset.']
+r=a.apply(B,'01a1447f-53aa-73f0-b307-03a735f3bb43',[25],D/'apply-polar25-context-completion.json',D/'qa-polar25-context-completion.json',pathlib.Path(__file__),qualifyOnly=True,peerSnapshot={'actualCurrentPeers':[p for p in m.read(B/'peer-snapshot.json')['actualCurrentPeers'] if p['topicId']=='polar-regions']},concerns=concerns);r.update(primaryInspectabilityPreflight=pre,allActualFullBodiesVerified=len(m.read(B/'peer-snapshot.json')['actualCurrentPeers']),sourceOriginalFreeze=freeze);m.write(D/'qualification-polar25-context-completion.json',r)
+print(m.savecode([p for p in B.rglob('*') if p.is_file()]+[D/'qualification-polar25-context-completion.json',pathlib.Path(__file__),D/'primary-inspectability-preflight.py'],'Qualify original polar25-context-completion exact SOURCE fullbody bindings no quality credit'))
