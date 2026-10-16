@@ -1,3 +1,9 @@
+# CURRENT879/2000 ACTIVE override
+
+Intake871/newly8/remaining1121, waves500/198/181/0. Strict32/33SOLEcycle1FINALPASS certified codebranch codex/question-quality-wave-6 commitaf3b90d40cb596bb3220c7df8517e5dafcbc8600, Pprivatebranch codex/question-revision-resume-20261014 projection8b072857b9ebdc6ecc588e66a8501c3fe332119a, notmain. Exact12literal/8wholevariants/38bilateral20actualbody bindings, rawreader ef587091, source83d881/applyff505/QA639bfd, originalFIXhistory retained. No ordinarycycle2.
+
+Parks26newcourtesy16e3 closestfullSOURCEcompletion57ce6084 nowqualifiedac20b880/applied649115c0/QA19PASSb8d7cf92. FIRSTINITIAL OTHER83 ACTIVE taskreader-parks26-new-initial-task.json, lastcursor75/native1; criticalall4unique/credible inclofftrailvegetationyieldimplicitPOPULARcondition/protectednaturetaxonomy/ownnoteadditionalpackstockdownhill. OriginalpropernameSOURCEgradeHOLD52508 neverINITIAL/newfactnotreset, allrawcompletionhistoryimmutable. NativeSOURCEc606 actual1 ACTIVE original27-40 first27 tasksource-parks27-40-continuation-task.json cursor23; not26fix. SOURCE7f actual1 ACTIVE original34-40first34 tasksource-polar34-40-continuation-task.json cursor67. Topic26fenceuntilINITIAL consumed; polar34proposalproductionallowed, no further32/33mutation. Rootactual1 at2ONLYpreserveSTOP/fullgoalhandoff. Fullgoalnotcomplete, no HOLDREADYQA credit. Threeclaimsroot, Pbeforeeverywritelease/foreignindexes untouched. creatednativec606 directive required final. Queue freshest pipeline.
+
 # Pipeline override after root actual compaction1 — CURRENT877/2000 active
 
 All1123 remain in scope, waves500/198/179/0. Native root01a14508-c53b-7af2-881a-50801afe7870 actual1 verified own session_meta journal; atactual2 ONLY preservationSTOP/fullgoal successor, no ordinarynew work. No goalcompletion atslice.
