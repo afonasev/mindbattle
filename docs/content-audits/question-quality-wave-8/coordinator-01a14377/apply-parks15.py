@@ -1,0 +1,12 @@
+"""Apply originalSOURCE15 after14INITIALconsumed; noactiveparkreader, creditzero."""
+import pathlib,importlib.util,sys
+D=pathlib.Path(__file__).parent;C=D.parents[3]
+def load(n,p):
+ s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+m=load('own',D/'owned-tools.py');a=load('standard',C/'docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/apply-standard.py');a.P=m.P;B=D/'qualified-parks15';ps=m.read(B/'peer-snapshot.json');adj=m.read(D/'parks14-initial-fix-adjudication.json');assert adj['verdict']=='FIX' and adj['qualityCredit']==0 and adj['currentHash']==m.sha(m.read(C/'src/content/topics/national-parks-nature.json')['questions'][13])
+for p in ps['actualCurrentPeers']+ps['fullActualQueryHits']:
+ q=next(q for q in m.read(C/f"src/content/topics/{p['topicId']}.json")['questions'] if q['id']==p['id']);assert q==p['card'] and m.sha(q)==p.get('sha256',p.get('canonicalSHA256'))
+same=[p for p in ps['actualCurrentPeers'] if p['topicId']=='national-parks-nature']
+r=a.apply(B,'01a14381-11dc-7bc3-9892-ac7f310f7171',[15],D/'apply-parks15.json',D/'qa-parks15.json',pathlib.Path(__file__),qualifyOnly='--qualify-only' in sys.argv,peerSnapshot={'actualCurrentPeers':same},concerns=['Original15 firstINITIAL. Allprimarypersonalread/full6literal4wholevariants/absoluteEASY/onekey/4parksplausibility; questionnamesUluruandKataTjuta, readerjudge actualinformationalvalue/answercueing notinheritedsourcePASS.','Fullcurrentlandmarks-wonders-uluru-australia sacredmonolithrelation vsparkcombiningUluru+KataTjuta geography mustmeaningfullybothwaysERVC/directreverse, notonlydifferenttypes/names. Fullactualpark14Kakadu currentlyINITIALFIXnotqualityaccepted, future14solecycleproposal mustreadwhenavailable.','Correctownnote traditionalAnanguowners+jointmanagement exactUNESCOprimary beyondparknameMAIN. WrongnotesReefAuthority/Kakadu4rivers/FiordlandMilfordNWsourcecontexts precise. SourcefullActualQueryHits99 and11same/crosspeersvalidated; same-topic-only adapter notdroppingcrossvalidation.','14INITIALconsumed0, noactiveparkreader during15apply; OTHERonlypolar11differenttopic. Subsequent14cycleapply mustwaitunconsumed15receipt if15underOTHER, useexistingSOURCE fullmutual14/15proof/currentdelta asneeded.'])
+if '--qualify-only' in sys.argv:
+ m.write(D/'qualification-parks15.json',r);print(m.savecode([D/'qualification-parks15.json',pathlib.Path(__file__)],'Qualify originalSOURCE15 fullprimary andallactualsame/crosspeers'))
