@@ -2,6 +2,42 @@
   "stage": "FINAL",
   "actualCurrentPeers": [
     {
+      "id": "books-publishing-item-model",
+      "topicId": "books-publishing",
+      "sourceOrder": 96,
+      "card": {
+        "id": "books-publishing-item-model",
+        "difficulty": "hard",
+        "prompt": "В каталоге описан двухтомный комплект одной монографии. Какое утверждение FRBR допускает об экземпляре (Item)?",
+        "answers": [
+          {
+            "text": "Один экземпляр может включать несколько физических объектов.",
+            "note": "Каждый экземпляр FRBR относится только к одной Манифестации; многотомный комплект при этом может включать несколько физических объектов."
+          },
+          {
+            "text": "Каждый отдельно переплетённый том обязан быть самостоятельным экземпляром.",
+            "note": "IFLA прямо допускает один Item из двух отдельно переплетённых томов; один физический объект — частый, но не обязательный случай."
+          },
+          {
+            "text": "Физические тома образуют одно Произведение.",
+            "note": "Произведение — абстрактное интеллектуальное или художественное создание; физическое комплектование не определяет его границы."
+          },
+          {
+            "text": "Один экземпляр может относиться к нескольким Манифестациям.",
+            "note": "В FRBR каждый экземпляр относится только к одной Манифестации; одна Манифестация, напротив, может иметь несколько экземпляров."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Правило FRBR допускает, что один экземпляр (Item) включает несколько физических объектов. Поэтому многотомный комплект может составлять один экземпляр, хотя тома остаются отдельными физическими объектами.",
+        "source": {
+          "title": "IFLA, Functional Requirements for Bibliographic Records: Final Report",
+          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
+          "verifiedAt": "2026-10-16"
+        }
+      },
+      "sha256": "33d831b6fa1eeeacbd618bfd275270c928e885bf0b122ef4c4a9a0902f683d91"
+    },
+    {
       "id": "books-publishing-edition-state",
       "topicId": "books-publishing",
       "sourceOrder": 25,
@@ -223,6 +259,7 @@
       "kind": "targetedActual",
       "left": {
         "id": "books-publishing-item-model",
+        "sha256": "33d831b6fa1eeeacbd618bfd275270c928e885bf0b122ef4c4a9a0902f683d91",
         "card": {
           "id": "books-publishing-item-model",
           "difficulty": "hard",
@@ -253,7 +290,180 @@
             "verifiedAt": "2026-10-16"
           }
         },
+        "MAIN": {
+          "entity": "FRBR Item",
+          "relation": "разрешённая физическая составность экземпляра",
+          "value": "один Item может включать несколько объектов",
+          "context": "двухтомный комплект одной монографии"
+        }
+      },
+      "right": {
+        "id": "books-publishing-edition-state",
+        "sha256": "da3208976346fc6a53b9f6f569a96bf95271f824586355b5fa4258ba396c310a",
+        "card": {
+          "id": "books-publishing-edition-state",
+          "difficulty": "hard",
+          "prompt": "Как называется совокупность экземпляров, полученных из одного набора либо изготовленных по одной и той же наборной форме?",
+          "answers": [
+            {
+              "text": "Оттиск (impression)",
+              "note": "Оттиск — все экземпляры текстового издания, полученные в ходе одного события печати."
+            },
+            {
+              "text": "Выпуск (issue)",
+              "note": "Выпуск — запланированная издателем группа экземпляров, отличимая от других специально выбранными признаками."
+            },
+            {
+              "text": "Состояние (state)",
+              "note": "Состояние различает экземпляры в том же оттиске или выпуске; отличия не предназначены объявлять новый публичный выпуск."
+            },
+            {
+              "text": "Издание (edition)",
+              "note": "В книгах ручного печатного периода помета «impression» обычно могла указывать на новое издание или выпуск."
+            }
+          ],
+          "correctIndex": 3,
+          "explanation": "Издание — совокупность экземпляров, полученных из одного набора или по практически одинаковому оригиналу. Оттиск относится к одному событию печати, а выпуск и состояние различают группы копий по другим библиографическим признакам.",
+          "source": {
+            "title": "DCRMR Glossary — Rare Books and Manuscripts Section",
+            "url": "https://bsc.rbms.info/DCRMR/glossary/",
+            "verifiedAt": "2026-10-15"
+          }
+        },
+        "MAIN": {
+          "entity": "Издание edition",
+          "relation": "производственное объединение",
+          "value": "копии одного набора/формы",
+          "context": "описательная библиография"
+        }
+      },
+      "bilateralGround": "Edition48 groups copies by shared setting or printing form;96 asks how many physical objects one Item may contain. Manufacturing-group identity does not decide whether two volumes form one Item, and reversing either predicate leaves the other unanswered.",
+      "directReverseCheck": "Edition48 groups copies by shared setting or printing form;96 asks how many physical objects one Item may contain. Manufacturing-group identity does not decide whether two volumes form one Item, and reversing either predicate leaves the other unanswered.",
+      "result": "DISTINCT_MAIN",
+      "personalCurrentReread": "Personally reread both whole live cards by ID after detecting stale ordinal error; MAIN ground reassessed for these exact IDs and remains valid."
+    },
+    {
+      "kind": "targetedActual",
+      "left": {
+        "id": "books-publishing-item-model",
         "sha256": "33d831b6fa1eeeacbd618bfd275270c928e885bf0b122ef4c4a9a0902f683d91",
+        "card": {
+          "id": "books-publishing-item-model",
+          "difficulty": "hard",
+          "prompt": "В каталоге описан двухтомный комплект одной монографии. Какое утверждение FRBR допускает об экземпляре (Item)?",
+          "answers": [
+            {
+              "text": "Один экземпляр может включать несколько физических объектов.",
+              "note": "Каждый экземпляр FRBR относится только к одной Манифестации; многотомный комплект при этом может включать несколько физических объектов."
+            },
+            {
+              "text": "Каждый отдельно переплетённый том обязан быть самостоятельным экземпляром.",
+              "note": "IFLA прямо допускает один Item из двух отдельно переплетённых томов; один физический объект — частый, но не обязательный случай."
+            },
+            {
+              "text": "Физические тома образуют одно Произведение.",
+              "note": "Произведение — абстрактное интеллектуальное или художественное создание; физическое комплектование не определяет его границы."
+            },
+            {
+              "text": "Один экземпляр может относиться к нескольким Манифестациям.",
+              "note": "В FRBR каждый экземпляр относится только к одной Манифестации; одна Манифестация, напротив, может иметь несколько экземпляров."
+            }
+          ],
+          "correctIndex": 0,
+          "explanation": "Правило FRBR допускает, что один экземпляр (Item) включает несколько физических объектов. Поэтому многотомный комплект может составлять один экземпляр, хотя тома остаются отдельными физическими объектами.",
+          "source": {
+            "title": "IFLA, Functional Requirements for Bibliographic Records: Final Report",
+            "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
+            "verifiedAt": "2026-10-16"
+          }
+        },
+        "MAIN": {
+          "entity": "FRBR Item",
+          "relation": "разрешённая физическая составность экземпляра",
+          "value": "один Item может включать несколько объектов",
+          "context": "двухтомный комплект одной монографии"
+        }
+      },
+      "right": {
+        "id": "books-publishing-issue-state",
+        "sha256": "f5ff5ff232bdf402e860e5593a3090fe183dec1f36df6656c2df8e43c5cda05f",
+        "card": {
+          "id": "books-publishing-issue-state",
+          "difficulty": "hard",
+          "prompt": "Как называется заранее спланированная группа экземпляров, выделенная как отдельная издательская единица?",
+          "answers": [
+            {
+              "text": "Издание",
+              "note": "Издание включает все экземпляры, полученные в ходе одной работы типографской композиции или с одного основного оригинала."
+            },
+            {
+              "text": "Выпуск",
+              "note": "В обсуждении DCRM(B) новую титульную страницу, нового издателя и иной тип бумаги перечислили как возможные признаки нового выпуска."
+            },
+            {
+              "text": "Тиражный оттиск",
+              "note": "Impression охватывает все экземпляры текстового издания, произведённые за одно событие печати."
+            },
+            {
+              "text": "Вариант",
+              "note": "Вариант (state) отличается от других копий того же печатания или выпуска, но не считается отдельным издательским усилием."
+            }
+          ],
+          "correctIndex": 1,
+          "explanation": "Выпуск (issue) — сознательно спланированная группа опубликованных копий, которую отличают от других групп как отдельную единицу. Различия специально предназначены для её обозначения.",
+          "source": {
+            "title": "RBMS / DCRM (RDA Edition) — Glossary",
+            "url": "https://bsc.rbms.info/DCRMR/glossary/",
+            "verifiedAt": "2026-10-16"
+          }
+        },
+        "MAIN": {
+          "entity": "Выпуск issue",
+          "relation": "издательское выделение",
+          "value": "запланированная отдельная группа копий",
+          "context": "описательная библиография"
+        }
+      },
+      "bilateralGround": "Issue49 asks a deliberate publishing unit of copies;96 asks object cardinality within a single FRBR Item. Planned production grouping and model cardinality are different relations and values, not reverse forms.",
+      "directReverseCheck": "Issue49 asks a deliberate publishing unit of copies;96 asks object cardinality within a single FRBR Item. Planned production grouping and model cardinality are different relations and values, not reverse forms.",
+      "result": "DISTINCT_MAIN",
+      "personalCurrentReread": "Personally reread both whole live cards by ID after detecting stale ordinal error; MAIN ground reassessed for these exact IDs and remains valid."
+    },
+    {
+      "kind": "targetedActual",
+      "left": {
+        "id": "books-publishing-item-model",
+        "sha256": "33d831b6fa1eeeacbd618bfd275270c928e885bf0b122ef4c4a9a0902f683d91",
+        "card": {
+          "id": "books-publishing-item-model",
+          "difficulty": "hard",
+          "prompt": "В каталоге описан двухтомный комплект одной монографии. Какое утверждение FRBR допускает об экземпляре (Item)?",
+          "answers": [
+            {
+              "text": "Один экземпляр может включать несколько физических объектов.",
+              "note": "Каждый экземпляр FRBR относится только к одной Манифестации; многотомный комплект при этом может включать несколько физических объектов."
+            },
+            {
+              "text": "Каждый отдельно переплетённый том обязан быть самостоятельным экземпляром.",
+              "note": "IFLA прямо допускает один Item из двух отдельно переплетённых томов; один физический объект — частый, но не обязательный случай."
+            },
+            {
+              "text": "Физические тома образуют одно Произведение.",
+              "note": "Произведение — абстрактное интеллектуальное или художественное создание; физическое комплектование не определяет его границы."
+            },
+            {
+              "text": "Один экземпляр может относиться к нескольким Манифестациям.",
+              "note": "В FRBR каждый экземпляр относится только к одной Манифестации; одна Манифестация, напротив, может иметь несколько экземпляров."
+            }
+          ],
+          "correctIndex": 0,
+          "explanation": "Правило FRBR допускает, что один экземпляр (Item) включает несколько физических объектов. Поэтому многотомный комплект может составлять один экземпляр, хотя тома остаются отдельными физическими объектами.",
+          "source": {
+            "title": "IFLA, Functional Requirements for Bibliographic Records: Final Report",
+            "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
+            "verifiedAt": "2026-10-16"
+          }
+        },
         "MAIN": {
           "entity": "FRBR Item",
           "relation": "разрешённая физическая составность экземпляра",
@@ -263,6 +473,7 @@
       },
       "right": {
         "id": "books-publishing-variant-state",
+        "sha256": "a153c413a5cd1a8d9e4162999fcc441c0d12c083025280eee301d0b8225b994a",
         "card": {
           "id": "books-publishing-variant-state",
           "difficulty": "hard",
@@ -293,179 +504,6 @@
             "verifiedAt": "2026-10-15"
           }
         },
-        "sha256": "a153c413a5cd1a8d9e4162999fcc441c0d12c083025280eee301d0b8225b994a",
-        "MAIN": {
-          "entity": "Издание edition",
-          "relation": "производственное объединение",
-          "value": "копии одного набора/формы",
-          "context": "описательная библиография"
-        }
-      },
-      "bilateralGround": "Edition48 groups copies by shared setting or printing form;96 asks how many physical objects one Item may contain. Manufacturing-group identity does not decide whether two volumes form one Item, and reversing either predicate leaves the other unanswered.",
-      "directReverseCheck": "Edition48 groups copies by shared setting or printing form;96 asks how many physical objects one Item may contain. Manufacturing-group identity does not decide whether two volumes form one Item, and reversing either predicate leaves the other unanswered.",
-      "result": "DISTINCT_MAIN"
-    },
-    {
-      "kind": "targetedActual",
-      "left": {
-        "id": "books-publishing-item-model",
-        "card": {
-          "id": "books-publishing-item-model",
-          "difficulty": "hard",
-          "prompt": "В каталоге описан двухтомный комплект одной монографии. Какое утверждение FRBR допускает об экземпляре (Item)?",
-          "answers": [
-            {
-              "text": "Один экземпляр может включать несколько физических объектов.",
-              "note": "Каждый экземпляр FRBR относится только к одной Манифестации; многотомный комплект при этом может включать несколько физических объектов."
-            },
-            {
-              "text": "Каждый отдельно переплетённый том обязан быть самостоятельным экземпляром.",
-              "note": "IFLA прямо допускает один Item из двух отдельно переплетённых томов; один физический объект — частый, но не обязательный случай."
-            },
-            {
-              "text": "Физические тома образуют одно Произведение.",
-              "note": "Произведение — абстрактное интеллектуальное или художественное создание; физическое комплектование не определяет его границы."
-            },
-            {
-              "text": "Один экземпляр может относиться к нескольким Манифестациям.",
-              "note": "В FRBR каждый экземпляр относится только к одной Манифестации; одна Манифестация, напротив, может иметь несколько экземпляров."
-            }
-          ],
-          "correctIndex": 0,
-          "explanation": "Правило FRBR допускает, что один экземпляр (Item) включает несколько физических объектов. Поэтому многотомный комплект может составлять один экземпляр, хотя тома остаются отдельными физическими объектами.",
-          "source": {
-            "title": "IFLA, Functional Requirements for Bibliographic Records: Final Report",
-            "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
-            "verifiedAt": "2026-10-16"
-          }
-        },
-        "sha256": "33d831b6fa1eeeacbd618bfd275270c928e885bf0b122ef4c4a9a0902f683d91",
-        "MAIN": {
-          "entity": "FRBR Item",
-          "relation": "разрешённая физическая составность экземпляра",
-          "value": "один Item может включать несколько объектов",
-          "context": "двухтомный комплект одной монографии"
-        }
-      },
-      "right": {
-        "id": "books-publishing-headband-part",
-        "card": {
-          "id": "books-publishing-headband-part",
-          "difficulty": "hard",
-          "prompt": "Как называется лента или тесьма с утолщённым краем, которую в переплёте наклеивают на верхний и нижний края корешка для укрепления и украшения?",
-          "answers": [
-            {
-              "text": "Расстав",
-              "note": "Расстав — область у края корешка, на которой шарнирно соединённые крышка и корешок сгибаются при открывании."
-            },
-            {
-              "text": "Мулл",
-              "note": "Мулл — рыхлая хлопчатобумажная ткань, которой преимущественно оклеивают корешок издательского переплёта."
-            },
-            {
-              "text": "Каптал",
-              "note": "В средневековом переплёте каптал могли пришивать к тетрадям и закреплять в рёбрах крышек; шнур обычно оплетали нитями или кожаными ремешками."
-            },
-            {
-              "text": "Передний обрез",
-              "note": "Передний обрез находится напротив корешка: это край, со стороны которого раскрывают книгу."
-            }
-          ],
-          "correctIndex": 2,
-          "explanation": "Каптал — лента или тесьма с утолщённым краем, которую наклеивают на верхний и нижний края корешка. В средневековом переплёте его могли пришивать к тетрадям и закреплять в рёбрах крышек.",
-          "source": {
-            "title": "Национальная библиотека Республики Тыва — Словарь К-М, статья «Каптал»",
-            "url": "https://tuva-library.ru/contents/131-k-m.html",
-            "verifiedAt": "2026-10-16"
-          }
-        },
-        "sha256": "42b1033d2e25e72581892ce94975876eeb72a992df273f9b1c204a98afb38a0d",
-        "MAIN": {
-          "entity": "Выпуск issue",
-          "relation": "издательское выделение",
-          "value": "запланированная отдельная группа копий",
-          "context": "описательная библиография"
-        }
-      },
-      "bilateralGround": "Issue49 asks a deliberate publishing unit of copies;96 asks object cardinality within a single FRBR Item. Planned production grouping and model cardinality are different relations and values, not reverse forms.",
-      "directReverseCheck": "Issue49 asks a deliberate publishing unit of copies;96 asks object cardinality within a single FRBR Item. Planned production grouping and model cardinality are different relations and values, not reverse forms.",
-      "result": "DISTINCT_MAIN"
-    },
-    {
-      "kind": "targetedActual",
-      "left": {
-        "id": "books-publishing-item-model",
-        "card": {
-          "id": "books-publishing-item-model",
-          "difficulty": "hard",
-          "prompt": "В каталоге описан двухтомный комплект одной монографии. Какое утверждение FRBR допускает об экземпляре (Item)?",
-          "answers": [
-            {
-              "text": "Один экземпляр может включать несколько физических объектов.",
-              "note": "Каждый экземпляр FRBR относится только к одной Манифестации; многотомный комплект при этом может включать несколько физических объектов."
-            },
-            {
-              "text": "Каждый отдельно переплетённый том обязан быть самостоятельным экземпляром.",
-              "note": "IFLA прямо допускает один Item из двух отдельно переплетённых томов; один физический объект — частый, но не обязательный случай."
-            },
-            {
-              "text": "Физические тома образуют одно Произведение.",
-              "note": "Произведение — абстрактное интеллектуальное или художественное создание; физическое комплектование не определяет его границы."
-            },
-            {
-              "text": "Один экземпляр может относиться к нескольким Манифестациям.",
-              "note": "В FRBR каждый экземпляр относится только к одной Манифестации; одна Манифестация, напротив, может иметь несколько экземпляров."
-            }
-          ],
-          "correctIndex": 0,
-          "explanation": "Правило FRBR допускает, что один экземпляр (Item) включает несколько физических объектов. Поэтому многотомный комплект может составлять один экземпляр, хотя тома остаются отдельными физическими объектами.",
-          "source": {
-            "title": "IFLA, Functional Requirements for Bibliographic Records: Final Report",
-            "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
-            "verifiedAt": "2026-10-16"
-          }
-        },
-        "sha256": "33d831b6fa1eeeacbd618bfd275270c928e885bf0b122ef4c4a9a0902f683d91",
-        "MAIN": {
-          "entity": "FRBR Item",
-          "relation": "разрешённая физическая составность экземпляра",
-          "value": "один Item может включать несколько объектов",
-          "context": "двухтомный комплект одной монографии"
-        }
-      },
-      "right": {
-        "id": "books-publishing-mull-part",
-        "card": {
-          "id": "books-publishing-mull-part",
-          "difficulty": "hard",
-          "prompt": "Как называется грубая рыхлая хлопчатобумажная ткань, которой преимущественно оклеивают корешок издательского переплёта?",
-          "answers": [
-            {
-              "text": "Каптал",
-              "note": "Каптал — полоса из кожи или шнура, закреплённая у головного, а иногда и у нижнего края корешка."
-            },
-            {
-              "text": "Бакрам",
-              "note": "Бакрам — прочная переплётная ткань из хлопка или льна; её часто покрывают акрилом."
-            },
-            {
-              "text": "Форзац",
-              "note": "Форзац защищает текст у начала или конца книги и участвует в прикреплении книжного блока к крышкам."
-            },
-            {
-              "text": "Мулл",
-              "note": "В Cornell glossary для mull дано перекрёстное название super; речь идёт о ткани для оклейки корешка."
-            }
-          ],
-          "correctIndex": 3,
-          "explanation": "Мулл — грубая рыхлая хлопчатобумажная ткань, применяемая преимущественно для оклейки корешков издательских переплётов. Бакрам — сильная хлопчатобумажная или льняная переплётная ткань.",
-          "source": {
-            "title": "University of Edinburgh Ligatus — Language of Bindings, “mull”",
-            "url": "https://lob.is.ed.ac.uk/concept/1448",
-            "verifiedAt": "2026-10-15"
-          }
-        },
-        "sha256": "2658c65071d8ecfb5c4d20805d83f37c6d0000538a28c87ebcf59422fbb4ccd3",
         "MAIN": {
           "entity": "Вариант state",
           "relation": "внутригрупповое различие",
@@ -475,12 +513,14 @@
       },
       "bilateralGround": "Variant50 labels a difference within an impression/issue;96 asks whether one entity may comprise two separate bound objects. A within-group difference descriptor and permissible physical composition of an Item can coexist but do not entail one another on reversal.",
       "directReverseCheck": "Variant50 labels a difference within an impression/issue;96 asks whether one entity may comprise two separate bound objects. A within-group difference descriptor and permissible physical composition of an Item can coexist but do not entail one another on reversal.",
-      "result": "DISTINCT_MAIN"
+      "result": "DISTINCT_MAIN",
+      "personalCurrentReread": "Personally reread both whole live cards by ID after detecting stale ordinal error; MAIN ground reassessed for these exact IDs and remains valid."
     },
     {
       "kind": "targetedActual",
       "left": {
         "id": "books-publishing-item-model",
+        "sha256": "33d831b6fa1eeeacbd618bfd275270c928e885bf0b122ef4c4a9a0902f683d91",
         "card": {
           "id": "books-publishing-item-model",
           "difficulty": "hard",
@@ -511,7 +551,6 @@
             "verifiedAt": "2026-10-16"
           }
         },
-        "sha256": "33d831b6fa1eeeacbd618bfd275270c928e885bf0b122ef4c4a9a0902f683d91",
         "MAIN": {
           "entity": "FRBR Item",
           "relation": "разрешённая физическая составность экземпляра",
@@ -521,6 +560,7 @@
       },
       "right": {
         "id": "books-publishing-work-model",
+        "sha256": "6ea8c8f8ae25c371579c6a98c116cc499c6d532068f1e2223ed12331f0ed23b3",
         "card": {
           "id": "books-publishing-work-model",
           "difficulty": "hard",
@@ -551,7 +591,6 @@
             "verifiedAt": "2026-10-16"
           }
         },
-        "sha256": "6ea8c8f8ae25c371579c6a98c116cc499c6d532068f1e2223ed12331f0ed23b3",
         "MAIN": {
           "entity": "Произведение Work",
           "relation": "абстрактное создание",
@@ -561,12 +600,14 @@
       },
       "bilateralGround": "Work73 asks the abstract creation’s entity name.96 explicitly concerns an Item and tests multi-object permission rather than naming a model level. Work’s abstract unity cannot settle object cardinality of one Item; no reverse duplicate.",
       "directReverseCheck": "Work73 asks the abstract creation’s entity name.96 explicitly concerns an Item and tests multi-object permission rather than naming a model level. Work’s abstract unity cannot settle object cardinality of one Item; no reverse duplicate.",
-      "result": "DISTINCT_MAIN"
+      "result": "DISTINCT_MAIN",
+      "personalCurrentReread": "Personally reread both whole live cards by ID after detecting stale ordinal error; MAIN ground reassessed for these exact IDs and remains valid."
     },
     {
       "kind": "targetedActual",
       "left": {
         "id": "books-publishing-item-model",
+        "sha256": "33d831b6fa1eeeacbd618bfd275270c928e885bf0b122ef4c4a9a0902f683d91",
         "card": {
           "id": "books-publishing-item-model",
           "difficulty": "hard",
@@ -597,7 +638,6 @@
             "verifiedAt": "2026-10-16"
           }
         },
-        "sha256": "33d831b6fa1eeeacbd618bfd275270c928e885bf0b122ef4c4a9a0902f683d91",
         "MAIN": {
           "entity": "FRBR Item",
           "relation": "разрешённая физическая составность экземпляра",
@@ -607,6 +647,7 @@
       },
       "right": {
         "id": "books-publishing-expression-model",
+        "sha256": "a0393a20e7fd9665cc085cbe227fb395b8ee021870fcc6e261079a04baf63837",
         "card": {
           "id": "books-publishing-expression-model",
           "difficulty": "hard",
@@ -637,7 +678,6 @@
             "verifiedAt": "2026-10-16"
           }
         },
-        "sha256": "a0393a20e7fd9665cc085cbe227fb395b8ee021870fcc6e261079a04baf63837",
         "MAIN": {
           "entity": "Выражение Expression",
           "relation": "реализация создания",
@@ -647,12 +687,14 @@
       },
       "bilateralGround": "Expression74 asks an intellectual/artistic realization;96 asks permitted physical composition of one Item. Realization form and the number of material components are separate predicates and values in both directions.",
       "directReverseCheck": "Expression74 asks an intellectual/artistic realization;96 asks permitted physical composition of one Item. Realization form and the number of material components are separate predicates and values in both directions.",
-      "result": "DISTINCT_MAIN"
+      "result": "DISTINCT_MAIN",
+      "personalCurrentReread": "Personally reread both whole live cards by ID after detecting stale ordinal error; MAIN ground reassessed for these exact IDs and remains valid."
     },
     {
       "kind": "targetedActual",
       "left": {
         "id": "books-publishing-item-model",
+        "sha256": "33d831b6fa1eeeacbd618bfd275270c928e885bf0b122ef4c4a9a0902f683d91",
         "card": {
           "id": "books-publishing-item-model",
           "difficulty": "hard",
@@ -683,7 +725,6 @@
             "verifiedAt": "2026-10-16"
           }
         },
-        "sha256": "33d831b6fa1eeeacbd618bfd275270c928e885bf0b122ef4c4a9a0902f683d91",
         "MAIN": {
           "entity": "FRBR Item",
           "relation": "разрешённая физическая составность экземпляра",
@@ -693,6 +734,7 @@
       },
       "right": {
         "id": "books-publishing-manifestation-model",
+        "sha256": "82e5962a88e910e9600ccf43697aacc378cf187ba6f301f011e4bca895b439ea",
         "card": {
           "id": "books-publishing-manifestation-model",
           "difficulty": "hard",
@@ -723,7 +765,6 @@
             "verifiedAt": "2026-10-16"
           }
         },
-        "sha256": "82e5962a88e910e9600ccf43697aacc378cf187ba6f301f011e4bca895b439ea",
         "MAIN": {
           "entity": "Манифестация Manifestation",
           "relation": "форма физического воплощения",
@@ -733,7 +774,9 @@
       },
       "bilateralGround": "Current75 asks paper versus microfilm embodiments and answers Manifestation.96 asks how many separate physical objects one Item may contain, while the correct note independently states Item→one Manifestation. Different carriers versus multiple components of one exemplar are distinct model axes, not direct/reverse duplicates. Current75 exactly matches the repair02 addendum and live catalog hash.",
       "directReverseCheck": "Current75 asks paper versus microfilm embodiments and answers Manifestation.96 asks how many separate physical objects one Item may contain, while the correct note independently states Item→one Manifestation. Different carriers versus multiple components of one exemplar are distinct model axes, not direct/reverse duplicates. Current75 exactly matches the repair02 addendum and live catalog hash.",
-      "result": "DISTINCT_MAIN"
+      "result": "DISTINCT_MAIN",
+      "personalCurrentReread": "Personally reread both whole live cards by ID after detecting stale ordinal error; MAIN ground reassessed for these exact IDs and remains valid."
     }
-  ]
+  ],
+  "bindingCorrection": "Intended fullactualsix located byID; correct CURRENT array orders25/47/48/73/74/75. Target96 included asfullactualpeer. No headband/mull substitution. All semantic pair grounds personally re-evaluated against exact intended cards; PASS96 unchanged."
 }
