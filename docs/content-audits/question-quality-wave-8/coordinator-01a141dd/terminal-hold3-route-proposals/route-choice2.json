@@ -1,0 +1,102 @@
+{
+  "schema": "mindbattle.terminal-hold3-route-choice.v2",
+  "createdAt": "2026-10-16",
+  "stage": "ROUTE_PROPOSAL_ONLY",
+  "status": "COORDINATOR_REVIEW_REQUIRED",
+  "credit": 0,
+  "catalogChanged": false,
+  "priorHistory": {
+    "preserved": true,
+    "priorProposal": "docs/content-audits/question-quality-wave-8/coordinator-01a141dd/terminal-hold3-route-proposals/route-choice.json",
+    "note": "This alternative is additive; prior proposals and FINAL HOLD receipts remain intact."
+  },
+  "guardrails": {
+    "frozenFields": ["id", "topic", "sourceOrder", "difficulty", "correctIndex"],
+    "noCycle2OrReset": true,
+    "noFullCandidatePackets": true,
+    "sourceRoleDoesNotUseGitIndexOrRefs": true,
+    "onlyThisFileWritten": true
+  },
+  "mainSearch": {
+    "scope": "Global prompt+correctKey scan of current src/content/topics/*.json; semantic review of finance/legal and book/printing matches.",
+    "findings": {
+      "item6": "No other MAIN prompt/key directly asks the matte/no-glare finish relation; closest are same-topic cover-treatment and cover-placement questions.",
+      "item45": "No other MAIN prompt/key uses net receipts/list price as an author royalty base; closest finance/legal hits cover copyright, profit, and revenue metrics.",
+      "item69": "No MAIN prompt/key mentions Diamond Sutra, 868, or earliest dated printed book; nearest print-history hits ask about incunabula or printing methods."
+    }
+  },
+  "routes": [
+    {
+      "frozen": {"id": "books-publishing-paperback-form", "topic": "books-publishing", "sourceOrder": 6, "difficulty": "easy", "correctIndex": 1, "receiptCanonicalSHA256": "b32e2f542ab4da946331d63aff146478db64a5f5e515269b9dcd4a5dbb37e018"},
+      "routeId": "matte-no-glare-plus-kdp-paperback-availability",
+      "recommendation": "SUPPORTED_NEW_FACT",
+      "sources": [
+        {"title": "IngramSpark — The Ultimate Guide to Master Your Book Cover Design", "url": "https://www.ingramspark.com/master-your-book-cover-design", "retainedFullContext": "docs/content-audits/question-quality-wave-8/process-v2-books-next10-source-01a141dd/author/sources/ingramspark-cover-textures-binding-2026-10-16.txt", "sha256": "b254d02c9d8c304eef70ee60757fbb3980275d5fdf3db88ea5589545fd582fda", "locator": "Book Textures, full list, lines 57–63; adjacent cover-options and binding sections are retained in the same file.", "fact": "IngramSpark pairs Matte Cover with ‘Soft feel, no glare, polished’; ‘polished’ is not evidence of a physical polishing process."},
+        {"title": "Amazon KDP — Create a Paperback Cover", "url": "https://kdp.amazon.com/en_US/help/topic/G201953020", "locator": "Page scope lines 68–70; finish-choice sentence line 72.", "fullContextOnce": "Create a Paperback Cover. This resource covers paperback cover requirements. ‘You have two cover finish options: glossy and matte.’", "fact": "KDP explicitly offers matte and glossy on paperback covers on this page. This availability claim is paperback-scoped and does not attribute IngramSpark’s no-glare statement to KDP."}
+      ],
+      "proposal": {"prompt": "Keep frozen: Какое покрытие обложки в списке IngramSpark описано как не дающее бликов?", "answers": "Keep existing answer texts and order.", "correctIndex": 1, "answer1Note": "IngramSpark describes Matte Cover with ‘Soft feel, no glare, polished’; ‘polished’ is quoted as vendor wording, not a physical-process claim. Separately, KDP lists glossy and matte as the two finish options for paperback covers (Create a Paperback Cover, lines 68–72). This availability fact applies to KDP paperbacks.", "difficultyRationale": "EASY remains a direct match to the existing no-glare fact. The note adds a distinct primary fact with explicit format attribution."},
+      "nearestMain": [
+        {"topic": "books-publishing", "sourceOrder": 15, "id": "books-publishing-case-binding", "sha256": "db2419c3cbb84a0bb41a62a34136267071457bc2e07140588790d19617b48d3b", "prompt": "Как IngramSpark называет твёрдую обложку с ламинированным покрытием, наклеенным на переплётные доски и загнутым по краям, если отдельной суперобложки нет?", "key": "Кейс-ламинат (case laminate)", "relation": "Same provider and cover-treatment vocabulary; different finish predicate."},
+        {"topic": "books-publishing", "sourceOrder": 1, "id": "books-publishing-cover-part", "sha256": "8d8ff76015de1118991a272530646ef9d9052332ab78b6cd2d8107e8bcd90a81", "prompt": "На какой стороне обложки обычно размещают штрихкод издания?", "key": "На задней стороне", "relation": "Same book-cover subject; distinct placement fact."}
+      ]
+    },
+    {
+      "frozen": {"id": "books-publishing-royalty-right", "topic": "books-publishing", "sourceOrder": 45, "difficulty": "medium", "correctIndex": 3, "receiptCanonicalSHA256": "f7999e808d0a5738317be995612dc7f2d866a5d672e9b4c9cfac265c0621c68b"},
+      "routeId": "authors-guild-net-receipts-contract-base",
+      "recommendation": "SUPPORTED_NEW_CONCEPT",
+      "source": {
+        "title": "Authors Guild — Model Trade Book Contract, section 5 Royalties",
+        "url": "https://go.authorsguild.org/contract_sections/5",
+        "locator": "Model clause lines 644–655; commentary lines 659–667.",
+        "fullContextOnce": "The Model Contract uses suggested retail list price for one hardcover schedule. For most small and medium-sized publishers it defines Net Receipts as amounts actually received by the publisher minus only return credits and applicable taxes, postage, and shipping. The commentary identifies list/cover price and publisher net receipts as common trade royalty bases; it says net receipts are typically amounts received after taxes and applicable bookseller or wholesaler discounts.",
+        "exactPrimaryWording": ["‘all amounts actually received by Publisher, minus only return credits and applicable taxes, postage and shipping costs (hereinafter called Net Receipts)’", "‘either (1) the suggested retail (otherwise known as list or cover price) of the book or (2) the publisher’s net receipts’"],
+        "fact": "Net receipts is contract-defined actual publisher receipts after specified deductions; it is not list price or net profit."
+      },
+      "proposal": {
+        "difficulty": "medium",
+        "prompt": "В договоре о торговой книге роялти считают с фактических поступлений издателя после предусмотренных вычетов, а не с розничной цены. Как называется эта база?",
+        "answers": ["Рекомендованная розничная цена книги (list/cover price)", "Валовые поступления издателя до вычетов (gross receipts)", "Чистая прибыль издателя после расходов (net profit)", "Чистые поступления издателя, определённые договором (net receipts)"],
+        "correctIndex": 3,
+        "answerNotes": ["List/cover price is the suggested retail-price base.", "Gross receipts precede deductions.", "Net profit subtracts business expenses; the Model Contract defines Net Receipts by specified credits and costs.", "Net receipts is the contract term for actual amounts received less specified deductions; definitions vary by contract."],
+        "difficultyRationale": "MEDIUM distinguishes four plausible contract bases—list price, gross receipts, net receipts, and net profit. It requires ordinary royalty-base understanding without math, recoupment chronology, or category elimination."
+      },
+      "nearestMain": [
+        {"topic": "books-publishing", "sourceOrder": 43, "id": "books-publishing-publicdomain-right", "sha256": "68feef4331970f05e91d754bfde342c1bbc82fe41d4aa1405fbb2404579560bc", "prompt": "Как называется правовой статус в США для произведения, которое никогда не охранялось авторским правом, например факта или открытия?", "key": "Общественное достояние", "relation": "Same-topic copyright status; not a payment base."},
+        {"topic": "law-rights", "sourceOrder": 59, "id": "law-rights-copyright", "sha256": "ca5f4e3d37e99909b5b0e34ba8e0d2077dec8b040a7b616a0ce1e6549870194c", "prompt": "Какой вид правовой охраны автоматически защищает написанный роман?", "key": "Авторское право", "relation": "Nearest legal concept; no royalty accounting."},
+        {"topic": "economics-money", "sourceOrder": 47, "id": "economics-money-profit-basic", "sha256": "9d3e09bcc374f0cdf887ce7b2d79481bd254588e51b37fa63fb99a0cb17d8af3", "prompt": "Когда бизнес получает прибыль в простом примере?", "key": "Когда доходы превышают расходы", "relation": "Financial neighbor relevant to the net-profit distinction."},
+        {"topic": "tourism-travel", "sourceOrder": 46, "id": "tourism-travel-adr-metric", "sha256": "b02612c54b4fd68042a75bbc3d98d4d9a9cf6950015cf8ee36f3e3e8ac88c689", "prompt": "Какая величина делит выручку от номеров на число проданных номеров?", "key": "Средняя цена номера", "relation": "Revenue metric, not an author royalty base."}
+      ]
+    },
+    {
+      "frozen": {"id": "books-publishing-scroll-form", "topic": "books-publishing", "sourceOrder": 69, "difficulty": "medium", "correctIndex": 3, "receiptCanonicalSHA256": "b14698e2a57faf302402443985612b5a070bf3d47b37562feb12a894a8a016c2"},
+      "routeId": "diamond-sutra-earliest-dated-complete-printed-book",
+      "recommendation": "SUPPORTED_WITH_EXPLICIT_SCOPE_LIMIT",
+      "source": {
+        "title": "International Dunhuang Programme / British Library — Buddhist texts: The Diamond Sutra",
+        "url": "https://idp.bl.uk/discover/learning/buddhism-on-the-silk-roads/articles/buddhism-on-the-ground/buddhist-texts-the-diamond-sutra/",
+        "locator": "‘The Diamond Sutra’ opening paragraph; ‘Colophon from the Diamond Sutra’ complete paragraph; article closing qualification. Official-site search returned text on 2026-10-16; direct open returned 403.",
+        "fullContextOnce": "IDP identifies the Chinese Diamond Sutra copy as the world’s earliest dated printed book, made in 868 CE. Its colophon records sponsor Wang Jie and completion on 11 May 868; the text was woodblock-printed on seven yellow-dyed sheets joined into a five-metre scroll. The article qualifies the milestone: earlier printing examples exist, but 868 is the earliest date found in a complete printed text, making this copy the first example of that bounded category.",
+        "scopeLimit": "Use earliest dated printed book / earliest date in a complete printed text. Do not claim the first printing event or first printed object of any kind."
+      },
+      "comparableSutraTitleEvidence": [
+        {"title": "Heart Sutra", "url": "https://idp.bl.uk/collection/0E12B4BA72A640D784947E2A3BFB41A2/", "locator": "IDP collection object Or.8210/S.4289, Chinese diagrammatic copy of Prajnaparamitahrdayasutra (Heart Sutra)."},
+        {"title": "Lotus Sutra", "url": "https://idp.bl.uk/discover/learning/dunhuang/collection-items/introducing-dunhuang/", "locator": "‘The Lotus Sutra’ subsection identifies a Chinese scroll copy dated 672."},
+        {"title": "Sutra of Eternal Life (Sukhavativyuha)", "url": "https://idp.bl.uk/references/Zwalf_1985/", "locator": "Catalogue 56, title ‘Sutra of Eternal Life / Scroll of Sukhavativyuha in Chinese’."}
+      ],
+      "proposal": {
+        "difficulty": "medium",
+        "prompt": "Какой из этих буддийских текстов IDP называет самым ранним датированным печатным книжным изданием, уточняя, что 868 год — самая ранняя дата в сохранившемся полном печатном тексте?",
+        "answers": ["Heart Sutra", "Lotus Sutra", "Sutra of Eternal Life (Sukhavativyuha)", "Diamond Sutra"],
+        "correctIndex": 3,
+        "answerNotes": ["IDP catalogs a Chinese Heart Sutra manuscript, not this dated-print milestone.", "IDP catalogs a Lotus Sutra scroll dated 672, not the cited 868 milestone.", "IDP catalogs Sukhavativyuha as a separate Buddhist sutra; the milestone is about the Diamond Sutra copy.", "IDP identifies the Diamond Sutra copy with the milestone and limits it to the earliest date in a complete printed text."],
+        "difficultyRationale": "MEDIUM rests on a standard book-history milestone and four real, parallel Buddhist sutra titles, not incidental artifact fittings. The wording does not claim printing began with this copy."
+      },
+      "nearestMain": [
+        {"topic": "books-publishing", "sourceOrder": 21, "id": "books-publishing-incunabulum-term", "sha256": "532e35f30cba2c32adb7f1559b5cbdc94f5af9912546a4a9f779b24e9549f8c9", "prompt": "Как называют европейскую книгу, напечатанную подвижными металлическими литерами до 1501 года?", "key": "Инкунабула", "relation": "Same-topic early-book-history category; distinct region and predicate."},
+        {"topic": "world-history", "sourceOrder": 30, "id": "world-history-gutenberg-invention", "sha256": "50b1ba3fdfe1097489a2a8eb74aa1b9eb4a39d6557c18d5bbb55e50df0094e2f", "prompt": "Как в Европе печатали страницы до распространения системы Гутенберга с отдельными металлическими литерами?", "key": "Вырезали страницу целиком на деревянной доске", "relation": "Early printing-method question, not a dated-book claim."},
+        {"topic": "history-china", "sourceOrder": 23, "id": "history-china-easy-03a-03", "sha256": "1c83f091e58314489f280beeb39b108cea81cce94326ebf1d2a065b66cfad95c", "prompt": "Какая технология позволила в Китае получать много одинаковых копий текста задолго до европейской печатной революции?", "key": "Печать с резных досок и наборных знаков", "relation": "Chinese printing-history neighbor; asks method, not the surviving dated text."}
+      ]
+    }
+  ],
+  "completion": {"readyPackets": 0, "credit": 0, "catalogUnchanged": true, "routeSelectionRequired": true, "nextAction": "Coordinator reviews these routes; only after selection may the source role prepare a packet."}
+}
