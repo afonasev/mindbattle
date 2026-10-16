@@ -50,6 +50,9 @@ for snapshot in peers.get('latestProposalSnapshots',[]):
  sourceData=rd(sourcePath)
  if 'entries' in sourceData:
   entry=next(e for e in sourceData['entries'] if e['id']==p['id'])
+ elif 'candidates' in sourceData:
+  # Historical SOURCE used a candidates wrapper; exact body/hash checks below apply.
+  entry=next(e for e in sourceData['candidates'] if e['id']==p['id'])
  elif 'relevantSimultaneousProposals' in sourceData:
   # SOURCE78 retained full own proposals in its immutable MAIN packet.
   # Bind the actual body/hash and the original author's candidate at the same
@@ -66,7 +69,7 @@ for snapshot in peers.get('latestProposalSnapshots',[]):
   local=next(e for e in sourceData['relevantLocalCards'] if e['id']==p['id'])
   entry=next(e for e in rd(sourcePath.parent/'candidate.json')['entries'] if e['id']==p['id'])
   assert local['frozenLocalProposalCard']==entry['proposedCard'] and local['frozenLocalProposalSHA256']==entry['afterHash']
- assert entry['proposedCard']==p['card'] and sha(p['card'])==digest(p)==entry['afterHash'];assert p['id'] not in proposals;proposals[p['id']]=p
+ assert entry['proposedCard']==p['card'] and sha(p['card'])==digest(p)==entry['afterHash'];version=(p['id'],digest(p));assert version not in proposals;proposals[version]=p
 pairEvidence=peers.get('bilateralMainComparisons',peers.get('bilateralMAINComparisons'))
 assert isinstance(pairEvidence,list) and pairEvidence
 pairEvidence=pairEvidence+peers.get('proposedBilateralMAINComparisons',[])
@@ -84,7 +87,7 @@ for pair in pairEvidence:
   assert pair['bilateralEntityRelationValueContextAssessment'] and isinstance(pair['directReverse'],bool)
  for side in ['left','right']:
   p=pair[side]
-  known=proposals.get(p['id']) if proposed_peer_state(p) else actualPeerBindings.get(p['id'])
+  known=proposals.get((p['id'],digest(p))) if proposed_peer_state(p) else actualPeerBindings.get(p['id'])
   assert known and digest(p)==digest(known)
   card=p.get('card',known['card'])
   assert card==known['card'] and sha(card)==digest(p)
