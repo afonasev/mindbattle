@@ -11,3 +11,7 @@ P /Users/eaafonasev/Projects/mindbattle/planning
 CP /Users/eaafonasev/Projects/mindbattle/planning/openspec/changes/question-quality-future-waves/current-checkpoint.json
 
 Both indexes FOREIGN; private rawCAS only; own prelease before every planning write, release before waits. Python -B. No newworktree/Localmain writes/fullsuite/runtime/browser/audio/Player/build/deploy/mainmerge/OpenSpecarchive. At ownactual2 preserveSTOP/fullgoalhandoff, no ordinary work.
+
+## Active pipeline
+
+parks24 raw077aa preSOURCE2 qualified38993, applied2f098, affected19PASS f61cb0d. OTHER83 firstINITIAL active task reader-parks24-initial-task.json; parks-topic mutationfence until consumed. Source7f continuing originalpolar28–40 from prior INPUT in new source-polar28-40-resumed; Source3a originalparks25–40 new assignedunit in source-parks25-40-original. All3 actualnative1 at START, noreset; ownroot0. queue.json tracks cursors. Root55 STOP/finalidle saved53abebc and archived. No actor to be archived merelyforSTOP if compatiblepre2. Root source provenance prefix independently bytechecked; all871acceptedhashes and2000frozen fields verified unchanged, metadata/provenancecredit0.
