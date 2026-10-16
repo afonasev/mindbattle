@@ -1,0 +1,97 @@
+{
+  "schema": "question-peer-current-addendum-v1",
+  "baseline": "fb9c2fef976ca27fb8e38e3614b20c80fc175ee2",
+  "targetId": "books-publishing-item-model",
+  "targetSourceOrder": 96,
+  "targetCard": {
+    "id": "books-publishing-item-model",
+    "difficulty": "hard",
+    "prompt": "В каталоге описан двухтомный комплект одной монографии. Какое утверждение FRBR допускает об экземпляре (Item)?",
+    "answers": [
+      {
+        "text": "Один экземпляр может включать несколько физических объектов.",
+        "note": "Каждый экземпляр FRBR относится только к одной Манифестации; многотомный комплект при этом может включать несколько физических объектов."
+      },
+      {
+        "text": "Каждый отдельно переплетённый том обязан быть самостоятельным экземпляром.",
+        "note": "IFLA прямо допускает один Item из двух отдельно переплетённых томов; один физический объект — частый, но не обязательный случай."
+      },
+      {
+        "text": "Физические тома образуют одно Произведение.",
+        "note": "Произведение — абстрактное интеллектуальное или художественное создание; физическое комплектование не определяет его границы."
+      },
+      {
+        "text": "Один экземпляр может относиться к нескольким Манифестациям.",
+        "note": "В FRBR каждый экземпляр относится только к одной Манифестации; одна Манифестация, напротив, может иметь несколько экземпляров."
+      }
+    ],
+    "correctIndex": 0,
+    "explanation": "Правило FRBR допускает, что один экземпляр (Item) включает несколько физических объектов. Поэтому многотомный комплект может составлять один экземпляр, хотя тома остаются отдельными физическими объектами.",
+    "source": {
+      "title": "IFLA, Functional Requirements for Bibliographic Records: Final Report",
+      "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
+      "verifiedAt": "2026-10-16"
+    }
+  },
+  "targetCanonicalSHA256": "33d831b6fa1eeeacbd618bfd275270c928e885bf0b122ef4c4a9a0902f683d91",
+  "currentTopicPath": "src/content/topics/books-publishing.json",
+  "currentTopicRawSHA256": "e068439933ae08cb19e4779ad25de833d60fce51e0b81eceff5a30792b91cf09",
+  "currentPeerSnapshotReadAt": "2026-10-16",
+  "actualCurrentPeers": [
+    {
+      "id": "books-publishing-manifestation-model",
+      "topicId": "books-publishing",
+      "sourceOrder": 75,
+      "card": {
+        "id": "books-publishing-manifestation-model",
+        "difficulty": "hard",
+        "prompt": "В FRBR один и тот же текст представлен печатной книгой и микрофильмом. Какой уровень обозначает каждую форму физического воплощения?",
+        "answers": [
+          {
+            "text": "Экземпляр",
+            "note": "Экземпляр — одна копия манифестации; её состояние может измениться после производства, например из-за утраченной страницы или нового переплёта."
+          },
+          {
+            "text": "Произведение",
+            "note": "Произведение — абстрактное интеллектуальное создание, общее содержание которого прослеживается через разные выражения."
+          },
+          {
+            "text": "Выражение",
+            "note": "Выражение передаёт интеллектуальную или художественную форму произведения; шрифт и расположение страницы сами по себе к нему не относятся."
+          },
+          {
+            "text": "Манифестация",
+            "note": "Манифестация описывает физические характеристики группы копий и характеристики её производства и распространения."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Манифестация — физическое воплощение выражения произведения. Копии на разных физических носителях, например бумаге и микрофильме, относятся к разным манифестациям.",
+        "source": {
+          "title": "Functional Requirements for Bibliographic Records: Final Report — IFLA",
+          "url": "https://www.ifla.org/wp-content/uploads/2019/05/assets/cataloguing/frbr/frbr_2008.pdf",
+          "verifiedAt": "2026-10-16"
+        }
+      },
+      "sha256": "82e5962a88e910e9600ccf43697aacc378cf187ba6f301f011e4bca895b439ea"
+    }
+  ],
+  "bilateralMAINComparisons": [
+    {
+      "candidateVsActual75": {
+        "entity": "FRBR Item / экземпляр versus FRBR Manifestation / манифестация",
+        "relation": "membership of multiple physical objects in one Item versus identifying the physical embodiment of an expression; a single Item exemplifies exactly one Manifestation",
+        "value": "one multi-object Item versus paper and microfilm as distinct physical embodiments/Manifestations",
+        "context": "В каталоге описан двухтомный комплект одной монографии. Какое утверждение FRBR допускает об экземпляре (Item)? / В FRBR один и тот же текст представлен печатной книгой и микрофильмом. Какой уровень обозначает каждую форму физического воплощения?",
+        "directReverse": "The candidate asks which FRBR rule allows a two-volume monograph to be one Item; its key is the multi-physical-object cardinality rule. The actual question asks which FRBR level distinguishes paper and microfilm embodiments; its key is Manifestation. Knowing either key does not answer the other stem."
+      },
+      "actual75VsCandidate": {
+        "entity": "FRBR Manifestation versus FRBR Item",
+        "relation": "carrier-specific physical embodiment versus cardinality of physical objects within one Item",
+        "value": "different physical carriers give distinct Manifestations versus one Item may contain several objects",
+        "context": "В FRBR один и тот же текст представлен печатной книгой и микрофильмом. Какой уровень обозначает каждую форму физического воплощения? / В каталоге описан двухтомный комплект одной монографии. Какое утверждение FRBR допускает об экземпляре (Item)?",
+        "directReverse": "The actual question tests that a paper book and microfilm are separate physical embodiments. It does not establish whether one Item can contain multiple bound volumes. The candidate tests that separate cardinality rule, not which FRBR level represents carrier form."
+      }
+    }
+  ],
+  "qualityCredit": 0
+}
