@@ -1,0 +1,9 @@
+"""Apply sole primary source metadata defect from consumed INITIAL2, no text changes."""
+import pathlib,importlib.util,subprocess
+D=pathlib.Path(__file__).parent;C=D.parents[3]
+def load(n,p):
+ s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+m=load('own',D/'owned-tools.py');a=load('standard',C/'docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/apply-standard.py');a.P=m.P;B=C/'docs/content-audits/question-quality-wave-8/process-v2-polar2-10-fresh-01a142a3/author/polar2-source-url-cycle1';ps=m.read(B/'peer-snapshot.json');e=m.read(B/'candidate.json')['entries'][0];assert {k for k in e['beforeCard'] if e['beforeCard'][k]!=e['proposedCard'][k]}=={'source'};assert e['beforeCard']['source']['verifiedAt']==e['proposedCard']['source']['verifiedAt']
+for p in ps['actualCurrentPeers']:assert p['card']==next(q for q in m.read(C/f"src/content/topics/{p['topicId']}.json")['questions'] if q['id']==p['id']) and m.sha(p['card'])==p['sha256']
+tp=C/'src/content/topics/polar-regions.json';assert tp.read_bytes()==subprocess.check_output(['git','-C',str(C),'show','refs/heads/codex/question-quality-wave-6:'+str(tp.relative_to(C))])
+a.apply(B,'01a142d0-3ae4-7d93-a1f3-ad8038c4254d',[2],D/'apply-polar2-url-cycle1.json',D/'qa-polar2-url-cycle1.json',pathlib.Path(__file__),peerSnapshot={'actualCurrentPeers':[p for p in ps['actualCurrentPeers'] if p['topicId']=='polar-regions']},concerns=['Single directed SOURCE fix-cycle1 sole source.url/title metadata changed. MAIN literalall6groups/4wholevariants same, still independently judge exact CURRENT FINAL after actual primary NOAAFAQ L214 + all other retainedfullcontexts.','Polar4 now strictcertified839 exactwholebody unchanged; do not inherit SOURCE reciprocal label; actual independentINITIAL4 judged distinct queried relations.'])
