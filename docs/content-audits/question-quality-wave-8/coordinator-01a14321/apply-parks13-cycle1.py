@@ -1,0 +1,12 @@
+"""Exact NP13 directedSOURCE cycle1 application and separate fullcrosspeer validation."""
+import pathlib,importlib.util,sys,subprocess
+D=pathlib.Path(__file__).parent;C=D.parents[3]
+def load(n,p):
+ s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+m=load('own',D/'owned-tools.py');a=load('standard',C/'docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/apply-standard.py');a.P=m.P;B=D/'qualified-parks13-cycle1';ps=m.read(B/'peer-snapshot.json')
+for p in ps['actualCurrentPeers']+ps['relevantCrossTopicPeers']:
+ q=next(q for q in m.read(C/f"src/content/topics/{p['topicId']}.json")['questions'] if q['id']==p['id']);assert q==p['card'] and m.sha(q)==p.get('sha256',p.get('canonicalSHA256'))
+tp=C/'src/content/topics/national-parks-nature.json';assert tp.read_bytes()==subprocess.check_output(['git','-C',str(C),'show','refs/heads/codex/question-quality-wave-6:'+str(tp.relative_to(C))])
+r=a.apply(B,'01a14328-322d-71d0-9b8c-3da31158840f',[13],D/'apply-parks13-cycle1.json',D/'qa-parks13-cycle1.json',pathlib.Path(__file__),qualifyOnly='--qualify-only' in sys.argv,peerSnapshot={'actualCurrentPeers':ps['actualCurrentPeers']},concerns=['NP13 only directedSOURCEcycle1 afterINITIALFIX alternatives. NewfourAustralianmarineparks eachwithactualcoralcontext; independentFINAL must assess actualallfour/namingdetails and broadadultEASY, notinherit prefixMarinePark orSOURCE PASS.','Actualmainparkprotection largestreef vsworld-geographyphysicalreefhabitat MAIN closepair requires fullcurrentsemanticbothways; no titleprefixautomaticdistinct. All6literal4wholevariants directsourceURL fullprimary contexts mustbepersonallyread.','Root mechanicalfullrawtransport fromSOURCE nativeoriginal webopens replaces selectedmanualexcerptpaths; exactcandidate/literaljudgments unchanged. ActualWorldHeritage source.url fullbody is in originalSOURCEopen, newcomposite retainsoriginalboundaries/URLs. KnownCoralSea curltimeout retained, no retries/bypass.'])
+if '--qualify-only' in sys.argv:
+ p=D/'qualification-parks13-cycle1.json';m.write(p,{'owner':m.O,'qualified':True,'qualityCredit':0,'groups':len(r['finalGroupBindings']),'wholeVariants':len(r['finalVariantBindings']),'actualTopicPeers':len(ps['actualCurrentPeers']),'actualCrossTopicPeers':len(ps['relevantCrossTopicPeers']),'sourceFreeze':'62c578f9f7feb64e30fe325739a2dcba84d9fd3a','fullPrimarySourceTransport':True});print(m.savecode([p,pathlib.Path(__file__)],'Qualify NP13 exactSOURCEcycle1 fullprimary/groups/variants/crosspeers no credit'))
