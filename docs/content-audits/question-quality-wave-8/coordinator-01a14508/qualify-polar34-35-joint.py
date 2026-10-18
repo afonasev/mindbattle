@@ -1,0 +1,46 @@
+"""Bind two complete same-author original SOURCE packets plus exact mutual proof; no credit."""
+import pathlib,json,re,subprocess,importlib.util
+D=pathlib.Path(__file__).parent;C=D.parents[3]
+def mod(n,p):
+ s=importlib.util.spec_from_file_location(n,p);x=importlib.util.module_from_spec(s);s.loader.exec_module(x);return x
+m=mod('o',D/'owned-tools.py');a=mod('a',C/'docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/apply-standard.py');a.P=m.P;author='01a150be-8a21-7a73-a0c7-6358f1abe716';B=D/'qualified-polar34-35-joint';B.mkdir(exist_ok=True);R35=D/'source-polar35-40-fresh';R34=D/'qualified-polar34-fresh';MP=D/'D/source-polar34-35-mutual-proof/mutual-proof.json';counts={}
+for u,date in [(m.O,'16'),(author,'19'),('01a150d1-3383-7d30-ad23-76d70ec18813','19')]:
+ j=next(pathlib.Path('/Users/eaafonasev/.codex/sessions/2026/10/'+date).glob('*'+u+'.jsonl'));counts[u]=sum(json.loads(l).get('type')=='compacted' for l in j.open());assert counts[u]<2
+for root,freeze in [(R34,'a172531c6ad6a0256bbf4da8e0b45644541c971c'),(R35,'2b5f9cd12e65b7aa1f85947495f758ab5b04efc4')]:
+ for p in root.rglob('*'):
+  if p.is_file():assert p.read_bytes()==subprocess.check_output(['git','-C',str(C),'show',freeze+':'+str(p.relative_to(C))])
+assert MP.read_bytes()==subprocess.check_output(['git','-C',str(C),'show','01f1affb99d24ab4bf69cbdeb004f6a2e79d3eb7:'+str(MP.relative_to(C))]);mutual=m.read(MP);assert mutual['sourceNativeId']==author
+c34=m.read(R34/'candidate.json');c35=m.read(R35/'candidate.json');s34=m.read(R34/'sourceproof.json');s35=m.read(R35/'sourceproof.json');p34=m.read(R34/'peer-snapshot.json');p35=m.read(R35/'peer-evidence.json');entries=c34['entries']+c35['entries'];assert [e['sourceOrder'] for e in entries]==[34,35]
+for e,key in zip(entries,['source34','source35']):
+ mm=mutual[key];assert m.raw(pathlib.Path(mm['candidatePath']))==mm['candidateFileSHA256'];assert mm['proposedCard']==e['proposedCard'] and m.sha(mm['proposedCard'])==mm['afterHash']==e['afterHash']
+for kind in ['ERVC','directReverse']:
+ for direction in ['34_to_35','35_to_34']:assert mutual['comparison'][kind][direction]['basis'] and mutual['comparison'][kind][direction]['verdict']
+cat={}
+for p in (C/'src/content/topics').glob('*.json'):
+ t=m.read(p)
+ for n,q in enumerate(t['questions'],1):cat[q['id']]={'topicId':t['id'],'sourceOrder':n,'card':q}
+actual={}
+def peer(i,tid,c,sha):
+ assert c==cat[i]['card'] and m.sha(c)==sha
+ if i in actual:assert actual[i]['card']==c
+ actual[i]={'id':i,'topicId':tid,'sourceOrder':cat[i]['sourceOrder'],'card':c,'sha256':sha}
+for p in p34['actualCurrentPeers']:peer(p['id'],p['topicId'],p['card'],p['sha256'])
+base=p35['globalMainBaselineReference'];bp=C/base['path'];assert m.raw(bp)==base['fileSHA256'] and m.sha(m.read(bp))==base['canonicalSHA256'];rows=m.read(bp)['rows'];assert len(rows)==base['rowCount']==11000;delta=p35['globalMainDelta'];assert len(delta)==1 and delta[0]['id']=='national-parks-nature-026';dr=delta[0];assert dr['currentFullCard']==cat[dr['id']]['card'] and m.sha(dr['currentFullCard'])==dr['currentWholeCardSHA256'];assert m.sha(dr['currentMain'])==dr['currentMainSHA256'];assert m.raw(C/dr['sourcePath'])==dr['currentSourceRawSHA256']
+currentRows=[]
+for row in rows:
+ main=dr['currentMain'] if row['id']==dr['id'] else row['main'];c=cat[row['id']]['card'];assert main=={'prompt':c['prompt'],'answers':[v['text'] for v in c['answers']],'correctIndex':c['correctIndex']};currentRows.append({**row,'main':main})
+ref=p35['sameTopicSnapshotReference'];assert ref['unchangedFromPrior'] and ref['readReceiptCount']==100 and m.raw(C/ref['currentSourcePath'])==ref['currentRawSHA256'];assert m.raw(C/ref['priorPeerSnapshotPath'])==ref['priorPeerSnapshotSHA256'];assert m.raw(C/ref['priorReadReceiptsPath'])==ref['priorReadReceiptsSHA256']
+search=p35['globalSearch'];patterns={k:(v['regex'] if isinstance(v,dict) else v) for k,v in search['patterns'].items()};found=[r['id'] for r in currentRows if any(re.search(v,json.dumps(r['main'],ensure_ascii=False),re.I) for v in patterns.values())];assert set(found)=={h['id'] for h in search['hits']} and len(found)==search['hitCount']==17
+for h in search['hits']:
+ peer(h['id'],h['topicId'],h['fullCurrentCard'],h['wholeCurrentCardSHA256']);assert m.sha(h['main'])==h['mainSHA256'];assert all(h[k] and h[k]['directAnswer'] and h[k]['verdict'] for k in ['candidateToPeerERVC','peerToCandidateERVC'])
+contexts=m.read(D/'qualification-polar34-fresh.json')['primaryContexts']
+for source in s35['rawSources']:
+ p=C/source['path'];assert m.raw(p)==source['sha256'];body=m.read(p);headers=list(re.finditer(r'cite[^]+ \[wordlim:[^\n]*Total lines: ([0-9]+)',body));ix=next(k for k,h in enumerate(headers) if h.group(1)=='193');segment=body[headers[ix].start():headers[ix+1].start() if ix+1<len(headers) else len(body)];assert {int(n) for n in re.findall(r'\bL([0-9]+):',segment)}==set(range(193));contexts.append({'path':source['path'],'rawSHA256':source['sha256'],'actualVisibleLineIds':193,'completeContext':'NSIDC completepage all193, science66-136; NASA6 separateblock not proofforfrozen ground'})
+for e in s35['entries']:
+ for v in e['fourFullPromptAnswerNoteAssessments']:
+  assert all(v[k] for k in ['grammar','plausibility','truthUniqueKey','noteTruthUsefulness']);v['plausibilityUniqueKeyAndNoteTruthUsefulness']={k:v[k] for k in ['plausibility','truthUniqueKey','noteTruthUsefulness']};v['technicalFieldNormalization']='Exact author separate judgments nested into standard SOURCE combinedcontainer; no semanticchanges.'
+candidate={**c34,'entries':entries,'deliveredSourceOrders':[34,35],'sourcePacketOrigins':[str(R34.relative_to(C)),str(R35.relative_to(C))]};sp={**s34,'entries':s34['entries']+s35['entries'],'rawSources':s34['rawSources']+s35['rawSources'],'contextNote':'Same rawaggregate contains NASA6 andNSIDC193 separately. Both URL/context entries retained; samefilehash notdifferentprimarybody. GSFC67separatefile.'};ps={**p34,'actualCurrentPeers':list(actual.values()),'SOURCE35PeerEvidence':{'path':str((R35/'peer-evidence.json').relative_to(C)),'rawSHA256':m.raw(R35/'peer-evidence.json'),'globalSnapshotReused':True,'deltaId':'national-parks-nature-026','allRowsCurrent':True},'SOURCEBothProposedMutual':{'path':str(MP.relative_to(C)),'rawSHA256':m.raw(MP),'sourceFreeze':'01f1affb99d24ab4bf69cbdeb004f6a2e79d3eb7','exactProposedHashes':[e['afterHash'] for e in entries],'originalAuthoredLocationRetained':True}}
+for n,x in [('candidate.json',candidate),('sourceproof.json',sp),('peer-snapshot.json',ps)]:m.write(B/n,x)
+concerns=m.read(D/'qualification-polar34-fresh.json')['editorialConcernsForOTHER']+['Paired FIRSTINITIAL34+35, exact88c946/d6405f both actualPOSTIMAGES afterapply. SOURCE35 preserves MAIN thermaldefinition butreplacesmixedsolaralternatives withcomparablefrozengroundtypes andownkeynoteadditionaloffshoreArcticpermafrost beyondwholeprompt/key. NSIDC70seasonal>15days/intermittent1-15days/76temperature<=0C>=2years/offshorecontinental shelves;77icecontent/locationnotdefinition;90active layerthaws/freezesannually. No groundmustcontainwater/alwaysbelow0vsat0 confusion. AbsoluteadultEASY maynotbejustrelativewithinsoilscience; all4crediblecomparable andkeyunique, notesliteraltruth/usefulness, sourcegiven2yearstemperaturethresholdnoarbitrarymath.', 'SOURCE35fullglobal17hits+same100ownpriorread exactsameunchangedtopic, full11kbaselinecanonicalref+oneCURRENT26delta no8.5MBcopy. Candidate34genuine88c vsactualb11 separately SOURCE35read and SOURCEmutualpostimages bothdirectionsERVC/directreverse01f1. Independentpairedreader mustreadBOTH CURRENTpostimages not SOURCEbefore orproposals merelyaspointers; all12groups8variants separately andallprimarycontexts including3separateNASA/NSIDCarticleblocks. FirstINITIALonly forboth, oneSOURCEfixthenFINAL/unresolvedHOLD0/noordinary2/reset, notrelated26FINALHOLD (do notborrowcredit).']
+r=a.apply(B,author,[34,35],D/'apply-polar34-35-joint.json',D/'qa-polar34-35-joint.json',pathlib.Path(__file__),qualifyOnly=True,peerSnapshot={'actualCurrentPeers':[p for p in actual.values() if p['topicId']=='polar-regions']},concerns=concerns);r.update(nativeCompactions=counts,sourceOriginalFreezes=['f6bbffbb59c4489b960d1c3ce14a85ce7dececa6','2b5f9cd12e65b7aa1f85947495f758ab5b04efc4','01f1affb99d24ab4bf69cbdeb004f6a2e79d3eb7'],primaryContexts=contexts,allActualFullBodies=len(actual),sourceMutualPostimages=m.raw(MP),qualityCredit=0)
+m.write(D/'qualification-polar34-35-joint.json',r);m.write(B/'normalization-provenance.json',{'owner':m.O,'operations':'Two sameauthor completedoriginalSOURCEentries union; authorseparatevariantjudgments losslesslynestedunderstandardcombinedfield. Canonicalrawsources reusedwithoutcopies. FullprimaryURLcontexts allretained includingNASA6 andNSIDC193sameaggregate. Ownsame100read reusedunchangedsource; SOURCE35oneactual26delta fullbody/mainhash checked. SOURCEactualfullpeerunion; mutualproofat originalauthorednestedD path retained, no change/bodycopy. No content or semanticjudgment invented.','origins':r['sourceOriginalFreezes'],'qualityCredit':0});print(m.savecode(list(B.glob('*.json'))+[D/'qualification-polar34-35-joint.json',pathlib.Path(__file__)],'Qualify complete originalSOURCE34-35 exact bothpostimage mutual proof'))
