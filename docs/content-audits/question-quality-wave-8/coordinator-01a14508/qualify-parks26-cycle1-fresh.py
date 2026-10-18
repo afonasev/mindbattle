@@ -1,0 +1,40 @@
+"""Bind fresh personal SOURCE base plus its bounded peer addendum; no credit."""
+import pathlib,importlib.util,json,subprocess,re
+D=pathlib.Path(__file__).parent;C=D.parents[3]
+def mod(n,p):
+ s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+m=mod('o',D/'owned-tools.py');a=mod('a',C/'docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/apply-standard.py');a.P=m.P
+R=D/'source-parks26-new-cycle1-fresh-adoption';A=D/'source-parks26-new-cycle1-peer-complete';B=D/'qualified-parks26-cycle1-fresh';B.mkdir(exist_ok=True);author='01a1457d-f536-73e0-b097-d540eda34b25';counts={}
+for u in [m.O,author,'01a14483-ccd0-7321-bd23-2262fcb11e5b']:
+ fs=list(pathlib.Path('/Users/eaafonasev/.codex/sessions/2026/10/16').glob('*'+u+'.jsonl'));assert len(fs)==1;counts[u]=sum(json.loads(l).get('type')=='compacted' for l in fs[0].open());assert counts[u]<2
+for folder,freeze in [(R,'d95fac1dd9082b63b556666b93fba1cb16596fc4'),(A,'06171cd41dc11be6b75fda5d7eb32771d10b0770')]:
+ for p in folder.rglob('*'):
+  if p.is_file():assert p.read_bytes()==subprocess.check_output(['git','-C',str(C),'show',freeze+':'+str(p.relative_to(C))])
+candidate=m.read(R/'candidate.json');sp=m.read(R/'sourceproof.json');ps=m.read(R/'peer-snapshot.json');add=m.read(A/'peer-evidence.json');entry=candidate['entries'][0];assert sp['sourceNativeId']==ps['sourceNativeId']==add['sourceNativeId']==author;assert entry['afterHash']==add['candidate']['proposedHash']=='4794a6abaaecb97ffb67caf4bede4fc154a92e1ba09dcb1d729fecfdc2a38bcb';assert entry['beforeHash']=='16e3e8aa27d199bfd2898b7d1b1aebdb1cb54848fe5285349b43cc7b0bf0a59f'
+for s in sp['rawSources']:
+ p=pathlib.Path(s['path']);assert m.raw(p)==s['sha256'];body=p.read_text();ids={int(n) for n in re.findall(r'\bL([0-9]+):',body)};assert ids==set(range(210));native=pathlib.Path(s['nativeRecordPath']);assert m.raw(native)==s['nativeRecordSHA256'];nr=m.read(native)['originalRecord']['payload']['output'];text='\n'.join(v.get('text','') for v in nr);assert body[body.index('L0:'):body.index('L196:')]==text[text.index('L0:'):text.index('L196:')]
+cat={}
+for p in (C/'src/content/topics').glob('*.json'):
+ t=m.read(p)
+ for q in t['questions']:cat[q['id']]={'topicId':t['id'],'card':q}
+actual={}
+for p in ps['actualCurrentPeers']:
+ assert m.sha(p['card'])==p['sha256'] and p['card']==cat[p['id']]['card'];actual[p['id']]=p
+read=ps['sameTopicMAINRead'];assert read['count']==100 and len(read['readReceipts'])==100
+for rr in read['readReceipts']:
+ assert rr['canonicalSHA256']==actual[rr['id']]['sha256'] and all(rr[k] for k in ['promptRead','allFourOrderedLabelsRead','keyRead'])
+g=ps['globalMAIN'];assert m.raw(pathlib.Path(g['path']))==g['rawSHA256'];delta=ps['currentGlobalDelta'];assert m.raw(pathlib.Path(delta['path']))==delta['rawSHA256'];globalData=m.read(pathlib.Path(delta['path']));rows=globalData['currentRows'];assert len(rows)==g['cardCount']==11000 and m.sha(rows)==delta['currentCanonicalRowsSHA256']
+for row in rows:
+ q=cat[row['id']]['card'];assert row['topicId']==cat[row['id']]['topicId'] and row['prompt']==q['prompt'] and row['answers']==[v['text'] for v in q['answers']] and row['correctIndex']==q['correctIndex']
+pairs=add['currentMainPairs']+add['separateGenuineProposalPairs'];assert len(add['currentMainPairs'])==7 and len(add['separateGenuineProposalPairs'])==4
+for pair in pairs:
+ assert pair['candidateId']==entry['id'] and pair['candidateSHA256']==entry['afterHash'];assert m.sha(pair['peerCard'])==pair['peerFullCardSHA256'];assert all(pair[k] for k in ['candidateToPeer','peerToCandidate','directReverseAssessment','verdict']);assert set(pair['candidateERVC'])==set(pair['peerERVC'])=={'entity','relation','value','context'}
+ if pair['comparisonKind']=='actual_current_MAIN':assert pair['peerCard']==cat[pair['peerId']]['card'] and pair['peerFullCardSHA256']==actual[pair['peerId']]['sha256']
+ else:
+  p=pathlib.Path(pair['originalCandidatePath']);assert m.raw(p)==pair['originalCandidateFileSHA256'];original=next(e for e in m.read(p)['entries'] if e['id']==pair['peerId']);assert original['proposedCard']==pair['peerCard'] and original['afterHash']==pair['peerFullCardSHA256']
+ps['bilateralMainComparisons']=pairs;ps['boundedSourcePeerAddendum']={'path':str((A/'peer-evidence.json').relative_to(C)),'rawSHA256':m.raw(A/'peer-evidence.json'),'freeze':'06171cd41dc11be6b75fda5d7eb32771d10b0770','sourceAuthorSame':author};ps['sameTopicMAINRead']['nativeId']=author
+for n,x in [('candidate.json',candidate),('sourceproof.json',sp),('peer-snapshot.json',ps)]:m.write(B/n,x)
+concerns=['SAME sole SOURCEcycle1 after FIRSTINITIAL genuineNEW26 FIXeffadcd/consume11effb. Earlier SOURCEc606 actual2 proposal4794 was UNQUALIFIED; freshSOURCE7d actual0 personallyadopted samebody/all6+4/fullcanonicalprimary/global11k+same100/fullclosest andownbilateral11. No newINITIAL/cycle2/reset. Exactbefore16e3 after4794. Oldpropername26SOURCEgradeHOLD history retained.', 'Prompt now explicitly popular muddy trail. NPScompletearticle20-181 within nativebyteexact0-195, fullretained210/footer196-209unverifiedunused; L50-55existingtrail/singlefile/middleevenmuddy and81-85courtesy/yield/packstockdownhill. Distinguishcreatingnewbypass fromtemporarydurableoff-trailstep; no blanketbaninvented. Independently all4credible/unique includingrequestoncomingwaitslot2 andwhetherstop/singlefilewhileontrail iscoherent. Note0 wording "Идти встречным потоком всем рядом" grammar/naturalness mustindependentlyassess, notinheritSOURCEgrammarPASS. Keynote packstockdownhill extra beyondpeopleyield remains ownoptionfact.', 'All6literal/4wholevariants/fullprimary/absoluteadultLARGEculturalEASY/frozenkey1/taxonomy/ownnoteextra. Global11000exactcurrent e8e896 reconstructedSOURCEretainedcurrentrows937c plusbasea2a, all101actualfullbodyhashes live; closesttourismfullaeff8 vsMAINae1a differentrepresentations, narrowerconditionadded doesnotbyitselfprovedistinct. Full7actual+4genuineproposaladdendum06171 authorbothdirectionsERVC/directreverse/body/sourcefilehashes, latestproposal024distinctfromCURRENT024. No formatban/crossnoteban or SOURCE/QAinheritance. Independent FINAL only; unresolvedHOLD0 noordinary2.']
+r=a.apply(B,author,[26],D/'apply-parks26-cycle1-fresh.json',D/'qa-parks26-cycle1-fresh.json',pathlib.Path(__file__),qualifyOnly=True,peerSnapshot={'actualCurrentPeers':[p for p in actual.values() if p['topicId']=='national-parks-nature']},concerns=concerns);r.update(sourceBaseFreeze='d95fac1dd9082b63b556666b93fba1cb16596fc4',sourcePeerAddendumFreeze='06171cd41dc11be6b75fda5d7eb32771d10b0770',nativeCompactions=counts,globalCurrentRowsSHA256=delta['currentCanonicalRowsSHA256'],allActualFullBodies=len(actual),primaryCoverage='210visible labels, nativeprefix0-195byteexact includescompletearticle20-181; unusedfooter196-209unverified',sameSoleCycle=1,qualityCredit=0)
+m.write(D/'qualification-parks26-cycle1-fresh.json',r);m.write(B/'normalization-provenance.json',{'owner':m.O,'operations':'Exact sameauthor freshcandidate/sourceproof fromd95fac, sourcepeerwholebodyhash/proposalpaths/ownERVC/directreverse addendum06171 linked underbasepeer. No content or judgment invented; rawprimary canonicalref reused/no newcopy.','sourceBasePath':str(R.relative_to(C)),'sourceBaseFreeze':'d95fac1dd9082b63b556666b93fba1cb16596fc4','sourcePeerAddendumPath':str(A.relative_to(C)),'sourcePeerAddendumFreeze':'06171cd41dc11be6b75fda5d7eb32771d10b0770'})
+print(m.savecode(list(B.glob('*.json'))+[D/'qualification-parks26-cycle1-fresh.json',pathlib.Path(__file__)],'Qualify fresh personal source26 same solecycle1 full primary and livepeer bindings'))
