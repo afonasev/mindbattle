@@ -84,9 +84,18 @@ class Flow:
                 except ValueError: errors.append('missing:'+edge['id']); continue
                 threshold=edge['threshold']; stage=dep['stage']
                 delivered=stage in ({'deployed','finalizing','awaiting-acceptance','accepted','archived'} if dep['kind']=='software' else {'published','finalizing','awaiting-acceptance','accepted','archived'})
+                if dep['evidence'].get('pending_deploy',{}).get('status')=='pending': delivered=False
                 ok=delivered and (threshold!='accepted' or self.acceptance_status(dep)=='accepted')
                 if not ok: errors.append('dependency:'+edge['id'])
         return errors
+
+    def valid_pending_deploy(self,d):
+        pending=d['evidence'].get('pending_deploy',{})
+        merged=d['evidence'].get('merge',{})
+        return (isinstance(pending,dict) and pending.get('status')=='pending'
+            and bool(merged.get('commit')) and pending.get('commit')==merged['commit']
+            and all(isinstance(pending.get(k),str) and pending[k].strip()
+                for k in ['reason','authorization_source','environment','next_step']))
 
     def claim(self, cid, owner):
         p,d=self.get(cid)
@@ -119,6 +128,8 @@ class Flow:
         p,d=self.get(cid)
         if key in {'acceptance','acceptance_deferred','cancellation'}: raise ValueError('Use explicit human decision command')
         if not value: raise ValueError('Empty evidence')
+        if key in {'pending_deploy','deploy_authorization'} and not isinstance(value,dict):
+            raise ValueError(key+' evidence must be an object')
         d['evidence'][key]=value
         return self.save(p,d,'evidence',key=key)
 
@@ -194,6 +205,8 @@ class Flow:
 
     def finalization_errors(self,p,d):
         errors=self.blocks(d,'awaiting-acceptance')
+        if d['evidence'].get('pending_deploy',{}).get('status')=='pending' and not self.valid_pending_deploy(d):
+            errors.append('invalid-pending-deploy')
         for key in ['spec_sync','cleanup','acceptance_guide']:
             if not d['evidence'].get(key): errors.append('missing:'+key)
         if d['evidence'].get('cleanup_pending',{}).get('completed') is False:
@@ -228,18 +241,19 @@ class Flow:
         if target=='cancelled':
             if old in {'archived','cancelled'}: raise ValueError('Terminal stage')
             if not decision or not source: raise ValueError('Explicit cancellation decision/source required')
-        elif target not in EDGES.get(old,set()): raise ValueError('Invalid transition: '+old+' → '+target)
+        elif (target not in EDGES.get(old,set())
+              and not (target=='deployed' and old in {'awaiting-acceptance','accepted'} and self.valid_pending_deploy(d))):
+            raise ValueError('Invalid transition: '+old+' → '+target)
         if d['owner'] and d['owner']!=owner: raise ValueError('Change belongs to another session')
         if target=='implementing' and not d['owner']: raise ValueError('Claim first')
         if old=='merged' and target=='finalizing':
-            # Source-only QA tooling has no game release to deploy. This is an
-            # explicit reviewed exemption, never inferred from paths or tests.
+            # Explicit source-only or deferred deployment, never inferred from paths/tests.
             delivery=d['evidence'].get('source_only_delivery', {})
             merged=d['evidence'].get('merge', {})
-            if (delivery.get('scope')!='qa-tooling' or delivery.get('runtime_changed') is not False
+            if not self.valid_pending_deploy(d) and (delivery.get('scope')!='qa-tooling' or delivery.get('runtime_changed') is not False
                 or not delivery.get('reason') or not delivery.get('authorization_source')
                 or not merged.get('commit') or delivery.get('commit')!=merged.get('commit')):
-                raise ValueError('Source-only QA tooling delivery evidence required; runtime changes require deployment')
+                raise ValueError('Source-only QA tooling or commit-bound pending_deploy evidence required')
         errors=self.blocks(d,target)
         if errors and target!='cancelled': raise ValueError('Blocked: '+str(errors))
         needed={'ready':['scope'],'verified':['verification'],'merged':['merge','remote_push'],'deployed':['release','smoke'],'published':['publication'],'finalizing':[],'awaiting-acceptance':['spec_sync','cleanup','acceptance_guide'],'archived':['archive']}.get(target,[])
@@ -248,6 +262,14 @@ class Flow:
         if target=='verified' and d['kind']=='software' and not d['evidence'].get('commit'): raise ValueError('Missing implementation commit')
         if target in {'merged','deployed'} and d['kind']!='software': raise ValueError('Non-software uses publication')
         if target=='published' and d['kind']=='software': raise ValueError('Software requires merge/deploy')
+        if target=='deployed' and d['evidence'].get('pending_deploy',{}).get('status')=='pending':
+            authorization=d['evidence'].get('deploy_authorization',{})
+            pending=d['evidence']['pending_deploy']
+            if (not self.valid_pending_deploy(d) or not isinstance(authorization.get('source'),str)
+                or not authorization['source'].strip()
+                or authorization.get('commit')!=pending['commit']
+                or authorization.get('environment')!=pending['environment']):
+                raise ValueError('Separate human deploy_authorization for this commit and environment required')
         if target=='merged':
             e=d['evidence']['merge']
             subprocess.run(['git','-C',e['repo'],'merge-base','--is-ancestor',e['commit'],e['main_ref']],check=True,capture_output=True)
@@ -283,6 +305,10 @@ class Flow:
             d['history'].append({'event':'previous-delivery','at':now(),'evidence':d['evidence']})
             d['evidence']={k:v for k,v in d['evidence'].items() if k=='scope'}
         if target=='archived' and p.parent.parent.name!='archive': raise ValueError('Archive through OpenSpec first')
+        if target=='archived' and d['evidence'].get('pending_deploy',{}).get('status')=='pending':
+            raise ValueError('Pending deployment prevents archive')
+        if target=='deployed' and d['evidence'].get('pending_deploy',{}).get('status')=='pending':
+            d['evidence']['pending_deploy']['status']='deployed'
         d['stage']=target
         if target in {'awaiting-acceptance','accepted','archived','cancelled'}: d['owner']=None
         return self.save(p,d,'transition',previous=old,stage=target,decision=decision,source=source)
@@ -292,7 +318,9 @@ class Flow:
         for _,d in self.records().values():
             qs=[q for q in d['questions'] if q['status']!='resolved']
             stage=d['stage']
+            pending=d['evidence'].get('pending_deploy',{})
             result.append({'id':d['id'],'stage':stage,'owner':d['owner'],'parent':d['parent'],'paused':d['paused'],'questions':qs,'ready':stage in {'ready','rework-required'} and not d['owner'] and not self.blocks(d,'implementing'),'acceptance':stage in {'verified','merged','deployed','published','finalizing','awaiting-acceptance','accepted'} and bool(self.result_binding(d)) and self.acceptance_status(d) in {'pending','stale'},'acceptance_status':self.acceptance_status(d),'finalization_debt':stage in {'verified','merged','deployed','published','finalizing','accepted'},'blocks':self.blocks(d,'implementing')})
+            result[-1]['pending_deploy']=pending if pending.get('status')=='pending' else None
         return result
 
     def lease(self,action,name,owner,reason=None):
