@@ -39,3 +39,5 @@
   `openspec store register <project>/planning --id mindbattle-planning`.
   Игнорирование в Git кода не сохраняет планы: их изменения коммить отдельно;
   исходный code clone сам по себе planning-историю не содержит.
+
+Для другого устройства: `.agents/references/portability.md` от корня проекта; абсолютные пути выше — привязка исходного устройства, не обязательное расположение.

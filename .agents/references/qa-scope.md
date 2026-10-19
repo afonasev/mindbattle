@@ -3,19 +3,17 @@
 Выбирай gate по изменённым контрактам, потребителям общей зависимости и возможным
 последствиям, а не по имени файла. В change записывай выбранный scope, обоснование,
 затронутые поверхности и дополнительные tests. При нескольких влияниях объединяй
-маршруты; если границу доказать нельзя — `full`. Эта матрица определяет required
-checks для change; профильный default `npm run qa` — безопасный full fallback,
-а не требование full для каждого изменения.
+маршруты. Если граница неясна, сначала исследуй зависимости. Full, включая `npm run qa`, требует отдельного явного разрешения человека на этот прогон; integration/production не дают его автоматически. Выбирай достаточные affected tests, сохраняя действующие контракты.
 
 | Влияние | Обязательный локальный маршрут | Дополнительные gates |
 | --- | --- | --- |
 | QA tooling/docs без runtime/visible изменений | `npm run qa:tooling` | Маршрут включает Node и Python flow-контракты; реально выполнить каждый изменённый маршрут. Для flow helper дополнительно `python3 tools/test_flow.py` и `python3 -m unittest discover -s tests -p 'test_flow*.py'`. |
 | Изолированное представление/текст/layout без изменения правил, state, permissions, timers или input | `npm run qa:ui` | Затронутые browser сценарии вне smoke и screenshots; реальный in-app Browser для visible изменений. |
 | Phone/display presentation | `npm run qa:ui` | Snapshot checks не доказывают SSE/privacy. Если меняются роль, snapshot mapping, права/синхронизация — также `qa:network`; физические телефоны при изменении device interaction. |
-| Изолированное сетевое взаимодействие с известной границей | `npm run qa:network` + UI при visible изменении | network-domain/room/status, реальные SSE и 12 browser клиентов, restore/departure/privacy. При изменении протокола/authority/timers/full shared state — full. |
-| Изолированный input adapter с известной границей | `npm run qa:input` + UI при visible изменении | Keyboard/virtual-gamepad integration и controller tests; физический gamepad отдельно. Изменение общего порядка/neutral gates/permissions — full. |
+| Изолированное сетевое взаимодействие с известной границей | `npm run qa:network` + UI при visible изменении | network-domain/room/status, реальные SSE и 12 browser клиентов, restore/departure/privacy. При изменении протокола/authority/timers/full shared state — расширь affected-проверки по зависимостям; full только с отдельным разрешением. |
+| Изолированный input adapter с известной границей | `npm run qa:input` + UI при visible изменении | Keyboard/virtual-gamepad integration и controller tests; физический gamepad отдельно. Изменение общего порядка/neutral gates/permissions — расширь affected-проверки по зависимостям; full только с отдельным разрешением. |
 | Конкретная subsystem без общего критического влияния | Typecheck + явные затронутые Vitest/browser tests с JSON evidence | Content: catalog-full/topics/content и действующие editorial integrity gates. Audio: audio unit/browser tests и audible acceptance. Storage/results/feedback/PWA: собственные unit/browser integration tests; smoke не покрывает эти контракты. |
-| Gameplay rules, clocks, scoring, seed/RNG, command ordering, hidden information, общие критические зависимости, неизвестное влияние, зависимости/toolchain | `npm run qa` (full) | Полные units, production build, все browser scenarios. Перед production full, release identity и smoke; production требует отдельного разрешения. |
+| Gameplay rules, clocks, scoring, seed/RNG, command ordering, hidden information, общие критические зависимости, неизвестное влияние, зависимости/toolchain | Affected contracts; `npm run qa` only with explicit full approval | Полные units, production build, все browser scenarios. Release identity и affected smoke; production и full требуют отдельных разрешений. |
 
 ## Команды и покрытие
 
@@ -24,7 +22,7 @@ npm run qa:tooling
 npm run qa:ui
 npm run qa:network
 npm run qa:input
-npm run qa                              # full default
+npm run qa                              # full: separate explicit human approval required
 npm run qa:ui -- --evidence /absolute/durable/path
 npm run test:qa-tooling                 # только контрактные tests runner
 ```
