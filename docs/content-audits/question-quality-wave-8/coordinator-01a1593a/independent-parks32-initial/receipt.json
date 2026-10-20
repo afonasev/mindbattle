@@ -1,0 +1,363 @@
+{
+  "readerNativeId": "01a15948-9443-7821-b99c-a4a11c44c897",
+  "observedModelEffort": {
+    "model": "gpt-6.1-sol",
+    "effort": "medium"
+  },
+  "reviewDate": "2026-10-20",
+  "stage": "INITIAL",
+  "cycle": 0,
+  "qualityCredit": 0,
+  "entries": [
+    {
+      "id": "national-parks-nature-032",
+      "topicId": "national-parks-nature",
+      "sourceOrder": 32,
+      "stage": "INITIAL",
+      "cycle": 0,
+      "currentCard": {
+        "id": "national-parks-nature-032",
+        "difficulty": "easy",
+        "prompt": "Какой парк назван в честь древовидной юкки?",
+        "answers": [
+          {
+            "text": "Зайон",
+            "note": "Зайон — парк Юты; в узкой части каньона стены достигают 1000 футов, а река Вирджин местами сужается до 20–30 футов."
+          },
+          {
+            "text": "Грейт-Смоки-Маунтинс",
+            "note": "Грейт-Смоки-Маунтинс расположен на границе Теннесси и Северной Каролины; три главных входа в парк находятся в Гатлинберге, Таунсенде и Чероки."
+          },
+          {
+            "text": "Акадия",
+            "note": "Акадия находится на побережье штата Мэн; парк защищает почти 64 мили побережья и включает более 20 гор."
+          },
+          {
+            "text": "Джошуа-Три",
+            "note": "Джошуа-Три — калифорнийский парк на стыке пустынь Мохаве и Колорадо."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Это Джошуа-Три. В его пределах встречаются две пустынные экосистемы.",
+        "source": {
+          "title": "Joshua Trees - Joshua Tree National Park (U.S. National Park Service)",
+          "url": "https://www.nps.gov/jotr/learn/nature/jtrees.htm",
+          "verifiedAt": "2026-10-20"
+        }
+      },
+      "currentCardCanonicalSHA256": "9b13411ed586c38888d83e8998bfbfbe4d163f52fd384bf5e945a8d9279ae63b",
+      "status": "FIX",
+      "sixLiteralCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой парк назван в честь древовидной юкки?",
+            "answers": [
+              "Зайон",
+              "Грейт-Смоки-Маунтинс",
+              "Акадия",
+              "Джошуа-Три"
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "20394fe404d152601d5a44c757e11855a26fdfd739a506afe1412b64f862fe36",
+          "status": "PASS",
+          "individualGround": "NPS Joshua Trees L25 прямо называет Joshua tree (Yucca brevifolia) namesake парка. USFS L59-L64 относит растение к роду Yucca и tree/shrub life form, L84 прямо говорит tree-like perennial evergreen monocot. Поэтому «древовидная юкка» — корректное описание жизненной формы, не ошибочное таксономическое дерево/кактус. Вопрос не утверждает, что все юкки древовидны, и не требует решать дискуссию о western/eastern species. Ключ3 единственный среди четырёх реальных национальных парков: Зайон, Грейт-Смоки-Маунтинс и Акадия не являются именем описанной юкки. Это PASS по истине и уникальности ключа; абсолютная сложность рассмотрена отдельно.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a1593a/source-parks32/raw-sources/nps-joshua-tree-namesake.json",
+              "url": "https://www.nps.gov/jotr/learn/nature/jtrees.htm",
+              "jsonPointer": "/completeVisibleResult",
+              "locator": "NPS Joshua Trees entire retained visible response L21-L71 (selected output, not135-line full underlying page); namesake and Yucca brevifolia L25, tree form FAQ L46-L48."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a1593a/source-parks32/raw-sources/usfs-joshua-tree-taxonomy.json",
+              "url": "https://research.fs.usda.gov/feis/species-reviews/yucspp",
+              "jsonPointer": "/completeVisibleResult",
+              "locator": "USFS FEIS entire retained selected output; Life Form/Genus L56-L79, tree-like evergreen L83-L85, complete taxonomy section L123-L148."
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Это Джошуа-Три. В его пределах встречаются две пустынные экосистемы.",
+          "canonicalSHA256": "9d57922145c482a93021700ce8f79a10f4a713885108bdd9a03d1f4ffd05cd74",
+          "status": "PASS",
+          "individualGround": "Объяснение прямо называет Джошуа-Три, содержит два предложения и не делает утверждения «всего две экосистемы». Полный NPS Nature L24-L28 перечисляет Colorado Desert, Mojave Desert и отдельно высокогорную экосистему Little San Bernardino с можжевельником и сосной. Следовательно, две ПУСТЫННЫЕ экосистемы действительно встречаются в пределах парка; третья экосистема иной категории не опровергает текст. Сохранять объяснение правильно.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a152aa/source-parks29-fresh-native/sourceproof.json",
+              "url": "https://www.nps.gov/jotr/learn/nature/index.htm",
+              "jsonPointer": "/fullOriginalToolOutputs/1/completeVisibleResult",
+              "locator": "NPS Joshua Tree Nature full retained L0-L80; all three ecosystems L24-L28, California address L37-L38."
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Зайон — парк Юты; в узкой части каньона стены достигают 1000 футов, а река Вирджин местами сужается до 20–30 футов.",
+          "canonicalSHA256": "9ad4fa36368960776e06bc787fa9ddcbe49cb1872244a2f3664ac387c50d2164",
+          "status": "PASS",
+          "individualGround": "NPS The Narrows L41 описывает узкую часть Zion Canyon, стены1000ft и местами только20–30ft ширины реки; transcript L48 прямо называет Virgin River, адрес L117-L119 указывает Юту. Справка сообщает конкретную геометрию каньона именно Зайона. Числа не являются самоцелью, не перенесены на все каньоны парка и не названы глобальными максимумами. Слово «достигают1000» не содержит утверждения, что нигде не бывает стен выше; transcript L47 с иной глубиной прочитан и не скрыт.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a152aa/source-parks29-fresh-native/sourceproof.json",
+              "url": "https://www.nps.gov/zion/planyourvisit/thenarrows.htm?fullweb=1",
+              "jsonPointer": "/fullOriginalToolOutputs/0/completeVisibleResult",
+              "locator": "NPS The Narrows full retained L0-L162; The Narrows L39-L41, transcript L47-L48, Utah address L117-L119."
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Грейт-Смоки-Маунтинс расположен на границе Теннесси и Северной Каролины; три главных входа в парк находятся в Гатлинберге, Таунсенде и Чероки.",
+          "canonicalSHA256": "62b5c1325232b61386bb0ab37e06f9dc598123706ab342b9626c6437a733fe8c",
+          "status": "PASS",
+          "individualGround": "NPS Contact Us L23 одним полным предложением подтверждает расположение по обе стороны границы Tennessee/North Carolina и три main entrances: Gatlinburg,Townsend,Cherokee. Русская справка точно относит оба факта к Грейт-Смоки-Маунтинс; это полезная ориентация в парке, а не справка о другом ответе.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a152aa/source-parks29-fresh-native/sourceproof.json",
+              "url": "https://www.nps.gov/grsm/contacts.htm",
+              "jsonPointer": "/fullOriginalToolOutputs/1/completeVisibleResult",
+              "locator": "NPS Great Smoky Mountains Contact Us full retained L0-L98; direct border and three entrances statement L23."
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Акадия находится на побережье штата Мэн; парк защищает почти 64 мили побережья и включает более 20 гор.",
+          "canonicalSHA256": "bec9828787faa777057803c43f471284c17e2ed91ec1f78978ac0ffda87bb8bd",
+          "status": "PASS",
+          "individualGround": "NPS Acadia Nature L24 помещает парк на побережье Мэна, а полный L41 сообщает more than20mountains и nearly64miles ofcoastline. Сохранены qualifiers «более»/«почти». Обе характеристики относятся к Акадии, не к общей длине побережья штата. Это самостоятельная полезная справка о прибрежном горном парке.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a152aa/source-parks29-fresh-native/sourceproof.json",
+              "url": "https://www.nps.gov/acad/learn/nature/index.htm",
+              "jsonPointer": "/fullOriginalToolOutputs/1/completeVisibleResult",
+              "locator": "NPS Acadia Nature full retained L0-L119; Maine coast L24, mountains/coastline L41."
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "Джошуа-Три — калифорнийский парк на стыке пустынь Мохаве и Колорадо.",
+          "canonicalSHA256": "395f99805dd9b9b6e4fe6b9dc87ce1f2eb22fa5f7a9846c380252c5a4e63cabc",
+          "status": "PASS",
+          "individualGround": "NPS Joshua Tree Nature L25-L27 прямо называет Colorado и Mojave Desert, их соответствующие части парка и третью высокогорную экосистему; L24 называет их California ecosystems, L37-L38 даёт адрес CA. Поэтому калифорнийский парк на стыке двух названных пустынь подтверждён. Это конкретная география правильного варианта сверх вопроса о происхождении имени; совпадение с вторым предложением explanation допустимо, название пустынь добавлено только вnote.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a152aa/source-parks29-fresh-native/sourceproof.json",
+              "url": "https://www.nps.gov/jotr/learn/nature/index.htm",
+              "jsonPointer": "/fullOriginalToolOutputs/1/completeVisibleResult",
+              "locator": "NPS Joshua Tree Nature full retained L0-L80; all three ecosystems L24-L28, California address L37-L38."
+            }
+          ]
+        }
+      ],
+      "fourFullPromptAnswerNoteVariants": [
+        {
+          "slot": 0,
+          "prompt": "Какой парк назван в честь древовидной юкки?",
+          "answer": "Зайон",
+          "note": "Зайон — парк Юты; в узкой части каньона стены достигают 1000 футов, а река Вирджин местами сужается до 20–30 футов.",
+          "tripleCanonicalSHA256": "c55e17cc91548d93d575c14a23079ec25652e224e89826d0a262562050f67163",
+          "grammar": {
+            "status": "PASS",
+            "reason": "Лично прочитан полный вопрос «Какой парк назван в честь древовидной юкки?» с самостоятельной подписью «Зайон» и всей собственной справкой. Имя парка в именительном падеже естественно отвечает на «какой парк»; род/число/форма не выделяют key3."
+          },
+          "plausibility": {
+            "status": "PASS",
+            "reason": "Реальный национальный парк Юты с запоминающимся собственным именем и пустынно-каньонным ландшафтом; уместный конкурент другому юго-западному парку при неизвестной этимологии."
+          },
+          "truthUniqueKey": {
+            "status": "PASS",
+            "isKey": false,
+            "reason": "NPS Joshua Trees L25 прямо называет Joshua tree (Yucca brevifolia) namesake парка. USFS L59-L64 относит растение к роду Yucca и tree/shrub life form, L84 прямо говорит tree-like perennial evergreen monocot. Поэтому «древовидная юкка» — корректное описание жизненной формы, не ошибочное таксономическое дерево/кактус. Вопрос не утверждает, что все юкки древовидны, и не требует решать дискуссию о western/eastern species. Ключ3 единственный среди четырёх реальных национальных парков: Зайон, Грейт-Смоки-Маунтинс и Акадия не являются именем описанной юкки. Это PASS по истине и уникальности ключа; абсолютная сложность рассмотрена отдельно."
+          },
+          "noteTruthUsefulness": {
+            "status": "PASS",
+            "reason": "NPS The Narrows L41 описывает узкую часть Zion Canyon, стены1000ft и местами только20–30ft ширины реки; transcript L48 прямо называет Virgin River, адрес L117-L119 указывает Юту. Справка сообщает конкретную геометрию каньона именно Зайона. Числа не являются самоцелью, не перенесены на все каньоны парка и не названы глобальными максимумами. Слово «достигают1000» не содержит утверждения, что нигде не бывает стен выше; transcript L47 с иной глубиной прочитан и не скрыт."
+          },
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a152aa/source-parks29-fresh-native/sourceproof.json",
+              "url": "https://www.nps.gov/zion/planyourvisit/thenarrows.htm?fullweb=1",
+              "jsonPointer": "/fullOriginalToolOutputs/0/completeVisibleResult",
+              "locator": "NPS The Narrows full retained L0-L162; The Narrows L39-L41, transcript L47-L48, Utah address L117-L119."
+            }
+          ]
+        },
+        {
+          "slot": 1,
+          "prompt": "Какой парк назван в честь древовидной юкки?",
+          "answer": "Грейт-Смоки-Маунтинс",
+          "note": "Грейт-Смоки-Маунтинс расположен на границе Теннесси и Северной Каролины; три главных входа в парк находятся в Гатлинберге, Таунсенде и Чероки.",
+          "tripleCanonicalSHA256": "69dfa3fdd7f0256674903284620998d82eef64c43ce3a1f6b67941f27b26a888",
+          "grammar": {
+            "status": "PASS",
+            "reason": "Лично прочитан полный вопрос «Какой парк назван в честь древовидной юкки?» с самостоятельной подписью «Грейт-Смоки-Маунтинс» и всей собственной справкой. Имя парка в именительном падеже естественно отвечает на «какой парк»; род/число/форма не выделяют key3."
+          },
+          "plausibility": {
+            "status": "PASS",
+            "reason": "Реальный национальный парк США с растительным/лесным природным контекстом и образным названием. Незнающий происхождение park names может рассмотреть его; ложность не задана абсурдной категорией."
+          },
+          "truthUniqueKey": {
+            "status": "PASS",
+            "isKey": false,
+            "reason": "NPS Joshua Trees L25 прямо называет Joshua tree (Yucca brevifolia) namesake парка. USFS L59-L64 относит растение к роду Yucca и tree/shrub life form, L84 прямо говорит tree-like perennial evergreen monocot. Поэтому «древовидная юкка» — корректное описание жизненной формы, не ошибочное таксономическое дерево/кактус. Вопрос не утверждает, что все юкки древовидны, и не требует решать дискуссию о western/eastern species. Ключ3 единственный среди четырёх реальных национальных парков: Зайон, Грейт-Смоки-Маунтинс и Акадия не являются именем описанной юкки. Это PASS по истине и уникальности ключа; абсолютная сложность рассмотрена отдельно."
+          },
+          "noteTruthUsefulness": {
+            "status": "PASS",
+            "reason": "NPS Contact Us L23 одним полным предложением подтверждает расположение по обе стороны границы Tennessee/North Carolina и три main entrances: Gatlinburg,Townsend,Cherokee. Русская справка точно относит оба факта к Грейт-Смоки-Маунтинс; это полезная ориентация в парке, а не справка о другом ответе."
+          },
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a152aa/source-parks29-fresh-native/sourceproof.json",
+              "url": "https://www.nps.gov/grsm/contacts.htm",
+              "jsonPointer": "/fullOriginalToolOutputs/1/completeVisibleResult",
+              "locator": "NPS Great Smoky Mountains Contact Us full retained L0-L98; direct border and three entrances statement L23."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "prompt": "Какой парк назван в честь древовидной юкки?",
+          "answer": "Акадия",
+          "note": "Акадия находится на побережье штата Мэн; парк защищает почти 64 мили побережья и включает более 20 гор.",
+          "tripleCanonicalSHA256": "2ea60e6b717812072c7a002e7de10ec5bf5012259ad30d7f0d17fd5ea1e7d4f0",
+          "grammar": {
+            "status": "PASS",
+            "reason": "Лично прочитан полный вопрос «Какой парк назван в честь древовидной юкки?» с самостоятельной подписью «Акадия» и всей собственной справкой. Имя парка в именительном падеже естественно отвечает на «какой парк»; род/число/форма не выделяют key3."
+          },
+          "plausibility": {
+            "status": "PASS",
+            "reason": "Реальный парк США со значительной растительностью и непрозрачным собственным именем; семантически тот же тип ответа, без грамматической подсказки."
+          },
+          "truthUniqueKey": {
+            "status": "PASS",
+            "isKey": false,
+            "reason": "NPS Joshua Trees L25 прямо называет Joshua tree (Yucca brevifolia) namesake парка. USFS L59-L64 относит растение к роду Yucca и tree/shrub life form, L84 прямо говорит tree-like perennial evergreen monocot. Поэтому «древовидная юкка» — корректное описание жизненной формы, не ошибочное таксономическое дерево/кактус. Вопрос не утверждает, что все юкки древовидны, и не требует решать дискуссию о western/eastern species. Ключ3 единственный среди четырёх реальных национальных парков: Зайон, Грейт-Смоки-Маунтинс и Акадия не являются именем описанной юкки. Это PASS по истине и уникальности ключа; абсолютная сложность рассмотрена отдельно."
+          },
+          "noteTruthUsefulness": {
+            "status": "PASS",
+            "reason": "NPS Acadia Nature L24 помещает парк на побережье Мэна, а полный L41 сообщает more than20mountains и nearly64miles ofcoastline. Сохранены qualifiers «более»/«почти». Обе характеристики относятся к Акадии, не к общей длине побережья штата. Это самостоятельная полезная справка о прибрежном горном парке."
+          },
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a152aa/source-parks29-fresh-native/sourceproof.json",
+              "url": "https://www.nps.gov/acad/learn/nature/index.htm",
+              "jsonPointer": "/fullOriginalToolOutputs/1/completeVisibleResult",
+              "locator": "NPS Acadia Nature full retained L0-L119; Maine coast L24, mountains/coastline L41."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "prompt": "Какой парк назван в честь древовидной юкки?",
+          "answer": "Джошуа-Три",
+          "note": "Джошуа-Три — калифорнийский парк на стыке пустынь Мохаве и Колорадо.",
+          "tripleCanonicalSHA256": "69f6ac9aec2597875d87750f4b2157103f7e02d49f573c3095800b250d0f6375",
+          "grammar": {
+            "status": "PASS",
+            "reason": "Лично прочитан полный вопрос «Какой парк назван в честь древовидной юкки?» с самостоятельной подписью «Джошуа-Три» и всей собственной справкой. Имя парка в именительном падеже естественно отвечает на «какой парк»; род/число/форма не выделяют key3."
+          },
+          "plausibility": {
+            "status": "PASS",
+            "reason": "Реальный национальный парк, чьё имя в точности связано с описанной юккой по NPS. Это единственный ключ, а не ответ по свободному домыслу о слове «дерево»."
+          },
+          "truthUniqueKey": {
+            "status": "PASS",
+            "isKey": true,
+            "reason": "NPS Joshua Trees L25 прямо называет Joshua tree (Yucca brevifolia) namesake парка. USFS L59-L64 относит растение к роду Yucca и tree/shrub life form, L84 прямо говорит tree-like perennial evergreen monocot. Поэтому «древовидная юкка» — корректное описание жизненной формы, не ошибочное таксономическое дерево/кактус. Вопрос не утверждает, что все юкки древовидны, и не требует решать дискуссию о western/eastern species. Ключ3 единственный среди четырёх реальных национальных парков: Зайон, Грейт-Смоки-Маунтинс и Акадия не являются именем описанной юкки. Это PASS по истине и уникальности ключа; абсолютная сложность рассмотрена отдельно."
+          },
+          "noteTruthUsefulness": {
+            "status": "PASS",
+            "reason": "NPS Joshua Tree Nature L25-L27 прямо называет Colorado и Mojave Desert, их соответствующие части парка и третью высокогорную экосистему; L24 называет их California ecosystems, L37-L38 даёт адрес CA. Поэтому калифорнийский парк на стыке двух названных пустынь подтверждён. Это конкретная география правильного варианта сверх вопроса о происхождении имени; совпадение с вторым предложением explanation допустимо, название пустынь добавлено только вnote."
+          },
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a152aa/source-parks29-fresh-native/sourceproof.json",
+              "url": "https://www.nps.gov/jotr/learn/nature/index.htm",
+              "jsonPointer": "/fullOriginalToolOutputs/1/completeVisibleResult",
+              "locator": "NPS Joshua Tree Nature full retained L0-L80; all three ecosystems L24-L28, California address L37-L38."
+            }
+          ]
+        }
+      ],
+      "absoluteLevel": {
+        "status": "FIX",
+        "frozenDifficulty": "easy",
+        "perceivedLevel": "medium",
+        "individualGround": "Проверяемое соответствие — не просто «парк назван деревом», а связь русского ботанического описания «древовидная юкка» с распространённым именем Joshua tree и затем с названием парка. Человек, регулярно соприкасающийся с американскими парками/природой Мохаве, вероятно узнает её; взрослый вне этой темы обычно не знает, что Joshua tree — юкка. Это ближе к MEDIUM по действующей абсолютной рубрике. Отсутствие даты, Latin name в вопросе и многошагового вычисления само по себе не делает факт EASY. Базовое английское tree=дерево может помочь сузить выбор по знакомому названию, но не устанавливает ботаническое соответствие и не заменяет узнаваемый широкий факт. Авторский довод про beginner US national-parks/general-nature quiz описывает тематическую аудиторию; названной широкой демографической/культурной группы с обычным внетематическим знанием этого соответствия он не обосновывает. Это моё независимое редакторское суждение о требуемом знании, а не измеренная доля правильных ответов или утверждение об отсутствии любой осведомлённой группы."
+      },
+      "correctNoteExtraFact": {
+        "status": "PASS",
+        "fact": "Калифорнийское расположение парка и стык пустынь Мохаве/Колорадо.",
+        "beyondWholePromptAndKey": "Prompt/key спрашивает namesake юкки, не положение и две названные пустыни. Справка сообщает географию своего правильного парка; допустимо частичное совпадение с explanation.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a152aa/source-parks29-fresh-native/sourceproof.json",
+            "url": "https://www.nps.gov/jotr/learn/nature/index.htm",
+            "jsonPointer": "/fullOriginalToolOutputs/1/completeVisibleResult",
+            "locator": "NPS Joshua Tree Nature full retained L0-L80; all three ecosystems L24-L28, California address L37-L38."
+          }
+        ]
+      },
+      "frozen": {
+        "id": "national-parks-nature-032",
+        "topicId": "national-parks-nature",
+        "sourceOrder": 32,
+        "difficulty": "easy",
+        "correctIndex": 3
+      },
+      "topicFit": "Этимология названия конкретного национального парка через его характерное растение прямо связана с тематикой национальных парков и природы.",
+      "sourceMetadata": "Точная HTTPS NPS Joshua Trees содержит namesake claim; verifiedAt2026-10-20 соответствует текущей проверке.",
+      "countClaimAssessment": {
+        "status": "PASS",
+        "reason": "Объяснение прямо называет Джошуа-Три, содержит два предложения и не делает утверждения «всего две экосистемы». Полный NPS Nature L24-L28 перечисляет Colorado Desert, Mojave Desert и отдельно высокогорную экосистему Little San Bernardino с можжевельником и сосной. Следовательно, две ПУСТЫННЫЕ экосистемы действительно встречаются в пределах парка; третья экосистема иной категории не опровергает текст. Сохранять объяснение правильно."
+      },
+      "defects": [
+        {
+          "id": "parks32-absolute-easy-audience",
+          "field": "difficulty_vs_prompt",
+          "status": "FIX",
+          "category": "absoluteDifficulty",
+          "literal": "Какой парк назван в честь древовидной юкки?",
+          "frozenDifficulty": "easy",
+          "perceivedLevel": "medium",
+          "reason": "Проверяемое соответствие — не просто «парк назван деревом», а связь русского ботанического описания «древовидная юкка» с распространённым именем Joshua tree и затем с названием парка. Человек, регулярно соприкасающийся с американскими парками/природой Мохаве, вероятно узнает её; взрослый вне этой темы обычно не знает, что Joshua tree — юкка. Это ближе к MEDIUM по действующей абсолютной рубрике. Отсутствие даты, Latin name в вопросе и многошагового вычисления само по себе не делает факт EASY. Базовое английское tree=дерево может помочь сузить выбор по знакомому названию, но не устанавливает ботаническое соответствие и не заменяет узнаваемый широкий факт. Авторский довод про beginner US national-parks/general-nature quiz описывает тематическую аудиторию; названной широкой демографической/культурной группы с обычным внетематическим знанием этого соответствия он не обосновывает. Это моё независимое редакторское суждение о требуемом знании, а не измеренная доля правильных ответов или утверждение об отсутствии любой осведомлённой группы.",
+          "rubricLocator": "docs/content-audits/question-authoring-guide-2026-09-02.md, Сложность; canonical planning GAME_SPEC Контент вопросов and question-catalog rubric.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a1593a/source-parks32/raw-sources/nps-joshua-tree-namesake.json",
+              "url": "https://www.nps.gov/jotr/learn/nature/jtrees.htm",
+              "jsonPointer": "/completeVisibleResult",
+              "locator": "NPS Joshua Trees entire retained visible response L21-L71 (selected output, not135-line full underlying page); namesake and Yucca brevifolia L25, tree form FAQ L46-L48."
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a1593a/source-parks32/raw-sources/usfs-joshua-tree-taxonomy.json",
+              "url": "https://research.fs.usda.gov/feis/species-reviews/yucspp",
+              "jsonPointer": "/completeVisibleResult",
+              "locator": "USFS FEIS entire retained selected output; Life Form/Genus L56-L79, tree-like evergreen L83-L85, complete taxonomy section L123-L148."
+            }
+          ],
+          "minimumRequiredChange": "В одном направленном fix-cycle обеспечить действительно доступный широкий взрослой аудитории EASY-проверяемый факт/формулировку с источниковым основанием либо представить конкретное содержательное обоснование калибровки по широкой демографической/культурной группе для этого точного текста. Не понижать рубрику до beginner тематической викторины и не менять frozen difficulty/key/ID самовольно. Хорошие notes и факты сохранить; новый текст не придуман reviewer.",
+          "preserve": "Фактическую корректность, источники,полезные notes0-3,правильную оговоркуtwoDESERTecosystems; numeric key3/ID/topic/order/EASY остаются frozen.",
+          "scope": "One first INITIAL difficulty defect; no author fix performed by reader."
+        }
+      ],
+      "preserveGoodText": "Фактические группы/четыре справки не требуют косметического переписывания. Единственный возврат касается абсолютного уровня/доступности проверяемого знания."
+    }
+  ],
+  "scope": {
+    "id": "national-parks-nature-032",
+    "topicId": "national-parks-nature",
+    "sourceOrder": 32,
+    "catalogCommit": "52762d44caa39b7657ab588b34eca7d690de9c55",
+    "cardHash": "9b13411ed586c38888d83e8998bfbfbe4d163f52fd384bf5e945a8d9279ae63b",
+    "sourceFreeze": "d38c7758c2a2c7e6085c27b06a961e601b034c7c"
+  },
+  "taskRawSHA256": "f21857f027ae9cfdf2f0dfce3d8d520b18239863c2ebe1a9b95e9bc9d2f21cf3",
+  "authorOrOtherCardGradeInherited": false,
+  "next": "Coordinator consumes first INITIAL FIX and resolves one directed difficulty issue; no catalog edit or next card by reader."
+}
