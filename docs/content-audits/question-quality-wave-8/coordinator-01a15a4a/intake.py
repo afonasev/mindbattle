@@ -112,6 +112,15 @@ for R in packet_paths:
             rows.append({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[v['text'] for v in q['answers']],'correctIndex':q['correctIndex']})
     assert len(rows) == 11000 and m.sha(rows) == global_audit.get('rowsCanonicalSHA256',global_audit.get('projectionCanonicalSHA256'))
     actual = {}
+    if isinstance(ps.get('actualCurrentPeers'), int):
+        # This raw field is an inventory count, not a list of assessed peers.
+        # Preserve the count and use only the author's explicit full relevant
+        # peer bodies. Do not invent 100 peer assessments or hydrate an unbound path.
+        assert ps['actualCurrentPeers'] == len(topic['questions']) == 100
+        assert isinstance(ps.get('fullRelevantSameTopicPeers'), list) and ps['fullRelevantSameTopicPeers']
+        ps['originalActualCurrentPeerInventoryCount'] = ps['actualCurrentPeers']
+        ps['actualCurrentPeers'] = ps['fullRelevantSameTopicPeers']
+        ps['technicalPeerContainerAlias'] = 'Explicit fullRelevantSameTopicPeers retained verbatim; inventory count is not substantive peer credit. Original full100 topic inventory remains at immutable raw inventoryPath.'
     if 'actualCurrentPeers' in ps:
         snapshots = ps['actualCurrentPeers'] + ps.get('sameTopicClosestFullBodies',[]) + ps.get('crossCatalogClosestFullBodies',[])
     else:
