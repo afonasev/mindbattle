@@ -6,12 +6,13 @@ m = importlib.util.module_from_spec(s)
 s.loader.exec_module(m)
 x = m.read(D / 'manifest.json')
 assert x['owner'] == m.O
-author = x['actors']['parks33Author']
+source_actors = [x['actors'][k] for k in x.get('sourceActorKeys', ['parks33Author'])]
 reviewer = x['actors']['reviewer']
-retired = author['stage'].startswith(('ARCHIVED', 'RETIRED'))
-current_actors = [a for a in [author, reviewer] if not a['stage'].startswith(('ARCHIVED', 'RETIRED'))]
-authors = [author] if author['stage'].startswith('START') else []
+current_actors = [a for a in source_actors+[reviewer] if not a['stage'].startswith(('ARCHIVED', 'RETIRED'))]
+authors = [a for a in source_actors if a['stage'].startswith('START')]
 readers = [reviewer] if reviewer['stage'].startswith('START') else []
+idle_authors = [a for a in source_actors if not a['stage'].startswith(('START', 'ARCHIVED', 'RETIRED'))]
+assert len(authors) <= 2 and len(readers) <= 1
 with m.flow.locked():
     m.flow.lease('acquire', 'planning', m.O)
 try:
@@ -27,7 +28,7 @@ try:
         m.write(cp_path, cp)
         sp = m.P / 'evidence/question-revision-process-v2/coordinator-state.json'
         st = m.read(sp)
-        st.update(activeAuthors=authors, idleAuthors=[] if authors or retired else [author],
+        st.update(activeAuthors=authors, idleAuthors=idle_authors,
                   activeIndependentReview=reviewer if readers else None,
                   currentNativeActors={a['threadId']: a for a in current_actors},
                   nativeActorsCurrent=current_actors, currentWork=x['currentWork'],
