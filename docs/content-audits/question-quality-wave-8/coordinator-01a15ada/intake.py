@@ -78,12 +78,12 @@ for R in packet_paths:
         retained = ps['retrieval']
         assert retained['topicFileCount'] == 110 and retained['questionCount'] == 11000
         assert len(retained['globalRows']) == 11000
-        assert m.sha(retained['globalRows']) == retained['globalRowsCanonicalSHA256']
+        assert m.sha(retained['globalRows']) == retained.get('globalRowsCanonicalSHA256', retained.get('rowsCanonicalSHA256'))
         global_audit = ps['globalMAIN'] = {
             'topicFileCount': retained['topicFileCount'],
             'questionCount': retained['questionCount'],
             'rows': retained['globalRows'],
-            'rowsCanonicalSHA256': retained['globalRowsCanonicalSHA256'],
+            'rowsCanonicalSHA256': retained.get('globalRowsCanonicalSHA256', retained.get('rowsCanonicalSHA256')),
             'allCurrentFileByteBindings': retained['allCurrentFileByteBindings']}
         ps['sameTopicMAIN'] = retained['sameTopicMAIN']
         ps['technicalRetrievalShapeAlias'] = 'Exact original retrieval rows/file bindings/topic bodies; no new facts or peer judgments.'
@@ -175,6 +175,21 @@ for R in packet_paths:
             source['completeOutputSHA256'] = hashlib.sha256(body.encode('utf-8')).hexdigest()
             source['technicalCompleteOutputBinding'] = 'Unique already-retained full original tool body; empty JSON Pointer means the root JSON string.'
         if 'completeOutputPointer' in source:
+            capture = m.read(p)
+            if isinstance(capture,dict) and 'originalRecord' in capture and source['completeOutputPointer'].startswith('/payload/'):
+                # Capture helper pointer is relative to retained native record.
+                # Verify exact native lineage before adding its wrapper prefix.
+                native_path = pathlib.Path(capture['nativeJournal'])
+                if not native_path.exists():
+                    matches = list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+capture['sourceNativeId']+'.jsonl'))
+                    assert len(matches) == 1
+                    native_path = matches[0]
+                native_record = json.loads(native_path.read_text().splitlines()[capture['nativeRecordLine']-1])
+                assert native_record == capture['originalRecord']
+                assert capture['sourceNativeId'] == candidate['sourceNativeId']
+                source['originalNativeRecordRelativePointer'] = source['completeOutputPointer']
+                source['completeOutputPointer'] = '/originalRecord'+source['completeOutputPointer']
+                source['technicalCaptureWrapperPointerAlias'] = 'Exact retained originalRecord verified against actual native journal line; prefix only, raw unchanged.'
             body = m.read(p)
             for key in source['completeOutputPointer'].split('/')[1:]:
                 body = body[int(key)] if isinstance(body,list) else body[key]
