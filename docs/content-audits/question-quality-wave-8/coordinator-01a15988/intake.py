@@ -21,9 +21,34 @@ for R in packet_paths:
     assert m.sha(e['beforeCard']) == e['beforeHash'] and m.sha(e['proposedCard']) == e['afterHash']
     before, after = groups(e['beforeCard']), groups(e['proposedCard'])
     for g in sp['entries'][0]['literalGroups']:
+        if g['group'] == 'prompt_ordered_answers_key' and isinstance(g['literal'], str):
+            # Lossless shape alias only: candidate already binds the entire
+            # ordered group, and all four personal assessments bind its strings.
+            assert g['literal'] == e['proposedCard']['prompt']
+            assert m.sha(g['literal']) == g['literalSHA256']
+            variants = sp['entries'][0]['fourFullPromptAnswerNoteAssessments']
+            assert len(variants) == 4 and {v['slot'] for v in variants} == set(range(4))
+            for v in variants:
+                answer = e['proposedCard']['answers'][v['slot']]
+                assert v['fullPrompt'] == g['literal'] and v['answer'] == answer['text']
+                assert v['note'] == answer['note']
+            assert e['fieldGroups']['prompt_ordered_answers_key']['afterCanonicalSHA256'] == m.sha(after[g['group']])
+            g['originalPromptOnlyLiteral'] = g['literal']
+            g['originalPromptOnlyLiteralSHA256'] = g['literalSHA256']
+            g['literal'] = after[g['group']]
+            g['literalSHA256'] = m.sha(g['literal'])
+            g['technicalShapeAlias'] = 'Same author candidate group and four bound full triples; no text or primaryGround changed.'
         assert g['literal'] == after[g['group']] and m.sha(g['literal']) == g['literalSHA256']
     if isinstance(e['fieldGroups'],dict):
         for k, fg in e['fieldGroups'].items():
+            for phase, literal in [('before', before[k]), ('after', after[k])]:
+                key = phase+'CanonicalSHA256'
+                if fg[key] != m.sha(literal):
+                    assert isinstance(literal, str)
+                    assert fg[key] == hashlib.sha256(literal.encode('utf-8')).hexdigest()
+                    fg['original'+phase.title()+'RawUTF8SHA256'] = fg[key]
+                    fg[key] = m.sha(literal)
+                    fg['technicalHashRepresentationAlias'] = 'Exact identical author string; raw UTF8 and canonical JSON string hashes distinguished.'
             assert fg['beforeCanonicalSHA256'] == m.sha(before[k]) and fg['afterCanonicalSHA256'] == m.sha(after[k])
     else:
         assert isinstance(e['fieldGroups'],list)
@@ -69,7 +94,24 @@ for R in packet_paths:
     for source in sp['rawSources']:
         original = dict(source); p = C/source['path']; digest = source.get('sha256',source.get('fileSHA256',m.raw(p)))
         assert m.raw(p) == digest
-        if source.get('completeOutputPointer'):
+        if p.suffix == '.json' and 'completeOutputPointer' not in source:
+            capture = m.read(p)
+            hits = []
+            def find_body(value, pointer=''):
+                if isinstance(value,dict):
+                    for key, child in value.items():
+                        find_body(child,pointer+'/'+key.replace('~','~0').replace('/','~1'))
+                elif isinstance(value,list):
+                    for key, child in enumerate(value):find_body(child,pointer+'/'+str(key))
+                elif isinstance(value,str) and 'Source: open(' in value and source['url'] in value:
+                    hits.append((pointer,value))
+            find_body(capture)
+            assert len(hits) == 1, ('AMBIGUOUS_FULL_SOURCE_BODY', str(p), len(hits))
+            pointer, body = hits[0]
+            source['completeOutputPointer'] = pointer
+            source['completeOutputSHA256'] = hashlib.sha256(body.encode('utf-8')).hexdigest()
+            source['technicalCompleteOutputBinding'] = 'Unique already-retained full original tool body; empty JSON Pointer means the root JSON string.'
+        if 'completeOutputPointer' in source:
             body = m.read(p)
             for key in source['completeOutputPointer'].split('/')[1:]:
                 body = body[int(key)] if isinstance(body,list) else body[key]
@@ -106,6 +148,13 @@ for R in packet_paths:
         elif isinstance(v,list):
             for x in v: source_aliases(x)
     source_aliases(sp)
+    for v in sp['entries'][0]['fourFullPromptAnswerNoteAssessments']:
+        triple = {'prompt':v['fullPrompt'],'answer':v['answer'],'note':v['note']}
+        if 'tripleSHA256' in v and v['tripleSHA256'] != m.sha(triple):
+            assert v['tripleSHA256'] == m.sha({'slot':v['slot'],**triple})
+            v['originalSlotIncludedTripleSHA256'] = v['tripleSHA256']
+            v['tripleSHA256'] = m.sha(triple)
+            v['technicalTripleShapeAlias'] = 'Same author full prompt/answer/note, redundant numeric slot excluded from canonical triple hash only.'
     if 'fullOriginalToolOutputs' in sp:
         sp['immutableFullOriginalToolOutputs'] = {'path':str((R/'sourceproof.json').relative_to(C)), 'sha256':m.raw(R/'sourceproof.json'), 'jsonPointer':'/fullOriginalToolOutputs'}
         del sp['fullOriginalToolOutputs']
