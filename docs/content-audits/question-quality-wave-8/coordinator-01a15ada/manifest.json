@@ -326,12 +326,12 @@
       "hostId": "local",
       "model": "gpt-6.1-sol",
       "thinking": "medium",
-      "stage": "START_INITIAL_POLAR62",
+      "stage": "IDLE_INITIAL62_FIX_WAIT_SOLECYCLE1",
       "task": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15ada/reader-polar62-initial-task.json",
-      "expected": "One exact INITIAL polar62; assess specific blocker at30min",
+      "expected": "One same-reader FINAL62 solecycle1 after exact apply/QA",
       "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/20/rollout-2026-10-20T23-09-04-01a15a80-acf6-7ac3-b21c-e7092170741b.jsonl",
       "actualCompactions": 0,
-      "cursor": "d8424da1-6e53-48fa-84dd-131974222d70:72",
+      "cursor": "d8424da1-6e53-48fa-84dd-131974222d70:75",
       "lastInput": 259216,
       "modelWindow": 475000,
       "lastTaskEvent": "task_complete"
@@ -341,9 +341,9 @@
       "hostId": "local",
       "model": "gpt-6-luna",
       "thinking": "medium",
-      "stage": "IDLE_SOURCE62_READY_RETAIN_FOR_DIRECTED_REPAIR",
-      "task": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15ada/source-polar62-task.json",
-      "expected": "One bounded SOURCE62 using already captured relevant full primary bodies; no63",
+      "stage": "START_SOURCE_POLAR62_CYCLE1",
+      "task": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15ada/source-polar62-cycle1-task.json",
+      "expected": "One bounded sole directed62cycle1 READY/HOLD then same-reader FINAL",
       "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/21/rollout-2026-10-21T01-00-15-01a15ae6-759d-7f02-8db3-299b3e32a149.jsonl",
       "actualCompactions": 0,
       "lastInput": 202194,
@@ -402,13 +402,14 @@
     "id": "polar-regions-beaufort-gyre-clockwise",
     "topicId": "polar-regions",
     "sourceOrder": 62,
-    "stage": "START_INITIAL_POLAR62",
+    "stage": "INITIAL62_FIX_SOLECYCLE1_STARTED",
     "sourceFreeze": "44ec9dbb2d81ffee08ec2f766b4415021960e609",
     "rawAuthorFreeze": "00f9f478487613e8d42b08685d135678ab1530af",
     "catalogCommit": "d9d0727ac8790ddee4ebb1feded0a2e6a2d7b0ef",
     "qaReportCommit": "51d3fc17662fd145ee0c9810e77a745ccda01b59",
     "qaPath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15ada/qa-qualified-source-polar62.json",
-    "cardHash": "a1bbdbff81e315c4edd2cfd98228ef79acc1a35ba44b766be02ecee31c38812b"
+    "cardHash": "a1bbdbff81e315c4edd2cfd98228ef79acc1a35ba44b766be02ecee31c38812b",
+    "hash": "a1bbdbff81e315c4edd2cfd98228ef79acc1a35ba44b766be02ecee31c38812b"
   },
   "latestCertification": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15ada/certification-polar61-initial.json",
   "latestCodeCertificate": "59a8d4c6db6d0f440b13df23094ec5dc238e98d3",
@@ -895,5 +896,37 @@
       "catalogCommit": "b3d6003e6e38ab838d9e88ae152ad169f7661053",
       "stage": "QA19PASS_PENDING_METADATA_FINAL"
     }
+  },
+  "pendingSource62": {
+    "status": "INITIAL_FIX_SOLECYCLE1_STARTED",
+    "initialReceipt": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15ada/independent-polar62-initial/receipt.json",
+    "qualityCredit": 0,
+    "cycle": 1,
+    "defects": [
+      {
+        "code": "BEAUFORT_NAME_AND_CATEGORY_CUE_ABSOLUTE_MEDIUM_UNSUPPORTED",
+        "severity": "substantive",
+        "fields": [
+          "prompt",
+          "answers[0].text",
+          "answers[1].text",
+          "answers[2].text",
+          "answers[3].text",
+          "difficulty"
+        ],
+        "finding": "Условие уже называет «антициклон Бофорта», а единственный ответ с тем же именем — «Круговорот Бофорта». Одновременно вопрос просит круговорот, и только один вариант буквально назван круговоротом; остальные — течение/дрейф. Поэтому key0 выбирается по имени и категории без знания арктической циркуляции, clockwise-направления или действия антициклона. Две независимые подсказки делают тематические факты ненужными для решения и не подтверждают MEDIUM.",
+        "requiredAction": "В одном directedcycle1 убрать и повтор имени, и единственное совпадение категории, сохранив frozenID/topic/order/MEDIUM/key0. Вопрос/ряд должны требовать реального тематического знания о циркуляцииБофорта, а не сопоставленияслов. Не ограничиваться удалением одного «Бофорта» при оставшемся единственном «круговороте»; не добавлять обязательнуюHARD/многошаговуюматематику. Хорошие источники/ownnotesсохранить, изменённые зависимости проверить.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15ada/source-polar61/raw/supporting-polar-flows.json",
+            "url": "https://www.nasa.gov/centers-and-facilities/jpl/arctic-ice-melt-is-changing-ocean-currents/",
+            "pointer": "/originalRecord/payload/output/1/text",
+            "locator": "NASA L257–263;NOAA Arcticreport L218–231"
+          }
+        ],
+        "qualification": "Не оспариваются факты clockwise/anticyclonicрежима или полезность note0; semanticMAIN distinct от61. Совпадениянот с другими ключами не являются дефектом.",
+        "cycle": 0
+      }
+    ]
   }
 }
