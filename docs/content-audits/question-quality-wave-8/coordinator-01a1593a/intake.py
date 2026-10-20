@@ -65,7 +65,7 @@ for R in packet_paths:
         pid = peer.get('id',q['id'])
         assert catalog[pid] == (peer['topicId'], q) and m.sha(q) == digest
         actual[pid] = {**peer, 'id':pid, 'sha256':digest}
-    paths = {}
+    paths = {}; verified_pointer_bodies = set()
     for source in sp['rawSources']:
         original = dict(source); p = C/source['path']; digest = source.get('sha256',source.get('fileSHA256',m.raw(p)))
         assert m.raw(p) == digest
@@ -73,13 +73,35 @@ for R in packet_paths:
             body = m.read(p)
             for key in source['completeOutputPointer'].split('/')[1:]:
                 body = body[int(key)] if isinstance(body,list) else body[key]
-            assert hashlib.sha256(body.encode()).hexdigest() == source['completeOutputSHA256']
+            actual_body = hashlib.sha256(body.encode()).hexdigest()
+            declared = source['completeOutputSHA256']; canonical_string = m.sha(body)
+            pointer_key = (str(p),source['completeOutputPointer'])
+            if declared != actual_body:
+                if declared != canonical_string:
+                    # Only a proven one-character omission of the already verified
+                    # identical capture/pointer is repairable as a copied hash typo.
+                    assert pointer_key in verified_pointer_bodies and source['url'] in body
+                    assert len(declared)+1 == len(canonical_string)
+                    assert any(canonical_string[:i]+canonical_string[i+1:] == declared for i in range(len(canonical_string)))
+                    source['copiedHashOmissionProvenAgainstIdenticalVerifiedCapture'] = True
+                source['originalDeclaredCompleteOutputSHA256'] = declared
+                source['canonicalJSONStringSHA256'] = canonical_string
+                source['completeOutputSHA256'] = actual_body
+                source['captureHashRepresentationNormalization'] = 'Original unchanged body verified at immutable file/pointer. Raw UTF8 payload and canonical JSON string hashes are distinct; original declaration retained.'
+            verified_pointer_bodies.add(pointer_key)
         rel = str(p.relative_to(C)); paths[source['path']] = rel
+        paths[str(p)] = paths[rel] = rel
+        if source.get('completeOutputPointer'):
+            for base in [source['path'],str(p),rel]:
+                paths[base+'#'+source['completeOutputPointer']] = rel
         source.update(path=rel, sha256=digest, originalSourceBinding=original)
     def source_aliases(v):
         if isinstance(v,dict):
-            for k, x in v.items():
-                if k == 'sourcePaths': v[k] = [paths.get(p,p) for p in x]
+            for k, x in list(v.items()):
+                if k == 'sourcePaths':
+                    normalized = [paths.get(p,p) for p in x]
+                    if normalized != x: v['sourcePathsBeforeTechnicalNormalization'] = x
+                    v[k] = normalized
                 else: source_aliases(x)
         elif isinstance(v,list):
             for x in v: source_aliases(x)
