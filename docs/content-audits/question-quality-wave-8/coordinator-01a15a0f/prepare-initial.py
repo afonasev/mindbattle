@@ -19,8 +19,9 @@ qa_commit = m.savecode([qa_path], 'Preserve exact '+label+' affected content QA1
 x = m.read(D/'manifest.json')
 cp = m.read(m.P/'openspec/changes/question-quality-future-waves/current-checkpoint.json')
 assert cp['owner'] == m.O and len(cp['currentEligibleCompletedIds']) == x['CURRENT']
-t = m.read(D/'reader-polar46-initial-task.json')
-t.update(owner=m.O, role='independent reviewer one exact INITIAL '+label,
+t = m.read(m.C/'docs/content-audits/question-quality-wave-8/coordinator-01a15a0f/reader-polar46-initial-task.json')
+t.update(owner=m.O, manifest=str(D/'manifest.json'),
+         binderSchemaReference=str(D/'bind-current-receipt.py'), role='independent reviewer one exact INITIAL '+label,
          phase='START_INITIAL_'+label.upper(), id=q['id'], sourceOrder=order,
          catalogCommit=catalog_commit, cardHash=m.sha(q),
          sourceFreeze=qualified_freeze, rawAuthorFreeze=raw_freeze,
