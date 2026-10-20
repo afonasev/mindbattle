@@ -20,6 +20,12 @@ for R in packet_paths:
     assert topic['questions'][e['sourceOrder']-1] == e['beforeCard']
     assert m.sha(e['beforeCard']) == e['beforeHash'] and m.sha(e['proposedCard']) == e['afterHash']
     before, after = groups(e['beforeCard']), groups(e['proposedCard'])
+    if e['status'] == 'READY_FOR_SAME_READER_FINAL':
+        assert candidate['cycle'] == 1 and R.name.endswith('-cycle1')
+        initial = m.read(D/('independent-polar'+str(e['sourceOrder'])+'-initial/receipt.json'))
+        assert initial['entries'][0]['id'] == e['id'] and initial['entries'][0]['status'] == 'FIX'
+        e['originalDirectedFinalStatus'] = e['status']
+        e['status'] = 'READY_FOR_INDEPENDENT_REVIEW'
     for g in sp['entries'][0]['literalGroups']:
         if g['group'] == 'prompt_ordered_answers_key' and isinstance(g['literal'], str):
             # Lossless shape alias only: candidate already binds the entire
@@ -113,6 +119,45 @@ for R in packet_paths:
         assert saved_inventory['sameTopicMAIN']['questions'] == topic['questions']
         same_topic['questions'] = saved_inventory['sameTopicMAIN']['questions']
         same_topic['technicalHydration'] = 'Exact original saved100 bodies from SHA-bound author inventory; no new assessment.'
+    # A directed naming-only repair retained the original INITIAL inventory.
+    # Rebind only its own historical preimage after proving the full initial
+    # application chain and that every other catalog body is unchanged.
+    if candidate['cycle'] == 1 and R.name.endswith('-cycle1') and 'rows' in global_audit:
+        old_questions = ps['sameTopicMAIN'].get('questions', [])
+        changes = [(a,b) for a,b in zip(old_questions,topic['questions']) if a != b]
+        if changes:
+            assert len(old_questions) == len(topic['questions']) == 100 and len(changes) == 1
+            old_self, live_self = changes[0]
+            prior_path = R.with_name(R.name.removesuffix('-cycle1'))/'candidate.json'
+            prior = m.read(prior_path)['entries'][0]
+            assert old_self == prior['beforeCard'] and live_self == prior['proposedCard'] == e['beforeCard']
+            assert e['proposedCard'] == {**live_self, 'prompt':live_self['prompt'].replace('Амри','Эймери'), 'explanation':live_self['explanation'].replace('Амри','Эймери')}
+            original_global = json.loads(json.dumps(global_audit))
+            old_rows, live_rows = [], []
+            bindings = global_audit['allCurrentFileByteBindings']
+            assert len(bindings) == 110
+            for f in bindings:
+                p = C/f['path']; t = m.read(p)
+                if t['id'] == e['topicId']:
+                    old_topic = {**t,'questions':old_questions}
+                    assert hashlib.sha256((json.dumps(old_topic,ensure_ascii=False,indent=2)+'\n').encode()).hexdigest() == f['sha256']
+                    f['sha256'] = m.raw(p)
+                else:
+                    assert m.raw(p) == f['sha256']
+                    old_topic = t
+                for source, dest in [(old_topic,old_rows),(t,live_rows)]:
+                    dest.extend({'topicId':source['id'],'id':q['id'],'prompt':q['prompt'],'answers':[v['text'] for v in q['answers']],'correctIndex':q['correctIndex']} for q in source['questions'])
+            assert old_rows == global_audit['rows'] and m.sha(old_rows) == global_audit['rowsCanonicalSHA256']
+            ps['originalHistoricalSelfInventory'] = original_global
+            global_audit.update(rows=live_rows,rowsCanonicalSHA256=m.sha(live_rows))
+            ps['sameTopicMAIN']['questions'] = topic['questions']
+            if 'fileSHA256' in ps['sameTopicMAIN']:
+                ps['sameTopicMAIN']['fileSHA256'] = m.raw(C/f"src/content/topics/{e['topicId']}.json")
+            for peer in ps['actualCurrentPeers']:
+                if peer['id'] == e['id']:
+                    assert peer['card'] == old_self and peer['sha256'] == m.sha(old_self)
+                    peer.update(originalHistoricalSelfPreimage=peer['card'],card=live_self,sha256=m.sha(live_self))
+            ps['technicalSelfOnlyCatalogDelta'] = {'priorCandidate':str(prior_path.relative_to(C)), 'priorCandidateRawSHA256':m.raw(prior_path), 'oldSelfSHA256':m.sha(old_self), 'currentSelfSHA256':m.sha(live_self), 'otherCardsUnchanged':True, 'selfIsDistinctPeer':False, 'operation':'Machine freshness only; exact naming repair; no peer assessment created or changed.'}
     inventory = global_audit.get('allCurrentFileByteBindings', global_audit.get('fileManifest',global_audit.get('files')))
     assert len(inventory) == 110
     rows, catalog = [], {}
