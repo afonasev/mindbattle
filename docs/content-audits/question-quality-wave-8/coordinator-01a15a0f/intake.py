@@ -74,6 +74,15 @@ for R in packet_paths:
                 for g in e['fieldGroups']:
                     assert g['literal'] == after[g['group']] and g['literalSHA256'] == m.sha(g['literal'])
     global_audit = ps.get('globalMAIN', ps.get('global11000MainAudit'))
+    if global_audit is None and 'inventoryPath' in ps:
+        inv_path = C / ps['inventoryPath']
+        assert m.raw(inv_path) == ps['inventoryFileSHA256']
+        retained = m.read(inv_path)
+        assert ps['currentMainRows'] == retained['globalMAIN']['questionCount'] == 11000
+        assert ps['sameTopicCurrentCards'] == retained['sameTopicMAIN']['questionCount'] == 100
+        ps['globalMAIN'] = global_audit = retained['globalMAIN']
+        ps['sameTopicMAIN'] = retained['sameTopicMAIN']
+        ps['technicalInventoryReferenceHydration'] = {'path':ps['inventoryPath'], 'sha256':ps['inventoryFileSHA256'], 'operation':'Exact author-retained inventory only; no new peer judgment.'}
     # Lossless hydration from the author's immutable, SHA-bound fresh inventory.
     if 'sourceInventoryPath' in global_audit:
         inventory_path = pathlib.Path(global_audit['sourceInventoryPath'])
