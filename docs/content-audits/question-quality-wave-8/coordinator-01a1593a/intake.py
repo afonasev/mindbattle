@@ -1,5 +1,5 @@
 """Lossless mechanical intake of the two preserved SOURCE packets; no quality credit."""
-import pathlib, json, hashlib, importlib.util, subprocess
+import pathlib, json, hashlib, importlib.util, subprocess, sys
 D = pathlib.Path(__file__).parent
 spec = importlib.util.spec_from_file_location('owned', D/'owned-tools.py')
 m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
@@ -12,8 +12,9 @@ def groups(q):
     return {'prompt_ordered_answers_key': {'prompt':q['prompt'], 'answers':[v['text'] for v in q['answers']], 'correctIndex':q['correctIndex']}, 'explanation':q['explanation'], **{'note'+str(k):v['note'] for k,v in enumerate(q['answers'])}}
 
 reports = []
-for name in ['source-polar41-cycle1-fresh', 'source-parks31-complete']:
-    R = OLD/name; B = D/('qualified-'+name)
+packet_paths = [pathlib.Path(p).resolve() for p in sys.argv[1:]] if len(sys.argv)>1 else [OLD/n for n in ['source-polar41-cycle1-fresh', 'source-parks31-complete']]
+for R in packet_paths:
+    name = R.name; B = D/('qualified-'+name)
     candidate, sp, ps = [m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
     e = candidate['entries'][0]; topic = m.read(C/f"src/content/topics/{e['topicId']}.json")
     assert topic['questions'][e['sourceOrder']-1] == e['beforeCard']
@@ -76,4 +77,4 @@ for name in ['source-polar41-cycle1-fresh', 'source-parks31-complete']:
     report.update(rawPacket=str(R.relative_to(C)),cycle=candidate['cycle'],globalMAIN=m.sha(rows),status='MECHANICAL_INTAKE_PASS_PENDING_INDEPENDENT_REVIEW',qualityCredit=0)
     m.write(D/(name+'-intake.json'),report); reports.append({'id':e['id'],'afterHash':e['afterHash'],'status':report['status']})
 files = [pathlib.Path(__file__),D/'method-pilot.md'] + list(D.glob('*-intake.json')) + [p for p in D.glob('qualified-*/*.json')]
-print(json.dumps({'commit':m.savecode(files,'Mechanically qualify preserved SOURCE41 and31 without new editorial review'),'packets':reports},ensure_ascii=False))
+print(json.dumps({'commit':m.savecode(files,'Mechanically qualify SOURCE packet without new editorial review'),'packets':reports},ensure_ascii=False))
