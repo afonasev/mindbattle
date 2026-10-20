@@ -1,0 +1,15 @@
+# Full exact2000 handoff
+
+Successor: 01a1593a-ac89-7b22-9cdb-d59678b1d767. CURRENT 890/2000; remaining 1110 across all20 topics/waves6–9. Waves500/198/192/0. Full goal ACTIVE, unfinished. This predecessor has actual native compactions2 and performs preservation/release only.
+
+Machine manifest: handoff-manifest-01a1593a.json; live actor/cycle routing: queue.json. These supersede older coordinator-state actor fields. Canonical checkpoint stays planning/openspec/changes/question-quality-future-waves/current-checkpoint.json. Selected scope, frozen key/difficulty and accepted hashes unchanged.
+
+SOURCE31: source-parks31-complete critical3 raw READY; bd8cba929e11cff933293bfebae97d934b0fd262; candidate b86b97ec6c5578fa1ea8003101ff0e3ca31c7711a4888027bb0396ab2c18be41. No qualification/apply/QA/INITIAL, zero credit. Country primary/stable pointer completion must be checked by successor; existing source-parks31-fresh body capture points to native ordinal271 (one-based), not declared270. No prior independent cycle31 consumed.
+
+SOURCE41: source-polar41-cycle1-fresh critical3 raw READY, preserved with this handoff. FIRSTINITIAL FIX raw75ab23f7901bf25bd21f71bcb0db09d517624a04 already consumed80280b907ad193056a15cadb9184f0f4100166f7. Same solecycle1 only: note1 replace final phrase with «в Восточно-Сибирское море и море Бофорта». Expected candidate f9bc933ed67843a76a3d0df60d3a91547ac6360a811b13f526c131d9b7abf298. Not qualified/applied/QA/FINAL; zero credit. Reviewer D1 idle awaiting samecycle1 FINAL. Keep MAIN31 unchanged during reader41 binding.
+
+SOURCE42: old actor stopped2; no complete packet/noINITIAL. Original BAS Antarctic factsheet robot challenge consumed; no retry/bypass; one official alternative remains. Diagnostic source-captures/source52f1-42-bas-challenge-original.json preserved7a572a1749d148055454dc341139daaf1c3702d7.
+
+Pinned process coordinator-01a14377/pinned-question-revision-12e5581b.md SHA8bc3b06d80b0aa94dbb8d375253c5074eda067615ab7e3a2c3845bbfabaff7b9 remains binding. Guard coordinator-01a13f31/planning-certification-guard.py unchanged. No quality inheritance, full6/4 personal judgments and whole primary/relevant peer bodies, no third full review. HOLDs remain zero, including polar13/21/22 and parks14/26, retained histories. Latest certificate6650fe076aa60f771869e2fdbfcd4d58d1bf756a, projection3628fb7f4e1a430c38e5740ee0d1b13d8ca2ce25. Existing minimal affected QA19 only after actual apply; no QA during this handoff.
+
+Both default indexes FOREIGN. Planning physical main never switch. Private refs codex/question-quality-wave-6 and codex/question-revision-resume-20261014; private-save helper evidence/question-revision-process-v2/private-save-helper-01a13cb1.py. Acquire own planning lease before every planning mutation/save; release before waits. Historical P index changed externally before this handoff; preserve current bytes, never restore old index. No main merge, runtime, full suite, release/deploy or OpenSpec archive authorized. No new actors/messages by this predecessor.
