@@ -174,6 +174,10 @@ for R in packet_paths:
             source['completeOutputPointer'] = pointer
             source['completeOutputSHA256'] = hashlib.sha256(body.encode('utf-8')).hexdigest()
             source['technicalCompleteOutputBinding'] = 'Unique already-retained full original tool body; empty JSON Pointer means the root JSON string.'
+        if p.suffix != '.json' and source.get('completeOutputPointer') == '/file/full captured page text':
+            assert source['completeOutputSHA256'] == m.raw(p)
+            source['originalTextFileLocator'] = source.pop('completeOutputPointer')
+            source['technicalTextFileBinding'] = 'Exact whole UTF8 file; descriptive file locator is not a JSON Pointer. Original declaration retained.'
         if 'completeOutputPointer' in source:
             capture = m.read(p)
             if isinstance(capture,dict) and 'originalRecord' in capture and source['completeOutputPointer'].startswith('/payload/'):
@@ -196,6 +200,23 @@ for R in packet_paths:
             actual_body = hashlib.sha256(body.encode()).hexdigest()
             declared = source['completeOutputSHA256']; canonical_string = m.sha(body)
             pointer_key = (str(p),source['completeOutputPointer'])
+            if declared not in (actual_body, canonical_string) and isinstance(capture,dict) and 'originalRecord' in capture:
+                # Reused SOURCE71 captures carry authoritative body hashes in
+                # their immutable wrappers. Prove native equality before a
+                # lossless alias of a separately mistyped packet declaration.
+                assert capture['completeOutputPointer'] == source['completeOutputPointer']
+                assert capture['completeOutputSHA256'] == actual_body and source['url'] in body
+                native_path = pathlib.Path(capture['nativeJournal'])
+                if not native_path.exists():
+                    matches = list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+capture['sourceNativeId']+'.jsonl'))
+                    assert len(matches) == 1
+                    native_path = matches[0]
+                native_record = json.loads(native_path.read_text().splitlines()[capture['nativeRecordLine']-1])
+                assert native_record == capture['originalRecord']
+                source['originalDeclaredCompleteOutputSHA256'] = declared
+                source['technicalNativeVerifiedCaptureHashAlias'] = {'nativeId':capture['sourceNativeId'], 'nativeRecordLine':capture['nativeRecordLine'], 'originalRecordByteEqual':True, 'captureBodySHA256':actual_body}
+                source['completeOutputSHA256'] = actual_body
+                declared = actual_body
             if declared != actual_body:
                 if declared != canonical_string:
                     # Only a proven one-character omission of the already verified
