@@ -74,6 +74,23 @@ for R in packet_paths:
                 for g in e['fieldGroups']:
                     assert g['literal'] == after[g['group']] and g['literalSHA256'] == m.sha(g['literal'])
     global_audit = ps.get('globalMAIN', ps.get('global11000MainAudit'))
+    # Lossless hydration from the author's immutable, SHA-bound fresh inventory.
+    if 'sourceInventoryPath' in global_audit:
+        inventory_path = pathlib.Path(global_audit['sourceInventoryPath'])
+        assert m.raw(inventory_path) == global_audit['sourceInventorySHA256']
+        saved_inventory = m.read(inventory_path)
+        full_global = saved_inventory['globalMAIN']
+        assert full_global['rowsCanonicalSHA256'] == global_audit['rowsCanonicalSHA256']
+        assert full_global['topicFileCount'] == global_audit['topicFileCount'] == 110
+        assert full_global['questionCount'] == global_audit['questionCount'] == 11000
+        global_audit['originalInventoryReference'] = dict(global_audit)
+        global_audit['allCurrentFileByteBindings'] = full_global['allCurrentFileByteBindings']
+        same_topic = ps['sameTopicMAIN']
+        assert same_topic['sourceInventoryPath'] == str(inventory_path)
+        assert same_topic['sourceInventorySHA256'] == m.raw(inventory_path)
+        assert saved_inventory['sameTopicMAIN']['questions'] == topic['questions']
+        same_topic['questions'] = saved_inventory['sameTopicMAIN']['questions']
+        same_topic['technicalHydration'] = 'Exact original saved100 bodies from SHA-bound author inventory; no new assessment.'
     inventory = global_audit.get('allCurrentFileByteBindings', global_audit.get('fileManifest',global_audit.get('files')))
     assert len(inventory) == 110
     rows, catalog = [], {}
