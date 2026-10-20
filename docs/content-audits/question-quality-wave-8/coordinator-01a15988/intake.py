@@ -38,7 +38,14 @@ for R in packet_paths:
             g['literal'] = after[g['group']]
             g['literalSHA256'] = m.sha(g['literal'])
             g['technicalShapeAlias'] = 'Same author candidate group and four bound full triples; no text or primaryGround changed.'
-        assert g['literal'] == after[g['group']] and m.sha(g['literal']) == g['literalSHA256']
+        assert g['literal'] == after[g['group']]
+        if m.sha(g['literal']) != g['literalSHA256']:
+            assert isinstance(g['literal'],str)
+            assert g['literalSHA256'] == hashlib.sha256(g['literal'].encode('utf-8')).hexdigest()
+            g['originalLiteralRawUTF8SHA256'] = g['literalSHA256']
+            g['literalSHA256'] = m.sha(g['literal'])
+            g['technicalLiteralHashAlias'] = 'Identical author literal, raw UTF8 hash normalized to canonical JSON string hash.'
+        assert m.sha(g['literal']) == g['literalSHA256']
     if isinstance(e['fieldGroups'],dict):
         for k, fg in e['fieldGroups'].items():
             for phase, literal in [('before', before[k]), ('after', after[k])]:
