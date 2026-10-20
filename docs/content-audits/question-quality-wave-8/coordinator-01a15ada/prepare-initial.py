@@ -4,14 +4,16 @@ D = pathlib.Path(__file__).parent
 s = importlib.util.spec_from_file_location('owned', D/'owned-tools.py')
 m = importlib.util.module_from_spec(s)
 s.loader.exec_module(m)
-order, catalog_commit, raw_freeze, qualified_freeze = sys.argv[1:]
+order, catalog_commit, raw_freeze, qualified_freeze = sys.argv[1:5]
 order = int(order)
 label = 'polar' + str(order)
-B = D/('qualified-source-' + label)
+packet_name = sys.argv[5] if len(sys.argv)>5 else 'source-'+label
+assert packet_name.startswith('source-'+label) and pathlib.Path(packet_name).name == packet_name
+B = D/('qualified-' + packet_name)
 e = m.read(B/'candidate.json')['entries'][0]
 q = m.read(m.C/'src/content/topics/polar-regions.json')['questions'][order-1]
 assert q == e['proposedCard'] and m.sha(q) == e['afterHash']
-qa_path = D/('qa-qualified-source-' + label + '.json')
+qa_path = D/('qa-qualified-' + packet_name + '.json')
 qa = m.read(qa_path)
 assert qa['success'] and qa['numPassedTests'] == 19
 assert qa['numFailedTests'] == qa['numPendingTests'] == 0
@@ -26,8 +28,8 @@ t.update(owner=m.O, manifest=str(D/'manifest.json'),
          catalogCommit=catalog_commit, cardHash=m.sha(q),
          sourceFreeze=qualified_freeze, rawAuthorFreeze=raw_freeze,
          authorNativeId=m.read(B/'candidate.json')['sourceNativeId'],
-         authorPacket=str(B), immutableRawAuthorPacket=str(D/('source-'+label)),
-         applyReport=str(D/('qualified-source-'+label+'-apply.json')),
+         authorPacket=str(B), immutableRawAuthorPacket=str(D/packet_name),
+         applyReport=str(D/('qualified-'+packet_name+'-apply.json')),
          qa=str(qa_path), qaSHA256=m.raw(qa_path), qaReportCommit=qa_commit,
          outputDirectory=str(D/('independent-'+label+'-initial')),
          frozen={'id':q['id'], 'topicId':'polar-regions', 'sourceOrder':order,
