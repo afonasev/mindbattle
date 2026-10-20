@@ -22,11 +22,11 @@
       "hostId": "local",
       "model": "gpt-6.1-sol",
       "thinking": "medium",
-      "stage": "START_INITIAL_POLAR76",
+      "stage": "IDLE_INITIAL76_FIX_PRESERVED",
       "task": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15b4d/reader-polar76-initial-task.json",
-      "expected": "One exact INITIAL polar76; assess specific blocker at30min",
+      "expected": "Directed FINAL76 after solecycle1",
       "actualCompactions": 0,
-      "cursor": "6e0465a9-cf84-4972-92fe-1ac3e25d6c11:49",
+      "cursor": "6e0465a9-cf84-4972-92fe-1ac3e25d6c11:55",
       "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/21/rollout-2026-10-21T02-17-46-01a15b2d-6dce-7330-bbd0-b63960127d22.jsonl",
       "lastInput": 216020,
       "modelWindow": 475000,
@@ -240,7 +240,7 @@
     "qaPath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15b4d/qa-qualified-source-polar76.json",
     "cardHash": "3d5d60a7dc19961bdecd08603a0f5f788165c60a3c4f885f612eeec04ec2725e"
   },
-  "next": "INITIAL76 verdict; parallel SOURCE77 output-only, catalog frozen",
+  "next": "SOURCE77 output completion then same fresh author directed SOURCE76 solecycle1; no INITIAL77 until repair dependency checked",
   "rootContextReason": "Fresh successor actual0; previous actual0 preventive handoff preserved",
   "codeCommit": "945c7d6d580666a4edb693c74d0fe44c7105f85c",
   "codeCommitMeaning": "Previously preserved and freshly read back source; new takeover save recorded separately",
@@ -331,5 +331,53 @@
   },
   "createdNativeThreads": [
     "01a15b62-523f-7d43-9c8e-4e87e7c993fc"
-  ]
+  ],
+  "pendingSource76": {
+    "initialReceipt": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15b4d/independent-polar76-initial/receipt.json",
+    "initialStatus": "FIX",
+    "cycle1Consumed": false,
+    "stage": "PENDING_DIRECTED_SOURCE76_SOLECYCLE1",
+    "defects": [
+      {
+        "code": "HETEROGENEOUS_ANSWER_CATEGORIES_CUE_THE_KEY",
+        "severity": "substantive",
+        "fields": [
+          "prompt",
+          "answers[1].text",
+          "answers[2].text",
+          "answers[3].text"
+        ],
+        "finding": "Вопрос явно спрашивает политический статус арктической суши. Только ответ0 — «территории нескольких государств» — вообще относится к государственной принадлежности. «Мирное использование» задаёт назначение деятельности, «нет постоянного населения» — демографию, «сеть научных станций» — инфраструктуру. Игрок выбирает0 по смысловой категории без знания статуса Арктики. Все три неверных варианта связаны с полярной темой, но тематичность не заменяет сопоставимость и правдоподобие ответов на этот конкретный вопрос. Это дефект даже для EASY.",
+        "requiredAction": "В единственном направленном цикле сохранить frozen EASY/key0, но сделать все четыре ответа сопоставимыми гипотезами о политическом/территориальном статусе с единственным верным0. Либо выбрать иной столь же простой source-backed способ спросить тот же MAIN, где все четыре варианта действительно отвечают условию. Не исправлять только гладкость языка и не считать более подробные notes ремонтом ряда. Для изменённых ответов нужны их собственные проверенные notes. Сохранить хорошие факты, не менять каталог вне76; направленный FINAL — на новый wholecard/affected dependencies.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15b4d/source-polar76/arctic-council-states-capture.json",
+            "url": "https://arctic-council.org/about/states/",
+            "pointer": "/originalRecord/payload/output/1/text",
+            "locator": "Arctic CouncilL19–21,L23–36"
+          },
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a14455/source-polar21-22-original/raw-sources/ats-treaty-portal-full.json",
+            "url": "https://www.ats.aq/e/antarctictreaty.html",
+            "pointer": "/fullOriginalToolOutput",
+            "locator": "ATS L8–9 (ArticleI)"
+          },
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15ada/source-polar60/raw/finnish-government-antarctica.json",
+            "url": "https://valtioneuvosto.fi/en/-/what-is-antarctica-and-how-does-it-relate-to-finland-",
+            "pointer": "/originalRecord/payload/output/1/text",
+            "locator": "FinnishL335,L347–350"
+          },
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15b4d/source-polar76/arctic-council-states-capture.json",
+            "url": "https://www.comnap.aq/antarctic-facilities-information",
+            "pointer": "/originalRecord/payload/output/1/text",
+            "locator": "COMNAP (second document)L74–78,L82"
+          }
+        ],
+        "newSourceAttemptRequired": false,
+        "qualification": "Не объявляю истинные антарктические facts вnotes ложными и не требую переписывать explanation ради отличия; основной дефект в несопоставимых типах ответов."
+      }
+    ]
+  }
 }
