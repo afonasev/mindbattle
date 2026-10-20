@@ -8,6 +8,8 @@ x = m.read(D / 'manifest.json')
 assert x['owner'] == m.O
 author = x['actors']['parks33Author']
 reviewer = x['actors']['reviewer']
+retired = author['stage'].startswith(('ARCHIVED', 'RETIRED'))
+current_actors = [a for a in [author, reviewer] if not a['stage'].startswith(('ARCHIVED', 'RETIRED'))]
 authors = [author] if author['stage'].startswith('START') else []
 readers = [reviewer] if reviewer['stage'].startswith('START') else []
 with m.flow.locked():
@@ -21,14 +23,14 @@ try:
         assert len(cp['currentEligibleCompletedIds']) == x['CURRENT']
         assert len(cp['currentRemainingIds']) == x['remaining']
         cp.update(currentSourceActors=authors, currentSourceActiveCount=len(authors),
-                  currentIndependentActors=readers, nativeActorsCurrent=[author, reviewer])
+                  currentIndependentActors=readers, nativeActorsCurrent=current_actors)
         m.write(cp_path, cp)
         sp = m.P / 'evidence/question-revision-process-v2/coordinator-state.json'
         st = m.read(sp)
-        st.update(activeAuthors=authors, idleAuthors=[] if authors else [author],
+        st.update(activeAuthors=authors, idleAuthors=[] if authors or retired else [author],
                   activeIndependentReview=reviewer if readers else None,
-                  currentNativeActors={'SOURCE': author, 'OTHER': reviewer},
-                  nativeActorsCurrent=[author, reviewer], currentWork=x['currentWork'],
+                  currentNativeActors={a['threadId']: a for a in current_actors},
+                  nativeActorsCurrent=current_actors, currentWork=x['currentWork'],
                   codeCommit=m.h.git(m.C, 'rev-parse', 'HEAD'), next=x['next'],
                   asOf=datetime.datetime.now(datetime.timezone.utc).isoformat())
         m.write(sp, st)
