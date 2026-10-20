@@ -23,7 +23,8 @@ try:
         assert cp['owner'] == m.O
         assert len(cp['currentEligibleCompletedIds']) == x['CURRENT']
         assert len(cp['currentRemainingIds']) == x['remaining']
-        cp.update(currentSourceActors=authors, currentSourceActiveCount=len(authors),
+        cp.update(next=x['next'], currentManifest=x['manifest'],
+                  currentSourceActors=authors, currentSourceActiveCount=len(authors),
                   currentIndependentActors=readers, nativeActorsCurrent=current_actors)
         m.write(cp_path, cp)
         sp = m.P / 'evidence/question-revision-process-v2/coordinator-state.json'
