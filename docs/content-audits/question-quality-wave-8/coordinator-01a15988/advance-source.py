@@ -16,6 +16,7 @@ t = m.read(D / 'source-parks37-task.json')
 t.update(phase=f'START_SOURCE{order}', id=q['id'], sourceOrder=order,
          difficulty=q['difficulty'], correctIndex=q['correctIndex'], beforeHash=m.sha(q),
          baselineCode=m.h.git(m.C, 'rev-parse', 'HEAD'),
+         captureHelper=str(D / 'capture-native.py'), captureMethod=str(D / 'capture-method.md'),
          outputDirectory=str(D / f'source-parks{order}'),
          scope=f'One untouched SOURCE{order}; preserve exact frozen ID/topic/order/level/key. '
                'Preserve good text; repair only genuine source/language/absolutelevel/MAIN defects. '
@@ -36,6 +37,8 @@ t.update(phase=f'START_SOURCE{order}', id=q['id'], sourceOrder=order,
                  'No copied stale snapshot, snippetproof or automatic PASS. <=10lines final.')
 m.write(out, t)
 x['actors']['parks33Author'].update(stage=f'START_SOURCE{order}', task=str(out))
+x['codeCommit'] = t['baselineCode']
+x['codeCommitMeaning'] = 'Source ref before this task preparation; exact candidate is in currentWork when applied'
 x['currentWork'] = {'id': q['id'], 'stage': f'START_SOURCE{order}'}
 x['next'] = f'One SOURCE{order}, then only applicable next stage; no held retries'
 m.write(D / 'manifest.json', x)
