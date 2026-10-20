@@ -119,6 +119,14 @@ for R in packet_paths:
         assert saved_inventory['sameTopicMAIN']['questions'] == topic['questions']
         same_topic['questions'] = saved_inventory['sameTopicMAIN']['questions']
         same_topic['technicalHydration'] = 'Exact original saved100 bodies from SHA-bound author inventory; no new assessment.'
+    if 'sameTopicMAIN' not in ps and 'currentTopicSnapshot' in ps:
+        retained_topic = ps['currentTopicSnapshot']
+        assert retained_topic['topicId'] == topic['id']
+        assert retained_topic['questionCount'] == len(retained_topic['questions']) == 100
+        assert retained_topic['questions'] == topic['questions']
+        assert retained_topic['fileSHA256'] == m.raw(C / retained_topic['path'])
+        ps['sameTopicMAIN'] = retained_topic
+        ps['technicalSameTopicContainerAlias'] = 'Exact author-retained currentTopicSnapshot full100 bodies and current file hash; no hydration or peer judgment.'
     # A directed naming-only repair retained the original INITIAL inventory.
     # Rebind only its own historical preimage after proving the full initial
     # application chain and that every other catalog body is unchanged.
