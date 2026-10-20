@@ -22,10 +22,27 @@ for R in packet_paths:
     before, after = groups(e['beforeCard']), groups(e['proposedCard'])
     for g in sp['entries'][0]['literalGroups']:
         assert g['literal'] == after[g['group']] and m.sha(g['literal']) == g['literalSHA256']
-    for k, fg in e['fieldGroups'].items():
-        assert fg['beforeCanonicalSHA256'] == m.sha(before[k]) and fg['afterCanonicalSHA256'] == m.sha(after[k])
+    if isinstance(e['fieldGroups'],dict):
+        for k, fg in e['fieldGroups'].items():
+            assert fg['beforeCanonicalSHA256'] == m.sha(before[k]) and fg['afterCanonicalSHA256'] == m.sha(after[k])
+    else:
+        assert isinstance(e['fieldGroups'],list)
+        if all(isinstance(g,str) for g in e['fieldGroups']):
+            assert set(e['fieldGroups']) == {k for k in after if before[k] != after[k]}
+        else:
+            assert len(e['fieldGroups']) == 6 and {g['group'] for g in e['fieldGroups']} == set(after)
+            if all('before' in g and 'after' in g for g in e['fieldGroups']):
+                for g in e['fieldGroups']:
+                    k=g['group']
+                    assert g['before'] == before[k] and g['after'] == after[k]
+                    assert g['beforeCanonicalSHA256'] == m.sha(before[k]) and g['afterCanonicalSHA256'] == m.sha(after[k])
+                e['originalFieldGroups'] = e['fieldGroups']
+                e['fieldGroups'] = {g['group']:{k:g[k] for k in ['beforeCanonicalSHA256','afterCanonicalSHA256']} for g in e['originalFieldGroups']}
+            else:
+                for g in e['fieldGroups']:
+                    assert g['literal'] == after[g['group']] and g['literalSHA256'] == m.sha(g['literal'])
     global_audit = ps.get('globalMAIN', ps.get('global11000MainAudit'))
-    inventory = global_audit.get('allCurrentFileByteBindings', global_audit.get('fileManifest'))
+    inventory = global_audit.get('allCurrentFileByteBindings', global_audit.get('fileManifest',global_audit.get('files')))
     assert len(inventory) == 110
     rows, catalog = [], {}
     for f in inventory:
@@ -35,7 +52,7 @@ for R in packet_paths:
         for q in t['questions']:
             catalog[q['id']] = (t['id'], q)
             rows.append({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[v['text'] for v in q['answers']],'correctIndex':q['correctIndex']})
-    assert len(rows) == 11000 and m.sha(rows) == global_audit['rowsCanonicalSHA256']
+    assert len(rows) == 11000 and m.sha(rows) == global_audit.get('rowsCanonicalSHA256',global_audit.get('projectionCanonicalSHA256'))
     actual = {}
     if 'actualCurrentPeers' in ps:
         snapshots = ps['actualCurrentPeers'] + ps.get('sameTopicClosestFullBodies',[]) + ps.get('crossCatalogClosestFullBodies',[])
@@ -45,8 +62,9 @@ for R in packet_paths:
         snapshots = [{'id':p.get('card',p)['id'],'topicId':topic['id'],'card':p.get('card',p),'sha256':m.sha(p.get('card',p))} for p in saved] + ps['fullClosestCurrentPeers']
     for peer in snapshots:
         q = peer['card']; digest = peer.get('sha256',peer.get('canonicalSHA256'))
-        assert catalog[peer['id']] == (peer['topicId'], q) and m.sha(q) == digest
-        actual[peer['id']] = {**peer, 'sha256':digest}
+        pid = peer.get('id',q['id'])
+        assert catalog[pid] == (peer['topicId'], q) and m.sha(q) == digest
+        actual[pid] = {**peer, 'id':pid, 'sha256':digest}
     paths = {}
     for source in sp['rawSources']:
         original = dict(source); p = C/source['path']; digest = source.get('sha256',source.get('fileSHA256',m.raw(p)))
