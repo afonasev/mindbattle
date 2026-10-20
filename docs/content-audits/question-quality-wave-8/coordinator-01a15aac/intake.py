@@ -74,6 +74,19 @@ for R in packet_paths:
                 for g in e['fieldGroups']:
                     assert g['literal'] == after[g['group']] and g['literalSHA256'] == m.sha(g['literal'])
     global_audit = ps.get('globalMAIN', ps.get('global11000MainAudit'))
+    if global_audit is None and isinstance(ps.get('retrieval'), dict):
+        retained = ps['retrieval']
+        assert retained['topicFileCount'] == 110 and retained['questionCount'] == 11000
+        assert len(retained['globalRows']) == 11000
+        assert m.sha(retained['globalRows']) == retained['globalRowsCanonicalSHA256']
+        global_audit = ps['globalMAIN'] = {
+            'topicFileCount': retained['topicFileCount'],
+            'questionCount': retained['questionCount'],
+            'rows': retained['globalRows'],
+            'rowsCanonicalSHA256': retained['globalRowsCanonicalSHA256'],
+            'allCurrentFileByteBindings': retained['allCurrentFileByteBindings']}
+        ps['sameTopicMAIN'] = retained['sameTopicMAIN']
+        ps['technicalRetrievalShapeAlias'] = 'Exact original retrieval rows/file bindings/topic bodies; no new facts or peer judgments.'
     if global_audit is None and 'inventoryPath' in ps:
         inv_path = C / ps['inventoryPath']
         assert m.raw(inv_path) == ps['inventoryFileSHA256']
