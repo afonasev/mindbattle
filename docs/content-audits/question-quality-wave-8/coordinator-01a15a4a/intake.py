@@ -121,6 +121,14 @@ for R in packet_paths:
     for peer in snapshots:
         q = peer['card']; digest = peer.get('sha256',peer.get('canonicalSHA256'))
         pid = peer.get('id',q['id'])
+        if pid == e['id'] and q == e['proposedCard'] and digest == e['beforeHash'] and q != e['beforeCard']:
+            # Proven self-reference alias: immutable candidate supplies both exact
+            # bodies, while the peer hash and live catalog bind the before body.
+            # Do not alter any distinct peer or the original author packet.
+            assert peer['topicId'] == e['topicId'] and catalog[pid] == (e['topicId'], e['beforeCard'])
+            peer['originalSelfProposedBody'] = q
+            peer['technicalSelfPreimageAlias'] = 'Original own proposal body paired with exact beforeHash; normalize self to candidate beforeCard and live CURRENT. Self is not a distinct peer.'
+            peer['card'] = q = e['beforeCard']
         assert catalog[pid] == (peer['topicId'], q) and m.sha(q) == digest
         actual[pid] = {**peer, 'id':pid, 'sha256':digest}
     paths = {}; verified_pointer_bodies = set()
