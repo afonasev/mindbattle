@@ -19,6 +19,13 @@ for R in packet_paths:
     e = candidate['entries'][0]; topic = m.read(C/f"src/content/topics/{e['topicId']}.json")
     assert topic['questions'][e['sourceOrder']-1] == e['beforeCard']
     assert m.sha(e['beforeCard']) == e['beforeHash'] and m.sha(e['proposedCard']) == e['afterHash']
+    if 'entries' not in sp:
+        assert sp['id'] == e['id'] and sp['status'] == e['status']
+        assert sp['beforeHash'] == e['beforeHash'] and sp['afterHash'] == e['afterHash']
+        keys=['id','status','beforeHash','afterHash','literalGroups','fourFullPromptAnswerNoteAssessments','correctNoteNewFact','absoluteDifficulty','changeRationale']
+        assert len(sp['literalGroups']) == 6 and len(sp['fourFullPromptAnswerNoteAssessments']) == 4
+        sp['entries']=[{k:sp[k] for k in keys}]
+        sp['technicalSingleEntryContainerAlias']='Exact original top-level single-card fields retained and aliased into entries[0]; no literal or assessment changed.'
     before, after = groups(e['beforeCard']), groups(e['proposedCard'])
     if e['status'] == 'READY_FOR_SAME_READER_FINAL':
         assert candidate['cycle'] == 1 and R.name.endswith('-cycle1')
@@ -102,6 +109,22 @@ for R in packet_paths:
         ps['globalMAIN'] = global_audit = retained['globalMAIN']
         ps['sameTopicMAIN'] = retained['sameTopicMAIN']
         ps['technicalInventoryReferenceHydration'] = {'path':ps['inventoryPath'], 'sha256':ps['inventoryFileSHA256'], 'operation':'Exact author-retained inventory only; no new peer judgment.'}
+    if global_audit is not None and 'freshInventoryPath' in global_audit and 'sourceInventoryPath' not in global_audit:
+        inv_path=pathlib.Path(global_audit['freshInventoryPath'])
+        assert str(inv_path) == sp['sourceInventoryPath']
+        assert m.raw(inv_path) == global_audit['freshInventorySHA256'] == sp['sourceInventorySHA256']
+        inv=m.read(inv_path)
+        assert inv['globalMAIN']['rowsCanonicalSHA256'] == global_audit['rowsCanonicalSHA256']
+        assert inv['globalMAIN']['questionCount'] == global_audit['questionCount'] == 11000
+        original=dict(global_audit)
+        global_audit.update(sourceInventoryPath=str(inv_path),sourceInventorySHA256=m.raw(inv_path),topicFileCount=inv['globalMAIN']['topicFileCount'])
+        global_audit['originalFreshInventoryReference']=original
+        same=ps['sameTopicMAIN']
+        assert same['questionCount'] == inv['sameTopicMAIN']['questionCount'] == 100
+        assert (C/same['path']).resolve() == (C/inv['sameTopicMAIN']['path']).resolve()
+        assert same['fileSHA256'] == inv['sameTopicMAIN']['fileSHA256'] == m.raw(C/same['path'])
+        same.update(sourceInventoryPath=str(inv_path),sourceInventorySHA256=m.raw(inv_path))
+        ps['technicalFreshInventoryReferenceAlias']='Exact explicit path+SHA bound independently in sourceproof and globalMAIN; alias names only, no unbound hydration or peer assessment.'
     # Lossless hydration from the author's immutable, SHA-bound fresh inventory.
     if 'sourceInventoryPath' in global_audit:
         inventory_path = pathlib.Path(global_audit['sourceInventoryPath'])
