@@ -1,0 +1,54 @@
+{
+  "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/21/rollout-2026-10-21T20-19-29-01a15f0b-c787-7633-949f-a78a69b9de2d.jsonl",
+  "originalCall": {
+    "timestamp": "2026-10-21T15:32:10.361Z",
+    "ordinal": 266,
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call",
+      "id": "ctc_0959f4cf24b47cd3016ad8daf743a08191a879373bf61ab033",
+      "status": "completed",
+      "call_id": "call_064475a239b84acc8ee1b3a2fb63b052",
+      "name": "exec",
+      "input": "text(await tools.exec_command({cmd:\"python3 -B docs/content-audits/question-quality-wave-8/coordinator-01a15f0b/preserve-packet.py 36 author36\",\"workdir\":\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\",\"max_output_tokens\":2100}));\ntext(await tools.exec_command({cmd:\"sed -n '1,180p' docs/content-audits/question-quality-wave-8/coordinator-01a15f0b/verify-network.py\",\"workdir\":\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\",\"max_output_tokens\":4300}));\n",
+      "internal_chat_message_metadata_passthrough": {
+        "turn_id": "01a15f10-b632-7df0-8aa5-aad0f115db5e",
+        "create_time": 1792596727.2682397
+      }
+    }
+  },
+  "originalResult": {
+    "timestamp": "2026-10-21T15:32:10.850Z",
+    "ordinal": 270,
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call_output",
+      "id": "ctco_01a15f17-63e2-75f2-ba77-e2f8c1c3d5f1",
+      "call_id": "call_064475a239b84acc8ee1b3a2fb63b052",
+      "output": [
+        {
+          "type": "input_text",
+          "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+        },
+        {
+          "type": "input_text",
+          "text": "{\"chunk_id\":\"132a9d\",\"wall_time_seconds\":0.000007709,\"exit_code\":1,\"original_token_count\":115,\"output\":\"Traceback (most recent call last):\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f0b/preserve-packet.py\\\", line 17, in <module>\\n    for g in literal_groups:assert g['literal']==ag[g['group']] and g['literalSHA256']==m.sha(g['literal'])\\n                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError\\n\"}"
+        },
+        {
+          "type": "input_text",
+          "text": "{\"chunk_id\":\"e4b4b8\",\"wall_time_seconds\":0.000016917,\"exit_code\":0,\"original_token_count\":1003,\"output\":\"\\\"\\\"\\\"Deterministic network accounting; exact stored native recovery only, no quality credit.\\\"\\\"\\\"\\nimport pathlib,json,re,importlib.util,sys\\nD=pathlib.Path(__file__).parent\\ns=importlib.util.spec_from_file_location('owned',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)\\norder=int(sys.argv[1]);R=D/sys.argv[2];proof_path=D/(sys.argv[3] if len(sys.argv)>3 and not sys.argv[3].startswith('--') else f'history-russia{order}-native-proof.json');proof=m.read(proof_path);uid=proof['sourceNativeId'];include_prior='--include-prior-tasks' in sys.argv\\np=pathlib.Path(proof['nativeJournal']);matches=[p] if p.exists() else list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+uid+'.jsonl'));assert len(matches)==1\\nnative=matches[0];rows=[json.loads(l) for l in native.open()];assert rows[0]['payload']['id']==uid\\nstart=proof['currentTaskStartLine'];calls=[]\\nfor n,row in enumerate(rows,1):\\n p=row.get('payload',{})\\n if (include_prior or n>start) and p.get('type')=='custom_tool_call' and re.search(r'await\\\\s+tools\\\\.web__run\\\\s*\\\\(',p.get('input','')):calls.append((n,p))\\nassert len(calls)==len(proof['networkCalls'])+ (len(proof.get('priorTaskNetworkCalls',[])) if include_prior else 0)\\nwrappers=[]\\nfor p in R.rglob('*.json'):\\n z=m.read(p)\\n if isinstance(z,dict) and 'originalRecord' in z:\\n  if 'nativeRecordLine' in z:\\n   line=z['nativeRecordLine']\\n  else:\\n   assert z['sourceNativeId']==uid\\n   exact=[n for n,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==z['nativeCallId']]\\n   assert len(exact)==1;line=exact[0]\\n  assert rows[line-1]==z['originalRecord'];wrappers.append((p,z))\\nnetwork=[];owned=[];missing=[]\\nfor ordinal,(line,call) in enumerate(calls,1):\\n results=[(n,r) for n,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==call['call_id']];assert len(results)==1\\n resultline,result=results[0];found=[(p,z) for p,z in wrappers if z['originalRecord']==result]\\n if not found:\\n  p=D/f'history-russia{order}-stored-native-result-{resultline}.json';z={'sourceNativeId':uid,'nativeJournalActual':str(native),'nativeRecordLine':resultline,'call_id':call['call_id'],'originalRecord':result,'operation':'Exact full stored native original recovered network0; author raw immutable. Not primary quality adoption.'}\\n  if p.exists():assert m.read(p)==z\\n  else:m.write(p,z)\\n  found=[(p,z)];owned.append(p);missing.append(resultline)\\n identical_aliases=[]\\n if len(found)>1:\\n  # Distinct URL captures may retain the same full multi-URL native result.\\n  # Every wrapper was already verified against the exact unique native output.\\n  assert all(z['originalRecord']==result for p,z in found)\\n  identical_aliases=[{'path':str(p),'fileSHA256':m.raw(p),'nativeExact':True} for p,z in sorted(found,key=lambda v:str(v[0]))]\\n  found=[sorted(found,key=lambda v:str(v[0]))[0]]\\n assert len(found)==1;p,z=found[0]\\n network.append({'ordinalOneBased':ordinal,'call_id':call['call_id'],'callLine':line,'resultLine':resultline,'call':call['input'],'originalResult':str(p),'fileSHA256':m.raw(p),'nativeExact':True,'identicalOriginalResultAliases':identical_aliases})\\nreport={'owner':m.O,'sourceNativeId':uid,'nativeJournalActual':str(native),'sourceOrder':order,'actualWebCalls':len(calls),'includePriorTasks':include_prior,'proof':str(proof_path),'calls':network,'exactStoredRecoveryNetworkCalls':0,'missingAuthorResultLinesRecovered':missing,'rawPacketUnchanged':True,'qualityCredit':0}\\nreport_name=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--report-name=')),f'history-russia{order}-network-accounting.json');assert pathlib.Path(report_name).name==report_name\\nrp=D/report_name;m.write(rp,report)\\nprint(m.savecode([rp,pathlib.Path(__file__),*owned],f'Account SOURCE{order} exact stored native network results without quality credit'))\\nprint(json.dumps({'actualWebCalls':len(calls),'recoveredMissingOriginals':missing,'qualityCredit':0}))\\n\"}"
+        }
+      ],
+      "internal_chat_message_metadata_passthrough": {
+        "turn_id": "01a15f10-b632-7df0-8aa5-aad0f115db5e",
+        "create_time": 1792596730.850276
+      }
+    },
+    "metadata": {
+      "client_authored": false,
+      "fallback_token_limit_override": 12000
+    }
+  },
+  "repair": "No semantic repair; raw HOLD preservation only",
+  "qualityCredit": 0
+}

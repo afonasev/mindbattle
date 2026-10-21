@@ -1,0 +1,52 @@
+{
+  "originalCall": {
+    "timestamp": "2026-10-21T15:33:19.908Z",
+    "ordinal": 291,
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call",
+      "id": "ctc_0959f4cf24b47cd3016ad8db2581e0819184646469a529adbe",
+      "status": "completed",
+      "call_id": "call_f50259e7e1cb46dd963167244857441d",
+      "name": "exec",
+      "input": "text(await tools.exec_command({cmd:\"python3 -B - <<'PY'\\nimport pathlib,json,importlib.util,re\\nD=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f0b');s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m);x=m.read(D/'manifest.json');a=x['actors']['author36'];R=D/'source-history-russia36';j=[json.loads(l) for l in pathlib.Path(a['nativeJournal']).open()];assert j[0]['payload']['id']==a['threadId'];start=max(i for i,r in enumerate(j,1) if r.get('payload',{}).get('type')=='task_started');calls=[{'callLine':i,'call':r['payload']['input']} for i,r in enumerate(j,1) if i>start and r.get('payload',{}).get('type')=='custom_tool_call' and re.search(r'await\\\\s+tools\\\\.web__run\\\\s*\\\\(',r['payload'].get('input',''))];e=m.read(R/'candidate.json')['entries'][0];current=m.read(m.C/'src/content/topics/history-russia.json')['questions'][35];assert e['status']=='HOLD' and e['beforeCard']==current and m.sha(current)==e['beforeHash'] and m.sha(e['proposedCard'])==e['afterHash'];assert current['id']==e['proposedCard']['id'] and current['difficulty']==e['proposedCard']['difficulty'] and current['correctIndex']==e['proposedCard']['correctIndex']\\nti=next(r['payload']['info'] for r in reversed(j) if r.get('payload',{}).get('type')=='token_count');comp=sum(r['type']=='compacted' for r in j);last=next(r['payload']['type'] for r in reversed(j) if r.get('payload',{}).get('type') in ['task_started','task_complete']);assert last=='task_complete'\\nproof={'owner':m.O,'sourceNativeId':a['threadId'],'nativeJournal':a['nativeJournal'],'actualCompactions':comp,'lastInput':ti['last_token_usage']['input_tokens'],'modelWindow':ti['model_context_window'],'packet':str(R),'rawFileSHA256':{str(p.relative_to(R)):m.raw(p) for p in R.rglob('*') if p.is_file()},'status':'HOLD','beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'qualityCredit':0,'networkCalls':calls,'priorTaskNetworkCalls':[],'currentTaskStartLine':start,'qualification':'NOT_QUALIFIED_NOT_APPLIED_NO_QA_NO_INITIAL','preservationValidationFailure':{'error':'literalGroups explanation != proposedCard.explanation','meaning':'Sourceproof binds old explanation while candidate proposes new explanation; preserve exact malformed HOLD raw, do not normalize semantic mismatch or qualify.'}}\\na.update(actualCompactions=comp,lastInput=proof['lastInput'],modelWindow=proof['modelWindow'],lastTaskEvent=last,stage='IDLE_AFTER_SOURCE36_HOLD_UNQUALIFIED',nativePreflightVerifiedBy=m.O,cursor='0441d7ec-2d4e-4a45-84f1-b33096c25977:25');m.write(D/'history-russia36-native-proof.json',proof)\\n# Keep the original failed preservation call and exact result, no replay.\\nroot=pathlib.Path('/Users/eaafonasev/.codex/sessions/2026/10/21/rollout-2026-10-21T20-19-29-'+m.O+'.jsonl');rr=[json.loads(l) for l in root.open()];cc=[r for r in rr if r.get('payload',{}).get('type')=='custom_tool_call' and 'preserve-packet.py 36 author36' in r['payload'].get('input','')];assert len(cc)==1;outs=[r for r in rr if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==cc[0]['payload']['call_id']];assert len(outs)==1;m.write(D/'history-russia36-preservation-failure.json',{'nativeJournal':str(root),'originalCall':cc[0],'originalResult':outs[0],'repair':'No semantic repair; raw HOLD preservation only','qualityCredit':0})\\nx['pendingHistoryRussia36']={'id':current['id'],'status':'AUTHORHOLD0_UNQUALIFIED_UNAPPLIED_NO_INITIAL','beforeHash':e['beforeHash'],'currentHash':m.sha(current),'unappliedCandidateHash':e['afterHash'],'rawPacket':str(R),'rawPreservation':'Exact original HOLD files including mismatched explanation bindings, no qualification','technicalFailure':str(D/'history-russia36-preservation-failure.json'),'sourceNetworkAccounting':str(D/'history-russia36-network-accounting.json'),'noIndependentInitial':True,'QA':'NotRun unapplied HOLD','applied':False,'qualityCredit':0};m.write(D/'manifest.json',x)\\nprint(m.savecode([p for p in R.rglob('*') if p.is_file()]+[D/'history-russia36-native-proof.json',D/'history-russia36-preservation-failure.json',D/'manifest.json'],'Preserve original SOURCE36 unqualified author HOLD and exact failed literal binding'))\\nprint('web_calls',len(calls),'compactions',comp,'raw_files',len(proof['rawFileSHA256']))\\nPY\",\"max_output_tokens\":1000}));\ntext(await tools.exec_command({cmd:\"python3 -B docs/content-audits/question-quality-wave-8/coordinator-01a15f0b/verify-network.py 36 source-history-russia36\",\"workdir\":\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\",\"max_output_tokens\":1400}));\n",
+      "internal_chat_message_metadata_passthrough": {
+        "turn_id": "01a15f10-b632-7df0-8aa5-aad0f115db5e",
+        "create_time": 1792596773.510899
+      }
+    }
+  },
+  "originalResult": {
+    "timestamp": "2026-10-21T15:33:20.765Z",
+    "ordinal": 295,
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call_output",
+      "id": "ctco_01a15f18-74fd-7113-a9b5-f29a525e86a4",
+      "call_id": "call_f50259e7e1cb46dd963167244857441d",
+      "output": [
+        {
+          "type": "input_text",
+          "text": "Script completed\nWall time 0.8 seconds\nOutput:\n"
+        },
+        {
+          "type": "input_text",
+          "text": "{\"chunk_id\":\"cceeae\",\"wall_time_seconds\":0.000008417,\"exit_code\":1,\"original_token_count\":22,\"output\":\"Traceback (most recent call last):\\n  File \\\"<stdin>\\\", line 7, in <module>\\nAssertionError\\n\"}"
+        },
+        {
+          "type": "input_text",
+          "text": "{\"chunk_id\":\"7e39a9\",\"wall_time_seconds\":0.50428525,\"exit_code\":0,\"original_token_count\":30,\"output\":\"ccd413d8cbd49755abd710611adb8833de35f8ac\\n{\\\"actualWebCalls\\\": 2, \\\"recoveredMissingOriginals\\\": [157], \\\"qualityCredit\\\": 0}\\n\"}"
+        }
+      ],
+      "internal_chat_message_metadata_passthrough": {
+        "turn_id": "01a15f10-b632-7df0-8aa5-aad0f115db5e",
+        "create_time": 1792596800.765546
+      }
+    },
+    "metadata": {
+      "client_authored": false,
+      "fallback_token_limit_override": 12000
+    }
+  },
+  "cause": "Diagnostic matched its own current native call in addition to original preservation call. Fixed selection by exact failed output and paired call_id; no raw change."
+}
