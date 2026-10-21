@@ -1,5 +1,5 @@
 """Lossless mechanical intake of the two preserved SOURCE packets; no quality credit."""
-import pathlib, json, hashlib, importlib.util, subprocess, sys
+import pathlib, json, hashlib, importlib.util, subprocess, sys, re
 D = pathlib.Path(__file__).parent
 spec = importlib.util.spec_from_file_location('owned', D/'owned-tools.py')
 m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
@@ -114,6 +114,26 @@ for R in packet_paths:
         ps['globalMAIN'] = global_audit = retained['globalMAIN']
         ps['sameTopicMAIN'] = retained['sameTopicMAIN']
         ps['technicalInventoryReferenceHydration'] = {'path':ps['inventoryPath'], 'sha256':ps['inventoryFileSHA256'], 'operation':'Exact author-retained inventory only; no new peer judgment.'}
+    if global_audit is not None and 'freshInventoryPath' in global_audit and 'freshInventoryPath' not in sp and 'sourceInventoryPath' not in sp:
+        # Exact explicit peer path+SHA and sourceproof prose locator refer to
+        # the same author-retained inventory; no arbitrary path hydration.
+        declared=global_audit['freshInventoryPath']
+        inv_path=pathlib.Path(declared); inv_path=inv_path if inv_path.is_absolute() else C/inv_path
+        assert declared in json.dumps(sp.get('sourceIndex',{}),ensure_ascii=False)
+        assert ps['sameTopicMAIN']['freshInventoryPath']==declared
+        assert m.raw(inv_path)==global_audit['freshInventorySHA256']
+        inv=m.read(inv_path)
+        assert inv['globalMAIN']['topicFileCount']==110 and inv['globalMAIN']['questionCount']==11000
+        assert inv['globalMAIN']['rowsCanonicalSHA256']==global_audit['rowsCanonicalSHA256']
+        assert inv['sameTopicMAIN']['questions']==topic['questions']
+        assert len(inv['globalMAIN']['allCurrentFileByteBindings'])==110
+        for binding in inv['globalMAIN']['allCurrentFileByteBindings']:
+            assert m.raw(C/binding['path'])==binding['sha256']
+        sp['freshInventoryPath']=str(inv_path)
+        sp['freshInventorySHA256']=m.raw(inv_path)
+        global_audit['originalFreshInventoryPath']=declared
+        global_audit['freshInventoryPath']=str(inv_path)
+        ps['technicalSourceproofProseInventoryLocatorAlias']={'originalSourceIndex':sp['sourceIndex'],'explicitRawPeerPath':declared,'explicitRawPeerSHA256':m.raw(inv_path),'operation':'Exact already-bound author inventory and all100/110 live checks; path/container alias only, no new semantic assessment.'}
     if global_audit is not None and 'freshInventoryPath' in global_audit and 'sourceInventoryPath' not in global_audit:
         inv_path=pathlib.Path(global_audit['freshInventoryPath'])
         if 'sourceInventoryPath' not in sp:
@@ -270,6 +290,34 @@ for R in packet_paths:
     for source in sp['rawSources']:
         original = dict(source); p = C/source['path']; digest = source.get('sha256',source.get('fileSHA256',m.raw(p)))
         assert m.raw(p) == digest
+        original_path=source['path']
+        recovery_path=R/'raw/recovery.json'
+        if recovery_path.exists() and p.suffix=='.json':
+            oldcap=m.read(p)
+            if isinstance(oldcap,dict) and 'originalRecord' in oldcap:
+                oldbody=oldcap['originalRecord']['payload']['output'][1]['text']
+                if oldbody.startswith('Warning: truncated output'):
+                    recovery=m.read(recovery_path);rp=pathlib.Path(recovery['capture']['path']);recap=m.read(rp)
+                    assert m.raw(rp)==recovery['capture']['fileSHA256']
+                    assert recovery['networkCalls']==0 and recovery['reEmission']['retainedStoreLoaded'] is True
+                    assert recap['sourceNativeId']==oldcap['sourceNativeId']==candidate['sourceNativeId']
+                    journal=[json.loads(l) for l in pathlib.Path(recap['nativeJournal']).open()]
+                    assert journal[oldcap['nativeRecordLine']-1]==oldcap['originalRecord']
+                    assert journal[recap['nativeRecordLine']-1]==recap['originalRecord']
+                    oldcall=journal[recovery['originalRetainedResult']['functionsExecCallOrdinal']-1]['payload']
+                    assert oldcall['call_id']==oldcap['originalRecord']['payload']['call_id']
+                    key=recovery['originalRetainedResult']['storeKey'];assert key in oldcall['input'] and 'store(' in oldcall['input']
+                    newcall=next(r['payload'] for r in journal if r.get('payload',{}).get('call_id')==recap['originalRecord']['payload']['call_id'] and r.get('payload',{}).get('type')=='custom_tool_call')
+                    assert key in newcall['input'] and 'text(load(' in newcall['input']
+                    assert not re.search(r'(?m)^\s*(?:(?:const|let|var)\s+\w+\s*=\s*|text\(\s*)?await\s+tools\.web__run\s*\(',newcall['input'])
+                    full=recap['originalRecord']['payload']['output'][1]['text']
+                    assert not re.search(r'Warning: truncated output|…\d+ tokens truncated…',full)
+                    parts=re.split(r'…\d+ tokens truncated…',oldbody.split('\n\n',1)[1]);assert len(parts)==2
+                    assert all(part in full for part in parts) and full.index(parts[0])<full.index(parts[1])
+                    assert source['url'] in full
+                    source.update(path=str(rp.relative_to(C)),sha256=m.raw(rp),completeOutputPointer=recap['completeOutputPointer'],completeOutputSHA256=recap['completeOutputSHA256'],originalTruncatedSourceBinding=original,technicalRetainedStoreFullOutputRecovery={'recovery':str(recovery_path.relative_to(C)),'recoverySHA256':m.raw(recovery_path),'oldNativeLine':oldcap['nativeRecordLine'],'newNativeLine':recap['nativeRecordLine'],'visibleOriginalPrefixSuffixExact':True,'networkCalls':0,'operation':'Existing original store result re-emitted in full, not a source retry; raw packet and old captures immutable.'})
+                    p=rp;digest=m.raw(p)
+
         if p.suffix == '.json' and 'completeOutputPointer' not in source:
             capture = m.read(p)
             hits = []
@@ -343,7 +391,7 @@ for R in packet_paths:
                 source['completeOutputSHA256'] = actual_body
                 source['captureHashRepresentationNormalization'] = 'Original unchanged body verified at immutable file/pointer. Raw UTF8 payload and canonical JSON string hashes are distinct; original declaration retained.'
             verified_pointer_bodies.add(pointer_key)
-        rel = str(p.relative_to(C)); paths[source['path']] = rel
+        rel = str(p.relative_to(C)); paths[original_path] = rel; paths[str(C/original_path)] = rel; paths[source['path']] = rel
         paths[str(p)] = paths[rel] = rel
         if source.get('completeOutputPointer'):
             for base in [source['path'],str(p),rel]:
