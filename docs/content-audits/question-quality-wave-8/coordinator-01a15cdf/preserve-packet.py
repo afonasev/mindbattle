@@ -13,8 +13,8 @@ assert e['sourceOrder']==order and e['beforeCard']==q and m.sha(q)==e['beforeHas
 assert e['id']==q['id'] and e['status'] in ['HOLD','READY_FOR_INDEPENDENT_REVIEW','READY_FOR_SAME_READER_FINAL']
 cp=m.read(pathlib.Path(x['canonicalCheckpoint']));f=next(z for z in cp['selectedCards'] if z['questionId']==e['id']);assert q['difficulty']==e['proposedCard']['difficulty']==f['difficulty'] and q['correctIndex']==e['proposedCard']['correctIndex']==f['correctIndex']
 def groups(c):return {'prompt_ordered_answers_key':{'prompt':c['prompt'],'answers':[v['text'] for v in c['answers']],'correctIndex':c['correctIndex']},'explanation':c['explanation'],**{'note'+str(k):v['note'] for k,v in enumerate(c['answers'])}}
-bg,ag=groups(q),groups(e['proposedCard']);entry=sp['entries'][0];assert entry['id']==e['id'] and len(entry['literalGroups'])==6 and len(entry['fourFullPromptAnswerNoteAssessments'])==4
-for g in entry['literalGroups']:assert g['literal']==ag[g['group']] and g['literalSHA256']==m.sha(g['literal'])
+bg,ag=groups(q),groups(e['proposedCard']);entry=sp['entries'][0];literal_groups=entry.get('literalGroups',entry.get('sixLiteralGroups'));assert entry['id']==e['id'] and len(literal_groups)==6 and len(entry['fourFullPromptAnswerNoteAssessments'])==4
+for g in literal_groups:assert g['literal']==ag[g['group']] and g['literalSHA256']==m.sha(g['literal'])
 for k,fg in e['fieldGroups'].items():assert fg['beforeCanonicalSHA256']==m.sha(bg[k]) and fg['afterCanonicalSHA256']==m.sha(ag[k])
 for v in entry['fourFullPromptAnswerNoteAssessments']:
  k=v['slot'];tr={'prompt':e['proposedCard']['prompt'],'answer':e['proposedCard']['answers'][k]['text'],'note':e['proposedCard']['answers'][k]['note']};assert tr=={'prompt':v['fullPrompt'],'answer':v['answer'],'note':v['note']} and m.sha(tr)==v['tripleSHA256']
@@ -34,7 +34,7 @@ for path in sorted((m.C/'src/content/topics').glob('*.json')):
   cat[card['id']]=card;rows.append({'topicId':t['id'],'id':card['id'],'prompt':card['prompt'],'answers':[a['text'] for a in card['answers']],'correctIndex':card['correctIndex']})
 assert len(rows)==11000 and m.sha(rows)==ps['globalMAIN']['rowsCanonicalSHA256']
 for b in ps['globalMAIN']['allCurrentFileByteBindings']:assert m.raw(m.C/b['path'])==b.get('sha256',b.get('fileSHA256',b.get('fileSha256')))
-if 'sameTopicMAIN' in ps:
+if 'questions' in ps.get('sameTopicMAIN',{}):
  assert ps['sameTopicMAIN']['questions']==m.read(m.C/'src/content/topics/history-russia.json')['questions']
 else:
  # Preservation only: all100 exact ordered peer bodies are an equivalent
