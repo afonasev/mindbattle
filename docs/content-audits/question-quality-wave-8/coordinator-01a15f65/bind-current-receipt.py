@@ -123,11 +123,13 @@ for e in r['entries']:
   assert e['status']=='PASS' and not e['defects'];author=authors[i];accepted.append({'questionId':i,'cardCanonicalSha256':sha(q),'authorNativeId':author['id'],'authorReceipt':author['packet']+'/sourceproof.json','authorFreeze':case['sourceFreeze'],'readerNativeId':case['readerNativeId'],'independentReceipt':str(rp.relative_to(C)),'readerReceiptRawSHA256':raw(rp),'coordinatorDecision':case['coordinatorDecision']})
 if '--verify-fix-only' in sys.argv:
  assert not acceptedOrders and not accepted and all(e['status']=='FIX' and e['defects'] for e in r['entries'])
+elif '--verify-hold-only' in sys.argv:
+ assert not acceptedOrders and not accepted and all(e['status']=='HOLD' and e['defects'] for e in r['entries'])
 else:
  assert len(accepted)==len(acceptedOrders)>0
 audit={'root':compacted(O),'SOURCE':{a['id']:compacted(a['id']) for a in authors.values()},'OTHER':compacted(case['readerNativeId'])};assert audit['root']<2
 report={**case['reportBase'],'scope':case['scope'],'acceptedOrders':case['acceptedOrders'],'verified':{'currentCards':len(r['entries']),'literalGroups':6*len(r['entries']),'wholeVariants':4*len(r['entries']),'acceptedCards':len(accepted),'actualPeers':len(peers['actualCurrentPeers']),'bilateralMainPairs':len(pairEvidence)},'QA':{'path':case['qaPath'],'pass':19,'fail':0,'pending':0,'testedCatalogCommit':case['testedCatalogCommit'],'reportCommit':case['qaReportCommit']},'preleaseGuard':True,'sourceFreezeLineage':sourceLineage,'actualCompactionAudit':audit,'ownIntakeCURRENT':951}
-if '--verify-only' in sys.argv or '--verify-fix-only' in sys.argv:
+if '--verify-only' in sys.argv or '--verify-fix-only' in sys.argv or '--verify-hold-only' in sys.argv:
  print(json.dumps({'verified':report['verified'],'acceptedOrders':case['acceptedOrders'],'audit':audit,'mutations':False}));raise SystemExit(0)
 m=load('certificate',D/'certification-common.py');m.O=O;m.P=P;guard=load('guard',D.parent/'coordinator-01a13f31/planning-certification-guard.py')
 m._preleasePlanningIndex=raw(pathlib.Path(m.h.git(P,'rev-parse','--path-format=absolute','--git-path','index')))
