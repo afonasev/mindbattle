@@ -16,6 +16,7 @@ packet_paths = [pathlib.Path(p).resolve() for p in sys.argv[1:]] if len(sys.argv
 for R in packet_paths:
     name = R.name; B = D/('qualified-'+name)
     candidate, sp, ps = [m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
+    m.alias_explicit_peer_inventory_projection(candidate,sp,ps,R)
     m.alias_serialized_prompt_group(candidate,sp)
     m.alias_full_prompt_answer_concatenation(candidate,sp)
     m.alias_full_body_wrapper_digests(ps,R)
