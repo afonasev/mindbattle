@@ -168,6 +168,53 @@ for R in packet_paths:
         assert same['fileSHA256'] == inv['sameTopicMAIN']['fileSHA256'] == m.raw(C/same['path'])
         same.update(sourceInventoryPath=str(inv_path),sourceInventorySHA256=m.raw(inv_path))
         ps['technicalFreshInventoryReferenceAlias']='Exact explicit path+SHA bound independently in sourceproof and globalMAIN; alias names only, no unbound hydration or peer assessment.'
+    if 'inventoryPath' in global_audit and 'inventoryFileSHA256' in global_audit and 'sourceInventoryPath' not in sp:
+        # Explicit immutable peer inventory binding within the exact author bundle.
+        # Require the full existing rows/files/topic snapshots before naming aliases.
+        assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+        assert candidate['cycle']==sp['cycle']==ps['cycle']
+        assert sp['entries'][0]['id']==e['id']
+        declared=global_audit['inventoryPath']
+        inv_path=pathlib.Path(declared);inv_path=inv_path if inv_path.is_absolute() else C/inv_path
+        assert inv_path.is_relative_to(R) and inv_path.is_file()
+        assert m.raw(inv_path)==global_audit['inventoryFileSHA256']
+        inv=m.read(inv_path)
+        assert inv['globalMAIN']['topicFileCount']==global_audit['topicFileCount']==110
+        assert inv['globalMAIN']['questionCount']==global_audit['questionCount']==11000
+        inventory_current_rows=[]
+        for current_path in sorted((C/'src/content/topics').glob('*.json')):
+            current_topic=m.read(current_path)
+            inventory_current_rows.extend({'topicId':current_topic['id'],'id':q['id'],'prompt':q['prompt'],'answers':[v['text'] for v in q['answers']],'correctIndex':q['correctIndex']} for q in current_topic['questions'])
+        assert len(inventory_current_rows)==11000
+        assert inv['globalMAIN']['rowsCanonicalSHA256']==global_audit['rowsCanonicalSHA256']==m.sha(inventory_current_rows)
+        original_file_bindings=global_audit['allCurrentFileByteBindings']
+        assert len(original_file_bindings)==110
+        normalized_file_bindings=[]
+        for binding in original_file_bindings:
+            digest=next(binding[k] for k in ['sha256','fileSHA256','fileSha256'] if k in binding)
+            current_topic=m.read(C/binding['path'])
+            assert m.raw(C/binding['path'])==digest
+            assert binding.get('topicId',current_topic['id'])==current_topic['id']
+            assert binding.get('questionCount',len(current_topic['questions']))==len(current_topic['questions'])==100
+            normalized_file_bindings.append({'path':binding['path'],'sha256':digest})
+        assert inv['globalMAIN']['allCurrentFileByteBindings']==normalized_file_bindings
+        original_questions=ps['sameTopicMAIN']['questions']
+        assert len(original_questions)==100
+        if all(isinstance(v,dict) and 'card' in v for v in original_questions):
+            assert [v['sourceOrder'] for v in original_questions]==list(range(1,101))
+            assert all(v['topicId']==e['topicId'] and v['id']==v['card']['id'] and m.sha(v['card'])==v['sha256'] for v in original_questions)
+            inventory_topic_bodies=[v['card'] for v in original_questions]
+        else:
+            inventory_topic_bodies=original_questions
+        assert inv['sameTopicMAIN']['questions']==inventory_topic_bodies==topic['questions']
+        assert len(topic['questions'])==100
+        global_audit['originalAugmentedFileByteBindings']=original_file_bindings
+        global_audit['allCurrentFileByteBindings']=normalized_file_bindings
+        assert inv['sameTopicMAIN']['fileSHA256']==ps['sameTopicMAIN']['fileSHA256']==m.raw(C/ps['sameTopicMAIN']['path'])
+        sp['sourceInventoryPath']=str(inv_path);sp['sourceInventorySHA256']=m.raw(inv_path)
+        global_audit.update(inventoryPath=str(inv_path),inventorySHA256=m.raw(inv_path))
+        ps['sameTopicMAIN'].update(inventoryPath=str(inv_path),inventorySHA256=m.raw(inv_path))
+        ps['technicalExplicitPeerInventoryBindingAlias']={'originalPeerPath':declared,'fileSHA256':m.raw(inv_path),'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSnapshotSHA256':m.raw(R/'peer-snapshot.json'),'operation':'Only names/path representation for exact author peer-bound inventory after all110/11000/100 current checks; raw and semantic judgments unchanged.'}
     if 'inventoryPath' in global_audit and 'sourceInventoryPath' not in global_audit:
         inv_path=pathlib.Path(global_audit['inventoryPath'])
         inv_path=inv_path if inv_path.is_absolute() else C/inv_path
