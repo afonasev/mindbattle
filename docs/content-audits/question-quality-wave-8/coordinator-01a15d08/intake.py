@@ -363,10 +363,14 @@ for R in packet_paths:
     for v in sp['entries'][0]['fourFullPromptAnswerNoteAssessments']:
         triple = {'prompt':v['fullPrompt'],'answer':v['answer'],'note':v['note']}
         if 'tripleSHA256' in v and v['tripleSHA256'] != m.sha(triple):
-            assert v['tripleSHA256'] == m.sha({'slot':v['slot'],**triple})
-            v['originalSlotIncludedTripleSHA256'] = v['tripleSHA256']
+            if v['tripleSHA256'] == m.sha({'fullPrompt':v['fullPrompt'],'answer':v['answer'],'note':v['note']}):
+                v['originalFullPromptKeyTripleSHA256'] = v['tripleSHA256']
+                v['technicalTripleShapeAlias'] = 'Same exact author fullPrompt/answer/note literals; fullPrompt key named prompt in canonical triple only.'
+            else:
+                assert v['tripleSHA256'] == m.sha({'slot':v['slot'],**triple})
+                v['originalSlotIncludedTripleSHA256'] = v['tripleSHA256']
+                v['technicalTripleShapeAlias'] = 'Same author full prompt/answer/note, redundant numeric slot excluded from canonical triple hash only.'
             v['tripleSHA256'] = m.sha(triple)
-            v['technicalTripleShapeAlias'] = 'Same author full prompt/answer/note, redundant numeric slot excluded from canonical triple hash only.'
     if 'fullOriginalToolOutputs' in sp:
         sp['immutableFullOriginalToolOutputs'] = {'path':str((R/'sourceproof.json').relative_to(C)), 'sha256':m.raw(R/'sourceproof.json'), 'jsonPointer':'/fullOriginalToolOutputs'}
         del sp['fullOriginalToolOutputs']
