@@ -168,6 +168,27 @@ for R in packet_paths:
         assert same['fileSHA256'] == inv['sameTopicMAIN']['fileSHA256'] == m.raw(C/same['path'])
         same.update(sourceInventoryPath=str(inv_path),sourceInventorySHA256=m.raw(inv_path))
         ps['technicalFreshInventoryReferenceAlias']='Exact explicit path+SHA bound independently in sourceproof and globalMAIN; alias names only, no unbound hydration or peer assessment.'
+    if 'inventoryPath' in global_audit and 'sourceInventoryPath' not in global_audit:
+        inv_path=pathlib.Path(global_audit['inventoryPath'])
+        inv_path=inv_path if inv_path.is_absolute() else C/inv_path
+        assert str(inv_path)==sp['sourceInventoryPath']==ps['sameTopicMAIN']['inventoryPath']
+        assert m.raw(inv_path)==sp['sourceInventorySHA256']==global_audit['inventorySHA256']==ps['sameTopicMAIN']['inventorySHA256']
+        inv=m.read(inv_path)
+        assert inv['globalMAIN']['topicFileCount']==global_audit['topicFileCount']==110
+        assert inv['globalMAIN']['questionCount']==global_audit['questionCount']==11000
+        assert inv['globalMAIN']['rowsCanonicalSHA256']==global_audit['rowsCanonicalSHA256']
+        assert len(inv['globalMAIN']['allCurrentFileByteBindings'])==110
+        assert inv['sameTopicMAIN']['questions']==topic['questions'] and len(topic['questions'])==100
+        global_audit.update(sourceInventoryPath=str(inv_path),sourceInventorySHA256=m.raw(inv_path))
+        global_audit['technicalInventoryPathNameAlias']='Exact sourceproof and both peer containers declare identical immutable inventory path and SHA; names only.'
+    same_questions=ps.get('sameTopicMAIN',{}).get('questions',[])
+    if len(same_questions)==100 and all(isinstance(p,dict) and 'card' in p for p in same_questions):
+        assert [p['sourceOrder'] for p in same_questions]==list(range(1,101))
+        assert all(p['topicId']==e['topicId'] and p['id']==p['card']['id'] and m.sha(p['card'])==p['sha256'] for p in same_questions)
+        assert [p['card'] for p in same_questions]==topic['questions']
+        ps['originalSameTopicQuestionWrappers']=same_questions
+        ps['sameTopicMAIN']['questions']=[p['card'] for p in same_questions]
+        ps['technicalSameTopicQuestionWrapperAlias']='Exact100 original ordered full card bodies and hashes, wrapper only; raw unchanged.'
     # Explicit full100 ordered author peers are a retained topic snapshot,
     # even when the original names its container actualCurrentPeers only.
     if 'questions' not in ps.get('sameTopicMAIN',{}) and len(ps.get('actualCurrentPeers',[])) == 100:
