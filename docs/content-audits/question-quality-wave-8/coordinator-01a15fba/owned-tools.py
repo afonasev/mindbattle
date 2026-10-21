@@ -21,6 +21,26 @@ def saveplan(files,message):
  finally:
   with flow.locked():flow.lease('release','planning',O)
 
+def alias_full_prompt_answer_concatenation(candidate,sp):
+ e=candidate['entries'][0];q=e['proposedCard'];entry=sp['entries'][0]
+ variants=entry['fourFullPromptAnswerNoteAssessments']
+ if all(v['fullPrompt']==q['prompt'] for v in variants):return
+ assert len(variants)==4 and {v['slot'] for v in variants}==set(range(4))
+ assert sha(q)==e['afterHash']
+ group={'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']}
+ assert e['fieldGroups']['prompt_ordered_answers_key']['afterCanonicalSHA256']==sha(group)
+ literal=next(g for g in entry['literalGroups'] if g['group']=='prompt_ordered_answers_key')
+ assert literal['literal']==group and literal['literalSHA256']==sha(group)
+ for v in variants:
+  a=q['answers'][v['slot']]
+  assert v['answer']==a['text'] and v['note']==a['note']
+  triple={'prompt':q['prompt'],'answer':a['text'],'note':a['note']}
+  assert v['tripleSHA256']==sha(triple)
+  assert v['fullPrompt']==q['prompt']+' '+a['text']
+  v['originalPromptAnswerConcatenationLiteral']=v['fullPrompt']
+  v['technicalRedundantPromptAnswerDecomposition']={'originalCanonicalSHA256':sha(v['fullPrompt']),'candidatePromptCanonicalSHA256':sha(q['prompt']),'alreadyDeclaredTripleSHA256':v['tripleSHA256'],'operation':'Exact prompt + one ASCII space + exact separately bound answer; invertible redundant serialization decomposition only. Original literal retained; no answer, note, hash, primary ground or assessment changed.'}
+  v['fullPrompt']=q['prompt']
+
 def alias_explicit_nested_inventory(candidate,sp,ps,R):
  """Lossless derived view of explicit SHA-bound inventory and original100 peers."""
  if 'globalMAIN' in ps or 'globalMAINRetrieval' not in ps:return

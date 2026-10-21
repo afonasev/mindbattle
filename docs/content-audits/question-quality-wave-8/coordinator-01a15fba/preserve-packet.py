@@ -9,6 +9,7 @@ comp=sum(o['type']=='compacted' for o in journal);last=next(o['payload']['info']
 a,sp,ps=[m.read(R/f) for f in ['candidate.json','sourceproof.json','peer-snapshot.json']]
 assert all(v['sourceNativeId']==uid for v in [a,sp,ps]);assert len(a['entries'])==len(sp['entries'])==1
 m.alias_serialized_prompt_group(a,sp)
+m.alias_full_prompt_answer_concatenation(a,sp)
 m.alias_full_body_wrapper_digests(ps,R)
 e=a['entries'][0];q=m.read(m.C/'src/content/topics/history-russia.json')['questions'][order-1]
 assert e['sourceOrder']==order and e['beforeCard']==q and m.sha(q)==e['beforeHash'] and m.sha(e['proposedCard'])==e['afterHash']
