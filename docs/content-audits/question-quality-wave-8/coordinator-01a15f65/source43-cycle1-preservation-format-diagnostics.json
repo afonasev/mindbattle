@@ -1,0 +1,109 @@
+{
+  "owner": "01a15f65-e74b-74f1-be7c-22e19ea029e9",
+  "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/21/rollout-2026-10-21T21-57-56-01a15f65-e74b-74f1-be7c-22e19ea029e9.jsonl",
+  "originalPreservationAttempts": [
+    {
+      "callLine": 994,
+      "originalCallRecord": {
+        "timestamp": "2026-10-21T17:56:14.056Z",
+        "ordinal": 993,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_080e1c91fbdeaf5e016ad8fcb9b710819191e9946afd31f82e",
+          "status": "completed",
+          "call_id": "call_cb48d8a6fee24e549ae63ffe419efbcd",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -B docs/content-audits/question-quality-wave-8/coordinator-01a15f65/preserve-packet.py 43 author43 source-history-russia43-cycle1\",\"workdir\":\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\",\"max_output_tokens\":1500}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a15f69-a3bb-7941-9adf-9f28e1d829de",
+            "create_time": 1792605374.0439653
+          }
+        }
+      },
+      "outputLine": 997,
+      "originalOutputRecord": {
+        "timestamp": "2026-10-21T17:56:14.245Z",
+        "ordinal": 996,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a15f9b-4725-7392-9e64-146ad94d8e2d",
+          "call_id": "call_cb48d8a6fee24e549ae63ffe419efbcd",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.1 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"3d1125\",\"wall_time_seconds\":0.000010208,\"exit_code\":1,\"original_token_count\":106,\"output\":\"Traceback (most recent call last):\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f65/preserve-packet.py\\\", line 24, in <module>\\n    else:assert g['literal']==ag[g['group']] and g['literalSHA256']==m.sha(g['literal'])\\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a15f69-a3bb-7941-9adf-9f28e1d829de",
+            "create_time": 1792605374.245605
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    },
+    {
+      "callLine": 1015,
+      "originalCallRecord": {
+        "timestamp": "2026-10-21T17:57:04.121Z",
+        "ordinal": 1014,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_080e1c91fbdeaf5e016ad8fce715bc8191a5d0462e1fe6b8b9",
+          "status": "completed",
+          "call_id": "call_41cfeba544aa442e8199430b478095f9",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -B - <<'PY'\\nimport pathlib,ast\\nD=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f65');p=D/'owned-tools.py';s=p.read_text();start=s.index('def alias_serialized_prompt_group(');end=s.index('\\\\ndef alias_full_body_wrapper_digests(',start);new='''def alias_serialized_prompt_group(candidate,sp):\\n \\\"\\\"\\\"Decode only exact canonical JSON serializations of the six bound literals.\\\"\\\"\\\"\\n e=candidate['entries'][0];q=e['proposedCard'];expected={'prompt_ordered_answers_key':{'prompt':q['prompt'],'answers':[v['text'] for v in q['answers']],'correctIndex':q['correctIndex']},'explanation':q['explanation'],**{'note'+str(k):v['note'] for k,v in enumerate(q['answers'])}}\\n for g in sp['entries'][0].get('literalGroups',[]):\\n  target=expected[g['group']]\\n  if g['literal']==target or not isinstance(g['literal'],str) or not g['literal'].startswith(('{','\\\"')):continue\\n  original=g['literal'];assert json.loads(original)==target\\n  assert original==json.dumps(target,ensure_ascii=False,sort_keys=True,separators=(',',':'))\\n  assert hashlib.sha256(original.encode()).hexdigest()==g['literalSHA256']==e['fieldGroups'][g['group']]['afterCanonicalSHA256']==sha(target)\\n  g.update(originalSerializedLiteral=original,originalSerializedLiteralSHA256=g['literalSHA256'],literal=target,literalSHA256=sha(target),technicalSerializedGroupAlias='Canonical JSON serialization of exact bound literal decoded to identical object/string; raw immutable, all values/grounds unchanged.')\\n''';s=s[:start]+new+s[end:];ast.parse(s);p.write_text(s);print('Exact canonical JSON string/object literal decoding, all six groups and hashes proven unchanged')\\nPY\",\"max_output_tokens\":600}));\ntext(await tools.exec_command({cmd:\"python3 -B docs/content-audits/question-quality-wave-8/coordinator-01a15f65/preserve-packet.py 43 author43 source-history-russia43-cycle1\",\"workdir\":\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\",\"max_output_tokens\":1600}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a15f69-a3bb-7941-9adf-9f28e1d829de",
+            "create_time": 1792605415.0900362
+          }
+        }
+      },
+      "outputLine": 1019,
+      "originalOutputRecord": {
+        "timestamp": "2026-10-21T17:57:05.331Z",
+        "ordinal": 1018,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a15f9c-0eb3-7e12-b2f4-9bf176f471ac",
+          "call_id": "call_41cfeba544aa442e8199430b478095f9",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 1.2 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"0f79b4\",\"wall_time_seconds\":0.000009166,\"exit_code\":0,\"original_token_count\":24,\"output\":\"Exact canonical JSON string/object literal decoding, all six groups and hashes proven unchanged\\n\"}"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"514999\",\"wall_time_seconds\":0.89934725,\"exit_code\":0,\"original_token_count\":43,\"output\":\"e2acd0688f537060bb27fddd521428ec17381dbc\\n{\\\"status\\\": \\\"READY_FOR_SAME_READER_FINAL\\\", \\\"actualCompactions\\\": 1, \\\"lastInput\\\": 69012, \\\"modelWindow\\\": 258400, \\\"networkCalls\\\": []}\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a15f69-a3bb-7941-9adf-9f28e1d829de",
+            "create_time": 1792605425.331566
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    }
+  ],
+  "reason": "Original FAIL retained. Each of six author literals is its exact canonical JSON serialization. JSON decode/object-or-string equality/canonical serialization/raw SHA/candidate group SHA all verified. No literal or ground changed, raw immutable, cycle1 network0; same-reader FINAL only, no newINITIAL or reset."
+}

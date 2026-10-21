@@ -4,7 +4,7 @@ D = pathlib.Path(__file__).parent
 s = importlib.util.spec_from_file_location('owned', D/'owned-tools.py')
 m = importlib.util.module_from_spec(s)
 s.loader.exec_module(m)
-order, catalog_commit, raw_freeze, qualified_freeze = sys.argv[1:]
+order, catalog_commit, raw_freeze, qualified_freeze = sys.argv[1:5]
 order = int(order)
 assert m.h.git(m.C,'rev-parse','--verify',catalog_commit+'^{commit}')==catalog_commit, 'Exact full tested catalog commit required'
 label = 'history-russia' + str(order) + '-cycle1'
@@ -12,7 +12,8 @@ B = D/('qualified-source-' + label)
 e = m.read(B/'candidate.json')['entries'][0]
 q = m.read(m.C/'src/content/topics/history-russia.json')['questions'][order-1]
 assert q == e['proposedCard'] and m.sha(q) == e['afterHash']
-qa_path = D/('qa-qualified-source-' + label + '.json')
+qa_path = pathlib.Path(sys.argv[5]).resolve() if len(sys.argv)>5 else D/('qa-qualified-source-' + label + '.json')
+assert qa_path.is_relative_to(D)
 qa = m.read(qa_path)
 assert qa['success'] and qa['numPassedTests'] == 19
 assert qa['numFailedTests'] == qa['numPendingTests'] == 0

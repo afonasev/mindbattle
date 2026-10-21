@@ -51,13 +51,15 @@ def alias_explicit_nested_inventory(candidate,sp,ps,R):
  ps['technicalExplicitNestedInventoryAlias']={'originalPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'inventoryPath':str(path),'inventorySHA256':raw(path),'operation':'Exact explicit three-way path/SHA and live110/11000/100 bindings; nested original full peers aliased only, no new semantic assessment. Original relevantPairs retained.'}
 
 def alias_serialized_prompt_group(candidate,sp):
- e=candidate['entries'][0];q=e['proposedCard'];expected={'prompt':q['prompt'],'answers':[v['text'] for v in q['answers']],'correctIndex':q['correctIndex']}
+ """Decode only exact canonical JSON serializations of the six bound literals."""
+ e=candidate['entries'][0];q=e['proposedCard'];expected={'prompt_ordered_answers_key':{'prompt':q['prompt'],'answers':[v['text'] for v in q['answers']],'correctIndex':q['correctIndex']},'explanation':q['explanation'],**{'note'+str(k):v['note'] for k,v in enumerate(q['answers'])}}
  for g in sp['entries'][0].get('literalGroups',[]):
-  if g['group']!='prompt_ordered_answers_key' or not isinstance(g['literal'],str) or not g['literal'].startswith('{'):continue
-  original=g['literal'];assert json.loads(original)==expected
-  assert original==json.dumps(expected,ensure_ascii=False,sort_keys=True,separators=(',',':'))
-  assert hashlib.sha256(original.encode()).hexdigest()==g['literalSHA256']==e['fieldGroups'][g['group']]['afterCanonicalSHA256']==sha(expected)
-  g.update(originalSerializedLiteral=original,originalSerializedLiteralSHA256=g['literalSHA256'],literal=expected,literalSHA256=sha(expected),technicalSerializedGroupAlias='Canonical JSON string of the exact entire ordered prompt/answers/key decoded to identical object; raw immutable, all literal values/grounds unchanged.')
+  target=expected[g['group']]
+  if g['literal']==target or not isinstance(g['literal'],str) or not g['literal'].startswith(('{','"')):continue
+  original=g['literal'];assert json.loads(original)==target
+  assert original==json.dumps(target,ensure_ascii=False,sort_keys=True,separators=(',',':'))
+  assert hashlib.sha256(original.encode()).hexdigest()==g['literalSHA256']==e['fieldGroups'][g['group']]['afterCanonicalSHA256']==sha(target)
+  g.update(originalSerializedLiteral=original,originalSerializedLiteralSHA256=g['literalSHA256'],literal=target,literalSHA256=sha(target),technicalSerializedGroupAlias='Canonical JSON serialization of exact bound literal decoded to identical object/string; raw immutable, all values/grounds unchanged.')
 
 def alias_full_body_wrapper_digests(ps,R):
  same=ps.get('sameTopicMAIN',{});wrappers=same.get('questions',[])
