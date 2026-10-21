@@ -111,6 +111,12 @@ for R in packet_paths:
         ps['technicalInventoryReferenceHydration'] = {'path':ps['inventoryPath'], 'sha256':ps['inventoryFileSHA256'], 'operation':'Exact author-retained inventory only; no new peer judgment.'}
     if global_audit is not None and 'freshInventoryPath' in global_audit and 'sourceInventoryPath' not in global_audit:
         inv_path=pathlib.Path(global_audit['freshInventoryPath'])
+        if 'sourceInventoryPath' not in sp:
+            assert str(inv_path) == sp['freshInventoryPath']
+            assert m.raw(inv_path) == sp['freshInventorySHA256'] == global_audit['freshInventorySHA256']
+            sp['sourceInventoryPath']=sp['freshInventoryPath']
+            sp['sourceInventorySHA256']=sp['freshInventorySHA256']
+            sp['technicalExplicitFreshSourceInventoryAlias']='Identical explicit author path and verified file SHA; names only, no unbound hydration or assessment.'
         assert str(inv_path) == sp['sourceInventoryPath']
         assert m.raw(inv_path) == global_audit['freshInventorySHA256'] == sp['sourceInventorySHA256']
         inv=m.read(inv_path)
