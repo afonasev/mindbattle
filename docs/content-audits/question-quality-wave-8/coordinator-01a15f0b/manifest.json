@@ -22,15 +22,15 @@
       "hostId": "local",
       "model": "gpt-6.1-sol",
       "thinking": "medium",
-      "stage": "START_INITIAL_HISTORY-RUSSIA35",
+      "stage": "IDLE_AFTER_INITIAL35_FIX_WAITING_SAME_READER_FINAL",
       "createdBy": "01a15e52-f8e3-7292-9930-bdc893b19882",
       "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/21/rollout-2026-10-21T17-47-15-01a15e80-6729-7bf0-a737-67c9a18f5130.jsonl",
       "actualCompactions": 0,
       "nativePreflightVerifiedBy": "01a15f0b-c787-7633-949f-a78a69b9de2d",
       "lastTaskEvent": "task_complete",
-      "lastInput": 273260,
+      "lastInput": 299463,
       "modelWindow": 475000,
-      "cursor": "836927e7-4480-4133-a7dd-1491920e28e2:54",
+      "cursor": "836927e7-4480-4133-a7dd-1491920e28e2:59",
       "task": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f0b/reader-history-russia35-initial-task.json",
       "expected": "One exact INITIAL history-russia35; assess specific blocker at30min",
       "preInitial35NativeVerified": true
@@ -3476,7 +3476,7 @@
   },
   "pendingHistoryRussia35": {
     "id": "history-russia-table-of-ranks",
-    "status": "APPLIED_QA19_PASS_INITIAL35_ACTIVE",
+    "status": "INITIAL35_FIX",
     "rawPacket": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f0b/source-history-russia35",
     "rawFreeze": "7ecc50f1d1c212f910a2e5134fd62e81d75ef347",
     "qualifiedFreeze": "329f497e5060120f4dc2ed5b02a29f9ddc52e161",
@@ -3487,7 +3487,31 @@
     "actualWebCalls": 4,
     "sourceActualCompactions": 0,
     "qualityCredit": 0,
-    "nativePreflightDiagnostic": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f0b/initial35-native-preflight-diagnostic.json"
+    "nativePreflightDiagnostic": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f0b/initial35-native-preflight-diagnostic.json",
+    "initialReceipt": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f0b/independent-history-russia35-initial/receipt.json",
+    "initialDefects": [
+      {
+        "code": "ANSWER_ROW_QUANTIFIER_FULL_SET_CUE",
+        "severity": "FIX",
+        "field": "prompt_ordered_answers_key / complete four-answer row",
+        "observedPattern": {
+          "slot0": "OnlyA+B",
+          "slot1": "OnlyB+C",
+          "slot2": "OnlyA+C",
+          "slot3": "A+B+C (key, uniquely no restrictive quantifier)",
+          "A": "военные",
+          "B": "гражданские",
+          "C": "придворные"
+        },
+        "ground": "The distractors are all three possible two-category subsets of the same three labels, each prefixed “Только”; the keyed answer alone is their complete union without that prefix. The correct choice is therefore uniquely framed as comprehensive, and the three wrong answers are uniquely framed as partial. This provides a strong avoidable presentation/test-taking cue independent of knowing Peter’s system. It does not logically prove that every uninformed player must answer correctly; no measured performance claim is made. The defect is the systematic row cue and resulting failure to demonstrate the intendedMEDIUM knowledge demand, not historical inaccuracy or a new ban on all compound answers.",
+        "rulePath": "docs/content-audits/question-authoring-guide-2026-09-02.md",
+        "ruleLocator": "Формулировка и варианты: comparable detail/no answer cue; Сложность:MEDIUM must require thematic knowledge rather than obvious invalid alternatives",
+        "directedFix": "One directedSOURCE35 cycle: preserve id/topic/order/medium/correctIndex3 and supported good wording where applicable. Build four comparably framed genuine scope/role alternatives without a unique unrestricted full-set key against three “only” pairs. Removing only the word “Только” would make overlapping partial descriptions and is not sufficient: recheck literal truth/unique key and each option’s own-note explanation against the retained three-kind source. Keep the existing correct-note14classes/highest-lowest fact unless a changed prompt requires a new own extra fact. Then exact affectedFINAL; unresolved defectHOLD, no ordinarycycle2.",
+        "scope": "Only assigned35 and actually changed dependencies; certified32–34 not reopened, SOURCE36HOLD not adopted."
+      }
+    ],
+    "initialReaderNetworkCalls": 0,
+    "initialVerificationCase": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f0b/case-history-russia35-initial-fix.json"
   },
   "qaSelectionHistoryRussia35": {
     "baseline": "329f497e5060120f4dc2ed5b02a29f9ddc52e161",
@@ -3503,5 +3527,16 @@
     "typecheck": "NotRun JSON-only",
     "runtime": "NotRun prohibited",
     "fullSuite": "NotRun not authorized"
+  },
+  "initial35Work": {
+    "id": "history-russia-table-of-ranks",
+    "topicId": "history-russia",
+    "sourceOrder": 35,
+    "catalogCommit": "09d5b09a252e643713cd02e55a409fd36db7e7d1",
+    "cardHash": "16c875cfca177df06c01ef48a4acde8e43d3b5a4e91f0857a6d0573a067afd82",
+    "sourceFreeze": "329f497e5060120f4dc2ed5b02a29f9ddc52e161",
+    "rawAuthorFreeze": "7ecc50f1d1c212f910a2e5134fd62e81d75ef347",
+    "qaReportCommit": "3da561bbbcf7b62f06fe41ee106fae93ea1d6305",
+    "qa": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f0b/qa-qualified-source-history-russia35.json"
   }
 }
