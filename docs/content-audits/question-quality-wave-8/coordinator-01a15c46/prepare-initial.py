@@ -6,6 +6,7 @@ m = importlib.util.module_from_spec(s)
 s.loader.exec_module(m)
 order, catalog_commit, raw_freeze, qualified_freeze = sys.argv[1:5]
 order = int(order)
+assert m.h.git(m.C, 'rev-parse', '--verify', catalog_commit+'^{commit}') == catalog_commit, 'Exact full tested catalog commit required'
 label = 'polar' + str(order)
 packet_name = sys.argv[5] if len(sys.argv)>5 else 'source-'+label
 assert packet_name.startswith('source-'+label) and pathlib.Path(packet_name).name == packet_name
