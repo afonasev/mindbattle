@@ -157,6 +157,7 @@ for R in packet_paths:
             # An explicit sourceIndex inventory is already bound by path and SHA.
             # Prove identical full topic bodies before aliasing its redundant name.
             explicit=sp.get('sourceIndex',{}).get('freshInventory',{})
+            assert inv_path.is_relative_to(R) and inv_path.is_file()
             assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
             assert candidate['cycle']==sp['cycle']==ps['cycle']==0
             assert explicit['path']==declared and explicit['sha256']==global_audit['freshInventorySHA256']==m.raw(inv_path)
