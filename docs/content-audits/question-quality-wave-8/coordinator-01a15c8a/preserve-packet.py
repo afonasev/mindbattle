@@ -27,7 +27,16 @@ for source in sp['rawSources']:
    matches=list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+cap['sourceNativeId']+'.jsonl'));assert len(matches)==1;jp=matches[0]
   record=json.loads(jp.read_text().splitlines()[cap['nativeRecordLine']-1]);assert record==cap['originalRecord']
   raw_checks.append({'path':str(p),'nativeId':cap['sourceNativeId'],'nativeLine':cap['nativeRecordLine'],'originalRecordExact':True})
-for p in ps['actualCurrentPeers']:assert m.sha(p['card'])==p.get('sha256',p.get('canonicalSHA256'))
+cat={};rows=[]
+for path in sorted((m.C/'src/content/topics').glob('*.json')):
+ t=m.read(path)
+ for card in t['questions']:
+  cat[card['id']]=card;rows.append({'topicId':t['id'],'id':card['id'],'prompt':card['prompt'],'answers':[a['text'] for a in card['answers']],'correctIndex':card['correctIndex']})
+assert len(rows)==11000 and m.sha(rows)==ps['globalMAIN']['rowsCanonicalSHA256']
+for b in ps['globalMAIN']['allCurrentFileByteBindings']:assert m.raw(m.C/b['path'])==b['sha256']
+assert ps['sameTopicMAIN']['questions']==m.read(m.C/'src/content/topics/polar-regions.json')['questions']
+for p in ps['actualCurrentPeers']:assert m.sha(p['card'])==p.get('sha256',p.get('canonicalSHA256')) and p['card']==cat[p['id']]
+
 proof={'owner':m.O,'sourceNativeId':uid,'nativeJournal':str(native),'actualCompactions':comp,'lastInput':last['last_token_usage']['input_tokens'],'modelWindow':last['model_context_window'],'packet':str(R),'rawFileSHA256':{str(p.relative_to(R)):m.raw(p) for p in R.rglob('*') if p.is_file()},'status':e['status'],'beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'sixGroups':6,'fourVariants':4,'nativeCaptureBindings':raw_checks,'qualityCredit':0,'networkCalls':[]}
 for i,o in enumerate(journal,1):
  p=o.get('payload',{})
