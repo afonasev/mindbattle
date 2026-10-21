@@ -1,5 +1,5 @@
 """Mechanical preservation of one native SOURCE packet, without quality credit."""
-import pathlib, json, importlib.util, sys
+import pathlib, json, importlib.util, sys, re
 D=pathlib.Path(__file__).parent
 s=importlib.util.spec_from_file_location('owned',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
 order=int(sys.argv[1]);actor_key=sys.argv[2];name=sys.argv[3] if len(sys.argv)>3 else f'source-history-russia{order}'
@@ -40,7 +40,7 @@ for p in ps['actualCurrentPeers']:assert m.sha(p['card'])==p.get('sha256',p.get(
 proof={'owner':m.O,'sourceNativeId':uid,'nativeJournal':str(native),'actualCompactions':comp,'lastInput':last['last_token_usage']['input_tokens'],'modelWindow':last['model_context_window'],'packet':str(R),'rawFileSHA256':{str(p.relative_to(R)):m.raw(p) for p in R.rglob('*') if p.is_file()},'status':e['status'],'beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'sixGroups':6,'fourVariants':4,'nativeCaptureBindings':raw_checks,'qualityCredit':0,'networkCalls':[]}
 for i,o in enumerate(journal,1):
  p=o.get('payload',{})
- if o['type']=='response_item' and p.get('type')=='custom_tool_call' and 'await tools.web__run(' in p.get('input',''):
+ if o['type']=='response_item' and p.get('type')=='custom_tool_call' and re.match(r'^(?:(?:const|let|var)\s+\w+\s*=\s*|text\(\s*)?await\s+tools\.web__run\s*\(', p.get('input','').lstrip()):
   callid=p['call_id'];result=next(((j,z) for j,z in enumerate(journal,1) if z.get('payload',{}).get('type')=='custom_tool_call_output' and z['payload'].get('call_id')==callid),None)
   proof['networkCalls'].append({'callLine':i,'call':p['input'],'resultLine':result[0] if result else None})
 actor.update(actualCompactions=comp,lastInput=proof['lastInput'],modelWindow=proof['modelWindow'],lastTaskEvent='task_complete',stage=f'IDLE_AFTER_SOURCE{order}_{e["status"]}',nativePreflightVerifiedBy=m.O)
