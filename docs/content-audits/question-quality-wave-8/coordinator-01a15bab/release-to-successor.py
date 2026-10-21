@@ -1,0 +1,21 @@
+"""Supported exact3 release after successor native READONLY ACK; no new quality work."""
+import pathlib,json,importlib.util,datetime
+D=pathlib.Path(__file__).parent;s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m);x=m.read(D/'manifest.json');successor='01a15bcc-bb59-7060-a1d6-48c9b65f7d18';assert x['successorThreadId']==successor
+j=next(pathlib.Path('/Users/eaafonasev/.codex/sessions/2026/10/21').glob('*'+successor+'.jsonl'));events=[json.loads(l) for l in j.open()];assert events[0]['payload']['id']==successor;assert not any(e['type']=='compacted' for e in events);event=[e['payload']['type'] for e in events if e['type']=='event_msg' and e['payload'].get('type') in ['task_started','task_complete']][-1];assert event=='task_complete';last=[e['payload']['info'] for e in events if e['type']=='event_msg' and e['payload'].get('type')=='token_count'][-1]
+assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and m.read(m.P/'.flow-leases.json')=={}
+for label,p in [('code',m.C),('planning',m.P)]:assert m.raw(pathlib.Path(m.h.git(p,'rev-parse','--path-format=absolute','--git-path','index')))==x['foreignIndexes'][label]
+report={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'predecessor':m.O,'successor':successor,'phase':'EXACT3_RELEASED_PENDING_SUCCESSOR_ACTIVATE','CURRENT':920,'remaining':1080,'fullGoal':2000,'claims':x['claims'],'successorReadonlyACK':{'nativeJournal':str(j),'actualCompactions':0,'lastInput':last['last_token_usage']['input_tokens'],'modelWindow':last['model_context_window'],'lastTaskEvent':event,'cursor':'44a475a1-45ac-4125-80fa-09d45610fb28:4','verified920Hashes2000FrozenExactPartition':True},'sourceBeforeRelease':m.h.git(m.C,'rev-parse','HEAD'),'noActiveSourceOrReviewTask':True,'rootStoppedControl':True,'foreignIndexes':x['foreignIndexes']}
+with m.flow.locked():m.flow.lease('acquire','planning',m.O)
+try:
+ with m.flow.locked():
+  for cid in x['claims']:m.flow.release(cid,m.O)
+ cp=m.P/'openspec/changes/question-quality-future-waves/current-checkpoint.json';c=m.read(cp);assert len(c['currentEligibleCompletedIds'])==920 and len(c['currentRemainingIds'])==1080;c.update(owner=None,activeCoordinator=None,phase=report['phase'],ordinaryWorkActivated=False,pendingSuccessor=successor,currentSourceActors=[],currentIndependentActors=[]);c['ownershipTransfer']={'predecessor':m.O,'successor':successor,'status':'SUPPORTED_EXACT3_RELEASED_WAIT_ACTIVATE_CLAIM','CURRENT':920,'remaining':1080,'fullGoal':2000,'claims':x['claims'],'handoff':str(D/'handoff-next.json'),'rootActualCompactions':0};m.write(cp,c)
+ sp=m.P/'evidence/question-revision-process-v2/coordinator-state.json';st=m.read(sp);st.update(owner=None,activeCoordinator=None,phase=report['phase'],status='RELEASED_EXACT3_WAIT_SUCCESSOR_CLAIM_ACTIVATE',claims=[],ordinaryWorkActivated=False,pendingSuccessor=successor,oldRootStoppedControl=True,next='ACTIVATE successor exact3 supported claim then continue full2000 from untouched86; old root no new tasks');m.write(sp,st)
+ gp=m.P/'evidence/question-revision-process-v2/active-full2000-goal-01a1593a.json';g=m.read(gp);g.update(owner=None,pendingSuccessor=successor,successor=successor);m.write(gp,g)
+ pp=m.P/'evidence/question-revision-process-v2/release-01a15bab-to-01a15bcc.json';m.write(pp,report);pfiles=[cp,sp,gp,pp]+[m.flow.get(cid)[0] for cid in x['claims']];pc=m.h.save(m.P,'refs/heads/codex/question-revision-resume-20261014',[str(p.relative_to(m.P)) for p in pfiles],'Supported exact3 release after verified successor READONLY ACK CURRENT920',x['foreignIndexes']['planning']);print('releaseP',pc)
+finally:
+ with m.flow.locked():m.flow.lease('release','planning',m.O)
+assert all(m.flow.get(cid)[1]['owner'] is None for cid in x['claims']) and m.read(m.P/'.flow-leases.json')=={}
+for fn in ['manifest.json','handoff-next.json']:
+ v=m.read(D/fn);v.update(phase=report['phase'],claimsOwner=None,leaseHeld=False,oldRootStoppedControl=True,supportedReleaseP=pc);m.write(D/fn,v)
+m.write(D/'supported-release.json',{**report,'supportedReleaseP':pc,'all3OwnersNoneVerified':True,'leaseAfter':{}});cc=m.savecode([D/'manifest.json',D/'handoff-next.json',D/'supported-release.json',pathlib.Path(__file__)],'Preserve exact3 supported release and stopped predecessor control CURRENT920');print('final code',cc)
