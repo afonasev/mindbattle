@@ -7,7 +7,9 @@ R=D/name;x=m.read(D/'manifest.json');actor=x['actors'][actor_key];uid=actor['thr
 assert journal[0]['payload']['id']==uid
 comp=sum(o['type']=='compacted' for o in journal);last=next(o['payload']['info'] for o in reversed(journal) if o.get('payload',{}).get('type')=='token_count')
 a,sp,ps=[m.read(R/f) for f in ['candidate.json','sourceproof.json','peer-snapshot.json']]
-assert all(v['sourceNativeId']==uid for v in [a,sp,ps]);assert len(a['entries'])==len(sp['entries'])==1
+assert all(v['sourceNativeId']==uid for v in [a,sp,ps])
+m.alias_single_sourceproof_entry(a,sp)
+assert len(a['entries'])==len(sp['entries'])==1
 m.alias_serialized_prompt_group(a,sp)
 m.alias_full_prompt_answer_concatenation(a,sp)
 m.alias_full_body_wrapper_digests(ps,R)
