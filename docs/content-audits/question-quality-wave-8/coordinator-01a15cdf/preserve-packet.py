@@ -34,7 +34,16 @@ for path in sorted((m.C/'src/content/topics').glob('*.json')):
   cat[card['id']]=card;rows.append({'topicId':t['id'],'id':card['id'],'prompt':card['prompt'],'answers':[a['text'] for a in card['answers']],'correctIndex':card['correctIndex']})
 assert len(rows)==11000 and m.sha(rows)==ps['globalMAIN']['rowsCanonicalSHA256']
 for b in ps['globalMAIN']['allCurrentFileByteBindings']:assert m.raw(m.C/b['path'])==b.get('sha256',b.get('fileSHA256',b.get('fileSha256')))
-assert ps['sameTopicMAIN']['questions']==m.read(m.C/'src/content/topics/history-russia.json')['questions']
+if 'sameTopicMAIN' in ps:
+ assert ps['sameTopicMAIN']['questions']==m.read(m.C/'src/content/topics/history-russia.json')['questions']
+else:
+ # HOLD preservation only: all100 exact ordered peer bodies are an equivalent
+ # retained full topic snapshot. Do not hydrate or qualify the raw packet.
+ assert e['status']=='HOLD'
+ topic_cards=m.read(m.C/'src/content/topics/history-russia.json')['questions']
+ full_peers=[p for p in ps['actualCurrentPeers'] if p['topicId']=='history-russia']
+ assert len(full_peers)==100 and [p['sourceOrder'] for p in full_peers]==list(range(1,101))
+ assert [p['card'] for p in full_peers]==topic_cards
 for p in ps['actualCurrentPeers']:assert m.sha(p['card'])==p.get('sha256',p.get('canonicalSHA256')) and p['card']==cat[p['id']]
 
 proof={'owner':m.O,'sourceNativeId':uid,'nativeJournal':str(native),'actualCompactions':comp,'lastInput':last['last_token_usage']['input_tokens'],'modelWindow':last['model_context_window'],'packet':str(R),'rawFileSHA256':{str(p.relative_to(R)):m.raw(p) for p in R.rglob('*') if p.is_file()},'status':e['status'],'beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'sixGroups':6,'fourVariants':4,'nativeCaptureBindings':raw_checks,'qualityCredit':0,'networkCalls':[]}
