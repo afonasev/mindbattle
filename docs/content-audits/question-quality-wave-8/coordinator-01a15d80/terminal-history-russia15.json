@@ -1,0 +1,39 @@
+{
+  "owner": "01a15d80-0fba-7452-81f6-ce117a86dd4a",
+  "status": "TERMINAL_FINAL15_HOLD0_BINDING_NOT_CERTIFICATION",
+  "cardHash": "4c8f7c263ae3cd883723e57af76d294c74ba9d08779caf5e4f97f528288fe072",
+  "sixGroups": 6,
+  "fourVariants": 4,
+  "actualPeers": 12,
+  "initialDefectsResolved": [
+    "15-D1"
+  ],
+  "finalDefects": [
+    {
+      "id": "15-D2",
+      "field": "answers[2].note",
+      "severity": "non-self-contained reference introduced by solecycle1",
+      "literal": "Экспозиция The Viking World в этом музее датирует эпоху викингов 750–1100 годами.",
+      "finding": "Новая note правильно ограничивает750–1100 экспозицией, но выражение «в этом музее» не имеет названного antecedent. В note названо только The Viking World, а музей не назван ни в prompt, ни в других полях; отображаемый основной source — Президентская библиотека. Поэтому справка не является самостоятельной: читатель не может определить, какой музей имеется в виду. В первичном L81 это Swedish History Museum, но его имя не попало в карточку.",
+      "requiredAction": "Terminal HOLD после единственного ordinarycycle1. Самостоятельность справки требует явного названия учреждения либо формулировки без неразрешённого указания; дальнейший ordinarycycle2, новый INITIAL или автоматический патч этим verdict не разрешены. Следующее действие определяет координатор в пределах действующих fences.",
+      "sourcesLocators": [
+        {
+          "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15d80/source-history-russia15/raw/academia-and-vikings-open.json",
+          "locator": "turn5view1 L79-L82; L68-L70; complete original context read at INITIAL, affected context reread FINAL"
+        }
+      ],
+      "contract": "Question-authoring guide: каждая справка самостоятельна; packetContract requires grammar and note truth/usefulness for the full prompt-answer-note variant."
+    }
+  ],
+  "qualityCredit": 0,
+  "CURRENT": 937,
+  "remaining": 1063,
+  "rule": "Terminal same-reader FINAL solecycle1 HOLD0 at4c8f7c263ae3cd883723e57af76d294c74ba9d08779caf5e4f97f528288fe072. INITIAL15-D1 exhibition-range qualifier resolved; FINAL15-D2 new note2 uses unresolved self-reference «в этом музее» without naming Swedish History Museum. Keep applied current in remaining1063. No ordinarycycle2/newINITIAL/reset/automatic museum-name fix/adjacentID workaround. Separate explicit human-process authorization required to reopen. Original9webcalls/RASrepeat deviation and cycle1network0 retained.",
+  "readerActualCompactions": 0,
+  "readerLastInput": 374899,
+  "readerNetworkCalls": 0,
+  "cycle1NetworkCalls": 0,
+  "sourceInitialNetworkCalls": 9,
+  "sourceRepeatDeviationPreserved": true,
+  "qa19Pass": true
+}
