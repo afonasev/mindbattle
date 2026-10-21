@@ -11,5 +11,9 @@ if x.get('additionalRetainedSourceIndexes'):
 if x.get('retainedStationContextIndex'):
  t['additionalRetainedSourceIndex']=x['retainedStationContextIndex']
  t['retainedFullStationCapture']={'path':x['retainedStationFullCapture'],'sha256':m.raw(x['retainedStationFullCapture']),'rule':'Full ORIGINAL tool output retained once; personally read actual available bodies and limitations. AWI/IPF/BAS station URLs already opened: no refetch. A successful tool open is not proof of complete content. SOURCE92 Rothera duplicate is not official alternative; no further92 network.'}
+# Forward the actual current task's prior attempt metadata, preserving historical templates.
+t['priorSourceAttemptMetadata']=x.get(f'historyRussia{order}SourceAttemptMetadata',{})
+t['source8CaptureLossFence']={k:x['pendingHistoryRussia8'][k] for k in ['captureLossValidation','attemptedURLsNoRetry','status','noIndependentInitial']}
+t['source8CaptureLossRule']='No refetch/retry these attempted URLs; lost full bodies are not primary proof; SOURCE8 remains HOLD/unapplied/noINITIAL and no retroactive adoption. Distinct unattempted claims are not broadly exhausted.'
 a.update(stage=f'START_SOURCE_HISTORY_RUSSIA{order}',task=str(D/f'source-history-russia{order}-task.json'),expected=f'One bounded SOURCE{order} READY/HOLD packet; no adjacent task')
 x['sourceActorKeys']=[actor_key];x['currentWork']={'id':q['id'],'topicId':'history-russia','sourceOrder':order,'stage':a['stage'],'CURRENT':x['CURRENT'],'remaining':x['remaining'],'beforeHash':m.sha(q)};x['next']=f'SOURCE{order} READY/HOLD then preservation and mechanical intake only if READY; independent reviewer remains idle until concrete exact INITIAL';m.write(D/f'source-history-russia{order}-task.json',t);m.write(D/'manifest.json',x);print(m.savecode([D/f'source-history-russia{order}-task.json',D/'manifest.json',pathlib.Path(__file__)],f'Prepare untouched SOURCE{order} exact native-bound author task'))
