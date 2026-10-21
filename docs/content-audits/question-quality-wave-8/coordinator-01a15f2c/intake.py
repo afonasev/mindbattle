@@ -125,8 +125,14 @@ for R in packet_paths:
             assert candidate['cycle']==sp['cycle']==ps['cycle']==0
             assert sp['entries'][0]['id']==e['id']
             assert inv_path.is_relative_to(R) and inv_path.is_file()
-            assert ps['sameTopicMAIN']['freshInventoryPath']==declared
             assert m.raw(inv_path)==global_audit['freshInventorySHA256']
+            initial_inv=m.read(inv_path)
+            assert initial_inv['sameTopicMAIN']['questions']==ps['sameTopicMAIN']['questions']==topic['questions']
+            assert initial_inv['sameTopicMAIN']['fileSHA256']==ps['sameTopicMAIN']['fileSHA256']==m.raw(C/ps['sameTopicMAIN']['path'])
+            if 'freshInventoryPath' not in ps['sameTopicMAIN']:
+                ps['sameTopicMAIN']['freshInventoryPath']=declared
+                ps['technicalSameTopicFullBodyInventoryLocatorAlias']={'explicitGlobalPath':declared,'fileSHA256':m.raw(inv_path),'operation':'Same raw author peer already contains all100 exact ordered topic bodies and matching topic file SHA; global explicit inventory has identical100 bodies. Locator alias only, original raw untouched.'}
+            assert ps['sameTopicMAIN']['freshInventoryPath']==declared
             assert ps['sameTopicMAIN']['questions']==topic['questions'] and len(topic['questions'])==100
             assert len(global_audit['allCurrentFileByteBindings'])==110
             sp['technicalExplicitInitialPeerInventoryBinding']={'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSnapshotSHA256':m.raw(R/'peer-snapshot.json'),'path':declared,'fileSHA256':m.raw(inv_path),'operation':'Exact explicit same-author initial peer inventory path/SHA; all existing live110/11000/100 checks below retained. Acquisition prose unchanged; no unbound hydration or new judgment.'}
