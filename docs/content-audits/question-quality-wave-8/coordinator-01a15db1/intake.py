@@ -304,7 +304,7 @@ for R in packet_paths:
         assert m.raw(p) == digest
         original_path=source['path']
         recovery_path=R/'raw/recovery.json'
-        if not recovery_path.exists() and candidate['cycle']==1 and R.name.endswith('-cycle1'):
+        if not recovery_path.exists() and candidate['cycle']==1 and R.name.endswith('-cycle1') and (R.with_name(R.name.removesuffix('-cycle1'))/'raw/recovery.json').exists():
             initial_raw=R.with_name(R.name.removesuffix('-cycle1'))
             initial_candidate=m.read(initial_raw/'candidate.json')
             assert e['beforeCard']==initial_candidate['entries'][0]['proposedCard']
