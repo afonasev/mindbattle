@@ -24,7 +24,20 @@ for v in entry['fourFullPromptAnswerNoteAssessments']:
   triple_checks.append({'slot':k,'originalFullPromptKeyTripleSHA256':v['tripleSHA256'],'canonicalPromptKeyTripleSHA256':m.sha(tr),'operation':'Verified identical literal triple, field-name-only hash representation; immutable raw preserved'})
 raw_checks=[]
 for source in sp['rawSources']:
- p=pathlib.Path(source['path']);p=p if p.is_absolute() else m.C/p;assert m.raw(p)==source['sha256'];cap=m.read(p) if p.suffix=='.json' else None
+ p=pathlib.Path(source['path']);p=p if p.is_absolute() else m.C/p
+ if not p.exists():
+  assert source['path'].startswith('content-audits/')
+  alt=m.C/'docs'/source['path'];assert alt.is_file() and alt.is_relative_to(R/'raw')
+  assert m.raw(alt)==source['sha256']
+  exact=m.read(alt);assert exact['sourceNativeId']==uid and exact['url']==source['url']
+  assert journal[exact['nativeRecordLine']-1]==exact['originalRecord']
+  body=exact
+  for key in source['completeOutputPointer'].split('/')[1:]:body=body[int(key)] if isinstance(body,list) else body[key]
+  assert isinstance(body,str) and source['url'] in body
+  assert __import__('hashlib').sha256(body.encode()).hexdigest()==source['completeOutputSHA256']==exact['completeOutputSHA256']
+  raw_checks.append({'originalMissingDocsPath':str(p),'resolvedOriginalCapture':str(alt),'fileSHA256':m.raw(alt),'nativeRecordExact':True,'bodyURLAndSHAExact':True,'operation':'Read-only path alias for missing docs prefix; original author sourceproof unchanged.'})
+  p=alt
+ assert m.raw(p)==source['sha256'];cap=m.read(p) if p.suffix=='.json' else None
  if isinstance(cap,dict) and 'originalRecord' in cap:
   jp=pathlib.Path(cap['nativeJournal'])
   if not jp.exists():
