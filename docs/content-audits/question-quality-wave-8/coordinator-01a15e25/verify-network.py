@@ -27,6 +27,7 @@ for ordinal,(line,call) in enumerate(calls,1):
  assert len(found)==1;p,z=found[0]
  network.append({'ordinalOneBased':ordinal,'call_id':call['call_id'],'callLine':line,'resultLine':resultline,'call':call['input'],'originalResult':str(p),'fileSHA256':m.raw(p),'nativeExact':True})
 report={'owner':m.O,'sourceNativeId':uid,'nativeJournalActual':str(native),'sourceOrder':order,'actualWebCalls':len(calls),'includePriorTasks':include_prior,'proof':str(proof_path),'calls':network,'exactStoredRecoveryNetworkCalls':0,'missingAuthorResultLinesRecovered':missing,'rawPacketUnchanged':True,'qualityCredit':0}
-rp=D/f'history-russia{order}-network-accounting.json';m.write(rp,report)
+report_name=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--report-name=')),f'history-russia{order}-network-accounting.json');assert pathlib.Path(report_name).name==report_name
+rp=D/report_name;m.write(rp,report)
 print(m.savecode([rp,pathlib.Path(__file__),*owned],f'Account SOURCE{order} exact stored native network results without quality credit'))
 print(json.dumps({'actualWebCalls':len(calls),'recoveredMissingOriginals':missing,'qualityCredit':0}))

@@ -37,7 +37,19 @@ for path in sorted((m.C/'src/content/topics').glob('*.json')):
  for card in t['questions']:
   cat[card['id']]=card;rows.append({'topicId':t['id'],'id':card['id'],'prompt':card['prompt'],'answers':[a['text'] for a in card['answers']],'correctIndex':card['correctIndex']})
 assert len(rows)==11000 and m.sha(rows)==ps['globalMAIN']['rowsCanonicalSHA256']
-for b in ps['globalMAIN']['allCurrentFileByteBindings']:assert m.raw(m.C/b['path'])==b.get('sha256',b.get('fileSHA256',b.get('fileSha256')))
+inventory_read_binding=None
+file_bindings=ps['globalMAIN'].get('allCurrentFileByteBindings')
+if file_bindings is None:
+ # Equivalent explicit author SHA-bound inventory; raw packet remains untouched.
+ inv_path=pathlib.Path(sp['sourceInventoryPath']);inv_path=inv_path if inv_path.is_absolute() else m.C/inv_path
+ assert str(inv_path)==ps['globalMAIN']['inventoryPath']==ps['sameTopicMAIN']['inventoryPath']
+ assert m.raw(inv_path)==sp['sourceInventorySHA256']==ps['globalMAIN']['inventorySHA256']==ps['sameTopicMAIN']['inventorySHA256']
+ inv=m.read(inv_path);assert inv['globalMAIN']['rowsCanonicalSHA256']==ps['globalMAIN']['rowsCanonicalSHA256']==m.sha(rows)
+ assert inv['globalMAIN']['topicFileCount']==110 and inv['globalMAIN']['questionCount']==11000
+ assert inv['sameTopicMAIN']['questions']==m.read(m.C/'src/content/topics/history-russia.json')['questions']
+ file_bindings=inv['globalMAIN']['allCurrentFileByteBindings'];assert len(file_bindings)==110
+ inventory_read_binding={'path':str(inv_path),'fileSHA256':m.raw(inv_path),'operation':'Read exact original sourceproof+peer SHA-bound inventory; all existing rows11000/topic100/files110 assertions retained, raw untouched.'}
+for b in file_bindings:assert m.raw(m.C/b['path'])==b.get('sha256',b.get('fileSHA256',b.get('fileSha256')))
 if 'questions' in ps.get('sameTopicMAIN',{}):
  assert ps['sameTopicMAIN']['questions']==m.read(m.C/'src/content/topics/history-russia.json')['questions']
 else:
@@ -49,7 +61,7 @@ else:
  assert [p['card'] for p in full_peers]==topic_cards
 for p in ps['actualCurrentPeers']:assert m.sha(p['card'])==p.get('sha256',p.get('canonicalSHA256')) and p['card']==cat[p['id']]
 
-proof={'owner':m.O,'sourceNativeId':uid,'nativeJournal':str(native),'actualCompactions':comp,'lastInput':last['last_token_usage']['input_tokens'],'modelWindow':last['model_context_window'],'packet':str(R),'rawFileSHA256':{str(p.relative_to(R)):m.raw(p) for p in R.rglob('*') if p.is_file()},'status':e['status'],'beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'sixGroups':6,'fourVariants':4,'nativeCaptureBindings':raw_checks,'qualityCredit':0,'networkCalls':[],'technicalTripleHashRepresentationChecks':triple_checks}
+proof={'owner':m.O,'sourceNativeId':uid,'nativeJournal':str(native),'actualCompactions':comp,'lastInput':last['last_token_usage']['input_tokens'],'modelWindow':last['model_context_window'],'packet':str(R),'rawFileSHA256':{str(p.relative_to(R)):m.raw(p) for p in R.rglob('*') if p.is_file()},'status':e['status'],'beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'sixGroups':6,'fourVariants':4,'nativeCaptureBindings':raw_checks,'qualityCredit':0,'networkCalls':[],'technicalTripleHashRepresentationChecks':triple_checks,'explicitInventoryReadBinding':inventory_read_binding}
 for i,o in enumerate(journal,1):
  p=o.get('payload',{})
  if o['type']=='response_item' and p.get('type')=='custom_tool_call' and re.match(r'^(?:(?:const|let|var)\s+\w+\s*=\s*|text\(\s*)?await\s+tools\.web__run\s*\(', re.sub(r'^// @exec:[^\n]*\n', '', p.get('input','').lstrip())):
