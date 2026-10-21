@@ -16,6 +16,14 @@ for p in R.rglob('*.json'):
  if isinstance(z,dict) and 'originalRecord' in z:
   if 'nativeRecordLine' in z:
    line=z['nativeRecordLine']
+  elif 'callId' in z:
+   assert z['sourceNativeId']==uid
+   exact=[n for n,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==z['callId']]
+   assert len(exact)==1 and exact[0]==z['nativeOutputLine']
+   assert rows[z['nativeCallLine']-1]['payload']['type']=='custom_tool_call'
+   assert rows[z['nativeCallLine']-1]['payload']['call_id']==z['callId']
+   assert any(n==z['nativeCallLine'] and call['call_id']==z['callId'] for n,call in calls)
+   line=exact[0]
   else:
    assert z['sourceNativeId']==uid
    exact=[n for n,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==z['nativeCallId']]
