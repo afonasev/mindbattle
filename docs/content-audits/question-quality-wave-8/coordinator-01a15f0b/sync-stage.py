@@ -13,10 +13,13 @@ authors = [a for a in source_actors if a['stage'].startswith('START')]
 readers = [reviewer] if reviewer['stage'].startswith('START') else []
 idle_authors = [a for a in source_actors if not a['stage'].startswith(('START', 'ARCHIVED', 'RETIRED'))]
 assert len(authors) <= 2 and len(readers) <= 1
+index_path = pathlib.Path(m.h.git(m.P, 'rev-parse', '--path-format=absolute', '--git-path', 'index'))
+expected_index = m.raw(index_path)
 with m.flow.locked():
     m.flow.lease('acquire', 'planning', m.O)
 try:
     with m.flow.locked():
+        assert m.raw(index_path) == expected_index, 'Foreign planning index advanced before P writes'
         assert all(m.flow.get(cid)[1]['owner'] == m.O for cid in x['claims'])
         cp_path = m.P / 'openspec/changes/question-quality-future-waves/current-checkpoint.json'
         cp = m.read(cp_path)
@@ -41,7 +44,7 @@ try:
         print(m.h.save(m.P, 'refs/heads/codex/question-revision-resume-20261014',
                        [str(p.relative_to(m.P)) for p in files],
                        'Synchronize active exact2000 stage and existing evidence',
-                       '468c6c6118c135884e32bdfbe9240235b72990dfc8c90b1b6e86def6cfc7f9d6'))
+                       expected_index))
 finally:
     with m.flow.locked():
         m.flow.lease('release', 'planning', m.O)
