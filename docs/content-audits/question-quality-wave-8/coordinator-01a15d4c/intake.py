@@ -119,7 +119,19 @@ for R in packet_paths:
         # the same author-retained inventory; no arbitrary path hydration.
         declared=global_audit['freshInventoryPath']
         inv_path=pathlib.Path(declared); inv_path=inv_path if inv_path.is_absolute() else C/inv_path
-        assert declared in json.dumps(sp.get('sourceIndex',{}),ensure_ascii=False)
+        if declared not in json.dumps(sp.get('sourceIndex',{}),ensure_ascii=False):
+            assert candidate['cycle']==1 and R.name.endswith('-cycle1')
+            initial_raw=R.with_name(R.name.removesuffix('-cycle1'))
+            initial_sp=m.read(initial_raw/'sourceproof.json');initial_candidate=m.read(initial_raw/'candidate.json')
+            assert candidate['sourceNativeId']==initial_candidate['sourceNativeId']==initial_sp['sourceNativeId']
+            assert e['beforeCard']==initial_candidate['entries'][0]['proposedCard']
+            assert sp['sourceIndex']==initial_sp['sourceIndex']
+            full=[p for p in ps['actualCurrentPeers'] if p['topicId']==e['topicId']]
+            assert len(full)==100 and [p['sourceOrder'] for p in full]==list(range(1,101))
+            assert [p['card'] for p in full]==topic['questions']
+            assert all(m.sha(p['card'])==p.get('sha256',p.get('canonicalSHA256')) for p in full)
+            sp['technicalHistoricalSourceIndexProsePreserved']={'initialRawSourceproof':str((initial_raw/'sourceproof.json').relative_to(C)),'rawSHA256':m.raw(initial_raw/'sourceproof.json'),'meaning':'Original identical acquisition-history prose retained; CURRENT inventory comes from exact explicit cycle1 peer path/SHA, all100 full current author bodies, all110 live file bindings. No unbound hydration or new peer judgment.'}
+
         assert ps['sameTopicMAIN']['freshInventoryPath']==declared
         assert m.raw(inv_path)==global_audit['freshInventorySHA256']
         inv=m.read(inv_path)
@@ -292,6 +304,12 @@ for R in packet_paths:
         assert m.raw(p) == digest
         original_path=source['path']
         recovery_path=R/'raw/recovery.json'
+        if not recovery_path.exists() and candidate['cycle']==1 and R.name.endswith('-cycle1'):
+            initial_raw=R.with_name(R.name.removesuffix('-cycle1'))
+            initial_candidate=m.read(initial_raw/'candidate.json')
+            assert e['beforeCard']==initial_candidate['entries'][0]['proposedCard']
+            assert candidate['sourceNativeId']==initial_candidate['sourceNativeId']
+            recovery_path=initial_raw/'raw/recovery.json'
         if recovery_path.exists() and p.suffix=='.json':
             oldcap=m.read(p)
             if isinstance(oldcap,dict) and 'originalRecord' in oldcap:
