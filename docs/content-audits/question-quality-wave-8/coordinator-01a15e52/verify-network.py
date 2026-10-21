@@ -14,7 +14,13 @@ wrappers=[]
 for p in R.rglob('*.json'):
  z=m.read(p)
  if isinstance(z,dict) and 'originalRecord' in z:
-  line=z['nativeRecordLine'];assert rows[line-1]==z['originalRecord'];wrappers.append((p,z))
+  if 'nativeRecordLine' in z:
+   line=z['nativeRecordLine']
+  else:
+   assert z['sourceNativeId']==uid
+   exact=[n for n,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==z['nativeCallId']]
+   assert len(exact)==1;line=exact[0]
+  assert rows[line-1]==z['originalRecord'];wrappers.append((p,z))
 network=[];owned=[];missing=[]
 for ordinal,(line,call) in enumerate(calls,1):
  results=[(n,r) for n,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==call['call_id']];assert len(results)==1
