@@ -18,6 +18,9 @@ t['source8CaptureLossRule']='No refetch/retry these attempted URLs; lost full bo
 t['previousSource9NetworkAccounting']=x.get('pendingHistoryRussia9',{}).get('sourceNetworkAccounting')
 t['previousSource10NetworkAccounting']=str(D.parent/'coordinator-01a15d25/history-russia10-network-accounting.json')
 t['previousSource10Cycle1NetworkAccounting']=str(D.parent/'coordinator-01a15d25/history-russia10-cycle1-network-accounting.json')
+t['previousSource11NetworkAccounting']=str(D/'history-russia11-network-accounting.json')
+t['previousSource11Recovery']=str(D/'source-history-russia11/raw/recovery.json')
+t['previousSource11AttemptRule']='SOURCE11 source6webcalls plus fulloriginalstoredresult recovery0 and solecycle1network0; no retry/refetch consumed URLs. FINAL11PASS after explanation-only repair, no ordinarycycle2/newINITIAL/reset. Recovery is not source exhaustion or new attempt.'
 t['previousSource9AttemptRule']='SOURCE9 primary502 and one officialalternative fullyretained; no retry/refetch. Read original fullsuccessfulcapture from sourceIndex first; no broad exhaustion of unrelated unattempted claims.'
 a.update(stage=f'START_SOURCE_HISTORY_RUSSIA{order}',task=str(D/f'source-history-russia{order}-task.json'),expected=f'One bounded SOURCE{order} READY/HOLD packet; no adjacent task')
 x['sourceActorKeys']=[actor_key];x['currentWork']={'id':q['id'],'topicId':'history-russia','sourceOrder':order,'stage':a['stage'],'CURRENT':x['CURRENT'],'remaining':x['remaining'],'beforeHash':m.sha(q)};x['next']=f'SOURCE{order} READY/HOLD then preservation and mechanical intake only if READY; independent reviewer remains idle until concrete exact INITIAL';m.write(D/f'source-history-russia{order}-task.json',t);m.write(D/'manifest.json',x);print(m.savecode([D/f'source-history-russia{order}-task.json',D/'manifest.json',pathlib.Path(__file__)],f'Prepare untouched SOURCE{order} exact native-bound author task'))
