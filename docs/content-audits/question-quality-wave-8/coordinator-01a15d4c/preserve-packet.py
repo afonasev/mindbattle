@@ -60,6 +60,6 @@ proof['currentTaskStartLine']=task_start
 proof['priorTaskNetworkCalls']=[v for v in proof['networkCalls'] if v['callLine']<task_start]
 proof['networkCalls']=[v for v in proof['networkCalls'] if v['callLine']>task_start]
 actor.update(actualCompactions=comp,lastInput=proof['lastInput'],modelWindow=proof['modelWindow'],lastTaskEvent='task_complete',stage=f'IDLE_AFTER_SOURCE{order}_{e["status"]}',nativePreflightVerifiedBy=m.O)
-proof_path=D/(name.replace('source-','')+'-native-proof.json');m.write(proof_path,proof);m.write(D/'manifest.json',x)
+proof_path=D/(name.replace('source-','').replace('/','-')+'-native-proof.json');m.write(proof_path,proof);m.write(D/'manifest.json',x)
 print(m.savecode([p for p in R.rglob('*') if p.is_file()]+[proof_path,D/'manifest.json',pathlib.Path(__file__)],f'Preserve native SOURCE{order} {e["status"]} exact packet without quality credit'))
 print(json.dumps({k:proof[k] for k in ['status','actualCompactions','lastInput','modelWindow','networkCalls']},ensure_ascii=False))
