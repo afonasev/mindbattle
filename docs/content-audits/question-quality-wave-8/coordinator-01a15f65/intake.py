@@ -17,6 +17,7 @@ for R in packet_paths:
     name = R.name; B = D/('qualified-'+name)
     candidate, sp, ps = [m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
     m.alias_serialized_prompt_group(candidate,sp)
+    m.alias_full_body_wrapper_digests(ps,R)
     m.alias_explicit_nested_inventory(candidate,sp,ps,R)
     e = candidate['entries'][0]; topic = m.read(C/f"src/content/topics/{e['topicId']}.json")
     assert topic['questions'][e['sourceOrder']-1] == e['beforeCard']
