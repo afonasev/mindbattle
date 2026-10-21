@@ -1,0 +1,101 @@
+{
+  "sourceNativeId": "01a15d29-50e6-7432-9684-c0672bb0c154",
+  "nativeJournal": "/Users/eaafonasev/.codex/archived_sessions/rollout-2026-10-21T11-32-31-01a15d29-50e6-7432-9684-c0672bb0c154.jsonl",
+  "scope": "INITIAL SOURCE9 task only; solecycle1 network0",
+  "originalPrimaryFailure": {
+    "callRecord": {
+      "timestamp": "2026-10-21T06:33:39.498Z",
+      "ordinal": 94,
+      "type": "response_item",
+      "payload": {
+        "type": "custom_tool_call",
+        "id": "ctc_0cf5d7b9b7e7faf5016ad85cc3174881919cb6ea206ca88c5a",
+        "status": "completed",
+        "call_id": "call_ffb722e797de403a9e58d0e29e4e2720",
+        "name": "exec",
+        "input": "const r=await tools.web__run({open:[{ref_id:\"https://encyclopedia.ushmm.org/content/en/timeline-event/holocaust/1939-1941/operation-barbarossa\"}],response_length:\"long\"}); store(\"source9_ushmm_primary\",r); text(r);\n",
+        "internal_chat_message_metadata_passthrough": {
+          "turn_id": "01a15d29-ea14-73b2-bd9e-99a5a924d9ce",
+          "create_time": 1792564419.093612
+        }
+      }
+    },
+    "resultRecord": {
+      "timestamp": "2026-10-21T06:33:43.414Z",
+      "ordinal": 97,
+      "type": "response_item",
+      "payload": {
+        "type": "custom_tool_call_output",
+        "id": "ctco_01a15d2a-6af6-7c91-8e04-fdc3f01c1866",
+        "call_id": "call_ffb722e797de403a9e58d0e29e4e2720",
+        "output": [
+          {
+            "type": "input_text",
+            "text": "Script completed\nWall time 3.9 seconds\nOutput:\n"
+          },
+          {
+            "type": "input_text",
+            "text": "Internal Error ()\nciteturn0view0 [wordlim: 200] Source: open({\"ref_id\":\"https://encyclopedia.ushmm.org/content/en/timeline-event/holocaust/1939-1941/operation-barbarossa\",\"lineno\":null}); Total lines: 1\nL0: Failed to fetch https://encyclopedia.ushmm.org/content/en/timeline-event/holocaust/1939-1941/operation-barbarossa: (502) Bad Gateway\n"
+          }
+        ],
+        "internal_chat_message_metadata_passthrough": {
+          "turn_id": "01a15d29-ea14-73b2-bd9e-99a5a924d9ce",
+          "create_time": 1792564423.414566
+        }
+      },
+      "metadata": {
+        "client_authored": false,
+        "fallback_token_limit_override": 12000
+      }
+    }
+  },
+  "calls": [
+    {
+      "callLine": 95,
+      "call": "const r=await tools.web__run({open:[{ref_id:\"https://encyclopedia.ushmm.org/content/en/timeline-event/holocaust/1939-1941/operation-barbarossa\"}],response_length:\"long\"}); store(\"source9_ushmm_primary\",r); text(r);\n",
+      "resultLine": 98
+    },
+    {
+      "callLine": 106,
+      "call": "const r=await tools.web__run({search_query:[{q:\"site:encyclopedia.ushmm.org/content/en/article Soviet Union invasion June 22 1941 Germany Italy Romania Hungary\"}],response_length:\"long\"}); store(\"source9_ushmm_alt_discovery\",r); text(r);\n",
+      "resultLine": 109
+    },
+    {
+      "callLine": 124,
+      "call": "const r=await tools.web__run({open:[{ref_id:\"turn1search1\"}],response_length:\"long\"}); store(\"source9_ushmm_official_alternative\",r); text(r);\n",
+      "resultLine": 127
+    }
+  ],
+  "exactRecordChecks": [
+    {
+      "callLine": 95,
+      "resultLine": 98,
+      "callRecordSHA256": "203970da168bd31764ff6a3ccb6bc590505d1d7973c34b69e7104213358c6a93",
+      "resultRecordSHA256": "fbda7a80ab8b4cf9bffc9e65230a4baa5e33be4c2d130f9265564566dfe2d1be"
+    },
+    {
+      "callLine": 106,
+      "resultLine": 109,
+      "callRecordSHA256": "40ec1dc54965de3bcadacdc7fe540d79577bea73589523cbbb13b9ce90b4576d",
+      "resultRecordSHA256": "34b15fc018f26225d458a00c04ad4c503427e945eb15e5a22a6b59d4513168a1"
+    },
+    {
+      "callLine": 124,
+      "resultLine": 127,
+      "callRecordSHA256": "7a0c95a19e1e6d6371e23de92b23edb16fad437ee8292e386f34fa8e4c38b78a",
+      "resultRecordSHA256": "7356364cc73cb7e065c7c006d609932a7debcd7dc1455a6d5884c5320d9c871d"
+    }
+  ],
+  "officialAlternativeFullCapture": {
+    "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15d25/source-history-russia9/raw/ushmm-soviet-invasion.json",
+    "sha256": "f10f9b11c3beb793a76006a67e17d6847cbb2f154146ddb25f59d612b726e8d5",
+    "originalRecordExact": true
+  },
+  "openCalls": 2,
+  "URLAttempts": 2,
+  "discoveryCalls": 1,
+  "discoveryQueries": 1,
+  "cycle1Network": 0,
+  "reviewerBothStagesNetwork": 0,
+  "rule": "No retry/refetch primary or official alternative. Full primary failure retained, full successful alternative retained once. Old SOURCE8 HOLD not adopted."
+}
