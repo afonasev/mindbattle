@@ -130,12 +130,15 @@ report={**case['reportBase'],'scope':case['scope'],'acceptedOrders':case['accept
 if '--verify-only' in sys.argv or '--verify-fix-only' in sys.argv:
  print(json.dumps({'verified':report['verified'],'acceptedOrders':case['acceptedOrders'],'audit':audit,'mutations':False}));raise SystemExit(0)
 m=load('certificate',D/'certification-common.py');m.O=O;m.P=P;guard=load('guard',D.parent/'coordinator-01a13f31/planning-certification-guard.py')
+m._preleasePlanningIndex=raw(pathlib.Path(m.h.git(P,'rev-parse','--path-format=absolute','--git-path','index')))
 cc=guard.certify_preleased(m,accepted,report,case['expectedCURRENT'],case['wave'],C/case['reportPath'],[p for p in R.rglob('*') if p.is_file()]+[pathlib.Path(__file__),casePath],case['testedCatalogCommit'])
+projectionIndex=pathlib.Path(m.h.git(P,'rev-parse','--path-format=absolute','--git-path','index'));expectedProjectionIndex=raw(projectionIndex)
 with m.flow.locked():m.flow.lease('acquire','planning',O)
 try:
+ assert raw(projectionIndex)==expectedProjectionIndex
  cp=rd(P/'openspec/changes/question-quality-future-waves/current-checkpoint.json');n=len(cp['currentEligibleCompletedIds']);waves=[w['currentSourceEditorialCards'] for w in cp['waves']]
  sp=P/'evidence/question-revision-process-v2/coordinator-state.json';st=rd(sp);st['waveCURRENT']=waves;wr(sp,st)
  gp=P/'evidence/question-revision-process-v2/active-full2000-goal-01a1593a.json';g=rd(gp);g.update(CURRENT=n,remaining=2000-n,newlyCertified=n-949,waveCURRENT=waves,latestCodeCommit=cc,latestCertification=case['reportPath']);wr(gp,g)
- print('projection',m.h.save(P,'refs/heads/codex/question-revision-resume-20261014',[str(p.relative_to(P)) for p in [sp,gp]],f'Record fullgoal CURRENT{n} delta{n-949} exact accepted subset',raw(P/m.h.git(P,'rev-parse','--git-path','index'))))
+ print('projection',m.h.save(P,'refs/heads/codex/question-revision-resume-20261014',[str(p.relative_to(P)) for p in [sp,gp]],f'Record fullgoal CURRENT{n} delta{n-949} exact accepted subset',expectedProjectionIndex))
 finally:
  with m.flow.locked():m.flow.lease('release','planning',O)

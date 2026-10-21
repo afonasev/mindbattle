@@ -18,8 +18,12 @@ def certify(accepted,report,expected,wave,out,files,qaCommit):
  for e in accepted:assert e['questionId'] not in done and sha(catalog[e['questionId']])==e['cardCanonicalSha256']
  for t in ['maps-cartography','engineering-machines']:assert (C/f'src/content/topics/{t}.json').read_bytes()==subprocess.check_output(['git','-C',str(C),'show',qaCommit+f':src/content/topics/{t}.json'])
  n=expected+len(accepted);now=datetime.datetime.now(datetime.timezone.utc).isoformat();report.update(owner=O,at=now,accepted=accepted,newQualityCredit=len(accepted),CURRENT=n,remaining=2000-n,mainIntegrated=False,fullGoalNotComplete=True);write(out,report);rp=C/f'docs/content-audits/question-quality-wave-{wave}/root-certified-source-checkpoint.json';reg=read(rp);before=len(reg['cards']);reg['cards']+=accepted;reg.update(sourceEditorialCompletedCards=before+len(accepted),sourceEditorialCompletedFields=6*(before+len(accepted)),ownerNativeId=O,latestBatch={'certification':str(pathlib.Path(out).relative_to(C)),'newQualityCredit':len(accepted),'CURRENT':n,'remaining':2000-n});reg[f'wave{wave}Remaining']=500-len(reg['cards']);write(rp,reg);files=list(dict.fromkeys([str(pathlib.Path(p).relative_to(C)) for p in files+[out,rp,pathlib.Path(__file__).resolve()]]));cc=h.save(C,'refs/heads/codex/question-quality-wave-6',files,f'Certify exact CURRENT{n} bound independent PASS{len(accepted)} wave{wave}',raw(C/h.git(C,'rev-parse','--git-path','index')));print('code',cc)
+ planningIndex=pathlib.Path(h.git(P,'rev-parse','--path-format=absolute','--git-path','index'))
+ expectedPlanningIndex=globals().get('_preleasePlanningIndex',raw(planningIndex))
+ assert raw(planningIndex)==expectedPlanningIndex, 'Foreign planning index advanced before certificate writes'
  with flow.locked():flow.lease('acquire','planning',O)
  try:
+  assert raw(planningIndex)==expectedPlanningIndex
   for e in accepted:
    i=e['questionId']
    for k in ['completedIds','currentEligibleCompletedIds']:ck[k].append(i)
@@ -31,7 +35,7 @@ def certify(accepted,report,expected,wave,out,files,qaCommit):
   for k in ['currentEligibleFields','historicalUniqueFields']:sm[k]=6*n
   sm[f'wave{wave}CurrentCertifiedCards']=len(reg['cards']);done=set(ck['currentEligibleCompletedIds'])
   for w in ck['waves']:w['currentSourceEditorialCards']=len(done.intersection(w['selectedIds']))
-  assert sum(w['currentSourceEditorialCards'] for w in ck['waves'])==n;ck['latestBatch']={'certification':str(pathlib.Path(out).relative_to(C)),'codeCommit':cc,'newQualityCredit':len(accepted),'CURRENT':n,'remaining':2000-n};write(cp,ck);sp=P/'evidence/question-revision-process-v2/coordinator-state.json';st=read(sp);st['counts']={'CURRENT':n,'remaining':2000-n};st['coordinatorProgress'].update(CURRENT=n,newlyCertified=n-949,remaining=2000-n);st['currentWork'].update(CURRENT=n,remaining=2000-n,codeCommit=cc);st['latestBatch']=ck['latestBatch'];write(sp,st);pp=P/f'evidence/question-revision-process-v2/{pathlib.Path(out).stem}-01a15f2c.json';write(pp,{'codeBranch':'codex/question-quality-wave-6','codeCommit':cc,**report});print('planning',h.save(P,'refs/heads/codex/question-revision-resume-20261014',[str(p.relative_to(P)) for p in [cp,sp,pp]],f'Record CURRENT{n} exact independent PASS and retained residual gates',raw(P/h.git(P,'rev-parse','--git-path','index'))))
+  assert sum(w['currentSourceEditorialCards'] for w in ck['waves'])==n;ck['latestBatch']={'certification':str(pathlib.Path(out).relative_to(C)),'codeCommit':cc,'newQualityCredit':len(accepted),'CURRENT':n,'remaining':2000-n};write(cp,ck);sp=P/'evidence/question-revision-process-v2/coordinator-state.json';st=read(sp);st['counts']={'CURRENT':n,'remaining':2000-n};st['coordinatorProgress'].update(CURRENT=n,newlyCertified=n-949,remaining=2000-n);st['currentWork'].update(CURRENT=n,remaining=2000-n,codeCommit=cc);st['latestBatch']=ck['latestBatch'];write(sp,st);pp=P/f'evidence/question-revision-process-v2/{pathlib.Path(out).stem}-01a15f2c.json';write(pp,{'codeBranch':'codex/question-quality-wave-6','codeCommit':cc,**report});print('planning',h.save(P,'refs/heads/codex/question-revision-resume-20261014',[str(p.relative_to(P)) for p in [cp,sp,pp]],f'Record CURRENT{n} exact independent PASS and retained residual gates',expectedPlanningIndex))
  finally:
   with flow.locked():flow.lease('release','planning',O)
  return cc
