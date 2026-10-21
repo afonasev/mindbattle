@@ -22,15 +22,15 @@
       "hostId": "local",
       "model": "gpt-6.1-sol",
       "thinking": "medium",
-      "stage": "START_INITIAL_HISTORY-RUSSIA25",
+      "stage": "IDLE_AFTER_INITIAL25_FIX_AVAILABLE_FOR_INITIAL26",
       "createdBy": "01a15db1-757e-7dd1-a924-d215c9a8608d",
       "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/21/rollout-2026-10-21T14-09-19-01a15db8-e016-7662-988d-1fd4eedccf31.jsonl",
       "actualCompactions": 0,
       "nativePreflightVerifiedBy": "01a15e25-ed2b-7cc0-a466-b43bc5cecb52",
       "expected": "One exact INITIAL history-russia25; assess specific blocker at30min",
       "lastTaskEvent": "task_complete",
-      "lastInput": 282377,
-      "cursor": "a732f1d1-96f0-4e87-a3f6-a00e7f15f648:39",
+      "lastInput": 310415,
+      "cursor": "a732f1d1-96f0-4e87-a3f6-a00e7f15f648:43",
       "task": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15e25/reader-history-russia25-initial-task.json",
       "modelWindow": 475000
     },
@@ -3133,7 +3133,50 @@
     "catalogCommit": "27ff184be1dc68b162a1816d6627c6e993473556",
     "qaReportCommit": "2a6d2fc7b1c6ec9f03d67fc37c37bdf09981454f",
     "qaPath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15e25/qa-source25-26-shared.json",
-    "cardHash": "68c36fe8343240645c289deaba7abdb28d8753c6a91aef77f1039910b3321fd5"
+    "cardHash": "68c36fe8343240645c289deaba7abdb28d8753c6a91aef77f1039910b3321fd5",
+    "status": "FIX",
+    "defects": [
+      {
+        "id": "25-D1",
+        "field": "prompt",
+        "severity": "unsupported date attached to selection instead of campaign/liberation",
+        "literal": "Кто был выбран военачальником Второго народного ополчения в 1612 году?",
+        "finding": "Фраза «был выбран ... в1612году» датирует1612годом именноизбраниевоеначальника. Лично прочитанныйPRlibL79 относит1612к освобождениюМосквы, L80 сообщаетобизбранииПожарскогововремялеченияпослеранения, но неговоритчтоэтоизбраниепроизошлов1612. L81 даётвыступлениеополчениявконцефевраля1612. Переносдатировкипохода/освобождениянаактвыборанеобоснованисточником. Неутверждаю точнуюинуюдатувыбораизбиблиографическогозаглавияL239-L243: этонепрочитанноеисследование, аметаданные.",
+        "requiredAction": "Вединственномнаправленномcycle1 минимальноубратьнеподтверждённуюдатуактавыбора либо привязать1612кдействительноподтверждённомупоходу/освобождениюМосквы, сохранивсмыслразличиявоеначальникаПожарскогоиорганизатораМинина. Неизобретатьточнуюдатуизбрания и неделатьновуюзагрузкурадиэтойпоправки. FrozenID/topic/order/key1/MEDIUMсохранить.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15e25/source-history-russia25/raw/prlib-minin-pozharsky.json",
+            "locator": "turn2view0 original returned L0-L353 personally read; continuous relevant L75-L83, especially L79-L81; catalog L239-L243 is metadata only"
+          }
+        ],
+        "nextActionOwner": "01a15e25-ed2b-7cc0-a466-b43bc5cecb52",
+        "contract": "Содержательноеclaim-to-sourceоснование сохраняетчтоименно датированоисточником,а неHTTP/hashилиобщийсоседнийгод."
+      },
+      {
+        "id": "25-D2",
+        "field": "answers[3].text and its affected note",
+        "severity": "obviously anachronistic distractor for the explicit1612 context",
+        "literal": {
+          "text": "Михаил Кутузов",
+          "note": "Кутузов командовал русскими армиями в Отечественную войну 1812 года."
+        },
+        "finding": "МихаилКутузов — полководецэпохи1812, тоестьпримернодвумястолетиямипозднееуказанного1612. ЭтоизвестноеисторическоеразличиеподтвержденосохранённымPRlibL71-L76 и самайnote. ОннеявляетсяправдоподобнымкандидатомнавоеначальникаополченияСмуты; общаякатегория«русскийвоенныйдеятель»неустраняетявныйанахронизм. Минин/Пожарский/ШуйскийотнесеныксамойСмуте, поэтомуКутузоввыпадаетизряда.",
+        "requiredAction": "Втомжеединственномcycle1 заменитьslot3 и егозатронутуюnote напроверяемуюправдоподобнуюфигурусоответствующегоконтекста/сопоставимуюальтернативу, сохранивровноодинключ, полноценныесамостоятельныеnotes иабсолютныйMEDIUM. Сначалареальнодоступныесохранённыеисточники; данныйverdictнеразрешаетrefetch/reset/обходпопыток. Остальныехорошиетекстынепереписыватьбезнеобходимости.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15e25/source-history-russia25/raw/prlib-minin-pozharsky.json",
+            "locator": "turn2view0 original returned L0-L353 personally read; continuous relevant L75-L83, especially L79-L81; catalog L239-L243 is metadata only"
+          },
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15db1/source-history-russia17/raw/prlib-kutuzov-1812.json",
+            "locator": "turn1view0 actual returned saved context; continuous relevant L54-L77 personally reread, especially L71-L76; no missing context reconstructed"
+          }
+        ],
+        "nextActionOwner": "01a15e25-ed2b-7cc0-a466-b43bc5cecb52",
+        "contract": "Памятка/packetContract: правдоподобныедистракторы, безочевидноневозможныхсущностей; тематическаяобщностьнеснимаетпроверкувсегоряда."
+      }
+    ],
+    "receipt": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15e25/independent-history-russia25-initial/receipt.json"
   },
   "concurrentSource27Work": {
     "id": "history-russia-ussr-founded",
