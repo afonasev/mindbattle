@@ -8,7 +8,10 @@ x = m.read(D / 'manifest.json')
 assert x['owner'] == m.O
 source_actors = [x['actors'][k] for k in x.get('sourceActorKeys', ['parks33Author'])]
 reviewer = x['actors']['reviewer']
-current_actors = [a for a in source_actors+[reviewer] if not a['stage'].startswith(('ARCHIVED', 'RETIRED'))]
+retained_reviewers = x.get('retainedNativeReviewers', [])
+assert all(not a['stage'].startswith('START') for a in retained_reviewers)
+current_actors = list({a['threadId']: a for a in source_actors+[reviewer]+retained_reviewers
+                      if not a['stage'].startswith(('ARCHIVED', 'RETIRED'))}.values())
 authors = [a for a in source_actors if a['stage'].startswith('START')]
 readers = [reviewer] if reviewer['stage'].startswith('START') else []
 idle_authors = [a for a in source_actors if not a['stage'].startswith(('START', 'ARCHIVED', 'RETIRED'))]
