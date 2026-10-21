@@ -137,7 +137,7 @@ function another(position: Position): Position {
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/?muted=1");
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   await muteAudio(page);

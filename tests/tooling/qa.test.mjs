@@ -91,3 +91,43 @@ test('Python unittest evidence must include executed passing tests', () => {
   assert.equal(verifyUnittest('Ran 3 tests in 0.01s\n\nOK\n').passed, 3);
   for (const log of ['', 'Ran 0 tests in 0.00s\nOK', 'Ran 3 tests in 0.01s\nFAILED (errors=1)', 'Ran 3 tests in 0.01s\nOK (skipped=1)']) assert.throws(() => verifyUnittest(log));
 });
+
+// Guard the optimization's failure behavior and shared timeout without wall-clock sleeps.
+test('mounted assertions keep the original timeout budget and propagate failures', async t => {
+  const { expectAfterMount } = await import('../browser/qa-mounted.mjs');
+  let now = 100;
+  t.mock.method(performance, 'now', () => now);
+  let disposed = false;
+  const page = { async waitForFunction(predicate, selector, options) {
+    assert.equal(selector, '.snapshot');
+    assert.deepEqual(options, { polling: 'raf', timeout: 5000 });
+    now += 320;
+    return { async dispose() { disposed = true; now += 5; } };
+  } };
+  let calls = 0;
+  await expectAfterMount(page, '.snapshot', async options => {
+    calls++;
+    assert.equal(disposed, true);
+    assert.deepEqual(options, { timeout: 4675 });
+  });
+  assert.equal(calls, 1);
+  const wrongText = new Error('wrong text');
+  await assert.rejects(expectAfterMount(page, '.snapshot', async () => { throw wrongText; }), error => error === wrongText);
+});
+
+test('missing or late mounts cannot pass or restart an exhausted assertion timeout', async t => {
+  const { expectAfterMount } = await import('../browser/qa-mounted.mjs');
+  let now = 0, calls = 0;
+  t.mock.method(performance, 'now', () => now);
+  const assertion = async () => { calls++; };
+  const missing = new Error('mount timeout');
+  await assert.rejects(expectAfterMount({ waitForFunction: async () => { throw missing; } }, '.missing', assertion), error => error === missing);
+  for (const elapsed of [5000, 5001]) {
+    const page = { async waitForFunction() { now += elapsed; return { async dispose() {} }; } };
+    await assert.rejects(expectAfterMount(page, '.late', assertion), /assertion budget/);
+  }
+  for (const timeout of [0, -1, Infinity, NaN]) {
+    await assert.rejects(expectAfterMount({}, '.invalid', assertion, timeout), /finite positive/);
+  }
+  assert.equal(calls, 0);
+});
