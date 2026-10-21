@@ -10,7 +10,9 @@ assert m.h.git(m.C, 'rev-parse', '--verify', catalog_commit+'^{commit}') == cata
 label = 'history-russia' + str(order)
 packet_name = sys.argv[5] if len(sys.argv)>5 else 'source-'+label
 assert packet_name.startswith('source-'+label) and pathlib.Path(packet_name).name == packet_name
-B = D/('qualified-' + packet_name)
+B = pathlib.Path(sys.argv[6]).resolve() if len(sys.argv)>6 else D/('qualified-' + packet_name)
+assert B.is_relative_to(m.C/'docs/content-audits/question-quality-wave-8')
+raw_packet = B.with_name(B.name.removeprefix('qualified-'))
 e = m.read(B/'candidate.json')['entries'][0]
 q = m.read(m.C/'src/content/topics/history-russia.json')['questions'][order-1]
 assert q == e['proposedCard'] and m.sha(q) == e['afterHash']
@@ -29,7 +31,7 @@ t.update(topicId='history-russia', owner=m.O, manifest=str(D/'manifest.json'),
          catalogCommit=catalog_commit, cardHash=m.sha(q),
          sourceFreeze=qualified_freeze, rawAuthorFreeze=raw_freeze,
          authorNativeId=m.read(B/'candidate.json')['sourceNativeId'],
-         authorPacket=str(B), immutableRawAuthorPacket=str(D/packet_name),
+         authorPacket=str(B), immutableRawAuthorPacket=str(raw_packet),
          applyReport=str(D/('qualified-'+packet_name+'-apply.json')),
          qa=str(qa_path), qaSHA256=m.raw(qa_path), qaReportCommit=qa_commit,
          outputDirectory=str(D/('independent-'+label+'-initial')),
