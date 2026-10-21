@@ -16,8 +16,12 @@ def groups(c):return {'prompt_ordered_answers_key':{'prompt':c['prompt'],'answer
 bg,ag=groups(q),groups(e['proposedCard']);entry=sp['entries'][0];literal_groups=entry.get('literalGroups',entry.get('sixLiteralGroups'));assert entry['id']==e['id'] and len(literal_groups)==6 and len(entry['fourFullPromptAnswerNoteAssessments'])==4
 for g in literal_groups:assert g['literal']==ag[g['group']] and g['literalSHA256']==m.sha(g['literal'])
 for k,fg in e['fieldGroups'].items():assert fg['beforeCanonicalSHA256']==m.sha(bg[k]) and fg['afterCanonicalSHA256']==m.sha(ag[k])
+triple_checks=[]
 for v in entry['fourFullPromptAnswerNoteAssessments']:
- k=v['slot'];tr={'prompt':e['proposedCard']['prompt'],'answer':e['proposedCard']['answers'][k]['text'],'note':e['proposedCard']['answers'][k]['note']};assert tr=={'prompt':v['fullPrompt'],'answer':v['answer'],'note':v['note']} and m.sha(tr)==v['tripleSHA256']
+ k=v['slot'];tr={'prompt':e['proposedCard']['prompt'],'answer':e['proposedCard']['answers'][k]['text'],'note':e['proposedCard']['answers'][k]['note']};assert tr=={'prompt':v['fullPrompt'],'answer':v['answer'],'note':v['note']}
+ if m.sha(tr)!=v['tripleSHA256']:
+  assert m.sha({'fullPrompt':tr['prompt'],'answer':tr['answer'],'note':tr['note']})==v['tripleSHA256']
+  triple_checks.append({'slot':k,'originalFullPromptKeyTripleSHA256':v['tripleSHA256'],'canonicalPromptKeyTripleSHA256':m.sha(tr),'operation':'Verified identical literal triple, field-name-only hash representation; immutable raw preserved'})
 raw_checks=[]
 for source in sp['rawSources']:
  p=pathlib.Path(source['path']);p=p if p.is_absolute() else m.C/p;assert m.raw(p)==source['sha256'];cap=m.read(p) if p.suffix=='.json' else None
@@ -45,7 +49,7 @@ else:
  assert [p['card'] for p in full_peers]==topic_cards
 for p in ps['actualCurrentPeers']:assert m.sha(p['card'])==p.get('sha256',p.get('canonicalSHA256')) and p['card']==cat[p['id']]
 
-proof={'owner':m.O,'sourceNativeId':uid,'nativeJournal':str(native),'actualCompactions':comp,'lastInput':last['last_token_usage']['input_tokens'],'modelWindow':last['model_context_window'],'packet':str(R),'rawFileSHA256':{str(p.relative_to(R)):m.raw(p) for p in R.rglob('*') if p.is_file()},'status':e['status'],'beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'sixGroups':6,'fourVariants':4,'nativeCaptureBindings':raw_checks,'qualityCredit':0,'networkCalls':[]}
+proof={'owner':m.O,'sourceNativeId':uid,'nativeJournal':str(native),'actualCompactions':comp,'lastInput':last['last_token_usage']['input_tokens'],'modelWindow':last['model_context_window'],'packet':str(R),'rawFileSHA256':{str(p.relative_to(R)):m.raw(p) for p in R.rglob('*') if p.is_file()},'status':e['status'],'beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'sixGroups':6,'fourVariants':4,'nativeCaptureBindings':raw_checks,'qualityCredit':0,'networkCalls':[],'technicalTripleHashRepresentationChecks':triple_checks}
 for i,o in enumerate(journal,1):
  p=o.get('payload',{})
  if o['type']=='response_item' and p.get('type')=='custom_tool_call' and re.match(r'^(?:(?:const|let|var)\s+\w+\s*=\s*|text\(\s*)?await\s+tools\.web__run\s*\(', p.get('input','').lstrip()):
