@@ -6,6 +6,7 @@ m = importlib.util.module_from_spec(s)
 s.loader.exec_module(m)
 order, catalog_commit, raw_freeze, qualified_freeze = sys.argv[1:]
 order = int(order)
+assert m.h.git(m.C,'rev-parse','--verify',catalog_commit+'^{commit}')==catalog_commit, 'Exact full tested catalog commit required'
 label = 'history-russia' + str(order) + '-cycle1'
 B = D/('qualified-source-' + label)
 e = m.read(B/'candidate.json')['entries'][0]
