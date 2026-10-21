@@ -51,7 +51,12 @@ if file_bindings is None:
  inventory_read_binding={'path':str(inv_path),'fileSHA256':m.raw(inv_path),'operation':'Read exact original sourceproof+peer SHA-bound inventory; all existing rows11000/topic100/files110 assertions retained, raw untouched.'}
 for b in file_bindings:assert m.raw(m.C/b['path'])==b.get('sha256',b.get('fileSHA256',b.get('fileSha256')))
 if 'questions' in ps.get('sameTopicMAIN',{}):
- assert ps['sameTopicMAIN']['questions']==m.read(m.C/'src/content/topics/history-russia.json')['questions']
+ saved_questions=ps['sameTopicMAIN']['questions']
+ if len(saved_questions)==100 and all(isinstance(p,dict) and 'card' in p for p in saved_questions):
+  assert [p['sourceOrder'] for p in saved_questions]==list(range(1,101))
+  assert all(p['topicId']=='history-russia' and p['id']==p['card']['id'] and m.sha(p['card'])==p['sha256'] for p in saved_questions)
+  saved_questions=[p['card'] for p in saved_questions]
+ assert saved_questions==m.read(m.C/'src/content/topics/history-russia.json')['questions']
 else:
  # Preservation only: all100 exact ordered peer bodies are an equivalent
  # retained full topic snapshot. Do not hydrate or qualify the raw packet.
