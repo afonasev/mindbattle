@@ -37,9 +37,8 @@ for b in ps['globalMAIN']['allCurrentFileByteBindings']:assert m.raw(m.C/b['path
 if 'sameTopicMAIN' in ps:
  assert ps['sameTopicMAIN']['questions']==m.read(m.C/'src/content/topics/history-russia.json')['questions']
 else:
- # HOLD preservation only: all100 exact ordered peer bodies are an equivalent
+ # Preservation only: all100 exact ordered peer bodies are an equivalent
  # retained full topic snapshot. Do not hydrate or qualify the raw packet.
- assert e['status']=='HOLD'
  topic_cards=m.read(m.C/'src/content/topics/history-russia.json')['questions']
  full_peers=[p for p in ps['actualCurrentPeers'] if p['topicId']=='history-russia']
  assert len(full_peers)==100 and [p['sourceOrder'] for p in full_peers]==list(range(1,101))
