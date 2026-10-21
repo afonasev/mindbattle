@@ -16,7 +16,8 @@ raw_packet = B.with_name(B.name.removeprefix('qualified-'))
 e = m.read(B/'candidate.json')['entries'][0]
 q = m.read(m.C/'src/content/topics/history-russia.json')['questions'][order-1]
 assert q == e['proposedCard'] and m.sha(q) == e['afterHash']
-qa_path = D/('qa-qualified-' + packet_name + '.json')
+qa_path = pathlib.Path(sys.argv[7]).resolve() if len(sys.argv)>7 else D/('qa-qualified-' + packet_name + '.json')
+assert qa_path.is_relative_to(D)
 qa = m.read(qa_path)
 assert qa['success'] and qa['numPassedTests'] == 19
 assert qa['numFailedTests'] == qa['numPendingTests'] == 0
