@@ -143,6 +143,14 @@ for R in packet_paths:
         global_audit['originalInventoryReference'] = dict(global_audit)
         global_audit['allCurrentFileByteBindings'] = full_global['allCurrentFileByteBindings']
         same_topic = ps['sameTopicMAIN']
+        if 'sourceInventoryPath' not in same_topic:
+            assert sp['sourceInventoryPath'] == str(inventory_path)
+            assert sp['sourceInventorySHA256'] == m.raw(inventory_path) == global_audit['sourceInventorySHA256']
+            assert (C/same_topic['path']).resolve() == (C/saved_inventory['sameTopicMAIN']['path']).resolve()
+            assert same_topic['questionCount'] == saved_inventory['sameTopicMAIN']['questionCount'] == 100
+            assert same_topic['fileSHA256'] == saved_inventory['sameTopicMAIN']['fileSHA256'] == m.raw(C/same_topic['path'])
+            same_topic.update(sourceInventoryPath=str(inventory_path),sourceInventorySHA256=m.raw(inventory_path))
+            same_topic['technicalExplicitInventoryContainerAlias']='Exact sourceproof/globalMAIN explicit path and SHA plus topic path/fileSHA/count equality; no invented snapshot or assessment.'
         assert same_topic['sourceInventoryPath'] == str(inventory_path)
         assert same_topic['sourceInventorySHA256'] == m.raw(inventory_path)
         assert saved_inventory['sameTopicMAIN']['questions'] == topic['questions']
