@@ -33,7 +33,7 @@ for path in sorted((m.C/'src/content/topics').glob('*.json')):
  for card in t['questions']:
   cat[card['id']]=card;rows.append({'topicId':t['id'],'id':card['id'],'prompt':card['prompt'],'answers':[a['text'] for a in card['answers']],'correctIndex':card['correctIndex']})
 assert len(rows)==11000 and m.sha(rows)==ps['globalMAIN']['rowsCanonicalSHA256']
-for b in ps['globalMAIN']['allCurrentFileByteBindings']:assert m.raw(m.C/b['path'])==b['sha256']
+for b in ps['globalMAIN']['allCurrentFileByteBindings']:assert m.raw(m.C/b['path'])==b.get('sha256',b.get('fileSHA256',b.get('fileSha256')))
 assert ps['sameTopicMAIN']['questions']==m.read(m.C/'src/content/topics/polar-regions.json')['questions']
 for p in ps['actualCurrentPeers']:assert m.sha(p['card'])==p.get('sha256',p.get('canonicalSHA256')) and p['card']==cat[p['id']]
 
