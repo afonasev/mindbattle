@@ -257,7 +257,21 @@ for R in packet_paths:
         global_audit.update(inventoryPath=str(inv_path),inventorySHA256=m.raw(inv_path))
         ps['sameTopicMAIN'].update(inventoryPath=str(inv_path),inventorySHA256=m.raw(inv_path))
         ps['technicalExplicitPeerInventoryBindingAlias']={'originalPeerPath':declared,'fileSHA256':m.raw(inv_path),'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSnapshotSHA256':m.raw(R/'peer-snapshot.json'),'operation':'Only names/path representation for exact author peer-bound inventory after all110/11000/100 current checks; raw and semantic judgments unchanged.'}
-    if 'inventoryPath' in global_audit and 'sourceInventoryPath' not in global_audit:
+    if 'inventoryPath' in global_audit and 'sourceInventoryPath' not in sp and 'sourceInventoryPath' not in global_audit:
+        # Optional unbound locator is not proof and must never hydrate bodies.
+        # The original raw packet already binds all110 files/11000 rows and
+        # all100 ordered full bodies, independently of that optional file.
+        assert 'inventorySHA256' not in global_audit and 'inventorySHA256' not in ps['sameTopicMAIN']
+        assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+        assert candidate['cycle']==sp['cycle']==ps['cycle']
+        assert global_audit['inventoryPath']==ps['sameTopicMAIN']['inventoryPath']
+        assert len(global_audit['allCurrentFileByteBindings'])==110
+        full=ps['actualCurrentPeers']
+        assert len(full)==100 and [v['sourceOrder'] for v in full]==list(range(1,101))
+        assert [v['card'] for v in full]==topic['questions']
+        assert all(v['topicId']==e['topicId'] and v['id']==v['card']['id'] and m.sha(v['card'])==v.get('sha256',v.get('canonicalSHA256')) for v in full)
+        ps['technicalCompleteInlineSnapshotNoInventoryHydration']={'originalOptionalInventoryLocator':global_audit['inventoryPath'],'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':m.raw(R/'peer-snapshot.json'),'operation':'No inventory file read or SHA invented. Use already explicit full100 bodies, all110 raw file bindings and original11000 row digest, validated by unchanged downstream checks. Optional locator remains untrusted metadata; author raw and semantic grounds unchanged.'}
+    if 'inventoryPath' in global_audit and 'sourceInventoryPath' not in global_audit and 'sourceInventoryPath' in sp:
         inv_path=pathlib.Path(global_audit['inventoryPath'])
         inv_path=inv_path if inv_path.is_absolute() else C/inv_path
         assert str(inv_path)==sp['sourceInventoryPath']==ps['sameTopicMAIN']['inventoryPath']
