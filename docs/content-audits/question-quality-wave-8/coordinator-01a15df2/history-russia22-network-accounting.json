@@ -1,0 +1,84 @@
+{
+  "sourceNativeId": "01a15e12-c7dd-7fb1-94d8-7ab6221fa77a",
+  "nativeJournal": "/Users/eaafonasev/.codex/archived_sessions/rollout-2026-10-21T15-47-31-01a15e12-c7dd-7fb1-94d8-7ab6221fa77a.jsonl",
+  "actualCompactions": 0,
+  "actualWebToolCalls": 3,
+  "discoveryCalls": 1,
+  "discoveryQueries": 2,
+  "openCalls": 2,
+  "calls": [
+    {
+      "callLine": 188,
+      "callId": "call_3e4f64210abe4dc18f0d04079bbe5f9a",
+      "originalCallInput": "const r = await tools.web__run({search_query:[{q:\"site:musee-armee.fr Grande Armée 1812 troupes françaises campagne de Russie\"},{\"q\":\"Napoleonic Wars 1812 Grande Armée French core official museum source\"}],response_length:\"medium\"}); store(\"source22_grande_armee_discovery\",r); text(r)\n",
+      "resultLine": 191,
+      "resultCanonicalSHA256": "c94854b9a7b7e2911f5e48117a087633ecef4e6fe7e96e2a7538d13eaf73c7ec",
+      "functionsTruncationMarker": false
+    },
+    {
+      "callLine": 197,
+      "callId": "call_3b5a433b39c74b3facc80514bf900cb2",
+      "originalCallInput": "const r = await tools.web__run({open:[{ref_id:\"turn0search2\"}],response_length:\"long\"}); store(\"source22_armee_primary\",r); text(r)\n",
+      "resultLine": 200,
+      "resultCanonicalSHA256": "8f5d5d9ad2820f8cb1d3eb7233441f843eaba41904d5ac11934e48abbc83e8ee",
+      "functionsTruncationMarker": false
+    },
+    {
+      "callLine": 237,
+      "callId": "call_8613b7f7a8eb4693b4d2de34fb33af70",
+      "originalCallInput": "const r = await tools.web__run({open:[{ref_id:\"turn0search0\"}],response_length:\"long\"}); store(\"source22_moskova_alternative\",r); text(r)\n",
+      "resultLine": 240,
+      "resultCanonicalSHA256": "00b86143a96a25a229e2473247ac14a371839456683e56bbe6fbff755dc35f92",
+      "functionsTruncationMarker": false
+    }
+  ],
+  "nativeRawBindings": [
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15df2/source-history-russia22/raw/attempt-moskova-borodino-alternative-timeout.json",
+      "nativeLine": 240,
+      "originalExact": true
+    },
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15df2/source-history-russia22/raw/attempt-defense-napoleonienne-timeout.json",
+      "nativeLine": 200,
+      "originalExact": true
+    },
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15df2/source-history-russia22/raw/grande-armee-discovery-search.json",
+      "nativeLine": 191,
+      "originalExact": true
+    }
+  ],
+  "attempts": [
+    {
+      "kind": "targeted_discovery",
+      "nativeJournalOrdinal": 187,
+      "nativeOutputOrdinal": 190,
+      "nativeCallId": "call_3e4f64210abe4dc18f0d04079bbe5f9a",
+      "query": "Official French military/museum sources for the 1812 Grande Armée and its composition.",
+      "result": "Discovery snippets only. They were not used as source evidence; the complete returned discovery output is preserved at docs/content-audits/question-quality-wave-8/coordinator-01a15df2/source-history-russia22/raw/grande-armee-discovery-search.json."
+    },
+    {
+      "kind": "source_open_primary",
+      "url": "https://www.defense.gouv.fr/actualites/periode-napoleonienne-moment-fondateur-modernisation-larmee-francaise",
+      "nativeJournalOrdinal": 196,
+      "nativeOutputOrdinal": 199,
+      "nativeCallId": "call_3b5a433b39c74b3facc80514bf900cb2",
+      "result": "400 timeout; no full page body returned. Exact original output preserved separately; capture-native.py rejected it because it contained no complete page body. No retry.",
+      "rawRecordPath": "docs/content-audits/question-quality-wave-8/coordinator-01a15df2/source-history-russia22/raw/attempt-defense-napoleonienne-timeout.json"
+    },
+    {
+      "kind": "source_open_official_alternative",
+      "url": "https://www.defense.gouv.fr/terre/mieux-nous-connaitre/histoire-larmee-terre/larmee-terre-travers-ses-batailles/bataille-moskova-borodino",
+      "nativeJournalOrdinal": 236,
+      "nativeOutputOrdinal": 239,
+      "nativeCallId": "call_8613b7f7a8eb4693b4d2de34fb33af70",
+      "result": "400 timeout; no full page body returned. Exact original output preserved separately. This exhausts the one bounded official alternative for the Grande Armée composition claim; no third fetch.",
+      "rawRecordPath": "docs/content-audits/question-quality-wave-8/coordinator-01a15df2/source-history-russia22/raw/attempt-moskova-borodino-alternative-timeout.json"
+    }
+  ],
+  "status": "AUTHOR_HOLD_UNAPPLIED_NO_INITIAL_NO_CREDIT",
+  "rawFreeze": "7db505779287c067da576e3bb0de6e63dfeb47f3",
+  "limitation": "French-core composition note primary+one official alternative both timeout. Other three country notes unattempted, not exhausted. Retained Kutuzov ORIGINAL returned body has line-number gaps: never complete entirepage. No unchanged automatic retry/reset/adoption via nextID.",
+  "localDiagnostic": "First inventory invocation failed because output directory absent; after mkdir a new invocation succeeded. No network-attempt reset."
+}
