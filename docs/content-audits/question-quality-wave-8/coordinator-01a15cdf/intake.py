@@ -131,6 +131,20 @@ for R in packet_paths:
         assert same['fileSHA256'] == inv['sameTopicMAIN']['fileSHA256'] == m.raw(C/same['path'])
         same.update(sourceInventoryPath=str(inv_path),sourceInventorySHA256=m.raw(inv_path))
         ps['technicalFreshInventoryReferenceAlias']='Exact explicit path+SHA bound independently in sourceproof and globalMAIN; alias names only, no unbound hydration or peer assessment.'
+    # Explicit full100 ordered author peers are a retained topic snapshot,
+    # even when the original names its container actualCurrentPeers only.
+    if 'sameTopicMAIN' not in ps and len(ps.get('actualCurrentPeers',[])) == 100:
+        full_peers=ps['actualCurrentPeers']
+        assert all(p['topicId']==e['topicId'] for p in full_peers)
+        assert [p['sourceOrder'] for p in full_peers]==list(range(1,101))
+        assert [p['card'] for p in full_peers]==topic['questions']
+        assert all(m.sha(p['card'])==p.get('sha256',p.get('canonicalSHA256')) for p in full_peers)
+        topic_path=f"src/content/topics/{e['topicId']}.json"
+        binding=next(f for f in global_audit['allCurrentFileByteBindings'] if f['path']==topic_path)
+        bound_sha=binding.get('sha256',binding.get('fileSHA256',binding.get('fileSha256')))
+        assert m.raw(C/topic_path)==bound_sha
+        ps['sameTopicMAIN']={'topicId':e['topicId'],'path':topic_path,'fileSHA256':bound_sha,'questionCount':100,'questions':[p['card'] for p in full_peers]}
+        ps['technicalExplicitFullPeerSnapshotContainerAlias']='All100 original ordered full peer bodies and explicit global file binding verified; names only, no unbound hydration or new assessment.'
     # Lossless hydration from the author's immutable, SHA-bound fresh inventory.
     if 'sourceInventoryPath' in global_audit:
         inventory_path = pathlib.Path(global_audit['sourceInventoryPath'])
