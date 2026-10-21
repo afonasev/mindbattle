@@ -118,3 +118,36 @@ def alias_full_body_wrapper_digests(ps,R):
   if 'sha256' in w:assert w['sha256']==sha(w['card'])
   else:w.update(sha256=sha(w['card']),technicalDerivedBodyDigest='Exact original full card body, id, sourceOrder, topic path and fileSHA verified against live entire100; digest computed, raw untouched.')
  ps['technicalFullBodyWrapperDigestAlias']={'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawSHA256':raw(R/'peer-snapshot.json'),'topicFileSHA256':raw(path),'orderedFullBodiesVerified':100,'operation':'Deterministic digest of explicit unchanged full bodies; no new peer assessment or unbound hydration.'}
+
+def alias_explicit_peer_inventory_projection(candidate,sp,ps,R):
+ """Recover only explicit SHA-bound full bodies behind author MAIN projections."""
+ if not isinstance(ps.get('actualCurrentPeers'),int):return
+ if not all(k in ps for k in ['freshInventoryPath','freshInventorySHA256','fullClosestCurrentPeers']):return
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==0
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ e=candidate['entries'][0];same=ps['sameTopicMAIN'];global_audit=ps['globalMAIN']
+ path=pathlib.Path(ps['freshInventoryPath']);path=path if path.is_absolute() else C/path
+ assert path.is_relative_to(R) and raw(path)==ps['freshInventorySHA256']
+ inv=read(path);full=inv['sameTopicMAIN']['questions'];topic=read(C/same['path'])
+ assert inv['sameTopicMAIN']['topicId']==same['topicId']==e['topicId']==topic['id']
+ assert ps['actualCurrentPeers']==same['questionCount']==len(full)==len(topic['questions'])==100
+ assert full==topic['questions']
+ assert same['fileSHA256']==inv['sameTopicMAIN']['fileSHA256']==raw(C/same['path'])
+ def projection(q):return {'topicId':topic['id'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']}
+ assert same['questions']==[projection(q) for q in full]
+ assert global_audit['topicFileCount']==inv['globalMAIN']['topicFileCount']==110
+ assert global_audit['questionCount']==inv['globalMAIN']['questionCount']==11000
+ assert global_audit['rowsCanonicalSHA256']==inv['globalMAIN']['rowsCanonicalSHA256']
+ assert global_audit['allCurrentFileByteBindings']==inv['globalMAIN']['allCurrentFileByteBindings']
+ assert len(global_audit['allCurrentFileByteBindings'])==110
+ for f in global_audit['allCurrentFileByteBindings']:assert raw(C/f['path'])==f['sha256']
+ mapping={q['id']:q for q in full};relevant=ps['fullClosestCurrentPeers'];assert relevant
+ for peer in relevant:
+  assert peer['topicId']==topic['id'] and peer['card']==mapping[peer['id']]
+  assert peer['card']==full[peer['sourceOrder']-1] and sha(peer['card'])==peer['sha256']
+ same['originalMAINProjectionQuestions']=same['questions'];same['questions']=json.loads(json.dumps(full,ensure_ascii=False))
+ ps['originalActualCurrentPeerInventoryCount']=ps['actualCurrentPeers'];ps['actualCurrentPeers']=json.loads(json.dumps(relevant,ensure_ascii=False))
+ global_audit.update(sourceInventoryPath=str(path),sourceInventorySHA256=raw(path))
+ same.update(sourceInventoryPath=str(path),sourceInventorySHA256=raw(path))
+ sp.update(sourceInventoryPath=str(path),sourceInventorySHA256=raw(path))
+ ps['technicalExplicitProjectedTopicSnapshotAlias']={'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'inventoryPath':str(path),'inventorySHA256':raw(path),'operation':'Exact original top-level path/SHA,100MAIN projections,110filebindings,11000rowdigest and same-topic fileSHA bind the full100 bodies already retained by this author. Inventory count100 is not assessed-peer credit; only original fullClosestCurrentPeers are substantive peers. No unbound hydration, new peer assessment, literal or source ground.'}

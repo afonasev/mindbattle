@@ -1,0 +1,92 @@
+{
+  "rawThreeSHA256": {
+    "candidate.json": "449295a978a72e6a453295f2dfc98b356d7f9ad49fa079a98bafae8dce1f4214",
+    "sourceproof.json": "3e45462c456b531840d9202fd77d15ed7a6ebe6c37a6424a7f4b503085ba111f",
+    "peer-snapshot.json": "1971418e65141a674b5a3d4dc541e9107ef5b55e492686840a8182bdaf7f6e05"
+  },
+  "failures": [
+    {
+      "line": 1336,
+      "originalEvent": {
+        "timestamp": "2026-10-21T23:40:46.689Z",
+        "ordinal": 1335,
+        "type": "event_msg",
+        "payload": {
+          "type": "item_completed",
+          "thread_id": "01a160a6-2f23-7d91-84b9-0ec38f7a34b1",
+          "turn_id": "01a160ab-3dd7-7a93-a9c4-7c3d071abe05",
+          "item": {
+            "type": "CommandExecution",
+            "id": "exec-2ce2cc83-0f93-460d-9b01-03f4689d74ad",
+            "process_id": "64347",
+            "command": [
+              "/bin/zsh",
+              "-lc",
+              "python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a160a6/preserve-packet.py 68 author68"
+            ],
+            "cwd": "file:///Users/eaafonasev/Projects/mindbattle",
+            "parsed_cmd": [
+              {
+                "type": "unknown",
+                "cmd": "python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a160a6/preserve-packet.py 68 author68"
+              }
+            ],
+            "source": "unified_exec_startup",
+            "status": "failed",
+            "aggregated_output": "Traceback (most recent call last):\n  File \"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a160a6/preserve-packet.py\", line 83, in <module>\n    assert saved_questions==m.read(m.C/'src/content/topics/history-russia.json')['questions']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+            "exit_code": 1,
+            "duration": {
+              "secs": 0,
+              "nanos": 92025958
+            }
+          },
+          "started_at_ms": 1792626046597,
+          "completed_at_ms": 1792626046689
+        }
+      }
+    },
+    {
+      "line": 1345,
+      "originalEvent": {
+        "timestamp": "2026-10-21T23:41:14.843Z",
+        "ordinal": 1344,
+        "type": "event_msg",
+        "payload": {
+          "type": "item_completed",
+          "thread_id": "01a160a6-2f23-7d91-84b9-0ec38f7a34b1",
+          "turn_id": "01a160ab-3dd7-7a93-a9c4-7c3d071abe05",
+          "item": {
+            "type": "CommandExecution",
+            "id": "exec-d3fd9e8f-8c6f-4553-86c2-51189d191684",
+            "process_id": "61638",
+            "command": [
+              "/bin/zsh",
+              "-lc",
+              "python3 -B - <<'PY'\nimport pathlib,json,hashlib\nD=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a160a6');R=D/'source-history-russia68';ps=json.loads((R/'peer-snapshot.json').read_text());sp=json.loads((R/'sourceproof.json').read_text());cur=json.loads((D.parents[3]/'src/content/topics/history-russia.json').read_text())['questions'];saved=ps['sameTopicMAIN']['questions'];print('topkeys',list(ps));print('SPkeys',list(sp));print('savedDiffOrders',[i for i,(a,b) in enumerate(zip(saved,cur),1) if a!=b]);print('SPinventoryfields',{k:v for k,v in sp.items() if 'invent' in k.lower()});print('globalfields',{k:v for k,v in ps['globalMAIN'].items() if k not in ['rows','allCurrentFileByteBindings']});print('samescalars',{k:v for k,v in ps['sameTopicMAIN'].items() if k!='questions'});print('sourceIndex',sp.get('sourceIndex'));p=next((v for v in ps.get('actualCurrentPeers',[]) if v['id']==cur[66]['id']),None);print('actualPeer67Exists',bool(p),'matchesCurrent',p and p.get('card')==cur[66]);print('files',[p.name for p in R.iterdir()])\nPY"
+            ],
+            "cwd": "file:///Users/eaafonasev/Projects/mindbattle",
+            "parsed_cmd": [
+              {
+                "type": "unknown",
+                "cmd": "python3 -B - <<'PY'\nimport pathlib,json,hashlib\nD=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a160a6');R=D/'source-history-russia68';ps=json.loads((R/'peer-snapshot.json').read_text());sp=json.loads((R/'sourceproof.json').read_text());cur=json.loads((D.parents[3]/'src/content/topics/history-russia.json').read_text())['questions'];saved=ps['sameTopicMAIN']['questions'];print('topkeys',list(ps));print('SPkeys',list(sp));print('savedDiffOrders',[i for i,(a,b) in enumerate(zip(saved,cur),1) if a!=b]);print('SPinventoryfields',{k:v for k,v in sp.items() if 'invent' in k.lower()});print('globalfields',{k:v for k,v in ps['globalMAIN'].items() if k not in ['rows','allCurrentFileByteBindings']});print('samescalars',{k:v for k,v in ps['sameTopicMAIN'].items() if k!='questions'});print('sourceIndex',sp.get('sourceIndex'));p=next((v for v in ps.get('actualCurrentPeers',[]) if v['id']==cur[66]['id']),None);print('actualPeer67Exists',bool(p),'matchesCurrent',p and p.get('card')==cur[66]);print('files',[p.name for p in R.iterdir()])\nPY"
+              }
+            ],
+            "source": "unified_exec_startup",
+            "status": "failed",
+            "aggregated_output": "topkeys ['owner', 'sourceNativeId', 'stage', 'cycle', 'qualityCredit', 'candidate', 'globalMAIN', 'sameTopicMAIN', 'fullClosestCurrentPeers', 'currentGuardRows', 'bilateralCurrentComparisons', 'globalLiteralRetrievalOnlyHits', 'genuineProposalPairs', 'observedNonmatchingProposals', 'proposalSearchLimitations', 'limitations', 'actualCurrentPeers', 'freshInventoryPath', 'freshInventorySHA256']\nSPkeys ['owner', 'sourceNativeId', 'stage', 'cycle', 'qualityCredit', 'rawSources', 'entries', 'networkAccounting', 'limitations']\nsavedDiffOrders [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100]\nSPinventoryfields {}\nglobalfields {'topicFileCount': 110, 'questionCount': 11000, 'rowsCanonicalSHA256': 'b38dbc30b2607f37e36bf6cbb3fa26af3b22e367313e24f08734e6e75c3d1b51'}\nsamescalars {'path': 'src/content/topics/history-russia.json', 'topicId': 'history-russia', 'fileSHA256': '58f148efbdd0e7094135c3cd663086b0f8e3640b662cab56285b82fa569062dc', 'questionCount': 100}\nsourceIndex None\nTraceback (most recent call last):\n  File \"<stdin>\", line 2, in <module>\nTypeError: 'int' object is not iterable\n",
+            "exit_code": 1,
+            "duration": {
+              "secs": 0,
+              "nanos": 12166
+            }
+          },
+          "started_at_ms": 1792626074843,
+          "completed_at_ms": 1792626074843
+        }
+      }
+    }
+  ],
+  "reason": "sameTopicMAIN.questions were MAINprojections, actualCurrentPeers was count100; exact author-SHA-bound fresh inventory has full100 and six original full relevant peers. Initial root diagnostic erroneously treated count as iterable.",
+  "newNetwork": 0,
+  "rawUnchanged": true
+}
