@@ -26,6 +26,11 @@ for R in packet_paths:
         assert len(sp['literalGroups']) == 6 and len(sp['fourFullPromptAnswerNoteAssessments']) == 4
         sp['entries']=[{k:sp[k] for k in keys}]
         sp['technicalSingleEntryContainerAlias']='Exact original top-level single-card fields retained and aliased into entries[0]; no literal or assessment changed.'
+    if 'literalGroups' not in sp['entries'][0] and 'sixLiteralGroups' in sp['entries'][0]:
+        entry=sp['entries'][0]
+        assert len(entry['sixLiteralGroups'])==6
+        entry['literalGroups']=entry['sixLiteralGroups']
+        entry['technicalLiteralGroupContainerAlias']='Same original sixLiteralGroups exact list aliased into literalGroups; original container retained, no literal or ground changed.'
     before, after = groups(e['beforeCard']), groups(e['proposedCard'])
     if e['status'] == 'READY_FOR_SAME_READER_FINAL':
         assert candidate['cycle'] == 1 and R.name.endswith('-cycle1')
@@ -133,7 +138,7 @@ for R in packet_paths:
         ps['technicalFreshInventoryReferenceAlias']='Exact explicit path+SHA bound independently in sourceproof and globalMAIN; alias names only, no unbound hydration or peer assessment.'
     # Explicit full100 ordered author peers are a retained topic snapshot,
     # even when the original names its container actualCurrentPeers only.
-    if 'sameTopicMAIN' not in ps and len(ps.get('actualCurrentPeers',[])) == 100:
+    if 'questions' not in ps.get('sameTopicMAIN',{}) and len(ps.get('actualCurrentPeers',[])) == 100:
         full_peers=ps['actualCurrentPeers']
         assert all(p['topicId']==e['topicId'] for p in full_peers)
         assert [p['sourceOrder'] for p in full_peers]==list(range(1,101))
@@ -143,6 +148,10 @@ for R in packet_paths:
         binding=next(f for f in global_audit['allCurrentFileByteBindings'] if f['path']==topic_path)
         bound_sha=binding.get('sha256',binding.get('fileSHA256',binding.get('fileSha256')))
         assert m.raw(C/topic_path)==bound_sha
+        if 'sameTopicMAIN' in ps:
+            original_same=ps['sameTopicMAIN']
+            assert original_same['path']==topic_path and original_same['topicId']==e['topicId'] and original_same['questionCount']==100 and original_same['fileSHA256']==bound_sha
+            ps['originalSameTopicMAINMetadata']=original_same
         ps['sameTopicMAIN']={'topicId':e['topicId'],'path':topic_path,'fileSHA256':bound_sha,'questionCount':100,'questions':[p['card'] for p in full_peers]}
         ps['technicalExplicitFullPeerSnapshotContainerAlias']='All100 original ordered full peer bodies and explicit global file binding verified; names only, no unbound hydration or new assessment.'
     # Lossless hydration from the author's immutable, SHA-bound fresh inventory.
