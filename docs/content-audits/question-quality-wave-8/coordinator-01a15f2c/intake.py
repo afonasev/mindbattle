@@ -119,7 +119,18 @@ for R in packet_paths:
         # the same author-retained inventory; no arbitrary path hydration.
         declared=global_audit['freshInventoryPath']
         inv_path=pathlib.Path(declared); inv_path=inv_path if inv_path.is_absolute() else C/inv_path
-        if declared not in json.dumps(sp.get('sourceIndex',{}),ensure_ascii=False):
+        explicit_initial_peer_binding = declared not in json.dumps(sp.get('sourceIndex',{}),ensure_ascii=False) and candidate['cycle']==0
+        if explicit_initial_peer_binding:
+            assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+            assert candidate['cycle']==sp['cycle']==ps['cycle']==0
+            assert sp['entries'][0]['id']==e['id']
+            assert inv_path.is_relative_to(R) and inv_path.is_file()
+            assert ps['sameTopicMAIN']['freshInventoryPath']==declared
+            assert m.raw(inv_path)==global_audit['freshInventorySHA256']
+            assert ps['sameTopicMAIN']['questions']==topic['questions'] and len(topic['questions'])==100
+            assert len(global_audit['allCurrentFileByteBindings'])==110
+            sp['technicalExplicitInitialPeerInventoryBinding']={'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSnapshotSHA256':m.raw(R/'peer-snapshot.json'),'path':declared,'fileSHA256':m.raw(inv_path),'operation':'Exact explicit same-author initial peer inventory path/SHA; all existing live110/11000/100 checks below retained. Acquisition prose unchanged; no unbound hydration or new judgment.'}
+        elif declared not in json.dumps(sp.get('sourceIndex',{}),ensure_ascii=False):
             assert candidate['cycle']==1 and R.name.endswith('-cycle1')
             initial_raw=R.with_name(R.name.removesuffix('-cycle1'))
             initial_sp=m.read(initial_raw/'sourceproof.json');initial_candidate=m.read(initial_raw/'candidate.json')
