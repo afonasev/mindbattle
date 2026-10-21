@@ -15,6 +15,8 @@ if x.get('retainedStationContextIndex'):
 t['priorSourceAttemptMetadata']=x.get(f'historyRussia{order}SourceAttemptMetadata',{})
 t['source8CaptureLossFence']={k:x['pendingHistoryRussia8'][k] for k in ['captureLossValidation','attemptedURLsNoRetry','status','noIndependentInitial']}
 t['source8CaptureLossRule']='No refetch/retry these attempted URLs; lost full bodies are not primary proof; SOURCE8 remains HOLD/unapplied/noINITIAL and no retroactive adoption. Distinct unattempted claims are not broadly exhausted.'
+t['previousSource30NetworkAccounting']=x.get('pendingHistoryRussia30',{}).get('sourceNetworkAccounting')
+t['previousSource30AttemptRule']='SOURCE30 AUTHORHOLD0 UNAPPLIED/noINITIAL/noQA. Fouractualcalls: two discovery and PRlib node802981 +romanovy_6 originalopens; alloriginalpayloads retained. No retry/refetch/reset or HOLDqualityadoption. Actualreturned contexts only; archivecatalogrecord is not manifesto transcription. Two builderSyntaxErrors and coordinatorcontainerdiagnostic preserved. Distinct unattempted claims are not broadly exhausted. Reuse saved original bodies with personal reading, not author verdict.'
 t['previousSource9NetworkAccounting']=x.get('pendingHistoryRussia9',{}).get('sourceNetworkAccounting')
 t['previousSource10NetworkAccounting']=str(D.parent/'coordinator-01a15d25/history-russia10-network-accounting.json')
 t['previousSource10Cycle1NetworkAccounting']=str(D.parent/'coordinator-01a15d25/history-russia10-cycle1-network-accounting.json')
