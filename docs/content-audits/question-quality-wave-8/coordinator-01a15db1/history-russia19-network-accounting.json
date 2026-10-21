@@ -1,0 +1,70 @@
+{
+  "owner": "01a15db1-757e-7dd1-a924-d215c9a8608d",
+  "sourceNativeId": "01a15dd8-9989-7cb3-8064-38aa144fd8aa",
+  "originalNetworkCalls": 5,
+  "discoveryCalls": 2,
+  "discoveryQueries": 3,
+  "openCalls": 3,
+  "actualCalls": [
+    {
+      "callLine": 233,
+      "call": "const r = await tools.web__run({search_query:[{q:\"site:novgorodmuseum.ru Великий Новгород Волхов древний город\"},{\"q\":\"site:pskovmuseum.ru Псков река Великая история города\"}],\"response_length\":\"long\"}); store(\"source19_city_source_discovery\", r); text(r);\n",
+      "resultLine": 236
+    },
+    {
+      "callLine": 262,
+      "call": "const r = await tools.web__run({search_query:[{q:\"официальный сайт Псков музей Псков река Великая город история\"}],\"response_length\":\"short\"}); store(\"source19_pskov_discovery\", r); text(r);\n",
+      "resultLine": 265
+    },
+    {
+      "callLine": 271,
+      "call": "// @exec: {\"max_output_tokens\": 5000}\nconst r = await tools.web__run({open:[{ref_id:\"turn0search0\"}],\"response_length\":\"long\"}); store(\"source19_novgorod_primary_open\", r); text(r);\n",
+      "resultLine": 274
+    },
+    {
+      "callLine": 278,
+      "call": "// @exec: {\"max_output_tokens\": 5000}\nconst r = await tools.web__run({open:[{ref_id:\"turn1search4\"}],\"response_length\":\"long\"}); store(\"source19_pskov_primary_open\", r); text(r);\n",
+      "resultLine": 281
+    },
+    {
+      "callLine": 285,
+      "call": "// @exec: {\"max_output_tokens\": 6000}\nconst r = await tools.web__run({open:[{ref_id:\"turn1search11\"}],\"response_length\":\"long\"}); store(\"source19_pskov_official_alternative\", r); text(r);\n",
+      "resultLine": 288
+    }
+  ],
+  "nativeDiagnosticExport": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15db1/history-russia19-network-native-records.json",
+  "nativeDiagnosticSHA256": "bf251e686734b5370357d61f12b453a1b0b489bac1e99f2998d616a532922260",
+  "exportNetworkCalls": 0,
+  "actualCompactions": 1,
+  "authorCompleteThenSTOP": true,
+  "retainedSources": [
+    {
+      "url": "https://www.prlib.ru/news/1167908",
+      "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15cb9/source-history-russia3/raw/prlib-peter-great.json",
+      "fileSHA256": "6e5831df7e9e335e9156ba7b5f1df035e69c2252165b4dd7ccc86c4d51b25b77",
+      "bodyPointer": "/originalRecord/payload/output/1/text",
+      "bodySHA256": "55d6012ddd3eb244dd1035d97762eefe653c332f09734aff0d43a77a6ee19d94"
+    },
+    {
+      "url": "https://novgorodmuseum.ru/visit/sobytiya/dva-serdca-goroda",
+      "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15db1/source-history-russia19/raw/novgorod-museum.json",
+      "fileSHA256": "6f201c4611174c89b6fe4b91fe4f2e2f6d856fb0a4f14a17aa582067cabb71f6",
+      "bodyPointer": "/originalRecord/payload/output/1/text",
+      "bodySHA256": "959a13ef966de9d800cde17cd0a09d09eb8c20ec4259fd1c97848b78bd5bc132"
+    },
+    {
+      "url": "https://whc.unesco.org/en/list/545/",
+      "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15db1/source-history-russia18/raw/unesco-moscow-kremlin-red-square.json",
+      "fileSHA256": "b2ad3b3ba1d70224b2abfac73048ebd467b3ba40d7f20c9baf08a0be7b784a9c",
+      "bodyPointer": "/originalRecord/payload/output/1/text",
+      "bodySHA256": "aaac875bf25df8ff2a5cd73271cdef0cb7fbd5fb05392a1b5bd7c6b7c54d727e"
+    }
+  ],
+  "noRefetchFailedPskov": [
+    "https://pskov.ru/vlast/samoupravlenie/municipal/pskov",
+    "https://www.culture.ru/institutes/36636/pskovskii-kreml"
+  ],
+  "attemptBoundary": "Pskov river-note primary403 then one CultureRF alternative400timeout. No third/new source fetch; alternate proposed own-option note uses pre-existing UNESCO545 body. Preserve author-disclosed late retained-body inspection before using that context, not a source retry/exhaustion reset or evidence adoption of18. Broader unrelated claims not exhausted. Successful Novgorod context retained once, no refetch.",
+  "discoveryLimits": "Native236 functions truncation discovery only; no search used as sourceproof.",
+  "qualityCredit": 0
+}
