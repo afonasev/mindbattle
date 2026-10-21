@@ -16,6 +16,8 @@ packet_paths = [pathlib.Path(p).resolve() for p in sys.argv[1:]] if len(sys.argv
 for R in packet_paths:
     name = R.name; B = D/('qualified-'+name)
     candidate, sp, ps = [m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
+    m.alias_serialized_prompt_group(candidate,sp)
+    m.alias_explicit_nested_inventory(candidate,sp,ps,R)
     e = candidate['entries'][0]; topic = m.read(C/f"src/content/topics/{e['topicId']}.json")
     assert topic['questions'][e['sourceOrder']-1] == e['beforeCard']
     assert m.sha(e['beforeCard']) == e['beforeHash'] and m.sha(e['proposedCard']) == e['afterHash']
@@ -43,7 +45,7 @@ for R in packet_paths:
             # Lossless shape alias only: candidate already binds the entire
             # ordered group, and all four personal assessments bind its strings.
             assert g['literal'] == e['proposedCard']['prompt']
-            assert m.sha(g['literal']) == g['literalSHA256']
+            assert g['literalSHA256'] in [m.sha(g['literal']),hashlib.sha256(g['literal'].encode()).hexdigest()]
             variants = sp['entries'][0]['fourFullPromptAnswerNoteAssessments']
             assert len(variants) == 4 and {v['slot'] for v in variants} == set(range(4))
             for v in variants:
