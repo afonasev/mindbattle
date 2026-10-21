@@ -2,13 +2,13 @@
 import pathlib, json, importlib.util, sys
 D=pathlib.Path(__file__).parent
 s=importlib.util.spec_from_file_location('owned',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
-order=int(sys.argv[1]);actor_key=sys.argv[2];name=sys.argv[3] if len(sys.argv)>3 else f'source-polar{order}'
+order=int(sys.argv[1]);actor_key=sys.argv[2];name=sys.argv[3] if len(sys.argv)>3 else f'source-history-russia{order}'
 R=D/name;x=m.read(D/'manifest.json');actor=x['actors'][actor_key];uid=actor['threadId'];native=pathlib.Path(actor['nativeJournal']);journal=[json.loads(l) for l in native.open()]
 assert journal[0]['payload']['id']==uid
 comp=sum(o['type']=='compacted' for o in journal);last=next(o['payload']['info'] for o in reversed(journal) if o.get('payload',{}).get('type')=='token_count')
 a,sp,ps=[m.read(R/f) for f in ['candidate.json','sourceproof.json','peer-snapshot.json']]
 assert all(v['sourceNativeId']==uid for v in [a,sp,ps]);assert len(a['entries'])==len(sp['entries'])==1
-e=a['entries'][0];q=m.read(m.C/'src/content/topics/polar-regions.json')['questions'][order-1]
+e=a['entries'][0];q=m.read(m.C/'src/content/topics/history-russia.json')['questions'][order-1]
 assert e['sourceOrder']==order and e['beforeCard']==q and m.sha(q)==e['beforeHash'] and m.sha(e['proposedCard'])==e['afterHash']
 assert e['id']==q['id'] and e['status'] in ['HOLD','READY_FOR_INDEPENDENT_REVIEW','READY_FOR_SAME_READER_FINAL']
 cp=m.read(pathlib.Path(x['canonicalCheckpoint']));f=next(z for z in cp['selectedCards'] if z['questionId']==e['id']);assert q['difficulty']==e['proposedCard']['difficulty']==f['difficulty'] and q['correctIndex']==e['proposedCard']['correctIndex']==f['correctIndex']
@@ -34,7 +34,7 @@ for path in sorted((m.C/'src/content/topics').glob('*.json')):
   cat[card['id']]=card;rows.append({'topicId':t['id'],'id':card['id'],'prompt':card['prompt'],'answers':[a['text'] for a in card['answers']],'correctIndex':card['correctIndex']})
 assert len(rows)==11000 and m.sha(rows)==ps['globalMAIN']['rowsCanonicalSHA256']
 for b in ps['globalMAIN']['allCurrentFileByteBindings']:assert m.raw(m.C/b['path'])==b.get('sha256',b.get('fileSHA256',b.get('fileSha256')))
-assert ps['sameTopicMAIN']['questions']==m.read(m.C/'src/content/topics/polar-regions.json')['questions']
+assert ps['sameTopicMAIN']['questions']==m.read(m.C/'src/content/topics/history-russia.json')['questions']
 for p in ps['actualCurrentPeers']:assert m.sha(p['card'])==p.get('sha256',p.get('canonicalSHA256')) and p['card']==cat[p['id']]
 
 proof={'owner':m.O,'sourceNativeId':uid,'nativeJournal':str(native),'actualCompactions':comp,'lastInput':last['last_token_usage']['input_tokens'],'modelWindow':last['model_context_window'],'packet':str(R),'rawFileSHA256':{str(p.relative_to(R)):m.raw(p) for p in R.rglob('*') if p.is_file()},'status':e['status'],'beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'sixGroups':6,'fourVariants':4,'nativeCaptureBindings':raw_checks,'qualityCredit':0,'networkCalls':[]}

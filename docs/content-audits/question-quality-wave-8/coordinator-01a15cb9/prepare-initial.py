@@ -7,12 +7,12 @@ s.loader.exec_module(m)
 order, catalog_commit, raw_freeze, qualified_freeze = sys.argv[1:5]
 order = int(order)
 assert m.h.git(m.C, 'rev-parse', '--verify', catalog_commit+'^{commit}') == catalog_commit, 'Exact full tested catalog commit required'
-label = 'polar' + str(order)
+label = 'history-russia' + str(order)
 packet_name = sys.argv[5] if len(sys.argv)>5 else 'source-'+label
 assert packet_name.startswith('source-'+label) and pathlib.Path(packet_name).name == packet_name
 B = D/('qualified-' + packet_name)
 e = m.read(B/'candidate.json')['entries'][0]
-q = m.read(m.C/'src/content/topics/polar-regions.json')['questions'][order-1]
+q = m.read(m.C/'src/content/topics/history-russia.json')['questions'][order-1]
 assert q == e['proposedCard'] and m.sha(q) == e['afterHash']
 qa_path = D/('qa-qualified-' + packet_name + '.json')
 qa = m.read(qa_path)
@@ -33,7 +33,7 @@ t.update(owner=m.O, manifest=str(D/'manifest.json'),
          applyReport=str(D/('qualified-'+packet_name+'-apply.json')),
          qa=str(qa_path), qaSHA256=m.raw(qa_path), qaReportCommit=qa_commit,
          outputDirectory=str(D/('independent-'+label+'-initial')),
-         frozen={'id':q['id'], 'topicId':'polar-regions', 'sourceOrder':order,
+         frozen={'id':q['id'], 'topicId':'history-russia', 'sourceOrder':order,
                  'difficulty':q['difficulty'], 'correctIndex':q['correctIndex']},
          focus='Personally assess whole exact CURRENT: six literal canonical groups, four full prompt/answer/note variants; every claim/option/note grounded in personally read complete immutable primary contexts. Unique key, grammar, absolute adult '+q['difficulty'].upper()+', correct-note extra own fact. Read actual relevant full peers and bilateral entity/relation/value/context/direct reverse. No inherited author judgment or lexical-only duplicate verdict.',
          currentContext='CURRENT'+str(x['CURRENT'])+'/2000 remaining'+str(x['remaining'])+'. Exact applied '+label+' QA19PASS. All prior HOLDs and exhausted attempts preserved. Catalog frozen until verdict; no third full revision.',
@@ -43,7 +43,7 @@ task_path = D/('reader-'+label+'-initial-task.json')
 m.write(task_path, t)
 x['actors']['reviewer'].update(stage='START_INITIAL_'+label.upper(), task=str(task_path),
                               expected='One exact INITIAL '+label+'; assess specific blocker at30min')
-x['currentWork']={'id':q['id'], 'topicId':'polar-regions', 'sourceOrder':order,
+x['currentWork']={'id':q['id'], 'topicId':'history-russia', 'sourceOrder':order,
                   'stage':'START_INITIAL_'+label.upper(), 'sourceFreeze':qualified_freeze,
                   'rawAuthorFreeze':raw_freeze, 'catalogCommit':catalog_commit,
                   'qaReportCommit':qa_commit, 'qaPath':str(qa_path), 'cardHash':m.sha(q)}

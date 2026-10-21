@@ -29,7 +29,7 @@ for R in packet_paths:
     before, after = groups(e['beforeCard']), groups(e['proposedCard'])
     if e['status'] == 'READY_FOR_SAME_READER_FINAL':
         assert candidate['cycle'] == 1 and R.name.endswith('-cycle1')
-        initial = m.read(D/('independent-polar'+str(e['sourceOrder'])+'-initial/receipt.json'))
+        initial = m.read(D/('independent-history-russia'+str(e['sourceOrder'])+'-initial/receipt.json'))
         assert initial['entries'][0]['id'] == e['id'] and initial['entries'][0]['status'] == 'FIX'
         e['originalDirectedFinalStatus'] = e['status']
         e['status'] = 'READY_FOR_INDEPENDENT_REVIEW'
