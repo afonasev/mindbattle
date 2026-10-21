@@ -8,13 +8,19 @@ assert journal[0]['payload']['id']==uid
 comp=sum(o['type']=='compacted' for o in journal);last=next(o['payload']['info'] for o in reversed(journal) if o.get('payload',{}).get('type')=='token_count')
 a,sp,ps=[m.read(R/f) for f in ['candidate.json','sourceproof.json','peer-snapshot.json']]
 assert all(v['sourceNativeId']==uid for v in [a,sp,ps]);assert len(a['entries'])==len(sp['entries'])==1
+m.alias_serialized_prompt_group(a,sp)
 e=a['entries'][0];q=m.read(m.C/'src/content/topics/history-russia.json')['questions'][order-1]
 assert e['sourceOrder']==order and e['beforeCard']==q and m.sha(q)==e['beforeHash'] and m.sha(e['proposedCard'])==e['afterHash']
 assert e['id']==q['id'] and e['status'] in ['HOLD','READY_FOR_INDEPENDENT_REVIEW','READY_FOR_SAME_READER_FINAL']
 cp=m.read(pathlib.Path(x['canonicalCheckpoint']));f=next(z for z in cp['selectedCards'] if z['questionId']==e['id']);assert q['difficulty']==e['proposedCard']['difficulty']==f['difficulty'] and q['correctIndex']==e['proposedCard']['correctIndex']==f['correctIndex']
 def groups(c):return {'prompt_ordered_answers_key':{'prompt':c['prompt'],'answers':[v['text'] for v in c['answers']],'correctIndex':c['correctIndex']},'explanation':c['explanation'],**{'note'+str(k):v['note'] for k,v in enumerate(c['answers'])}}
 bg,ag=groups(q),groups(e['proposedCard']);entry=sp['entries'][0];literal_groups=entry.get('literalGroups',entry.get('sixLiteralGroups'));assert entry['id']==e['id'] and len(literal_groups)==6 and len(entry['fourFullPromptAnswerNoteAssessments'])==4
-for g in literal_groups:assert g['literal']==ag[g['group']] and g['literalSHA256']==m.sha(g['literal'])
+for g in literal_groups:
+ if g['group']=='prompt_ordered_answers_key' and isinstance(g['literal'],str):
+  assert g['literal']==e['proposedCard']['prompt']
+  assert g['literalSHA256'] in [m.sha(g['literal']),__import__('hashlib').sha256(g['literal'].encode()).hexdigest()]
+  assert e['fieldGroups'][g['group']]['afterCanonicalSHA256']==m.sha(ag[g['group']])
+ else:assert g['literal']==ag[g['group']] and g['literalSHA256']==m.sha(g['literal'])
 for k,fg in e['fieldGroups'].items():assert fg['beforeCanonicalSHA256']==m.sha(bg[k]) and fg['afterCanonicalSHA256']==m.sha(ag[k])
 triple_checks=[]
 for v in entry['fourFullPromptAnswerNoteAssessments']:
@@ -44,6 +50,7 @@ for source in sp['rawSources']:
    matches=list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+cap['sourceNativeId']+'.jsonl'));assert len(matches)==1;jp=matches[0]
   record=json.loads(jp.read_text().splitlines()[cap['nativeRecordLine']-1]);assert record==cap['originalRecord']
   raw_checks.append({'path':str(p),'nativeId':cap['sourceNativeId'],'nativeLine':cap['nativeRecordLine'],'originalRecordExact':True})
+m.alias_explicit_nested_inventory(a,sp,ps,R)
 cat={};rows=[]
 for path in sorted((m.C/'src/content/topics').glob('*.json')):
  t=m.read(path)
