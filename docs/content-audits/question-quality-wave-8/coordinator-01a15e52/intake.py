@@ -373,6 +373,34 @@ for R in packet_paths:
                 source['originalNativeRecordRelativePointer'] = source['completeOutputPointer']
                 source['completeOutputPointer'] = '/originalRecord'+source['completeOutputPointer']
                 source['technicalCaptureWrapperPointerAlias'] = 'Exact retained originalRecord verified against actual native journal line; prefix only, raw unchanged.'
+            # A reused capture may retain the old sourceproof's container pointer.
+            # Alias only when the unchanged native wrapper, URL and exact declared
+            # body digest independently identify the same full original output.
+            if isinstance(capture,dict) and 'originalRecord' in capture:
+                try:
+                    probe = m.read(p)
+                    for key in source['completeOutputPointer'].split('/')[1:]:
+                        probe = probe[int(key)] if isinstance(probe,list) else probe[key]
+                except (KeyError,IndexError,TypeError,ValueError):
+                    native_path = pathlib.Path(capture['nativeJournal'])
+                    if not native_path.exists():
+                        matches = list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+capture['sourceNativeId']+'.jsonl'))
+                        assert len(matches) == 1
+                        native_path = matches[0]
+                    assert json.loads(native_path.read_text().splitlines()[capture['nativeRecordLine']-1]) == capture['originalRecord']
+                    bound = m.read(p)
+                    pointer = capture['completeOutputPointer']
+                    if pointer.startswith('/payload/'):
+                        pointer = '/originalRecord'+pointer
+                    for key in pointer.split('/')[1:]:
+                        bound = bound[int(key)] if isinstance(bound,list) else bound[key]
+                    assert isinstance(bound,str) and source['url'] in bound
+                    body_sha = hashlib.sha256(bound.encode()).hexdigest()
+                    assert capture['completeOutputSHA256'] == body_sha
+                    assert source['completeOutputSHA256'] in (body_sha,m.sha(bound))
+                    source['originalInvalidContainerPointer'] = source['completeOutputPointer']
+                    source['completeOutputPointer'] = pointer
+                    source['technicalNativeBoundContainerPointerAlias'] = {'nativeId':capture['sourceNativeId'],'nativeRecordLine':capture['nativeRecordLine'],'originalRecordExact':True,'sameDeclaredBodySHA256':body_sha,'operation':'Pointer only; author raw, source body, locator and judgments unchanged.'}
             body = m.read(p)
             for key in source['completeOutputPointer'].split('/')[1:]:
                 body = body[int(key)] if isinstance(body,list) else body[key]
