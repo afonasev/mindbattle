@@ -156,10 +156,16 @@ for R in packet_paths:
         if 'freshInventoryPath' not in ps['sameTopicMAIN']:
             # An explicit sourceIndex inventory is already bound by path and SHA.
             # Prove identical full topic bodies before aliasing its redundant name.
-            explicit=sp.get('sourceIndex',{}).get('freshInventory',{})
+            explicit=sp.get('sourceIndex',{}).get('cycle1FreshInventory' if candidate['cycle']==1 else 'freshInventory',{})
             assert inv_path.is_relative_to(R) and inv_path.is_file()
             assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
-            assert candidate['cycle']==sp['cycle']==ps['cycle']==0
+            assert candidate['cycle']==sp['cycle']==ps['cycle'] and candidate['cycle'] in (0,1)
+            if candidate['cycle']==1:
+                assert R.name.endswith('-cycle1')
+                original_candidate=m.read(R.with_name(R.name.removesuffix('-cycle1'))/'candidate.json')
+                assert candidate['sourceNativeId']==original_candidate['sourceNativeId']
+                assert e['beforeCard']==original_candidate['entries'][0]['proposedCard']
+                assert m.read(D/('independent-history-russia'+str(e['sourceOrder'])+'-initial/receipt.json'))['entries'][0]['status']=='FIX'
             assert explicit['path']==declared and explicit['sha256']==global_audit['freshInventorySHA256']==m.raw(inv_path)
             bound_inventory=m.read(inv_path)
             assert explicit['globalRowsCanonicalSHA256']==global_audit['rowsCanonicalSHA256']==bound_inventory['globalMAIN']['rowsCanonicalSHA256']
