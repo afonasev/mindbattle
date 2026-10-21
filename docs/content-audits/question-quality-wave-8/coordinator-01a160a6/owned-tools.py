@@ -76,8 +76,26 @@ def alias_explicit_nested_inventory(candidate,sp,ps,R):
  sp.update(sourceInventoryPath=str(path),sourceInventorySHA256=raw(path))
  ps['technicalExplicitNestedInventoryAlias']={'originalPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'inventoryPath':str(path),'inventorySHA256':raw(path),'operation':'Exact explicit three-way path/SHA and live110/11000/100 bindings; nested original full peers aliased only, no new semantic assessment. Original relevantPairs retained.'}
 
+def alias_single_sourceproof_entry(candidate,sp):
+ """Alias a native-bound singular entry without changing author raw or grounds."""
+ if 'entries' in sp:return
+ if 'entry' not in sp:return
+ assert len(candidate['entries'])==1 and isinstance(sp['entry'],dict)
+ assert candidate['sourceNativeId']==sp['sourceNativeId'] and candidate['cycle']==sp['cycle']
+ c=candidate['entries'][0];e=sp['entry'];q=c['proposedCard']
+ assert e['id']==c['id']==q['id'] and e['topicId']==c['topicId']==sp['topicId']==candidate['topicId']
+ assert e['sourceOrder']==c['sourceOrder'] and e['status']==c['status']
+ assert len(e['literalGroups'])==6 and len(e['fourFullPromptAnswerNoteAssessments'])==4
+ assert {v['slot'] for v in e['fourFullPromptAnswerNoteAssessments']}==set(range(4))
+ for v in e['fourFullPromptAnswerNoteAssessments']:
+  a=q['answers'][v['slot']];assert v['fullPrompt']==q['prompt'] and v['answer']==a['text'] and v['note']==a['note']
+ sp['entries']=[json.loads(json.dumps(e,ensure_ascii=False))]
+ assert sp['entries'][0]==e
+ sp['technicalSingleEntryContainerAlias']={'originalKey':'entry','originalEntryCanonicalSHA256':sha(e),'sourceNativeId':sp['sourceNativeId'],'cycle':sp['cycle'],'operation':'Exact native/cycle/ID/topic/order/status and original six/four literals bound to candidate; singular original entry retained unchanged, deep-copied as entries[0]. No hydration, new ground, or raw edit.'}
+
 def alias_serialized_prompt_group(candidate,sp):
  """Decode only exact canonical JSON serializations of the six bound literals."""
+ alias_single_sourceproof_entry(candidate,sp)
  e=candidate['entries'][0];q=e['proposedCard'];expected={'prompt_ordered_answers_key':{'prompt':q['prompt'],'answers':[v['text'] for v in q['answers']],'correctIndex':q['correctIndex']},'explanation':q['explanation'],**{'note'+str(k):v['note'] for k,v in enumerate(q['answers'])}}
  for g in sp['entries'][0].get('literalGroups',[]):
   target=expected[g['group']]
