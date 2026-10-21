@@ -58,3 +58,17 @@ def alias_serialized_prompt_group(candidate,sp):
   assert original==json.dumps(expected,ensure_ascii=False,sort_keys=True,separators=(',',':'))
   assert hashlib.sha256(original.encode()).hexdigest()==g['literalSHA256']==e['fieldGroups'][g['group']]['afterCanonicalSHA256']==sha(expected)
   g.update(originalSerializedLiteral=original,originalSerializedLiteralSHA256=g['literalSHA256'],literal=expected,literalSHA256=sha(expected),technicalSerializedGroupAlias='Canonical JSON string of the exact entire ordered prompt/answers/key decoded to identical object; raw immutable, all literal values/grounds unchanged.')
+
+def alias_full_body_wrapper_digests(ps,R):
+ same=ps.get('sameTopicMAIN',{});wrappers=same.get('questions',[])
+ if len(wrappers)!=100 or not all(isinstance(w,dict) and 'card' in w for w in wrappers):return
+ if all('sha256' in w for w in wrappers):return
+ path=C/same['path'];topic=read(path)
+ assert same['questionCount']==100 and same['fileSHA256']==raw(path)
+ assert [w['sourceOrder'] for w in wrappers]==list(range(1,101))
+ assert [w['card'] for w in wrappers]==topic['questions']
+ assert all(w['id']==w['card']['id'] and w['topicId']==topic['id'] for w in wrappers)
+ for w in wrappers:
+  if 'sha256' in w:assert w['sha256']==sha(w['card'])
+  else:w.update(sha256=sha(w['card']),technicalDerivedBodyDigest='Exact original full card body, id, sourceOrder, topic path and fileSHA verified against live entire100; digest computed, raw untouched.')
+ ps['technicalFullBodyWrapperDigestAlias']={'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawSHA256':raw(R/'peer-snapshot.json'),'topicFileSHA256':raw(path),'orderedFullBodiesVerified':100,'operation':'Deterministic digest of explicit unchanged full bodies; no new peer assessment or unbound hydration.'}

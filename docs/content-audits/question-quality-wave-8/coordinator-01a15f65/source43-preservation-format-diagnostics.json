@@ -1,0 +1,117 @@
+{
+  "owner": "01a15f65-e74b-74f1-be7c-22e19ea029e9",
+  "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/21/rollout-2026-10-21T21-57-56-01a15f65-e74b-74f1-be7c-22e19ea029e9.jsonl",
+  "originalPreservationAttempts": [
+    {
+      "callLine": 420,
+      "originalCallRecord": {
+        "timestamp": "2026-10-21T17:16:50.418Z",
+        "ordinal": 419,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_080e1c91fbdeaf5e016ad8f381269c8191813e29163af7543a",
+          "status": "completed",
+          "call_id": "call_515b553edcb6495d8804ec194726d0d0",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -B docs/content-audits/question-quality-wave-8/coordinator-01a15f65/preserve-packet.py 43 author43\",\"workdir\":\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\",\"max_output_tokens\":1700}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a15f69-a3bb-7941-9adf-9f28e1d829de",
+            "create_time": 1792603009.155214
+          }
+        }
+      },
+      "outputLine": 423,
+      "originalOutputRecord": {
+        "timestamp": "2026-10-21T17:16:50.715Z",
+        "ordinal": 422,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a15f77-369b-75c2-b00e-712648f9dfa1",
+          "call_id": "call_515b553edcb6495d8804ec194726d0d0",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"599f38\",\"wall_time_seconds\":0.048601125,\"exit_code\":1,\"original_token_count\":239,\"output\":\"Traceback (most recent call last):\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f65/preserve-packet.py\\\", line 77, in <module>\\n    assert all(p['topicId']=='history-russia' and p['id']==p['card']['id'] and m.sha(p['card'])==p['sha256'] for p in saved_questions)\\n           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f65/preserve-packet.py\\\", line 77, in <genexpr>\\n    assert all(p['topicId']=='history-russia' and p['id']==p['card']['id'] and m.sha(p['card'])==p['sha256'] for p in saved_questions)\\n                                                                                                 ~^^^^^^^^^^\\nKeyError: 'sha256'\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a15f69-a3bb-7941-9adf-9f28e1d829de",
+            "create_time": 1792603010.715166
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    },
+    {
+      "callLine": 434,
+      "originalCallRecord": {
+        "timestamp": "2026-10-21T17:17:21.277Z",
+        "ordinal": 433,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_080e1c91fbdeaf5e016ad8f39320c481918372b171b2641ccc",
+          "status": "completed",
+          "call_id": "call_8770b4026e9144b182af7fd7dfc783a1",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -B - <<'PY'\\nimport pathlib,ast\\nD=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f65');p=D/'owned-tools.py';s=p.read_text();s+='''\\ndef alias_full_body_wrapper_digests(ps,R):\\n same=ps.get('sameTopicMAIN',{});wrappers=same.get('questions',[])\\n if len(wrappers)!=100 or not all(isinstance(w,dict) and 'card' in w for w in wrappers):return\\n if all('sha256' in w for w in wrappers):return\\n path=C/same['path'];topic=read(path)\\n assert same['questionCount']==100 and same['fileSHA256']==raw(path)\\n assert [w['sourceOrder'] for w in wrappers]==list(range(1,101))\\n assert [w['card'] for w in wrappers]==topic['questions']\\n assert all(w['id']==w['card']['id'] and w['topicId']==topic['id'] for w in wrappers)\\n for w in wrappers:\\n  if 'sha256' in w:assert w['sha256']==sha(w['card'])\\n  else:w.update(sha256=sha(w['card']),technicalDerivedBodyDigest='Exact original full card body, id, sourceOrder, topic path and fileSHA verified against live entire100; digest computed, raw untouched.')\\n ps['technicalFullBodyWrapperDigestAlias']={'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawSHA256':raw(R/'peer-snapshot.json'),'topicFileSHA256':raw(path),'orderedFullBodiesVerified':100,'operation':'Deterministic digest of explicit unchanged full bodies; no new peer assessment or unbound hydration.'}\\n''';ast.parse(s);p.write_text(s)\\nfor name,needle in [('preserve-packet.py','m.alias_serialized_prompt_group(a,sp)'),('intake.py','    m.alias_serialized_prompt_group(candidate,sp)')]:\\n p=D/name;s=p.read_text();assert needle in s;s=s.replace(needle,needle+'\\\\n'+('    ' if name=='intake.py' else '')+'m.alias_full_body_wrapper_digests(ps,R)');ast.parse(s);p.write_text(s)\\nprint('Exact full100 existing wrapper digests derived after path/fileSHA/order/body equality')\\nPY\",\"max_output_tokens\":500}));\ntext(await tools.exec_command({cmd:\"python3 -B docs/content-audits/question-quality-wave-8/coordinator-01a15f65/preserve-packet.py 43 author43\",\"workdir\":\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\",\"max_output_tokens\":1800}));\ntext(await tools.exec_command({cmd:\"python3 -B docs/content-audits/question-quality-wave-8/coordinator-01a15f65/verify-network.py 43 source-history-russia43\",\"workdir\":\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\",\"max_output_tokens\":1000}));\ntext(await tools.exec_command({cmd:\"python3 -B docs/content-audits/question-quality-wave-8/coordinator-01a15f65/intake.py docs/content-audits/question-quality-wave-8/coordinator-01a15f65/source-history-russia43\",\"workdir\":\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\",\"max_output_tokens\":1500}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a15f69-a3bb-7941-9adf-9f28e1d829de",
+            "create_time": 1792603027.1329355
+          }
+        }
+      },
+      "outputLine": 440,
+      "originalOutputRecord": {
+        "timestamp": "2026-10-21T17:17:23.440Z",
+        "ordinal": 439,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a15f77-b670-7953-b12c-3e3dbd5e8260",
+          "call_id": "call_8770b4026e9144b182af7fd7dfc783a1",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 2.1 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"7f133f\",\"wall_time_seconds\":0.000025667,\"exit_code\":0,\"original_token_count\":22,\"output\":\"Exact full100 existing wrapper digests derived after path/fileSHA/order/body equality\\n\"}"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"ebd958\",\"wall_time_seconds\":0.597638958,\"exit_code\":0,\"original_token_count\":225,\"output\":\"8c7726e69cce1c70cdfe153de8fba5f97cebd486\\n{\\\"status\\\": \\\"READY_FOR_INDEPENDENT_REVIEW\\\", \\\"actualCompactions\\\": 0, \\\"lastInput\\\": 185298, \\\"modelWindow\\\": 258400, \\\"networkCalls\\\": [{\\\"callLine\\\": 168, \\\"call\\\": \\\"const r = await tools.web__run({search_query:[{q:\\\\\\\"site:prlib.ru Жалованная грамота дворянству 1785 Екатерина II текст\\\\\\\"}],response_length:\\\\\\\"short\\\\\\\"}); text(r);\\\", \\\"resultLine\\\": 171}, {\\\"callLine\\\": 177, \\\"call\\\": \\\"const r = await tools.web__run({open:[{ref_id:\\\\\\\"turn0search0\\\\\\\"}],response_length:\\\\\\\"long\\\\\\\"}); text(r);\\\", \\\"resultLine\\\": 180}, {\\\"callLine\\\": 191, \\\"call\\\": \\\"const r = await tools.web__run({open:[{ref_id:\\\\\\\"turn0search2\\\\\\\"}],response_length:\\\\\\\"long\\\\\\\"}); text(r);\\\", \\\"resultLine\\\": 194}, {\\\"callLine\\\": 280, \\\"call\\\": \\\"const r = await tools.web__run({open:[{ref_id:\\\\\\\"https://www.prlib.ru/history/619038\\\\\\\"}],response_length:\\\\\\\"long\\\\\\\"}); text(r);\\\", \\\"resultLine\\\": 283}]}\\n\"}"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"14af45\",\"wall_time_seconds\":0.135348083,\"exit_code\":0,\"original_token_count\":30,\"output\":\"ac5d5c3e13539bdc52f743e2096072442b0f6da3\\n{\\\"actualWebCalls\\\": 4, \\\"recoveredMissingOriginals\\\": [171], \\\"qualityCredit\\\": 0}\\n\"}"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"5f1e4e\",\"wall_time_seconds\":0.773740875,\"exit_code\":0,\"original_token_count\":65,\"output\":\"{\\\"commit\\\": \\\"149a088f86e816a0247718972b736da2e3c14795\\\", \\\"packets\\\": [{\\\"id\\\": \\\"history-russia-charter-to-nobility\\\", \\\"afterHash\\\": \\\"b806cf336e7eef6e7ab37f0d841a25fa338cf0e3e484555e74e1ebe1a91615f2\\\", \\\"status\\\": \\\"MECHANICAL_INTAKE_PASS_PENDING_INDEPENDENT_REVIEW\\\"}]}\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a15f69-a3bb-7941-9adf-9f28e1d829de",
+            "create_time": 1792603043.440057
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    }
+  ],
+  "reason": "Original KeyError sha256 retained;100 explicit ordered full card wrappers had no digest. Exact topic path/fileSHA and all100 bodies/order/id verified, derived hash only; no raw/semantic change."
+}
