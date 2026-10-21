@@ -23,7 +23,7 @@ x = m.read(D/'manifest.json')
 cp = m.read(m.P/'openspec/changes/question-quality-future-waves/current-checkpoint.json')
 assert cp['owner'] == m.O and len(cp['currentEligibleCompletedIds']) == x['CURRENT']
 t = m.read(m.C/'docs/content-audits/question-quality-wave-8/coordinator-01a15a0f/reader-polar46-initial-task.json')
-t.update(owner=m.O, manifest=str(D/'manifest.json'),
+t.update(topicId='history-russia', owner=m.O, manifest=str(D/'manifest.json'),
          binderSchemaReference=str(D/'bind-current-receipt.py'), role='independent reviewer one exact INITIAL '+label,
          phase='START_INITIAL_'+label.upper(), id=q['id'], sourceOrder=order,
          catalogCommit=catalog_commit, cardHash=m.sha(q),

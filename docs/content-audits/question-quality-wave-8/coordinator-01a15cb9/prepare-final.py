@@ -20,7 +20,7 @@ x = m.read(D/'manifest.json')
 cp = m.read(m.P/'openspec/changes/question-quality-future-waves/current-checkpoint.json')
 assert cp['owner'] == m.O and len(cp['currentEligibleCompletedIds']) == x['CURRENT']
 t = m.read(D/('reader-history-russia'+str(order)+'-initial-task.json'))
-t.update(owner=m.O, manifest=str(D/'manifest.json'),
+t.update(topicId='history-russia', owner=m.O, manifest=str(D/'manifest.json'),
          binderSchemaReference=str(D/'bind-current-receipt.py'), role='independent reviewer one exact directed FINAL '+label,
          phase='START_FINAL_'+label.upper(), stage='FINAL', cycle=1, previousIndependentInitial=str(D/('independent-history-russia'+str(order)+'-initial/receipt.json')), id=q['id'], sourceOrder=order,
          catalogCommit=catalog_commit, cardHash=m.sha(q),
