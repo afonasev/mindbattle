@@ -22,15 +22,15 @@
       "hostId": "local",
       "model": "gpt-6.1-sol",
       "thinking": "medium",
-      "stage": "START_INITIAL_HISTORY-RUSSIA5",
+      "stage": "IDLE_AFTER_INITIAL_HISTORY_RUSSIA5_FIX",
       "expected": "One exact INITIAL history-russia5; assess specific blocker at30min",
       "createdBy": "01a15c46-b8ad-7813-89bc-93f2b35e9c2d",
       "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/21/rollout-2026-10-21T08-07-39-01a15c6d-c3d9-7e11-93d5-22668dbe4d38.jsonl",
       "actualCompactions": 0,
-      "lastInput": 311218,
+      "lastInput": 353718,
       "lastTaskEvent": "task_complete",
       "nativePreflightVerifiedBy": "01a15cdf-657f-7b93-bbce-9cb12b398c70",
-      "cursor": "ad49a1c1-09f0-43f7-84db-d6b48b8f29ce:51",
+      "cursor": "ad49a1c1-09f0-43f7-84db-d6b48b8f29ce:61",
       "task": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15cdf/reader-history-russia5-initial-task.json",
       "modelWindow": 475000
     },
@@ -281,7 +281,7 @@
     "id": "history-russia-last-emperor",
     "topicId": "history-russia",
     "sourceOrder": 5,
-    "stage": "START_INITIAL_HISTORY-RUSSIA5",
+    "stage": "INITIAL5_FIX_PENDING_SOLE_CYCLE1",
     "sourceFreeze": "a18bc407ab600f9e0dc33e2daa0da46e68badd54",
     "rawAuthorFreeze": "bdaf47244012a321a3d9ae9727395ef378b721db",
     "catalogCommit": "fe409189af3a53a3e8550be1623376aa7882a7f6",
@@ -1611,7 +1611,7 @@
   },
   "pendingHistoryRussia5": {
     "id": "history-russia-last-emperor",
-    "status": "AUTHOR_READY_QUALIFIED_PENDING_APPLY_QA_INITIAL",
+    "status": "INITIAL_FIX_PENDING_SOLE_DIRECTED_CYCLE1",
     "rawFreeze": "bdaf47244012a321a3d9ae9727395ef378b721db",
     "qualifiedFreeze": "a18bc407ab600f9e0dc33e2daa0da46e68badd54",
     "afterHash": "0d9d635aae0c046dc42df83860c9462bd3a5045c6bfd695b3f56d680be626fe1",
@@ -1620,7 +1620,53 @@
     "independentFixCycleConsumed": false,
     "applyCommit": "fe409189af3a53a3e8550be1623376aa7882a7f6",
     "qaPath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15cdf/qa-qualified-source-history-russia5.json",
-    "stage": "START_INITIAL_HISTORY_RUSSIA5"
+    "stage": "START_INITIAL_HISTORY_RUSSIA5",
+    "initialReceipt": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15cdf/independent-history-russia5-initial/receipt.json",
+    "initialReceiptSHA256": "b06a00036c20643adac1b0125faa6336d130fd8ce92c2c7dddaaf9eeb19b473d",
+    "initialStatus": "FIX",
+    "defects": [
+      {
+        "id": "5-D1",
+        "fields": [
+          "answers[3].note"
+        ],
+        "kind": "TEMPORAL_CONFLATION_IN_PRIMARY_WORDING",
+        "ground": "Note3 переносит формальное объявление России республикой в ход Февральской революции. Падение монархии и отречение в феврале/марте — другое событие, чем более позднее формальное провозглашение республики в1917году. Источник RomanovL333 действительно пишет это же; независимая проверка не может принять исторически неточную временную связку только по наличию официальногоURL. Отдельного сохранённого первичного подтверждения точной даты республиканского акта в packet нет.",
+        "requiredAction": "В единственном directedcycle заменить/исправить конкретный временной claim по надёжному полному контексту. Уже сохранённый PDFL408-L421 поддерживает конкретное событие из жизни НиколаяII; не нужно автоматически повторять или расширять сетевой поиск.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15cdf/source-history-russia5/raw/prlib-romanov-dynasty.json",
+            "locator": "Whole actually retained Romanov output; historical paragraphs L322-L333 and L345-L354; own claims L332/L353; problematic statement L333"
+          },
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15cb9/source-history-russia2/raw/prlib-nicholas-abdication-context.json",
+            "locator": "Retained PDF L279@P14-L626@P28; whole abdication context L398-L443, particularly L408-L421"
+          }
+        ],
+        "policy": "question-authoring-guide: factual correctness, useful own-option note and correct-note additional fact; GAME_SPEC Content questions; pinned process: source receipt/hash is not truth proof"
+      },
+      {
+        "id": "5-D2",
+        "fields": [
+          "answers[3].note"
+        ],
+        "kind": "CORRECT_NOTE_OWN_OPTION_FACT_MISSING",
+        "ground": "Note3 вообще не называет НиколаяII, его действие, дату/обстоятельство его царствования или иную собственную характеристику. Она сообщает только политическое изменение страны. Само соседство с последним императором в источнике не заменяет дополнительного факта о правильном варианте. Даже исправление времени объявления республики само по себе этот пробел не закрывает.",
+        "requiredAction": "Дать конкретный проверенный факт именно о НиколаеII сверх prompt/key. Допустимо совпадение с explanation или тематическими чужими notes; cross-note ban не вводится.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15cb9/source-history-russia2/raw/prlib-nicholas-abdication-context.json",
+            "locator": "Retained PDF L279@P14-L626@P28; whole abdication context L398-L443, particularly L408-L421"
+          },
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a15cdf/source-history-russia5/raw/prlib-romanov-dynasty.json",
+            "locator": "Whole actually retained Romanov output; historical paragraphs L322-L333 and L345-L354; own claims L332/L353; problematic statement L333"
+          }
+        ],
+        "policy": "question-authoring-guide: factual correctness, useful own-option note and correct-note additional fact; GAME_SPEC Content questions; pinned process: source receipt/hash is not truth proof"
+      }
+    ],
+    "cycle1Consumed": false
   },
   "qaSelectionHistoryRussia5": {
     "baseline": "a18bc407ab600f9e0dc33e2daa0da46e68badd54",
