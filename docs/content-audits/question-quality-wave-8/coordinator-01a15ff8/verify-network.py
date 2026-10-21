@@ -1,5 +1,5 @@
 """Deterministic network accounting; exact stored native recovery only, no quality credit."""
-import pathlib,json,re,importlib.util,sys
+import pathlib,json,re,importlib.util,sys,subprocess
 D=pathlib.Path(__file__).parent
 s=importlib.util.spec_from_file_location('owned',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
 order=int(sys.argv[1]);R=D/sys.argv[2];proof_path=D/(sys.argv[3] if len(sys.argv)>3 and not sys.argv[3].startswith('--') else f'history-russia{order}-native-proof.json');proof=m.read(proof_path);uid=proof['sourceNativeId'];include_prior='--include-prior-tasks' in sys.argv
@@ -29,7 +29,7 @@ for p in R.rglob('*.json'):
    exact=[n for n,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==z['nativeCallId']]
    assert len(exact)==1;line=exact[0]
   assert rows[line-1]==z['originalRecord'];wrappers.append((p,z))
-network=[];owned=[];missing=[]
+network=[];owned=[];missing=[];pre_dispatch=[]
 for ordinal,(line,call) in enumerate(calls,1):
  results=[(n,r) for n,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==call['call_id']];assert len(results)==1
  resultline,result=results[0];found=[(p,z) for p,z in wrappers if z['originalRecord']==result]
@@ -46,9 +46,15 @@ for ordinal,(line,call) in enumerate(calls,1):
   identical_aliases=[{'path':str(p),'fileSHA256':m.raw(p),'nativeExact':True} for p,z in sorted(found,key=lambda v:str(v[0]))]
   found=[sorted(found,key=lambda v:str(v[0]))[0]]
  assert len(found)==1;p,z=found[0]
+ blocks=result['payload'].get('output',[])
+ if isinstance(blocks,list) and blocks and blocks[0].get('text','').startswith('Script failed') and any(b.get('text','').startswith('Script error:\nSyntaxError:') for b in blocks if isinstance(b,dict)):
+  check=subprocess.run(['node','--input-type=module','--check'],input=call['input'],text=True,capture_output=True)
+  if check.returncode!=0:
+   pre_dispatch.append({'call_id':call['call_id'],'callLine':line,'resultLine':resultline,'originalResult':str(p),'fileSHA256':m.raw(p),'nativeExact':True,'actualWebCalls':0,'reason':'Entire exec module rejected before execution; exact input fails compile-only Node syntax check. No source request dispatched.','compileOnlyExitCode':check.returncode,'compileOnlyStderr':check.stderr})
+   continue
  network.append({'ordinalOneBased':ordinal,'call_id':call['call_id'],'callLine':line,'resultLine':resultline,'call':call['input'],'originalResult':str(p),'fileSHA256':m.raw(p),'nativeExact':True,'identicalOriginalResultAliases':identical_aliases})
-report={'owner':m.O,'sourceNativeId':uid,'nativeJournalActual':str(native),'sourceOrder':order,'actualWebCalls':len(calls),'includePriorTasks':include_prior,'proof':str(proof_path),'calls':network,'exactStoredRecoveryNetworkCalls':0,'missingAuthorResultLinesRecovered':missing,'rawPacketUnchanged':True,'qualityCredit':0}
+report={'owner':m.O,'sourceNativeId':uid,'nativeJournalActual':str(native),'sourceOrder':order,'actualWebCalls':len(network),'candidateExecModules':len(calls),'preDispatchCompilationFailures':pre_dispatch,'includePriorTasks':include_prior,'proof':str(proof_path),'calls':network,'exactStoredRecoveryNetworkCalls':0,'missingAuthorResultLinesRecovered':missing,'rawPacketUnchanged':True,'qualityCredit':0}
 report_name=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--report-name=')),f'history-russia{order}-network-accounting.json');assert pathlib.Path(report_name).name==report_name
 rp=D/report_name;m.write(rp,report)
 print(m.savecode([rp,pathlib.Path(__file__),*owned],f'Account SOURCE{order} exact stored native network results without quality credit'))
-print(json.dumps({'actualWebCalls':len(calls),'recoveredMissingOriginals':missing,'qualityCredit':0}))
+print(json.dumps({'actualWebCalls':len(network),'preDispatchCompilationFailures':len(pre_dispatch),'recoveredMissingOriginals':missing,'qualityCredit':0}))
