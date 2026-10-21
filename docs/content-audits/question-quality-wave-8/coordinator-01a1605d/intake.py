@@ -153,6 +153,20 @@ for R in packet_paths:
             assert all(m.sha(p['card'])==p.get('sha256',p.get('canonicalSHA256')) for p in full)
             sp['technicalHistoricalSourceIndexProsePreserved']={'initialRawSourceproof':str((initial_raw/'sourceproof.json').relative_to(C)),'rawSHA256':m.raw(initial_raw/'sourceproof.json'),'meaning':'Original identical acquisition-history prose retained; CURRENT inventory comes from exact explicit cycle1 peer path/SHA, all100 full current author bodies, all110 live file bindings. No unbound hydration or new peer judgment.'}
 
+        if 'freshInventoryPath' not in ps['sameTopicMAIN']:
+            # An explicit sourceIndex inventory is already bound by path and SHA.
+            # Prove identical full topic bodies before aliasing its redundant name.
+            explicit=sp.get('sourceIndex',{}).get('freshInventory',{})
+            assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+            assert candidate['cycle']==sp['cycle']==ps['cycle']==0
+            assert explicit['path']==declared and explicit['sha256']==global_audit['freshInventorySHA256']==m.raw(inv_path)
+            bound_inventory=m.read(inv_path)
+            assert explicit['globalRowsCanonicalSHA256']==global_audit['rowsCanonicalSHA256']==bound_inventory['globalMAIN']['rowsCanonicalSHA256']
+            assert bound_inventory['sameTopicMAIN']['questions']==ps['sameTopicMAIN']['questions']==topic['questions']
+            assert bound_inventory['sameTopicMAIN']['fileSHA256']==ps['sameTopicMAIN']['fileSHA256']==m.raw(C/ps['sameTopicMAIN']['path'])
+            assert len(topic['questions'])==100 and len(global_audit['allCurrentFileByteBindings'])==110
+            ps['sameTopicMAIN']['freshInventoryPath']=declared
+            sp['technicalExplicitSourceIndexInventoryAlias']={'path':declared,'fileSHA256':m.raw(inv_path),'rawPeerSHA256':m.raw(R/'peer-snapshot.json'),'operation':'Exact explicit sourceIndex freshInventory path/SHA and identical full100 topic bodies; redundant peer locator name only. Raw and all assessments unchanged.'}
         assert ps['sameTopicMAIN']['freshInventoryPath']==declared
         assert m.raw(inv_path)==global_audit['freshInventorySHA256']
         inv=m.read(inv_path)
