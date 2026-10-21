@@ -1,0 +1,107 @@
+import copy, hashlib, json, pathlib
+
+C = pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle')
+D = C / 'docs/content-audits/question-quality-wave-8/coordinator-01a15e8b/source-history-russia30'
+I = json.load(open(D / 'fresh-inventory.json'))
+T = json.load(open(C / 'docs/content-audits/question-quality-wave-8/coordinator-01a15e8b/source-history-russia30-task.json'))
+OWNER, NATIVE, DATE = T['owner'], '01a15e95-c6bb-7813-9699-a12ae3a226ce', '2026-10-21'
+
+def canon(x):
+    return json.dumps(x, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode()
+
+def sha(x):
+    return hashlib.sha256(canon(x)).hexdigest()
+
+def fsha(p):
+    return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+
+PEERS = I['actualCurrentPeers']
+BEFORE = copy.deepcopy(next(x['card'] for x in PEERS if x['id'] == T['id']))
+assert sha(BEFORE) == T['beforeHash']
+AFTER = copy.deepcopy(BEFORE)
+AFTER['answers'][0]['note'] = 'Александр II жил в 1818–1881 годах; в архивном описании манифеста 1861 года отмечен его автограф.'
+AFTER['answers'][1]['note'] = 'Николай I жил в 1796–1855 годах.'
+AFTER['answers'][2]['note'] = 'Павел I жил в 1754–1801 годах.'
+AFTER['answers'][3]['note'] = 'Александр III жил в 1845–1894 годах.'
+AFTER['explanation'] = 'Император Александр II подписал Манифест 1861 года, даровавший крепостным людям права свободных сельских обывателей. На архивном экземпляре документа указан его автограф.'
+AFTER['source'] = {'title': 'Манифест 19 февраля 1861 года. О даровании крепостным людям прав состояния свободных сельских обывателей и об устройстве их быта — Президентская библиотека имени Б.Н. Ельцина', 'url': 'https://www.prlib.ru/node/802981', 'verifiedAt': DATE}
+assert (AFTER['id'], AFTER['difficulty'], AFTER['correctIndex']) == (BEFORE['id'], 'easy', 0)
+
+BG = {'prompt_ordered_answers_key': {'prompt': BEFORE['prompt'], 'answers': [x['text'] for x in BEFORE['answers']], 'correctIndex': BEFORE['correctIndex']}, 'explanation': BEFORE['explanation']}
+AG = {'prompt_ordered_answers_key': {'prompt': AFTER['prompt'], 'answers': [x['text'] for x in AFTER['answers']], 'correctIndex': AFTER['correctIndex']}, 'explanation': AFTER['explanation']}
+for n in range(4):
+    BG[f'note{n}'], AG[f'note{n}'] = BEFORE['answers'][n]['note'], AFTER['answers'][n]['note']
+FIELD_GROUPS = {k: {'beforeCanonicalSHA256': sha(BG[k]), 'afterCanonicalSHA256': sha(AG[k])} for k in BG}
+ENTRY = {'id': T['id'], 'topicId': T['topicId'], 'sourceOrder': 30, 'status': 'HOLD', 'beforeCard': BEFORE, 'beforeHash': sha(BEFORE), 'proposedCard': AFTER, 'afterHash': sha(AFTER), 'fieldGroups': FIELD_GROUPS, 'proposedCardCanonicalSHA256': sha(AFTER)}
+CANDIDATE = {'owner': OWNER, 'sourceNativeId': NATIVE, 'stage': 'FRESH_PERSONAL_SOURCE30_COMPLETE', 'cycle': 0, 'qualityCredit': 0, 'scope': {'id': T['id'], 'topicId': T['topicId'], 'sourceOrder': 30, 'frozen': T['frozen']}, 'history': {'preimage': 'Fresh assigned-worktree inventory; full live CURRENT card canonical SHA256 matches task preimage a109fb26b732c9279c529111a2f641a78acfde6a8eb7fb9bf83caf5dab4981b2.', 'previousEvidence': 'No complete SOURCE30 primary body was present in assigned retained indexes or targeted saved-source search. Existing Britannica metadata was not treated as evidence; this role read two official Presidential Library pages.'}, 'entries': [ENTRY]}
+(D / 'candidate.json').write_text(json.dumps(CANDIDATE, ensure_ascii=False, indent=2) + '\n')
+
+SOURCE_DEFS = [
+    {'path': 'docs/content-audits/question-quality-wave-8/coordinator-01a15e8b/source-history-russia30/raw/prlib-manifest-1861.json', 'url': 'https://www.prlib.ru/node/802981', 'title': 'Манифест 19 февраля 1861 года. О даровании крепостным людям прав состояния свободных сельских обывателей и об устройстве их быта', 'callid': 'call_c38fbfd0efc5404a83efe11d11a5fcef', 'locator': 'turn1view0 L36-L45', 'coverage': 'Personally read complete returned page. L36-L39 gives the 1861 manifesto title/date and Alexander II autograph; L42-L45 identifies archival holding and digital-copy record.'},
+    {'path': 'docs/content-audits/question-quality-wave-8/coordinator-01a15e8b/source-history-russia30/raw/prlib-romanov-collection.json', 'url': 'https://www.prlib.ru/romanovy_6', 'title': 'Романовы в конце XVIII – начале XX века', 'callid': 'call_93a62d0dbad74e018d576c36984b6c02', 'locator': 'turn3view0 L318,L328,L334,L339', 'coverage': 'Personally read complete returned 412-line collection page. It lists Pavel I (1754–1801), Nikolai I (1796–1855), Alexander II (1818–1881), and Alexander III (1845–1894).'}]
+RAW = []
+for sd in SOURCE_DEFS:
+    cap = json.load(open(C / sd['path']))
+    source_sha = fsha(C / sd['path'])
+    RAW.append({'path': sd['path'], 'url': sd['url'], 'title': sd['title'], 'sha256': source_sha, 'fileSHA256': source_sha, 'completeOutputPointer': cap['completeOutputPointer'], 'completeOutputSHA256': cap['completeOutputSHA256'], 'captureReadProvenance': {'sourceNativeId': NATIVE, 'nativeJournal': T['authorNativeJournal'], 'nativeRecordLine': cap['nativeRecordLine'], 'nativeCallId': sd['callid'], 'originalTool': 'tools.web__run open', 'pageLocator': sd['locator'], 'personalReadBy': NATIVE, 'readAt': DATE, 'personallyReadFullRelevantContext': True, 'personalReadCoverage': sd['coverage']}, 'originalSourceBinding': {'path': sd['path'], 'url': sd['url'], 'title': sd['title'], 'sha256': source_sha, 'fileSHA256': source_sha, 'completeOutputPointer': cap['completeOutputPointer'], 'completeOutputSHA256': cap['completeOutputSHA256']}})
+R0, R1 = RAW
+
+GROUNDS = {
+    'prompt_ordered_answers_key': ('The primary archive record identifies the 1861 manifesto as granting serfs free-rural-inhabitant status and records Alexander II autograph, uniquely identifying the correct emperor.', 'PRLIB primary record L36-L43.', [R0['path']]),
+    'explanation': ('The primary record title says the manifesto granted serfs the rights/status of free rural inhabitants; metadata gives the 1861 date and Alexander II autograph.', 'PRLIB primary record L36-L43.', [R0['path']]),
+    'note0': ('The official Romanov collection dates Alexander II to 1818–1881; the primary record separately notes his autograph on the manifesto.', 'Romanov collection L334; primary record L36-L43.', [R1['path'], R0['path']]),
+    'note1': ('The official Romanov collection identifies Nikolai I as 1796–1855.', 'Romanov collection L328.', [R1['path']]),
+    'note2': ('The official Romanov collection identifies Pavel I as 1754–1801.', 'Romanov collection L318.', [R1['path']]),
+    'note3': ('The official Romanov collection identifies Alexander III as 1845–1894.', 'Romanov collection L339.', [R1['path']])}
+LITERALS = [{'group': k, 'literal': AG[k], 'literalSHA256': sha(AG[k]), 'primaryGround': GROUNDS[k][0], 'locator': GROUNDS[k][1], 'sourcePaths': GROUNDS[k][2]} for k in AG]
+WHY = [
+    ('Alexander II is the unique key: the archival record identifies the 1861 emancipation manifesto and records his autograph. The note adds his 1818–1881 lifespan.', 'Primary record L36-L43; Romanov collection L334.', [R0['path'], R1['path']]),
+    ('Nikolai I is a same-category emperor distractor, but his 1796–1855 lifespan ends before the 1861 manifesto. The note teaches that fact.', 'Romanov collection L328; primary record L38-L39.', [R1['path'], R0['path']]),
+    ('Pavel I is a same-category but much earlier emperor; his 1754–1801 lifespan predates the manifesto. The note teaches that fact.', 'Romanov collection L318; primary record L38-L39.', [R1['path'], R0['path']]),
+    ('Alexander III is a same-category later emperor; the collection dates his life to 1845–1894, after the 1861 manifesto. The note teaches that fact.', 'Romanov collection L339; primary record L38-L39.', [R1['path'], R0['path']])]
+ASSESS = []
+for slot, answer in enumerate(AFTER['answers']):
+    why, locator, paths = WHY[slot]
+    triple = {'prompt': AFTER['prompt'], 'answer': answer['text'], 'note': answer['note']}
+    ASSESS.append({'slot': slot, 'fullPrompt': AFTER['prompt'], 'answer': answer['text'], 'note': answer['note'], 'grammar': 'Natural Russian. The proper-name question, four emperor labels and concise biographical notes form a consistent readable row.', 'plausibilityUniqueKeyAndNoteTruthUsefulness': why, 'sourcePaths': paths, 'locator': locator, 'tripleSHA256': sha(triple)})
+NETWORK = [
+    {'purpose': 'Official discovery for 1861 emancipation document', 'kind': 'discovery', 'query': 'site:prlib.ru/history крепостного права 1861 Манифест освобождении крестьян Александр II', 'url': 'https://www.prlib.ru/node/802981', 'sourceNativeId': NATIVE, 'nativeJournal': T['authorNativeJournal'], 'nativeCallId': 'call_b62839afa2c24a9aa61110c99a354df0', 'nativeCallLine': 179, 'nativeOutputLine': 182, 'nativeOutputRecordId': 'ctco_01a15e98-18c2-7f31-9e32-671abeca5ad9', 'savedOriginalOutput': 'docs/content-audits/question-quality-wave-8/coordinator-01a15e8b/source-history-russia30/raw/network-discovery-original.json', 'savedFileSHA256': fsha(D/'raw/network-discovery-original.json'), 'savedOutputPointer': '/output/output/1/text', 'outcome': 'Successful official discovery; the result snippet is not source evidence.'},
+    {'purpose': 'Primary archive-record open', 'kind': 'open', 'url': R0['url'], 'sourceNativeId': NATIVE, 'nativeJournal': T['authorNativeJournal'], 'nativeCallId': 'call_c38fbfd0efc5404a83efe11d11a5fcef', 'nativeCallLine': 190, 'nativeOutputLine': 193, 'nativeOutputRecordId': 'ctco_01a15e98-59d7-7230-a955-7a2784ae0f2b', 'savedOriginalOutput': R0['path'], 'savedFileSHA256': R0['sha256'], 'savedOutputPointer': R0['completeOutputPointer'], 'outcome': 'Successful complete visible archive record; used for document, date and Alexander II autograph.'},
+    {'purpose': 'Official discovery for emperor life dates', 'kind': 'discovery', 'query': 'site:prlib.ru императоры Павел I Николай I Александр III годы правления', 'url': 'https://www.prlib.ru/romanovy_6', 'sourceNativeId': NATIVE, 'nativeJournal': T['authorNativeJournal'], 'nativeCallId': 'call_f16a366066da45bc8420177dd7d96d1b', 'nativeCallLine': 240, 'nativeOutputLine': 243, 'nativeOutputRecordId': 'ctco_01a15e99-33fb-78d0-be04-0e34e72fd260', 'savedOriginalOutput': 'docs/content-audits/question-quality-wave-8/coordinator-01a15e8b/source-history-russia30/raw/network-ruler-search-original.json', 'savedFileSHA256': fsha(D/'raw/network-ruler-search-original.json'), 'savedOutputPointer': '/output/output/1/text', 'outcome': 'Successful official discovery; snippets are not evidence.'},
+    {'purpose': 'Official Romanov collection open', 'kind': 'open', 'url': R1['url'], 'sourceNativeId': NATIVE, 'nativeJournal': T['authorNativeJournal'], 'nativeCallId': 'call_93a62d0dbad74e018d576c36984b6c02', 'nativeCallLine': 247, 'nativeOutputLine': 250, 'nativeOutputRecordId': 'ctco_01a15e99-49d9-7bc1-866b-6d05d4f67500', 'savedOriginalOutput': R1['path'], 'savedFileSHA256': R1['sha256'], 'savedOutputPointer': R1['completeOutputPointer'], 'outcome': 'Successful complete visible official collection page; used for all four emperor lifespans.'}]
+PROOF_ENTRY = {'id': T['id'], 'status': 'HOLD', 'beforeHash': sha(BEFORE), 'literalGroups': LITERALS, 'fourFullPromptAnswerNoteAssessments': ASSESS, 'correctNoteNewFact': {'fact': 'Alexander II lived from 1818 to 1881.', 'locator': 'PRLIB Romanov collection L334; primary record notes Alexander II autograph at L39.', 'sourcePaths': [R1['path'], R0['path']], 'whyAdditional': 'The lifespan is an independent fact about the correct emperor beyond the prompt and answer; the archival autograph anchors him to the emancipation document.'}, 'absoluteDifficulty': {'level': 'easy', 'audienceGround': 'This tests a broadly familiar Russian-history association, Alexander II and emancipation of the serfs, in one step. It requires no specialist knowledge; all four labels are Russian emperors.', 'judgment': 'Author assessment of common adult historical knowledge and one-step recall; source popularity does not determine difficulty.', 'supportingEvidence': {'path': R0['path'], 'pointer': R0['completeOutputPointer'], 'sha256': R0['sha256'], 'locator': 'PRLIB primary record L36-L43 identifies the 1861 emancipation document and Alexander II autograph.'}}}
+LIMITS = ['Current MAIN history-russia-emancipation-event (sourceOrder 20) keys the 1861 event as abolition of serfdom; this card asks the ruler associated with that same reform. Event, value and context coincide and the queried slots reverse, so candidate is HOLD for coordinator semantic adjudication.', 'The primary capture is a complete visible archival catalog record, not a transcription of the full manifesto. The revised explanation omits unsupported land-allotment and redemption-payment claims.']
+IMMUTABLE = [
+    {'path': 'docs/content-audits/question-quality-wave-8/coordinator-01a15e8b/source-history-russia30/raw/network-discovery-original.json', 'sha256': fsha(D/'raw/network-discovery-original.json'), 'jsonPointer': '/output/output/1/text'},
+    {'path': R0['path'], 'sha256': R0['sha256'], 'jsonPointer': R0['completeOutputPointer']},
+    {'path': 'docs/content-audits/question-quality-wave-8/coordinator-01a15e8b/source-history-russia30/raw/network-ruler-search-original.json', 'sha256': fsha(D/'raw/network-ruler-search-original.json'), 'jsonPointer': '/output/output/1/text'},
+    {'path': R1['path'], 'sha256': R1['sha256'], 'jsonPointer': R1['completeOutputPointer']}]
+SOURCE = {'owner': OWNER, 'sourceNativeId': NATIVE, 'stage': 'FRESH_PERSONAL_SOURCE30_COMPLETE', 'cycle': 0, 'qualityCredit': 0, 'scope': {'id': T['id'], 'topicId': T['topicId'], 'sourceOrder': 30, 'beforeHash': sha(BEFORE), 'afterHash': sha(AFTER), 'frozen': T['frozen']}, 'rawSources': RAW, 'sourceIndex': {'candidate': 'Personally read the full official archive record for the 1861 emancipation manifesto; it identifies date, document, Alexander II autograph and archive, L36-L45.', 'options': 'Personally read the full PRLIB Romanov collection page; selected emperors are dated at L318, L328, L334 and L339. Discovery output snippets are not evidence.', 'coverage': 'Both opened pages were returned as visible page bodies and personally read. Immutable captures are bound by SHA256 and complete-output JSON pointers.'}, 'entries': [PROOF_ENTRY], 'networkCalls': NETWORK, 'limitations': LIMITS, 'immutableFullOriginalToolOutputs': IMMUTABLE}
+(D / 'sourceproof.json').write_text(json.dumps(SOURCE, ensure_ascii=False, indent=2) + '\n')
+
+ROWS = I['globalMAIN']['rows']; TERMS = ['крепост', '1861', 'александр ii', 'alexander ii', 'serfdom', 'emancipation']; HITS = []
+ORDER = {x['id']: x.get('sourceOrder') for x in PEERS}
+for row in ROWS:
+    if any(t in json.dumps(row, ensure_ascii=False).lower() for t in TERMS):
+        HITS.append({'topicId': row['topicId'], 'sourceOrder': ORDER.get(row['id']), 'id': row['id'], 'card': copy.deepcopy(row), 'cardCanonicalSHA256': sha(row)})
+CROSS = []
+for topic, wanted in [('history-united-states', {'history-united-states-emancipation-document'}), ('middle-ages', {'middle-ages-serf'})]:
+    td = json.load(open(C / f'src/content/topics/{topic}.json'))
+    for order, card in enumerate(td['questions'], 1):
+        if card['id'] in wanted:
+            CROSS.append({'id': card['id'], 'topicId': topic, 'sourceOrder': order, 'card': copy.deepcopy(card), 'sha256': sha(card)})
+SAME = []
+for pid in ['history-russia-emancipation-event', 'history-russia-decembrist-year']:
+    x = next(p for p in PEERS if p['id'] == pid)
+    SAME.append({'id': x['id'], 'topicId': x['topicId'], 'sourceOrder': x['sourceOrder'], 'card': copy.deepcopy(x['card']), 'sha256': x['sha256']})
+def phash(pid): return next(x['sha256'] for x in SAME + CROSS if x['id'] == pid)
+BILATERAL = [
+    {'kind': 'CURRENT_MAIN', 'peerId': 'history-russia-emancipation-event', 'peerFullCardSHA256': phash('history-russia-emancipation-event'), 'candidateERVC': {'entity': 'Alexander II / Russian serfdom', 'relation': 'abolished by / signed emancipation manifesto', 'value': 'serfdom abolished', 'context': 'Russia, 1861'}, 'peerERVC': {'entity': 'Russian serfdom', 'relation': 'major change in', 'value': 'abolition', 'context': 'Russia, 1861'}, 'candidateToPeer': 'Direct reverse: peer keys the event as abolition of serfdom; this candidate asks who is associated with that same reform. Event, value and context coincide; queried slots differ.', 'peerToCandidate': 'The peer names the emancipation event; this candidate names its ruler. Either card supplies the central fact for the other. Marked duplicate-risk.', 'isDuplicate': True},
+    {'kind': 'CURRENT_MAIN', 'peerId': 'history-russia-decembrist-year', 'peerFullCardSHA256': phash('history-russia-decembrist-year'), 'candidateERVC': {'entity': 'Alexander II / Russian serfdom', 'relation': 'abolished by / signed emancipation manifesto', 'value': 'serfdom abolished', 'context': 'Russia, 1861'}, 'peerERVC': {'entity': 'Decembrist uprising', 'relation': 'occurred in', 'value': '1825', 'context': 'Russia, Senatskaya Square'}, 'candidateToPeer': 'Only overlapping MAIN token is distractor year 1861; peer question/key concern the 1825 uprising. Event, relation, value and context differ.', 'peerToCandidate': 'The uprising year does not identify the emperor responsible for emancipation; the candidate does not answer the Decembrist date.', 'isDuplicate': False},
+    {'kind': 'CROSS_TOPIC_CURRENT_MAIN', 'peerId': 'history-united-states-emancipation-document', 'peerFullCardSHA256': phash('history-united-states-emancipation-document'), 'candidateERVC': {'entity': 'Alexander II / Russian serfdom', 'relation': 'signed/implemented abolition', 'value': 'serfdom emancipation', 'context': 'Russian Empire, 1861'}, 'peerERVC': {'entity': 'Abraham Lincoln / Emancipation Proclamation', 'relation': 'issued', 'value': 'freedom for enslaved people in rebel states', 'context': 'United States, 1863'}, 'candidateToPeer': 'Both concern nineteenth-century emancipation, but different rulers, acts, countries and dates; neither key answers the other.', 'peerToCandidate': 'Lincoln’s proclamation does not identify the Russian emperor or serfdom reform; this item does not identify Lincoln’s act. Related theme only.', 'isDuplicate': False},
+    {'kind': 'CROSS_TOPIC_CURRENT_MAIN', 'peerId': 'middle-ages-serf', 'peerFullCardSHA256': phash('middle-ages-serf'), 'candidateERVC': {'entity': 'Russian serfdom', 'relation': 'abolished by', 'value': 'Alexander II in 1861', 'context': 'Russian Empire'}, 'peerERVC': {'entity': 'medieval dependent peasant', 'relation': 'term for', 'value': 'serf', 'context': 'European medieval manorial society'}, 'candidateToPeer': 'The concepts share a term, but era, social system, relation, value and context differ.', 'peerToCandidate': 'The medieval term does not identify the Russian ruler or 1861 reform; this item does not define medieval serfdom.', 'isDuplicate': False}]
+GLOBAL = {k: v for k, v in I['globalMAIN'].items() if k != 'rows'}
+GLOBAL.update({'projectionShape': 'Prompt + ordered answer labels + correctIndex; notes, explanation and sources excluded. All 11000 current rows remain bound in fresh-inventory.json.', 'readDate': DATE, 'retrievalTerms': TERMS, 'retrievalHitCount': len(HITS)})
+PS = {'owner': OWNER, 'sourceNativeId': NATIVE, 'stage': 'FRESH_PERSONAL_SOURCE30_COMPLETE', 'cycle': 0, 'qualityCredit': 0, 'candidate': {'id': T['id'], 'topicId': T['topicId'], 'sourceOrder': 30, 'beforeCard': BEFORE, 'beforeCardCanonicalSHA256': sha(BEFORE), 'proposedCard': AFTER, 'proposedCardCanonicalSHA256': sha(AFTER), 'frozen': T['frozen'], 'semanticEntity': 'Alexander II / Russian serfdom', 'semanticRelation': 'abolished by / signed emancipation manifesto', 'semanticValue': 'serfdom abolished in 1861', 'semanticContext': 'Russian Empire, 1861'}, 'globalMAIN': GLOBAL, 'sameTopicMAIN': {'path': I['sameTopicMAIN']['path'], 'topicId': T['topicId'], 'fileSHA256': I['sameTopicMAIN']['fileSHA256'], 'questionCount': I['sameTopicMAIN']['questionCount'], 'questions': copy.deepcopy(I['sameTopicMAIN']['questions'])}, 'fullClosestCurrentPeers': SAME + CROSS, 'currentGuardRows': {'currentTargetBeforeCard': {'id': T['id'], 'topicId': T['topicId'], 'sourceOrder': 30, 'card': BEFORE, 'sha256': sha(BEFORE)}}, 'bilateralCurrentComparisons': BILATERAL, 'globalLiteralRetrievalOnlyHits': HITS, 'genuineProposalPairs': [], 'observedNonmatchingProposals': [], 'proposalSearchLimitations': 'The assigned coordinator manifest lists only author30 as active in this slice; no other in-flight same-topic proposal is present.', 'limitations': ['The fresh inventory contains all same-topic cards and the 11000-row global MAIN projection; exact global literal hits are retained separately. Full relevant actual same-topic and cross-topic cards are included.', 'The current history-russia-emancipation-event is marked direct-reverse duplicate-risk; candidate remains HOLD. No catalog edit or quality credit is asserted.'], 'actualCurrentPeers': copy.deepcopy(PEERS)}
+(D / 'peer-snapshot.json').write_text(json.dumps(PS, ensure_ascii=False, indent=2) + '\n')
+print(json.dumps({'candidateFileSHA256': fsha(D/'candidate.json'), 'sourceproofFileSHA256': fsha(D/'sourceproof.json'), 'peerSnapshotFileSHA256': fsha(D/'peer-snapshot.json'), 'beforeCardSHA256': sha(BEFORE), 'proposedCardSHA256': sha(AFTER), 'globalLiteralHits': len(HITS), 'sameTopicCards': len(PEERS), 'webCalls': len(NETWORK), 'status': 'HOLD'}, ensure_ascii=False))
