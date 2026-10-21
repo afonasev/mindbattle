@@ -1,0 +1,72 @@
+{
+  "owner": "01a15db1-757e-7dd1-a924-d215c9a8608d",
+  "sourceNativeId": "01a15db8-8965-70f2-9e89-8343b6172819",
+  "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/21/rollout-2026-10-21T14-08-57-01a15db8-8965-70f2-9e89-8343b6172819.jsonl",
+  "actualCompactions": 0,
+  "lastInput": 131477,
+  "modelWindow": 258400,
+  "packet": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15db1/source-history-russia16",
+  "rawFileSHA256": {
+    "candidate.json": "35bb564c8c5fa0147eb30b6094d6280867e7019a150a9cd95d68d23ae246b031",
+    "fresh-inventory.json": "46fd5fdfa519bac85b57e0c3fe22251bd1ce24eff3a475599014e9897bae4d99",
+    "peer-snapshot.json": "19808516513dfa0c12e50954a5fa10b1c9c49b07a11a52462a5005787e7c5bdf",
+    "sourceproof.json": "83694293c34aa80ae819022cbe8ae3fadb18d973a22f3d4e519969a1c7495820",
+    "raw/nam-borodino-full.json": "f423c840afce18452d0758f363bdba426c4325c3055c2faaf67301f2e5721dd4",
+    "raw/official-source-discovery-search.json": "6a3b77186746dfe8dfa6372cbcb0b98afa68af8bab99ed05843ce5a84c7c17ee",
+    "raw/iwm-crimean-attempt.json": "586b3f6146ee9bf679613136971b1a5a99aa368a2a4c5dc191fa9b118f6320ce",
+    "raw/nam-crimea-docx-error.json": "a4ca4bdd694e132ced7d8b2482a11ba8586bb8a75cc29e61a791d4ac06134e8c",
+    "raw/crimean-source-discovery-search.json": "cee977fc908d4752e7d63d87f0a1bba8183c225a5115c62ab2b3157af3c043ed",
+    "raw/official-alternative-errors.json": "654b3f1ccf9426943b06b4bd87a2a7b7900ab20637f2de3948337f90d8b59ca6",
+    "raw/britannica-direct-attempt.json": "f070fa91b730939f389b29303d7e6fc1259593071a851b55893014c89dd4c4d2"
+  },
+  "status": "HOLD",
+  "beforeHash": "888699ac2579a55d82b092cc62d07d75e311874a7134210bd3421e2d7cc2d0f9",
+  "afterHash": "8c48ce174956976d7d854d4c16f26663294ca3d0089b4f7e0eea450a11600d7b",
+  "sixGroups": 6,
+  "fourVariants": 4,
+  "nativeCaptureBindings": [
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15db1/source-history-russia16/raw/nam-borodino-full.json",
+      "nativeId": "01a15db8-8965-70f2-9e89-8343b6172819",
+      "nativeLine": 234,
+      "originalRecordExact": true
+    },
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15db1/source-history-russia16/raw/iwm-crimean-attempt.json",
+      "nativeId": "01a15db8-8965-70f2-9e89-8343b6172819",
+      "nativeLine": 250,
+      "originalRecordExact": true
+    }
+  ],
+  "qualityCredit": 0,
+  "networkCalls": [
+    {
+      "callLine": 152,
+      "call": "// @exec: {\"max_output_tokens\": 8000}\nconst r = await tools.web__run({open:[\n  {ref_id:\"https://www.britannica.com/event/Battle-of-Borodino\"},\n  {ref_id:\"https://www.britannica.com/event/Crimean-War\"},\n  {ref_id:\"https://www.britannica.com/event/World-War-I\"},\n  {ref_id:\"https://www.britannica.com/event/Russo-Japanese-War\"}\n],response_length:\"long\"}); text(r);",
+      "resultLine": 155
+    },
+    {
+      "callLine": 186,
+      "call": "// @exec: {\"max_output_tokens\": 5000}\nconst r = await tools.web__run({search_query:[\n {q:\"site:nam.ac.uk Borodino battle 1812\"},\n {q:\"site:iwm.org.uk Crimean War 1853 1856\"},\n {q:\"site:iwm.org.uk First World War began 1914\"},\n {q:\"site:nationalarchives.gov.uk Russo-Japanese War 1904 1905\"}\n],response_length:\"long\"}); text(r);",
+      "resultLine": 189
+    },
+    {
+      "callLine": 215,
+      "call": "// @exec: {\"max_output_tokens\": 2500}\nconst r = await tools.web__run({search_query:[{q:\"site:nam.ac.uk/explore \\\"Crimean War\\\" \\\"1853\\\"\"}],response_length:\"medium\"}); text(r);",
+      "resultLine": 218
+    },
+    {
+      "callLine": 231,
+      "call": "// @exec: {\"max_output_tokens\": 6000}\nconst r = await tools.web__run({open:[\n  {ref_id:\"https://www.nam.ac.uk/explore/emperors-samovars\"},\n  {ref_id:\"https://www.nam.ac.uk/sites/default/files/learning-resource-files/2023-06/Florence-Mary-Quiz-Answer-Sheet.docx\"}\n],response_length:\"long\"}); text(r);",
+      "resultLine": 234
+    },
+    {
+      "callLine": 247,
+      "call": "// @exec: {\"max_output_tokens\": 6000}\nconst r = await tools.web__run({open:[\n  {ref_id:\"https://wmr.iwm.org.uk/war/crimean-war-1853-1856\"},\n  {ref_id:\"https://www.iwm.org.uk/sites/default/files/files/2023-10/first_world_war_large_print_guide.pdf\"},\n  {ref_id:\"https://www.nationalarchives.gov.uk/education/resources/may-fourth-movement-1919/\"}\n],response_length:\"long\"}); text(r);",
+      "resultLine": 250
+    }
+  ],
+  "technicalTripleHashRepresentationChecks": [],
+  "currentTaskStartLine": 67,
+  "priorTaskNetworkCalls": []
+}
