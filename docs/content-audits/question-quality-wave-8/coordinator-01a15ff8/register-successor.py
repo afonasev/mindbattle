@@ -15,8 +15,11 @@ def walk(v):
  elif isinstance(v,list):
   for a in v:walk(a)
  elif isinstance(v,str):
-  try:walk(json.loads(v))
-  except (ValueError,TypeError):pass
+  try:parsed=json.loads(v)
+  except (ValueError,TypeError):
+   try:parsed=json.loads(v.replace('\\"','"'))
+   except (ValueError,TypeError):return
+  if parsed!=v:walk(parsed)
 walk(outs[0][1]['payload']['output']);assert set(ids)=={S}
 ps=list(pathlib.Path('/Users/eaafonasev/.codex/sessions').rglob('*'+S+'.jsonl'));assert len(ps)==1;sr=[json.loads(l) for l in ps[0].open()];assert next(r['payload']['id'] for r in sr if r['type']=='session_meta')==S
 proof=D/'successor-create-native-proof.json';m.write(proof,{'parent':m.O,'parentNative':str(native),'createCallLine':line,'createCallId':call['call_id'],'createInputSHA256':hashlib.sha256(call['input'].encode()).hexdigest(),'exactOriginalResultLine':outs[0][0],'exactOriginalResultRecord':outs[0][1],'returnedSuccessorThreadId':S,'successorNativeJournal':str(ps[0]),'successorNativeSessionMetaId':S,'noEnvOrTimestampGuess':True})
