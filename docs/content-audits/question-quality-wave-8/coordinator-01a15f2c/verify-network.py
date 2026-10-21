@@ -8,7 +8,7 @@ native=matches[0];rows=[json.loads(l) for l in native.open()];assert rows[0]['pa
 start=proof['currentTaskStartLine'];calls=[]
 for n,row in enumerate(rows,1):
  p=row.get('payload',{})
- if (include_prior or n>start) and p.get('type')=='custom_tool_call' and re.search(r'await\s+tools\.web__run\s*\(',p.get('input','')):calls.append((n,p))
+ if (include_prior or n>start) and p.get('type')=='custom_tool_call' and re.match(r'^(?:(?:const|let|var)\s+\w+\s*=\s*|text\(\s*)?await\s+tools\.web__run\s*\(', re.sub(r'^// @exec:[^\n]*\n', '', p.get('input','').lstrip())):calls.append((n,p))
 assert len(calls)==len(proof['networkCalls'])+ (len(proof.get('priorTaskNetworkCalls',[])) if include_prior else 0)
 wrappers=[]
 for p in R.rglob('*.json'):

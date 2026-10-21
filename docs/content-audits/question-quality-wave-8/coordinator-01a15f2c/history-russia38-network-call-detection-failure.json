@@ -1,0 +1,35 @@
+{
+  "call": {
+    "type": "custom_tool_call",
+    "id": "ctc_0432a84d66c7c07e016ad8e5fa054c8191958b5561eac2afbc",
+    "status": "completed",
+    "call_id": "call_1719be366d454c9897ede48617a1f008",
+    "name": "exec",
+    "input": "text(await tools.exec_command({cmd:\"python3 -B docs/content-audits/question-quality-wave-8/coordinator-01a15f2c/preserve-packet.py 38 author38\\npython3 -B docs/content-audits/question-quality-wave-8/coordinator-01a15f2c/verify-network.py 38 source-history-russia38\",\"workdir\":\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\",\"max_output_tokens\":3000}));\n",
+    "internal_chat_message_metadata_passthrough": {
+      "turn_id": "01a15f30-ed43-7070-951c-982abd5b3f97",
+      "create_time": 1792599546.0737355
+    }
+  },
+  "output": {
+    "type": "custom_tool_call_output",
+    "id": "ctco_01a15f42-6446-7600-918b-ae947920d976",
+    "call_id": "call_1719be366d454c9897ede48617a1f008",
+    "output": [
+      {
+        "type": "input_text",
+        "text": "Script completed\nWall time 1.0 seconds\nOutput:\n"
+      },
+      {
+        "type": "input_text",
+        "text": "{\"chunk_id\":\"9604b2\",\"wall_time_seconds\":0.8491055,\"exit_code\":1,\"original_token_count\":372,\"output\":\"7777b0655fc7b391dadfe8f41c9cce27641735a2\\n{\\\"status\\\": \\\"HOLD\\\", \\\"actualCompactions\\\": 0, \\\"lastInput\\\": 226628, \\\"modelWindow\\\": 258400, \\\"networkCalls\\\": [{\\\"callLine\\\": 129, \\\"call\\\": \\\"const r = await tools.web__run({search_query:[{\\\\\\\"q\\\\\\\":\\\\\\\"site:prlib.ru \\\\\\\\\\\\\\\"Новая экономическая политика\\\\\\\\\\\\\\\" 1921 военный коммунизм Президентская библиотека\\\\\\\"}],\\\\\\\"response_length\\\\\\\":\\\\\\\"medium\\\\\\\"});\\\\nstore(\\\\\\\"russia38_nep_discovery\\\\\\\",r);\\\\ntext(r);\\\", \\\"resultLine\\\": 132}, {\\\"callLine\\\": 138, \\\"call\\\": \\\"const r = await tools.web__run({open:[{\\\\\\\"ref_id\\\\\\\":\\\\\\\"https://www.prlib.ru/file/3727797/download?token=g-ftwoyb\\\\\\\"}],\\\\\\\"response_length\\\\\\\":\\\\\\\"long\\\\\\\"});\\\\nstore(\\\\\\\"russia38_nep_prlib_pdf\\\\\\\",r);\\\\ntext(r);\\\", \\\"resultLine\\\": 141}, {\\\"callLine\\\": 273, \\\"call\\\": \\\"const r = await tools.web__run({open:[{\\\\\\\"ref_id\\\\\\\":\\\\\\\"https://www.britannica.com/event/New-Economic-Policy-Soviet-history\\\\\\\"}],\\\\\\\"response_length\\\\\\\":\\\\\\\"long\\\\\\\"});\\\\nstore(\\\\\\\"russia38_nep_britannica_exact\\\\\\\",r);\\\\ntext(r);\\\", \\\"resultLine\\\": 276}]}\\nTraceback (most recent call last):\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a15f2c/verify-network.py\\\", line 12, in <module>\\n    assert len(calls)==len(proof['networkCalls'])+ (len(proof.get('priorTaskNetworkCalls',[])) if include_prior else 0)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError\\n\"}"
+      }
+    ],
+    "internal_chat_message_metadata_passthrough": {
+      "turn_id": "01a15f30-ed43-7070-951c-982abd5b3f97",
+      "create_time": 1792599548.998545
+    }
+  },
+  "reason": "Unanchored tool-name regex matched embedded web-detection code in exec_command input. Anchor actual leading web tool call exactly as preserve-packet; preserve all original native records, no network retries.",
+  "qualityCredit": 0
+}
