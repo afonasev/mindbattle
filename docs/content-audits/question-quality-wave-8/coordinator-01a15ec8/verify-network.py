@@ -30,8 +30,15 @@ for ordinal,(line,call) in enumerate(calls,1):
   if p.exists():assert m.read(p)==z
   else:m.write(p,z)
   found=[(p,z)];owned.append(p);missing.append(resultline)
+ identical_aliases=[]
+ if len(found)>1:
+  # Distinct URL captures may retain the same full multi-URL native result.
+  # Every wrapper was already verified against the exact unique native output.
+  assert all(z['originalRecord']==result for p,z in found)
+  identical_aliases=[{'path':str(p),'fileSHA256':m.raw(p),'nativeExact':True} for p,z in sorted(found,key=lambda v:str(v[0]))]
+  found=[sorted(found,key=lambda v:str(v[0]))[0]]
  assert len(found)==1;p,z=found[0]
- network.append({'ordinalOneBased':ordinal,'call_id':call['call_id'],'callLine':line,'resultLine':resultline,'call':call['input'],'originalResult':str(p),'fileSHA256':m.raw(p),'nativeExact':True})
+ network.append({'ordinalOneBased':ordinal,'call_id':call['call_id'],'callLine':line,'resultLine':resultline,'call':call['input'],'originalResult':str(p),'fileSHA256':m.raw(p),'nativeExact':True,'identicalOriginalResultAliases':identical_aliases})
 report={'owner':m.O,'sourceNativeId':uid,'nativeJournalActual':str(native),'sourceOrder':order,'actualWebCalls':len(calls),'includePriorTasks':include_prior,'proof':str(proof_path),'calls':network,'exactStoredRecoveryNetworkCalls':0,'missingAuthorResultLinesRecovered':missing,'rawPacketUnchanged':True,'qualityCredit':0}
 report_name=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--report-name=')),f'history-russia{order}-network-accounting.json');assert pathlib.Path(report_name).name==report_name
 rp=D/report_name;m.write(rp,report)
