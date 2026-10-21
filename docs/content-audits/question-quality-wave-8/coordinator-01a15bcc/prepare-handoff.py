@@ -1,0 +1,51 @@
+"""Preserve exact CURRENT921 and one replacing read-only coordinator point."""
+import pathlib,json,importlib.util,datetime,subprocess
+D=pathlib.Path(__file__).parent
+s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+x=m.read(D/'manifest.json');cpPath=pathlib.Path(x['canonicalCheckpoint']);cp=m.read(cpPath)
+assert cp['owner']==m.O and x['CURRENT']==921 and x['remaining']==1079
+catalog={q['id']:(t['id'],q) for p in (m.C/'src/content/topics').glob('*.json') for t in [m.read(p)] for q in t['questions']}
+done=cp['currentEligibleCompletedIds'];remaining=cp['currentRemainingIds'];selected=cp['selectedCards']
+assert len(done)==len(set(done))==921 and len(remaining)==len(set(remaining))==1079 and len(selected)==2000
+assert set(done).isdisjoint(remaining) and set(done)|set(remaining)=={e['questionId'] for e in selected}
+assert len(cp['completedCardHashes'])==921
+for e in cp['completedCardHashes']:assert m.sha(catalog[e['questionId']][1])==e['cardCanonicalSha256']
+for e in selected:
+ t,q=catalog[e['questionId']];assert (t,q['difficulty'],q['correctIndex'])==(e['topicId'],e['difficulty'],e['correctIndex'])
+topic=m.read(m.C/'src/content/topics/polar-regions.json')
+base=json.loads(subprocess.check_output(['git','-C',str(m.C),'show','f9e19deac95ccf3cec64d6041be1bcd2655a8962:src/content/topics/polar-regions.json']))
+protected={order:m.sha(base['questions'][order-1]) for order in [62,72,80,83,86]}
+protected[87]=x['pendingSource87']['cycle1AfterHash']
+for order,digest in protected.items():assert m.sha(topic['questions'][order-1])==digest,(order,'protected HOLD drift')
+base=json.loads(subprocess.check_output(['git','-C',str(m.C),'show','f9e19deac95ccf3cec64d6041be1bcd2655a8962:src/content/topics/polar-regions.json']))
+changed=[q['id'] for b,q in zip(base['questions'],topic['questions']) if b!=q]
+assert set(changed)=={topic['questions'][86]['id'],topic['questions'][87]['id']}
+for label,p in [('code',m.C),('planning',m.P)]:assert m.raw(pathlib.Path(m.h.git(p,'rev-parse','--path-format=absolute','--git-path','index')))==x['foreignIndexes'][label]
+assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and m.read(m.P/'.flow-leases.json')=={}
+assert not cp['currentSourceActors'] and not cp['currentIndependentActors']
+uid=m.O;j=pathlib.Path('/Users/eaafonasev/.codex/sessions/2026/10/21/rollout-2026-10-21T05-11-46-'+uid+'.jsonl');rs=[json.loads(l) for l in j.open()];assert rs[0]['payload']['id']==uid
+cs=sum(r['type']=='compacted' for r in rs);last=next(r['payload']['info'] for r in reversed(rs) if r['type']=='event_msg' and r['payload'].get('type')=='token_count');assert cs==0
+root={'threadId':uid,'nativeJournal':str(j),'actualCompactions':cs,'lastInput':last['last_token_usage']['input_tokens'],'modelWindow':last['model_context_window'],'lastTaskEvent':'task_started'}
+a=x['actors']['reviewer'];rows=[json.loads(l) for l in pathlib.Path(a['nativeJournal']).open()];assert rows[0]['payload']['id']==a['threadId'];n=sum(r['type']=='compacted' for r in rows);i=next(r['payload']['info'] for r in reversed(rows) if r['type']=='event_msg' and r['payload'].get('type')=='token_count');assert n==0 and next(r['payload']['type'] for r in reversed(rows) if r['type']=='event_msg' and r['payload'].get('type') in ['task_started','task_complete'])=='task_complete';a.update(actualCompactions=n,lastInput=i['last_token_usage']['input_tokens'],modelWindow=i['model_context_window'],lastTaskEvent='task_complete')
+x['actors']['sourceAuthor88'].update(stage='ARCHIVED_SOURCE88_CERTIFIED_CONTEXT_PRESSURE',archived=True)
+slices=x['coordinatorSlicesToPreserve'];assert len(slices)==13 and slices[-1]=={'intakeCURRENT':918,'newlyCertified':2};slices=slices+[{'intakeCURRENT':920,'newlyCertified':1}]
+assert slices[0]['intakeCURRENT']+sum(e['newlyCertified'] for e in slices)==921
+now=datetime.datetime.now(datetime.timezone.utc).isoformat();reason='Preventive bounded handoff after SOURCE86 availability HOLD, two replacing source authors, SOURCE87 schema repair plus terminal solecycle1 FINAL HOLD, SOURCE88 solecycle1 strict FINAL PASS; root actual0, not compaction1/2'
+x.update(phase='PRESERVED_SLICE_PENDING_SUCCESSOR_ACK',coordinatorSlicesToPreserve=slices,rootNativeAudit=root,rootActualCompactions=0,actualCompactions=0,rootContextReason=reason,leaseHeld=False,sourceActorKeys=[],successorThreadId=None,verifiedNow={'all2000FrozenDifficultyNumericKey':True,'all921CurrentHashes':True,'exact921and1079Partition':True,'protectedHeldHashes':protected,'onlyCatalogChangedIds':changed,'ownAffectedContentRuns':4,'affectedEach':{'pass':19,'fail':0,'pending':0},'preINITIALSchemaFAIL87Preserved':True,'typecheck':'Inherited PASS reused string/source-only; no full/runtime/browser/build/deploy/human/deviceacceptance'},at=now)
+x['next']='After supported takeover bootstrap one fresh Luna/medium SOURCE author for untouched89; retired88 actual0 last223255/258400 not reusable. Retained idle reviewer may continue next exact INITIAL after native/context preflight.'
+x['helperInstanceVerification']='Owner01a15bcc, intake920/n-920, ownINITIAL, historical46template and optional fifth packet_name preserved; all source/hash/pointer/native/string/triple/empty-pointer/peer aliases plus naming-only inventory guard retained. prepare-source uses unchanged historical83template plus dynamic manifest sourceIndex and ownIntakeCURRENT.'
+m.write(D/'manifest.json',x)
+h={k:x[k] for k in ['C','P','codeBranch','planningBranch','canonicalCheckpoint','claims','foreignIndexes','owner','phase','CURRENT','remaining','fullGoal','intakeCURRENT','ownIntakeCURRENT','newlyCertified','mainIntegrated','manifest','claimsOwner','leaseHeld','verifiedNow','nextUntouched','coordinatorSlicesToPreserve','rootContextReason','ownProgress','helpers','actors','sourceActorKeys','pinnedProcess','packetContract','method','format','fences','predecessorHandoff','rootNativeAudit','newAttemptPointers','newAttemptFences','terminal62Rule','terminal87Rule','newLosslessAliases','heldOwn','pendingSource80','pendingSource82','pendingSource84','pendingSource85','pendingSource87','pendingSource88','source83AttemptFenceClarification','source86AttemptFenceClarification','sourceTaskTemplate','sourceIndex','readScope','remotePushAuthority','next']}
+h.update(rootActualCompactions=0,currentSourceActors=[],currentIndependentActors=[],retainedIdleAuthor=None,retainedIdleReviewer=x['actors']['reviewer'],protectedHeldHashes=protected,at=now,sourcePreservedCode='a1012b5058d8d515e09114136a9a50a956149592',sourcePreservedCodeMeaning='Last strict certificate before handoff save; delivery.evidence.remote_push plus fresh origin authoritative latest preservation.',cleanup={'predecessor01a15babArchived':True,'sourceAuthor84Archived':True,'sourceAuthor87Archived':True,'sourceAuthor88Archived':True,'CAndRawPreserved':True,'foreignIndexesPreserved':True,'noOwnedRuntimeBuildServerStarted':True},handoffRestrictions='Until ACTIVATE no quality/tasks/writes/claims/leases/tests/messages/titlechange; READONLY ACK here only, no predecessor message; ROOT supportedwaits. Preserve921/full2000/14slices/all HOLD/attempt/capture fences. After durable takeover archive predecessor01a15bcc yourself; no mainmerge/fulltests/runtime/browser/Player/build/deploy/release/OpenSpecarchive.',helperIdentityFence='AfterACTIVATE clonehelpers owner01a15bcc/intake920->ownnative/intake921; all ownIntakeCURRENT920 and n-920->921, certification-common suffix-01a15bcc.json->ownshort. OwnD/taskmanifest/binder/prepare-final ownINITIAL. Historical46 prepare-initial template immutable, optional5thpacket_name preserved. Historical83 sourceTaskTemplate path stays absolute old01a15bab directory unchanged; dynamic sourceIndex latest88-cycle1 stays immutable existing path, dynamic ownIntakeCURRENT/catalogCandidate. Preserve all aliases and naming-only selfinventorydelta guard. Derived active-full2000-goal-01a1593a.json intake921/new0 preserve14slices. sync-stage never changes remote_push.')
+m.write(D/'handoff-next.json',h)
+cc=m.savecode([D/'manifest.json',D/'handoff-next.json',pathlib.Path(__file__)],'Preserve exact CURRENT921 bounded handoff with terminal87 and strict88 FINAL PASS');print('C',cc)
+with m.flow.locked():m.flow.lease('acquire','planning',m.O)
+try:
+ cp=m.read(cpPath);assert cp['owner']==m.O;cp.update(phase=x['phase'],currentManifest=str(D/'manifest.json'),currentSourceActors=[],currentIndependentActors=[],currentSourceActiveCount=0,ordinaryWorkActivated=False,next=x['next']);m.write(cpPath,cp)
+ sp=m.P/'evidence/question-revision-process-v2/coordinator-state.json';st=m.read(sp);st.update(phase=x['phase'],status='PRESERVED_SLICE_WAIT_SUCCESSOR_ACK',currentWork=x['currentWork'],activeAuthors=[],idleAuthors=[],activeIndependentReview=None,currentIndependentActors=[],currentSourceActors=[],currentManifest=str(D/'manifest.json'),coordinatorSlicesToPreserve=slices,rootActualCompactions=0,ownActualCompactions=0,actualRootCompactions=0,rootContextReason=reason,preservedHandoff=str(D/'handoff-next.json'),ordinaryWorkActivated=False,next=x['next'],asOf=now);m.write(sp,st)
+ gp=m.P/'evidence/question-revision-process-v2/active-full2000-goal-01a1593a.json';g=m.read(gp);g.update(owner=m.O,CURRENT=921,remaining=1079,newlyCertified=1,intakeCURRENT=920,manifest=str(D/'manifest.json'),coordinatorSlicesToPreserve=slices,latestCodeCommit=cc);m.write(gp,g)
+ pp=m.P/'evidence/question-revision-process-v2/handoff-01a15bcc.json';m.write(pp,{'owner':m.O,'phase':x['phase'],'CURRENT':921,'remaining':1079,'fullGoal':2000,'codePreservation':cc,'handoff':str(D/'handoff-next.json'),'actualCompactions':0,'rootNativeAudit':root,'coordinatorSlicesToPreserve':slices,'noActiveSourceOrReviewTask':True,'nextUntouched':x['nextUntouched']})
+ print('P',m.h.save(m.P,'refs/heads/codex/question-revision-resume-20261014',[str(p.relative_to(m.P)) for p in [cpPath,sp,gp,pp]],'Record preserved exact921 slice and one replacing successor readiness point',x['foreignIndexes']['planning']))
+finally:
+ with m.flow.locked():m.flow.lease('release','planning',m.O)
+print('root',root);print('next',x['nextUntouched']);print('retained reviewer',a['threadId'],a['lastInput'],a['modelWindow'])
