@@ -18,7 +18,7 @@ for qid,e in selected.items():
  assert m.sha(b)==e['baselineCanonicalSha256'] and q['difficulty']==b['difficulty']==e['difficulty'] and q['correctIndex']==b['correctIndex']==e['correctIndex'],qid
 assert all(m.sha(catalog[e['questionId']])==e['cardCanonicalSha256'] for e in cp['completedCardHashes'])
 original83=m.h.git(m.C,'rev-parse','463701e1^{commit}')
-S=pathlib.Path(x['predecessorHandoff']).parent
+S=m.C/'docs/content-audits/question-quality-wave-8/coordinator-01a16254'
 raw83=S/'source-history-russia83'
 for name in ['candidate.json','sourceproof.json']:
  p=raw83/name;old=subprocess.check_output(['git','-C',str(m.C),'show',original83+':'+str(p.relative_to(m.C))]);assert old==p.read_bytes(),name
@@ -37,7 +37,7 @@ for item in x['ownAffectedRuns']:
  assert m.h.git(m.C,'show','HEAD:'+str(p.relative_to(m.C))).encode()==p.read_bytes().rstrip(b'\n')
  qa.append({'path':str(p),'rawSHA256':m.raw(p),'passed':19,'failed':0,'pending':0})
 packets=[]
-for order in range(89,96):
+for order in range(96,101):
  pending=x.get(f'pendingHistoryRussia{order}',{})
  for suffix,key in [('', 'rawFreeze'),('-cycle1','cycle1RawFreeze')]:
   freeze=pending.get(key);p=D/('source-history-russia'+str(order)+suffix)
@@ -51,7 +51,7 @@ for order in range(89,96):
   assert 'candidate.json' in checked and 'sourceproof.json' in checked,(order,suffix)
   packets.append({'order':order,'suffix':suffix,'freeze':freeze,'exactFrozenFiles':checked})
 native=[]
-for key,a in [('root',x['rootNativeAudit']),*x['actors'].items()]:
+for key,a in [('root',x['rootNativeAudit']),*x['actors'].items(),*[(f'retired-reader-{i}',a) for i,a in enumerate(x.get('retiredNativeReviewersCurrentOwner',[]))]]:
  p=pathlib.Path(a['nativeJournal'])
  if not p.exists():
   matches=list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').rglob('*'+a['threadId']+'.jsonl'));assert len(matches)==1;p=matches[0]
@@ -75,7 +75,7 @@ for root in [m.C,m.P]:
  # --no-optional-locks is a Git global flag, preserve any diagnostic instead of silently ignoring it.
  assert r.returncode==0,r.stderr
  status[str(root)]={'lines':len(r.stdout.splitlines()),'rawSHA256':hashlib.sha256(r.stdout.encode()).hexdigest(),'unknownResourcesRemoved':False}
-report={'owner':m.O,'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'CURRENT':n,'remaining':2000-n,'selected':2000,'partitionCompleteDisjoint':True,'allCurrentAcceptedHashesExact':True,'frozenBaselineDifficultyKeyTopicOrder':True,'baseline':cp['baselineSHA'],'ownScopeOrders':list(range(89,96)),'remotePushAuthoritySnapshot':pushes[0],'branches':{'code':{'branch':x['codeBranch'],'commit':m.h.git(m.C,'rev-parse','refs/heads/'+x['codeBranch'])},'planning':{'branch':x['planningBranch'],'commit':m.h.git(m.P,'rev-parse','refs/heads/'+x['planningBranch']),'checkoutBranch':m.h.git(m.P,'branch','--show-current')}},'source95ProceduralDeviations':x.get('source95CombinedProceduralDeviations'),'source83OriginalRawExactAtFirstFAIL':{'commit':original83,'files':['candidate.json','sourceproof.json'],'originalFAILPreserved':True,'creditOnlyAfterSameReaderFINALPASS':True},'foreignIndexes':x['foreignIndexes'],'claimsExactOwner':m.O,'leaseEmpty':True,'qa':qa,'rawPackets':packets,'native':native,'origin':{'main':main,'feature':feature,'acceptedHashesOnMain':exactmain,'acceptedCount':n,'featureAncestorOfMain':ancestor(feature,main),'mainAncestorOfFeature':ancestor(main,feature),'integrationPerformed':False},'status':status,'noSemanticRereviewOrQARerun':True,'notRun':['full suite','runtime','browser','Player/build','deploy','release','human/device acceptance']}
+report={'owner':m.O,'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'CURRENT':n,'remaining':2000-n,'selected':2000,'partitionCompleteDisjoint':True,'allCurrentAcceptedHashesExact':True,'frozenBaselineDifficultyKeyTopicOrder':True,'baseline':cp['baselineSHA'],'ownScopeOrders':list(range(96,101)),'remotePushAuthoritySnapshot':pushes[0],'branches':{'code':{'branch':x['codeBranch'],'commit':m.h.git(m.C,'rev-parse','refs/heads/'+x['codeBranch'])},'planning':{'branch':x['planningBranch'],'commit':m.h.git(m.P,'rev-parse','refs/heads/'+x['planningBranch']),'checkoutBranch':m.h.git(m.P,'branch','--show-current')}},'source95ProceduralDeviations':x.get('source95CombinedProceduralDeviations'),'source83OriginalRawExactAtFirstFAIL':{'commit':original83,'files':['candidate.json','sourceproof.json'],'originalFAILPreserved':True,'creditOnlyAfterSameReaderFINALPASS':True},'foreignIndexes':x['foreignIndexes'],'claimsExactOwner':m.O,'leaseEmpty':True,'qa':qa,'rawPackets':packets,'native':native,'origin':{'main':main,'feature':feature,'acceptedHashesOnMain':exactmain,'acceptedCount':n,'featureAncestorOfMain':ancestor(feature,main),'mainAncestorOfFeature':ancestor(main,feature),'integrationPerformed':False},'status':status,'noSemanticRereviewOrQARerun':True,'notRun':['full suite','runtime','browser','Player/build','deploy','release','human/device acceptance']}
 m.write(D/'handoff-verification.json',report)
 print(m.savecode([pathlib.Path(__file__),D/'handoff-verification.json'],'Preserve exact current checkpoint hashes and bounded closure verification'))
 print({'CURRENT':n,'remaining':2000-n,'QAReports':len(qa),'rawPackets':len(packets),'nativeActors':len(native),'acceptedHashesOnMain':exactmain,'originMain':main,'foreignIndexesPreserved':True})

@@ -24,7 +24,9 @@ def command_results(value):
             yield from command_results(decoded)
 
 report = {'owner':m.O, 'actors':{}, 'inheritedDiagnostics':str(pathlib.Path(x['predecessorHandoff']).parent/'technical-native-diagnostics.json'), 'meaning':'Exact original technical diagnostics only; no source retry or quality credit.'}
-for actor in [x['rootNativeAudit'], *x['actors'].values()]:
+if (D/'technical-native-diagnostics.json').exists():
+    report['actors'].update(m.read(D/'technical-native-diagnostics.json')['actors'])
+for actor in [x['rootNativeAudit'], *x['actors'].values(), *x.get('retiredNativeReviewersCurrentOwner',[])]:
     native = pathlib.Path(actor['nativeJournal'])
     if not native.exists():
         matches = list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').rglob('*'+actor['threadId']+'.jsonl'))
