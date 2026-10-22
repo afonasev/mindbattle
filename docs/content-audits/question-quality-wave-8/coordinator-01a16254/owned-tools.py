@@ -230,6 +230,31 @@ def alias_source83_cycle1_redundant_snapshot(candidate,sp,ps,R):
  next(b for b in bindings if b['path']=='src/content/topics/history-russia.json')['sha256']=raw(topic_path)
  ps['technicalRedundantSnapshotStageBinding']=proof;sp['technicalRedundantSnapshotStageBinding']=proof
 
+def alias_source84_cycle1_variant_names(candidate,sp,ps,R):
+ """Expose exact existing prompt and SHA-bound locator lists under contract names."""
+ if candidate['entries'][0]['sourceOrder']!=84 or candidate.get('cycle')!=1:return
+ R=pathlib.Path(R);assert R==D/'source-history-russia84-cycle1'
+ uid='01a16282-713c-7aa3-b66b-ca02fb99d0e1'
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']==uid
+ for name in ['candidate.json','sourceproof.json','peer-snapshot.json']:
+  p=R/name;assert p.read_bytes()==__import__('subprocess').check_output(['git','-C',str(C),'show','d0baf3be7a148345b6dca8f9363b706338353c88:'+str(p.relative_to(C))])
+ q=candidate['entries'][0]['proposedCard'];sources={}
+ for source in sp['rawSources']:
+  p=pathlib.Path(source['path']);p=p if p.is_absolute() else C/p
+  assert raw(p)==source['sha256'];sources[str(p)]=source['sha256']
+ for v in sp['entries'][0]['fourFullPromptAnswerNoteAssessments']:
+  a=q['answers'][v['slot']];assert v['prompt']==q['prompt'] and v['answer']==a['text'] and v['note']==a['note']
+  assert v['tripleSHA256']==sha({'prompt':v['prompt'],'answer':v['answer'],'note':v['note']})
+  assert 'fullPrompt' not in v and 'sourcePaths' not in v and 'locator' not in v
+  paths=[];locators=[]
+  for loc in v['sourcesLocators']:
+   p=pathlib.Path(loc['path']);p=p if p.is_absolute() else C/p
+   assert sources[str(p)]==loc['fileSHA256']==raw(p)
+   paths.append(loc['path']);locators.append(loc['locator'])
+  assert paths
+  v.update(fullPrompt=v['prompt'],sourcePaths=list(dict.fromkeys(paths)),locator=' | '.join(locators))
+ sp['technicalVariantFieldNameAlias']={'rawSourceproof':str(R/'sourceproof.json'),'rawSHA256':raw(R/'sourceproof.json'),'operation':'Exact existing prompt literal and explicit original SHA-bound source locator paths exposed as fullPrompt/sourcePaths/locator. Original prompt/sourcesLocators and every judgment retained unchanged. Unchanged INITIAL reader judgments remain attributed to original reader, not claimed as new independent author review.'}
+
 def alias_source77_own_prior_application(candidate,sp,ps,R):
  """Exact own77 preapplication bookkeeping delta; no inventory-file hydration."""
  if candidate.get('cycle')!=1 or candidate['entries'][0]['sourceOrder']!=77:return

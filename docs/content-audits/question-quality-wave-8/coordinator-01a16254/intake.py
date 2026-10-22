@@ -19,6 +19,7 @@ for R in packet_paths:
     m.alias_source77_own_prior_application(candidate,sp,ps,R)
     m.alias_source83_clarified_literals(candidate,sp,ps,R)
     m.alias_source83_cycle1_redundant_snapshot(candidate,sp,ps,R)
+    m.alias_source84_cycle1_variant_names(candidate,sp,ps,R)
     m.alias_explicit_peer_inventory_projection(candidate,sp,ps,R)
     m.alias_serialized_prompt_group(candidate,sp)
     m.alias_full_prompt_answer_concatenation(candidate,sp)
