@@ -16,7 +16,13 @@ x['ownProgress']['accepted'].append(q['id']);x['ownProgress']['certificates'].ap
 assert len(x['ownProgress']['accepted'])==len(set(x['ownProgress']['accepted']))==delta
 x.update(CURRENT=n,remaining=2000-n,newlyCertified=delta,phase=f'ACTIVE_FULL2000_CURRENT{n}')
 x[f'pendingHumanMedicine{order}'].update(status=status,qualityCredit=1,certification=str(certificatePath),certificationCodeCommit=certificateCommit)
-x['actors'][actorKey].update(stage=f'ARCHIVED_AFTER_CERTIFIED_SOURCE{order}',archived=True)
+retain='--retain-author' in sys.argv[5:]
+if retain:
+ a=x['actors'][actorKey];assert a['actualCompactions']==0 and a['lastTaskEvent']=='task_complete' and not a.get('archived',False)
+ a.update(stage=f'IDLE_AFTER_CERTIFIED_SOURCE{order}',archived=False)
+ x['noRetainedIdleAuthor']=False
+else:
+ x['actors'][actorKey].update(stage=f'ARCHIVED_AFTER_CERTIFIED_SOURCE{order}',archived=True)
 x['sourceActorKeys']=[k for k in x['sourceActorKeys'] if k!=actorKey]
 x['coordinatorSlicesToPreserve']=m.read(pathlib.Path(x['predecessorHandoff']))['coordinatorSlicesToPreserve']+[{'intakeCURRENT':x['ownIntakeCURRENT'],'newlyCertified':delta}]
 x['currentWork'].update(CURRENT=n,remaining=2000-n)
