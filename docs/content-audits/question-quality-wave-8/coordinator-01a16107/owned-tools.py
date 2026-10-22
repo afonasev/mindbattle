@@ -151,3 +151,50 @@ def alias_explicit_peer_inventory_projection(candidate,sp,ps,R):
  same.update(sourceInventoryPath=str(path),sourceInventorySHA256=raw(path))
  sp.update(sourceInventoryPath=str(path),sourceInventorySHA256=raw(path))
  ps['technicalExplicitProjectedTopicSnapshotAlias']={'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'inventoryPath':str(path),'inventorySHA256':raw(path),'operation':'Exact original top-level path/SHA,100MAIN projections,110filebindings,11000rowdigest and same-topic fileSHA bind the full100 bodies already retained by this author. Inventory count100 is not assessed-peer credit; only original fullClosestCurrentPeers are substantive peers. No unbound hydration, new peer assessment, literal or source ground.'}
+
+
+def alias_source77_own_prior_application(candidate,sp,ps,R):
+ """Exact own77 preapplication bookkeeping delta; no inventory-file hydration."""
+ if candidate.get('cycle')!=1 or candidate['entries'][0]['sourceOrder']!=77:return
+ R=pathlib.Path(R);assert R.parent==D and R.name=='source-history-russia77-cycle1'
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId'] and sp['cycle']==ps['cycle']==1
+ import copy
+ files=sorted((C/'src/content/topics').glob('*.json'));assert len(files)==110
+ live={};live_rows=[]
+ def project(t,q):return {'topicId':t,'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']}
+ for f in files:
+  t=read(f);live[t['id']]=t;live_rows.extend(project(t['id'],q) for q in t['questions'])
+ assert len(live_rows)==11000
+ if ps['globalMAIN']['rowsCanonicalSHA256']==sha(live_rows):return
+ I=R.with_name('source-history-russia77');initial=read(I/'candidate.json');oldps=read(I/'peer-snapshot.json');e0=initial['entries'][0];e=candidate['entries'][0]
+ assert initial['sourceNativeId']==candidate['sourceNativeId'] and initial['cycle']==0
+ assert e['id']==e0['id']=='history-russia-constitution-1993-method' and e['beforeCard']==e0['proposedCard'] and sha(e['beforeCard'])==e0['afterHash']
+ only=copy.deepcopy(e['proposedCard']);assert only['answers'][2]['text']=='Всенародным голосованием';only['answers'][2]['text']='Всенародное голосование';assert only==e['beforeCard']
+ assert ps['candidate']['beforeCard']==e['beforeCard'] and ps['candidate']['proposedCard']==e['proposedCard']
+ assert ps['globalMAIN']==oldps['globalMAIN'] and ps['sameTopicMAIN']==oldps['sameTopicMAIN'] and ps['actualCurrentPeers']==oldps['actualCurrentPeers'] and ps['fullClosestCurrentPeers']==oldps['fullClosestCurrentPeers'] and ps['currentGuardRows']==oldps['currentGuardRows']
+ oldtask=read(D/'source-history-russia77-task.json');oldbytes=__import__('subprocess').check_output(['git','--no-optional-locks','-C',str(C),'show',oldtask['baselineCode']+':src/content/topics/history-russia.json']);oldtopic=json.loads(oldbytes);now=live['history-russia']
+ assert oldtopic['questions'][76]==e0['beforeCard'] and now['questions'][76]==e0['proposedCard']
+ assert [i for i,(a,b) in enumerate(zip(oldtopic['questions'],now['questions']),1) if a!=b]==[77]
+ prior=read(D/'qualified-source-history-russia77-apply.json');assert prior['author']==candidate['sourceNativeId'] and prior['applied'][0]['beforeCard']==e0['beforeCard'] and prior['applied'][0]['proposedCard']==e['beforeCard']
+ binding=ps['globalMAIN']['allCurrentFileByteBindings'];assert len(binding)==110 and [v['path'] for v in binding]==[str(f.relative_to(C)) for f in files]
+ old_rows=[];history_field=None
+ for b,f in zip(binding,files):
+  key=next(k for k in ['sha256','fileSHA256','fileSha256','rawSHA256'] if k in b)
+  if f.name=='history-russia.json':assert b[key]==hashlib.sha256(oldbytes).hexdigest();t=oldtopic;history_field=key
+  else:assert b[key]==raw(f);t=live[f.stem]
+  old_rows.extend(project(t['id'],q) for q in t['questions'])
+ assert len(old_rows)==11000 and sha(old_rows)==ps['globalMAIN']['rowsCanonicalSHA256']
+ assert ps['sameTopicMAIN']['questions']==oldtopic['questions'] and ps['sameTopicMAIN']['fileSHA256']==hashlib.sha256(oldbytes).hexdigest()
+ peers=ps['actualCurrentPeers'];assert len(peers)==100 and [v['sourceOrder'] for v in peers]==list(range(1,101)) and [v['card'] for v in peers]==oldtopic['questions']
+ for v in peers:assert v['id']==v['card']['id'] and v['topicId']=='history-russia' and v['sha256']==sha(v['card'])
+ assert all(v['id']!=e['id'] for v in ps['fullClosestCurrentPeers'])
+ guard=ps['currentGuardRows']['currentTargetBeforeCard'];assert guard['card']==e0['beforeCard'] and guard['sha256']==e0['beforeHash']
+ proof={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'ownInitialCandidatePath':str(I/'candidate.json'),'ownInitialCandidateSHA256':raw(I/'candidate.json'),'ownInitialPeerPath':str(I/'peer-snapshot.json'),'ownInitialPeerSHA256':raw(I/'peer-snapshot.json'),'originalCatalogCommit':oldtask['baselineCode'],'oldGlobalRowSHA256':sha(old_rows),'currentGlobalRowSHA256':sha(live_rows),'oldSelfHash':e0['beforeHash'],'currentSelfHash':e['beforeHash'],'newGrammarProposalHash':e['afterHash'],'allOtherCardsAnd110FileBindingsProven':True,'inventoryFileHydration':False,'selfIsDistinctPeer':False,'operation':'Only exact own prior77 application replaces historical self-preimage in full100/110/11000 bookkeeping. Original raw unchanged; no literal, primaryGround or distinct-peer assessment changed.'}
+ ps['globalMAIN']['rowsCanonicalSHA256']=sha(live_rows)
+ for b in binding:
+  if b['path']=='src/content/topics/history-russia.json':b[history_field]=raw(C/b['path'])
+ ps['sameTopicMAIN']['questions']=copy.deepcopy(now['questions']);ps['sameTopicMAIN']['fileSHA256']=raw(C/'src/content/topics/history-russia.json')
+ for v in peers:
+  if v['id']==e['id']:v.update(card=copy.deepcopy(e['beforeCard']),sha256=e['beforeHash'])
+ guard.update(card=copy.deepcopy(e['beforeCard']),sha256=e['beforeHash'])
+ ps['technicalOwnPrior77SelfPreimageAlias']=proof;sp['technicalOwnPrior77SelfPreimageAlias']=proof
