@@ -1,0 +1,61 @@
+import json,hashlib,copy,pathlib
+root=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a160a6')
+out=root/'source-history-russia69-cycle1'
+raw=root/'source-history-russia69'
+inv=json.loads((out/'fresh-inventory.json').read_text())
+def canon(x): return json.dumps(x,ensure_ascii=False,sort_keys=True,separators=(',',':'))
+def sha(x): return hashlib.sha256(canon(x).encode()).hexdigest()
+oldc=json.loads((raw/'candidate.json').read_text()); olds=json.loads((raw/'sourceproof.json').read_text()); oldp=json.loads((raw/'peer-snapshot.json').read_text())
+receipt=json.loads((root/'independent-history-russia69-initial/receipt.json').read_text())
+assert receipt['entries'][0]['status']=='FIX'
+entry=oldc['entries'][0]
+assert entry['afterHash']=='d19922231c9c1cda4a445ff4d5474a21ac18ee585568c845237faf6202fc97bd'
+newnote='Деулинское перемирие 1618 года заключили с Речью Посполитой сроком на 14,5 года.'
+newc=copy.deepcopy(oldc); newc['cycle']=1
+ce=newc['entries'][0]; ce['beforeCard']=copy.deepcopy(entry['proposedCard']); ce['beforeHash']=entry['afterHash']; ce['status']='READY_FOR_SAME_READER_FINAL'
+for group in ce['fieldGroups'].values(): group['beforeCanonicalSHA256']=group['afterCanonicalSHA256']
+ce['proposedCard']['answers'][2]['note']=newnote
+ce['afterHash']=sha(ce['proposedCard'])
+ce['fieldGroups']['note2']['afterCanonicalSHA256']=sha(newnote)
+# Verify only one allowed path differs from cycle-0 proposed card.
+def changes(a,b,path=''):
+ if isinstance(a,dict) and isinstance(b,dict):
+  z=[]
+  for k in sorted(a.keys()|b.keys()): z+=changes(a.get(k),b.get(k),path+'/'+str(k))
+  return z
+ if isinstance(a,list) and isinstance(b,list):
+  z=[]
+  for i,(x,y) in enumerate(zip(a,b)): z+=changes(x,y,path+'/'+str(i))
+  if len(a)!=len(b): z.append(path+'/length')
+  return z
+ return [] if a==b else [path]
+assert changes(entry['proposedCard'],ce['proposedCard'])==['/answers/2/note']
+newc['qualityCredit']=0
+# sourceproof: retain all prior grounds, raw captures, unchanged assessment text; replace only note2 literal/ground and slot 2 triple assessment.
+news=copy.deepcopy(olds); news['cycle']=1; news['qualityCredit']=0
+se=news['entries'][0]; se['status']='READY_FOR_SAME_READER_FINAL'
+ng=next(g for g in se['literalGroups'] if g['group']=='note2')
+ng['literal']=newnote; ng['literalSHA256']=sha(newnote)
+ng['primaryGround']='PRlib L45 says the delegations concluded the Deulino truce for 14.5 years. L47 records renewed wars with the Commonwealth in 1632–1634, before the full contractual term elapsed. The revised note states only the agreed term and does not claim that hostilities remained stopped throughout it.'
+ng['locator']='PRlib turn1view0 L45,L47'
+ass=se['fourFullPromptAnswerNoteAssessments'][2]
+ass['note']=newnote
+ass['plausibilityUniqueKeyAndNoteTruthUsefulness']='«Деулинское перемирие» остается правдоподобным названием соглашения, но относится к войне России с Речью Посполитой, а не к выходу из Первой мировой войны. PRlib L45 подтверждает договорный срок 14,5 лет; L47 указывает на возобновление войны в 1632–1634 годах, поэтому новая формулировка корректно сообщает срок соглашения, не утверждая фактическую длительность прекращения военных действий.'
+ass['locator']='PRlib turn1view0 L40-L47'
+ass['tripleSHA256']=sha({'prompt':ass['fullPrompt'],'answer':ass['answer'],'note':newnote})
+se['directedDeltaCheck']={'cycle':1,'allowedChangedPaths':['answers[2].note'],'beforeNote':entry['proposedCard']['answers'][2]['note'],'afterNote':newnote,'beforeNoteSHA256':sha(entry['proposedCard']['answers'][2]['note']),'afterNoteSHA256':sha(newnote),'sourcePath':ng['sourcePaths'][0],'sourceFileSHA256':'989cafe65c6c85263334e4c43b085dca3381debab627252f29e801052412cb20','sourceBodySHA256':'386e4345f7796e7356e5e7044ab5aa83a411d4de079e2ade3a4af9762af01854','pointer':'/originalRecord/payload/output/1/text','locator':'PRlib turn1view0 L45,L47','assessment':'L45 supports the 14.5-year contractual term. L47 documents renewed war in 1632–1634; thus the note now describes term agreed, not actual uninterrupted cessation.','previousIndependentInitialReceipt':str(root/'independent-history-russia69-initial/receipt.json'),'previousIndependentInitialReceiptSHA256':'edf407278f883f0d74cfe900d78150d3a59ec6e79b5a0f53b15bb8355e0c7b08','networkCallsCycle1':0,'cumulativeAuthorNetworkCalls':2}
+# The proof-only delta record is separate; prior initial receipt and all source capture metadata remain intact.
+# Refresh current peer evidence from current-inventory output.
+newp=copy.deepcopy(oldp); newp['cycle']=1
+newp['freshInventoryPath']='docs/content-audits/question-quality-wave-8/coordinator-01a160a6/source-history-russia69-cycle1/fresh-inventory.json'
+newp['freshInventorySHA256']=hashlib.sha256((out/'fresh-inventory.json').read_bytes()).hexdigest()
+newp['globalMAIN']=copy.deepcopy(inv['globalMAIN']); newp['sameTopicMAIN']=copy.deepcopy(inv['sameTopicMAIN']); newp['actualCurrentPeers']=copy.deepcopy(inv['actualCurrentPeers'])
+proposed=ce['proposedCard']; ph=sha(proposed)
+for pair in newp['relevantProposedPairs']:
+ pair['proposedCard']=copy.deepcopy(proposed); pair['proposedCardCanonicalSHA256']=ph
+newp['globalMAINSearch'] = newp.get('globalMAINSearch',{})
+newp['directedDeltaCheck']={'cycle':1,'onlyChangedPath':'answers[2].note','globalMAINProjectionUnchanged':True,'sameTopicMAINProjectionUnchanged':True,'reason':'Prompt, ordered answer texts, correct key and order are unchanged; note text is outside the MAIN duplicate projection. Refreshed actual current peers and inventories are included above.','proposedCardCanonicalSHA256':ph,'globalMAINRowsCanonicalSHA256':inv['globalMAIN']['rowsCanonicalSHA256'],'sameTopicFileSHA256':inv['sameTopicMAIN']['fileSHA256']}
+for obj,name in [(newc,'candidate.json'),(news,'sourceproof.json'),(newp,'peer-snapshot.json')]:
+ (out/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+print('wrote',[(n,(out/n).stat().st_size,hashlib.sha256((out/n).read_bytes()).hexdigest()) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']])
+print('candidate afterHash',ce['afterHash'],'notehash',sha(newnote),'main rows',inv['globalMAIN']['rowsCanonicalSHA256'])
