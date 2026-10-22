@@ -24,6 +24,7 @@ x['additionalRetainedSourceIndexes']=list(dict.fromkeys(x['additionalRetainedSou
 packet='qualified-source-history-russia'+str(order)+('-cycle1' if 'FINAL' in status else '')
 x['sourceIndex']=str(D/packet/'sourceproof.json')
 x['helpers']['record-progress.py']=str(pathlib.Path(__file__))
+x['readyQueue']=[v for v in x.get('readyQueue',[]) if v.get('sourceOrder')!=order]
 m.write(D/'manifest.json',x);print('code',m.savecode([D/'manifest.json',pathlib.Path(__file__)],f'Record exact CURRENT{n} certificate projection and author cleanup'))
 idx=pathlib.Path(m.h.git(m.P,'rev-parse','--path-format=absolute','--git-path','index'));expected=m.raw(idx)
 assert expected==x['foreignIndexes']['planning']
