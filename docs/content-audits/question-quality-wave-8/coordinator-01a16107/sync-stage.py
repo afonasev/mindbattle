@@ -6,7 +6,7 @@ m = importlib.util.module_from_spec(s)
 s.loader.exec_module(m)
 x = m.read(D / 'manifest.json')
 assert x['owner'] == m.O
-source_actors = [x['actors'][k] for k in x.get('sourceActorKeys', ['parks33Author'])]
+source_actors = [a for k,a in x['actors'].items() if k.startswith('author') and not a.get('archived',False)]
 reviewer = x['actors']['reviewer']
 retained_reviewers = x.get('retainedNativeReviewers', [])
 assert all(not a['stage'].startswith('START') for a in retained_reviewers)
