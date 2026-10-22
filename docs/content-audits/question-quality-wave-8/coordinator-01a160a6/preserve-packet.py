@@ -31,8 +31,10 @@ triple_checks=[]
 for v in entry['fourFullPromptAnswerNoteAssessments']:
  k=v['slot'];tr={'prompt':e['proposedCard']['prompt'],'answer':e['proposedCard']['answers'][k]['text'],'note':e['proposedCard']['answers'][k]['note']};assert tr=={'prompt':v['fullPrompt'],'answer':v['answer'],'note':v['note']}
  if m.sha(tr)!=v['tripleSHA256']:
-  assert m.sha({'fullPrompt':tr['prompt'],'answer':tr['answer'],'note':tr['note']})==v['tripleSHA256']
-  triple_checks.append({'slot':k,'originalFullPromptKeyTripleSHA256':v['tripleSHA256'],'canonicalPromptKeyTripleSHA256':m.sha(tr),'operation':'Verified identical literal triple, field-name-only hash representation; immutable raw preserved'})
+  alternatives={'fullPromptKey':{'fullPrompt':tr['prompt'],'answer':tr['answer'],'note':tr['note']},'orderedThreeLiteralList':[tr['prompt'],tr['answer'],tr['note']]}
+  matched=[name for name,value in alternatives.items() if m.sha(value)==v['tripleSHA256']]
+  assert len(matched)==1
+  triple_checks.append({'slot':k,'originalTripleSHA256':v['tripleSHA256'],'originalRepresentation':matched[0],'canonicalPromptKeyTripleSHA256':m.sha(tr),'operation':'Verified exact same ordered full prompt/answer/note literals against candidate and six groups; representation only, immutable raw and grounds unchanged'})
 raw_checks=[]
 for source in sp['rawSources']:
  p=pathlib.Path(source['path']);p=p if p.is_absolute() else m.C/p
@@ -48,6 +50,10 @@ for source in sp['rawSources']:
   assert __import__('hashlib').sha256(body.encode()).hexdigest()==source['completeOutputSHA256']==exact['completeOutputSHA256']
   raw_checks.append({'originalMissingDocsPath':str(p),'resolvedOriginalCapture':str(alt),'fileSHA256':m.raw(alt),'nativeRecordExact':True,'bodyURLAndSHAExact':True,'operation':'Read-only path alias for missing docs prefix; original author sourceproof unchanged.'})
   p=alt
+ if 'sha256' not in source:
+  assert 'fileSHA256' in source and m.raw(p)==source['fileSHA256']
+  source['sha256']=source['fileSHA256']
+  raw_checks.append({'path':str(p),'originalFileSHA256':source['fileSHA256'],'operation':'Exact declared immutable file digest name alias only; no invented hash/body or raw edit.'})
  assert m.raw(p)==source['sha256'];cap=m.read(p) if p.suffix=='.json' else None
  if isinstance(cap,dict) and 'originalRecord' in cap:
   jp=pathlib.Path(cap['nativeJournal'])
