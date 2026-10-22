@@ -1,0 +1,101 @@
+import json,hashlib,re
+from pathlib import Path
+C=Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle');D=C/'docs/content-audits/question-quality-wave-8/coordinator-01a16329';N='01a164f5-4b8d-7761-a3f7-0ec75266cb95'
+def rd(p):return json.loads(Path(p).read_text())
+def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+def raw(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+T=rd(D/'reader-history-russia91-initial-task.json');O=Path(T['outputDirectory']);q=next(x for x in rd(C/'src/content/topics/history-russia.json')['questions'] if x['id']==T['id']);assert sha(q)==T['cardHash']
+S=rd(Path(T['authorPacket'])/'sourceproof.json')['rawSources']
+exactloc=['turn4view0 L63-L64','turn2view0 L45-L52','turn3view0 L44-L45, L54-L62','turn1view0 L50-L60']
+loc=[{'path':s['path'],'url':s['url'],'completeOutputPointer':s['completeOutputPointer'],'locator':exactloc[i]} for i,s in enumerate(S)]
+def refs(*ns):return [loc[i] for i in ns]
+defect={'code':'ANTI_BOLSHEVIK_QUALIFIER_ELIMINATES_ALL_DISTRACTORS','field':'prompt + answers[0..2].text','severity':'substantive editorial / MEDIUM plausibility','ground':'В буквальном prompt требуется антибольшевистское выступление. Кровавое воскресенье — шествие к царю и его расстрел 1905 (turn2view0 L45–52); декабристы выступали против самодержавия 1825 (turn3view0 L44,54–60); Февральская революция свергла монархию 1917 и создала Временное правительство/Советы (turn1view0 L50–60). Все три относятся к царской власти, а не к борьбе против большевистской власти. Игрок, знающий только общую последовательность «монархия→большевики», исключает весь ряд без знания Кронштадта или марта1921. Это не просто три неверные даты: политический квалификатор делает дистракторы категориально несостоятельными.','sourcesLocators':refs(0,1,2,3),'requiredAction':'Один направленный fix-cycle: устранить возможность исключить все три варианта одним политическим квалификатором, сохранив frozen ID/topic/order/difficulty/key. Проверить literal prompt с каждым вариантом и абсолютный MEDIUM. Хорошие explanation и четыре фактологически верные notes сохранять, если выбранное исправление их не затрагивает. Новые сведения допускаются только из уже сохранённых фактических контекстов; недостаточность источников означает HOLD, не fetch.','notAContentError':'Дата/участники/подавление и numeric key подтверждены. Само слово «антибольшевистское» исторически верно, дефект в сочетании с данным рядом.'}
+gs={'prompt_ordered_answers_key':{'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']},'explanation':q['explanation'],**{'note'+str(i):a['note'] for i,a in enumerate(q['answers'])}}
+grounds={
+'prompt_ordered_answers_key':('Факт и key подтверждены turn4view0 L63: март1921, вооружённое восстание против большевиков прямо названо Кронштадтским. Но INITIAL FIX по качеству ряда: три других названия — события против царской власти 1825/1905/1917, отсекаемые квалификатором без знания спрашиваемой даты/события. Все четыре грамматически согласованы как именные подстановки после «Какое ... выступление».',refs(0,1,2,3)),
+'explanation':('Лично прочитанные L63–64 прямо подтверждают март1921, антибольшевистскую направленность и скорое подавление. «Моряков» подтверждено экипажами кораблей в L63; это не утверждение об исключительном участии моряков. Два предложения называют ключ. Пропуск эмоционального «жестоко» не меняет факта подавления. Qualified explanation alias не служил доказательством: прочитан original body.',refs(0)),
+'note0':('turn2view0 L45–49: 9(22)января1905 в Петербурге войска/полиция открыли огонь по мирному шествию рабочих к Зимнему дворцу с петицией царю; L52 связывает это с Кровавым воскресеньем. Note кратко и точно определяет свой вариант. 9января — общепринятая дата по старому стилю, не новая дата.',refs(1)),
+'note1':('turn3view0 L44 прямо даёт декабрь1825, Санкт-Петербург и вооружённое выступление декабристов; L54–62 раскрывают монархический контекст. Note верна и полезна для собственного варианта.',refs(2)),
+'note2':('turn1view0 L50–52 помещает революцию в февраль1917; L59–60 сообщает отречение НиколаяII и свержение самодержавия. Note точно определяет исход своего варианта, не приписывает ему Кронштадт.',refs(3)),
+'note3':('turn4view0 L63 дословно по смыслу подтверждает гарнизон города и экипажи некоторых кораблей Балтийского флота, март1921 и выступление против большевиков. Состав участников — конкретный новый собственный факт сверх prompt+названия ключа, не просто повтор месяца или общего «восстание».',refs(0))}
+groups=[{'group':g,'literal':v,'canonicalSHA256':sha(v),'individualGround':grounds[g][0],'sourcesLocators':grounds[g][1]} for g,v in gs.items()]
+plaus=[
+'FIX: название реального российского протестного события сопоставимой длины, но шествие к царю1905 и его расстрел не правдоподобны как антибольшевистское выступление при буквальном prompt. Вместе с другими двумя дистракторами даёт систематическое исключение.',
+'FIX: восстание — та же широкая категория события, но известная дореволюционная/царская эпоха декабристов делает его явно несостоятельным именно по антибольшевистскому квалификатору; не требуется знать1921.',
+'FIX: политическая революция относится к близкой эпохе, однако направлена против монархии и предшествует установлению большевистской власти. Сочетание с двумя остальными царскими событиями обнажает ключ.',
+'Единственный фактически подходящий вариант; по длине и грамматике ключ не выделен. Но текущий ряд делает его единственным, который не исключается общей политической хронологией; это дефект ряда, а не ошибочный ключ.']
+truth=[
+'Неверный вариант по первичному контексту:9(22)января1905, шествие рабочих к царю, а не март1921/против большевиков.',
+'Неверный вариант:14(26)декабря1825, выступление против самодержавия, а не март1921/против большевиков.',
+'Неверный вариант:Февраль1917 и падение монархии; не Кронштадтское выступление1921.',
+'Правильный и единственный истинный вариант: L63 прямо именует восстание и даёт март1921/против большевиков. L64 подтверждает подавление.']
+variants=[]
+for i,a in enumerate(q['answers']):
+ tr={'prompt':q['prompt'],'answer':a['text'],'note':a['note']};variants.append({'slot':i,**tr,'tripleCanonicalSHA256':sha(tr),'grammar':'«'+q['prompt']+'» — «'+a['text']+'»: согласованная самостоятельная именная конструкция; название и note грамматически корректны.','plausibility':plaus[i],'truthUniqueKey':truth[i],'noteTruthUsefulness':grounds['note'+str(i)][0],'sourcesLocators':refs(0,[1,2,3,0][i]) if i<3 else refs(0)})
+e={'id':q['id'],'topicId':T['topicId'],'sourceOrder':91,'stage':'INITIAL','cycle':0,'currentCard':q,'currentCardCanonicalSHA256':sha(q),'status':'FIX','sixLiteralCanonicalGroups':groups,'fourFullPromptAnswerNoteVariants':variants,'absoluteLevel':{'frozen':'medium','assessment':'Самостоятельное знание связи Кронштадтского восстания с мартом1921 тематическое и может соответствовать MEDIUM. Текущий способ предъявления не удерживает этот уровень: все три дистрактора относятся к царской эпохе и исключаются словом «антибольшевистское» на базовой последовательности политических режимов. Менять frozen difficulty нельзя; требуется исправить prompt/ряд и повторно оценить затронутые связи.'},'correctNoteExtraFact':{'status':'SUPPORTED','fact':'В восстании участвовали гарнизон Кронштадта и экипажи некоторых кораблей Балтийского флота. Ни prompt, ни key состава участников не содержат.','sourcesLocators':refs(0)},'defects':[defect],'frozen':T['frozen']}
+receipt={'readerNativeId':N,'date':'2026-10-23','role':'independent','stage':'INITIAL','catalogCommit':T['catalogCommit'],'qualityCredit':0,'entries':[e]}
+reads=[
+'Лично прочитан весь фактически сохранённый body turn4view0 L0–158,12919символов. L63 дата/название/против большевиков/гарнизон и экипажи/требования; L64 скорое подавление. Подтверждение относится к самому тексту, не sourceIndex или алиасу.',
+'Лично прочитан весь body turn2view0 L0–123,7244символа. L45–52:9(22)января1905, шествие к царю, расстрел. Авторский sourceOutputLocator ошибочно именует turn4view0; здесь указан реальный turn2view0 из original output. Содержательная ссылка самостоятельно установлена чтением, raw не изменён.',
+'Лично прочитан полный сохранённый batch body12725символов: turn3view0 L0–140 и отдельный failed-fetch error turn3view1. L44 Санкт-Петербург/декабрь1825/против самодержавия; L54–62 монархический кризис и ход восстания. Error не используется как источник.',
+'Лично прочитан весь body turn1view0 L0–130,8556символов. L50–52 февраль1917; L53–58 новые органы власти; L59–60 отречение и свержение самодержавия.']
+sources=[]
+for i,s in enumerate(S):
+ p=C/s['path'];assert raw(p)==s['sha256'];v=rd(p)
+ for k in s['completeOutputPointer'].strip('/').split('/'):v=v[int(k)] if isinstance(v,list) else v[k]
+ body=hashlib.sha256(v.encode()).hexdigest();assert body==s['completeOutputSHA256'];sources.append({'path':s['path'],'url':s['url'],'rawReadSHA256':raw(p),'completeOutputPointer':s['completeOutputPointer'],'completeOutputSHA256':body,'actualReturnedCharacters':len(v),'locator':exactloc[i],'personalReadEvidence':reads[i],'readDate':'2026-10-23','limitations':'Только сохранённый original output. Никаких новых network/refetch/retry/alternative; авторские и coordinator semantic judgments не наследуются.'})
+sourceDoc={'readerNativeId':N,'sources':sources,'formatHistory':{'path':str((D/'source91-original-format-diagnostics.json').relative_to(C)),'rawSHA256':raw(D/'source91-original-format-diagnostics.json'),'originalMechanicalFAILsPreserved':True,'meaning':'Прочитан исходный diagnostic. Пустые redundant explanation references и технический qualified alias не доказывают содержание. Содержание explanation и участников независимо проверено по лично прочитанному original turn4view0 L63–64.'},'attemptFences':'Все старые HOLD/consumedcycles/SOURCE16/86→89 fences сохранены; SOURCE90 FIX не переоткрыт.','qualityCredit':0}
+selected={'history-russia':['history-russia-kronstadt-year','history-russia-bloody-sunday-event','history-russia-decembrist-year','history-russia-decembrists-square','history-russia-monarchy-ended','history-russia-revolution-1917-month','history-russia-dual-power-1917','history-russia-pugachev-rebellion','history-russia-nep-introduction','history-russia-civil-war-colors','history-russia-port-arthur-war','history-russia-abdication-emperor','history-russia-june-third-coup'],'history-united-kingdom':['history-united-kingdom-sample-04']}
+models={
+q['id']:('антибольшевистское выступление марта1921','идентифицируется как','Кронштадтское восстание','событие российской истории'),
+'history-russia-bloody-sunday-event':('расстрел шествия рабочих9(22)января1905','именуется','Кровавое воскресенье','Петербург/царская власть'),
+'history-russia-decembrist-year':('восстание декабристов','датируется годом','1825','выступление против самодержавия'),
+'history-russia-decembrists-square':('восстание декабристов','произошло на площади','Сенатская площадь','Санкт-Петербург/декабрь1825'),
+'history-russia-monarchy-ended':('падение монархии/отречениеНиколаяII','вызвано событием','Февральская революция','1917/Россия'),
+'history-russia-revolution-1917-month':('Октябрьская революция','означает событие','приход большевиков к власти','осень1917'),
+'history-russia-dual-power-1917':('двоевластие','имеет два центра','Временное правительство и Петроградский совет','после Февраля1917'),
+'history-russia-pugachev-rebellion':('восстание1773–1775','возглавлялось','Емельян Пугачёв','Поволжье/Приуралье'),
+'history-russia-nep-introduction':('замена военного коммунизма1921','являлась политикой','Новая экономическая политика','экономическое управление Советской России'),
+'history-russia-civil-war-colors':('основные стороны Гражданской войны','назывались','красные и белые','Россия/военные лагеря'),
+'history-russia-port-arthur-war':('оборона Порт-Артура','принадлежит войне','Русско-японская война','1904–1905'),
+'history-russia-abdication-emperor':('отречение марта1917','совершено императором','НиколайII','российский престол'),
+'history-russia-june-third-coup':('роспуск Второй Думы и новый избирательный закон','именуется','Третьеиюньский переворот','1907/Россия'),
+'history-united-kingdom-sample-04':('митинг за парламентскую реформу в Манчестере1819','завершился событием','Питерлоо','Британия/разгон кавалерией')}
+prose={
+'history-russia-bloody-sunday-event':'CURRENT91 спрашивает Кронштадт1921, peer56 именует расстрел1905. Разные событие/дата/политический контекст. Note неверного варианта peer56 действительно содержит базовый факт про Кронштадт, но это не его MAIN; MAIN56 не отвечает91, и91 не устанавливает название события1905.',
+'history-russia-decembrist-year':'91 идентифицирует антибольшевистское событие1921, peer26 датирует другое восстание1825. Не обратная связь того же восстания: разные entity/value/context. Знание любого из двух MAIN не устанавливает другого.',
+'history-russia-decembrists-square':'91 — событие по дате/направленности,55 — площадь выступления декабристов. Ни дата1921, ни имя Кронштадта не дают Сенатскую площадь1825; знание площади не даёт91. Разные связи.',
+'history-russia-monarchy-ended':'91 — вооружённый протест против большевиков1921,53 — революция, свергшая монархию1917. Февраль присутствует как distractor91, но его собственный MAIN другой; ни одно отношение не является прямым обращением второго.',
+'history-russia-revolution-1917-month':'Октябрь1917→приход большевиков к власти и март1921→восстание против них относятся к разным событиям и политическим отношениям. Дата/имя восстания не дают определение Октября и наоборот; прямого обращения нет.',
+'history-russia-dual-power-1917':'Два центра власти1917 — отдельная институциональная связь, а не идентификация восстания1921. Ни ключ «Кронштадт», ни ключ о двух центрах не является ответом другого MAIN.',
+'history-russia-pugachev-rebellion':'Общее слово «восстание» не совпадение:91 идентифицирует событие1921,86 спрашивает лидера восстания1773–1775. Субъекты, отношение, значение и эпоха различны в обе стороны; HOLD86 не принимается заново.',
+'history-russia-nep-introduction':'Общий1921 и контекст военного коммунизма:38 спрашивает экономическую политику,91 — название вооружённого выступления. НЭП не отвечает91, Кронштадт не отвечает38. Причинный фон не превращает две связи в прямую/обратную пару.',
+'history-russia-civil-war-colors':'Названия лагерей Гражданской войны и имя конкретного восстания1921 — разные уровни/связи. Против большевиков не тождественно ключу «красные и белые»; ни один MAIN не является обращением другого.',
+'history-russia-port-arthur-war':'Прочитана именно неизменённая INITIALFIX90, не cycle1proposal.90 оборона1904–1905→война,91 март1921→восстание. Разные event/relation/context;91 не получает ответа из90 и наоборот. FIX90 не переоценивается.',
+'history-russia-abdication-emperor':'81 идентифицирует императора отречения1917,91 восстание1921. Политическая смена эпохи сама по себе не совпадение фактологии MAIN; никакого прямого обращения нет.',
+'history-russia-june-third-coup':'98 именует думский переворот1907;91 восстание1921. Одни неверные варианты фигурируют в обоих рядах, но основные отношения/даты/ключи не совпадают в обе стороны.',
+'history-united-kingdom-sample-04':'UK99 спрашивает Питерлоо1819,91 Кронштадт1921. Лексический hit «Кровавое воскресенье» только в неверном варианте UK относится к1887, а не российскому1905; MAIN99 не отвечает91 и наоборот. Нет общего entity/relation/value/context.'}
+pe=[]
+for topic,ids in selected.items():
+ for n,card in enumerate(rd(C/f'src/content/topics/{topic}.json')['questions'],1):
+  if card['id'] in ids:pe.append({'id':card['id'],'topicId':topic,'sourceOrder':n,'card':card,'canonicalSHA256':sha(card),'sourcePath':f'src/content/topics/{topic}.json','fileSHA256':raw(C/f'src/content/topics/{topic}.json')})
+by={p['id']:p for p in pe}
+def side(i):
+ p=by[i];return {'id':i,'canonicalSHA256':p['canonicalSHA256'],'MAIN':dict(zip(['entity','relation','value','context'],models[i])),'key':p['card']['answers'][p['card']['correctIndex']]['text']}
+pairs=[{'left':side(q['id']),'right':side(i),'bilateralGround':s,'directReverseCheck':'Сопоставлены обе полные actual cards: обращение связи CURRENT91 не воспроизводит MAIN peer; конкретные различия в bilateralGround.','result':'DISTINCT_MAIN'} for i,s in prose.items()]
+rows=[];bindings=[];hits=[];pattern=r'Кронштад|антибольшев|1921|Тамбов|Антонов|Керенск|Махно|Кровав.{0,6}воскрес|декабрист|Февральск'
+for p in sorted((C/'src/content/topics').glob('*.json')):
+ qs=rd(p)['questions'];bindings.append({'path':str(p.relative_to(C)),'rawSHA256':raw(p),'questionCount':len(qs)})
+ for card in qs:
+  row={'topicId':p.stem,'id':card['id'],'prompt':card['prompt'],'answers':[a['text'] for a in card['answers']],'correctIndex':card['correctIndex']};rows.append(row)
+  if re.search(pattern,row['prompt']+' '+' '.join(row['answers']),re.I):hits.append(row)
+peerDoc={'readerNativeId':N,'actualCurrentPeers':pe,'bilateralMainComparisons':pairs,'latestProposalSnapshots':[],'globalMAINRetrieval':{'topicFiles':len(bindings),'rows':len(rows),'rowsCanonicalSHA256':sha(rows),'fileBindings':bindings,'query':pattern,'hits':hits,'limitations':'Retrieval is mechanical. All100 history-russia MAIN prompts+keys personally read in preceding unchanged slice, relevant full actual cards personally read in INITIAL91. Unrelated1921 Turkey/Spain/cinema hits do not express Russian uprising relation; full-catalog semantic review not claimed.'},'catalog90Guard':'Exact INITIALFIX90 current card retained. Unapplied note3cycle1 proposal not treated as actual.'}
+qa=rd(T['qa']);assert qa['success'] and qa['numPassedTests']==19 and qa['numFailedTests']==qa['numPendingTests']==0 and raw(T['qa'])==T['qaSHA256']
+fs=list(Path('/Users/eaafonasev/.codex/sessions/2026/10/22').glob('*-'+N+'.jsonl'));assert len(fs)==1;jr=[json.loads(l) for l in fs[0].open()];assert [v['payload']['id'] for v in jr if v.get('type')=='session_meta']==[N];comp=sum(v.get('type')=='compacted' for v in jr);assert comp<2
+verification={'readerNativeId':N,'catalogCommit':T['catalogCommit'],'catalogRawSHA256':raw(C/'src/content/topics/history-russia.json'),'currentCardCanonicalSHA256':sha(q),'existingQA19':{'path':str(Path(T['qa']).relative_to(C)),'rawSHA256':raw(T['qa']),'pass':19,'fail':0,'pending':0,'meaning':'Existing exact shared90+91 report read/hash-bound; no reviewer QA run, no inherited content verdict.'},'nativeJournal':str(fs[0]),'session_meta':N,'actualCompactions':comp,'source91OriginalMechanicalFAILsPreserved':True,'mechanicalChecks':{'sixLiteralGroups':len(groups),'fourWholeVariants':len(variants),'sourceFileHashes':len(sources),'actualPeers':len(pe),'bilateralPairs':len(pairs),'frozenMatch':q['id']==T['frozen']['id'] and q['difficulty']==T['frozen']['difficulty'] and q['correctIndex']==T['frozen']['correctIndex'] and by[q['id']]['sourceOrder']==91,'answerUTF16Lengths':[len(a['text'].encode('utf-16-le'))//2 for a in q['answers']],'noteWordCounts':[len(a['note'].split()) for a in q['answers']],'explanationWordCount':len(q['explanation'].split()),'explanationSentences':2},'notRun':['Git/binder','tests/runtime/browser/build/full suite','network/refetch/retry','human/device acceptance'],'integration':'Not assessed: Git forbidden; catalogCommit is assignment binding, not verified branch/integration.'}
+for g in groups:assert sha(g['literal'])==g['canonicalSHA256']
+for v in variants:assert sha({k:v[k] for k in ['prompt','answer','note']})==v['tripleCanonicalSHA256'] and all(v[k] for k in ['grammar','plausibility','truthUniqueKey','noteTruthUsefulness','sourcesLocators'])
+for p in pe:assert sha(p['card'])==p['canonicalSHA256']
+for name,value in [('receipt.json',receipt),('sources.json',sourceDoc),('peers.json',peerDoc),('verification.json',verification)]:
+ p=O/name;assert p.parent==O and not p.exists();p.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'status':'FIX','id':q['id'],'defects':[defect['code']],'outputDirectory':str(O),'sourceEntries':len(sources),'actualPeers':len(pe),'bilateralPairs':len(pairs),'actualCompactions':comp,'qualityCredit':0},ensure_ascii=False))
