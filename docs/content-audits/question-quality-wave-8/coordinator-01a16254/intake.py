@@ -286,7 +286,19 @@ for R in packet_paths:
             assert {v['id'] for v in full}=={q['id'] for q in topic['questions']}-{e['id']}
             assert ps['sameTopicMAIN']['questions']==topic['questions'] and len(topic['questions'])==100
             assert ps['sameTopicMAIN']['fileSHA256']==m.raw(C/ps['sameTopicMAIN']['path'])
-            assert all(v['card']==topic['questions'][v['sourceOrder']-1] for v in full)
+            checkpoint=m.read(P/'openspec/changes/question-quality-future-waves/current-checkpoint.json')
+            frozen_topic=json.loads(subprocess.check_output(['git','-C',str(C),'show',checkpoint['baselineSHA']+':'+ps['sameTopicMAIN']['path']]))
+            assert [q['id'] for q in frozen_topic['questions']]==[q['id'] for q in topic['questions']]
+            positions={q['id']:(i,q) for i,q in enumerate(topic['questions'],1)}
+            absent_orders=[]
+            for v in full:
+                position,body=positions[v['id']]
+                assert v['card']==body
+                if 'sourceOrder' in v:assert v['sourceOrder']==position
+                else:
+                    absent_orders.append(v['id']);v['sourceOrder']=position
+            if absent_orders:
+                ps['technicalExplicitPeerOrderAlias']={'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':m.raw(R/'peer-snapshot.json'),'originalSourceOrderAbsentFor':absent_orders,'originalFullTopicPointer':'/sameTopicMAIN/questions','frozenOrderCommit':checkpoint['baselineSHA'],'operation':'Exact peer ID/full body maps to existing explicit100-topic position, additionally identical to frozen baseline ID order. Original field absence and raw retained; no peer body or semantic judgment changed.'}
         assert all(v['topicId']==e['topicId'] and v['id']==v['card']['id'] and m.sha(v['card'])==v.get('sha256',v.get('canonicalSHA256')) for v in full)
         ps['technicalCompleteInlineSnapshotNoInventoryHydration']={'originalOptionalInventoryLocator':global_audit['inventoryPath'],'originalOptionalTopicInventoryLocator':original_topic_locator,'actualPeerCount':len(full),'candidateExcludedFromDistinctPeers':len(full)==99,'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':m.raw(R/'peer-snapshot.json'),'operation':'No inventory file read or SHA invented. Use already explicit full100 topic bodies, all110 raw file bindings and original11000 row digest, validated by unchanged downstream checks. Optional locator remains untrusted metadata; author raw and semantic grounds unchanged. A99peer list excludes self and remains unchanged.'}
     if 'inventoryPath' in global_audit and 'sourceInventoryPath' not in global_audit and 'sourceInventoryPath' in sp:
