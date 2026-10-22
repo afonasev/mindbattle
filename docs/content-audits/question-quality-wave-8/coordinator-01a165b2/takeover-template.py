@@ -18,6 +18,7 @@ flow=mod('flow',C/'tools/flow.py').Flow(P);sv=mod('private',P/'evidence/question
 for r in idx:assert raw(idx[r])==expected[r]
 assert read(P/'.flow-leases.json')=={} and all(flow.get(cid)[1]['owner'] is None for cid in h['claims'])
 cp_path=pathlib.Path(h['canonicalCheckpoint']);cp=read(cp_path);assert cp['owner'] is cp['activeCoordinator'] is None and len(cp['currentEligibleCompletedIds'])==n and len(cp['currentRemainingIds'])==2000-n
+assert all(w['owner'] is None for w in cp['waves'] if w['changeId'] in h['claims'] and 'owner' in w), 'Per-wave release must be verified before any successor writes'
 selected={v['questionId'] for v in cp['selectedCards']};done=set(cp['currentEligibleCompletedIds']);remaining=set(cp['currentRemainingIds']);assert len(selected)==2000 and len(done)==n and len(remaining)==2000-n and not done&remaining and done|remaining==selected
 cat={}
 for p in (C/'src/content/topics').glob('*.json'):cat.update({q['id']:q for q in read(p)['questions']})

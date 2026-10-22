@@ -21,6 +21,8 @@ for z in ack['exactNativeVerificationCallsAndResults']:walk(z['result']['payload
 assert codes and all(n==0 for n in codes)
 ack['exactVerificationExitCodes']=codes;m.write(D/'successor-ack.json',ack)
 assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and m.read(m.P/'.flow-leases.json')=={}
+precp=m.read(pathlib.Path(x['canonicalCheckpoint']));assert precp['owner']==m.O
+assert all(w['owner'] in {m.O,None} for w in precp['waves'] if w['changeId'] in x['claims'] and 'owner' in w)
 for root,key in [(m.C,'code'),(m.P,'planning')]:assert m.raw(pathlib.Path(m.h.git(root,'rev-parse','--path-format=absolute','--git-path','index')))==x['foreignIndexes'][key]
 print('preReleaseCode',m.savecode([pathlib.Path(__file__),D/'successor-ack.json'],'Preserve supported exact4 release procedure and successful native ACK verification'))
 phase='EXACT4_RELEASED_PENDING_SUCCESSOR_CLAIM'
@@ -30,6 +32,8 @@ with m.flow.locked():m.flow.lease('acquire','planning',m.O)
 try:
  assert m.raw(planningIndex)==expectedPlanningIndex
  with m.flow.locked():
+  livecp=m.read(pathlib.Path(x['canonicalCheckpoint']));assert livecp['owner']==m.O
+  assert all(w['owner'] in {m.O,None} for w in livecp['waves'] if w['changeId'] in x['claims'] and 'owner' in w)
   for cid in x['claims']:
    assert m.raw(planningIndex)==expectedPlanningIndex and m.read(m.P/'.flow-leases.json').get('planning',{}).get('owner')==m.O
    m.flow.release(cid,m.O)
