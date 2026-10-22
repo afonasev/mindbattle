@@ -46,6 +46,8 @@ task_path = D/('reader-'+label+'-initial-task.json')
 m.write(task_path, t)
 x['actors']['reviewer'].update(stage='START_INITIAL_'+label.upper(), task=str(task_path),
                               expected='One exact INITIAL '+label+'; assess specific blocker at30min')
+x['retainedIdleReviewer']=None
+x['noRetainedIdleReviewer']=True
 x['currentWork']={'id':q['id'], 'topicId':'human-medicine', 'sourceOrder':order,
                   'stage':'START_INITIAL_'+label.upper(), 'sourceFreeze':qualified_freeze,
                   'rawAuthorFreeze':raw_freeze, 'catalogCommit':catalog_commit,

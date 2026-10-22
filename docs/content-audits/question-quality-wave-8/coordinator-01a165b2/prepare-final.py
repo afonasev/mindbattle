@@ -43,6 +43,8 @@ task_path = D/('reader-'+label+'-final-task.json')
 m.write(task_path, t)
 x['actors']['reviewer'].update(stage='START_FINAL_'+label.upper(), task=str(task_path),
                               expected='One directed FINAL '+label+' PASS/HOLD; no further ordinary cycle')
+x['retainedIdleReviewer']=None
+x['noRetainedIdleReviewer']=True
 x['currentWork']={'id':q['id'], 'topicId':'human-medicine', 'sourceOrder':order,
                   'stage':'START_FINAL_'+label.upper(), 'sourceFreeze':qualified_freeze,
                   'rawAuthorFreeze':raw_freeze, 'catalogCommit':catalog_commit,
