@@ -1,0 +1,374 @@
+{
+  "owner": "01a16107-081b-7890-b1af-009ebf21f35b",
+  "allCompletedRootNonzeroExecResults": [
+    {
+      "resultLine": 2061,
+      "exactCall": {
+        "timestamp": "2026-10-22T05:35:13.308Z",
+        "ordinal": 2057,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_020603905a88addc016ad9a089e7548191b88480b0437ba6be",
+          "status": "completed",
+          "call_id": "call_bc1e6281c3a9468ea8b92abe3b9ffa7d",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -B - <<'PY'\\nimport json,pathlib\\nuid='01a16219-3cd8-7172-9dbf-779df704ffb1';ps=list(pathlib.Path('/Users/eaafonasev/.codex/sessions').rglob('*'+uid+'.jsonl'));assert len(ps)==1;rs=[json.loads(l) for l in ps[0].open()];assert rs[0]['payload']['id']==uid;print(json.dumps({'native':str(ps[0]),'calls':[r['payload']['input'] for r in rs if r.get('payload',{}).get('type')=='custom_tool_call']},ensure_ascii=False))\\ndef walk(v):\\n if isinstance(v,str):\\n  try:yield from walk(json.loads(v))\\n  except (ValueError,TypeError):pass\\n elif isinstance(v,list):\\n  for y in v:yield from walk(y)\\n elif isinstance(v,dict):\\n  if 'exit_code' in v:yield v\\n  for y in v.values():yield from walk(y)\\nout=[o for r in rs if r.get('payload',{}).get('type')=='custom_tool_call_output' for o in walk(r['payload'])];C=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle');fs=[C/'docs/content-audits/question-quality-wave-8'/s for s in ['coordinator-01a14377/pinned-question-revision-12e5581b.md','coordinator-01a13f31/packet-contract.json','coordinator-01a1593a/method-pilot.md','coordinator-01a1593a/packet-format.md']];assert all(o['exit_code']==0 and 'Warning: truncated output' not in o['output'] for o in out);assert all(any(o['output']==f.read_text() for o in out) for f in fs);assert sum(r['type']=='compacted' for r in rs)==0;print(json.dumps({'full4BytesExact':True,'allExit0':True,'actualCompactions':0}))\\nPY\",\"max_output_tokens\":2600}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792647305.9064865
+          }
+        }
+      },
+      "exactOriginalResult": {
+        "timestamp": "2026-10-22T05:35:14.052Z",
+        "ordinal": 2060,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a1621b-3a84-7322-822d-957ae19a8399",
+          "call_id": "call_bc1e6281c3a9468ea8b92abe3b9ffa7d",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.1 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"d906dc\",\"wall_time_seconds\":0.00001,\"exit_code\":1,\"original_token_count\":456,\"output\":\"{\\\"native\\\": \\\"/Users/eaafonasev/.codex/sessions/2026/10/22/rollout-2026-10-22T10-33-03-01a16219-3cd8-7172-9dbf-779df704ffb1.jsonl\\\", \\\"calls\\\": [\\\"const r = await tools.exec_command({cmd:\\\\\\\"wc -c docs/content-audits/question-quality-wave-8/coordinator-01a14377/pinned-question-revision-12e5581b.md && cat docs/content-audits/question-quality-wave-8/coordinator-01a14377/pinned-question-revision-12e5581b.md\\\\\\\",workdir:\\\\\\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\\\\\\\",yield_time_ms:10000,max_output_tokens:5000}); text(JSON.stringify(r));\\\\n\\\", \\\"const r = await tools.exec_command({cmd:\\\\\\\"wc -c docs/content-audits/question-quality-wave-8/coordinator-01a13f31/packet-contract.json && cat docs/content-audits/question-quality-wave-8/coordinator-01a13f31/packet-contract.json\\\\\\\",workdir:\\\\\\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\\\\\\\",yield_time_ms:10000,max_output_tokens:5000}); text(JSON.stringify(r));\\\\n\\\", \\\"const r = await tools.exec_command({cmd:\\\\\\\"wc -c docs/content-audits/question-quality-wave-8/coordinator-01a1593a/method-pilot.md && cat docs/content-audits/question-quality-wave-8/coordinator-01a1593a/method-pilot.md\\\\\\\",workdir:\\\\\\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\\\\\\\",yield_time_ms:10000,max_output_tokens:5000}); text(JSON.stringify(r));\\\\n\\\", \\\"const r = await tools.exec_command({cmd:\\\\\\\"wc -c docs/content-audits/question-quality-wave-8/coordinator-01a1593a/packet-format.md && cat docs/content-audits/question-quality-wave-8/coordinator-01a1593a/packet-format.md\\\\\\\",workdir:\\\\\\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\\\\\\\",yield_time_ms:10000,max_output_tokens:4000}); text(JSON.stringify(r));\\\\n\\\"]}\\nTraceback (most recent call last):\\n  File \\\"<stdin>\\\", line 12, in <module>\\nAssertionError\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792647314.052199
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      },
+      "exitCodes": [
+        1
+      ]
+    },
+    {
+      "resultLine": 2072,
+      "exactCall": {
+        "timestamp": "2026-10-22T05:35:52.387Z",
+        "ordinal": 2068,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_020603905a88addc016ad9a0a6d61481919f2f2c1511a058d1",
+          "status": "completed",
+          "call_id": "call_ffa15d60387441a1850a75da49d98fd5",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -B - <<'PY'\\nimport pathlib,json,importlib.util\\nD=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16107');s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m);uid='01a16219-3cd8-7172-9dbf-779df704ffb1';p=next(pathlib.Path('/Users/eaafonasev/.codex/sessions').rglob('*'+uid+'.jsonl'));rs=[json.loads(l) for l in p.open()];assert rs[0]['payload']['id']==uid\\n# Only the exact wc-one-file header + complete cat bytes declared by each original call is accepted.\\ndef walk(v):\\n if isinstance(v,str):\\n  try:yield from walk(json.loads(v))\\n  except (ValueError,TypeError):pass\\n elif isinstance(v,list):\\n  for y in v:yield from walk(y)\\n elif isinstance(v,dict):\\n  if 'exit_code' in v:yield v\\n  for y in v.values():yield from walk(y)\\nout=[o for r in rs if r.get('payload',{}).get('type')=='custom_tool_call_output' for o in walk(r['payload'])];files=[m.C/'docs/content-audits/question-quality-wave-8'/s for s in ['coordinator-01a14377/pinned-question-revision-12e5581b.md','coordinator-01a13f31/packet-contract.json','coordinator-01a1593a/method-pilot.md','coordinator-01a1593a/packet-format.md']];assert len(out)==4 and all(o['exit_code']==0 and 'Warning: truncated output' not in o['output'] for o in out);checks=[]\\nfor o,f in zip(out,files):\\n header,body=o['output'].split('\\\\n',1);assert header.split()==[str(f.stat().st_size),str(f.relative_to(m.C))] and body==f.read_text();checks.append({'file':str(f),'fileSHA256':m.raw(f),'wcHeaderExactDeclaredFileAndSize':True,'completeCatBodyByteEqual':True,'exit_code':o['exit_code']})\\nroot=pathlib.Path('/Users/eaafonasev/.codex/sessions/2026/10/22/rollout-2026-10-22T05-33-33-01a16107-081b-7890-b1af-009ebf21f35b.jsonl');rr=[json.loads(l) for l in root.open()];hits=[]\\nfor i,r in enumerate(rr,1):\\n c=r.get('payload',{})\\n if c.get('type')=='custom_tool_call' and \\\"uid='01a16219-3cd8-7172-9dbf-779df704ffb1'\\\" in c.get('input','') and \\\"o['output']==f.read_text()\\\" in c['input']:\\n  outs=[(j,z) for j,z in enumerate(rr,1) if z.get('payload',{}).get('type')=='custom_tool_call_output' and z['payload'].get('call_id')==c['call_id']];assert len(outs)==1;objs=list(walk(outs[0][1]['payload']));assert any(v['exit_code']==1 for v in objs);hits.append({'callLine':i,'exactCall':r,'resultLine':outs[0][0],'exactOriginalResult':outs[0][1]})\\nassert len(hits)==1\\nrp=D/'source78-bootstrap-wc-header-projection-diagnostic.json';m.write(rp,{'owner':m.O,'sourceNativeId':uid,'originalFailedRootVerifier':hits[0],'cause':'Root expected cat-only output although exact original call was wc -c onefile && cat samefile. No actor read failure, no write before mismatch.','checks':checks,'readOrNetworkReplay':False,'qualityCredit':0,'actualCompactions':sum(r['type']=='compacted' for r in rs)});print(m.savecode([rp],'Preserve bootstrap78 original projection FAIL and exact wc header/full cat verification'));print(json.dumps({'all4ExecExit0':True,'all4WholeBodiesExact':True,'originalVerifierExit1Preserved':True,'noReadReplay':True}))\\nPY\",\"max_output_tokens\":1700}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792647334.8389244
+          }
+        }
+      },
+      "exactOriginalResult": {
+        "timestamp": "2026-10-22T05:35:53.040Z",
+        "ordinal": 2071,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a1621b-d2d0-7901-9968-9887f2718d26",
+          "call_id": "call_ffa15d60387441a1850a75da49d98fd5",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"ab5ae8\",\"wall_time_seconds\":0.000009542,\"exit_code\":1,\"original_token_count\":23,\"output\":\"Traceback (most recent call last):\\n  File \\\"<stdin>\\\", line 20, in <module>\\nAssertionError\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792647353.0404
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      },
+      "exitCodes": [
+        1
+      ]
+    },
+    {
+      "resultLine": 2249,
+      "exactCall": {
+        "timestamp": "2026-10-22T05:47:07.444Z",
+        "ordinal": 2245,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_020603905a88addc016ad9a352fca88191b5e08c797fcb161d",
+          "status": "completed",
+          "call_id": "call_86bf467012fb4baebd3995cb4539c641",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -B - <<'PY'\\nimport pathlib,json,re\\nD=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16107');x=json.loads((D/'manifest.json').read_text());out={}\\nfor n in [75,76,77]:\\n a=x['actors'][f'author{n}'];rs=[json.loads(l) for l in pathlib.Path(a['nativeJournal']).open()];writes=[];unknown=[]\\n for i,r in enumerate(rs,1):\\n  p=r.get('payload',{})\\n  if p.get('type') not in ['custom_tool_call','function_call']:continue\\n  s=p.get('input',p.get('arguments',''));g=re.search(r'cmd\\\\s*:\\\\s*(\\\"(?:[^\\\"\\\\\\\\]|\\\\\\\\.)*\\\")',s)\\n  if g:\\n   cmd=json.loads(g.group(1));ls=cmd.splitlines()\\n   if any(re.search(r'write_text|write_bytes|mkdir|open\\\\(.*[\\\\'\\\\\\\"]w[\\\\'\\\\\\\"]|f\\\\.write\\\\(',l) for l in ls):\\n    writes.append({'line':i,'writeAndDestinationLines':[(j+1,l) for j,l in enumerate(ls) if re.search(r'write|mkdir|/tmp|Path\\\\(|^\\\\s*(OUT|O|out|ROOT|root|base|BASE|R|B|target|p)\\\\s*=',l)]})\\n  elif any(t in s for t in ['write_text','writeFile','write_bytes','mkdir','/tmp','apply_patch']):unknown.append({'line':i,'exactInput':s})\\n out[str(n)]={'writers':writes,'nonstandardWriteForms':unknown,'allCallNames':sorted(set(r['payload']['name'] for r in rs if r.get('payload',{}).get('type') in ['custom_tool_call','function_call']))}\\nprint(json.dumps(out,ensure_ascii=False,indent=2))\\nPY\",\"max_output_tokens\":5000}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792648018.9918287
+          }
+        }
+      },
+      "exactOriginalResult": {
+        "timestamp": "2026-10-22T05:47:07.774Z",
+        "ordinal": 2248,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a16226-1e7e-7f82-abb7-3c2a34189c64",
+          "call_id": "call_86bf467012fb4baebd3995cb4539c641",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.1 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"569b9d\",\"wall_time_seconds\":0.000009667,\"exit_code\":1,\"original_token_count\":125,\"output\":\"Traceback (most recent call last):\\n  File \\\"<stdin>\\\", line 4, in <module>\\n  File \\\"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_local.py\\\", line 537, in open\\n    return io.open(self, mode, buffering, encoding, errors, newline)\\n           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nFileNotFoundError: [Errno 2] No such file or directory: '/Users/eaafonasev/.codex/sessions/2026/10/22/rollout-2026-10-22T06-23-07-01a16134-6bba-7dd1-94b6-b8a539de33ac.jsonl'\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792648027.774521
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      },
+      "exitCodes": [
+        1
+      ]
+    },
+    {
+      "resultLine": 2377,
+      "exactCall": {
+        "timestamp": "2026-10-22T05:56:03.050Z",
+        "ordinal": 2373,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_020603905a88addc016ad9a57141e08191a71ac88199053900",
+          "status": "completed",
+          "call_id": "call_5130f42ae8d54bf4855ad878ccecdd71",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16107/preserve-packet.py 77 author77 source-history-russia77-cycle1\",\"max_output_tokens\":1800}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792648561.3093007
+          }
+        }
+      },
+      "exactOriginalResult": {
+        "timestamp": "2026-10-22T05:56:03.506Z",
+        "ordinal": 2376,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a1622e-4b32-7a11-98c9-a5659eabbd0b",
+          "call_id": "call_5130f42ae8d54bf4855ad878ccecdd71",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"4225d1\",\"wall_time_seconds\":0.207551,\"exit_code\":1,\"original_token_count\":104,\"output\":\"Traceback (most recent call last):\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16107/preserve-packet.py\\\", line 70, in <module>\\n    assert len(rows)==11000 and m.sha(rows)==ps['globalMAIN']['rowsCanonicalSHA256']\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792648563.506345
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      },
+      "exitCodes": [
+        1
+      ]
+    },
+    {
+      "resultLine": 2677,
+      "exactCall": {
+        "timestamp": "2026-10-22T06:19:27.638Z",
+        "ordinal": 2673,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_020603905a88addc016ad9aae2b9f881918438829bf6252169",
+          "status": "completed",
+          "call_id": "call_4ce3f4d348a44455a6be2ccd606b78f9",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -B - <<'PY'\\nimport pathlib,json,importlib.util,collections\\nD=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16107');s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m);R=D/'independent-history-russia77-cycle1-final';I=D/'independent-history-russia77-initial';checks=[]\\ndef walk(v,path):\\n if isinstance(v,dict):\\n  if {'originalRawPath','originalRawSHA256','originalJSONPointer','allOriginalFieldText'}<=set(v):\\n   p=pathlib.Path(v['originalRawPath']);assert p.parent==I and m.raw(p)==v['originalRawSHA256'];old=m.read(p)\\n   for k in v['originalJSONPointer'].split('/')[1:]:\\n    k=k.replace('~1','/').replace('~0','~');old=old[int(k)] if isinstance(old,list) else old[k]\\n   assert old==v['allOriginalFieldText'];checks.append({'finalPointer':path,'sourcePath':str(p),'rawSHA256':m.raw(p),'originalPointer':v['originalJSONPointer'],'allOriginalFieldsTextEqual':True})\\n  for k,w in v.items():walk(w,path+'/'+k)\\n elif isinstance(v,list):\\n  for k,w in enumerate(v):walk(w,path+'/'+str(k))\\nfor n in ['receipt.json','sources.json','peers.json','verification.json']:walk(m.read(R/n),n)\\nold=m.read(I/'receipt.json')['entries'][0];new=m.read(R/'receipt.json')['entries'][0];assert len(checks)>=28\\nfor k in ['absoluteLevel','correctNoteExtraFact']:assert new[k]==old[k]\\nfor a,b in zip(old['sixLiteralCanonicalGroups'],new['sixLiteralCanonicalGroups']):\\n if a['group']!='prompt_ordered_answers_key':assert a['literal']==b['literal'] and a['individualGround']==b['individualGround']\\n else:assert a['individualGround']!=b['individualGround']\\nfor a,b in zip(old['fourFullPromptAnswerNoteVariants'],new['fourFullPromptAnswerNoteVariants']):\\n for k in ['plausibility','truthUniqueKey','noteTruthUsefulness','sourcesLocators']:assert a[k]==b[k]\\np=D/'verification-history-russia77-final-own-initial-reuse.json';m.write(p,{'owner':m.O,'readerNativeId':m.read(R/'receipt.json')['readerNativeId'],'checks':checks,'unchanged5GroupsLevelExtraExact':True,'newSlot2AndRowGrammarSeparate':True,'onlySlot2CardLiteralChange':True,'sourceRawInventoryOriginalFAILPreserved':True,'uncured78AndPriorDeviationsRemain':True,'qualityCredit':0});print(m.savecode([p],'Verify same-reader FINAL77 own INITIAL exact raw pointers and factual judgment text'));print(json.dumps({'exactReuseChecks':len(checks),'byOriginalFile':dict(collections.Counter(pathlib.Path(c['sourcePath']).name for c in checks)),'unchanged5GroupsLevelExtraExact':True}))\\nPY\",\"max_output_tokens\":1700}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792649954.7374303
+          }
+        }
+      },
+      "exactOriginalResult": {
+        "timestamp": "2026-10-22T06:19:28.661Z",
+        "ordinal": 2676,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a16243-bc15-7780-abe4-32a2251fefba",
+          "call_id": "call_4ce3f4d348a44455a6be2ccd606b78f9",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"14df31\",\"wall_time_seconds\":0.000010666,\"exit_code\":1,\"original_token_count\":23,\"output\":\"Traceback (most recent call last):\\n  File \\\"<stdin>\\\", line 20, in <module>\\nAssertionError\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792649968.661612
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      },
+      "exitCodes": [
+        1
+      ]
+    },
+    {
+      "resultLine": 2719,
+      "exactCall": {
+        "timestamp": "2026-10-22T06:25:20.583Z",
+        "ordinal": 2715,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_020603905a88addc016ad9ac4e7bf88191b9862ace0802d2b3",
+          "status": "completed",
+          "call_id": "call_ca6346b435054179844c8ce30186566b",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16107/bind-current-receipt.py /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16107/case-history-russia77-final-pass.json --verify-only\",\"max_output_tokens\":2200}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792650318.490039
+          }
+        }
+      },
+      "exactOriginalResult": {
+        "timestamp": "2026-10-22T06:25:20.862Z",
+        "ordinal": 2718,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a16249-1bdd-7b12-a5d7-f50db5fb90d3",
+          "call_id": "call_ca6346b435054179844c8ce30186566b",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"398426\",\"wall_time_seconds\":0.009111208,\"exit_code\":1,\"original_token_count\":103,\"output\":\"Traceback (most recent call last):\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16107/bind-current-receipt.py\\\", line 109, in <module>\\n    if 'key' in p:assert p['key']==card['answers'][card['correctIndex']]['text']\\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792650320.861979
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      },
+      "exitCodes": [
+        1
+      ]
+    },
+    {
+      "resultLine": 2958,
+      "exactCall": {
+        "timestamp": "2026-10-22T06:34:17.339Z",
+        "ordinal": 2952,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_020603905a88addc016ad9ae651f008191983a4ff41933f91e",
+          "status": "completed",
+          "call_id": "call_fc17773f886d4fa8b7330be8c3591a01",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16107/bind-current-receipt.py /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16107/case-history-russia78-initial-pass.json\",\"max_output_tokens\":1200}));\ntext(await tools.mcp__codex_app__set_thread_archived({threadId:\"01a16219-3cd8-7172-9dbf-779df704ffb1\",archived:true}));\ntext(await tools.exec_command({cmd:\"python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16107/record-progress.py 78 author78 CERTIFIED_INITIAL_CONTENT_PASS_WITH_UNCURED_DUPLICATE_AURORA 8fb\",\"max_output_tokens\":1000}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792650853.145558
+          }
+        }
+      },
+      "exactOriginalResult": {
+        "timestamp": "2026-10-22T06:34:19.119Z",
+        "ordinal": 2957,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a16251-526f-7081-8300-e427de09e4b8",
+          "call_id": "call_fc17773f886d4fa8b7330be8c3591a01",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 1.7 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"1d6d63\",\"wall_time_seconds\":1.141275208,\"exit_code\":0,\"original_token_count\":37,\"output\":\"code ff69614bdc9b083380ef046a7b90a26543048d23\\nplanning e519de58a5a01609932e6d2bc87dd4fe748beee8\\nprojection c85c7171c755713ad0bda58d295dbc9a5b3e7df8\\n\"}"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"threadId\\\":\\\"01a16219-3cd8-7172-9dbf-779df704ffb1\\\",\\\"archived\\\":true}\"}],\"isError\":false}"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"bd987c\",\"wall_time_seconds\":0.000009709,\"exit_code\":1,\"original_token_count\":431,\"output\":\"fatal: invalid object name '8fb'.\\nTraceback (most recent call last):\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16107/record-progress.py\\\", line 13, in <module>\\n    assert m.h.git(m.C,'show',certificateCommit+':'+str(certificatePath.relative_to(m.C))).encode()==certificatePath.read_bytes().rstrip(b'\\\\n')\\n           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/Users/eaafonasev/Projects/mindbattle/planning/evidence/question-revision-process-v2/private-save-helper-01a13cb1.py\\\", line 3, in git\\n    def git(root,*args,env=None,input=None):return subprocess.check_output(['git','-C',str(root),*args],env=env,input=input).decode().strip()\\n                                                   ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py\\\", line 472, in check_output\\n    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,\\n           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n               **kwargs).stdout\\n               ^^^^^^^^^\\n  File \\\"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py\\\", line 577, in run\\n    raise CalledProcessError(retcode, process.args,\\n                             output=stdout, stderr=stderr)\\nsubprocess.CalledProcessError: Command '['git', '-C', '/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle', 'show', '8fb:docs/content-audits/question-quality-wave-8/coordinator-01a16107/certification-history-russia78.json']' returned non-zero exit status 128.\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792650859.119609
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      },
+      "exitCodes": [
+        1
+      ]
+    }
+  ],
+  "count": 7,
+  "meaning": "Original technical failures retained independently of content QA. Includes root record-progress78 called with invalid8fb commit before any write; corrected exact certificate ff69614 then succeeded. No tests rerun or assertions weakened. Earlier archive-path/bootstrap/self-alias/reuse/literal-key diagnoses retained in own dedicated artifacts.",
+  "contentQAFailureCount": 0,
+  "qualityCredit": 0
+}
