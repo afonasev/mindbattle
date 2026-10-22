@@ -275,10 +275,20 @@ for R in packet_paths:
         assert original_topic_locator is None or global_audit['inventoryPath']==original_topic_locator
         assert len(global_audit['allCurrentFileByteBindings'])==110
         full=ps['actualCurrentPeers']
-        assert len(full)==100 and [v['sourceOrder'] for v in full]==list(range(1,101))
-        assert [v['card'] for v in full]==topic['questions']
+        if len(full)==100:
+            assert [v['sourceOrder'] for v in full]==list(range(1,101))
+            assert [v['card'] for v in full]==topic['questions']
+        else:
+            # Explicit full topic remains100; a distinct-peer list may omit
+            # the candidate itself. Do not invent a self peer or read the
+            # optional undigested inventory file to fill that list.
+            assert len(full)==99
+            assert {v['id'] for v in full}=={q['id'] for q in topic['questions']}-{e['id']}
+            assert ps['sameTopicMAIN']['questions']==topic['questions'] and len(topic['questions'])==100
+            assert ps['sameTopicMAIN']['fileSHA256']==m.raw(C/ps['sameTopicMAIN']['path'])
+            assert all(v['card']==topic['questions'][v['sourceOrder']-1] for v in full)
         assert all(v['topicId']==e['topicId'] and v['id']==v['card']['id'] and m.sha(v['card'])==v.get('sha256',v.get('canonicalSHA256')) for v in full)
-        ps['technicalCompleteInlineSnapshotNoInventoryHydration']={'originalOptionalInventoryLocator':global_audit['inventoryPath'],'originalOptionalTopicInventoryLocator':original_topic_locator,'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':m.raw(R/'peer-snapshot.json'),'operation':'No inventory file read or SHA invented. Use already explicit full100 bodies, all110 raw file bindings and original11000 row digest, validated by unchanged downstream checks. Optional locator remains untrusted metadata; author raw and semantic grounds unchanged.'}
+        ps['technicalCompleteInlineSnapshotNoInventoryHydration']={'originalOptionalInventoryLocator':global_audit['inventoryPath'],'originalOptionalTopicInventoryLocator':original_topic_locator,'actualPeerCount':len(full),'candidateExcludedFromDistinctPeers':len(full)==99,'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':m.raw(R/'peer-snapshot.json'),'operation':'No inventory file read or SHA invented. Use already explicit full100 topic bodies, all110 raw file bindings and original11000 row digest, validated by unchanged downstream checks. Optional locator remains untrusted metadata; author raw and semantic grounds unchanged. A99peer list excludes self and remains unchanged.'}
     if 'inventoryPath' in global_audit and 'sourceInventoryPath' not in global_audit and 'sourceInventoryPath' in sp:
         inv_path=pathlib.Path(global_audit['inventoryPath'])
         inv_path=inv_path if inv_path.is_absolute() else C/inv_path
