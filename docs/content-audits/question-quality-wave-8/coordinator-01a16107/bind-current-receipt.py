@@ -4,7 +4,13 @@ C=pathlib.Path(__file__).resolve().parents[4];D=pathlib.Path(__file__).parent;P=
 def rd(p):return json.loads(pathlib.Path(p).read_text())
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
-def wr(p,v):pathlib.Path(p).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def wr(p,v):
+ p=pathlib.Path(p)
+ if P in p.parents:
+  assert rd(P/'.flow-leases.json').get('planning',{}).get('owner')==O
+  index=pathlib.Path(subprocess.check_output(['git','--no-optional-locks','-C',str(P),'rev-parse','--path-format=absolute','--git-path','index'],text=True).strip())
+  assert raw(index)==rd(D/'manifest.json')['foreignIndexes']['planning']
+ p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
 def load(n,p):
  s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 def digest(p):return p.get('sha256',p.get('canonicalSHA256'))
