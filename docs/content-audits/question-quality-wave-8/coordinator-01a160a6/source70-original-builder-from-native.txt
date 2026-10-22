@@ -1,0 +1,87 @@
+import json, hashlib, pathlib, copy
+base=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a160a6')
+out=base/'source-history-russia70'
+inv=json.loads((out/'fresh-inventory-after69.json').read_text())
+peers={r['sourceOrder']:r for r in inv['actualCurrentPeers'] if r.get('sourceOrder') in [64,66,70,77,83,85]}
+before=copy.deepcopy(peers[70]['card'])
+canon=lambda x: json.dumps(x,ensure_ascii=False,separators=(',',':')).encode()
+sha=lambda x: hashlib.sha256(x).hexdigest()
+beforehash=sha(canon(before))
+assert beforehash=='c4637f7705f67ce5b1ef159742bbd6b4d64f074448b252d1bd693f327f79fac6'
+after=copy.deepcopy(before)
+after['prompt']='Какой государственный орган впервые созвали в Русском государстве в 1549 году?'
+after['answers'][0]={'text':'Земский собор','note':'Земский собор был сословно-представительным органом Московского государства.'}
+after['answers'][1]={'text':'Государственная дума','note':'Первая Государственная дума Российской империи начала работу 10 мая 1906 года.'}
+after['answers'][2]={'text':'Правительствующий сенат','note':'Пётр I учредил Сенат в 1711 году; он стал высшим органом государственной власти и законодательства.'}
+after['answers'][3]={'text':'Государственный совет','note':'В 1811 году министры являлись членами Государственного совета.'}
+after['explanation']='В 1549 году при Иване IV был созван первый Земский собор — сословно-представительный орган Московского государства. В 1550 году был принят новый Судебник.'
+after['source']={'title':'Видеолекторий об Иване Грозном и его эпохе | Президентская библиотека имени Б.Н. Ельцина','url':'https://www.prlib.ru/node/657362','verifiedAt':'2026-10-22'}
+afterhash=sha(canon(after))
+fieldgroups={}
+def fg(name,b,a): fieldgroups[name]={'beforeCanonicalSHA256':sha(canon(b)),'afterCanonicalSHA256':sha(canon(a))}
+fg('prompt_ordered_answers_key',{'prompt':before['prompt'],'answers':[x['text'] for x in before['answers']],'correctIndex':before['correctIndex']},{'prompt':after['prompt'],'answers':[x['text'] for x in after['answers']],'correctIndex':after['correctIndex']})
+fg('explanation',before['explanation'],after['explanation'])
+for i in range(4): fg(f'note{i}',before['answers'][i]['note'],after['answers'][i]['note'])
+entry={'id':before['id'],'topicId':'history-russia','sourceOrder':70,'status':'READY_FOR_INDEPENDENT_REVIEW','beforeCard':before,'beforeHash':beforehash,'proposedCard':after,'afterHash':afterhash,'fieldGroups':fieldgroups,'proposedCardCanonicalSHA256':afterhash}
+candidate={'owner':'01a160a6-2f23-7d91-84b9-0ec38f7a34b1','sourceNativeId':'01a160da-3c7a-75a3-be77-d26f5c7e888d','stage':'SOURCE_HISTORY_RUSSIA70_READY','cycle':0,'qualityCredit':0,'scope':{'id':before['id'],'topicId':'history-russia','sourceOrder':70,'frozen':{'difficulty':'hard','correctIndex':0}},'history':{'preimage':{'baselineCode':'27ca2631c29cc791fb2bbd07c07d34c2a568b58e','beforeHash':beforehash,'currentInventory':'docs/content-audits/question-quality-wave-8/coordinator-01a160a6/source-history-russia70/fresh-inventory-after69.json','currentGlobalRowsCanonicalSHA256':inv['globalMAIN']['rowsCanonicalSHA256']},'previousEvidence':['SOURCE69 applied; catalog frozen pending INITIAL69 verdict. This packet retains its pre-SOURCE69 inventory and uses the documented SOURCE69-only row/file-binding delta.']},'entries':[entry]}
+(out/'candidate.json').write_text(json.dumps(candidate,ensure_ascii=False,indent=2)+'\n')
+# proof grounds
+rawnew='docs/content-audits/question-quality-wave-8/coordinator-01a160a6/source-history-russia70/raw/prlib-ivan-iv-zemsky-sobor.json'
+raw40='docs/content-audits/question-quality-wave-8/coordinator-01a160a6/source-history-russia40/raw/prlib-first-duma-official.json'
+raw64='docs/content-audits/question-quality-wave-8/coordinator-01a160a6/source-history-russia64/raw/prlib-history-claims-original-open.json'
+prompt_group={'prompt':after['prompt'],'answers':[x['text'] for x in after['answers']],'correctIndex':0}
+groups=[
+('prompt_ordered_answers_key',prompt_group,'The Presidential Library page states that Ivan IV convened the first Zemsky Sobor in 1549 and describes it as a class-representative body (L55). It also dates adoption of a new Sudebnik to 1550 (L55), supporting a distinct state-organ chronology. The retained Duma page dates the first Imperial Duma session to 10 May 1906 (L49); the retained Senate article dates its establishment by Peter I to 1711 (618969 L45); and the State Council source records ministers as members in 1811 (619554 L50). The key is therefore uniquely matched by 1549.', 'PRlib node 657362 L55; PRlib node 619233 L49; PRlib history 618969 L45; PRlib history 619554 L50',[rawnew,raw40,raw64]),
+('explanation',after['explanation'],'The Presidential Library page directly states both that the first Zemsky Sobor was convened in 1549 and that a new Sudebnik was adopted in 1550.', 'PRlib node 657362 L55',[rawnew]),
+('note0',after['answers'][0]['note'],'The same page identifies the Zemsky Sobor as a class-representative body; “сословно-представительный” is a concise Russian rendering of that description.', 'PRlib node 657362 L55',[rawnew]),
+('note1',after['answers'][1]['note'],'The Duma source states that the first Duma began sessions on 27 April (10 May) 1906; the proposed note gives the modern-calendar date.', 'PRlib node 619233 L49',[raw40]),
+('note2',after['answers'][2]['note'],'The Senate article states that Peter I established the Governing Senate in 1711 and describes it as the highest state authority and legislative body.', 'PRlib history 618969 L45',[raw64]),
+('note3',after['answers'][3]['note'],'The retained State Council/ministry source states that in 1811 ministers were members of the State Council.', 'PRlib history 619554 L50',[raw64])]
+literalGroups=[]
+for group,literal,ground,locator,paths in groups:
+ literalGroups.append({'group':group,'literal':literal,'literalSHA256':sha(canon(literal)),'primaryGround':ground,'locator':locator,'sourcePaths':paths})
+assess=[]
+assess_text=[
+('Государственный орган is broad enough for all options; “в 1549 году” and Russian-state context fit each institution historically. The options are parallel named institutions.','Земский собор is uniquely supported by the 1549 first-convocation fact. Its note accurately identifies its representative character without merely repeating the date.'),
+('Государственная дума fits the category and context grammatically as a named institution.','A plausible representative body, but the source dates the first Imperial Duma to 1906, far after 1549; the note gives a useful grounded date.'),
+('Правительствующий сенат is a grammatically consistent institution name and a plausible state organ.','The source places its establishment under Peter I in 1711, so it cannot be the institution first convened in 1549; the note gives a grounded founding date and role.'),
+('Государственный совет is a grammatically consistent institution name and a plausible state organ.','The source locates ministers in the State Council in 1811, centuries after the target date; the note supplies a grounded institutional-era fact.')]
+for i,a in enumerate(after['answers']):
+ paths=groups[i+2][4] if i>0 else [rawnew]
+ locator=groups[i+2][3] if i>0 else 'PRlib node 657362 L55'
+ assess.append({'slot':i,'fullPrompt':after['prompt'],'answer':a['text'],'note':a['note'],'grammar':assess_text[i][0],'plausibilityUniqueKeyAndNoteTruthUsefulness':assess_text[i][1],'sourcePaths':paths,'locator':locator,'tripleSHA256':sha(canon([after['prompt'],a['text'],a['note']]))})
+source_entries=[{'id':before['id'],'status':'READY_FOR_INDEPENDENT_REVIEW','beforeHash':beforehash,'literalGroups':literalGroups,'fourFullPromptAnswerNoteAssessments':assess,'correctNoteNewFact':'The correct note adds the classification of the Zemsky Sobor as a class-representative body, a fact stated on the primary page and not contained in the prompt.','absoluteDifficulty':'Hard is retained as frozen. The prompt asks for a historically specific institution in a 16th-century state context; four state institutions are semantically parallel, with chronology as the discriminating evidence. The wording does not reveal the key.','captureReadProvenance':{'readerNativeId':'01a160da-3c7a-75a3-be77-d26f5c7e888d','nativeJournal':'/Users/eaafonasev/.codex/sessions/2026/10/22/rollout-2026-10-22T04-44-37-01a160da-3c7a-75a3-be77-d26f5c7e888d.jsonl','reviewDate':'2026-10-22','personallyReadCompleteBodies':['https://www.prlib.ru/node/657362','https://www.prlib.ru/node/619233','https://www.prlib.ru/history/618969','https://www.prlib.ru/history/619554']}}]
+rawSources=[]
+for url,path,ptr,bsha,locator in [
+('https://www.prlib.ru/node/657362',rawnew,'/originalRecord/payload/output/1/text','5a8a11d657313e5dfeea0a696955c2d0a3e7cd8785bc8d43abcc31f2f0251306','L55'),
+('https://www.prlib.ru/node/619233',raw40,'/originalRecord/payload/output/1/text','see-retained-source40-proof-index','L44-L53'),
+('https://www.prlib.ru/history/618969',raw64,'/originalRecord/payload/output/1/text','retained-source64-combined-capture','L45'),
+('https://www.prlib.ru/history/619554',raw64,'/originalRecord/payload/output/1/text','retained-source64-combined-capture','L50')]:
+ fp=base/path
+ rawSources.append({'url':url,'path':path,'fileSHA256':sha(fp.read_bytes()) if fp.exists() else 'retained-file-not-in-current-checkout','completeOutputPointer':ptr,'completeOutputSHA256':bsha,'locator':locator,'captureReadProvenance':'Full body read by packet author; preserved raw capture or retained qualifying prior packet.'})
+proof={'owner':candidate['owner'],'sourceNativeId':candidate['sourceNativeId'],'stage':candidate['stage'],'cycle':0,'qualityCredit':0,'rawSources':rawSources,'sourceIndex':[{'title':after['source']['title'],'url':after['source']['url'],'verifiedAt':after['source']['verifiedAt'],'role':'Primary direct support for the target institution, date, representative classification and 1550 Sudebnik fact.','locator':'L55','path':rawnew}],'entries':source_entries,'limitations':['The first-choice Big Encyclopedia fetch timed out; the official Presidential Library page independently supports the main 1549 claim.','The Big Encyclopedia veche article returned HTTP 401. The official Presidential Library veche item returned catalog metadata only, insufficient for the factual note, so Veche was replaced by State Duma using the retained full official Duma source.','The original Britannica Ivan the Terrible URL had already failed in the SOURCE61 attempt fence and was not retried.','The State Council proposal uses the retained official 1811 membership fact; it does not claim a separately established founding date.']}
+(out/'sourceproof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+# peer evidence: reuse inventory projections and include only potentially related current cards
+full=[{'id':r['id'],'topicId':r['topicId'],'sourceOrder':r['sourceOrder'],'card':r['card'],'cardSHA256':r['sha256']} for r in peers.values() if r['sourceOrder']!=70]
+actual=[]
+for r in full:
+ actual.append({'kind':'actualCurrent','peerId':r['id'],'peerFullCardSHA256':r['cardSHA256'],'candidateERVC':{'entity':'first Zemsky Sobor','relation':'first convocation in the Russian state','value':'1549','context':'Ivan IV / sixteenth-century Russian state'},'peerERVC':{'entity':r['id'],'relation':r['card']['prompt'],'value':r['card']['answers'][r['card']['correctIndex']]['text'],'context':r['card']['explanation']},'candidateToPeer':'Distinct asks: candidate identifies the first organ convened in 1549; peer asks a separate founder, constitutional method, assembly identity, or 1613 event. Shared historical institution vocabulary does not make the tested relation/value the same.','peerToCandidate':'The peer’s prompt and key do not answer which organ was first convened in 1549. The 1613 Zemsky Sobor peer shares entity but tests a later election/event, while the candidate tests first convocation in 1549.'})
+peer={'owner':candidate['owner'],'sourceNativeId':candidate['sourceNativeId'],'stage':candidate['stage'],'cycle':0,'qualityCredit':0,'candidate':{'id':before['id'],'topicId':'history-russia','sourceOrder':70,'beforeCard':before,'beforeCardCanonicalSHA256':beforehash,'proposedCard':after,'proposedCardCanonicalSHA256':afterhash,'frozen':{'difficulty':'hard','correctIndex':0},'semanticEntity':'Zemsky Sobor','semanticRelation':'first convened in the Russian state','semanticValue':'1549','semanticContext':'Ivan IV / sixteenth-century Russian state'},'globalMAIN':inv['globalMAIN'],'sameTopicMAIN':inv['sameTopicMAIN'],'fullClosestCurrentPeers':full,'currentGuardRows':[{'peerId':r['id'],'sourceOrder':r['sourceOrder'],'card':r['card']} for r in full],'bilateralCurrentComparisons':actual,'globalLiteralRetrievalOnlyHits':[{'query':'1549','hit':'japanese question mentioning Francisco Xavier; literal year only, no shared tested relation','disposition':'not a semantic peer'}, {'query':'Земский собор','hit':'constitution-1993-method','disposition':'distractor only; asks adoption method in 1993'}, {'query':'Земский собор','hit':'novgorod-assembly','disposition':'distractor only; asks Novgorod assembly name'}, {'query':'Земский собор','hit':'troubles-end-year-event','disposition':'same institution, but tests 1613 election/event rather than first convocation in 1549'}],'genuineProposalPairs':[],'observedNonmatchingProposals':[],'proposalSearchLimitations':['Comparison is limited to the candidate’s source topic and the five full MAIN cards surfaced by the retained targeted search; no whole-catalog reread was performed.','SOURCE69 is applied to the baseline global snapshot via the recorded one-row/file-binding delta. SOURCE70 comparison uses the complete MAIN card as of this snapshot.'],'limitations':['The broad inventory is carried forward from the pre-SOURCE69 snapshot; only SOURCE69 row and its topic-file binding were refreshed.','No claim that this packet’s proposed wording was searched against future catalog changes.'],'actualCurrentPeers':inv['actualCurrentPeers'],'inventoryRevision':inv['inventoryRevision']}
+(out/'peer-snapshot.json').write_text(json.dumps(peer,ensure_ascii=False,indent=2)+'\n')
+log={'owner':candidate['owner'],'sourceNativeId':candidate['sourceNativeId'],'task':'SOURCE70 only','attempts':[{'url':'https://old.bigenc.ru/text/3042245','result':'timeout / fetch returned 400','nativeCallId':'call_4c7864ea75764a30a0602f5b2ce16e57','journalCallLine':329,'journalResultLine':332,'disposition':'Stopped for this source; official PRlib alternative succeeded.'},{'url':'https://www.prlib.ru/node/657362','result':'complete primary page captured and read','nativeCallId':'call_d313df1a7e9142fe8ed6db3965749237','journalCallLine':338,'journalResultLine':341,'capture':rawnew},{'url':'https://bigenc.ru/c/veche-542f8c','result':'HTTP 401','nativeCallId':'call_4b161e9c7d4e41f08ec143c81829729c','journalCallLine':382,'journalResultLine':385,'disposition':'No retry.'},{'url':'https://www.prlib.ru/item/400692','result':'catalog metadata only; no factual body for Veche claim','nativeCallId':'call_91dc3c3a56aa4c21a388f1d80a0758a1','journalCallLine':396,'journalResultLine':399,'disposition':'Insufficient evidence; Veche removed from proposed card.'},{'url':'https://www.britannica.com/biography/Ivan-the-Terrible','result':'not attempted in SOURCE70','disposition':'Existing SOURCE61 failed-attempt fence honored; not refetched.'}],'networkPolicy':'One attempt plus one official alternative per uncovered claim; all attempts exhausted for these claims.'}
+(out/'network-attempt-log.json').write_text(json.dumps(log,ensure_ascii=False,indent=2)+'\n')
+print('wrote packet files; before',beforehash,'after',afterhash)
+PY
+python3 /tmp/build_source70_packet.py
+python3 - <<'PY'
+import json,pathlib,hashlib
+p=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a160a6/source-history-russia70')
+for f in ['candidate.json','sourceproof.json','peer-snapshot.json','network-attempt-log.json']:
+ d=json.loads((p/f).read_text()); print(f,'valid JSON',len((p/f).read_bytes()),'bytes')
+c=json.loads((p/'candidate.json').read_text()); e=c['entries'][0]
+canon=lambda x: json.dumps(x,ensure_ascii=False,separators=(',',':')).encode()
+assert hashlib.sha256(canon(e['beforeCard'])).hexdigest()==e['beforeHash']
+assert hashlib.sha256(canon(e['proposedCard'])).hexdigest()==e['afterHash']
+assert e['beforeCard']['id']==e['proposedCard']['id'] and e['beforeCard']['difficulty']==e['proposedCard']['difficulty']=='hard'
+assert e['beforeCard']['correctIndex']==e['proposedCard']['correctIndex']==0
+print('hashes/frozen fields verified; groups',list(e['fieldGroups']))
