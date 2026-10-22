@@ -9,6 +9,7 @@ comp=sum(o['type']=='compacted' for o in journal);last=next(o['payload']['info']
 a,sp,ps=[m.read(R/f) for f in ['candidate.json','sourceproof.json','peer-snapshot.json']]
 assert all(v['sourceNativeId']==uid for v in [a,sp,ps])
 m.alias_source77_own_prior_application(a,sp,ps,R)
+m.alias_source83_clarified_literals(a,sp,ps,R)
 m.alias_single_sourceproof_entry(a,sp)
 m.alias_explicit_peer_inventory_projection(a,sp,ps,R)
 assert len(a['entries'])==len(sp['entries'])==1

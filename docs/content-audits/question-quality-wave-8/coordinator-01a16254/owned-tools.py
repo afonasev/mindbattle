@@ -153,6 +153,41 @@ def alias_explicit_peer_inventory_projection(candidate,sp,ps,R):
  ps['technicalExplicitProjectedTopicSnapshotAlias']={'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'inventoryPath':str(path),'inventorySHA256':raw(path),'operation':'Exact original top-level path/SHA,100MAIN projections,110filebindings,11000rowdigest and same-topic fileSHA bind the full100 bodies already retained by this author. Inventory count100 is not assessed-peer credit; only original fullClosestCurrentPeers are substantive peers. No unbound hydration, new peer assessment, literal or source ground.'}
 
 
+def alias_source83_clarified_literals(candidate,sp,ps,R):
+ """Bind two author-clarified literal copies; original raw and grounds stay intact."""
+ if candidate['entries'][0]['sourceOrder']!=83 or candidate.get('cycle')!=0:return
+ R=pathlib.Path(R);assert R==D/'source-history-russia83'
+ uid='01a1627c-8cb4-7b52-b8b1-7f6752217e7f'
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']==uid
+ cp=R/'literal-binding-clarification.json';clar=read(cp)
+ assert clar['sourceNativeId']==uid and clar['networkCalls']==clar['cycle']==clar['qualityCredit']==0
+ freeze='463701e1cb541566022b1f042f32981a6153b761'
+ for name,proof in clar['originalPacketFiles'].items():
+  p=R/name;assert raw(p)==proof['sha256']
+  assert p.read_bytes()==__import__('subprocess').check_output(['git','-C',str(C),'show',freeze+':'+str(p.relative_to(C))])
+ e=candidate['entries'][0];assert sha(e['proposedCard'])==e['afterHash']==clar['originalPacketFiles']['candidate.json']['afterHash']
+ if isinstance(e['fieldGroups'],list):
+  original=e['fieldGroups'];assert len(original)==6 and {g['group'] for g in original}=={'prompt_ordered_answers_key','explanation','note0','note1','note2','note3'}
+  assert all(set(g)=={'group','beforeCanonicalSHA256','afterCanonicalSHA256'} for g in original)
+  e['originalFieldGroupsList']=original
+  e['fieldGroups']={g['group']:{k:v for k,v in g.items() if k!='group'} for g in original}
+  e['technicalFieldGroupsListAlias']='Six explicit distinct named before/after hash entries projected to dictionary; original ordered list retained unchanged.'
+ def pointer(value,path):
+  for key in path.split('/')[1:]:value=value[int(key)] if isinstance(value,list) else value[key]
+  return value
+ assert {v['group'] for v in clar['bindings']}=={'explanation','note2'} and len(clar['bindings'])==2
+ for b in clar['bindings']:
+  g=pointer(sp,b['originalSourceproofPointer']);literal=pointer(candidate,b['existingCandidatePointer'])
+  assert g['group']==b['group'] and g['literal']==b['originalLiteral'] and g['literalSHA256']==b['originalLiteralSHA256']==sha(g['literal'])
+  assert g['primaryGround']==b['unchangedPrimaryGround'] and g['sourcePaths']==b['unchangedSourcePaths'] and g['locator']==b['unchangedLocator']
+  assert literal==b['intendedLiteral'] and sha(literal)==b['intendedLiteralSHA256']==e['fieldGroups'][b['group']]['afterCanonicalSHA256']
+  if b['group']=='note2':
+   assert pointer(sp,b['existingVariantPointer'])['note']==literal
+   assert pointer(sp,b['existingCorrectNoteNewFactPointer'])['newFact']==literal
+  g['originalLiteralBindingBeforeClarification']={'literal':g['literal'],'literalSHA256':g['literalSHA256']}
+  g.update(literal=literal,literalSHA256=sha(literal))
+ sp['technicalAuthorClarifiedLiteralBinding']={'path':str(cp),'rawSHA256':raw(cp),'originalPacketFreeze':freeze,'temporalBoundary':clar['temporalBoundary'],'operation':'Two stale literal copies bound to already-emitted exact candidate and explicit author clarification. Original raw, all grounds/locators/source paths and judgments retained; no new source claim or quality credit.'}
+
 def alias_source77_own_prior_application(candidate,sp,ps,R):
  """Exact own77 preapplication bookkeeping delta; no inventory-file hydration."""
  if candidate.get('cycle')!=1 or candidate['entries'][0]['sourceOrder']!=77:return

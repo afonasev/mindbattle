@@ -17,6 +17,7 @@ for R in packet_paths:
     name = R.name; B = D/('qualified-'+name)
     candidate, sp, ps = [m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
     m.alias_source77_own_prior_application(candidate,sp,ps,R)
+    m.alias_source83_clarified_literals(candidate,sp,ps,R)
     m.alias_explicit_peer_inventory_projection(candidate,sp,ps,R)
     m.alias_serialized_prompt_group(candidate,sp)
     m.alias_full_prompt_answer_concatenation(candidate,sp)
