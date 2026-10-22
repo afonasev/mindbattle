@@ -1,0 +1,143 @@
+{
+  "owner": "01a16107-081b-7890-b1af-009ebf21f35b",
+  "sourceNativeId": "01a16219-3cd8-7172-9dbf-779df704ffb1",
+  "originalRootFailures": [
+    {
+      "callLine": 2058,
+      "exactCall": {
+        "timestamp": "2026-10-22T05:35:13.308Z",
+        "ordinal": 2057,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_020603905a88addc016ad9a089e7548191b88480b0437ba6be",
+          "status": "completed",
+          "call_id": "call_bc1e6281c3a9468ea8b92abe3b9ffa7d",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -B - <<'PY'\\nimport json,pathlib\\nuid='01a16219-3cd8-7172-9dbf-779df704ffb1';ps=list(pathlib.Path('/Users/eaafonasev/.codex/sessions').rglob('*'+uid+'.jsonl'));assert len(ps)==1;rs=[json.loads(l) for l in ps[0].open()];assert rs[0]['payload']['id']==uid;print(json.dumps({'native':str(ps[0]),'calls':[r['payload']['input'] for r in rs if r.get('payload',{}).get('type')=='custom_tool_call']},ensure_ascii=False))\\ndef walk(v):\\n if isinstance(v,str):\\n  try:yield from walk(json.loads(v))\\n  except (ValueError,TypeError):pass\\n elif isinstance(v,list):\\n  for y in v:yield from walk(y)\\n elif isinstance(v,dict):\\n  if 'exit_code' in v:yield v\\n  for y in v.values():yield from walk(y)\\nout=[o for r in rs if r.get('payload',{}).get('type')=='custom_tool_call_output' for o in walk(r['payload'])];C=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle');fs=[C/'docs/content-audits/question-quality-wave-8'/s for s in ['coordinator-01a14377/pinned-question-revision-12e5581b.md','coordinator-01a13f31/packet-contract.json','coordinator-01a1593a/method-pilot.md','coordinator-01a1593a/packet-format.md']];assert all(o['exit_code']==0 and 'Warning: truncated output' not in o['output'] for o in out);assert all(any(o['output']==f.read_text() for o in out) for f in fs);assert sum(r['type']=='compacted' for r in rs)==0;print(json.dumps({'full4BytesExact':True,'allExit0':True,'actualCompactions':0}))\\nPY\",\"max_output_tokens\":2600}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792647305.9064865
+          }
+        }
+      },
+      "resultLine": 2061,
+      "exactOriginalResult": {
+        "timestamp": "2026-10-22T05:35:14.052Z",
+        "ordinal": 2060,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a1621b-3a84-7322-822d-957ae19a8399",
+          "call_id": "call_bc1e6281c3a9468ea8b92abe3b9ffa7d",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.1 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"d906dc\",\"wall_time_seconds\":0.00001,\"exit_code\":1,\"original_token_count\":456,\"output\":\"{\\\"native\\\": \\\"/Users/eaafonasev/.codex/sessions/2026/10/22/rollout-2026-10-22T10-33-03-01a16219-3cd8-7172-9dbf-779df704ffb1.jsonl\\\", \\\"calls\\\": [\\\"const r = await tools.exec_command({cmd:\\\\\\\"wc -c docs/content-audits/question-quality-wave-8/coordinator-01a14377/pinned-question-revision-12e5581b.md && cat docs/content-audits/question-quality-wave-8/coordinator-01a14377/pinned-question-revision-12e5581b.md\\\\\\\",workdir:\\\\\\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\\\\\\\",yield_time_ms:10000,max_output_tokens:5000}); text(JSON.stringify(r));\\\\n\\\", \\\"const r = await tools.exec_command({cmd:\\\\\\\"wc -c docs/content-audits/question-quality-wave-8/coordinator-01a13f31/packet-contract.json && cat docs/content-audits/question-quality-wave-8/coordinator-01a13f31/packet-contract.json\\\\\\\",workdir:\\\\\\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\\\\\\\",yield_time_ms:10000,max_output_tokens:5000}); text(JSON.stringify(r));\\\\n\\\", \\\"const r = await tools.exec_command({cmd:\\\\\\\"wc -c docs/content-audits/question-quality-wave-8/coordinator-01a1593a/method-pilot.md && cat docs/content-audits/question-quality-wave-8/coordinator-01a1593a/method-pilot.md\\\\\\\",workdir:\\\\\\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\\\\\\\",yield_time_ms:10000,max_output_tokens:5000}); text(JSON.stringify(r));\\\\n\\\", \\\"const r = await tools.exec_command({cmd:\\\\\\\"wc -c docs/content-audits/question-quality-wave-8/coordinator-01a1593a/packet-format.md && cat docs/content-audits/question-quality-wave-8/coordinator-01a1593a/packet-format.md\\\\\\\",workdir:\\\\\\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\\\\\\\",yield_time_ms:10000,max_output_tokens:4000}); text(JSON.stringify(r));\\\\n\\\"]}\\nTraceback (most recent call last):\\n  File \\\"<stdin>\\\", line 12, in <module>\\nAssertionError\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792647314.052199
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    },
+    {
+      "callLine": 2069,
+      "exactCall": {
+        "timestamp": "2026-10-22T05:35:52.387Z",
+        "ordinal": 2068,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_020603905a88addc016ad9a0a6d61481919f2f2c1511a058d1",
+          "status": "completed",
+          "call_id": "call_ffa15d60387441a1850a75da49d98fd5",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -B - <<'PY'\\nimport pathlib,json,importlib.util\\nD=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16107');s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m);uid='01a16219-3cd8-7172-9dbf-779df704ffb1';p=next(pathlib.Path('/Users/eaafonasev/.codex/sessions').rglob('*'+uid+'.jsonl'));rs=[json.loads(l) for l in p.open()];assert rs[0]['payload']['id']==uid\\n# Only the exact wc-one-file header + complete cat bytes declared by each original call is accepted.\\ndef walk(v):\\n if isinstance(v,str):\\n  try:yield from walk(json.loads(v))\\n  except (ValueError,TypeError):pass\\n elif isinstance(v,list):\\n  for y in v:yield from walk(y)\\n elif isinstance(v,dict):\\n  if 'exit_code' in v:yield v\\n  for y in v.values():yield from walk(y)\\nout=[o for r in rs if r.get('payload',{}).get('type')=='custom_tool_call_output' for o in walk(r['payload'])];files=[m.C/'docs/content-audits/question-quality-wave-8'/s for s in ['coordinator-01a14377/pinned-question-revision-12e5581b.md','coordinator-01a13f31/packet-contract.json','coordinator-01a1593a/method-pilot.md','coordinator-01a1593a/packet-format.md']];assert len(out)==4 and all(o['exit_code']==0 and 'Warning: truncated output' not in o['output'] for o in out);checks=[]\\nfor o,f in zip(out,files):\\n header,body=o['output'].split('\\\\n',1);assert header.split()==[str(f.stat().st_size),str(f.relative_to(m.C))] and body==f.read_text();checks.append({'file':str(f),'fileSHA256':m.raw(f),'wcHeaderExactDeclaredFileAndSize':True,'completeCatBodyByteEqual':True,'exit_code':o['exit_code']})\\nroot=pathlib.Path('/Users/eaafonasev/.codex/sessions/2026/10/22/rollout-2026-10-22T05-33-33-01a16107-081b-7890-b1af-009ebf21f35b.jsonl');rr=[json.loads(l) for l in root.open()];hits=[]\\nfor i,r in enumerate(rr,1):\\n c=r.get('payload',{})\\n if c.get('type')=='custom_tool_call' and \\\"uid='01a16219-3cd8-7172-9dbf-779df704ffb1'\\\" in c.get('input','') and \\\"o['output']==f.read_text()\\\" in c['input']:\\n  outs=[(j,z) for j,z in enumerate(rr,1) if z.get('payload',{}).get('type')=='custom_tool_call_output' and z['payload'].get('call_id')==c['call_id']];assert len(outs)==1;objs=list(walk(outs[0][1]['payload']));assert any(v['exit_code']==1 for v in objs);hits.append({'callLine':i,'exactCall':r,'resultLine':outs[0][0],'exactOriginalResult':outs[0][1]})\\nassert len(hits)==1\\nrp=D/'source78-bootstrap-wc-header-projection-diagnostic.json';m.write(rp,{'owner':m.O,'sourceNativeId':uid,'originalFailedRootVerifier':hits[0],'cause':'Root expected cat-only output although exact original call was wc -c onefile && cat samefile. No actor read failure, no write before mismatch.','checks':checks,'readOrNetworkReplay':False,'qualityCredit':0,'actualCompactions':sum(r['type']=='compacted' for r in rs)});print(m.savecode([rp],'Preserve bootstrap78 original projection FAIL and exact wc header/full cat verification'));print(json.dumps({'all4ExecExit0':True,'all4WholeBodiesExact':True,'originalVerifierExit1Preserved':True,'noReadReplay':True}))\\nPY\",\"max_output_tokens\":1700}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792647334.8389244
+          }
+        }
+      },
+      "resultLine": 2072,
+      "exactOriginalResult": {
+        "timestamp": "2026-10-22T05:35:53.040Z",
+        "ordinal": 2071,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a1621b-d2d0-7901-9968-9887f2718d26",
+          "call_id": "call_ffa15d60387441a1850a75da49d98fd5",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"ab5ae8\",\"wall_time_seconds\":0.000009542,\"exit_code\":1,\"original_token_count\":23,\"output\":\"Traceback (most recent call last):\\n  File \\\"<stdin>\\\", line 20, in <module>\\nAssertionError\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1610d-b17f-7132-bb07-d3d2d17f9a43",
+            "create_time": 1792647353.0404
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    }
+  ],
+  "causes": [
+    "First verifier incorrectly expected cat-only output despite explicit wc+cat original commands.",
+    "Second verifier passed full-byte checks but its lineage extractor selected its own in-flight call before result existed; replaced by completed-result-driven exact call_id extraction."
+  ],
+  "checks": [
+    {
+      "file": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a14377/pinned-question-revision-12e5581b.md",
+      "fileSHA256": "8bc3b06d80b0aa94dbb8d375253c5074eda067615ab7e3a2c3845bbfabaff7b9",
+      "declaredWCHeaderExact": true,
+      "wholeCatBodyExact": true,
+      "exit_code": 0
+    },
+    {
+      "file": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a13f31/packet-contract.json",
+      "fileSHA256": "5fd7049ae8bd9e73bf0ea069d83e2e2e5ae7761c44740d27300478b1cc25ce35",
+      "declaredWCHeaderExact": true,
+      "wholeCatBodyExact": true,
+      "exit_code": 0
+    },
+    {
+      "file": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1593a/method-pilot.md",
+      "fileSHA256": "1ff2f0179f01e24134429cb5c05a09802816f33c31d174774f080bee4a08d5bf",
+      "declaredWCHeaderExact": true,
+      "wholeCatBodyExact": true,
+      "exit_code": 0
+    },
+    {
+      "file": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1593a/packet-format.md",
+      "fileSHA256": "27ea05054ba98defdb8da9ae24784ca0230cdf15832f9aa678592f487c88038b",
+      "declaredWCHeaderExact": true,
+      "wholeCatBodyExact": true,
+      "exit_code": 0
+    }
+  ],
+  "actualCompactions": 0,
+  "actorAll4Exit0": true,
+  "qualityCredit": 0,
+  "noActorReadReplay": true,
+  "noQARerun": true
+}
