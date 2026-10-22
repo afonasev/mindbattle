@@ -19,4 +19,5 @@ t['allCurrentAttemptFences']={'path':str(D/'manifest.json'),'pointer':'/newAttem
 a.update(stage='START_SOURCE_'+label.upper(),task=str(D/('source-'+label+'-task.json')),expected='One bounded SOURCE READY/HOLD; no adjacent task')
 x['sourceActorKeys']=list(dict.fromkeys([k for k in x.get('sourceActorKeys',[]) if x['actors'][k]['stage'].startswith('START')]+[key]));assert len(x['sourceActorKeys'])<=2
 x['currentWork']={'id':q['id'],'topicId':topic,'sourceOrder':order,'stage':a['stage'],'CURRENT':x['CURRENT'],'remaining':x['remaining'],'beforeHash':m.sha(q),'wave':wave};x['next']='SOURCE READY/HOLD then preserve raw; qualified READY only may proceed to apply/affected19/independent INITIAL'
+x['noRetainedIdleAuthor']=not any(k.startswith('author') and v['stage'].startswith('IDLE_') and not v.get('archived',False) for k,v in x['actors'].items())
 m.write(pathlib.Path(a['task']),t);m.write(D/'manifest.json',x);print(m.savecode([pathlib.Path(a['task']),D/'manifest.json',pathlib.Path(__file__)],'Prepare untouched exact native SOURCE on owned topic/wave route'))
