@@ -267,13 +267,16 @@ for R in packet_paths:
         assert 'inventorySHA256' not in global_audit and 'inventorySHA256' not in ps['sameTopicMAIN']
         assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
         assert candidate['cycle']==sp['cycle']==ps['cycle']
-        assert global_audit['inventoryPath']==ps['sameTopicMAIN']['inventoryPath']
+        # A locator with no digest is optional metadata. Missing corresponding
+        # topic locator cannot supply proof and must not hydrate an inventory.
+        original_topic_locator=ps['sameTopicMAIN'].get('inventoryPath')
+        assert original_topic_locator is None or global_audit['inventoryPath']==original_topic_locator
         assert len(global_audit['allCurrentFileByteBindings'])==110
         full=ps['actualCurrentPeers']
         assert len(full)==100 and [v['sourceOrder'] for v in full]==list(range(1,101))
         assert [v['card'] for v in full]==topic['questions']
         assert all(v['topicId']==e['topicId'] and v['id']==v['card']['id'] and m.sha(v['card'])==v.get('sha256',v.get('canonicalSHA256')) for v in full)
-        ps['technicalCompleteInlineSnapshotNoInventoryHydration']={'originalOptionalInventoryLocator':global_audit['inventoryPath'],'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':m.raw(R/'peer-snapshot.json'),'operation':'No inventory file read or SHA invented. Use already explicit full100 bodies, all110 raw file bindings and original11000 row digest, validated by unchanged downstream checks. Optional locator remains untrusted metadata; author raw and semantic grounds unchanged.'}
+        ps['technicalCompleteInlineSnapshotNoInventoryHydration']={'originalOptionalInventoryLocator':global_audit['inventoryPath'],'originalOptionalTopicInventoryLocator':original_topic_locator,'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':m.raw(R/'peer-snapshot.json'),'operation':'No inventory file read or SHA invented. Use already explicit full100 bodies, all110 raw file bindings and original11000 row digest, validated by unchanged downstream checks. Optional locator remains untrusted metadata; author raw and semantic grounds unchanged.'}
     if 'inventoryPath' in global_audit and 'sourceInventoryPath' not in global_audit and 'sourceInventoryPath' in sp:
         inv_path=pathlib.Path(global_audit['inventoryPath'])
         inv_path=inv_path if inv_path.is_absolute() else C/inv_path
