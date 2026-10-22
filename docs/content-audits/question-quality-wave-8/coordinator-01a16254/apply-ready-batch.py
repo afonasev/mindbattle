@@ -8,7 +8,11 @@ assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims'])
 reports=[];replacements={};files=[pathlib.Path(__file__)]
 assert len(sys.argv[1:])>=2
 batch_orders=[m.read(D/name/'candidate.json')['entries'][0]['sourceOrder'] for name in sys.argv[1:]]
-batch_label='-'.join(map(str,batch_orders));qa=D/f'qa-source{batch_label}-shared.json';baseline=m.h.git(m.C,'rev-parse','HEAD')
+batch_cycles={m.read(D/name/'candidate.json')['cycle'] for name in sys.argv[1:]}
+assert len(batch_cycles)==1 and next(iter(batch_cycles)) in (0,1)
+batch_label='-'.join(map(str,batch_orders))+('-cycle1' if batch_cycles=={1} else '')
+qa=D/f'qa-source{batch_label}-shared.json';baseline=m.h.git(m.C,'rev-parse','HEAD')
+assert not qa.exists(), 'Never overwrite an earlier exact QA report'
 for name in sys.argv[1:]:
  B=D/name;c=m.read(B/'candidate.json');e=c['entries'][0];topic=e['topicId'];assert topic=='history-russia';ps=m.read(B/'peer-snapshot.json')
  report=a.apply(B,c['sourceNativeId'],[e['sourceOrder']],D/(name+'-apply.json'),qa,pathlib.Path(__file__),qualifyOnly=True,peerSnapshot={'actualCurrentPeers':[p for p in ps['actualCurrentPeers'] if p['topicId']==topic]})
