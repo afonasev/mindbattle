@@ -188,6 +188,48 @@ def alias_source83_clarified_literals(candidate,sp,ps,R):
   g.update(literal=literal,literalSHA256=sha(literal))
  sp['technicalAuthorClarifiedLiteralBinding']={'path':str(cp),'rawSHA256':raw(cp),'originalPacketFreeze':freeze,'temporalBoundary':clar['temporalBoundary'],'operation':'Two stale literal copies bound to already-emitted exact candidate and explicit author clarification. Original raw, all grounds/locators/source paths and judgments retained; no new source claim or quality credit.'}
 
+def alias_source83_cycle1_redundant_snapshot(candidate,sp,ps,R):
+ """Reconcile exact known shared apply; preserve historical full snapshot."""
+ if candidate['entries'][0]['sourceOrder']!=83 or candidate.get('cycle')!=1:return
+ R=pathlib.Path(R);assert R==D/'source-history-russia83-cycle1'
+ uid='01a1627c-8cb4-7b52-b8b1-7f6752217e7f'
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']==uid
+ freeze='f2941aeffbcbc0757507313f92b0ff8bcc57599c'
+ for name in ['candidate.json','sourceproof.json','peer-snapshot.json']:
+  p=R/name;assert p.read_bytes()==__import__('subprocess').check_output(['git','-C',str(C),'show',freeze+':'+str(p.relative_to(C))])
+ topic_path=C/'src/content/topics/history-russia.json';topic=read(topic_path);live=topic['questions']
+ full=ps['actualCurrentPeers'];assert len(full)==6 and [v['sourceOrder'] for v in full]==[50,64,70,74,85,96]
+ assert all(v['card']==live[v['sourceOrder']-1] for v in full)
+ assert all(v['topicId']=='history-russia' and v['id']==v['card']['id'] and sha(v['card'])==v['sha256'] for v in full)
+ assert len(ps['fullClosestCurrentPeers'])==6 and all(v['card']==next(q for q in live if q['id']==v['id']) for v in ps['fullClosestCurrentPeers'])
+ batch=read(D/'source83-84-shared-apply.json')
+ oldbytes=__import__('subprocess').check_output(['git','-C',str(C),'show',batch['baseline']+':src/content/topics/history-russia.json'])
+ old=json.loads(oldbytes)['questions'];assert ps['sameTopicMAIN']['questions']==old
+ assert ps['sameTopicMAIN']['fileSHA256']==hashlib.sha256(oldbytes).hexdigest()
+ assert [i for i,(a,b) in enumerate(zip(old,live),1) if a!=b]==[83,84]
+ derived=__import__('copy').deepcopy(old);applied_bindings=[]
+ for order in [83,84]:
+  app=read(D/f'qualified-source-history-russia{order}-apply.json')['applied'][0]
+  assert old[order-1]==app['beforeCard'] and live[order-1]==app['proposedCard']
+  derived[order-1]=app['proposedCard']
+  applied_bindings.append({'path':str(D/f'qualified-source-history-russia{order}-apply.json'),'rawSHA256':raw(D/f'qualified-source-history-russia{order}-apply.json'),'beforeCanonicalSHA256':sha(app['beforeCard']),'afterCanonicalSHA256':sha(app['proposedCard'])})
+ assert derived==live
+ e=candidate['entries'][0];assert e['beforeCard']==live[82] and e['beforeHash']==sha(live[82])
+ assert ps['candidate']['beforeCard']==live[82] and ps['candidate']['proposedCard']==e['proposedCard']
+ bindings=ps['globalMAIN']['allCurrentFileByteBindings'];files=sorted((C/'src/content/topics').glob('*.json'));assert len(bindings)==len(files)==110
+ assert [b['path'] for b in bindings]==[str(f.relative_to(C)) for f in files]
+ rows=[]
+ for b,f in zip(bindings,files):
+  if f==topic_path:assert b['sha256']==hashlib.sha256(oldbytes).hexdigest()
+  else:assert b['sha256']==raw(f)
+  t=read(f);rows.extend({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']} for q in t['questions'])
+ assert len(rows)==11000 and sha(rows)==ps['globalMAIN']['rowsCanonicalSHA256']
+ proof={'originalRaw':str(R/'peer-snapshot.json'),'rawSHA256':raw(R/'peer-snapshot.json'),'rawFreeze':freeze,'historicalQuestionsPointer':'/sameTopicMAIN/questions','originalQuestionsCanonicalSHA256':sha(old),'explicitFreshRelevantPeersPointer':'/actualCurrentPeers','explicitFreshRelevantPeersCount':6,'currentQuestionsCanonicalSHA256':sha(derived),'oldTopicFileSHA256':hashlib.sha256(oldbytes).hexdigest(),'currentTopicFileSHA256':raw(topic_path),'knownSharedApply':str(D/'source83-84-shared-apply.json'),'exactAppliedBodyBindings':applied_bindings,'changedOrders':[83,84],'preapplicationOnly':True,'inventoryFileHydration':False,'operation':'Original cycle1 retains historical100 full bodies plus6 unchanged fresh relevant peers. Project only exact known applied83/84 before-to-after bodies into the historical full snapshot. All other98 bodies and110 file bindings proven unchanged. Original raw,6 relevant peer bodies and semantic comparisons/grounds remain unchanged. Original full100 is explicitly historical, not called fresh.'}
+ ps['sameTopicMAIN']['questions']=derived
+ ps['sameTopicMAIN']['fileSHA256']=raw(topic_path)
+ next(b for b in bindings if b['path']=='src/content/topics/history-russia.json')['sha256']=raw(topic_path)
+ ps['technicalRedundantSnapshotStageBinding']=proof;sp['technicalRedundantSnapshotStageBinding']=proof
+
 def alias_source77_own_prior_application(candidate,sp,ps,R):
  """Exact own77 preapplication bookkeeping delta; no inventory-file hydration."""
  if candidate.get('cycle')!=1 or candidate['entries'][0]['sourceOrder']!=77:return
