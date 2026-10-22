@@ -3,7 +3,7 @@ import pathlib,importlib.util,datetime,sys
 D=pathlib.Path(__file__).parent
 s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
 x=m.read(D/'manifest.json');cp=m.read(pathlib.Path(x['canonicalCheckpoint']));n=len(cp['currentEligibleCompletedIds']);released='--released' in sys.argv;expectedOwner=None if released else m.O;assert cp['owner']==expectedOwner and n==x['CURRENT'];assert all(m.flow.get(cid)[1]['owner']==expectedOwner for cid in x['claims']);
-if released:assert x['phase']=='EXACT3_RELEASED_PENDING_SUCCESSOR_CLAIM' and x['successorThreadId'] and cp['pendingSuccessor']==x['successorThreadId']
+if released:assert x['phase']=='EXACT4_RELEASED_PENDING_SUCCESSOR_CLAIM' and x['successorThreadId'] and cp['pendingSuccessor']==x['successorThreadId']
 assert m.read(m.P/'.flow-leases.json')=={}
 for root,key in [(m.C,'code'),(m.P,'planning')]:assert m.raw(pathlib.Path(m.h.git(root,'rev-parse','--path-format=absolute','--git-path','index')))==x['foreignIndexes'][key]
 ref='refs/heads/codex/question-quality-wave-6';head=m.h.git(m.C,'rev-parse',ref);m.h.git(m.C,'diff','--check','5508df6f6873d38d08539b2cee1ae488d223cc0d',head);m.h.git(m.C,'push','origin',ref+':'+ref);remote=m.h.git(m.C,'ls-remote','origin',ref).split()[0];assert remote==head
