@@ -47,6 +47,17 @@ for R in packet_paths:
         assert initial['entries'][0]['id'] == e['id'] and initial['entries'][0]['status'] == 'FIX'
         e['originalDirectedFinalStatus'] = e['status']
         e['status'] = 'READY_FOR_INDEPENDENT_REVIEW'
+    if R.name=='source-history-russia91' and candidate['sourceNativeId']=='01a164f2-bdf7-78b1-a2b1-803a3d34a4f0':
+        assert m.raw(R/'sourceproof.json')=='a6000e69e02a40001f14145016e71b1e1867aafc2e19b09101a35b2b2dd7848a'
+        g=next(v for v in sp['entries'][0]['literalGroups'] if v['group']=='explanation')
+        assert g['sourcePaths']==[] and g['locator']=='' and m.sha(g['literal'])=='4cd6070668cb8c22d3252e88815a5bf97e9b2f68b734a2c573713f90c27e5de6'
+        refs=[v for v in sp['rawSources'] if v.get('claimRole')=='MAIN, correct answer and explanation'];assert len(refs)==1
+        ref=refs[0];assert ref['url']=='https://www.prlib.ru/node/619247' and ref['sourceOutputLocator']=='turn4view0 L63-L64'
+        assert ref['captureReadProvenance']['readThisNativeId']==candidate['sourceNativeId'] and ref['captureReadProvenance']['personallyReadRelevantContext'] is True
+        assert ref['captureReadProvenance']['relevantLocator']==ref['sourceOutputLocator'] and 'L64 says it was soon suppressed.' in ref['captureReadProvenance']['claimCoverage']
+        assert 'and suppression.' in sp['sourceIndex']['main'] and ref['sourceOutputLocator'] in sp['sourceIndex']['main']
+        g['technicalAlreadyDeclaredExplanationSourceAlias']={'rawSHA256':m.raw(R/'sourceproof.json'),'originalSourcePaths':[],'originalLocator':'','bindingPointer':'/rawSources/0/claimRole','locatorPointer':'/rawSources/0/sourceOutputLocator','operation':'Exact already-declared explanation role, personally-read provenance and sourceIndex.main coverage relocated into redundant literal-group reference fields only. Raw/literal/ground/digests unchanged; no new source or judgment.'}
+        g['sourcePaths']=[ref['path']];g['locator']=ref['sourceOutputLocator']
     for g in sp['entries'][0]['literalGroups']:
         if g['group'] == 'prompt_ordered_answers_key' and isinstance(g['literal'], str):
             # Lossless shape alias only: candidate already binds the entire
