@@ -1,0 +1,83 @@
+{
+  "sourceNativeId": "01a16571-d8fb-73f2-b41c-1fd35f9ea7cb",
+  "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/23/rollout-2026-10-23T02-08-42-01a16571-d8fb-73f2-b41c-1fd35f9ea7cb.jsonl",
+  "nativeEvidence": {
+    "session_meta_id": "01a16571-d8fb-73f2-b41c-1fd35f9ea7cb",
+    "actualCompactedRecordCount": 0
+  },
+  "scope": "SOURCE97 only; author HOLD then STOP, no SOURCE98.",
+  "deviations": [
+    {
+      "kind": "INITIAL_NATIVE_IDENTITY_AUDIT_FALSE_NEGATIVE",
+      "status": "CORRECTED_WITH_NATIVE_EVIDENCE",
+      "detail": "The initial parser searched response_item/function_call/arguments and returned unique call count 0. This journal uses custom_tool_call/input and custom_tool_call_output/output. Exact creator call call_921ce57c508f4d1ab0a9a87c17cc33fc and matching result record ctco_01a16571-dc06-7670-840c-2997ff264385 were then matched; returned native ID equals session_meta.id and actual compacted count is 0."
+    },
+    {
+      "kind": "MANIFEST_READ_SCOPE_OVERRUN",
+      "status": "UNCURED_AND_PRESERVED",
+      "detail": "A broad Python key filter over the coordinator manifest emitted many predecessor/history fields, contrary to the bounded read scope. It was read-only; no planning or source state changed."
+    },
+    {
+      "kind": "DISCOVERY_QUERY_FANOUT",
+      "status": "UNCURED_AND_PRESERVED",
+      "detail": "One web invocation included four discovery queries before two URLs were opened. PRlib yielded catalog metadata only; official NЭБ alternative yielded (403). No further network requests."
+    },
+    {
+      "kind": "INVENTORY_OUTPUT_DIRECTORY_MISSING",
+      "status": "RECOVERED",
+      "detail": "First assigned helper run failed because the task-owned directory did not exist. Created only that owned output directory and reran successfully; no existing file was overwritten."
+    },
+    {
+      "kind": "RETAINED_SOURCE_POINTER_PARSER_TYPEERROR",
+      "status": "RECOVERED",
+      "detail": "An initial read-only extractor used a string key for an array index and raised TypeError; integer indexing then read the retained body. No files changed."
+    }
+  ],
+  "networkAccounting": {
+    "actualCompactions": 0,
+    "actualWebToolInvocations": 2,
+    "discoverySearchQueries": 4,
+    "openedURLs": 2,
+    "calls": [
+      {
+        "call_id": "call_c18e277e117b4fde90842ed72b38923a",
+        "kind": "search",
+        "queries": [
+          "site:prlib.ru \"Устав о воинской повинности\" 1874",
+          "site:runivers.ru \"Устав о воинской повинности\" 1874",
+          "site:rusneb.ru \"Устав о воинской повинности\" 1874",
+          "site:collection.libraryofcongress.gov 1874 Russian military service statute conscription"
+        ]
+      },
+      {
+        "call_id": "call_2c0b190f44704c5593ae09f7d775403d",
+        "kind": "open",
+        "urls": [
+          "https://www.prlib.ru/item/459960",
+          "https://rusneb.ru/catalog/000199_000009_003545727/"
+        ]
+      }
+    ],
+    "openedURLOutcomes": [
+      {
+        "url": "https://www.prlib.ru/item/459960",
+        "outcome": "Full catalogue page; title and 1 Jan 1874 approval metadata only, no statute text."
+      },
+      {
+        "url": "https://rusneb.ru/catalog/000199_000009_003545727/",
+        "outcome": "(403) Forbidden; no body."
+      }
+    ],
+    "rule": "No further network calls or retries for the key claim in SOURCE97."
+  },
+  "inventoryStability": {
+    "first": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1656b/source-history-russia97/fresh-inventory.json",
+    "second": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1656b/source-history-russia97/fresh-inventory-final.json",
+    "sameGlobalRowsHash": true,
+    "sameGlobalFileByteBindings": true,
+    "sameTopicFileHash": true,
+    "sameTargetHash": true
+  },
+  "tests": "NotRun by source-author scope.",
+  "baselineCode": "1ba052f7dc704a9bd04f60e02625e46db3d1345e"
+}
