@@ -1,6 +1,6 @@
 {
   "owner": "01a16254-5cb1-7583-924e-f17339344af7",
-  "scope": "Exact original nonzero command results through this projection; diagnostic preservation only, no quality or procedural repair",
+  "scope": "Exact original nonzero command results through current projection; includes safe rejection of mistaken FIX-case invocation of PASS-only binder. No assertions weakened, no repeat of that invocation.",
   "actors": {
     "01a16254-5cb1-7583-924e-f17339344af7": {
       "native": "/Users/eaafonasev/.codex/sessions/2026/10/22/rollout-2026-10-22T11-37-38-01a16254-5cb1-7583-924e-f17339344af7.jsonl",
@@ -259,6 +259,370 @@
               "internal_chat_message_metadata_passthrough": {
                 "turn_id": "01a1625a-6c6b-7ac0-b79b-c98a5bf8f2c4",
                 "create_time": 1792652334.66484
+              }
+            },
+            "metadata": {
+              "client_authored": false,
+              "fallback_token_limit_override": 12000
+            }
+          },
+          "nonzeroCodes": [
+            1
+          ]
+        },
+        {
+          "callLine": 1232,
+          "originalCall": {
+            "timestamp": "2026-10-22T07:40:17.646Z",
+            "ordinal": 1231,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call",
+              "id": "ctc_076afef315493132016ad9bddfec54819195d9850e3603cfe9",
+              "status": "completed",
+              "call_id": "call_71c9ab1a69ba437588aaa4ec6b8b9f01",
+              "name": "exec",
+              "input": "text(await tools.exec_command({cmd:\"python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/preserve-packet.py 83 author83\",\"max_output_tokens\":1800}));\n",
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a1625a-6c6b-7ac0-b79b-c98a5bf8f2c4",
+                "create_time": 1792654815.926761
+              }
+            }
+          },
+          "resultLine": 1235,
+          "originalResult": {
+            "timestamp": "2026-10-22T07:40:17.886Z",
+            "ordinal": 1234,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call_output",
+              "id": "ctco_01a1628d-ba5e-7600-ad72-52f69e8fb1c7",
+              "call_id": "call_71c9ab1a69ba437588aaa4ec6b8b9f01",
+              "output": [
+                {
+                  "type": "input_text",
+                  "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+                },
+                {
+                  "type": "input_text",
+                  "text": "{\"chunk_id\":\"d7e2be\",\"wall_time_seconds\":0.0000075,\"exit_code\":1,\"original_token_count\":106,\"output\":\"Traceback (most recent call last):\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/preserve-packet.py\\\", line 29, in <module>\\n    else:assert g['literal']==ag[g['group']] and g['literalSHA256']==m.sha(g['literal'])\\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError\\n\"}"
+                }
+              ],
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a1625a-6c6b-7ac0-b79b-c98a5bf8f2c4",
+                "create_time": 1792654817.886617
+              }
+            },
+            "metadata": {
+              "client_authored": false,
+              "fallback_token_limit_override": 12000
+            }
+          },
+          "nonzeroCodes": [
+            1
+          ]
+        },
+        {
+          "callLine": 1301,
+          "originalCall": {
+            "timestamp": "2026-10-22T08:13:21.982Z",
+            "ordinal": 1300,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call",
+              "id": "ctc_076afef315493132016ad9c59b0fcc81918ab280a867615211",
+              "status": "completed",
+              "call_id": "call_60b34d23ae0f47078d3f985e5a96389d",
+              "name": "exec",
+              "input": "text(await tools.exec_command({cmd:\"python3 -B - <<'PY'\\nimport pathlib,ast,importlib.util\\nD=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254');files=[D/n for n in ['owned-tools.py','preserve-packet.py','intake.py']]\\nfor p in files:ast.parse(p.read_text())\\ns=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m);R=D/'source-history-russia83';a,sp,ps=[m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']];m.alias_source83_clarified_literals(a,sp,ps,R);assert all(g['literalSHA256']==m.sha(g['literal']) for g in sp['entries'][0]['literalGroups']);print(m.savecode([*files,R/'literal-binding-clarification.json',D/'source83-original-format-diagnostics.json'],'Preserve SOURCE83 author temporal clarification and exact guarded literal bindings'));print('AST and exact clarification bindings passed; raw unchanged; credit0')\\nPY\",\"max_output_tokens\":1000}));\n",
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a162aa-c0c4-7242-a0f8-90e324fc3fc8",
+                "create_time": 1792656795.0649374
+              }
+            }
+          },
+          "resultLine": 1304,
+          "originalResult": {
+            "timestamp": "2026-10-22T08:13:22.230Z",
+            "ordinal": 1303,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call_output",
+              "id": "ctco_01a162ac-01b6-7840-8818-cb3b8907d00e",
+              "call_id": "call_60b34d23ae0f47078d3f985e5a96389d",
+              "output": [
+                {
+                  "type": "input_text",
+                  "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+                },
+                {
+                  "type": "input_text",
+                  "text": "{\"chunk_id\":\"92adda\",\"wall_time_seconds\":0.000007709,\"exit_code\":1,\"original_token_count\":151,\"output\":\"Traceback (most recent call last):\\n  File \\\"<stdin>\\\", line 4, in <module>\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/owned-tools.py\\\", line 177, in alias_source83_clarified_literals\\n    assert literal==b['intendedLiteral'] and sha(literal)==b['intendedLiteralSHA256']==e['fieldGroups'][b['group']]['afterCanonicalSHA256']\\n                                                                                       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^\\nTypeError: list indices must be integers or slices, not str\\n\"}"
+                }
+              ],
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a162aa-c0c4-7242-a0f8-90e324fc3fc8",
+                "create_time": 1792656802.230329
+              }
+            },
+            "metadata": {
+              "client_authored": false,
+              "fallback_token_limit_override": 12000
+            }
+          },
+          "nonzeroCodes": [
+            1
+          ]
+        },
+        {
+          "callLine": 1377,
+          "originalCall": {
+            "timestamp": "2026-10-22T08:15:20.909Z",
+            "ordinal": 1376,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call",
+              "id": "ctc_076afef315493132016ad9c6165f508191961e257f7fcdc668",
+              "status": "completed",
+              "call_id": "call_eb24ce53d25a410e8c9578e1dbf685e5",
+              "name": "exec",
+              "input": "text(await tools.exec_command({cmd:\"python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/intake.py /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/source-history-russia84\",\"max_output_tokens\":1700}));\n",
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a162aa-c0c4-7242-a0f8-90e324fc3fc8",
+                "create_time": 1792656918.3819032
+              }
+            }
+          },
+          "resultLine": 1380,
+          "originalResult": {
+            "timestamp": "2026-10-22T08:15:21.137Z",
+            "ordinal": 1379,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call_output",
+              "id": "ctco_01a162ad-d231-7540-a45e-356333e8c495",
+              "call_id": "call_eb24ce53d25a410e8c9578e1dbf685e5",
+              "output": [
+                {
+                  "type": "input_text",
+                  "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+                },
+                {
+                  "type": "input_text",
+                  "text": "{\"chunk_id\":\"74873a\",\"wall_time_seconds\":0.000007875,\"exit_code\":1,\"original_token_count\":101,\"output\":\"Traceback (most recent call last):\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/intake.py\\\", line 270, in <module>\\n    assert global_audit['inventoryPath']==ps['sameTopicMAIN']['inventoryPath']\\n                                          ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\\nKeyError: 'inventoryPath'\\n\"}"
+                }
+              ],
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a162aa-c0c4-7242-a0f8-90e324fc3fc8",
+                "create_time": 1792656921.13777
+              }
+            },
+            "metadata": {
+              "client_authored": false,
+              "fallback_token_limit_override": 12000
+            }
+          },
+          "nonzeroCodes": [
+            1
+          ]
+        },
+        {
+          "callLine": 1530,
+          "originalCall": {
+            "timestamp": "2026-10-22T08:26:48.873Z",
+            "ordinal": 1529,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call",
+              "id": "ctc_076afef315493132016ad9c8c6289c8191a70aa9252713c6d5",
+              "status": "completed",
+              "call_id": "call_fe31426a0082426a81131a80d12d89ac",
+              "name": "exec",
+              "input": "text(await tools.exec_command({cmd:\"python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/bind-current-receipt.py /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/case-history-russia83-initial-fix.json\",\"max_output_tokens\":1700}));\n",
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a162aa-c0c4-7242-a0f8-90e324fc3fc8",
+                "create_time": 1792657606.1653714
+              }
+            }
+          },
+          "resultLine": 1533,
+          "originalResult": {
+            "timestamp": "2026-10-22T08:26:49.184Z",
+            "ordinal": 1532,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call_output",
+              "id": "ctco_01a162b8-51e0-7c51-8a4f-5f82e8acc9f5",
+              "call_id": "call_fe31426a0082426a81131a80d12d89ac",
+              "output": [
+                {
+                  "type": "input_text",
+                  "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+                },
+                {
+                  "type": "input_text",
+                  "text": "{\"chunk_id\":\"49782e\",\"wall_time_seconds\":0.052348583,\"exit_code\":1,\"original_token_count\":87,\"output\":\"Traceback (most recent call last):\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/bind-current-receipt.py\\\", line 135, in <module>\\n    assert len(accepted)==len(acceptedOrders)>0\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError\\n\"}"
+                }
+              ],
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a162aa-c0c4-7242-a0f8-90e324fc3fc8",
+                "create_time": 1792657609.184447
+              }
+            },
+            "metadata": {
+              "client_authored": false,
+              "fallback_token_limit_override": 12000
+            }
+          },
+          "nonzeroCodes": [
+            1
+          ]
+        },
+        {
+          "callLine": 1587,
+          "originalCall": {
+            "timestamp": "2026-10-22T08:30:15.300Z",
+            "ordinal": 1586,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call",
+              "id": "ctc_076afef315493132016ad9c9968148819196c3214580643fe5",
+              "status": "completed",
+              "call_id": "call_cd310adfa63e4089869466494420637d",
+              "name": "exec",
+              "input": "text(await tools.exec_command({cmd:\"python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/preserve-packet.py 83 author83 source-history-russia83-cycle1\",\"max_output_tokens\":1600}));\n",
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a162aa-c0c4-7242-a0f8-90e324fc3fc8",
+                "create_time": 1792657814.517168
+              }
+            }
+          },
+          "resultLine": 1590,
+          "originalResult": {
+            "timestamp": "2026-10-22T08:30:15.676Z",
+            "ordinal": 1589,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call_output",
+              "id": "ctco_01a162bb-787c-7a61-9e35-fa2e5393bf52",
+              "call_id": "call_cd310adfa63e4089869466494420637d",
+              "output": [
+                {
+                  "type": "input_text",
+                  "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"
+                },
+                {
+                  "type": "input_text",
+                  "text": "{\"chunk_id\":\"89fa23\",\"wall_time_seconds\":0.155119958,\"exit_code\":1,\"original_token_count\":117,\"output\":\"Traceback (most recent call last):\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/preserve-packet.py\\\", line 85, in <module>\\n    for b in file_bindings:assert m.raw(m.C/b['path'])==b.get('sha256',b.get('fileSHA256',b.get('fileSha256')))\\n                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError\\n\"}"
+                }
+              ],
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a162aa-c0c4-7242-a0f8-90e324fc3fc8",
+                "create_time": 1792657815.676151
+              }
+            },
+            "metadata": {
+              "client_authored": false,
+              "fallback_token_limit_override": 12000
+            }
+          },
+          "nonzeroCodes": [
+            1
+          ]
+        },
+        {
+          "callLine": 1628,
+          "originalCall": {
+            "timestamp": "2026-10-22T08:33:55.089Z",
+            "ordinal": 1627,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call",
+              "id": "ctc_076afef315493132016ad9ca6cc5a88191a69c8343e88e4024",
+              "status": "completed",
+              "call_id": "call_7932cc7dd05b45fdac7906130565703b",
+              "name": "exec",
+              "input": "text(await tools.exec_command({cmd:\"python3 -B - <<'PY'\\nimport pathlib,ast,importlib.util\\nD=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254');files=[D/n for n in ['owned-tools.py','preserve-packet.py','intake.py']]\\nfor p in files:ast.parse(p.read_text())\\ns=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m);R=D/'source-history-russia83-cycle1';a,sp,ps=[m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']];m.alias_source83_cycle1_redundant_snapshot(a,sp,ps,R);print(m.savecode(files,'Preserve exact83 cycle1 redundant snapshot alias from already explicit fresh full peers'));print('Exact3rawFreeze/full100fresh/known83+84stage/all110bindings/11000rows passed; original raw and comparisons unchanged')\\nPY\",\"max_output_tokens\":1100}));\n",
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a162aa-c0c4-7242-a0f8-90e324fc3fc8",
+                "create_time": 1792658028.775295
+              }
+            }
+          },
+          "resultLine": 1631,
+          "originalResult": {
+            "timestamp": "2026-10-22T08:33:55.464Z",
+            "ordinal": 1630,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call_output",
+              "id": "ctco_01a162be-d308-78a3-b98d-6c32ffadc148",
+              "call_id": "call_7932cc7dd05b45fdac7906130565703b",
+              "output": [
+                {
+                  "type": "input_text",
+                  "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+                },
+                {
+                  "type": "input_text",
+                  "text": "{\"chunk_id\":\"aca997\",\"wall_time_seconds\":0.001568625,\"exit_code\":1,\"original_token_count\":134,\"output\":\"Traceback (most recent call last):\\n  File \\\"<stdin>\\\", line 4, in <module>\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/owned-tools.py\\\", line 201, in alias_source83_cycle1_redundant_snapshot\\n    full=ps['actualCurrentPeers'];assert len(full)==100 and [v['sourceOrder'] for v in full]==list(range(1,101))\\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError\\n\"}"
+                }
+              ],
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a162aa-c0c4-7242-a0f8-90e324fc3fc8",
+                "create_time": 1792658035.464164
+              }
+            },
+            "metadata": {
+              "client_authored": false,
+              "fallback_token_limit_override": 12000
+            }
+          },
+          "nonzeroCodes": [
+            1
+          ]
+        },
+        {
+          "callLine": 1781,
+          "originalCall": {
+            "timestamp": "2026-10-22T08:44:29.338Z",
+            "ordinal": 1780,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call",
+              "id": "ctc_076afef315493132016ad9cce3215c81919d86b6582f760921",
+              "status": "completed",
+              "call_id": "call_287c897479dc4e98933eda92c41e5177",
+              "name": "exec",
+              "input": "text(await tools.exec_command({cmd:\"python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/preserve-packet.py 84 author84 source-history-russia84-cycle1\",\"max_output_tokens\":1700}));\n",
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a162aa-c0c4-7242-a0f8-90e324fc3fc8",
+                "create_time": 1792658669.4070344
+              }
+            }
+          },
+          "resultLine": 1784,
+          "originalResult": {
+            "timestamp": "2026-10-22T08:44:29.542Z",
+            "ordinal": 1783,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call_output",
+              "id": "ctco_01a162c8-7fe6-7d42-ac68-3935f5677d40",
+              "call_id": "call_287c897479dc4e98933eda92c41e5177",
+              "output": [
+                {
+                  "type": "input_text",
+                  "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+                },
+                {
+                  "type": "input_text",
+                  "text": "{\"chunk_id\":\"1557a2\",\"wall_time_seconds\":0.000008084,\"exit_code\":1,\"original_token_count\":245,\"output\":\"Traceback (most recent call last):\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/preserve-packet.py\\\", line 18, in <module>\\n    m.alias_full_prompt_answer_concatenation(a,sp)\\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/owned-tools.py\\\", line 33, in alias_full_prompt_answer_concatenation\\n    if all(v['fullPrompt']==q['prompt'] for v in variants):return\\n       ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16254/owned-tools.py\\\", line 33, in <genexpr>\\n    if all(v['fullPrompt']==q['prompt'] for v in variants):return\\n           ~^^^^^^^^^^^^^^\\nKeyError: 'fullPrompt'\\n\"}"
+                }
+              ],
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a162aa-c0c4-7242-a0f8-90e324fc3fc8",
+                "create_time": 1792658669.542397
               }
             },
             "metadata": {
