@@ -30,7 +30,9 @@ with m.flow.locked():m.flow.lease('acquire','planning',m.O)
 try:
  assert m.raw(planningIndex)==expectedPlanningIndex
  with m.flow.locked():
-  for cid in x['claims']:m.flow.release(cid,m.O)
+  for cid in x['claims']:
+   assert m.raw(planningIndex)==expectedPlanningIndex and m.read(m.P/'.flow-leases.json').get('planning',{}).get('owner')==m.O
+   m.flow.release(cid,m.O)
  cp_path=pathlib.Path(x['canonicalCheckpoint']);cp=m.read(cp_path);assert cp['owner']==m.O;cp.update(owner=None,activeCoordinator=None,phase=phase,successorStatus='RELEASED_PENDING_SUCCESSOR_CLAIM',ordinaryWorkActivated=False,oldRootStoppedControl=True,successorACK=str(D/'successor-ack.json'))
  cp['ownershipTransfer']={'predecessor':m.O,'successor':S,'status':phase,'claims':x['claims'],'CURRENT':x['CURRENT'],'remaining':x['remaining'],'handoff':str(D/'handoff-next.json'),'rootActualCompactions':rootCompactions};m.write(cp_path,cp)
  sp=m.P/'evidence/question-revision-process-v2/coordinator-state.json';st=m.read(sp);st.update(owner=None,activeCoordinator=None,claimsOwner=None,phase=phase,status=phase,successorStatus='RELEASED_PENDING_SUCCESSOR_CLAIM',ordinaryWorkActivated=False,oldRootStoppedControl=True,activeAuthors=[],idleAuthors=[],activeIndependentReview=None,successorACK=str(D/'successor-ack.json'));m.write(sp,st)
