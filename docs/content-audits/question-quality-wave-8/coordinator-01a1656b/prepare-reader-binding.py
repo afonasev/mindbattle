@@ -16,7 +16,7 @@ case['reportBase']['sourceNetworkTotalCalls']=pending.get('cycle1NetworkTotalCal
 if pending.get('sourceProvenanceDeviation'):
  dev=pending['sourceProvenanceDeviation'];assert dev['uncured'] and dev['contentPASSAndQAdoNotAssertProceduralCompliance'] and m.raw(dev['rawClarification'])==dev['rawSHA256']
  case['reportBase']['sourceProvenanceDeviation']=dev
-for field in ['proceduralDeviations','initialOrdinalAlias','procedureNotes']:
+for field in ['proceduralDeviations','initialOrdinalAlias','procedureNotes','attemptFence']:
  if field in pending:case['reportBase'][field]=pending[field]
 if pending.get('proceduralDeviations',{}).get('uncured'):case['reportBase']['contentPASSAndQAdoNotAssertProceduralCompliance']=True
 casePath=D/f'case-history-russia{order}-{stage}-{status.lower()}.json';m.write(casePath,case)
