@@ -4,7 +4,13 @@ C=pathlib.Path(__file__).resolve().parents[4];P=pathlib.Path('/Users/eaafonasev/
 def read(p):return json.loads(pathlib.Path(p).read_text())
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
-def write(p,v):pathlib.Path(p).write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def write(p,v):
+ p=pathlib.Path(p)
+ if P in p.parents:
+  assert read(P/'.flow-leases.json').get('planning',{}).get('owner')==O
+  idx=pathlib.Path(h.git(P,'rev-parse','--path-format=absolute','--git-path','index'))
+  assert raw(idx)==read(pathlib.Path(__file__).parent/'manifest.json')['foreignIndexes']['planning']
+ p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
 def mod(n,p):
  s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 h=mod('private_save',P/'evidence/question-revision-process-v2/private-save-helper-01a13cb1.py');flow=mod('owned_flow',C/'tools/flow.py').Flow(P)
