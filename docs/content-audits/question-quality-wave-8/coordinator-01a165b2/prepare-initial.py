@@ -7,14 +7,14 @@ s.loader.exec_module(m)
 order, catalog_commit, raw_freeze, qualified_freeze = sys.argv[1:5]
 order = int(order)
 assert m.h.git(m.C, 'rev-parse', '--verify', catalog_commit+'^{commit}') == catalog_commit, 'Exact full tested catalog commit required'
-label = 'history-russia' + str(order)
+label = 'human-medicine' + str(order)
 packet_name = sys.argv[5] if len(sys.argv)>5 else 'source-'+label
 assert packet_name.startswith('source-'+label) and pathlib.Path(packet_name).name == packet_name
 B = pathlib.Path(sys.argv[6]).resolve() if len(sys.argv)>6 else D/('qualified-' + packet_name)
-assert B.is_relative_to(m.C/'docs/content-audits/question-quality-wave-8')
+assert B.is_relative_to(D)  # own route; immutable schema references remain wave8
 raw_packet = B.with_name(B.name.removeprefix('qualified-'))
 e = m.read(B/'candidate.json')['entries'][0]
-q = m.read(m.C/'src/content/topics/history-russia.json')['questions'][order-1]
+q = m.read(m.C/'src/content/topics/human-medicine.json')['questions'][order-1]
 assert q == e['proposedCard'] and m.sha(q) == e['afterHash']
 qa_path = pathlib.Path(sys.argv[7]).resolve() if len(sys.argv)>7 else D/('qa-qualified-' + packet_name + '.json')
 assert qa_path.is_relative_to(D)
@@ -26,7 +26,7 @@ x = m.read(D/'manifest.json')
 cp = m.read(m.P/'openspec/changes/question-quality-future-waves/current-checkpoint.json')
 assert cp['owner'] == m.O and len(cp['currentEligibleCompletedIds']) == x['CURRENT']
 t = m.read(m.C/'docs/content-audits/question-quality-wave-8/coordinator-01a15a0f/reader-polar46-initial-task.json')
-t.update(topicId='history-russia', owner=m.O, manifest=str(D/'manifest.json'),
+t.update(topicId='human-medicine', owner=m.O, manifest=str(D/'manifest.json'),
          binderSchemaReference=str(D/'bind-current-receipt.py'), role='independent reviewer one exact INITIAL '+label,
          phase='START_INITIAL_'+label.upper(), id=q['id'], sourceOrder=order,
          catalogCommit=catalog_commit, cardHash=m.sha(q),
@@ -36,7 +36,7 @@ t.update(topicId='history-russia', owner=m.O, manifest=str(D/'manifest.json'),
          applyReport=str(D/('qualified-'+packet_name+'-apply.json')),
          qa=str(qa_path), qaSHA256=m.raw(qa_path), qaReportCommit=qa_commit,
          outputDirectory=str(D/('independent-'+label+'-initial')),
-         frozen={'id':q['id'], 'topicId':'history-russia', 'sourceOrder':order,
+         frozen={'id':q['id'], 'topicId':'human-medicine', 'sourceOrder':order,
                  'difficulty':q['difficulty'], 'correctIndex':q['correctIndex']},
          focus='Personally assess whole exact CURRENT: six literal canonical groups, four full prompt/answer/note variants; every claim/option/note grounded in personally read complete immutable primary contexts. Unique key, grammar, absolute adult '+q['difficulty'].upper()+', correct-note extra own fact. Read actual relevant full peers and bilateral entity/relation/value/context/direct reverse. No inherited author judgment or lexical-only duplicate verdict.',
          currentContext='CURRENT'+str(x['CURRENT'])+'/2000 remaining'+str(x['remaining'])+'. Exact applied '+label+' QA19PASS. All prior HOLDs and exhausted attempts preserved. Catalog frozen until verdict; no third full revision.',
@@ -46,7 +46,7 @@ task_path = D/('reader-'+label+'-initial-task.json')
 m.write(task_path, t)
 x['actors']['reviewer'].update(stage='START_INITIAL_'+label.upper(), task=str(task_path),
                               expected='One exact INITIAL '+label+'; assess specific blocker at30min')
-x['currentWork']={'id':q['id'], 'topicId':'history-russia', 'sourceOrder':order,
+x['currentWork']={'id':q['id'], 'topicId':'human-medicine', 'sourceOrder':order,
                   'stage':'START_INITIAL_'+label.upper(), 'sourceFreeze':qualified_freeze,
                   'rawAuthorFreeze':raw_freeze, 'catalogCommit':catalog_commit,
                   'qaReportCommit':qa_commit, 'qaPath':str(qa_path), 'cardHash':m.sha(q)}

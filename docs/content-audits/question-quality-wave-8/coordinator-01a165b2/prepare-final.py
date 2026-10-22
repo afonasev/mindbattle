@@ -7,10 +7,10 @@ s.loader.exec_module(m)
 order, catalog_commit, raw_freeze, qualified_freeze = sys.argv[1:5]
 order = int(order)
 assert m.h.git(m.C,'rev-parse','--verify',catalog_commit+'^{commit}')==catalog_commit, 'Exact full tested catalog commit required'
-label = 'history-russia' + str(order) + '-cycle1'
+label = 'human-medicine' + str(order) + '-cycle1'
 B = D/('qualified-source-' + label)
 e = m.read(B/'candidate.json')['entries'][0]
-q = m.read(m.C/'src/content/topics/history-russia.json')['questions'][order-1]
+q = m.read(m.C/'src/content/topics/human-medicine.json')['questions'][order-1]
 assert q == e['proposedCard'] and m.sha(q) == e['afterHash']
 qa_path = pathlib.Path(sys.argv[5]).resolve() if len(sys.argv)>5 else D/('qa-qualified-source-' + label + '.json')
 assert qa_path.is_relative_to(D)
@@ -21,10 +21,10 @@ qa_commit = m.savecode([qa_path], 'Preserve exact '+label+' affected content QA1
 x = m.read(D/'manifest.json')
 cp = m.read(m.P/'openspec/changes/question-quality-future-waves/current-checkpoint.json')
 assert cp['owner'] == m.O and len(cp['currentEligibleCompletedIds']) == x['CURRENT']
-t = m.read(D/('reader-history-russia'+str(order)+'-initial-task.json'))
-t.update(topicId='history-russia', owner=m.O, manifest=str(D/'manifest.json'),
+t = m.read(D/('reader-human-medicine'+str(order)+'-initial-task.json'))
+t.update(topicId='human-medicine', owner=m.O, manifest=str(D/'manifest.json'),
          binderSchemaReference=str(D/'bind-current-receipt.py'), role='independent reviewer one exact directed FINAL '+label,
-         phase='START_FINAL_'+label.upper(), stage='FINAL', cycle=1, previousIndependentInitial=str(D/('independent-history-russia'+str(order)+'-initial/receipt.json')), id=q['id'], sourceOrder=order,
+         phase='START_FINAL_'+label.upper(), stage='FINAL', cycle=1, previousIndependentInitial=str(D/('independent-human-medicine'+str(order)+'-initial/receipt.json')), id=q['id'], sourceOrder=order,
          catalogCommit=catalog_commit, cardHash=m.sha(q),
          sourceFreeze=qualified_freeze, rawAuthorFreeze=raw_freeze,
          authorNativeId=m.read(B/'candidate.json')['sourceNativeId'],
@@ -32,7 +32,7 @@ t.update(topicId='history-russia', owner=m.O, manifest=str(D/'manifest.json'),
          applyReport=str(D/('qualified-source-'+label+'-apply.json')),
          qa=str(qa_path), qaSHA256=m.raw(qa_path), qaReportCommit=qa_commit,
          outputDirectory=str(D/('independent-'+label+'-final')),
-         frozen={'id':q['id'], 'topicId':'history-russia', 'sourceOrder':order,
+         frozen={'id':q['id'], 'topicId':'human-medicine', 'sourceOrder':order,
                  'difficulty':q['difficulty'], 'correctIndex':q['correctIndex']},
          focus='Directed same-reader FINAL on your exact saved INITIAL defect and sole SOURCE-cycle1. Personally assess revised options/own notes and changed dependencies against complete retained primary contexts; verify unique key and actual absolute '+q['difficulty'].upper()+'. Preserve your own applicable judgments about unchanged literals by explicit exact pointer, no third full revision or inherited author verdict. Keep six/four exact whole-card bindings and current relevant bilateral MAIN peers. Unresolved defect is terminal HOLD; no new INITIAL/ordinarycycle2.',
          currentContext='CURRENT'+str(x['CURRENT'])+'/2000 remaining'+str(x['remaining'])+'. Exact solecycle1 applied '+label+' QA19PASS. All HOLD/attempt/cycle fences preserved. Catalog frozen until FINAL; no new INITIAL or ordinarycycle2.',
@@ -43,7 +43,7 @@ task_path = D/('reader-'+label+'-final-task.json')
 m.write(task_path, t)
 x['actors']['reviewer'].update(stage='START_FINAL_'+label.upper(), task=str(task_path),
                               expected='One directed FINAL '+label+' PASS/HOLD; no further ordinary cycle')
-x['currentWork']={'id':q['id'], 'topicId':'history-russia', 'sourceOrder':order,
+x['currentWork']={'id':q['id'], 'topicId':'human-medicine', 'sourceOrder':order,
                   'stage':'START_FINAL_'+label.upper(), 'sourceFreeze':qualified_freeze,
                   'rawAuthorFreeze':raw_freeze, 'catalogCommit':catalog_commit,
                   'qaReportCommit':qa_commit, 'qaPath':str(qa_path), 'cardHash':m.sha(q)}

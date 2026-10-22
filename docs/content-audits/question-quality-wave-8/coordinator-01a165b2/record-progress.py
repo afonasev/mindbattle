@@ -4,8 +4,8 @@ D=pathlib.Path(__file__).parent
 s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
 order=int(sys.argv[1]);actorKey=sys.argv[2];status=sys.argv[3];certificateCommit=sys.argv[4]
 x=m.read(D/'manifest.json');cpPath=pathlib.Path(x['canonicalCheckpoint']);cp=m.read(cpPath)
-certificatePath=D/f'certification-history-russia{order}.json';certificate=m.read(certificatePath)
-q=m.read(m.C/'src/content/topics/history-russia.json')['questions'][order-1]
+certificatePath=D/f'certification-human-medicine{order}.json';certificate=m.read(certificatePath)
+q=m.read(m.C/'src/content/topics/human-medicine.json')['questions'][order-1]
 n=len(cp['currentEligibleCompletedIds']);delta=n-x['ownIntakeCURRENT']
 assert cp['owner']==m.O and certificate['CURRENT']==n and certificate['newQualityCredit']==1
 assert [e['questionId'] for e in certificate['accepted']]==[q['id']]
@@ -15,13 +15,13 @@ assert q['id'] not in x['ownProgress']['accepted']
 x['ownProgress']['accepted'].append(q['id']);x['ownProgress']['certificates'].append(str(certificatePath));x['ownProgress']['newlyCertified']=delta
 assert len(x['ownProgress']['accepted'])==len(set(x['ownProgress']['accepted']))==delta
 x.update(CURRENT=n,remaining=2000-n,newlyCertified=delta,phase=f'ACTIVE_FULL2000_CURRENT{n}')
-x[f'pendingHistoryRussia{order}'].update(status=status,qualityCredit=1,certification=str(certificatePath),certificationCodeCommit=certificateCommit)
+x[f'pendingHumanMedicine{order}'].update(status=status,qualityCredit=1,certification=str(certificatePath),certificationCodeCommit=certificateCommit)
 x['actors'][actorKey].update(stage=f'ARCHIVED_AFTER_CERTIFIED_SOURCE{order}',archived=True)
 x['sourceActorKeys']=[k for k in x['sourceActorKeys'] if k!=actorKey]
 x['coordinatorSlicesToPreserve']=m.read(pathlib.Path(x['predecessorHandoff']))['coordinatorSlicesToPreserve']+[{'intakeCURRENT':x['ownIntakeCURRENT'],'newlyCertified':delta}]
 x['currentWork'].update(CURRENT=n,remaining=2000-n)
 x['additionalRetainedSourceIndexes']=list(dict.fromkeys(x['additionalRetainedSourceIndexes']+[x['sourceIndex']]))
-packet='qualified-source-history-russia'+str(order)+('-cycle1' if 'FINAL' in status else '')
+packet='qualified-source-human-medicine'+str(order)+('-cycle1' if 'FINAL' in status else '')
 x['sourceIndex']=str(D/packet/'sourceproof.json')
 x['helpers']['record-progress.py']=str(pathlib.Path(__file__))
 x['readyQueue']=[v for v in x.get('readyQueue',[]) if v.get('sourceOrder')!=order]
