@@ -585,6 +585,9 @@ for R in packet_paths:
             if v['tripleSHA256'] == m.sha({'fullPrompt':v['fullPrompt'],'answer':v['answer'],'note':v['note']}):
                 v['originalFullPromptKeyTripleSHA256'] = v['tripleSHA256']
                 v['technicalTripleShapeAlias'] = 'Same exact author fullPrompt/answer/note literals; fullPrompt key named prompt in canonical triple only.'
+            elif v['tripleSHA256']==m.sha([v['fullPrompt'],v['answer'],v['note']]):
+                v['originalOrderedListTripleSHA256']=v['tripleSHA256']
+                v['technicalTripleShapeAlias']='Exact ordered three literal list [prompt,answer,note] mapped to canonical named object; candidate/six-group/whole literal identity already verified, no ground or raw change.'
             else:
                 assert v['tripleSHA256'] == m.sha({'slot':v['slot'],**triple})
                 v['originalSlotIncludedTripleSHA256'] = v['tripleSHA256']
