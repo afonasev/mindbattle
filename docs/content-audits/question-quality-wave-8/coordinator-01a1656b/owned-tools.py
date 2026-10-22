@@ -19,7 +19,7 @@ def write(p,v):
 def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 def save(root,ref,files,message):
- paths=sorted(set(str(pathlib.Path(p).relative_to(root)) for p in files));idx=root/h.git(root,'rev-parse','--git-path','index');return h.save(root,ref,paths,message,raw(idx))
+ paths=sorted(set(str(pathlib.Path(p).relative_to(root)) for p in files));idx=root/h.git(root,'rev-parse','--git-path','index');expected=read(D/'manifest.json')['foreignIndexes']['planning' if root==P else 'code'];assert raw(idx)==expected, 'Foreign index differs from exact task boundary';return h.save(root,ref,paths,message,expected)
 def savecode(files,message):return save(C,'refs/heads/codex/question-quality-wave-6',files,message)
 def saveplan(files,message):
  with flow.locked():flow.lease('acquire','planning',O)
