@@ -19,6 +19,8 @@ if pending.get('sourceProvenanceDeviation'):
 for field in ['proceduralDeviations','initialOrdinalAlias','procedureNotes','attemptFence']:
  if field in pending:case['reportBase'][field]=pending[field]
 if pending.get('proceduralDeviations',{}).get('uncured'):case['reportBase']['contentPASSAndQAdoNotAssertProceduralCompliance']=True
+if stage=='final':
+ case['reportBase'].update(sourceNetworkCallsScope='This sole SOURCE cycle only',sourceInitialNetworkCalls=pending['actualWebCalls'],sourceCycle1NetworkCalls=pending['cycle1NetworkCalls'],sourceTotalNetworkCalls=pending['actualWebCalls']+pending['cycle1NetworkCalls'],sourceInitialNetworkAccounting=pending['sourceNetworkAccounting'],sourceInitialRawFreeze=pending['rawFreeze'],previousIndependentInitial=task['previousIndependentInitial'],previousIndependentInitialSHA256=m.raw(task['previousIndependentInitial']))
 casePath=D/f'case-history-russia{order}-{stage}-{status.lower()}.json';m.write(casePath,case)
 a.update(stage=f'IDLE_AFTER_{stage.upper()}{order}_{status}',lastInput=audit['lastInput'],modelWindow=audit['modelWindow'],actualCompactions=comp,lastTaskEvent=lastEvent,cursor=cursor,nativePreflightVerifiedBy=m.O);x['currentWork']['stage']=a['stage'];x[f'pendingHistoryRussia{order}'].update(independentStatus=status,readerNativeId=a['threadId'],readerNetworkCalls=len(calls));x[f'pendingHistoryRussia{order}']['finalReceipt' if stage=='final' else 'initialReceipt']=rel(R/'receipt.json');m.write(D/'manifest.json',x)
 print('code',m.savecode([auditPath,casePath,D/'manifest.json',pathlib.Path(__file__),*[p for p in R.rglob('*') if p.is_file()]],f'Freeze exact independent {stage.upper()}{order} {status} before strict binding'))
