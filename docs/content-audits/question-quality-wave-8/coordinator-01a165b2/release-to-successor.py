@@ -34,6 +34,10 @@ try:
    assert m.raw(planningIndex)==expectedPlanningIndex and m.read(m.P/'.flow-leases.json').get('planning',{}).get('owner')==m.O
    m.flow.release(cid,m.O)
  cp_path=pathlib.Path(x['canonicalCheckpoint']);cp=m.read(cp_path);assert cp['owner']==m.O;cp.update(owner=None,activeCoordinator=None,phase=phase,successorStatus='RELEASED_PENDING_SUCCESSOR_CLAIM',ordinaryWorkActivated=False,oldRootStoppedControl=True,successorACK=str(D/'successor-ack.json'))
+ for w in cp['waves']:
+  if w['changeId'] in x['claims'] and 'owner' in w:
+   assert w['owner'] in {m.O,None}, 'Never release a foreign per-wave owner'
+   w['owner']=None
  cp['ownershipTransfer']={'predecessor':m.O,'successor':S,'status':phase,'claims':x['claims'],'CURRENT':x['CURRENT'],'remaining':x['remaining'],'handoff':str(D/'handoff-next.json'),'rootActualCompactions':rootCompactions};m.write(cp_path,cp)
  sp=m.P/'evidence/question-revision-process-v2/coordinator-state.json';st=m.read(sp);st.update(owner=None,activeCoordinator=None,claimsOwner=None,phase=phase,status=phase,successorStatus='RELEASED_PENDING_SUCCESSOR_CLAIM',ordinaryWorkActivated=False,oldRootStoppedControl=True,activeAuthors=[],idleAuthors=[],activeIndependentReview=None,successorACK=str(D/'successor-ack.json'));m.write(sp,st)
  gp=m.P/'evidence/question-revision-process-v2/active-full2000-goal-01a1593a.json';g=m.read(gp);g.update(owner=None,activeCoordinator=None,phase=phase,oldRootStoppedControl=True,successorStatus='RELEASED_PENDING_SUCCESSOR_CLAIM',successorACK=str(D/'successor-ack.json'));m.write(gp,g)
