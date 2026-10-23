@@ -351,8 +351,14 @@ for R in packet_paths:
         assert m.raw(C/topic_path)==bound_sha
         if 'sameTopicMAIN' in ps:
             original_same=ps['sameTopicMAIN']
+            if 'topicId' not in original_same:
+                assert original_same['path']==topic_path and original_same['questionCount']==100 and original_same['fileSHA256']==bound_sha
+                assert topic['id']==e['topicId'] and all(peer['topicId']==e['topicId'] for peer in full_peers)
+                assert [peer['card'] for peer in full_peers]==topic['questions']
+                ps['technicalMissingRedundantTopicIdAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':m.raw(R/'peer-snapshot.json'),'originalTopicIdAbsent':True,'candidateTopicId':e['topicId'],'operation':'Exact candidate/topic id plus all100 original ordered peer topicIds and full bodies, path/file SHA/count already verified; redundant identity name only. Raw and semantic judgments unchanged; original format gap uncured.'}
+                original_same={**original_same,'topicId':e['topicId']}
             assert original_same['path']==topic_path and original_same['topicId']==e['topicId'] and original_same['questionCount']==100 and original_same['fileSHA256']==bound_sha
-            ps['originalSameTopicMAINMetadata']=original_same
+            ps['originalSameTopicMAINMetadata']=ps['sameTopicMAIN']
         ps['sameTopicMAIN']={'topicId':e['topicId'],'path':topic_path,'fileSHA256':bound_sha,'questionCount':100,'questions':[p['card'] for p in full_peers]}
         ps['technicalExplicitFullPeerSnapshotContainerAlias']='All100 original ordered full peer bodies and explicit global file binding verified; names only, no unbound hydration or new assessment.'
     # Lossless hydration from the author's immutable, SHA-bound fresh inventory.
