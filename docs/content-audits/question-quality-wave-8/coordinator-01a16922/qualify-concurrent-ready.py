@@ -30,6 +30,14 @@ nr=[json.loads(l) for l in pathlib.Path(nativeproof['nativeJournal']).open()]
 assert [r['payload']['id'] for r in nr if r['type']=='session_meta']==[uid] and sum(r['type']=='compacted' for r in nr)<2
 timing=clar['timingEvidence'];assert timing['nativeSessionId']==uid
 generation=timing['authorReadyGeneration'];check=timing['mechanicalPacketCheck'];read=timing[f'actualAuthoritativeOrder{changed}ReportRead']
+timing_alias=None
+if 'nativeCallLine' not in read:
+ assert isinstance(read['callLine'],int)
+ original_read=dict(read);read={**read,'nativeCallLine':read['callLine']}
+ call=nr[read['nativeCallLine']-1]['payload']
+ assert call['type']=='custom_tool_call'
+ assert str(reportpath) in call['input'] or (str(m.C) in call['input'] and str(reportpath.relative_to(m.C)) in call['input'])
+ timing_alias={'originalReadTiming':original_read,'operation':'Existing exact native callLine exposed under redundant nativeCallLine name after checking actual report path in original call. Raw clarification unchanged; original KeyError uncured.'}
 for callline,resultline in [(generation['callLine'],generation['toolResultLine']),(check['callLine'],check['toolResultLine']),(read['nativeCallLine'],read['toolResultLine'])]:
  a,b=nr[callline-1],nr[resultline-1];assert a['type']==b['type']=='response_item' and a['payload']['type']=='custom_tool_call' and b['payload']['type']=='custom_tool_call_output' and a['payload']['call_id']==b['payload']['call_id']
 assert generation['toolResultLine']<check['callLine']<read['nativeCallLine']
@@ -60,6 +68,8 @@ for p in ps['actualCurrentPeers']:
 ps['globalMAIN']['rows']=currentrows;ps['globalMAIN']['rowsCanonicalSHA256']=m.sha(currentrows)
 next(b for b in bindings if b['path']==str(tp.relative_to(m.C)))['sha256']=m.raw(tp)
 ps['technicalConcurrentDependencyAlias']=proof;sp['technicalConcurrentDependencyAlias']=proof
+if timing_alias:
+ proof['exactNativeReadTimingNameAlias']=timing_alias
 for source in sp['rawSources']:
  p=pathlib.Path(source['path']);p=p if p.is_absolute() else m.C/p;assert m.raw(p)==source['sha256']
  cap=m.read(p);jp=pathlib.Path(cap['nativeJournal'])
