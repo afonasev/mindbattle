@@ -20,16 +20,20 @@ def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 def alias_explicit_cross_topic_peers(candidate,sp,ps,R):
  """Keep explicit foreign-topic peer bodies in the validator's peer container."""
- if 'crossCatalogClosestFullBodies' in ps or 'actualRelevantCrossTopicPeers' not in ps:return
+ if 'crossCatalogClosestFullBodies' in ps:return
+ containers=[k for k in ['actualRelevantCrossTopicPeers','relevantCrossTopicPeers','crossTopicCurrentPeers'] if k in ps]
+ if not containers:return
+ assert len(containers)==1
+ container=containers[0]
  import copy
  assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
- peers=ps['actualRelevantCrossTopicPeers']
+ peers=ps[container]
  for peer in peers:
   t=read(C/('src/content/topics/'+peer['topicId']+'.json'))
   q=t['questions'][peer['sourceOrder']-1]
   assert peer['id']==q['id'] and peer['card']==q and peer['sha256']==sha(q)
  ps['crossCatalogClosestFullBodies']=copy.deepcopy(peers)
- ps['technicalCrossTopicContainerAlias']={'rawPeerSnapshot':str(pathlib.Path(R)/'peer-snapshot.json'),'rawPeerSHA256':raw(pathlib.Path(R)/'peer-snapshot.json'),'originalPointer':'/actualRelevantCrossTopicPeers','operation':'Exact original explicit foreign-topic full bodies and hashes verified against CURRENT, redundant container name only; raw and bilateral assessments unchanged.'}
+ ps['technicalCrossTopicContainerAlias']={'rawPeerSnapshot':str(pathlib.Path(R)/'peer-snapshot.json'),'rawPeerSHA256':raw(pathlib.Path(R)/'peer-snapshot.json'),'originalPointer':'/'+container,'operation':'Exact original explicit foreign-topic full bodies and hashes verified against CURRENT, redundant container name only; raw and bilateral assessments unchanged.'}
 def alias_explicit_inventory_binding(candidate,sp,ps,R):
  """Expose only the author's explicit SHA-bound inventory; raw stays immutable."""
  if 'sameTopicMAIN' in ps or 'inventoryBinding' not in ps:return
