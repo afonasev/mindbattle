@@ -42,6 +42,21 @@ def alias_explicit_inventory_binding(candidate,sp,ps,R):
  assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
  assert candidate['cycle']==sp['cycle']==ps['cycle']==0
  e=candidate['entries'][0];b=ps['inventoryBinding'];p=pathlib.Path(b['path'])
+ if 'sha256' not in b and 'fileSHA256' in b:
+  assert p.is_relative_to(R) and raw(p)==b['fileSHA256']
+  inv=read(p);same=inv['sameTopicMAIN'];g=inv['globalMAIN']
+  peers=ps['actualCurrentPeers'];topic=read(C/same['path'])
+  assert len(peers)==100 and [v['sourceOrder'] for v in peers]==list(range(1,101))
+  assert [v['card'] for v in peers]==same['questions']==topic['questions']
+  assert all(v['topicId']==topic['id'] and v['id']==v['card']['id'] and v['sha256']==sha(v['card']) for v in peers)
+  assert same['topicId']==e['topicId']==topic['id'] and same['fileSHA256']==raw(C/same['path'])
+  assert g['questionCount']==11000 and g['topicFileCount']==110
+  assert g['rowsCanonicalSHA256']==ps['globalMAIN']['rowsCanonicalSHA256']
+  assert g['allCurrentFileByteBindings']==ps['globalMAIN']['allCurrentFileByteBindings']
+  ps['originalExplicitFileSHA256InventoryBinding']=copy.deepcopy(b)
+  b={**b,'sha256':b['fileSHA256'],'topicCards':100,'globalMAINRows':11000,'globalTopicFiles':110,'topicFileSHA256':same['fileSHA256']}
+  ps['inventoryBinding']=b
+  ps['technicalExplicitFileSHA256InventoryBindingAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawSHA256':raw(R/'peer-snapshot.json'),'originalPointer':'/inventoryBinding','operation':'Exact explicit fileSHA256-bound inventory plus original ordered100 full peers and live topic bytes; redundant names/count projections only. Original binding retained, no raw or judgment edit.'}
  assert p.is_relative_to(R) and raw(p)==b['sha256']
  inv=read(p);same=inv['sameTopicMAIN'];g=inv['globalMAIN'];topic=read(C/same['path'])
  assert same['topicId']==e['topicId']==topic['id']
