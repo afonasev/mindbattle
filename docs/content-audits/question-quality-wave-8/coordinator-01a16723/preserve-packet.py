@@ -13,6 +13,7 @@ m.alias_source83_clarified_literals(a,sp,ps,R)
 m.alias_source83_cycle1_redundant_snapshot(a,sp,ps,R)
 m.alias_source84_cycle1_variant_names(a,sp,ps,R)
 m.alias_single_sourceproof_entry(a,sp)
+m.alias_source31_root_entry_identity(a,sp,R)
 m.alias_explicit_peer_inventory_projection(a,sp,ps,R)
 assert len(a['entries'])==len(sp['entries'])==1
 m.alias_serialized_prompt_group(a,sp)
