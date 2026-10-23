@@ -1,0 +1,215 @@
+{
+  "originalBadOrTruncatedCalls": [
+    {
+      "call": {
+        "timestamp": "2026-10-23T02:23:43.210Z",
+        "ordinal": 2150,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_092baa44280e5f02016adac52ae4e88191b1c0842e4eda7667",
+          "status": "completed",
+          "call_id": "call_becb2d1f5e9347b7a1f44b52a4899373",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1661f/verify-network.py\",\"max_output_tokens\":6500}));\ntext(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport json,pathlib\\nD=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1661f'); j=json.loads((D/'manifest.json').read_text());print('keys',list(j));print('p18',json.dumps(j['sourcePackets']['18'] if isinstance(j.get('sourcePackets'),dict) else {},ensure_ascii=False));print('actors',json.dumps(j.get('actors'),ensure_ascii=False)[:3500])\\nPY\",\"max_output_tokens\":3000}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a16626-c1bd-7841-9448-dc57937d0648",
+            "create_time": 1792722218.8999848
+          }
+        }
+      },
+      "result": {
+        "timestamp": "2026-10-23T02:23:43.397Z",
+        "ordinal": 2154,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a16692-4125-77a0-8df0-94567dd30ab5",
+          "call_id": "call_becb2d1f5e9347b7a1f44b52a4899373",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.1 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"5bee0e\",\"wall_time_seconds\":0.000013333,\"exit_code\":0,\"original_token_count\":1393,\"output\":\"\\\"\\\"\\\"Deterministic network accounting; exact stored native recovery only, no quality credit.\\\"\\\"\\\"\\nimport pathlib,json,re,importlib.util,sys,subprocess\\nD=pathlib.Path(__file__).parent\\ns=importlib.util.spec_from_file_location('owned',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)\\norder=int(sys.argv[1]);R=D/sys.argv[2];proof_path=D/(sys.argv[3] if len(sys.argv)>3 and not sys.argv[3].startswith('--') else f'human-medicine{order}-native-proof.json');proof=m.read(proof_path);uid=proof['sourceNativeId'];include_prior='--include-prior-tasks' in sys.argv\\np=pathlib.Path(proof['nativeJournal']);matches=[p] if p.exists() else list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+uid+'.jsonl'));assert len(matches)==1\\nnative=matches[0];rows=[json.loads(l) for l in native.open()];assert rows[0]['payload']['id']==uid\\nstart=proof['currentTaskStartLine'];calls=[]\\nfor n,row in enumerate(rows,1):\\n p=row.get('payload',{})\\n if (include_prior or n>start) and p.get('type')=='custom_tool_call' and re.match(r'^(?:(?:const|let|var)\\\\s+\\\\w+\\\\s*=\\\\s*|text\\\\(\\\\s*)?await\\\\s+tools\\\\.web__run\\\\s*\\\\(', re.sub(r'^// @exec:[^\\\\n]*\\\\n', '', p.get('input','').lstrip())):calls.append((n,p))\\nassert len(calls)==len(proof['networkCalls'])+ (len(proof.get('priorTaskNetworkCalls',[])) if include_prior else 0)\\nwrappers=[]\\nfor p in R.rglob('*.json'):\\n z=m.read(p)\\n if isinstance(z,dict) and 'originalRecord' in z:\\n  if 'nativeRecordLine' in z:\\n   line=z['nativeRecordLine']\\n  elif 'callId' in z:\\n   assert z['sourceNativeId']==uid\\n   exact=[n for n,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==z['callId']]\\n   assert len(exact)==1 and exact[0]==z['nativeOutputLine']\\n   assert rows[z['nativeCallLine']-1]['payload']['type']=='custom_tool_call'\\n   assert rows[z['nativeCallLine']-1]['payload']['call_id']==z['callId']\\n   assert any(n==z['nativeCallLine'] and call['call_id']==z['callId'] for n,call in calls)\\n   line=exact[0]\\n  else:\\n   assert z['sourceNativeId']==uid\\n   exact=[n for n,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==z['nativeCallId']]\\n   assert len(exact)==1;line=exact[0]\\n  assert rows[line-1]==z['originalRecord'];wrappers.append((p,z))\\nnetwork=[];owned=[];missing=[];pre_dispatch=[]\\nfor ordinal,(line,call) in enumerate(calls,1):\\n results=[(n,r) for n,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==call['call_id']];assert len(results)==1\\n resultline,result=results[0];found=[(p,z) for p,z in wrappers if z['originalRecord']==result]\\n if not found:\\n  p=D/f'human-medicine{order}-stored-native-result-{resultline}.json';z={'sourceNativeId':uid,'nativeJournalActual':str(native),'nativeRecordLine':resultline,'call_id':call['call_id'],'originalRecord':result,'operation':'Exact full stored native original recovered network0; author raw immutable. Not primary quality adoption.'}\\n  if p.exists():assert m.read(p)==z\\n  else:m.write(p,z)\\n  found=[(p,z)];owned.append(p);missing.append(resultline)\\n identical_aliases=[]\\n if len(found)>1:\\n  # Distinct URL captures may retain the same full multi-URL native result.\\n  # Every wrapper was already verified against the exact unique native output.\\n  assert all(z['originalRecord']==result for p,z in found)\\n  identical_aliases=[{'path':str(p),'fileSHA256':m.raw(p),'nativeExact':True} for p,z in sorted(found,key=lambda v:str(v[0]))]\\n  found=[sorted(found,key=lambda v:str(v[0]))[0]]\\n assert len(found)==1;p,z=found[0]\\n blocks=result['payload'].get('output',[])\\n if isinstance(blocks,list) and blocks and blocks[0].get('text','').startswith('Script failed') and any(b.get('text','').startswith('Script error:\\\\nSyntaxError:') for b in blocks if isinstance(b,dict)):\\n  check=subprocess.run(['node','--input-type=module','--check'],input=call['input'],text=True,capture_output=True)\\n  if check.returncode!=0:\\n   pre_dispatch.append({'call_id':call['call_id'],'callLine':line,'resultLine':resultline,'originalResult':str(p),'fileSHA256':m.raw(p),'nativeExact':True,'actualWebCalls':0,'reason':'Entire exec module rejected before execution; exact input fails compile-only Node syntax check. No source request dispatched.','compileOnlyExitCode':check.returncode,'compileOnlyStderr':check.stderr})\\n   continue\\n network.append({'ordinalOneBased':ordinal,'call_id':call['call_id'],'callLine':line,'resultLine':resultline,'call':call['input'],'originalResult':str(p),'fileSHA256':m.raw(p),'nativeExact':True,'identicalOriginalResultAliases':identical_aliases})\\nreport={'owner':m.O,'sourceNativeId':uid,'nativeJournalActual':str(native),'sourceOrder':order,'actualWebCalls':len(network),'candidateExecModules':len(calls),'preDispatchCompilationFailures':pre_dispatch,'includePriorTasks':include_prior,'proof':str(proof_path),'calls':network,'exactStoredRecoveryNetworkCalls':0,'missingAuthorResultLinesRecovered':missing,'rawPacketUnchanged':True,'qualityCredit':0}\\nreport_name=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--report-name=')),f'human-medicine{order}-network-accounting.json');assert pathlib.Path(report_name).name==report_name\\nrp=D/report_name;m.write(rp,report)\\nprint(m.savecode([rp,pathlib.Path(__file__),*owned],f'Account SOURCE{order} exact stored native network results without quality credit'))\\nprint(json.dumps({'actualWebCalls':len(network),'preDispatchCompilationFailures':len(pre_dispatch),'recoveredMissingOriginals':missing,'qualityCredit':0}))\\n\"}"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"4667ea\",\"wall_time_seconds\":0.00000925,\"exit_code\":0,\"original_token_count\":3766,\"output\":\"Warning: truncated output (original token count: 3766)\\nTotal output lines: 3\\n\\nkeys ['C', 'P', 'codeBranch', 'planningBranch', 'claims', 'fullGoal', 'CURRENT', 'remaining', 'mainIntegrated', 'foreignIndexes', 'actors', 'sourceActorKeys', 'pinnedProcess', 'packetContract', 'method', 'format', 'fences', 'coordinatorSlicesToPreserve', 'nextUntouched', 'newAttemptPointers', 'newAttemptFences', 'terminal62Rule', 'newLosslessAliases', 'owner', 'phase', 'claimsOwner', 'leaseHeld', 'intakeCURRENT', 'ownIntakeCURRENT', 'newlyCertified', 'rootActualCompactions', 'actualCompactions', 'manifest', 'canonicalCheckpoint', 'helpers', 'predecessorHandoff', 'inheritedManifest', 'ownProgress', 'ownAffectedRuns', 'inheritedAffectedRuns', 'verifiedNow', 'readScope', 'currentWork', 'next', 'rootContextReason', 'codeCommit', 'codeCommitMeaning', 'remotePushAuthority', 'at', 'planningActivationCommit', 'predecessorCleanup', 'helperInstanceVerification', 'heldOwn', 'createdNativeThreads', 'source78CompactionFence', 'planningReleaseCommit', 'oldRootStoppedControl', 'cleanup', 'pendingSource80', 'pendingSource82', 'rootNativeAudit', 'planningHandoffCommit', 'successorThreadId', 'supportedReleaseP', 'createdNativeThreadsCurrentOwner', 'pendingSource84', 'pendingSource85', 'source83AttemptFenceClarification', 'sourceTaskTemplate', 'source86AttemptFenceClarification', 'pendingSource87', 'terminal87Rule', 'sourceIndex', 'pendingSource88', 'pendingSource89', 'terminal89Rule', 'protectedHeldHashes', 'pendingSource90', 'terminal90Rule', 'pendingSource91', 'successorStatus', 'handoffRestrictions', 'source92AttemptFenceClarification', 'pendingSource92', 'retainedStationContextIndex', 'retainedStationFullCapture', 'pendingSource93', 'ownHeldOrders', 'pendingSource94', 'pendingSource95', 'pendingSource96', 'terminal96Rule', 'readScopeProjectionDiagnostic', 'pendingSource97', 'currentSourceActors', 'currentIndependentActors', 'retainedIdleReviewer', 'noRetainedIdleAuthor', 'helperIdentityFence', 'currentSourceActorsCount', 'pendingSource98', 'source99RawFreeze', 'source99QualifiedFreeze', 'pendingSource99', 'initial99Work', 'concurrentSource100Work', 'pendingSource100', 'nextTopicSelectionEvidence', 'historyRussia1SourceAttemptMetadata', 'pendingHistoryRussia1', 'ownHeldHistoryRussiaOrders', 'historyRussia2SourceAttemptMetadata', 'pendingHistoryRussia2', 'qaSelectionHistoryRussia2', 'historyRussia3SourceAttemptMetadata', 'pendingHistoryRussia3', 'qaSelectionHistoryRussia3', 'historyRussia4SourceAttemptMetadata', 'pendingHistoryRussia4', 'historyRussia5SourceAttemptMetadata', 'pendingHistoryRussia5', 'qaSelectionHistoryRussia5', 'qaSelectionHistoryRussia5Cycle1', 'historyRussia6SourceAttemptMetadata', 'initial5FinalWork', 'concurrentSource6Work', 'pendingHistoryRussia6', 'qaSelectionHistoryRussia6', 'qaSelectionHistoryRussia6Cycle1', 'additionalRetainedSourceIndexes', 'successorACK', 'mainIntegrationReadback', 'historyRussia7SourceAttemptMetadata', 'retiredReviewer', 'pendingHistoryRussia7', 'qaSelectionHistoryRussia7', 'historyRussia8SourceAttemptMetadata', 'initial7Work', 'concurrentSource8Work', 'pendingHistoryRussia8', 'qaSelectionHistoryRussia7Cycle1', 'ownNewHeldHistoryRussiaOrders', 'historyRussia9SourceAttemptMetadata', 'handoffVerification', 'pendingHistoryRussia9', 'qaSelectionHistoryRussia9', 'qaSelectionHistoryRussia9Cycle1', 'historyRussia10SourceAttemptMetadata', 'pendingHistoryRussia10', 'qaSelectionHistoryRussia10', 'qaSelectionHistoryRussia10Cycle1', 'historyRussia11SourceAttemptMetadata', 'completedOwnAuthors', 'pendingHistoryRussia11', 'qaSelectionHistoryRussia11', 'qaSelectionHistoryRussia11Cycle1', 'historyRussia12SourceAttemptMetadata', 'pendingHistoryRussia12', 'historyRussia13SourceAttemptMetadata', 'historyRussia14SourceAttemptMetadata', 'pendingHistoryRussia13', 'waitRecovery', 'historyRussia15SourceAttemptMetadata', 'pendingHistoryRussia14', 'pendingHistoryRussia15', 'historyRussia16SourceAttemptMetadata', 'terminalHistoryRussia15Rule', 'noRetainedIdleReviewer', 'retiredReviewerCurrentOwner', 'retainedSourcesCurrentOwner', 'pendingHistoryRussia16', 'historyRussia17SourceAttemptMetadata', 'historyRussia18SourceAttemptMetadata', 'pendingHistoryRussia17', 'pendingHistoryRussia18', 'historyRussia19SourceAttemptMetadata', 'qaSelectionHistoryRussia18', 'pendingHistoryRussia19', 'historyRussia20SourceAttemptMetadata', 'successorNativeJournal', 'successorCreationProof', 'rootStop', 'initial19Work', 'historyRussia21SourceAttemptMetadata', 'concurrentSource20Work', 'pendingHistoryRussia20', 'concurrentSource21Work', 'pendingHistoryRussia21', 'initial20Work', 'initial21Work', 'historyRussia22SourceAttemptMetadata', 'final20Work', 'pendingHistoryRussia22', 'historyRussia23SourceAttemptMetadata', 'readScopeProjectionCorrection', 'pendingHistoryRussia23', 'pendingHistoryRussia24', 'sharedReadyBatch', 'pendingHistoryRussia25', 'pendingHistoryRussia26', 'initial25Work', 'concurrentSource27Work', 'initial26Work', 'terminalHistoryRussia25Rule', 'pendingHistoryRussia27', 'source25PreservationFailure', 'source25Cycle1PreservationFailure', 'successorNativeProof', 'historyRussia28SourceAttemptMetadata', 'pendingHistoryRussia28', 'source28CompactionFence', 'pendingHistoryRussia29', 'pendingHistoryRussia30', 'historyRussia30SourceAttemptMetadata', 'pendingHistoryRussia31', 'historyRussia31SourceAttemptMetadata', 'qaSelectionHistoryRussia32', 'pendingHistoryRussia32', 'historyRussia32SourceAttemptMetadata', 'pendingHistoryRussia33', 'qaSelectionHistoryRussia33', 'source33CompactionFence', 'qaSelectionHistoryRussia33Cycle1', 'historyRussia33SourceAttemptMetadata', 'qaSelectionHistoryRussia34', 'pendingHistoryRussia34', 'qaSelectionHistoryRussia34Cycle1', 'historyRussia34SourceAttemptMetadata', 'pendingHistoryRussia36', 'pendingHistoryRussia35', 'qaSelectionHistoryRussia35', 'initial35Work', 'planningSyncPending', 'pendingHistoryRussia37', 'planningSyncForeignLeaseResolved', 'foreignIndexAdvanceEvidence', 'inheritedForeignIndexes', 'qaSelectionHistoryRussia35Cycle1', 'planningSyncForeignIndexResolved', '…766 tokens truncated…osingVerificationPassed', 'integration', 'pendingHistoryRussia79', 'pendingHistoryRussia80', 'ownHeldOrdersCurrentOwner', 'pendingHistoryRussia81', 'pendingHistoryRussia82', 'retiredReviewerCurrentOwnerAfter81', 'pendingHistoryRussia83', 'pendingHistoryRussia84', 'pendingFinal83Reviewer', 'pendingFinal84Reviewer', 'completedFinal83Reviewer', 'completedFinal84Reviewer', 'source85ReadScopeDeviation', 'pendingHistoryRussia86', 'source86UncuredAttemptOrder', 'pendingHistoryRussia85', 'pendingHistoryRussia87', 'pendingHistoryRussia88', 'pendingFinal87Reviewer', 'scopeLimitedObservationFromInitial87', 'postFirstCompactionScope', 'completedFinal87Reviewer', 'reader88BudgetPreflight', 'retiredReviewerCurrentOwnerAfter88', 'pendingFinal88Reviewer', 'next89AttemptBoundary', 'interruptedReleaseRecovery', 'bootstrapReviewer', 'pendingHistoryRussia89', 'ownHeldOrdersThisCoordinator', 'pendingHistoryRussia90', 'pendingHistoryRussia91', 'historyRussia92SourceAttemptMetadata', 'historyRussia93SourceAttemptMetadata', 'pendingHistoryRussia92', 'historyRussia94SourceAttemptMetadata', 'pendingHistoryRussia93', 'source95ReadScopeDeviation', 'pendingHistoryRussia95', 'historyRussia95SourceAttemptMetadata', 'pendingHistoryRussia94', 'source95CombinedProceduralDeviations', 'firstCompactionClosure', 'inheritedOwnHeldOrdersBeforeCurrentOwner', 'readerRetentionBudget', 'pendingBoundedWork', 'pendingHistoryRussia97', 'pendingHistoryRussia96', 'technicalDiagnosticsAuthority', 'source98ProceduralDeviations', 'pendingHistoryRussia98', 'pendingHistoryRussia99', 'retiredNativeReviewersCurrentOwner', 'pendingBootstrapActors', 'currentOwnedHandoffHelper', 'pendingHistoryRussia100', 'nextTopicRoutingPreflight', 'coordinatorBootstrapProceduralDeviations', 'activeRoute', 'pendingHumanMedicine1', 'pendingHumanMedicine2', 'claimSetContract', 'lastIndependentResult', 'pendingHumanMedicine3', 'pendingHumanMedicine4', 'pendingHumanMedicine5', 'pendingHumanMedicine6', 'pendingHumanMedicine7', 'pendingHumanMedicine8', 'pendingHumanMedicine9', 'lateGlobalReferenceReads', 'pendingHumanMedicine10', 'pendingReviews', 'ordinaryWorkActivated', 'successorBootstrapProceduralDeviations', 'ownProceduralDiagnostics', 'pendingHumanMedicine12', 'ownedSourceOrders', 'pendingHumanMedicine11', 'pendingHumanMedicine13', 'pendingHumanMedicine14', 'pendingHumanMedicine15', 'pendingHumanMedicine16', 'pendingHumanMedicine17', 'plannedClosedSliceLastOrder', 'nextAfterClosedSlice', 'pendingHumanMedicine18']\\np18 {}\\nactors {\\\"reviewer\\\": {\\\"threadId\\\": \\\"01a16640-c05c-7e43-8d02-e6006632b376\\\", \\\"hostId\\\": \\\"local\\\", \\\"model\\\": \\\"gpt-6.1-sol\\\", \\\"thinking\\\": \\\"medium\\\", \\\"stage\\\": \\\"IDLE_AFTER_INITIAL18_HOLD\\\", \\\"createdBy\\\": \\\"01a1661f-6d17-71d3-aebd-3e91536fb498\\\", \\\"nativeJournal\\\": \\\"/Users/eaafonasev/.codex/sessions/2026/10/23/rollout-2026-10-23T05-54-42-01a16640-c05c-7e43-8d02-e6006632b376.jsonl\\\", \\\"actualCompactions\\\": 0, \\\"lastTaskEvent\\\": \\\"task_complete\\\", \\\"lastInput\\\": 250741, \\\"modelWindow\\\": 475000, \\\"nativePreflightVerifiedBy\\\": \\\"01a1661f-6d17-71d3-aebd-3e91536fb498\\\", \\\"cursor\\\": \\\"2b58680c-b3a7-4f31-bb97-6a5334415847:21\\\", \\\"task\\\": \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1661f/reader-human-medicine18-initial-task.json\\\", \\\"expected\\\": \\\"One exact INITIAL human-medicine18; assess specific blocker at30min\\\"}, \\\"author11\\\": {\\\"threadId\\\": \\\"01a16628-1e7b-75d0-b3a5-7e314e716b0c\\\", \\\"hostId\\\": \\\"local\\\", \\\"model\\\": \\\"gpt-6-luna\\\", \\\"thinking\\\": \\\"medium\\\", \\\"stage\\\": \\\"ARCHIVED_AFTER_CERTIFIED_SOURCE11\\\", \\\"createdBy\\\": \\\"01a1661f-6d17-71d3-aebd-3e91536fb498\\\", \\\"nativeJournal\\\": \\\"/Users/eaafonasev/.codex/sessions/2026/10/23/rollout-2026-10-23T05-27-47-01a16628-1e7b-75d0-b3a5-7e314e716b0c.jsonl\\\", \\\"actualCompactions\\\": 1, \\\"lastTaskEvent\\\": \\\"task_complete\\\", \\\"lastInput\\\": 49706, \\\"modelWindow\\\": 258400, \\\"nativePreflightVerifiedBy\\\": \\\"01a1661f-6d17-71d3-aebd-3e91536fb498\\\", \\\"cursor\\\": \\\"cdf3dc1e-5eb6-409e-94a8-695b9f64a152:47\\\", \\\"task\\\": \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1661f/source-human-medicine11-task.json\\\", \\\"expected\\\": \\\"One bounded SOURCE READY/HOLD; no adjacent task\\\", \\\"archived\\\": true}, \\\"author12\\\": {\\\"threadId\\\": \\\"01a1662b-bd51-7190-88ad-d16b607efacc\\\", \\\"hostId\\\": \\\"local\\\", \\\"model\\\": \\\"gpt-6-luna\\\", \\\"thinking\\\": \\\"medium\\\", \\\"stage\\\": \\\"ARCHIVED_SOURCE12_AUTHORHOLD\\\", \\\"createdBy\\\": \\\"01a1661f-6d17-71d3-aebd-3e91536fb498\\\", \\\"nativeJournal\\\": \\\"/Users/eaafonasev/.codex/sessions/2026/10/23/rollout-2026-10-23T05-31-45-01a1662b-bd51-7190-88ad-d16b607efacc.jsonl\\\", \\\"actualCompactions\\\": 0, \\\"lastTaskEvent\\\": \\\"task_complete\\\", \\\"lastInput\\\": 131934, \\\"modelWindow\\\": 258400, \\\"nativePreflightVerifiedBy\\\": \\\"01a1661f-6d17-71d3-aebd-3e91536fb498\\\", \\\"cursor\\\": \\\"001104ef-523f-4e7c-9e70-dc3b9d05f42c:2\\\", \\\"task\\\": \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1661f/source-human-medicine12-task.json\\\", \\\"expected\\\": \\\"One bounded SOURCE READY/HOLD; no adjacent task\\\", \\\"archived\\\": true}, \\\"author13\\\": {\\\"threadId\\\": \\\"01a16636-18ac-7a43-a0b0-b383f5d71912\\\", \\\"hostId\\\": \\\"local\\\", \\\"model\\\": \\\"gpt-6-luna\\\", \\\"thinking\\\": \\\"medium\\\", \\\"stage\\\": \\\"ARCHIVED_AFTER_CERTIFIED_SOURCE13\\\", \\\"createdBy\\\": \\\"01a1661f-6d17-71d3-aebd-3e91536fb498\\\", \\\"nativeJournal\\\": \\\"/Users/eaafonasev/.codex/sessions/2026/10/23/rollout-2026-10-23T05-43-03-01a16636-18ac-7a43-a0b0-b383f5d71912.jsonl\\\", \\\"actualCompactions\\\": 0, \\\"lastTaskEvent\\\": \\\"task_complete\\\", \\\"lastInput\\\": 154270, \\\"modelWindow\\\": 258400, \\\"nativePreflightVerifiedBy\\\": \\\"01a1661f-6d17-71d3-aebd-3e91536fb498\\\", \\\"cursor\\\": \\\"0e7abbaf-6610-47a1-b57f-2d7ce08c74b8:1\\\", \\\"task\\\": \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1661f/source-human-medicine13-task.json\\\", \\\"expected\\\": \\\"One bounded SOURCE READY/HOLD; no adjacent task\\\", \\\"archived\\\": true}, \\\"author14\\\": {\\\"threadId\\\": \\\"01a1663c-ae62-7883-8139-0bd72ec0db20\\\", \\\"hostId\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a16626-c1bd-7841-9448-dc57937d0648",
+            "create_time": 1792722223.39773
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    },
+    {
+      "call": {
+        "timestamp": "2026-10-23T02:24:23.338Z",
+        "ordinal": 2166,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_092baa44280e5f02016adac53caffc81918ea88e6221ac7575",
+          "status": "completed",
+          "call_id": "call_bf2e99acd9944e02bc72c2781c861ca8",
+          "name": "exec",
+          "input": "text(await tools.mcp__codex_app__set_thread_archived({threadId:\"01a16665-2770-7090-a84a-22e16aa47adf\",archived:true}));\ntext(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport pathlib,json,importlib.util,subprocess,hashlib\\nD=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1661f');s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)\\nx=m.read(D/'manifest.json');p=x['pendingHumanMedicine18']; old=m.read(D/'human-medicine18-native-proof.json'); new=m.read(D/'human-medicine18-cycle1-native-proof.json')\\nfor f,h in old['rawFileSHA256'].items():assert m.raw(pathlib.Path(old['packet'])/f)==h\\nassert new['beforeHash']==new['afterHash']==p['afterHash']\\na=m.read(D/'human-medicine18-network-accounting.json');b=m.read(D/'human-medicine18-whole-native-network-accounting.json'); prior={v['call_id'] for v in a['calls']};delta=[v for v in b['calls'] if v['call_id'] not in prior];assert len(delta)==1 and b['actualWebCalls']==2\\nnative=pathlib.Path(new['nativeJournal']);rows=[json.loads(l) for l in native.open()];finals=[r for r in rows if r.get('payload',{}).get('type')=='message' and r['payload'].get('role')=='assistant' and r['payload'].get('phase')=='final_answer'];assert finals\\nack=D/'source18-cycle1-close-provenance.json';m.write(ack,{'originalCorrectionACK':finals[-1],'nativeJournal':str(native),'rawSource0AllOriginalFilesByteExact':True,'cycle1NewCalls':delta,'cycle1ActualWebCalls':1,'wholeSource18ActualWebCalls':2,'rawFreeze':'dfa14fdefe033a29e651649799127a53b3525d18','contentUnchanged':True,'noQAorIndependentFINAL':True,'originalProceduralDeviationsUncured':True})\\np.update(status='APPLIED_CURRENT_UNCREDITED_AFTER_INITIAL_HOLD_AND_AUTHOR_CYCLE1_HOLD',cycle1Status='AUTHOR_HOLD_UNQUALIFIED_UNAPPLIED',cycle1Applied=False,cycle1RawFreeze='dfa14fdefe033a29e651649799127a53b3525d18',cycle1NetworkCalls=1,totalSourceNetworkCalls=2,cycle1ActualCompactions=0,cycle1NetworkAccounting=str(ack),cycle1NoQA=True,cycle1NoIndependentFINAL=True,ordinaryCycle2Prohibited=True);p['cycle1Authorization']['used']=True\\nfence='Medicine18 terminal INITIAL HOLD plus sole author cycle1 HOLD unchanged/unqualified/unapplied, credit0. RedCross lacks explicit ABO profile mapping; one CBS official alternative unavailable. No retry/refetch/second alternative/cycle2/new INITIAL/reset/adjacent ABO mapping repair/automatic notes fix. Distinct blood claims not broadly exhausted. Original procedural gaps uncured.'\\nx['fences'].append(fence);x['actors']['author18'].update(archived=True,stage='ARCHIVED_SOURCE18_TERMINAL_CYCLE1_HOLD');x.update(sourceActorKeys=[],readyQueue=[],pendingReviews=[],pendingBoundedWork=[],rootActualCompactions=1,actualCompactions=1,next='Close preservation and transfer exact4 to one readonly successor; SOURCE19 only after successor activation.')\\nx['currentWork']={'stage':'CLOSED_SOURCE18_TERMINAL_HOLD','CURRENT':1006,'remaining':994,'fullGoal':2000}\\n# Retire only unused own helper changes; preserve original commits as history.\\nfor n in ['intake.py','prepare-final.py']:\\n rel=str((D/n).relative_to(m.C));data=subprocess.check_output(['git','-C',str(m.C),'show','fb9b66dcdc9c170ac46f99a6dead7a173ee959d7^:'+rel]);(D/n).write_bytes(data);compile(data,str(D/n),'exec')\\nroot=pathlib.Path(x['rootNativeAudit']['nativeJournal']);rr=[json.loads(l) for l in root.open()];orig=[r for r in rr if r.get('payload',{}).get('call_id')=='call_1f03cbb2c3304b54a5687820e43741d8'];assert len(orig)==2\\nproof=D/'first-compaction-preservation-diagnostic.json';m.write(proof,{'actualCompactions':sum(r.get('type')=='compacted' for r in rr),'originalCycle1PreservationCallAndOutput':orig,'verifiedExitCode':0,'freeze':'dfa14fdefe033a29e651649799127a53b3525d18','summaryReportedContextTruncationOriginalOutputActuallyRetained':True,'noReplay':True,'newOverbroadManifestKeysInspectionUncured':True})\\nm.write(D/'manifest.json',x);print(m.savecode([D/'manifest.json',ack,proof,D/'intake.py',D/'prepare-final.py'],'Close SOURCE18 terminal uncredited HOLD and retire consumed cycle helpers'))\\nPY\",\"max_output_tokens\":1700}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a16626-c1bd-7841-9448-dc57937d0648",
+            "create_time": 1792722236.690411
+          }
+        }
+      },
+      "result": {
+        "timestamp": "2026-10-23T02:24:23.745Z",
+        "ordinal": 2170,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a16692-dec1-75e1-a312-dcad814570c3",
+          "call_id": "call_bf2e99acd9944e02bc72c2781c861ca8",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.4 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"threadId\\\":\\\"01a16665-2770-7090-a84a-22e16aa47adf\\\",\\\"archived\\\":true}\"}],\"isError\":false}"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"0e360f\",\"wall_time_seconds\":0.000009916,\"exit_code\":1,\"original_token_count\":125,\"output\":\"Traceback (most recent call last):\\n  File \\\"<stdin>\\\", line 7, in <module>\\n  File \\\"/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_local.py\\\", line 537, in open\\n    return io.open(self, mode, buffering, encoding, errors, newline)\\n           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nFileNotFoundError: [Errno 2] No such file or directory: '/Users/eaafonasev/.codex/sessions/2026/10/23/rollout-2026-10-23T06-34-27-01a16665-2770-7090-a84a-22e16aa47adf.jsonl'\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a16626-c1bd-7841-9448-dc57937d0648",
+            "create_time": 1792722263.745126
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    },
+    {
+      "call": {
+        "timestamp": "2026-10-23T02:24:39.871Z",
+        "ordinal": 2176,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_092baa44280e5f02016adac560e380819196305e9f101099b0",
+          "status": "completed",
+          "call_id": "call_8de726c606654252ac1e2599abca8dbc",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport json,pathlib,subprocess\\np=pathlib.Path('/Users/eaafonasev/.codex/sessions/2026/10/23/rollout-2026-10-23T05-18-18-01a1661f-6d17-71d3-aebd-3e91536fb498.jsonl');rows=[json.loads(l) for l in p.open()];matches=[r for r in rows if r.get('payload',{}).get('type')=='custom_tool_call' and 'Retire only unused own helper changes' in r['payload'].get('input','')];assert len(matches)==1\\ns=matches[0]['payload']['input'];cmd=json.JSONDecoder().raw_decode(s.split('cmd:',1)[1])[0];old=\\\"native=pathlib.Path(new['nativeJournal']);rows=\\\";new=\\\"native=pathlib.Path(new['nativeJournal']);native=native if native.exists() else next(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+new['sourceNativeId']+'.jsonl'));rows=\\\";assert old in cmd;cmd=cmd.replace(old,new);r=subprocess.run(cmd,shell=True,executable='/bin/zsh',text=True,capture_output=True);print(r.stdout);print(r.stderr);print('exit',r.returncode)\\nPY\",\"max_output_tokens\":1500}));\ntext(await tools.exec_command({cmd:\"cat /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1661f/push-preservation.py\",\"max_output_tokens\":4500}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a16626-c1bd-7841-9448-dc57937d0648",
+            "create_time": 1792722272.8907042
+          }
+        }
+      },
+      "result": {
+        "timestamp": "2026-10-23T02:24:40.080Z",
+        "ordinal": 2180,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a16693-1e90-7ff0-b02f-b59feec9003a",
+          "call_id": "call_8de726c606654252ac1e2599abca8dbc",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"396d5b\",\"wall_time_seconds\":0.000009709,\"exit_code\":1,\"original_token_count\":22,\"output\":\"Traceback (most recent call last):\\n  File \\\"<stdin>\\\", line 2, in <module>\\nAssertionError\\n\"}"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"606ae2\",\"wall_time_seconds\":0.000012708,\"exit_code\":0,\"original_token_count\":668,\"output\":\"\\\"\\\"\\\"Push preserved feature HEAD and bind authoritative remote_push under a short P lease.\\\"\\\"\\\"\\nimport pathlib,importlib.util,datetime,sys\\nD=pathlib.Path(__file__).parent\\ns=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)\\nx=m.read(D/'manifest.json');cp=m.read(pathlib.Path(x['canonicalCheckpoint']));n=len(cp['currentEligibleCompletedIds']);released='--released' in sys.argv;expectedOwner=None if released else m.O;assert cp['owner']==expectedOwner and n==x['CURRENT'];assert all(m.flow.get(cid)[1]['owner']==expectedOwner for cid in x['claims']);\\nif released:assert x['phase']=='EXACT4_RELEASED_PENDING_SUCCESSOR_CLAIM' and x['successorThreadId'] and cp['pendingSuccessor']==x['successorThreadId']\\nassert m.read(m.P/'.flow-leases.json')=={}\\nfor root,key in [(m.C,'code'),(m.P,'planning')]:assert m.raw(pathlib.Path(m.h.git(root,'rev-parse','--path-format=absolute','--git-path','index')))==x['foreignIndexes'][key]\\nref='refs/heads/codex/question-quality-wave-6';head=m.h.git(m.C,'rev-parse',ref);m.h.git(m.C,'diff','--check','5508df6f6873d38d08539b2cee1ae488d223cc0d',head);m.h.git(m.C,'push','origin',ref+':'+ref);remote=m.h.git(m.C,'ls-remote','origin',ref).split()[0];assert remote==head\\npayload={'repo':str(m.C),'remote':'origin','branch':'codex/question-quality-wave-6','commit':head,'readbackVerified':True,'mainIntegrated':False,'CURRENT':n,'remaining':2000-n}\\nidx=pathlib.Path(m.h.git(m.P,'rev-parse','--path-format=absolute','--git-path','index'));expected=m.raw(idx);assert expected==x['foreignIndexes']['planning']\\nwith m.flow.locked():\\n assert m.raw(idx)==expected;m.flow.lease('acquire','planning',m.O)\\ntry:\\n with m.flow.locked():\\n  for cid in x['claims']:\\n   assert m.raw(idx)==expected and m.flow.get(cid)[1]['owner']==expectedOwner;m.flow.evidence(cid,'remote_push',payload)\\n report=m.P/f'evidence/question-revision-process-v2/preservation-push-{m.O[:8]}.json';m.write(report,{'owner':m.O,'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'remote_push':payload,'claims':x['claims'],'authority':'delivery.evidence.remote_push plus fresh origin; historical manifest snapshots not authoritative','noIntegrationOrDeploy':True});assert m.raw(idx)==expected\\n pc=m.h.save(m.P,'refs/heads/codex/question-revision-resume-20261014',[str(p.relative_to(m.P)) for p in [report,*[m.flow.get(cid)[0] for cid in x['claims']]]],f'Record authoritative preserved feature push CURRENT{n}',expected);print('planning',pc)\\nfinally:\\n with m.flow.locked():m.flow.lease('release','planning',m.O)\\nassert m.read(m.P/'.flow-leases.json')=={};print('featureRemote',head,'CURRENT',n,'remaining',2000-n)\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a16626-c1bd-7841-9448-dc57937d0648",
+            "create_time": 1792722280.08032
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    },
+    {
+      "call": {
+        "timestamp": "2026-10-23T02:26:38.048Z",
+        "ordinal": 2229,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_092baa44280e5f02016adac5d96d1c8191b38ad2ec4b414a4d",
+          "status": "completed",
+          "call_id": "call_b83a1b1ad1094db9927737b44b4dff55",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1661f/register-successor.py 01a16694-c910-7733-9153-75203048e97e\",\"max_output_tokens\":1800}));\ntext(await tools.exec_command({cmd:\"python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1661f/push-preservation.py\",\"yield_time_ms\":1000,\"max_output_tokens\":1200}));\ntext(await tools.exec_command({cmd:\"cat /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1661f/verify-successor-ack.py\",\"max_output_tokens\":7000}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a16626-c1bd-7841-9448-dc57937d0648",
+            "create_time": 1792722393.4314735
+          }
+        }
+      },
+      "result": {
+        "timestamp": "2026-10-23T02:26:39.978Z",
+        "ordinal": 2233,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a16694-f2ea-7772-8521-9446d6d03db8",
+          "call_id": "call_b83a1b1ad1094db9927737b44b4dff55",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 1.9 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"d6a501\",\"wall_time_seconds\":0.491159625,\"exit_code\":0,\"original_token_count\":70,\"output\":\"code 5ae59be91fe555f1e514344477bc2abc4fc0c2b1\\nplanning 853af6f72740554f1bac0f9048b6aefce7a6d4ea\\nregisteredSuccessor 01a16694-c910-7733-9153-75203048e97e call_id call_6e94f30c74094f8f896786cfe5a39bd5 callLine 2225 ownersRemain 01a1661f-6d17-71d3-aebd-3e91536fb498 leaseHeld False\\n\"}"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"034d21\",\"wall_time_seconds\":1.002605292,\"session_id\":57484,\"original_token_count\":0,\"output\":\"\"}"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"a26a26\",\"wall_time_seconds\":0.000007583,\"exit_code\":0,\"original_token_count\":1029,\"output\":\"\\\"\\\"\\\"Parent's deterministic audit of exact native readonly ACK and full successful document reads.\\\"\\\"\\\"\\nimport pathlib,json,importlib.util,hashlib\\nD=pathlib.Path(__file__).parent\\ns=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)\\nx=m.read(D/'manifest.json');S=x['successorThreadId'];native=pathlib.Path(x['successorNativeJournal']);rows=[json.loads(l) for l in native.open()]\\nassert next(r['payload']['id'] for r in rows if r['type']=='session_meta')==S\\nassert sum(r['type']=='compacted' for r in rows)==0\\nassert next(r['payload']['type'] for r in reversed(rows) if r.get('payload',{}).get('type') in ['task_started','task_complete'])=='task_complete'\\ndef command_results(v):\\n if isinstance(v,dict):\\n  if 'exit_code' in v and 'output' in v:yield v\\n  for a in v.values():yield from command_results(a)\\n elif isinstance(v,list):\\n  for a in v:yield from command_results(a)\\n elif isinstance(v,str):\\n  try:a=json.loads(v)\\n  except (ValueError,TypeError):return\\n  if a!=v:yield from command_results(a)\\ncalls={r['payload']['call_id']:(i,r) for i,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='custom_tool_call'}\\nsuccess=[];bad=[];bodies=[]\\nfor i,r in enumerate(rows,1):\\n p=r.get('payload',{})\\n if p.get('type')!='custom_tool_call_output':continue\\n results=list(command_results(p.get('output')))\\n if not results:continue\\n line,call=calls[p['call_id']];entry={'callLine':line,'call':call,'resultLine':i,'result':r}\\n if any(v['exit_code'] not in [None,0] for v in results):bad.append(entry);continue\\n if not all(v['exit_code']==0 for v in results):continue\\n success.append(entry)\\n for v in results:\\n  if 'Warning: truncated output' not in v['output'] and 'Output exceeded available model context' not in v['output']:bodies.append((p['call_id'],v['output']))\\ndocs=[m.C/'docs/content-audits/question-quality-wave-8'/p for p in ['coordinator-01a14377/pinned-question-revision-12e5581b.md','coordinator-01a13f31/packet-contract.json','coordinator-01a1593a/method-pilot.md','coordinator-01a1593a/packet-format.md']]\\nreads=[]\\nfor p in docs:\\n content=p.read_text().strip();matches=[cid for cid,b in bodies if content in b and str(p) in calls[cid][1]['payload'].get('input','') and all(str(other) not in calls[cid][1]['payload'].get('input','') for other in docs if other!=p)];assert matches,('No complete successful untruncated read',str(p));reads.append({'path':str(p),'rawSHA256':m.raw(p),'exactSuccessfulCallIds':matches})\\nassert len({v['exactSuccessfulCallIds'][0] for v in reads})==4, 'Four separate full structured successful read calls required'\\nfinals=[(i,r) for i,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='message' and r['payload'].get('role')=='assistant' and r['payload'].get('phase')=='final_answer']\\nassert finals\\nlast=finals[-1];text='\\\\n'.join(a.get('text','') for a in last[1]['payload']['content'] if isinstance(a,dict));assert 'ACK' in text and str(x['CURRENT']) in text and str(x['remaining']) in text and 'STOP' in text\\nassert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and m.read(m.P/'.flow-leases.json')=={}\\nfor root,key in [(m.C,'code'),(m.P,'planning')]:assert m.raw(pathlib.Path(m.h.git(root,'rev-parse','--path-format=absolute','--git-path','index')))==x['foreignIndexes'][key]\\nreport={'successor':S,'native':str(native),'rootPersonallyVerifiedExactNativeACK':True,'exactNativeVerificationCallsAndResults':success,'diagnosticFailuresPreservedSeparately':bad,'fullFourDocumentsSuccessfulUntruncatedReads':reads,'actualCompactions':0,'exactFinalACKLine':last[0],'exactFinalACKRecord':last[1],'CURRENT':x['CURRENT'],'remaining':x['remaining'],'claimsOwnerBeforeRelease':m.O,'leaseEmpty':True,'foreignIndexes':x['foreignIndexes'],'noQualityReplay':True}\\nm.write(D/'successor-ack.json',report)\\nprint(m.savecode([pathlib.Path(__file__),D/'successor-ack.json'],'Preserve personally audited exact native readonly successor ACK'))\\nprint({'successor':S,'actualCompactions':0,'successfulVerificationCalls':len(success),'diagnosticFailedCalls':len(bad),'fullDocuments':len(reads),'finalACK':text})\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a16626-c1bd-7841-9448-dc57937d0648",
+            "create_time": 1792722399.978191
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    }
+  ],
+  "uncured": true,
+  "reason": "Initial post-compaction broad manifest-key inspection truncated; archive moved author native, first closure attempt failed before any writes; recovery selector self-match rejected, then exact create-prefix selector recovered successful closure. No source or QA replay and no procedural cure.",
+  "originalFreezeVerified": "dfa14fdefe033a29e651649799127a53b3525d18"
+}
