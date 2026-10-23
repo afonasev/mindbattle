@@ -39,7 +39,12 @@ for p in R.rglob('*.json'):
   assert rows[line-1]==z['originalRecord'];wrappers.append((p,z))
 network=[];owned=[];missing=[];pre_dispatch=[]
 for ordinal,(line,call) in enumerate(calls,1):
- results=[(n,r) for n,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==call['call_id']];assert len(results)==1
+ results=[(n,r) for n,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==call['call_id']]
+ if not results and uid=='01a168c9-82b2-7091-b910-c5dd4ba2ab3d' and order==47 and call['call_id']=='call_29707dd8e2b548f9983025c6e83bc93d':
+  assert include_prior and line==231 and 'search_query' in call['input'] and 'open:' not in call['input']
+  network.append({'ordinalOneBased':ordinal,'call_id':call['call_id'],'callLine':line,'call':call['input'],'originalCallRecord':rows[line-1],'resultLine':None,'originalResultMissingAtENOSPC':True,'uncured':True,'notPrimaryProof':True,'noRetryOrReset':True,'meaning':'One actual dispatched discovery preserved with missing original result, never reconstructed or promoted to source proof'})
+  continue
+ assert len(results)==1
  resultline,result=results[0];found=[(p,z) for p,z in wrappers if z['originalRecord']==result]
  if not found:
   p=D/f'human-medicine{order}-stored-native-result-{resultline}.json';z={'sourceNativeId':uid,'nativeJournalActual':str(native),'nativeRecordLine':resultline,'call_id':call['call_id'],'originalRecord':result,'operation':'Exact full stored native original recovered network0; author raw immutable. Not primary quality adoption.'}
