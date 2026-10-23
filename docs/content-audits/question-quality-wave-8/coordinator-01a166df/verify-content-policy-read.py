@@ -2,8 +2,8 @@
 import pathlib,json,re,sys,importlib.util
 D=pathlib.Path(__file__).parent
 s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
-order=int(sys.argv[1]);uid=sys.argv[2]
-proof=m.read(D/f'source{order}-bootstrap-proof.json');assert proof['sourceNativeId']==uid
+order=int(sys.argv[1]);uid=sys.argv[2];reader='--reader' in sys.argv[3:];role='reader' if reader else 'source'
+proof=m.read(D/f'{role}{order}-bootstrap-proof.json');assert proof['readerNativeId' if reader else 'sourceNativeId']==uid
 native=pathlib.Path(proof['nativeJournal']);rows=[json.loads(l) for l in native.open()]
 assert [r['payload']['id'] for r in rows if r['type']=='session_meta']==[uid]
 assert sum(r['type']=='compacted' for r in rows)==0
@@ -23,6 +23,6 @@ whole=[]
 for check in proof['fourSeparateFullReads']:
  target=next((m.C/'docs/content-audits/question-quality-wave-8').rglob(check['path']));result=rows[check['resultLine']-1]['payload'];assert target.read_text() in list(strings(result['output']))
  whole.append({**check,'fileSHA256':m.raw(target),'originalWholeOutputEqualsFile':True})
-p=D/f'source{order}-content-policy-proof.json';assert not p.exists()
+p=D/f'{role}{order}-content-policy-proof.json';assert not p.exists()
 m.write(p,{'owner':m.O,'sourceNativeId':uid,'actualNative':str(native),'fourExactWholeReadBytes':whole,'fullContentSection':{'path':str(path),'fileSHA256':m.raw(path),'lines':[start+1,end],'originalOutputs':matches},'verifiedBeforeSOURCEStart':True,'qualityCredit':0})
 print(m.savecode([p,pathlib.Path(__file__)],f'Bind exact full Content policy and pinned bytes before SOURCE{order} start'))
