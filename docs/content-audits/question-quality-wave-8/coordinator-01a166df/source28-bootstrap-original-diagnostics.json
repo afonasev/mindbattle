@@ -1,0 +1,207 @@
+{
+  "owner": "01a166df-2e31-7dd0-a5ff-b9d905dcc541",
+  "sourceNativeId": "01a166f4-2c48-7ae0-815f-285f91f5a40c",
+  "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/23/rollout-2026-10-23T09-10-40-01a166f4-2c48-7ae0-815f-285f91f5a40c.jsonl",
+  "originalFourCalls": [
+    {
+      "callLine": 22,
+      "originalCall": {
+        "timestamp": "2026-10-23T04:10:49.833Z",
+        "ordinal": 21,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_0a5fcbd0c5a54a22016adade494c0c8191b2f1c906acab2ba5",
+          "status": "completed",
+          "call_id": "call_210981b9713b4cf889c71e7f2e5d223e",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"cat /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a14377/pinned-question-revision-12e5581b.md\",max_output_tokens:12000}); text(r);\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a166f4-2f36-77f2-baf6-d886ea16a85d",
+            "create_time": 1792728649.2985854
+          }
+        }
+      },
+      "resultLine": 25,
+      "originalResult": {
+        "timestamp": "2026-10-23T04:10:49.953Z",
+        "ordinal": 24,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a166f4-50e1-7d11-a05a-82860b4380bf",
+          "call_id": "call_210981b9713b4cf889c71e7f2e5d223e",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.1 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"26d1fd\",\"wall_time_seconds\":0.000013042,\"exit_code\":0,\"original_token_count\":3288,\"output\":\"# Ревизия вопросов: исполнимый процесс\\n\\nРешение о пересмотре процесса: пользователь, 2026-10-14, чат 01a13b21-6800-7843-9ab6-f255503aafda.\\nЭтот документ регулирует организацию работы. Требования к достоверности, независимой проверке,\\nсложности и frozen scope не отменяются. Закрытие старых чатов не означает приёмку вопросов.\\n\\n## Единица работы и роли\\n\\n- Одна задача — 10–20 конкретных ID одной темы, один baseline SHA, один авторский результат.\\n  Тематический контекст и соседние карточки доступны для чтения; завершение всей темы не является\\n  условием передачи готовой части. 500/2000 — размер очереди, не размер исполнительного поручения.\\n- Один координатор ведёт очередь и интеграцию; один автор готовит конкретную часть; другой человек/агент\\n  независимо проверяет получившийся CURRENT. Координатор выполняет adjudication и проверку\\n  согласованности вердиктов, но не делает третью полную содержательную ревизию.\\n- Применение точного patch и сохранение выполняет координатор обычными инструментами.\\n  Отдельный opaque-editor или capture-чат нужен только при конкретной технической необходимости,\\n  а не как обязательный этап для каждой карточки.\\n- До получения первого полностью завершённого пакета не запускать новую волну авторов.\\n  Затем максимум два авторских пакета одновременно и одна независимая проверка;\\n  очередь ожидающих независимого ревью — не более двух пакетов. Сначала разгружать её.\\n- Новые чаты/сообщения — только при имеющейся авторизации. При разрешённом запуске:\\n  автор и механическая работа — GPT-6 Luna/medium; координатор и независимый читатель —\\n  GPT-6.1 Sol/medium. Не менять модель существующих чатов без отдельного основания.\\n\\n## Что координатор передаёт исполнителю\\n\\nОдно короткое поручение: цель, список ID, baseline commit, разрешённые пути,\\nссылка на требования, индекс сохранённых источников, формат результата, проверка и критерий остановки.\\nНе передавать всю историю переписки, старые отчёты и полный checkpoint.\\nРабочий пакет и промежуточный результат с самого начала находятся в устойчивом каталоге задачи;\\nединственная копия в /tmp запрещена. Существующие данные не переписывать при переносе.\\n\\nПример поручения автору:\\n\\n> Проверь перечисленные ID по baseline SHA. Прочитай каждую карточку целиком: вопрос,\\n> четыре варианта с ключом, объяснение и четыре заметки; проверь первичные контексты,\\n> сложность и смысловые пересечения с релевантными соседями. Сохрани ID/topic/difficulty/key.\\n> Исправляй только содержательные или языковые дефекты, не переписывай удачный текст ради\\n> отличия от baseline. Верни patch и manifest: READY, FIX или HOLD по каждому ID.\\n> Для каждого решения дай конкретное основание и точный locator. Передай готовую часть,\\n> даже если остальные ID заблокированы. После одного адресного исправления спорные карточки\\n> вынеси в HOLD; не продолжай бесконечный поиск.\\n\\n## Источники и доказательства\\n\\n- Сначала открыть сохранённый первичный контекст по индексу; не скачивать его повторно\\n  только из-за нового исполнителя. Независимый читатель действительно читает контекст,\\n  а не наследует авторский PASS.\\n- Проверять утверждения всех вариантов и заметок. HTTP 200, hash и наличие URL доказывают\\n  получение файла, но не достоверность текста. Шаблонное «source supports note» не является основанием.\\n- На недоступный URL: одна ограниченная попытка плюс один официальный альтернативный путь.\\n  Неполный ответ, challenge, ошибка TLS/DNS или timeout — диагностический результат.\\n  Затем HOLD конкретного утверждения и точный запрос источника. Не обходить ограничения доступа.\\n- Общий полный первичный материал сохранять один раз с URL, датой, SHA и locator.\\n  В карточках — ссылки на этот материал и конкретные основания; не дублировать raw\\n  в каждом пакете/чате. Сохранность ранее требуемых полных контекстов не ослабляется.\\n- Существующие шесть групп полей, отдельные основания для вариантов/заметок и frozen hashes\\n  сохраняются. Формировать hashes и проверять схему инструментом, а не ручным переписыванием.\\n  Проза нужна для смысла решения, не для пересказа хэшей и маршрута Git.\\n- Никогда не засчитывать HOLD, structural-only, PASSready или авторский FIX как завершённый CURRENT.\\n\\n## Независимая проверка и завершение\\n\\n1. Автор сохраняет patch, точные before/after hashes и доказательства; READY/FIX отделяет от HOLD.\\n2. Координатор сверяет preimage с текущим файлом, применяет только разрешённые ID атомарно.\\n   Drift одного ID возвращает только этот ID на сверку; весь пакет заново не открывается.\\n3. Независимый читатель проверяет точный CURRENT целиком, первичные контексты и релевантных соседей.\\n   Его результат привязан к hash карточки и содержит конкретный PASS либо дефект.\\n4. На дефект допускается один адресный fix-cycle; после правки проверяется новая карточка\\n   и затронутые зависимости. Не перечитывать неизменившиеся другие карточки.\\n   Неразрешённый дефект — HOLD с владельцем следующего действия, не новое бесконечное поручение.\\n5. Координатор сопоставляет авторский и независимый результат, разрешает расхождения явно,\\n   проверяет инварианты/полноту и сохраняет commit. Зачёт увеличивается только для\\n   уникальных ID с доказанной актуальной версией и пройденными нужными проверками.\\n6. В checkpoint добавляется результат пакета. В основной записи остаются актуальные IDs,\\n   hashes, статусы и ссылки; история хранится в отдельных неизменяемых файлах.\\n   Не наращивать в одном JSON поля successor01..., coordinatorHistory и копии старых пакетов.\\n   Миграция старого checkpoint — отдельная работа, не ручное удаление истории.\\n\\n## Проверки и критерии остановки\\n\\n- До запуска выбрать affected checks по реальному diff. Для документации — ссылки/структура\\n  и git diff --check. Для контента — проверка схемы, уникальности ID, frozen key/difficulty,\\n  preimage/after hashes, полноты ссылок и затронутых контрактов каталога.\\n- Конкретные команды брать из текущего проекта после чтения их маршрута. Не запускать весь\\n  каталог, full QA, браузер, сборку или deploy «на всякий случай». Runtime QA, если нужен,\\n  только muted с самого старта. Автоматическая проверка не заменяет содержательное ревью.\\n- Через 30 минут без передачи хотя бы одной готовой карточки сохранить короткий checkpoint:\\n  что мешает, какие ID готовы, какое конкретное следующее действие. Это сигнал сменить маршрут,\\n  а не снизить требования к качеству или оборвать выполняющуюся обязательную проверку.\\n- Два одинаковых технических сбоя подряд: сохранить состояние, прекратить повторения\\n  неизменившегося вызова и сообщить конкретный блокер. Heartbeat не должен бесконечно будить\\n  сломанный координатор; возобновление требует изменения условия.\\n- После первого compaction сохранить текущий срез; после второго — только атомарное\\n  завершение, сохранение и остановка. Преемник получает manifest незавершённого среза,\\n  а не всю историю. Не создавать преемников ради повторного оформления тех же доказательств.\\n- wait_threads использовать с сохранённым cursor. Полный read_thread — только для нового\\n  результата, ошибки или перехода; большие ответы сначала фильтровать, не выводить в контекст.\\n\\n## Финальное сообщение исполнителя\\n\\nДо 10 строк: scope/baseline; READY/FIX/HOLD по ID; конкретные дефекты; проверенные контракты;\\nпути результата; ветка и commit; что перенесено в main; следующий исполнитель/действие.\\nУказать, какие проверки не выполнены. Продолжение не должно требовать поиска файлов в /tmp.\\n\\nЧат закрывается после сохранения результата и доказательств, проверки отсутствия своих процессов\\nи освобождения claim. Закрытие чата, завершение вопроса, merge, human acceptance и deploy\\nучитываются отдельно. Сессии старого процесса остановлены; этот документ сам их не перезапускает.\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a166f4-2f36-77f2-baf6-d886ea16a85d",
+            "create_time": 1792728649.953806
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    },
+    {
+      "callLine": 27,
+      "originalCall": {
+        "timestamp": "2026-10-23T04:10:51.722Z",
+        "ordinal": 26,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_0a5fcbd0c5a54a22016adade4b4b108191bc3c5d542cead288",
+          "status": "completed",
+          "call_id": "call_9c17ebf6e87e43989073df981e58bae7",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"cat /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a13f31/packet-contract.json\",max_output_tokens:12000}); text(r);\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a166f4-2f36-77f2-baf6-d886ea16a85d",
+            "create_time": 1792728651.3005867
+          }
+        }
+      },
+      "resultLine": 30,
+      "originalResult": {
+        "timestamp": "2026-10-23T04:10:51.836Z",
+        "ordinal": 29,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a166f4-583c-7291-9261-7d20bcd05f5c",
+          "call_id": "call_9c17ebf6e87e43989073df981e58bae7",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.1 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"76a1d8\",\"wall_time_seconds\":0.00000925,\"exit_code\":0,\"original_token_count\":1633,\"output\":\"{\\n  \\\"purpose\\\": \\\"Technical packet shape and concise reminders of existing pinned process; no new semantic rules, authorizations or quality credit. Scope/baseline/ownedpath in each native assignment remain authoritative.\\\",\\n  \\\"pinnedProcess\\\": \\\"git show 12e5581b:.agents/references/question-revision.md\\\",\\n  \\\"policyReads\\\": [\\n    \\\"docs/content-audits/question-authoring-guide-2026-09-02.md\\\",\\n    \\\"/Users/eaafonasev/Projects/mindbattle-planning/docs/GAME_SPEC.md section Content questions\\\",\\n    \\\"/Users/eaafonasev/Projects/mindbattle-planning/openspec/specs/question-catalog/spec.md:21-33\\\"\\n  ],\\n  \\\"frozen\\\": [\\n    \\\"questionId\\\",\\n    \\\"topicId\\\",\\n    \\\"sourceOrder\\\",\\n    \\\"difficulty\\\",\\n    \\\"correctIndex\\\"\\n  ],\\n  \\\"mutable\\\": \\\"All text including answer labels and source metadata may be source-backed rewritten. Preserve good wording. Read FULL prompt with every answer and its own note. Frozen correctIndex is not evidence for the key.\\\",\\n  \\\"semanticChecks\\\": [\\n    \\\"Personally read every field and full relevant primary context, including every distractor/note. Saved full bodies reused, not redownloaded/copied perpacket; snippet/search/HTTP200/hash alone never source proof.\\\",\\n    \\\"One key, plausible same-category alternatives, Russian grammar, correct absolute adult level. HARD specific knowledge OR substantive/multistep logic; MEDIUM thematic familiarity; EASY broad adult knowledge. No arbitrary mandatory math.\\\",\\n    \\\"Correct note adds a concrete own-option fact beyond its own prompt+key; overlap with explanation allowed. Wrong notes teach their own option and may use canonical facts keyed elsewhere. No cross-note ban.\\\",\\n    \\\"MAIN semantic duplicates checked by entity-relation-value-context/direct reverse in topic and relevant cross-catalog peers. Actual CURRENT peers and both sides of all proposed relevant pairs, including separate simultaneous proposals.\\\",\\n    \\\"Each literal group and each of four prompt-answer-note variants requires substantive claim-to-source grounds and exact locator. Repeating meaningful grounds is allowed; generic source-support templates are not evidence.\\\",\\n    \\\"source.url exact HTTPS fact page, verifiedAt actual reviewdate. Answers <=140 JS UTF16 characters; notes<=35 words; explanation2–4sentences and<=70words, directly names correct answer.\\\"\\n  ],\\n  \\\"canonicalHashes\\\": {\\n    \\\"serialization\\\": \\\"SHA256 UTF8 json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=False)\\\",\\n    \\\"groups\\\": {\\n      \\\"prompt_ordered_answers_key\\\": \\\"{prompt,answers:[answer.text in order],correctIndex}\\\",\\n      \\\"explanation\\\": \\\"literal string\\\",\\n      \\\"note0\\\": \\\"literal string\\\",\\n      \\\"note1\\\": \\\"literal string\\\",\\n      \\\"note2\\\": \\\"literal string\\\",\\n      \\\"note3\\\": \\\"literal string\\\"\\n    },\\n    \\\"triple\\\": \\\"{prompt:fullPrompt,answer,note}, ONLY these3keys; do not hash full assessment or fullPrompt key\\\"\\n  },\\n  \\\"authorCandidateEntry\\\": {\\n    \\\"id\\\": \\\"question ID\\\",\\n    \\\"topicId\\\": \\\"topic ID\\\",\\n    \\\"sourceOrder\\\": \\\"1-based frozen position\\\",\\n    \\\"status\\\": \\\"READY_FOR_INDEPENDENT_REVIEW or HOLD\\\",\\n    \\\"beforeCard\\\": \\\"exact actual CURRENT full card\\\",\\n    \\\"beforeHash\\\": \\\"canonical beforeCard SHA256\\\",\\n    \\\"proposedCard\\\": \\\"full proposed card\\\",\\n    \\\"afterHash\\\": \\\"canonical proposedCard SHA256\\\",\\n    \\\"fieldGroups\\\": \\\"DICT6 groupName -> {beforeCanonicalSHA256,afterCanonicalSHA256}; no renamed fieldGroups6before/afterdigests\\\"\\n  },\\n  \\\"authorSourceproof\\\": {\\n    \\\"rawSources\\\": \\\"LIST {path,url,sha256, capture/read provenance}; one full retained source body per path\\\",\\n    \\\"entries\\\": \\\"LIST per ID with status, literalGroups, fourFullPromptAnswerNoteAssessments, correctNoteNewFact, absoluteDifficulty\\\",\\n    \\\"literalGroups\\\": \\\"LIST6 {group,literal,literalSHA256,primaryGround:concrete exactclaim/key/limits,locator,sourcePaths:LIST strings}\\\",\\n    \\\"fourFullPromptAnswerNoteAssessments\\\": \\\"LIST4 {slot:0..3,fullPrompt,answer,note,grammar,plausibilityUniqueKeyAndNoteTruthUsefulness:concrete whykey/whydistractor/note truth/usefulness,sourcePaths:LIST strings,locator,tripleSHA256}\\\",\\n    \\\"correctNoteNewFact\\\": \\\"Name actual additional own-option fact and its primary locator; boolean alone insufficient\\\",\\n    \\\"absoluteDifficulty\\\": \\\"Frozen level plus actual audience/knowledge/reasoning ground\\\"\\n  },\\n  \\\"peers\\\": \\\"peer-snapshot.json actualCurrentPeers LIST{id,topicId,sourceOrder,card,sha256}, actual full CURRENT. Relevant proposed pairs fullcards/hashes, meaningful bilateral MAIN assessments. Cross-topic peer validation preserved separately if same-topic-only helper needs an adapter.\\\",\\n  \\\"readerReceiptEntry\\\": \\\"{id,sourceOrder,stage,currentCard,currentCardCanonicalSHA256,status,sixLiteralCanonicalGroups:[{group,literal,canonicalSHA256,individualGround,sourcesLocators}],fourFullPromptAnswerNoteVariants:[{slot,prompt,answer,note,tripleCanonicalSHA256,grammar,plausibility,truthUniqueKey,noteTruthUsefulness,sourcesLocators}],absoluteLevel,correctNoteExtraFact,defects,frozen}\\\",\\n  \\\"readerEvidence\\\": \\\"sources.json path/rawReadSHA256/url/locator/personal readEvidence/limitations; actualpeer fullcard canonicalSHA256; bilateral MAIN comparisons. Reader personally reads, never inherits author/QA PASS.\\\",\\n  \\\"workflow\\\": \\\"SOURCE qualified exactpreimage -> coordinator apply -> affected19QA -> independent exactCURRENT INITIAL -> one directed substantive authorfixcycle -> apply/affectedQA -> independent FINAL -> root binding. INITIAL independent PASS/FIX/HOLD; unresolved FINAL HOLD0. No automatic unchanged secondcycle; reopen only concrete new source/solution.\\\",\\n  \\\"roleBoundaries\\\": \\\"Authors/readers write only owned assigned new directory; no catalog/Git/index/refs/planning/claims. Coordinator owns apply/private-index commits/certification. No collaborationsubagents/new native actors by workers. No runtime/tests/build unless explicitly assigned; runtime if ever authorized mutedfromstart.\\\",\\n  \\\"stops\\\": \\\"Transfer ready portion without waiting for all.30minutes without ready: durable specific checkpoint.2same technical failures stop unchanged retries. After1actualcompaction preserve slice; after2 only atomicpreservation/STOP, no newstage.\\\",\\n  \\\"safety\\\": \\\"Both shared indexes FOREIGN. Coordinator uses private raw-byte helper/fullrefs/explicitownedfiles/freshindex hashes. Workers never default gitadd/commit/reset/checkout; avoid status commands that refresh sharedindex.\\\",\\n  \\\"qualityCredit\\\": \\\"Author READY/FIX/HOLD, structural checks, QA19, metadata and source download all credit0. Only unique exact CURRENT with substantive SOURCE+independentPASS, root binding and requiredchecks may count. Full goal exact2000, HOLD not completion.\\\"\\n}\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a166f4-2f36-77f2-baf6-d886ea16a85d",
+            "create_time": 1792728651.836588
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    },
+    {
+      "callLine": 32,
+      "originalCall": {
+        "timestamp": "2026-10-23T04:10:53.288Z",
+        "ordinal": 31,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_0a5fcbd0c5a54a22016adade4cda98819194a6bbabeb51818c",
+          "status": "completed",
+          "call_id": "call_299bfb1ae8664a1492491cc091603826",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"cat /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1593a/method-pilot.md\",max_output_tokens:12000}); text(r);\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a166f4-2f36-77f2-baf6-d886ea16a85d",
+            "create_time": 1792728652.8557134
+          }
+        }
+      },
+      "resultLine": 35,
+      "originalResult": {
+        "timestamp": "2026-10-23T04:10:53.404Z",
+        "ordinal": 34,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a166f4-5e5c-7e91-a9b1-847d2b78da0d",
+          "call_id": "call_299bfb1ae8664a1492491cc091603826",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.1 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"4eca1a\",\"wall_time_seconds\":0.000012833,\"exit_code\":0,\"original_token_count\":2208,\"output\":\"# Проверяемое продолжение без повторного оформления\\n\\nАвторизация: прямое поручение пользователя 2026-10-20 продолжить улучшение вопросов и при необходимости улучшить методику. Это применение pinned process и решений 2026-10-19, без изменения требований к содержанию, frozen scope, циклам исправления и session fences.\\n\\nПервый срез: завершить SOURCE41 sole cycle1 и SOURCE31 INITIAL. Исходный объём остаётся exact2000; на входе CURRENT890, remaining1110. HOLD и READY не дают зачёта. Интеграция, человеческая приёмка и публикация учитываются отдельно.\\n\\n- Вход — `manifest.json`, компактное представление канонического checkpoint, со ссылками на очередь и точные пакеты. Историю открывать только по конкретному расхождению.\\n- Детерминированная сверка before/after, шести групп, четырёх вариантов, frozen полей, файлов источников и peer snapshots выполняется инструментом. Координатор не пишет третью содержательную рецензию.\\n- Сохранять авторский raw неизменным. Различия полей схемы и абсолютных путей нормализовать lossless-алиасами с сохранением исходных hash/path. Не возвращать автору механическую задачу и не создавать отдельный скрипт на каждую карточку.\\n- Для SOURCE41 использовать независимый INITIAL; FINAL проверяет исправленное название и затронутый контекст, сохраняя применимые прежние суждения того же reviewer. SOURCE31 получает полноценный независимый INITIAL.\\n- Два независимых готовых изменения можно проверить одним affected content прогоном на точной общей версии. Изменение текста после QA требует проверки затронутого контракта; перенос evidence/commit сам по себе не требует повтора.\\n- Общие первичные материалы сохраняются один раз; в нормализованном пакете — ссылки на immutable raw, SHA и JSON Pointer. Полный новый текст источника не копировать ради новой роли или новой карточки.\\n- Один автор последовательно завершает одну карточку за содержательный цикл без дополнительных GO внутри разрешённого среза. До двух авторов и одного reviewer; READY-очередь не более двух пакетов. После первой компактизации завершать начатый срез, после второй — preservation/handoff.\\n\\nИсходные наблюдения: канонический checkpoint 1 546 026 байт / 84 корневых поля; поручение SOURCE41 12 396 байт; три JSON его авторского пакета 556 547 байт. Это объём документов, а не измерение токенов или доказательство ускорения.\\n\\nИзмерение пилота: уникальные принятые ID и время до binding; отдельно форматные и содержательные возвраты, повторные QA и смены владельца. Не заявлять выигрыш до результата. Не мигрировать и не удалять старую историю в этом срезе.\\n\\nНаблюдение пилота: возобновление прежнего reviewer с одной компактизацией и последним input около 419 тысяч из 475 тысяч токенов закончилось второй компактизацией и preservation HOLD41. Это не содержательный отказ и не PASS. Перед следующим возобновлением проверять не только число компактизаций, но и фактический оставшийся контекст. Насыщенную роль передавать на ограниченный остаток, сохраняя прежний INITIAL; не тратить новый цикл на повторное оформление в старом чате. Свежий reviewer проходит направленный остаток и даёт собственный FINAL, не выдавая старые прочтения за свои.\\n\\nДва содержательных уточнения из следующего среза:\\n\\n- Истинный факт из источника должен быть полезен именно для своего варианта ответа. При ремонте пробела нельзя подставлять соседний тематический факт только потому, что для него есть locator. Это проверяется в существующем основании noteTruthUsefulness, без новой обязательной формы.\\n- До объявления численной ошибки сверять категории и оговорки: «три экосистемы» само по себе не опровергает «две пустынные экосистемы». Проверка qualifier предотвращает ненужное переписывание хорошего текста; координатор направляет конкретный вопрос автору, не делает третью полную рецензию.\\n\\nНаблюдения после directed FINAL32 и подготовки разрешённого исключения42:\\n\\n- До INITIAL автор проверяет существующие четыре варианта как единый ряд: язык, детализация и подсказки должны быть сопоставимы. Добавление перевода только к правильному ответу не исправляет абсолютную сложность. Это основание уже предусмотрено grammar/plausibility/truthUniqueKey; новая форма не нужна.\\n- При замене неверного варианта автор сначала проверяет, остаётся ли он действительно неверным при буквальной формулировке вопроса. Совпадение темы или физического слоя с правильным ответом требует проверки уникальности, а не только source locator.\\n- Перед READY снимок каталога строится автоматически из текущих файлов. Не копировать fileManifest из прежней карточки и не объявлять его свежим. Разрешённые параллельные изменения фиксировать как точные технические deltas; собственную прошлую версию не считать отдельным содержательным peer.\\n- На время независимого содержательного verdict каталог не менять; evidence-only commits допустимы. Это устраняет возвращение reviewer из-за одной несогласованной rawSHA. Готовый второй SOURCE может ждать в разрешённой очереди.\\n\\nПервые два зачёта получены из уже подготовленных авторских пакетов. Последующие32/42 потребовали содержательных возвратов; ускорение новой разработки пока не доказано. HOLD сохраняется, цель exact2000 не сокращается.\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a166f4-2f36-77f2-baf6-d886ea16a85d",
+            "create_time": 1792728653.40413
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    },
+    {
+      "callLine": 39,
+      "originalCall": {
+        "timestamp": "2026-10-23T04:10:55.473Z",
+        "ordinal": 38,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_0a5fcbd0c5a54a22016adade4f047481918b21f8f2e599f281",
+          "status": "completed",
+          "call_id": "call_0e84921c2d924775bd88e206df5644fb",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"cat /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1593a/packet-format.md\",max_output_tokens:12000}); text(r);\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a166f4-2f36-77f2-baf6-d886ea16a85d",
+            "create_time": 1792728655.0184746
+          }
+        }
+      },
+      "resultLine": 42,
+      "originalResult": {
+        "timestamp": "2026-10-23T04:10:55.591Z",
+        "ordinal": 41,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a166f4-66e7-73f1-b198-5fc8f4299a89",
+          "call_id": "call_0e84921c2d924775bd88e206df5644fb",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.1 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"8ad4fb\",\"wall_time_seconds\":0.000012041,\"exit_code\":0,\"original_token_count\":1934,\"output\":\"# Компактная форма SOURCE-пакета\\n\\nЭто точная форма уже действующих six/four/source/peer требований, а не новая процедура приёмки. Для знакомства со схемой не печатать целиком старые candidate/sourceproof/peer-snapshot. Смысловые основания автор пишет сам; поля и hashes формирует инструментом. Никаких автоматически выставленных PASS.\\n\\nТри файла: `candidate.json`, `sourceproof.json`, `peer-snapshot.json`. В каждом — один и тот же фактический `sourceNativeId`, `topicId`, `cycle`, ID карточки. Native ID подтверждается coordinator по реальному session_meta, а не копируется из task owner. До START никаких записей.\\n\\n## Хэши: три разных представления\\n\\n```python\\ndef canonical_sha(value):\\n    return hashlib.sha256(json.dumps(value, ensure_ascii=False,\\n        sort_keys=True, separators=(',', ':')).encode('utf-8')).hexdigest()\\ndef file_sha(path):\\n    return hashlib.sha256(Path(path).read_bytes()).hexdigest()\\ndef body_sha(text):\\n    return hashlib.sha256(text.encode('utf-8')).hexdigest()\\n```\\n\\n- Карточка, literal (включая строку), triple и rows: `canonical_sha`.\\n- Файл: `file_sha`. Не путать с хэшем содержимого строки внутри JSON.\\n- Полный original tool body, извлечённый по JSON Pointer: `body_sha`. JSON-кавычки и escaping в этот hash не входят.\\n- Никогда не переписывать hex вручную и не копировать hash между разными представлениями.\\n\\n## Candidate\\n\\n`entries[0]` содержит `id`, `topicId`, `sourceOrder`, `status`, `beforeCard`, `beforeHash`, `proposedCard`, `afterHash`, `fieldGroups`.\\n\\n`status` — `READY_FOR_INDEPENDENT_REVIEW` либо точный `HOLD`; quality credit всегда0. Before — действительный preimage текущего назначения. Frozen ID/topic/order/difficulty/numeric key проверить по selection. Labels не заморожены глобально; править хороший текст без конкретного дефекта нельзя.\\n\\nИспользовать только dict-форму `fieldGroups`: ровно шесть ключей, каждый с вычисленными `beforeCanonicalSHA256` / `afterCanonicalSHA256`:\\n\\n```python\\ndef groups(card):\\n    return {\\n      'prompt_ordered_answers_key': {\\n        'prompt': card['prompt'],\\n        'answers': [a['text'] for a in card['answers']],\\n        'correctIndex': card['correctIndex']},\\n      'explanation': card['explanation'],\\n      **{'note'+str(k): a['note'] for k,a in enumerate(card['answers'])}}\\n```\\n\\n## Sourceproof\\n\\n`rawSources[]`: `path`, `url`, `sha256` (реальный file SHA), `captureReadProvenance`, `locator`. Для JSON-container также `completeOutputPointer` и `completeOutputSHA256` (= body SHA). Для общего capture перечислить все реальные URL/locators; не терять их из-за одинакового file path.\\n\\n`path` — только существующий устойчивый файл. Не `journal item N`, не `file#pointer`, не URL. JSON Pointer хранится отдельным полем. Новый raw сохранять один раз отдельным файлом до создания packet; не делать self-hash текущего sourceproof. Сохранённые immutable full contexts переиспользовать по file/pointer, не копировать в каждый packet.\\n\\n`entries[0].literalGroups[]`: ровно шесть объектов `group`, `literal`, `literalSHA256`, `primaryGround`, `sourcePaths`, `locator`. Literal — фактическое значение из `groups(proposedCard)`. PrimaryGround объясняет конкретный вывод, границы и qualifiers из полного первичного контекста, а не наличие ссылки.\\n\\n`fourFullPromptAnswerNoteAssessments[]`: слоты0..3, каждый содержит `fullPrompt`, `answer`, `note`, `tripleSHA256`, `grammar`, `plausibilityUniqueKeyAndNoteTruthUsefulness`, `sourcePaths`, `locator`.\\n\\nTriple = `{'prompt': fullPrompt, 'answer': answer, 'note': note}`. SourcePaths — голые file paths из rawSources; конкретный JSON Pointer/строки остаются в locator. В оценке явно обосновать грамматику, правдоподобие и единственность ключа, истинность и полезность справки именно для этого варианта. Истинный соседний тематический факт сам по себе недостаточен.\\n\\nОтдельно `correctNoteNewFact` и `absoluteDifficulty` с конкретным собственным основанием. Факт правильной справки — сверх всего prompt/key; совпадение с explanation само по себе не запрет. Source presence/посещаемость/относительное сравнение не доказывают EASY.\\n\\n## Peer snapshot\\n\\n- `globalMAIN`: 110 file bindings, 11000 rows; row shape строго `{topicId,id,prompt,answers:[четыре text],correctIndex}`, sorted topic filenames / исходный порядок вопросов. `rowsCanonicalSHA256` считается инструментом. Указанные file hashes должны соответствовать записанной текущей версии на момент передачи.\\n- Все100 текущих карточек темы сохранять инструментом, не печатать их целиком только ради формата. `actualCurrentPeers` — полные актуальные body/hash/id/topicId для peer bindings.\\n- Релевантные ближайшие карточки действительно читать целиком. Для каждой смысловой пары — конкретные entity/relation/value/context в обе стороны и direct reverse check. Лексический hit сам по себе не дубль; self-preimage binding не ещё один DISTINCT peer.\\n- Новое изменение в другом потоке требует только машинного refresh inventory и проверки действительно затронутых смысловых связей. Не читать неизменный каталог повторно; не называть старые file bindings свежими. Использовать точный questionId изменённой карточки, не угадывать его по номеру или первому hit.\\n\\n## Передача\\n\\nОдна законченная карточка на содержательный цикл. READY передать с конкретными границами/HOLD, без запроса GO на каждый патч. Никаких catalog/Git/planning/QA/других чатов со стороны SOURCE-автора. После первой compaction закончить начатый срез, после второй — preservation STOP. Зачёт даёт только точный независимый PASS + required affected QA + coordinator binding.\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a166f4-2f36-77f2-baf6-d886ea16a85d",
+            "create_time": 1792728655.591689
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    }
+  ],
+  "originalACKUnqualified": true,
+  "STARTIssued": false,
+  "uncured": true,
+  "requiredCorrection": "Four literal invocations as assigned before actual SOURCE START; never retroactive compliance."
+}
