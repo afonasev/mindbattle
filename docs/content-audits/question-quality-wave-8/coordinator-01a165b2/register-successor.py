@@ -6,9 +6,10 @@ x=m.read(D/'manifest.json');assert x['phase'].startswith('READY_FOR_READONLY_SUC
 S=sys.argv[1];native=pathlib.Path(x['rootNativeAudit']['nativeJournal']);rr=[json.loads(l) for l in native.open()];assert next(r['payload']['id'] for r in rr if r['type']=='session_meta')==m.O
 c=[(n,r['payload']) for n,r in enumerate(rr,1) if r.get('payload',{}).get('type')=='custom_tool_call' and r['payload'].get('input','').startswith('text(await tools.mcp__codex_app__create_thread({title:"coordinate: ревизия вопросов exact2000"')];assert len(c)==1
 line,call=c[0];outs=[(n,r) for n,r in enumerate(rr,1) if r.get('payload',{}).get('type')=='custom_tool_call_output' and r['payload'].get('call_id')==call['call_id']];assert len(outs)==1
-ids=[]
+ids=[];errors=[]
 def walk(v):
  if isinstance(v,dict):
+  if v.get('isError'):errors.append(v)
   for k,a in v.items():
    if k=='threadId':ids.append(a)
    else:walk(a)
@@ -20,7 +21,7 @@ def walk(v):
    try:parsed=json.loads(v.replace('\\"','"'))
    except (ValueError,TypeError):return
   if parsed!=v:walk(parsed)
-walk(outs[0][1]['payload']['output']);assert set(ids)=={S}
+walk(outs[0][1]['payload']['output']);assert set(ids)=={S} and not errors
 ps=list(pathlib.Path('/Users/eaafonasev/.codex/sessions').rglob('*'+S+'.jsonl'));assert len(ps)==1;sr=[json.loads(l) for l in ps[0].open()];assert next(r['payload']['id'] for r in sr if r['type']=='session_meta')==S
 proof=D/'successor-create-native-proof.json';m.write(proof,{'parent':m.O,'parentNative':str(native),'createCallLine':line,'createCallId':call['call_id'],'createInputSHA256':hashlib.sha256(call['input'].encode()).hexdigest(),'exactOriginalResultLine':outs[0][0],'exactOriginalResultRecord':outs[0][1],'returnedSuccessorThreadId':S,'successorNativeJournal':str(ps[0]),'successorNativeSessionMetaId':S,'noEnvOrTimestampGuess':True})
 x=m.read(D/'manifest.json');assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']);x.update(successorThreadId=S,successorNativeJournal=str(ps[0]),successorCreationProof=str(proof),successorNativeProof=str(proof),successorStatus='READONLY_BOOTSTRAP_REGISTERED')

@@ -32,7 +32,8 @@ for i,r in enumerate(rows,1):
 docs=[m.C/'docs/content-audits/question-quality-wave-8'/p for p in ['coordinator-01a14377/pinned-question-revision-12e5581b.md','coordinator-01a13f31/packet-contract.json','coordinator-01a1593a/method-pilot.md','coordinator-01a1593a/packet-format.md']]
 reads=[]
 for p in docs:
- content=p.read_text().strip();matches=[cid for cid,b in bodies if content in b];assert matches,('No complete successful untruncated read',str(p));reads.append({'path':str(p),'rawSHA256':m.raw(p),'exactSuccessfulCallIds':matches})
+ content=p.read_text().strip();matches=[cid for cid,b in bodies if content in b and str(p) in calls[cid][1]['payload'].get('input','') and all(str(other) not in calls[cid][1]['payload'].get('input','') for other in docs if other!=p)];assert matches,('No complete successful untruncated read',str(p));reads.append({'path':str(p),'rawSHA256':m.raw(p),'exactSuccessfulCallIds':matches})
+assert len({v['exactSuccessfulCallIds'][0] for v in reads})==4, 'Four separate full structured successful read calls required'
 finals=[(i,r) for i,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='message' and r['payload'].get('role')=='assistant' and r['payload'].get('phase')=='final_answer']
 assert finals
 last=finals[-1];text='\n'.join(a.get('text','') for a in last[1]['payload']['content'] if isinstance(a,dict));assert 'ACK' in text and str(x['CURRENT']) in text and str(x['remaining']) in text and 'STOP' in text
