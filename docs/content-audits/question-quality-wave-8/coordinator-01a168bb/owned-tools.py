@@ -366,4 +366,6 @@ def alias_same_topic_current_peer_container(candidate,sp,ps,R):
  b=next(b for b in bindings if b['path']==rel)
  assert b.get('sha256',b.get('fileSHA256',b.get('fileSha256')))==same['fileSHA256']
  ps['actualCurrentPeers']=peers
- ps['technicalExplicitNestedSameTopicPeerAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalPointer':'/sameTopicMAIN/actualCurrentPeers','originalTopLevelAbsent':True,'operation':'Exact100 original ordered full peer bodies, identity, digests and topic file binding verified; redundant container name only. Raw and judgments unchanged; original format gap uncured.'}
+ original_questions_absent='questions' not in same
+ if original_questions_absent:same['questions']=[peer['card'] for peer in peers]
+ ps['technicalExplicitNestedSameTopicPeerAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalPointer':'/sameTopicMAIN/actualCurrentPeers','originalTopLevelAbsent':True,'originalSameTopicQuestionsAbsent':original_questions_absent,'operation':'Exact100 original ordered full peer bodies, identity, digests and topic file binding verified; redundant container name only. Raw and judgments unchanged; original format gap uncured.'}
