@@ -621,6 +621,17 @@ for R in packet_paths:
         elif isinstance(v,list):
             for x in v: source_aliases(x)
     source_aliases(sp)
+    if R.name=='source-human-medicine28':
+        binding=m.read(D/'source28-intake-variant-container-alias.json')
+        original_sp=m.read(R/'sourceproof.json')
+        assert candidate['sourceNativeId']==binding['sourceNativeId']
+        assert m.raw(R/'sourceproof.json')==binding['rawSourceproofSHA256'] and m.raw(R/'candidate.json')==binding['rawCandidateSHA256'] and m.raw(R/'peer-snapshot.json')==binding['rawPeerSHA256']
+        for i,v in enumerate(sp['entries'][0]['fourFullPromptAnswerNoteAssessments']):
+            original=original_sp['entries'][0]['fourFullPromptAnswerNoteAssessments'][i];b=binding['originalCombinedAssessmentBindings'][i]
+            assert v['slot']==original['slot']==b['slot'] and v['grammar']==original['grammar'] and m.sha(v['grammar'])==b['literalCanonicalSHA256']
+            assert v['tripleSHA256']==original['tripleSHA256']==b['tripleSHA256'] and 'plausibilityUniqueKeyAndNoteTruthUsefulness' not in v
+            v['plausibilityUniqueKeyAndNoteTruthUsefulness']=v['grammar']
+            v['technicalOriginalCombinedAssessmentFieldAlias']={'binding':str(D/'source28-intake-variant-container-alias.json'),'originalPointer':b['originalPointer'],'operation':'Identical full existing combined author assessment string; standard container name only. Original grammar and raw retained.'}
     for v in sp['entries'][0]['fourFullPromptAnswerNoteAssessments']:
         triple = {'prompt':v['fullPrompt'],'answer':v['answer'],'note':v['note']}
         if 'tripleSHA256' in v and v['tripleSHA256'] != m.sha(triple):
