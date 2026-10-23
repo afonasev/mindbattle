@@ -50,10 +50,20 @@ active_topic=x['activeRoute']['topicId'];active_rel='src/content/topics/'+active
 intake_topic=json.loads(m.h.git(C,'show',base+':'+active_rel));current_topic=m.read(C/active_rel)
 assert [q['id'] for q in intake_topic['questions']]==[q['id'] for q in current_topic['questions']]
 changed_qids=[b['id'] for a,b in zip(intake_topic['questions'],current_topic['questions']) if a!=b]
-assert set(changed_qids)==set(x['ownProgress']['accepted'])
+applied_uncredited = {v['id']:v for k,v in x.items() if re.fullmatch('pendingHumanMedicine[0-9]+',k) and int(k.removeprefix('pendingHumanMedicine')) in x['ownedSourceOrders'] and v.get('qualityCredit')==0 and v.get('applied')}
+assert set(changed_qids)==set(x['ownProgress']['accepted'])|set(applied_uncredited)
+for qid,item in applied_uncredited.items():
+ assert item['status']=='TERMINAL_SAME_READER_FINAL_SOLE_CYCLE1_HOLD' and item['ordinaryCycle2Prohibited'] and qid in remaining
+ assert m.sha(catalog[qid])==item['appliedCurrentHash']==item['cycle1AfterHash']
+ receipt=m.read(C/item['finalReceipt'])['entries'][0]
+ assert receipt['status']=='HOLD' and receipt['stage']=='FINAL' and receipt['defects'] and receipt['currentCard']==catalog[qid] and receipt['currentCardCanonicalSHA256']==item['appliedCurrentHash']
+
 for key,item in x.items():
  if re.fullmatch('pendingHumanMedicine[0-9]+',key) and int(key.removeprefix('pendingHumanMedicine')) in x['ownedSourceOrders'] and item['qualityCredit']==0:
-  assert 'HOLD' in item['status'] and m.sha(catalog[item['id']])==item['beforeHash'], 'Uncredited HOLD proposal must remain unapplied'
+  assert 'HOLD' in item['status']
+  if not item.get('applied'):assert m.sha(catalog[item['id']])==item['beforeHash'], 'Uncredited unapplied HOLD proposal must remain unapplied'
+  else:assert item['id'] in applied_uncredited, 'Applied uncredited CURRENT requires exact terminal FINAL HOLD proof'
+
 
 original83=C/'docs/content-audits/question-quality-wave-8/coordinator-01a16254/source-history-russia83'
 for name in ['candidate.json','sourceproof.json']:
@@ -74,7 +84,7 @@ assert refs['refs/heads/'+x['codeBranch']]==pushes[0]['commit']
 main=refs['refs/heads/main'];maincards={}
 for tid in {e['topicId'] for e in sel.values()}:maincards.update({q['id']:q for q in json.loads(m.h.git(C,'show',main+':src/content/topics/'+tid+'.json'))['questions']})
 ancestor=subprocess.run(['git','-C',str(C),'merge-base','--is-ancestor','HEAD',main]);assert ancestor.returncode in [0,1]
-report={'owner':O,'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'CURRENT':n,'remaining':2000-n,'fullGoal':2000,'partitionCompleteDisjoint':True,'allCurrentAcceptedHashesExact':True,'all2000FrozenIdTopicOrderDifficultyNumericKey':True,'baseline':cp['baselineSHA'],'ownRawFreezes':raw,'ownQAReports':qa,'noSemanticRereviewOrQARerun':True,'source83OriginalByteExact':True,'allOldTopicFilesUnchangedSinceIntake':True,'ownChangedTopicPaths':changed,'ownChangedQuestionIds':changed_qids,'allOwnHOLDPreimagesUnchanged':True,'claims':x['claims'],'leaseEmpty':True,'foreignIndexes':x['foreignIndexes'],'liveIdleActors':actors,'authoritativeRemotePushAtVerification':pushes[0],'originMain':main,'acceptedExactHashesOnMain':sum(m.sha(maincards[e['questionId']])==e['cardCanonicalSha256'] for e in cp['completedCardHashes']),'featureHeadAncestorOfMain':ancestor.returncode==0,'mainIntegrationPerformed':False,'codeBranch':x['codeBranch'],'codeHeadBeforeReport':m.h.git(C,'rev-parse','HEAD'),'planningManagedBranch':x['planningBranch'],'planningManagedSHA':m.h.git(P,'rev-parse','refs/heads/'+x['planningBranch']),'planningCheckout':m.h.git(P,'branch','--show-current'),'diagnostics':str(D/'own-procedural-diagnostics.json'),'originalSource1PreHoldMetadataByteGapUncured':True,'allHOLDQualityCredit':0,'goalComplete':False,'notRun':['full suite','runtime','browser','Player/build','deploy','release','OpenSpec archive','human/device acceptance']}
+report={'owner':O,'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'CURRENT':n,'remaining':2000-n,'fullGoal':2000,'partitionCompleteDisjoint':True,'allCurrentAcceptedHashesExact':True,'all2000FrozenIdTopicOrderDifficultyNumericKey':True,'baseline':cp['baselineSHA'],'ownRawFreezes':raw,'ownQAReports':qa,'noSemanticRereviewOrQARerun':True,'source83OriginalByteExact':True,'allOldTopicFilesUnchangedSinceIntake':True,'ownChangedTopicPaths':changed,'ownChangedQuestionIds':changed_qids,'allUnappliedOwnHOLDPreimagesUnchanged':True,'ownAppliedUncreditedHolds':{qid:v['appliedCurrentHash'] for qid,v in applied_uncredited.items()},'claims':x['claims'],'leaseEmpty':True,'foreignIndexes':x['foreignIndexes'],'liveIdleActors':actors,'authoritativeRemotePushAtVerification':pushes[0],'originMain':main,'acceptedExactHashesOnMain':sum(m.sha(maincards[e['questionId']])==e['cardCanonicalSha256'] for e in cp['completedCardHashes']),'featureHeadAncestorOfMain':ancestor.returncode==0,'mainIntegrationPerformed':False,'codeBranch':x['codeBranch'],'codeHeadBeforeReport':m.h.git(C,'rev-parse','HEAD'),'planningManagedBranch':x['planningBranch'],'planningManagedSHA':m.h.git(P,'rev-parse','refs/heads/'+x['planningBranch']),'planningCheckout':m.h.git(P,'branch','--show-current'),'diagnostics':str(D/'own-procedural-diagnostics.json'),'originalSource1PreHoldMetadataByteGapUncured':True,'allHOLDQualityCredit':0,'goalComplete':False,'notRun':['full suite','runtime','browser','Player/build','deploy','release','OpenSpec archive','human/device acceptance']}
 out=D/'handoff-verification.json';assert not out.exists();m.write(out,report)
 print(m.savecode([out,pathlib.Path(__file__)],'Preserve closed exact current hashes raw freezes and bounded QA evidence'))
 print({'CURRENT':n,'remaining':2000-n,'rawFreezes':len(raw),'QAReports':len(qa),'allFrozen2000':True,'acceptedHashesOnMain':report['acceptedExactHashesOnMain'],'idleActors':len(actors)})

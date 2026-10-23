@@ -6,7 +6,7 @@ x=m.read(D/'manifest.json');cp=m.read(pathlib.Path(x['canonicalCheckpoint']));n=
 if released:assert x['phase']=='EXACT4_RELEASED_PENDING_SUCCESSOR_CLAIM' and x['successorThreadId'] and cp['pendingSuccessor']==x['successorThreadId']
 assert m.read(m.P/'.flow-leases.json')=={}
 for root,key in [(m.C,'code'),(m.P,'planning')]:assert m.raw(pathlib.Path(m.h.git(root,'rev-parse','--path-format=absolute','--git-path','index')))==x['foreignIndexes'][key]
-ref='refs/heads/codex/question-quality-wave-6';head=m.h.git(m.C,'rev-parse',ref);m.h.git(m.C,'diff','--check','5508df6f6873d38d08539b2cee1ae488d223cc0d',head);m.h.git(m.C,'push','origin',ref+':'+ref);remote=m.h.git(m.C,'ls-remote','origin',ref).split()[0];assert remote==head
+ref='refs/heads/codex/question-quality-wave-6';head=m.h.git(m.C,'rev-parse',ref);m.h.git(m.C,'diff','--check',m.read(D/'takeover.json')['predecessorRemotePush']['commit'],head);m.h.git(m.C,'push','origin',ref+':'+ref);remote=m.h.git(m.C,'ls-remote','origin',ref).split()[0];assert remote==head
 payload={'repo':str(m.C),'remote':'origin','branch':'codex/question-quality-wave-6','commit':head,'readbackVerified':True,'mainIntegrated':False,'CURRENT':n,'remaining':2000-n}
 idx=pathlib.Path(m.h.git(m.P,'rev-parse','--path-format=absolute','--git-path','index'));expected=m.raw(idx);assert expected==x['foreignIndexes']['planning']
 with m.flow.locked():
