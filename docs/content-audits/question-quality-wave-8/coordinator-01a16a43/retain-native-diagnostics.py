@@ -51,7 +51,7 @@ for actor in [x['rootNativeAudit'], *x['actors'].values(), *x.get('retiredNative
         codes += [v for v in legacy if v!=0]
         script_failed = any(t.startswith('Script failed') for t in texts)
         call_line, call = calls[p['call_id']]
-        evidence = {'callLine':call_line,'originalCall':call,'resultLine':line,'originalResult':row,'exitCodes':codes,'legacyOutputOnlyExitCode':legacy,'scriptFailed':script_failed,'inheritedBeforeCurrentOwner':inherited_actor or (first_own_reader_start is not None and call_line < first_own_reader_start)}
+        evidence = {'nativeJournal':str(native),'callLine':call_line,'originalCallCanonicalSHA256':m.sha(call),'resultLine':line,'originalResultCanonicalSHA256':m.sha(row),'call_id':p['call_id'],'exitCodes':codes,'legacyOutputOnlyExitCode':legacy,'scriptFailed':script_failed,'inheritedBeforeCurrentOwner':inherited_actor or (first_own_reader_start is not None and call_line < first_own_reader_start)}
         if codes or script_failed:
             bad.append(evidence)
         actual_truncation = any(t.startswith('Warning: truncated output') for t in texts)
@@ -61,11 +61,12 @@ for actor in [x['rootNativeAudit'], *x['actors'].values(), *x.get('retiredNative
             match = re.match(r'Warning: truncated output \(original token count: (\d+)\)',output)
             if match:
                 if int(match[1]) == result.get('original_token_count'):actual_truncation = True
-                else:inherited_warning_data.append({'resultLine':line,'currentOriginalTokenCount':result.get('original_token_count'),'inheritedWarningTokenCount':int(match[1]),'originalResult':row,'notNewTruncation':True})
+                else:inherited_warning_data.append({'nativeJournal':str(native),'resultLine':line,'currentOriginalTokenCount':result.get('original_token_count'),'inheritedWarningTokenCount':int(match[1]),'originalResultCanonicalSHA256':m.sha(row),'notNewTruncation':True})
         if actual_truncation:truncated.append(evidence)
     report['actors'][actor['threadId']] = {'native':str(native),'originalNativePath':actor['nativeJournal'],'actualCompactions':sum(r['type']=='compacted' for r in rows),'nonzeroOriginals':bad,'truncatedOriginals':truncated,'inheritedWarningData':inherited_warning_data,'newCurrentOwnerNonzero':sum(not v['inheritedBeforeCurrentOwner'] for v in bad),'newCurrentOwnerTruncated':sum(not v['inheritedBeforeCurrentOwner'] for v in truncated)}
 out = D/'closed-slice-diagnostics.json'
 assert not out.exists(), 'Closed original diagnostics are immutable; no overwrite'
+report['originalResolution']='Exact journal/line/call_id and canonical record digests, no history copy. If a journal moves on archive, resolve only its exact native-ID filename and verify session_meta.id before reading.'
 m.write(out,report)
 summary = D/'own-procedural-diagnostics.json'
 m.write(summary,{'owner':m.O,'closedOriginals':str(out),'closedOriginalsSHA256':m.raw(out),'earlierOriginalSnapshot':str(D/'technical-native-originals.json'),'earlierOriginalSnapshotSHA256':m.raw(D/'technical-native-originals.json'),'actors':{sid:{'actualCompactions':a['actualCompactions'],'nonzeroOriginals':len(a['nonzeroOriginals']),'truncatedOriginals':len(a['truncatedOriginals']),'newCurrentOwnerNonzero':a['newCurrentOwnerNonzero'],'newCurrentOwnerTruncated':a['newCurrentOwnerTruncated'],'inheritedWarningData':len(a['inheritedWarningData'])} for sid,a in report['actors'].items()},'allOriginalDiagnosticsUncured':True,'noEmbeddedHistoricalExecutionsCountedAsNew':True})
