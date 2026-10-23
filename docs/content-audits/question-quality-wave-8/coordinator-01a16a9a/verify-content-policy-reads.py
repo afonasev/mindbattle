@@ -2,8 +2,8 @@
 import pathlib,json,importlib.util,sys
 D=pathlib.Path(__file__).parent
 s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
-order=sys.argv[1];uid=sys.argv[2]
-p=pathlib.Path(m.read(D/f'source{order}-bootstrap-proof.json')['nativeJournal'])
+order=sys.argv[1];uid=sys.argv[2];role='reader' if '--reader' in sys.argv[3:] else 'source'
+p=pathlib.Path(m.read(D/f'{role}{order}-bootstrap-proof.json')['nativeJournal'])
 rows=[json.loads(l) for l in p.open()]
 assert [v['payload']['id'] for v in rows if v.get('type')=='session_meta']==[uid]
 assert sum(v.get('type')=='compacted' for v in rows)==0
@@ -40,6 +40,6 @@ for i,cid,r in outs:
  if isinstance(a,dict) and a.get('verifiedSessionMetaId')==uid and a.get('actualCompactions')==0 and 'originalCreateCall' in a and 'originalCreateOutput' in a:
   identity.append({'line':i,'call_id':cid,'originalIdentityResultCanonicalSHA256':m.sha(a)})
 assert identity
-out=D/f'source{order}-content-policy-proof.json';assert not out.exists()
-m.write(out,{'owner':m.O,'sourceNativeId':uid,'nativeJournal':str(p),'requiredReads':proof,'identityOriginalResults':identity,'fullContentReadBeforeSTART':True,'qualityCredit':0,'nonzeroExecs':sum(r['exit_code']!=0 for i,cid,r in outs),'truncatedToolCalls':len({cid for i,cid,r in outs if 'Warning: truncated output' in r['output']})})
+out=D/f'{role}{order}-content-policy-proof.json';assert not out.exists()
+m.write(out,{'owner':m.O,('readerNativeId' if role=='reader' else 'sourceNativeId'):uid,'nativeJournal':str(p),'requiredReads':proof,'identityOriginalResults':identity,'fullContentReadBeforeSTART':True,'qualityCredit':0,'nonzeroExecs':sum(r['exit_code']!=0 for i,cid,r in outs),'truncatedToolCalls':len({cid for i,cid,r in outs if 'Warning: truncated output' in r['output']})})
 print(m.savecode([out,pathlib.Path(__file__)],'Bind exact separate original SOURCE policy and Content reads before START'))
