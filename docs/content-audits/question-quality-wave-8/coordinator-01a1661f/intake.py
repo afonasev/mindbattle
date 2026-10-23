@@ -11,19 +11,6 @@ a = importlib.util.module_from_spec(spec); spec.loader.exec_module(a); a.P = P
 def groups(q):
     return {'prompt_ordered_answers_key': {'prompt':q['prompt'], 'answers':[v['text'] for v in q['answers']], 'correctIndex':q['correctIndex']}, 'explanation':q['explanation'], **{'note'+str(k):v['note'] for k,v in enumerate(q['answers'])}}
 
-def directed_initial_defect(initial, order):
-    entry=initial['entries'][0]
-    if entry['status']=='FIX':return True
-    # The new INITIAL18 evidence HOLD has its first, explicitly bounded fix
-    # authorized under the pinned one-defect cycle. Never relabel it as FIX.
-    x=m.read(D/'manifest.json');p=x['pendingHumanMedicine18'];auth=p['cycle1Authorization']
-    assert order==18 and entry['status']==auth['initialStatus']=='HOLD'
-    assert m.raw(pathlib.Path(auth['initialReceipt']))==auth['initialReceiptSHA256']
-    assert entry['currentCardCanonicalSHA256']==auth['beforeHash']
-    assert [d['code'] for d in entry['defects']]==auth['defectCodes']==['PRIMARY_ABO_PROFILE_MAPPING_NOT_RETAINED']
-    assert auth['cycle']==1 and not (D/'qualified-source-human-medicine18-cycle1').exists()
-    return True
-
 reports = []
 packet_paths = [pathlib.Path(p).resolve() for p in sys.argv[1:]] if len(sys.argv)>1 else [OLD/n for n in ['source-polar41-cycle1-fresh', 'source-parks31-complete']]
 assert len(sys.argv)>1, "Explicit new route packet required; no inherited fallback"
@@ -59,7 +46,7 @@ for R in packet_paths:
     if e['status'] == 'READY_FOR_SAME_READER_FINAL':
         assert candidate['cycle'] == 1 and R.name.endswith('-cycle1')
         initial = m.read(D/('independent-human-medicine'+str(e['sourceOrder'])+'-initial/receipt.json'))
-        assert initial['entries'][0]['id'] == e['id'] and directed_initial_defect(initial,e['sourceOrder'])
+        assert initial['entries'][0]['id'] == e['id'] and initial['entries'][0]['status'] == 'FIX'
         e['originalDirectedFinalStatus'] = e['status']
         e['status'] = 'READY_FOR_INDEPENDENT_REVIEW'
     if R.name=='source-history-russia91' and candidate['sourceNativeId']=='01a164f2-bdf7-78b1-a2b1-803a3d34a4f0':
@@ -196,7 +183,7 @@ for R in packet_paths:
                 original_candidate=m.read(R.with_name(R.name.removesuffix('-cycle1'))/'candidate.json')
                 assert candidate['sourceNativeId']==original_candidate['sourceNativeId']
                 assert e['beforeCard']==original_candidate['entries'][0]['proposedCard']
-                assert directed_initial_defect(m.read(D/('independent-human-medicine'+str(e['sourceOrder'])+'-initial/receipt.json')),e['sourceOrder'])
+                assert m.read(D/('independent-human-medicine'+str(e['sourceOrder'])+'-initial/receipt.json'))['entries'][0]['status']=='FIX'
             assert explicit['path']==declared and explicit['sha256']==global_audit['freshInventorySHA256']==m.raw(inv_path)
             bound_inventory=m.read(inv_path)
             assert explicit['globalRowsCanonicalSHA256']==global_audit['rowsCanonicalSHA256']==bound_inventory['globalMAIN']['rowsCanonicalSHA256']
