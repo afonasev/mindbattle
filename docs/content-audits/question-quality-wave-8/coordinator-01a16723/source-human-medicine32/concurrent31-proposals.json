@@ -1,0 +1,116 @@
+{
+  "purpose": "Bounded bilateral semantic assessment of simultaneous SOURCE31 and SOURCE32 proposals before application. No source/content review beyond these exact proposed cards.",
+  "proposals": [
+    {
+      "source": "SOURCE31",
+      "id": "human-medicine-brain-protection",
+      "topicId": "human-medicine",
+      "sourceOrder": 31,
+      "canonicalSHA256": "a7f539f3e80ec5e1d6711050497e6a12208a87e7a20a90755bd43045b77a0726",
+      "proposedCard": {
+        "id": "human-medicine-brain-protection",
+        "difficulty": "easy",
+        "prompt": "Какая часть скелета защищает головной мозг?",
+        "answers": [
+          {
+            "text": "Таз",
+            "note": "Таз передаёт вес верхней части тела на нижние конечности, когда человек стоит."
+          },
+          {
+            "text": "Лопатка",
+            "note": "Головка плечевой кости сочленяется с суставной впадиной лопатки, образуя плечевой сустав."
+          },
+          {
+            "text": "Череп",
+            "note": "У взрослого череп состоит из 22 отдельных костей; нижняя челюсть — единственная подвижная кость черепа."
+          },
+          {
+            "text": "Грудина",
+            "note": "Грудина служит передней опорой грудной клетки; первые семь пар рёбер прикрепляются к ней напрямую."
+          }
+        ],
+        "correctIndex": 2,
+        "explanation": "Череп поддерживает лицо и защищает головной мозг. Его мозговой отдел окружает мозг; внутри него расположена черепная полость.",
+        "source": {
+          "title": "OpenStax Anatomy and Physiology 2e: 7.2 The Skull",
+          "url": "https://openstax.org/books/anatomy-and-physiology-2e/pages/7-2-the-skull",
+          "verifiedAt": "2026-10-23"
+        }
+      },
+      "ERVC": {
+        "entity": "skull / cranial skeleton",
+        "relation": "protects",
+        "value": "brain",
+        "context": "basic human skeletal anatomy; cranial protection"
+      },
+      "directReverseCheck": "No. It asks which skeletal structure protects the brain; the reverse would ask what the skull protects or where the brain is protected. It does not ask where lungs are located."
+    },
+    {
+      "source": "SOURCE32",
+      "id": "human-medicine-lungs-location",
+      "topicId": "human-medicine",
+      "sourceOrder": 32,
+      "canonicalSHA256": "d5f40142b20fefec5459382379124e06feee9c7f60e0e45a31ced337fb4cf1d3",
+      "proposedCard": {
+        "id": "human-medicine-lungs-location",
+        "difficulty": "easy",
+        "prompt": "В какой полости тела находятся лёгкие?",
+        "answers": [
+          {
+            "text": "В брюшной полости",
+            "note": "Брюшная полость — отдел брюшно-тазовой полости, в котором расположены органы пищеварения."
+          },
+          {
+            "text": "В тазовой полости",
+            "note": "Тазовая полость — часть брюшно-тазовой полости, где расположены органы репродуктивной системы."
+          },
+          {
+            "text": "В черепной полости",
+            "note": "Черепная полость содержит головной мозг; спинномозговая полость продолжается от неё вдоль спинного мозга."
+          },
+          {
+            "text": "В грудной полости",
+            "note": "Грудную полость окружают рёбра, а снизу её ограничивает диафрагма."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Лёгкие находятся в грудной полости — верхнем отделе вентральной полости тела. Сердце расположено там же, в средостении; снизу грудную полость отделяет диафрагма.",
+        "source": {
+          "title": "OpenStax: Anatomical Terminology (Anatomy and Physiology 2e)",
+          "url": "https://openstax.org/books/anatomy-and-physiology-2e/pages/1-6-anatomical-terminology",
+          "verifiedAt": "2026-10-23"
+        }
+      },
+      "ERVC": {
+        "entity": "lungs",
+        "relation": "are located in",
+        "value": "thoracic cavity",
+        "context": "major human body cavity; basic anatomy"
+      },
+      "directReverseCheck": "No. It asks the body cavity containing the lungs; the reverse would ask which organs occupy the thoracic cavity. It does not ask which skeletal structure protects the brain."
+    }
+  ],
+  "bilateralAssessment": {
+    "source31AgainstSource32": "SOURCE31 tests skull -> protects -> brain. SOURCE32 tests lungs -> located in -> thoracic cavity. The entities, relations, and keyed values differ, so this is not a semantic duplicate or a direct reverse. SOURCE32 slot 2 does mention that the cranial cavity houses the brain; that is a related supporting fact but is a distractor note, not the tested skull-protection relation.",
+    "source32AgainstSource31": "SOURCE32’s keyed fact concerns lung location in the thoracic cavity. SOURCE31 does not assert a lung location, and its answer “Череп” is not the answer to SOURCE32. No competing key or contradiction arises.",
+    "sharedContext": "Both are elementary human-anatomy cards and SOURCE32’s cranial-cavity distractor note intersects the brain/skull topic of SOURCE31. They remain distinguishable by their exact prompts, relation, and correct answer."
+  },
+  "dependencyConclusion": "No semantic or application-order dependency is indicated. The proposals can be considered independently; preserve the noted brain/cranial-cavity adjacency during independent review. This is not a new SOURCE attempt or fix-cycle.",
+  "source32OriginalArtifacts": {
+    "hashesBefore": {
+      "candidate.json": "3e5792529fa2241b5b9fd7a79f0d2332818a7d06c51b3351ad7f83cc89ab7971",
+      "sourceproof.json": "a22585ada26a500b503b4c48b773ac5ae23c46b56c86832c77ab64a9ddd1a0d2",
+      "peer-snapshot.json": "7e2c1045f8b83d62726a81e8fd7306470a3055d876668c3a75c3ecdcf3749e08",
+      "openstax-anatomical-terminology.json": "0069d51cc9ceea07c9cd74cb9d604d952dc1b2a839e3dfba66fa599102f4dc6d",
+      "fresh-inventory.json": "ebfe19e5261975128696fb11467d77e2d636ed249d76928c0a2f5f20d5e3dd80"
+    },
+    "hashesAfter": {
+      "candidate.json": "3e5792529fa2241b5b9fd7a79f0d2332818a7d06c51b3351ad7f83cc89ab7971",
+      "sourceproof.json": "a22585ada26a500b503b4c48b773ac5ae23c46b56c86832c77ab64a9ddd1a0d2",
+      "peer-snapshot.json": "7e2c1045f8b83d62726a81e8fd7306470a3055d876668c3a75c3ecdcf3749e08",
+      "openstax-anatomical-terminology.json": "0069d51cc9ceea07c9cd74cb9d604d952dc1b2a839e3dfba66fa599102f4dc6d",
+      "fresh-inventory.json": "ebfe19e5261975128696fb11467d77e2d636ed249d76928c0a2f5f20d5e3dd80"
+    },
+    "unchanged": true
+  }
+}
