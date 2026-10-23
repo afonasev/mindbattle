@@ -1,0 +1,61 @@
+{
+  "owner": "01a16854-59b3-7cd0-8e1b-1299742fbeeb",
+  "sourceNativeId": "01a16860-4c13-7723-a9f4-21d9fe5830cc",
+  "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/23/rollout-2026-10-23T15-48-23-01a16860-4c13-7723-a9f4-21d9fe5830cc.jsonl",
+  "allPrestartDispatchesPersonallyReadOnly": true,
+  "originalDispatchCount": 16,
+  "originalDeviations": [
+    {
+      "meaning": "Own identity code reads original matched create response then inserts observed returned ID as literal; recursive text decoder stops on escaped quoting without recording decode error/unescape. Coordinator independently verified exact original created ID and session_meta; original incomplete decoder provenance remains UNCURED. No source facts affected.",
+      "callLine": 110,
+      "originalCall": {
+        "timestamp": "2026-10-23T10:49:03.199Z",
+        "ordinal": 109,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_0195dbf3795b7a9b016adb3b9cbb5c81918b9c8c11a4a40d09",
+          "status": "completed",
+          "call_id": "call_042a28908a7544fba9bcf6e7265bf7db",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport json\\nfrom pathlib import Path\\nimport glob\\nraw='{\\\"content\\\":[{\\\"type\\\":\\\"text\\\",\\\"text\\\":\\\"{\\\\\\\\\\\"threadId\\\\\\\\\\\":\\\\\\\\\\\"01a16860-4c13-7723-a9f4-21d9fe5830cc\\\\\\\\\\\",\\\\\\\\\\\"hostId\\\\\\\\\\\":\\\\\\\\\\\"local\\\\\\\\\\\"}\\\"}],\\\"isError\\\":false}'\\nobj=json.loads(raw)\\nwhile isinstance(obj,str): obj=json.loads(obj)\\nthread=obj['content'][0]['text']\\nwhile isinstance(thread,str):\\n    try: thread=json.loads(thread)\\n    except json.JSONDecodeError: break\\nrid='01a16860-4c13-7723-a9f4-21d9fe5830cc'\\npaths=list(Path('/Users/eaafonasev/.codex/sessions').glob('**/*'+rid+'.jsonl'))\\nif not paths:\\n    paths=[Path(x) for x in glob.glob('/Users/eaafonasev/.codex/archived_sessions/**/*'+rid+'.jsonl',recursive=True)]\\nprint('decoded_returned_id',rid,'hostId','local')\\nfor p in paths:\\n    rows=[json.loads(line) for line in p.read_text().splitlines() if line.strip()]\\n    meta=[r for r in rows if r.get('type')=='session_meta']\\n    compacted=sum(r.get('type')=='compacted' for r in rows)\\n    print('journal',p,'session_meta.id',[m.get('payload',{}).get('id') for m in meta],'top_level_compacted_count',compacted)\\nprint('matching_journal_count',len(paths))\\nPY\",max_output_tokens:2000}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a16860-4e2c-7532-927c-a387f0005553",
+            "create_time": 1792752540.7345984
+          }
+        }
+      },
+      "outputLine": 113,
+      "originalOutput": {
+        "timestamp": "2026-10-23T10:49:03.413Z",
+        "ordinal": 112,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a16860-e6b5-77d0-96b5-cf3839f3e1df",
+          "call_id": "call_042a28908a7544fba9bcf6e7265bf7db",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"1d57dd\",\"wall_time_seconds\":0.000016209,\"exit_code\":0,\"original_token_count\":76,\"output\":\"decoded_returned_id 01a16860-4c13-7723-a9f4-21d9fe5830cc hostId local\\njournal /Users/eaafonasev/.codex/sessions/2026/10/23/rollout-2026-10-23T15-48-23-01a16860-4c13-7723-a9f4-21d9fe5830cc.jsonl session_meta.id ['01a16860-4c13-7723-a9f4-21d9fe5830cc'] top_level_compacted_count 0\\nmatching_journal_count 1\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a16860-4e2c-7532-927c-a387f0005553",
+            "create_time": 1792752543.413456
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      }
+    }
+  ],
+  "allOriginalDeviationsUncured": true,
+  "qualityCredit": 0
+}
