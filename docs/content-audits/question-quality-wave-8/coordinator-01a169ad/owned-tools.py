@@ -18,6 +18,35 @@ def write(p,v):
  p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
 def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+def alias_explicit_inventory_binding(candidate,sp,ps,R):
+ """Expose only the author's explicit SHA-bound inventory; raw stays immutable."""
+ if 'sameTopicMAIN' in ps or 'inventoryBinding' not in ps:return
+ import copy
+ R=pathlib.Path(R);assert R.parent==D
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==0
+ e=candidate['entries'][0];b=ps['inventoryBinding'];p=pathlib.Path(b['path'])
+ assert p.is_relative_to(R) and raw(p)==b['sha256']
+ inv=read(p);same=inv['sameTopicMAIN'];g=inv['globalMAIN'];topic=read(C/same['path'])
+ assert same['topicId']==e['topicId']==topic['id']
+ assert same['questions']==topic['questions'] and same['questionCount']==b['topicCards']==100
+ assert same['fileSHA256']==b['topicFileSHA256']==raw(C/same['path'])
+ assert g['questionCount']==b['globalMAINRows']==11000 and g['topicFileCount']==b['globalTopicFiles']==110
+ assert g['rowsCanonicalSHA256']==ps['globalMAIN']['rowsCanonicalSHA256']
+ assert g['allCurrentFileByteBindings']==ps['globalMAIN']['allCurrentFileByteBindings']
+ rows=[]
+ for f in g['allCurrentFileByteBindings']:
+  assert raw(C/f['path'])==f['sha256'];t=read(C/f['path'])
+  rows.extend({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']} for q in t['questions'])
+ assert len(rows)==11000 and sha(rows)==g['rowsCanonicalSHA256']
+ assert 'rows' not in ps['globalMAIN'] or ps['globalMAIN']['rows']==rows
+ ps['sameTopicMAIN']=copy.deepcopy(same)
+ sp.update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
+ ps['globalMAIN'].update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
+ if 'crossTopicCurrentPeers' in ps:
+  assert 'crossCatalogClosestFullBodies' not in ps
+  ps['crossCatalogClosestFullBodies']=copy.deepcopy(ps['crossTopicCurrentPeers'])
+ ps['technicalExplicitInventoryBindingAlias']={'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalPointer':'/inventoryBinding','inventoryPath':str(p),'inventorySHA256':raw(p),'operation':'Exact original path/SHA and full100/110/11000 live bindings expose redundant container names only. Original peers, cross-topic bodies, assessments and raw remain unchanged; no new ground or quality credit.'}
 def alias_explicit_root_candidate(candidate,sp,ps,R):
  """Expose an explicit own single-card root as entries[0]; raw stays immutable."""
  if 'entries' in candidate:return
