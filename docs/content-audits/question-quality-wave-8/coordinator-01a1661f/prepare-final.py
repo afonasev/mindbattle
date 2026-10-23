@@ -19,6 +19,13 @@ assert qa['success'] and qa['numPassedTests'] == 19
 assert qa['numFailedTests'] == qa['numPendingTests'] == 0
 qa_commit = m.savecode([qa_path], 'Preserve exact '+label+' affected content QA19 PASS')
 x = m.read(D/'manifest.json')
+initial = m.read(D/('independent-human-medicine'+str(order)+'-initial/receipt.json'))
+initial_status = initial['entries'][0]['status']
+assert initial_status in ['FIX','HOLD']
+if initial_status=='HOLD':
+    auth=x['pendingHumanMedicine18']['cycle1Authorization']
+    assert order==18 and auth['initialStatus']=='HOLD' and auth['cycle']==1
+    assert m.raw(pathlib.Path(auth['initialReceipt']))==auth['initialReceiptSHA256']
 cp = m.read(m.P/'openspec/changes/question-quality-future-waves/current-checkpoint.json')
 assert cp['owner'] == m.O and len(cp['currentEligibleCompletedIds']) == x['CURRENT']
 t = m.read(D/('reader-human-medicine'+str(order)+'-initial-task.json'))
@@ -37,7 +44,7 @@ t.update(topicId='human-medicine', owner=m.O, manifest=str(D/'manifest.json'),
          focus='Directed same-reader FINAL on your exact saved INITIAL defect and sole SOURCE-cycle1. Personally assess revised options/own notes and changed dependencies against complete retained primary contexts; verify unique key and actual absolute '+q['difficulty'].upper()+'. Preserve your own applicable judgments about unchanged literals by explicit exact pointer, no third full revision or inherited author verdict. Keep six/four exact whole-card bindings and current relevant bilateral MAIN peers. Unresolved defect is terminal HOLD; no new INITIAL/ordinarycycle2.',
          currentContext='CURRENT'+str(x['CURRENT'])+'/2000 remaining'+str(x['remaining'])+'. Exact solecycle1 applied '+label+' QA19PASS. All HOLD/attempt/cycle fences preserved. Catalog frozen until FINAL; no new INITIAL or ordinarycycle2.',
          contextPreflight='Verify own native session_meta and actual compacted events; never use coordinator env identity. Reviewer '+x['actors']['reviewer']['threadId']+'. First actual compaction finish this card only; second preservationSTOP. Compact task only, no whole checkpoint/history/catalog dump.',
-         history='Your INITIAL FIX is immutable at previousIndependentInitial. This is its sole directed ordinary cycle1 FINAL, PASS or terminal HOLD; no reset. SOURCE READY/QA19 do not grant credit.')
+         history='Your INITIAL '+initial_status+' is immutable at previousIndependentInitial. This is its sole directed ordinary cycle1 FINAL, PASS or terminal HOLD; no reset. SOURCE READY/QA19 do not grant credit.')
 t['returnSchema'] = t['returnSchema'].replace('stage INITIAL', 'stage FINAL').replace('status PASS/FIX/HOLD', 'status PASS/HOLD')
 task_path = D/('reader-'+label+'-final-task.json')
 m.write(task_path, t)
