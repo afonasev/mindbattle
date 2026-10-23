@@ -344,3 +344,26 @@ def alias_source31_root_entry_identity(candidate, sp, R):
   assert k not in e or e[k] == sp[k]
   e[k] = sp[k]
  e['technicalRootIdentityContainerAlias'] = {'originalSourceproofSHA256':raw(R/'sourceproof.json'),'originalPointers':['/id','/topicId','/sourceOrder','/status'],'operation':'Already explicit root identity aliased into sole entry; candidate, six literals, four triples, original assessments and raw unchanged. Original KeyError remains uncured.'}
+
+def alias_same_topic_current_peer_container(candidate,sp,ps,R):
+ """Expose exact original nested100 peers; no new body or judgment."""
+ if 'actualCurrentPeers' in ps:return
+ same=ps.get('sameTopicMAIN',{})
+ if 'actualCurrentPeers' not in same:return
+ R=pathlib.Path(R);assert R.parent==D
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ assert candidate['cycle']==sp['cycle']==ps['cycle']
+ assert len(candidate['entries'])==1
+ e=candidate['entries'][0];tid=e['topicId']
+ assert candidate['topicId']==sp['topicId']==ps['topicId']==same['topicId']==tid
+ rel='src/content/topics/'+tid+'.json';assert same['path']==rel and same['questionCount']==100
+ topic=read(C/rel);peers=same['actualCurrentPeers']
+ assert topic['id']==tid and raw(C/rel)==same['fileSHA256']
+ assert len(peers)==100 and [p['sourceOrder'] for p in peers]==list(range(1,101))
+ assert [p['card'] for p in peers]==topic['questions']
+ assert all(p['topicId']==tid and p['id']==p['card']['id'] and sha(p['card'])==p.get('sha256',p.get('canonicalSHA256')) for p in peers)
+ bindings=ps['globalMAIN']['allCurrentFileByteBindings']
+ b=next(b for b in bindings if b['path']==rel)
+ assert b.get('sha256',b.get('fileSHA256',b.get('fileSha256')))==same['fileSHA256']
+ ps['actualCurrentPeers']=peers
+ ps['technicalExplicitNestedSameTopicPeerAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalPointer':'/sameTopicMAIN/actualCurrentPeers','originalTopLevelAbsent':True,'operation':'Exact100 original ordered full peer bodies, identity, digests and topic file binding verified; redundant container name only. Raw and judgments unchanged; original format gap uncured.'}

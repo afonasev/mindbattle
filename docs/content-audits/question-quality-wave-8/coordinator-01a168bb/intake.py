@@ -18,6 +18,7 @@ for R in packet_paths:
     assert R.parent==D and R.name.startswith("source-human-medicine"), "Only owned medicine packet"
     name = R.name; B = D/('qualified-'+name)
     candidate, sp, ps = [m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
+    m.alias_same_topic_current_peer_container(candidate,sp,ps,R)
     m.alias_explicit_root_candidate(candidate,sp,ps,R)
     m.alias_source77_own_prior_application(candidate,sp,ps,R)
     m.alias_source31_root_entry_identity(candidate,sp,R)
