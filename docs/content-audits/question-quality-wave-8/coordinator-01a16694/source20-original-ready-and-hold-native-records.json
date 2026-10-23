@@ -1,0 +1,168 @@
+{
+  "sourceNativeId": "01a1669c-2fba-7853-85b8-37807c59dde2",
+  "nativeJournalActual": "/Users/eaafonasev/.codex/archived_sessions/rollout-2026-10-23T07-34-34-01a1669c-2fba-7853-85b8-37807c59dde2.jsonl",
+  "records": [
+    {
+      "callLine": 285,
+      "originalCallRecord": {
+        "timestamp": "2026-10-23T02:40:06.175Z",
+        "ordinal": 284,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_0066d920258a0e25016adac8f1bfe08191b145726c0b0041ef",
+          "status": "completed",
+          "call_id": "call_f8be6d14f77a413c8c11aa9df6cc318d",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nimport json, hashlib, copy\\nC=Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle')\\nO=C/'docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20'\\ninv=json.loads((O/'fresh-inventory.json').read_text())\\ncur=copy.deepcopy(next(x['card'] for x in inv['actualCurrentPeers'] if x['id']=='human-medicine-middle-ear-bones'))\\nsha=lambda v: hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode('utf-8')).hexdigest()\\nassert sha(cur)=='d08471b48c1d2b77f088fa3607c9f61420159122a1978700ee8fb5fe6e93f70a'\\nproposed=copy.deepcopy(cur)\\nproposed['answers'][0]['note']='Сошник — непарная кость, формирующая задне-нижний край носовой перегородки; наковальня и стремечко относятся к косточкам среднего уха.'\\nproposed['answers'][1]['note']='Эти косточки усиливают колебания барабанной перепонки и передают их к улитке внутреннего уха.'\\nproposed['answers'][2]['note']='Улитка заполнена жидкостью, а волосковые клетки в ней преобразуют движение в электрический сигнал; молоточек и стремечко — косточки среднего уха.'\\nproposed['answers'][3]['note']='Преддверие относится к внутреннему уху; наковальня входит в цепь косточек среднего уха, передающих колебания к улитке.'\\nproposed['explanation']='Молоточек, наковальня и стремечко образуют цепь трёх косточек среднего уха. Они усиливают колебания барабанной перепонки и передают их к улитке, где движение жидкости запускает волну вдоль базилярной мембраны.'\\nproposed['source']={'title':'NIDCD: How Do We Hear?','url':'https://www.nidcd.nih.gov/health/how-do-we-hear','verifiedAt':'2026-10-23'}\\nassert proposed['id']==cur['id'] and proposed['difficulty']==cur['difficulty'] and proposed['correctIndex']==cur['correctIndex']\\nassert len(proposed['answers'])==4\\n\\ndef groups(card):\\n return {'prompt_ordered_answers_key':{'prompt':card['prompt'],'answers':[a['text'] for a in card['answers']],'correctIndex':card['correctIndex']},'explanation':card['explanation'],**{'note'+str(k):a['note'] for k,a in enumerate(card['answers'])}}\\nbefore_groups,after_groups=groups(cur),groups(proposed)\\nfield_groups={k:{'beforeCanonicalSHA256':sha(before_groups[k]),'afterCanonicalSHA256':sha(after_groups[k])} for k in before_groups}\\nassert len(field_groups)==6\\nprimary='docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json'\\nalt='docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/ncbi-mesh-vomer.json'\\nraw=[]\\nfor p,url,loc,prov,pointer,bodysha in [\\n(primary,'https://www.nidcd.nih.gov/health/how-do-we-hear','L11-L18; especially L11, L14-L17','Native web.open record in 01a1669c-2fba-7853-85b8-37807c59dde2, line 219; complete returned page L0-L34 personally read.', '/originalRecord/payload/output/1/text','36ab8f34cfab056b7126a81cf666f83d49f432a313a5743ef332e135530351fb'),\\n(alt,'https://www.ncbi.nlm.nih.gov/mesh/68055172','L52-L55; L103-L105','Native web.open official NCBI MeSH alternative in 01a1669c-2fba-7853-85b8-37807c59dde2, line 244; complete returned page L0-L131 personally read.', '/originalRecord/payload/output/1/text','ebb8a366c37b5a138cc30afa8fab06bb01055778c1fec6dfd9eee77693d2f725')]:\\n pth=C/p\\n body=json.loads(pth.read_text())\\n assert body['completeOutputPointer']==pointer and body['completeOutputSHA256']==bodysha\\n raw.append({'path':p,'url':url,'sha256':hashlib.sha256(pth.read_bytes()).hexdigest(),'captureReadProvenance':prov,'locator':loc,'completeOutputPointer':pointer,'completeOutputSHA256':bodysha})\\nsourcepaths=[primary,alt]\\nliterals=[]\\nfor group,val in after_groups.items():\\n if group=='prompt_ordered_answers_key':\\n  ground='NIDCD directly names malleus, incus and stapes as the three middle-ear bones (L14), uniquely matching ordered answer slot 1; it places cochlea, vestibule and semicircular canals in inner ear in its diagram description (L11). The proposed wrong combinations each include an inner-ear structure or vomer, not three ossicles.'\\n  loc=[{'path':primary,'locator':'L11, L14'},{'path':alt,'locator':'L52-L55'}]\\n elif group=='explanation':\\n  ground='NIDCD states that the eardrum sends vibrations to the three bones, that the bones amplify them and send them to the cochlea, and that cochlear fluid motion produces a traveling wave along the basilar membrane.'\\n  loc=[{'path':primary,'locator':'L14-L16'}]\\n elif group=='note0':\\n  ground='NCBI MeSH defines vomer as a facial bone forming the posterior and inferior border of the nasal septum; NIDCD identifies incus and stapes among the middle-ear bones.'\\n  loc=[{'path':alt,'locator':'L52-L55'},{'path':primary,'locator':'L11, L14'}]\\n elif group=='note1':\\n  ground='NIDCD states that the three ossicles amplify incoming vibrations and send them to the fluid-filled cochlea in the inner ear.'\\n  loc=[{'path':primary,'locator':'L14-L15'}]\\n elif group=='note2':\\n  ground='NIDCD describes the fluid-filled cochlea and hair-cell movement that opens channels and creates an electrical signal; it identifies malleus and stapes as middle-ear bones.'\\n  loc=[{'path':primary,'locator':'L14-L17'}]\\n else:\\n  ground='NIDCD diagram description places vestibule in the inner ear and identifies incus among the middle-ear bones; its text says the ossicles send vibration to cochlea.'\\n  loc=[{'path':primary,'locator':'L11, L14-L15'}]\\n literals.append({'group':group,'literal':val,'literalSHA256':sha(val),'primaryGround':ground,'sourcePaths':([primary,alt] if group=='note0' or group=='prompt_ordered_answers_key' else [primary]),'locator':loc})\\nvariants=[]\\nfor i,a in enumerate(proposed['answers']):\\n triple={'prompt':proposed['prompt'],'answer':a['text'],'note':a['note']}\\n facts=[\\n  ('Вариант соединяет сошник с двумя среднеушными косточками. Сошник — кость носовой перегородки, а наковальня и стремечко входят в цепь среднего уха; это тематически близкий, но неполный набор.',[{'path':alt,'locator':'L52-L55'},{'path':primary,'locator':'L11, L14'}]),\\n  ('Падеж и форма однородного перечисления согласованы с вопросом. Это единственный вариант, полностью совпадающий с названной NIDCD тройкой молоточек, наковальня и стремечко; дополнительная справка сообщает об усилении колебаний.',[{'path':primary,'locator':'L14-L15'}]),\\n  ('Перечень объединяет две реальные косточки среднего уха с улиткой внутреннего уха. Формулировка грамматически согласована; заметка отдельно сообщает о функции волосковых клеток улитки.',[{'path':primary,'locator':'L11, L14-L17'}]),\\n  ('Перечень объединяет одну косточку среднего уха с двумя структурами внутреннего уха. Перечисление грамматически параллельно; заметка связывает каждую названную структуру с собственным отделом уха.',[{'path':primary,'locator':'L11, L14-L15'}])][i]\\n variants.append({'slot':i,'fullPrompt':proposed['prompt'],'answer':a['text'],'note':a['note'],'tripleSHA256':sha(triple),'grammar':'Вопрос задаёт название группы, все варианты — грамматически параллельные именные перечни в именительном падеже; сочетания читаются без падежного нарушения.','plausibilityUniqueKeyAndNoteTruthUsefulness':facts[0],'sourcePaths':list(dict.fromkeys(x['path'] for x in facts[1])),'locator':facts[1]})\\nentry={'id':proposed['id'],'topicId':'human-medicine','sourceOrder':20,'status':'READY_FOR_INDEPENDENT_REVIEW','beforeCard':cur,'beforeHash':sha(cur),'proposedCard':proposed,'afterHash':sha(proposed),'fieldGroups':field_groups}\\nsourceproof={'sourceNativeId':'01a1669c-2fba-7853-85b8-37807c59dde2','topicId':'human-medicine','cycle':0,'id':proposed['id'],'sourceOrder':20,'status':'READY_FOR_INDEPENDENT_REVIEW','qualityCredit':0,'sourceSelection':{'baselineCode':'bb5bcc7f6227548108423f4f239f939c9c02b064','beforeHash':sha(cur),'frozen':{'id':proposed['id'],'topicId':'human-medicine','sourceOrder':20,'difficulty':'medium','correctIndex':1}},'rawSources':raw,'networkAttempts':[{'sequence':1,'type':'primary_open','url':'https://www.nidcd.nih.gov/health/how-do-we-hear','tool':'web__run open','result':'Success; complete returned page lines L0-L34 read personally; relevant L11-L18.'},{'sequence':2,'type':'official_alternative_discovery','query':'site:ncbi.nlm.nih.gov/books vomer bone nasal septum anatomy','tool':'web__run search_query','result':'Search returned NCBI MeSH Vomer and other candidates; only official NCBI MeSH Vomer opened and used; search snippets not used as evidence.'},{'sequence':3,'type':'official_alternative_open','url':'https://www.ncbi.nlm.nih.gov/mesh/68055172','tool':'web__run open','result':'Success; complete returned page lines L0-L131 read personally; relevant L52-L55.'}],'networkAccounting':{'webInvocations':3,'primaryAttempts':1,'officialAlternativePathsOpened':1,'retries':0,'resets':0},'entries':[{'id':proposed['id'],'status':'READY_FOR_INDEPENDENT_REVIEW','literalGroups':literals,'fourFullPromptAnswerNoteAssessments':variants,'correctNoteNewFact':{'fact':'The ossicles amplify eardrum vibrations before passing them to the cochlea. This is additional to naming the bones and is supported by the primary page.','sourcePaths':[primary],'locator':'L14-L15'},'absoluteDifficulty':{'level':'medium','ground':'Naming the three auditory ossicles requires specific familiarity with human ear anatomy; this is not broad adult knowledge. A player familiar with the topic can recognize the complete set, while distractors combine real nearby anatomical structures and are not absurd. It needs one thematic fact, not specialist diagnosis or multi-step reasoning.'}}]}\\n# Current peer snapshot, preserving exact inventory generated from live disk.\\npeer={'sourceNativeId':'01a1669c-2fba-7853-85b8-37807c59dde2','topicId':'human-medicine','sourceOrder':20,'id':proposed['id'],'globalMAIN':inv['globalMAIN'],'sameTopicMAIN':inv['sameTopicMAIN'],'actualCurrentPeers':inv['actualCurrentPeers'],'relevantProposedPairs':[{'idA':proposed['id'],'hashA':sha(proposed),'cardA':proposed,'idB':'human-medicine-ext-balance-ear','hashB':next(x['sha256'] for x in inv['actualCurrentPeers'] if x['id']=='human-medicine-ext-balance-ear'),'cardB':next(x['card'] for x in inv['actualCurrentPeers'] if x['id']=='human-medicine-ext-balance-ear'),'MAIN_bilateral':{'A_to_B':'Card A asks which three middle-ear bones conduct sound. Card B asks which inner-ear structure senses rotational head movement. Entity, relation and value differ; both concern ear anatomy but neither asserts or reverses the other fact.','B_to_A':'Card B is about vestibular rotation sensing, not the auditory ossicle chain; card A is about the auditory ossicle names, not vestibular sensing. Not a direct reverse or semantic duplicate.'}}]}\\n(O/'candidate.json').write_text(json.dumps({'sourceNativeId':'01a1669c-2fba-7853-85b8-37807c59dde2','topicId':'human-medicine','cycle':0,'entries':[entry]},ensure_ascii=False,indent=2)+'\\\\n')\\n(O/'sourceproof.json').write_text(json.dumps(sourceproof,ensure_ascii=False,indent=2)+'\\\\n')\\n(O/'peer-snapshot.json').write_text(json.dumps(peer,ensure_ascii=False,indent=2)+'\\\\n')\\nprint(json.dumps({'candidate':str(O/'candidate.json'),'candidateSHA256':hashlib.sha256((O/'candidate.json').read_bytes()).hexdigest(),'afterHash':sha(proposed),'sourceproof':str(O/'sourceproof.json'),'sourceproofSHA256':hashlib.sha256((O/'sourceproof.json').read_bytes()).hexdigest(),'peerSnapshot':str(O/'peer-snapshot.json'),'peerSnapshotSHA256':hashlib.sha256((O/'peer-snapshot.json').read_bytes()).hexdigest(),'globalMAINRows':len(inv['globalMAIN']['rows']),'sameTopicPeers':len(inv['actualCurrentPeers']),'qualityCredit':0},ensure_ascii=False))\\nPY\",max_output_tokens:2000}); text(JSON.stringify({exit_code:r.exit_code,output:r.output}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1669f-6521-7b92-be15-bdc63cbd1d4a",
+            "create_time": 1792723185.7506418
+          }
+        }
+      },
+      "originalOutputs": [
+        {
+          "line": 288,
+          "record": {
+            "timestamp": "2026-10-23T02:40:06.366Z",
+            "ordinal": 287,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call_output",
+              "id": "ctco_01a166a1-40de-7970-956e-94638e07b5f9",
+              "call_id": "call_f8be6d14f77a413c8c11aa9df6cc318d",
+              "output": [
+                {
+                  "type": "input_text",
+                  "text": "Script completed\nWall time 0.1 seconds\nOutput:\n"
+                },
+                {
+                  "type": "input_text",
+                  "text": "{\"exit_code\":0,\"output\":\"{\\\"candidate\\\": \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/candidate.json\\\", \\\"candidateSHA256\\\": \\\"f7f46ede6eae092821d7b4e07c56e4ed47679d64dff4d506542091b99870c703\\\", \\\"afterHash\\\": \\\"b697381c6145edf7da3a7d878f78329237132b692193230e38f31d4a2b98352c\\\", \\\"sourceproof\\\": \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/sourceproof.json\\\", \\\"sourceproofSHA256\\\": \\\"52655f5cc628192d0b5416e309c329fdfe6ce65d9cb331c127b09d40db49506c\\\", \\\"peerSnapshot\\\": \\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/peer-snapshot.json\\\", \\\"peerSnapshotSHA256\\\": \\\"26b703a56420250da8f130e186c127325ecb7961e275d410157286d70267bd12\\\", \\\"globalMAINRows\\\": 11000, \\\"sameTopicPeers\\\": 100, \\\"qualityCredit\\\": 0}\\n\"}"
+                }
+              ],
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a1669f-6521-7b92-be15-bdc63cbd1d4a",
+                "create_time": 1792723206.366843
+              }
+            },
+            "metadata": {
+              "client_authored": false,
+              "fallback_token_limit_override": 12000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "callLine": 292,
+      "originalCallRecord": {
+        "timestamp": "2026-10-23T02:40:15.236Z",
+        "ordinal": 291,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_0066d920258a0e25016adac90a213c8191a72652b2aa75de11",
+          "status": "completed",
+          "call_id": "call_1d73fce69b09433bbbaadef8c0fb529b",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport json,pathlib\\np=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/sourceproof.json')\\nd=json.loads(p.read_text())\\nfor v in d['entries'][0]['fourFullPromptAnswerNoteAssessments']:\\n assert isinstance(v['plausibilityUniqueKeyAndNoteTruthUsefulness'], list)\\n v['plausibilityUniqueKeyAndNoteTruthUsefulness']=v['plausibilityUniqueKeyAndNoteTruthUsefulness'][0]\\np.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\\\\n')\\nprint('fixed variant assessment types')\\nPY\\npython3 - <<'PY'\\nimport json,hashlib,pathlib\\nO=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20')\\nsha=lambda v:hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()\\nc=json.loads((O/'candidate.json').read_text()); s=json.loads((O/'sourceproof.json').read_text()); p=json.loads((O/'peer-snapshot.json').read_text())\\ne=c['entries'][0]; q=e['proposedCard']; b=e['beforeCard']\\nassert (e['id'],e['topicId'],e['sourceOrder'],q['difficulty'],q['correctIndex'])==('human-medicine-middle-ear-bones','human-medicine',20,'medium',1)\\nassert e['beforeHash']==sha(b)=='d08471b48c1d2b77f088fa3607c9f61420159122a1978700ee8fb5fe6e93f70a'\\nassert e['afterHash']==sha(q)\\nassert len(e['fieldGroups'])==6 and len(s['entries'][0]['literalGroups'])==6 and len(s['entries'][0]['fourFullPromptAnswerNoteAssessments'])==4\\nassert len(p['globalMAIN']['rows'])==11000 and len(p['actualCurrentPeers'])==100\\nassert all(isinstance(v['plausibilityUniqueKeyAndNoteTruthUsefulness'],str) for v in s['entries'][0]['fourFullPromptAnswerNoteAssessments'])\\nassert all(v['tripleSHA256']==sha({'prompt':v['fullPrompt'],'answer':v['answer'],'note':v['note']}) for v in s['entries'][0]['fourFullPromptAnswerNoteAssessments'])\\nassert all(v['literalSHA256']==sha(v['literal']) for v in s['entries'][0]['literalGroups'])\\nassert all(v['afterCanonicalSHA256']==sha({'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']}) if k=='prompt_ordered_answers_key' else v['afterCanonicalSHA256']==sha(q['explanation'] if k=='explanation' else q['answers'][int(k[-1])]['note']) for k,v in e['fieldGroups'].items())\\nassert len(q['explanation'].split())<=70 and 2<=len([x for x in q['explanation'].split('.') if x.strip()])<=4\\nassert all(len(a['note'].split())<=35 for a in q['answers'])\\nprint(json.dumps({'result':'PASS','frozen':'preserved','beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'groups':6,'variants':4,'globalRows':11000,'actualPeers':100,'explanationWords':len(q['explanation'].split()),'noteWords':[len(a['note'].split()) for a in q['answers']],'qualityCredit':0}))\\nPY\",max_output_tokens:3000}); text(JSON.stringify({exit_code:r.exit_code,output:r.output}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1669f-6521-7b92-be15-bdc63cbd1d4a",
+            "create_time": 1792723210.1316633
+          }
+        }
+      },
+      "originalOutputs": [
+        {
+          "line": 295,
+          "record": {
+            "timestamp": "2026-10-23T02:40:15.429Z",
+            "ordinal": 294,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call_output",
+              "id": "ctco_01a166a1-6445-7393-9810-7859da3763e4",
+              "call_id": "call_1d73fce69b09433bbbaadef8c0fb529b",
+              "output": [
+                {
+                  "type": "input_text",
+                  "text": "Script completed\nWall time 0.1 seconds\nOutput:\n"
+                },
+                {
+                  "type": "input_text",
+                  "text": "{\"exit_code\":0,\"output\":\"Traceback (most recent call last):\\n  File \\\"<stdin>\\\", line 5, in <module>\\nAssertionError\\n{\\\"result\\\": \\\"PASS\\\", \\\"frozen\\\": \\\"preserved\\\", \\\"beforeHash\\\": \\\"d08471b48c1d2b77f088fa3607c9f61420159122a1978700ee8fb5fe6e93f70a\\\", \\\"afterHash\\\": \\\"b697381c6145edf7da3a7d878f78329237132b692193230e38f31d4a2b98352c\\\", \\\"groups\\\": 6, \\\"variants\\\": 4, \\\"globalRows\\\": 11000, \\\"actualPeers\\\": 100, \\\"explanationWords\\\": 28, \\\"noteWords\\\": [17, 13, 20, 16], \\\"qualityCredit\\\": 0}\\n\"}"
+                }
+              ],
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a1669f-6521-7b92-be15-bdc63cbd1d4a",
+                "create_time": 1792723215.429388
+              }
+            },
+            "metadata": {
+              "client_authored": false,
+              "fallback_token_limit_override": 12000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "callLine": 330,
+      "originalCallRecord": {
+        "timestamp": "2026-10-23T02:40:56.117Z",
+        "ordinal": 329,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_0066d920258a0e25016adac93566cc8191a52b2673c1e250b4",
+          "status": "completed",
+          "call_id": "call_c2d3ae6f8f2f4199aabf91b9c698f259",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport json,pathlib\\nO=pathlib.Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20')\\ncp=O/'candidate.json'; sp=O/'sourceproof.json'\\nc=json.loads(cp.read_text()); s=json.loads(sp.read_text())\\nc['entries'][0]['status']='HOLD'\\ns['status']='HOLD'\\ns['entries'][0]['status']='HOLD'\\ns['policyReadCorrection']={'path':'/Users/eaafonasev/Projects/mindbattle/planning/docs/GAME_SPEC.md','section':'Content questions','actualLocator':'lines 135-285 inclusive; next section starts at line 286','readAt':'2026-10-23','readMethod':'single bounded successful sed -n 135,285p call; full untruncated returned output read personally','priorRead':'Earlier successful call covered only lines 135-168. Its accompanying ACK incorrectly said the full section had been read. This original partial-read/false-full-ACK remains uncured; the later full read is not retrocompliance.','holdReason':'The required full policy section was not read before the packet was first marked READY. The packet is now HOLD for coordinator disposition; no content/source cycle reset and no additional source attempt.'}\\ncp.write_text(json.dumps(c,ensure_ascii=False,indent=2)+'\\\\n')\\nsp.write_text(json.dumps(s,ensure_ascii=False,indent=2)+'\\\\n')\\nprint(json.dumps({'candidateStatus':c['entries'][0]['status'],'sourceproofStatus':s['status'],'candidateSHA256':__import__('hashlib').sha256(cp.read_bytes()).hexdigest(),'sourceproofSHA256':__import__('hashlib').sha256(sp.read_bytes()).hexdigest(),'correctionLocator':s['policyReadCorrection']['actualLocator']}))\\nPY\",max_output_tokens:2000}); text(JSON.stringify({exit_code:r.exit_code,output:r.output}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a1669f-6521-7b92-be15-bdc63cbd1d4a",
+            "create_time": 1792723253.4028172
+          }
+        }
+      },
+      "originalOutputs": [
+        {
+          "line": 333,
+          "record": {
+            "timestamp": "2026-10-23T02:40:56.255Z",
+            "ordinal": 332,
+            "type": "response_item",
+            "payload": {
+              "type": "custom_tool_call_output",
+              "id": "ctco_01a166a2-03bf-7a42-90bb-6ec3eb39f5d8",
+              "call_id": "call_c2d3ae6f8f2f4199aabf91b9c698f259",
+              "output": [
+                {
+                  "type": "input_text",
+                  "text": "Script completed\nWall time 0.1 seconds\nOutput:\n"
+                },
+                {
+                  "type": "input_text",
+                  "text": "{\"exit_code\":0,\"output\":\"{\\\"candidateStatus\\\": \\\"HOLD\\\", \\\"sourceproofStatus\\\": \\\"HOLD\\\", \\\"candidateSHA256\\\": \\\"d71c2bbf376ea2cb56daad44fb62ac83fa86b4455f421182618dff81c279613f\\\", \\\"sourceproofSHA256\\\": \\\"c1d865e05cd34091e75a893dd2dd01aea13172bd7e67d0bce05d780728b62723\\\", \\\"correctionLocator\\\": \\\"lines 135-285 inclusive; next section starts at line 286\\\"}\\n\"}"
+                }
+              ],
+              "internal_chat_message_metadata_passthrough": {
+                "turn_id": "01a1669f-6521-7b92-be15-bdc63cbd1d4a",
+                "create_time": 1792723256.255707
+              }
+            },
+            "metadata": {
+              "client_authored": false,
+              "fallback_token_limit_override": 12000
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "rawFirstRootByteFreeze": "36f0d030e039230b48378284eea48f23b942deb8",
+  "originalREADYPreimageBytesBeforeStatusChangeNotRootCaptured": true,
+  "noReconstructionOrRetrocompliance": true
+}
