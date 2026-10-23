@@ -1,0 +1,170 @@
+{
+  "taskStartLine": 115,
+  "newTaskNonzero": 2,
+  "newTaskTruncated": 1,
+  "owner": "01a168bb-acce-7442-9c79-71e240771c35",
+  "sourceNativeId": "01a168f5-d819-7343-a3aa-dae334c23be8",
+  "nativeJournalActual": "/Users/eaafonasev/.codex/sessions/2026/10/23/rollout-2026-10-23T18-31-44-01a168f5-d819-7343-a3aa-dae334c23be8.jsonl",
+  "actualCompactions": 0,
+  "nonzeroOriginals": [
+    {
+      "callLine": 228,
+      "originalCall": {
+        "timestamp": "2026-10-23T13:35:39.440Z",
+        "ordinal": 227,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_08c62afc8620cb22016adb629e2a20819187d22f420aea3260",
+          "status": "completed",
+          "call_id": "call_6ba66de2e4c24f09bfebb6e55a1636c1",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:'python3 - <<\\'PY\\'\\nimport json, hashlib\\nfrom pathlib import Path\\nbase = Path(\\\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\\\")\\nout = base / \\\"docs/content-audits/question-quality-wave-8/coordinator-01a168bb/source-human-medicine51\\\"\\ntask = json.loads((base / \\\"docs/content-audits/question-quality-wave-8/coordinator-01a168bb/source-human-medicine51-task.json\\\").read_text())\\ninv = json.loads((out / \\\"fresh-inventory.json\\\").read_text())\\ncard = next(x for x in inv[\\\"sameTopicMAIN\\\"][\\\"questions\\\"] if x[\\\"id\\\"] == task[\\\"id\\\"])\\npeer = next(x for x in inv[\\\"actualCurrentPeers\\\"] if x[\\\"id\\\"] == \\\"human-medicine-largest-organ\\\")\\nbefore = peer[\\\"card\\\"]\\nsha = lambda v: hashlib.sha256(json.dumps(v, ensure_ascii=False, sort_keys=True, separators=(\\\",\\\", \\\":\\\")).encode()).hexdigest()\\nassert sha(card) == task[\\\"beforeHash\\\"]\\nassert card == before\\n# Exact current original card from live inventory; leave it unchanged because there is no supported distinct replacement.\\ngroups = {\\n \\\"prompt_ordered_answers_key\\\": {\\\"prompt\\\": card[\\\"prompt\\\"], \\\"answers\\\": [a[\\\"text\\\"] for a in card[\\\"answers\\\"]], \\\"correctIndex\\\": card[\\\"correctIndex\\\"]},\\n \\\"explanation\\\": card[\\\"explanation\\\"],\\n **{\\\"note\\\"+str(i): a[\\\"note\\\"] for i,a in enumerate(card[\\\"answers\\\"])}\\n}\\ngroup_rows = [{\\\"group\\\": k, \\\"literal\\\": v, \\\"literalSHA256\\\": sha(v), \\\"primaryGround\\\": \\\"AUTHORHOLD: no independently qualified primary-source ground is asserted for this literal in this packet; the retained Medicine1 attempt is a prior HOLD and is not adopted as proof. The exact extant claim overlaps the current largest-organ MAIN peer.\\\", \\\"sourcePaths\\\": [], \\\"locator\\\": \\\"No qualified source locator asserted; see blockedAttemptMetadata for the non-replayable prior attempt boundary.\\\"} for k,v in groups.items()]\\nassess = []\\nfor i,a in enumerate(card[\\\"answers\\\"]):\\n    assess.append({\\\"slot\\\": i, \\\"fullPrompt\\\": card[\\\"prompt\\\"], \\\"answer\\\": a[\\\"text\\\"], \\\"note\\\": a[\\\"note\\\"],\\n      \\\"tripleSHA256\\\": sha({\\\"prompt\\\":card[\\\"prompt\\\"],\\\"answer\\\":a[\\\"text\\\"],\\\"note\\\":a[\\\"note\\\"]}),\\n      \\\"grammar\\\": \\\"Reviewed as a complete prompt-answer substitution; no new source-based correction is proposed.\\\",\\n      \\\"plausibilityUniqueKeyAndNoteTruthUsefulness\\\": \\\"HOLD: this variant cannot receive source-qualified truth/usefulness in this packet. The key option remains the skin, and the prompt relation (external body covering/largest area) overlaps the current sourceOrder 1 largest-organ item; other options are organs but this does not supply a distinct fact.\\\",\\n      \\\"sourcePaths\\\": [], \\\"locator\\\": \\\"No qualified primary-source locator asserted.\\\"})\\nentries = [{\\\"id\\\":task[\\\"id\\\"],\\\"topicId\\\":task[\\\"topicId\\\"],\\\"sourceOrder\\\":task[\\\"sourceOrder\\\"],\\\"status\\\":\\\"HOLD\\\",\\\"beforeCard\\\":card,\\\"beforeHash\\\":sha(card),\\\"proposedCard\\\":card,\\\"afterHash\\\":sha(card),\\\"fieldGroups\\\":{k:{\\\"beforeCanonicalSHA256\\\":sha(v),\\\"afterCanonicalSHA256\\\":sha(v)} for k,v in groups.items()},\\\"authorVerdict\\\":\\\"AUTHORHOLD\\\",\\\"reason\\\":\\\"Do not force READY. Current question repeats the skin/largest-organ MAIN fact in a scope qualifier (outer covering/largest area). Medicine1 AUTHORHOLD records the target source claim as already attempted and prohibits retry or adjacent workaround. No retained independently qualified source supports a genuinely distinct one-card replacement within this assignment.\\\",\\\"qualityCredit\\\":0}]\\ncandidate = {\\\"purpose\\\":\\\"SOURCE51 author packet; HOLD only, no certification or catalog change\\\",\\\"sourceNativeId\\\":\\\"01a168f5-d819-7343-a3aa-dae334c23be8\\\",\\\"topicId\\\":task[\\\"topicId\\\"],\\\"cycle\\\":task[\\\"cycle\\\"],\\\"entries\\\":entries}\\nsourceproof = {\\\"purpose\\\":\\\"SOURCE51 source assessment; AUTHORHOLD, prior HOLD evidence not adopted\\\",\\\"sourceNativeId\\\":\\\"01a168f5-d819-7343-a3aa-dae334c23be8\\\",\\\"topicId\\\":task[\\\"topicId\\\"],\\\"cycle\\\":task[\\\"cycle\\\"],\\\"rawSources\\\":[],\\\"blockedAttemptMetadata\\\":[{\\\"path\\\":\\\"docs/content-audits/question-quality-wave-8/coordinator-01a165b2/human-medicine1-network-accounting.json\\\",\\\"actualWebCalls\\\":5,\\\"priorStatus\\\":\\\"AUTHORHOLD fence; original source claim cannot be replayed or adopted\\\",\\\"usedAsProof\\\":False},{\\\"path\\\":\\\"docs/content-audits/question-quality-wave-8/coordinator-01a165b2/source-human-medicine1/sourceproof.json\\\",\\\"cardId\\\":\\\"human-medicine-largest-organ\\\",\\\"priorStatus\\\":\\\"HOLD\\\",\\\"usedAsProof\\\":False}],\\\"entries\\\":[{\\\"id\\\":task[\\\"id\\\"],\\\"status\\\":\\\"HOLD\\\",\\\"literalGroups\\\":group_rows,\\\"fourFullPromptAnswerNoteAssessments\\\":assess,\\\"correctNoteNewFact\\\":None,\\\"correctNoteNewFactHoldReason\\\":\\\"No independently qualified own-option fact established; do not inherit prior Medicine1 proof.\\\",\\\"absoluteDifficulty\\\":\\\"Frozen EASY; the unchanged prompt is a direct identification question, but author source qualification is HOLD and no completion credit is claimed.\\\"}],\\\"limits\\\":\\\"No network calls; no known-URL replay; no prior HOLD promotion or proof adoption. No raw source context is represented as current proof.\\\"}\\n# Exact bilateral MAIN comparison, including both full current cards and canonical hashes.\\nmain_pair = {\\\"left\\\":{\\\"id\\\":card[\\\"id\\\"],\\\"topicId\\\":task[\\\"topicId\\\"],\\\"sourceOrder\\\":51,\\\"card\\\":card,\\\"sha256\\\":sha(card)},\\\"right\\\":{\\\"id\\\":before[\\\"id\\\"],\\\"topicId\\\":task[\\\"topicId\\\"],\\\"sourceOrder\\\":1,\\\"card\\\":before,\\\"sha256\\\":sha(before)},\\\"leftToRight\\\":\\\"Both ask about skin's status as the body's largest organ/area: order 1 asks which organ is usually called the largest; order 51 asks which organ forms the outer covering and is largest by area. The outer-covering and area wording does not establish a distinct entity-relation-value-context claim here.\\\",\\\"rightToLeft\\\":\\\"The order 1 skin/largest-organ relation directly answers the order 51 prompt; the second wording is a qualifier/rephrase of the same MAIN claim.\\\",\\\"directReverseCheck\\\":\\\"No independent reverse fact; same skin-largest-organ relation.\\\"}\\npeers = {\\\"purpose\\\":\\\"Fresh actual CURRENT peer snapshot for SOURCE51 HOLD\\\",\\\"sourceNativeId\\\":\\\"01a168f5-d819-7343-a3aa-dae334c23be8\\\",\\\"topicId\\\":task[\\\"topicId\\\"],\\\"sourceOrder\\\":51,\\\"globalMAIN\\\":inv[\\\"globalMAIN\\\"],\\\"actualCurrentPeers\\\":inv[\\\"actualCurrentPeers\\\"],\\\"relevantPairs\\\":[main_pair],\\\"qualityCredit\\\":0}\\nfor name,value in ((\\\"candidate.json\\\",candidate),(\\\"sourceproof.json\\\",sourceproof),(\\\"peer-snapshot.json\\\",peers)):\\n    (out/name).write_text(json.dumps(value,ensure_ascii=False,indent=2)+\\\"\\\\n\\\")\\nprint(json.dumps({\\\"outputDirectory\\\":str(out),\\\"files\\\":[\\\"candidate.json\\\",\\\"sourceproof.json\\\",\\\"peer-snapshot.json\\\",\\\"fresh-inventory.json\\\"],\\\"beforeHash\\\":sha(card),\\\"matchesAssignedBeforeHash\\\":sha(card)==task[\\\"beforeHash\\\"],\\\"frozen\\\":{\\\"id\\\":card[\\\"id\\\"],\\\"topicId\\\":task[\\\"topicId\\\"],\\\"sourceOrder\\\":51,\\\"difficulty\\\":card[\\\"difficulty\\\"],\\\"correctIndex\\\":card[\\\"correctIndex\\\"]},\\\"mainPeer\\\":peer[\\\"id\\\"],\\\"verdict\\\":\\\"AUTHORHOLD\\\",\\\"qualityCredit\\\":0,\\\"networkCalls\\\":0},ensure_ascii=False))\\nPY',max_output_tokens:1500}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a168f8-2ee8-7193-a144-b985a8229e07",
+            "create_time": 1792762526.167509
+          }
+        }
+      },
+      "resultLine": 230,
+      "originalResult": {
+        "timestamp": "2026-10-23T13:35:39.621Z",
+        "ordinal": 229,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a168f9-6e65-7fa2-9eca-faf7d5b42f98",
+          "call_id": "call_6ba66de2e4c24f09bfebb6e55a1636c1",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script failed\nWall time 0.1 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "Script error:\nSyntaxError: Unexpected identifier 's'"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a168f8-2ee8-7193-a144-b985a8229e07",
+            "create_time": 1792762539.621587
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      },
+      "exitCodes": [],
+      "scriptFailed": true
+    },
+    {
+      "callLine": 234,
+      "originalCall": {
+        "timestamp": "2026-10-23T13:35:51.989Z",
+        "ordinal": 233,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_08c62afc8620cb22016adb62ae3e7c8191b313e7bfcf63aaef",
+          "status": "completed",
+          "call_id": "call_c23ce212509f431ab0e26e23b09326c7",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:`python3 - <<'PY'\nimport json, hashlib\nfrom pathlib import Path\nbase = Path(\"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle\")\nout = base / \"docs/content-audits/question-quality-wave-8/coordinator-01a168bb/source-human-medicine51\"\ntask = json.loads((base / \"docs/content-audits/question-quality-wave-8/coordinator-01a168bb/source-human-medicine51-task.json\").read_text())\ninv = json.loads((out / \"fresh-inventory.json\").read_text())\ncard = next(x for x in inv[\"sameTopicMAIN\"][\"questions\"] if x[\"id\"] == task[\"id\"])\npeer = next(x for x in inv[\"actualCurrentPeers\"] if x[\"id\"] == \"human-medicine-largest-organ\")\nbefore = peer[\"card\"]\nsha = lambda v: hashlib.sha256(json.dumps(v, ensure_ascii=False, sort_keys=True, separators=(\",\", \":\")).encode()).hexdigest()\nassert sha(card) == task[\"beforeHash\"]\nassert card == before\ngroups = {\n \"prompt_ordered_answers_key\": {\"prompt\": card[\"prompt\"], \"answers\": [a[\"text\"] for a in card[\"answers\"]], \"correctIndex\": card[\"correctIndex\"]},\n \"explanation\": card[\"explanation\"],\n **{\"note\"+str(i): a[\"note\"] for i,a in enumerate(card[\"answers\"])}\n}\ngroup_rows = [{\"group\": k, \"literal\": v, \"literalSHA256\": sha(v), \"primaryGround\": \"AUTHORHOLD: no independently qualified primary-source ground is asserted for this literal in this packet; the retained Medicine1 attempt is a prior HOLD and is not adopted as proof. The exact extant claim overlaps the current largest-organ MAIN peer.\", \"sourcePaths\": [], \"locator\": \"No qualified source locator asserted; see blockedAttemptMetadata for the non-replayable prior attempt boundary.\"} for k,v in groups.items()]\nassess = []\nfor i,a in enumerate(card[\"answers\"]):\n    assess.append({\"slot\": i, \"fullPrompt\": card[\"prompt\"], \"answer\": a[\"text\"], \"note\": a[\"note\"],\n      \"tripleSHA256\": sha({\"prompt\":card[\"prompt\"],\"answer\":a[\"text\"],\"note\":a[\"note\"]}),\n      \"grammar\": \"Reviewed as a complete prompt-answer substitution; no new source-based correction is proposed.\",\n      \"plausibilityUniqueKeyAndNoteTruthUsefulness\": \"HOLD: this variant cannot receive source-qualified truth/usefulness in this packet. The key option remains the skin, and the prompt relation (external body covering/largest area) overlaps the current sourceOrder 1 largest-organ item; other options are organs but this does not supply a distinct fact.\",\n      \"sourcePaths\": [], \"locator\": \"No qualified primary-source locator asserted.\"})\nentries = [{\"id\":task[\"id\"],\"topicId\":task[\"topicId\"],\"sourceOrder\":task[\"sourceOrder\"],\"status\":\"HOLD\",\"beforeCard\":card,\"beforeHash\":sha(card),\"proposedCard\":card,\"afterHash\":sha(card),\"fieldGroups\":{k:{\"beforeCanonicalSHA256\":sha(v),\"afterCanonicalSHA256\":sha(v)} for k,v in groups.items()},\"authorVerdict\":\"AUTHORHOLD\",\"reason\":\"Do not force READY. Current question repeats the skin/largest-organ MAIN fact in a scope qualifier (outer covering/largest area). Medicine1 AUTHORHOLD records the target source claim as already attempted and prohibits retry or adjacent workaround. No retained independently qualified source supports a genuinely distinct one-card replacement within this assignment.\",\"qualityCredit\":0}]\ncandidate = {\"purpose\":\"SOURCE51 author packet; HOLD only, no certification or catalog change\",\"sourceNativeId\":\"01a168f5-d819-7343-a3aa-dae334c23be8\",\"topicId\":task[\"topicId\"],\"cycle\":task[\"cycle\"],\"entries\":entries}\nsourceproof = {\"purpose\":\"SOURCE51 source assessment; AUTHORHOLD, prior HOLD evidence not adopted\",\"sourceNativeId\":\"01a168f5-d819-7343-a3aa-dae334c23be8\",\"topicId\":task[\"topicId\"],\"cycle\":task[\"cycle\"],\"rawSources\":[],\"blockedAttemptMetadata\":[{\"path\":\"docs/content-audits/question-quality-wave-8/coordinator-01a165b2/human-medicine1-network-accounting.json\",\"actualWebCalls\":5,\"priorStatus\":\"AUTHORHOLD fence; original source claim cannot be replayed or adopted\",\"usedAsProof\":False},{\"path\":\"docs/content-audits/question-quality-wave-8/coordinator-01a165b2/source-human-medicine1/sourceproof.json\",\"cardId\":\"human-medicine-largest-organ\",\"priorStatus\":\"HOLD\",\"usedAsProof\":False}],\"entries\":[{\"id\":task[\"id\"],\"status\":\"HOLD\",\"literalGroups\":group_rows,\"fourFullPromptAnswerNoteAssessments\":assess,\"correctNoteNewFact\":None,\"correctNoteNewFactHoldReason\":\"No independently qualified own-option fact established; do not inherit prior Medicine1 proof.\",\"absoluteDifficulty\":\"Frozen EASY; the unchanged prompt is a direct identification question, but author source qualification is HOLD and no completion credit is claimed.\"}],\"limits\":\"No network calls; no known-URL replay; no prior HOLD promotion or proof adoption. No raw source context is represented as current proof.\"}\nmain_pair = {\"left\":{\"id\":card[\"id\"],\"topicId\":task[\"topicId\"],\"sourceOrder\":51,\"card\":card,\"sha256\":sha(card)},\"right\":{\"id\":before[\"id\"],\"topicId\":task[\"topicId\"],\"sourceOrder\":1,\"card\":before,\"sha256\":sha(before)},\"leftToRight\":\"Both ask about skin's status as the body's largest organ/area: order 1 asks which organ is usually called the largest; order 51 asks which organ forms the outer covering and is largest by area. The outer-covering and area wording does not establish a distinct entity-relation-value-context claim here.\",\"rightToLeft\":\"The order 1 skin/largest-organ relation directly answers the order 51 prompt; the second wording is a qualifier/rephrase of the same MAIN claim.\",\"directReverseCheck\":\"No independent reverse fact; same skin-largest-organ relation.\"}\npeers = {\"purpose\":\"Fresh actual CURRENT peer snapshot for SOURCE51 HOLD\",\"sourceNativeId\":\"01a168f5-d819-7343-a3aa-dae334c23be8\",\"topicId\":task[\"topicId\"],\"sourceOrder\":51,\"globalMAIN\":inv[\"globalMAIN\"],\"actualCurrentPeers\":inv[\"actualCurrentPeers\"],\"relevantPairs\":[main_pair],\"qualityCredit\":0}\nfor name,value in ((\"candidate.json\",candidate),(\"sourceproof.json\",sourceproof),(\"peer-snapshot.json\",peers)):\n    (out/name).write_text(json.dumps(value,ensure_ascii=False,indent=2)+\"\\\\n\")\nprint(json.dumps({\"outputDirectory\":str(out),\"files\":[\"candidate.json\",\"sourceproof.json\",\"peer-snapshot.json\",\"fresh-inventory.json\"],\"beforeHash\":sha(card),\"matchesAssignedBeforeHash\":sha(card)==task[\"beforeHash\"],\"frozen\":{\"id\":card[\"id\"],\"topicId\":task[\"topicId\"],\"sourceOrder\":51,\"difficulty\":card[\"difficulty\"],\"correctIndex\":card[\"correctIndex\"]},\"mainPeer\":peer[\"id\"],\"verdict\":\"AUTHORHOLD\",\"qualityCredit\":0,\"networkCalls\":0},ensure_ascii=False))\nPY`,max_output_tokens:1500}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a168f8-2ee8-7193-a144-b985a8229e07",
+            "create_time": 1792762542.2466156
+          }
+        }
+      },
+      "resultLine": 237,
+      "originalResult": {
+        "timestamp": "2026-10-23T13:35:52.237Z",
+        "ordinal": 236,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a168f9-9fad-7112-a16a-aacaae688908",
+          "call_id": "call_c23ce212509f431ab0e26e23b09326c7",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"6cdcfb\",\"wall_time_seconds\":0.000009208,\"exit_code\":1,\"original_token_count\":23,\"output\":\"Traceback (most recent call last):\\n  File \\\"<stdin>\\\", line 12, in <module>\\nAssertionError\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a168f8-2ee8-7193-a144-b985a8229e07",
+            "create_time": 1792762552.237034
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      },
+      "exitCodes": [
+        1
+      ],
+      "scriptFailed": false
+    }
+  ],
+  "truncatedOriginals": [
+    {
+      "callLine": 130,
+      "originalCall": {
+        "timestamp": "2026-10-23T13:34:25.789Z",
+        "ordinal": 129,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_08c62afc8620cb22016adb6261492481918047418444fcee0d",
+          "status": "completed",
+          "call_id": "call_e0e04a8b2b2345308f7f74ed1299a3f7",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:'rg --files /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle | rg \\'(^|/)human-medicine[^/]*\\\\.(json|md)$|human-medicine.*sourceproof\\\\.json$\\'',max_output_tokens:2500}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a168f8-2ee8-7193-a144-b985a8229e07",
+            "create_time": 1792762465.2884145
+          }
+        }
+      },
+      "resultLine": 133,
+      "originalResult": {
+        "timestamp": "2026-10-23T13:34:26.047Z",
+        "ordinal": 132,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a168f8-4eff-70c1-8bf2-ae5e99b24055",
+          "call_id": "call_e0e04a8b2b2345308f7f74ed1299a3f7",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"chunk_id\":\"67ab29\",\"wall_time_seconds\":0.000010625,\"exit_code\":0,\"original_token_count\":12145,\"output\":\"Warning: truncated output (original token count: 12145)\\nTotal output lines: 262\\n\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/src/content/reviews/human-medicine.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/src/content/topics/human-medicine.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine24-stored-native-result-239.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine21-native-proof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine23-stored-native-result-326.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine19-network-accounting.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine24-native-proof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine20-stored-native-result-237.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine19-stored-native-result-290.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine23-network-accounting.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine22/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine20-native-proof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine24/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine23/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine23-native-proof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine20-network-accounting.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine22-native-proof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine23-stored-native-result-287.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine24-network-accounting.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/qualified-source-human-medicine21/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine22-network-accounting.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine19/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine21/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine23-stored-native-result-335.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine19-stored-native-result-283.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16694/human-medicine21-stored-native-result-252.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a…9645 tokens truncated…oof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine38-native-proof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine42-native-proof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/source-human-medicine40/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/source-human-medicine41/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine39-native-proof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine41-network-accounting.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/source-human-medicine39/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/source-human-medicine37/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine39-stored-native-result-214.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine39-network-accounting.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine40-cycle1-network-accounting.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine37-native-proof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine40-cycle1-native-proof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine42-network-accounting.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine37-stored-native-result-277.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine38-stored-native-result-287.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/source-human-medicine38/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine41-native-proof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine40-network-accounting.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/qualified-source-human-medicine39/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/qualified-source-human-medicine40/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine40-native-proof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine37-network-accounting.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine38-network-accounting.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/human-medicine38-stored-native-result-298.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/source-human-medicine42/sourceproof.json\\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1676a/source-human-medicine40-cycle1/sourceproof.json\\n\"}"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a168f8-2ee8-7193-a144-b985a8229e07",
+            "create_time": 1792762466.047099
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      },
+      "exitCodes": [],
+      "scriptFailed": false
+    }
+  ],
+  "allUncured": true,
+  "noEmbeddedHistoricalExecutionsCountedAsNew": true
+}
