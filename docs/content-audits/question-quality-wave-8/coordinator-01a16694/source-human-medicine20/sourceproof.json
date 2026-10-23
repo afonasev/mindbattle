@@ -1,0 +1,286 @@
+{
+  "sourceNativeId": "01a1669c-2fba-7853-85b8-37807c59dde2",
+  "topicId": "human-medicine",
+  "cycle": 0,
+  "id": "human-medicine-middle-ear-bones",
+  "sourceOrder": 20,
+  "status": "HOLD",
+  "qualityCredit": 0,
+  "sourceSelection": {
+    "baselineCode": "bb5bcc7f6227548108423f4f239f939c9c02b064",
+    "beforeHash": "d08471b48c1d2b77f088fa3607c9f61420159122a1978700ee8fb5fe6e93f70a",
+    "frozen": {
+      "id": "human-medicine-middle-ear-bones",
+      "topicId": "human-medicine",
+      "sourceOrder": 20,
+      "difficulty": "medium",
+      "correctIndex": 1
+    }
+  },
+  "rawSources": [
+    {
+      "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json",
+      "url": "https://www.nidcd.nih.gov/health/how-do-we-hear",
+      "sha256": "a075ff1bfa9ac5e16d3a1fb573a55e8299bfcfbe2b4cdae7bb8dab175f335c57",
+      "captureReadProvenance": "Native web.open record in 01a1669c-2fba-7853-85b8-37807c59dde2, line 219; complete returned page L0-L34 personally read.",
+      "locator": "L11-L18; especially L11, L14-L17",
+      "completeOutputPointer": "/originalRecord/payload/output/1/text",
+      "completeOutputSHA256": "36ab8f34cfab056b7126a81cf666f83d49f432a313a5743ef332e135530351fb"
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/ncbi-mesh-vomer.json",
+      "url": "https://www.ncbi.nlm.nih.gov/mesh/68055172",
+      "sha256": "568732e6cf878eadcad5773d8bbe7bd8c0cf4a412461963c7efe2c6ba05e0b8b",
+      "captureReadProvenance": "Native web.open official NCBI MeSH alternative in 01a1669c-2fba-7853-85b8-37807c59dde2, line 244; complete returned page L0-L131 personally read.",
+      "locator": "L52-L55; L103-L105",
+      "completeOutputPointer": "/originalRecord/payload/output/1/text",
+      "completeOutputSHA256": "ebb8a366c37b5a138cc30afa8fab06bb01055778c1fec6dfd9eee77693d2f725"
+    }
+  ],
+  "networkAttempts": [
+    {
+      "sequence": 1,
+      "type": "primary_open",
+      "url": "https://www.nidcd.nih.gov/health/how-do-we-hear",
+      "tool": "web__run open",
+      "result": "Success; complete returned page lines L0-L34 read personally; relevant L11-L18."
+    },
+    {
+      "sequence": 2,
+      "type": "official_alternative_discovery",
+      "query": "site:ncbi.nlm.nih.gov/books vomer bone nasal septum anatomy",
+      "tool": "web__run search_query",
+      "result": "Search returned NCBI MeSH Vomer and other candidates; only official NCBI MeSH Vomer opened and used; search snippets not used as evidence."
+    },
+    {
+      "sequence": 3,
+      "type": "official_alternative_open",
+      "url": "https://www.ncbi.nlm.nih.gov/mesh/68055172",
+      "tool": "web__run open",
+      "result": "Success; complete returned page lines L0-L131 read personally; relevant L52-L55."
+    }
+  ],
+  "networkAccounting": {
+    "webInvocations": 3,
+    "primaryAttempts": 1,
+    "officialAlternativePathsOpened": 1,
+    "retries": 0,
+    "resets": 0
+  },
+  "entries": [
+    {
+      "id": "human-medicine-middle-ear-bones",
+      "status": "HOLD",
+      "literalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Как называются три слуховые косточки среднего уха?",
+            "answers": [
+              "Сошник, наковальня и стремечко",
+              "Молоточек, наковальня и стремечко",
+              "Молоточек, улитка и стремечко",
+              "Наковальня, улитка и преддверие"
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "d24e7a6bdad59903ffecf6d33c771288479da1b83c436104b607c31cdb6b183b",
+          "primaryGround": "NIDCD directly names malleus, incus and stapes as the three middle-ear bones (L14), uniquely matching ordered answer slot 1; it places cochlea, vestibule and semicircular canals in inner ear in its diagram description (L11). The proposed wrong combinations each include an inner-ear structure or vomer, not three ossicles.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json",
+            "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/ncbi-mesh-vomer.json"
+          ],
+          "locator": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json",
+              "locator": "L11, L14"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/ncbi-mesh-vomer.json",
+              "locator": "L52-L55"
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Молоточек, наковальня и стремечко образуют цепь трёх косточек среднего уха. Они усиливают колебания барабанной перепонки и передают их к улитке, где движение жидкости запускает волну вдоль базилярной мембраны.",
+          "literalSHA256": "1bf0b83e787d67300ccf0c7bff3dbf312473db10f1163f452f9266113a65e601",
+          "primaryGround": "NIDCD states that the eardrum sends vibrations to the three bones, that the bones amplify them and send them to the cochlea, and that cochlear fluid motion produces a traveling wave along the basilar membrane.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json"
+          ],
+          "locator": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json",
+              "locator": "L14-L16"
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Сошник — непарная кость, формирующая задне-нижний край носовой перегородки; наковальня и стремечко относятся к косточкам среднего уха.",
+          "literalSHA256": "ed49d4d9d6e1e559c0ff9c3a1ac59a908cb8752afe4ebf8e2ddde7daff641420",
+          "primaryGround": "NCBI MeSH defines vomer as a facial bone forming the posterior and inferior border of the nasal septum; NIDCD identifies incus and stapes among the middle-ear bones.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json",
+            "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/ncbi-mesh-vomer.json"
+          ],
+          "locator": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/ncbi-mesh-vomer.json",
+              "locator": "L52-L55"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json",
+              "locator": "L11, L14"
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Эти косточки усиливают колебания барабанной перепонки и передают их к улитке внутреннего уха.",
+          "literalSHA256": "1e28908e988214033f01ec7014400c83b35bedee3fdded11594e0c346881369a",
+          "primaryGround": "NIDCD states that the three ossicles amplify incoming vibrations and send them to the fluid-filled cochlea in the inner ear.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json"
+          ],
+          "locator": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json",
+              "locator": "L14-L15"
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Улитка заполнена жидкостью, а волосковые клетки в ней преобразуют движение в электрический сигнал; молоточек и стремечко — косточки среднего уха.",
+          "literalSHA256": "58fd0e261f985689a4e051978c6c9665fc2fed5d9a5741693124904564883a45",
+          "primaryGround": "NIDCD describes the fluid-filled cochlea and hair-cell movement that opens channels and creates an electrical signal; it identifies malleus and stapes as middle-ear bones.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json"
+          ],
+          "locator": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json",
+              "locator": "L14-L17"
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "Преддверие относится к внутреннему уху; наковальня входит в цепь косточек среднего уха, передающих колебания к улитке.",
+          "literalSHA256": "0157d56e9fd2e4892b95b84f8ae22b97b4adcf65f6457b1d9cbd3b6da6c8b574",
+          "primaryGround": "NIDCD diagram description places vestibule in the inner ear and identifies incus among the middle-ear bones; its text says the ossicles send vibration to cochlea.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json"
+          ],
+          "locator": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json",
+              "locator": "L11, L14-L15"
+            }
+          ]
+        }
+      ],
+      "fourFullPromptAnswerNoteAssessments": [
+        {
+          "slot": 0,
+          "fullPrompt": "Как называются три слуховые косточки среднего уха?",
+          "answer": "Сошник, наковальня и стремечко",
+          "note": "Сошник — непарная кость, формирующая задне-нижний край носовой перегородки; наковальня и стремечко относятся к косточкам среднего уха.",
+          "tripleSHA256": "02f7ff5e083cb992351bbbe0fe751c71342c3ff76e8f320f59f5dcbbb16378f7",
+          "grammar": "Вопрос задаёт название группы, все варианты — грамматически параллельные именные перечни в именительном падеже; сочетания читаются без падежного нарушения.",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "Вариант соединяет сошник с двумя среднеушными косточками. Сошник — кость носовой перегородки, а наковальня и стремечко входят в цепь среднего уха; это тематически близкий, но неполный набор.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/ncbi-mesh-vomer.json",
+            "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json"
+          ],
+          "locator": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/ncbi-mesh-vomer.json",
+              "locator": "L52-L55"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json",
+              "locator": "L11, L14"
+            }
+          ]
+        },
+        {
+          "slot": 1,
+          "fullPrompt": "Как называются три слуховые косточки среднего уха?",
+          "answer": "Молоточек, наковальня и стремечко",
+          "note": "Эти косточки усиливают колебания барабанной перепонки и передают их к улитке внутреннего уха.",
+          "tripleSHA256": "ca86ae44b6aba0cc05c65d62fd7872e93d883f3b9ce1a55dc17ca4eb78a25472",
+          "grammar": "Вопрос задаёт название группы, все варианты — грамматически параллельные именные перечни в именительном падеже; сочетания читаются без падежного нарушения.",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "Падеж и форма однородного перечисления согласованы с вопросом. Это единственный вариант, полностью совпадающий с названной NIDCD тройкой молоточек, наковальня и стремечко; дополнительная справка сообщает об усилении колебаний.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json"
+          ],
+          "locator": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json",
+              "locator": "L14-L15"
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "fullPrompt": "Как называются три слуховые косточки среднего уха?",
+          "answer": "Молоточек, улитка и стремечко",
+          "note": "Улитка заполнена жидкостью, а волосковые клетки в ней преобразуют движение в электрический сигнал; молоточек и стремечко — косточки среднего уха.",
+          "tripleSHA256": "da613bdb7d93726d8f17202e38a92a08342ac18ba15c6c9175a03ca1f6d432ff",
+          "grammar": "Вопрос задаёт название группы, все варианты — грамматически параллельные именные перечни в именительном падеже; сочетания читаются без падежного нарушения.",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "Перечень объединяет две реальные косточки среднего уха с улиткой внутреннего уха. Формулировка грамматически согласована; заметка отдельно сообщает о функции волосковых клеток улитки.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json"
+          ],
+          "locator": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json",
+              "locator": "L11, L14-L17"
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "fullPrompt": "Как называются три слуховые косточки среднего уха?",
+          "answer": "Наковальня, улитка и преддверие",
+          "note": "Преддверие относится к внутреннему уху; наковальня входит в цепь косточек среднего уха, передающих колебания к улитке.",
+          "tripleSHA256": "5109da85e8f6100e8f0194bb1a9b68a9d2fc73fffeac87b3d3cf67bd97070f56",
+          "grammar": "Вопрос задаёт название группы, все варианты — грамматически параллельные именные перечни в именительном падеже; сочетания читаются без падежного нарушения.",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "Перечень объединяет одну косточку среднего уха с двумя структурами внутреннего уха. Перечисление грамматически параллельно; заметка связывает каждую названную структуру с собственным отделом уха.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json"
+          ],
+          "locator": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json",
+              "locator": "L11, L14-L15"
+            }
+          ]
+        }
+      ],
+      "correctNoteNewFact": {
+        "fact": "The ossicles amplify eardrum vibrations before passing them to the cochlea. This is additional to naming the bones and is supported by the primary page.",
+        "sourcePaths": [
+          "docs/content-audits/question-quality-wave-8/coordinator-01a16694/source-human-medicine20/raw/nidcd-how-do-we-hear.json"
+        ],
+        "locator": "L14-L15"
+      },
+      "absoluteDifficulty": {
+        "level": "medium",
+        "ground": "Naming the three auditory ossicles requires specific familiarity with human ear anatomy; this is not broad adult knowledge. A player familiar with the topic can recognize the complete set, while distractors combine real nearby anatomical structures and are not absurd. It needs one thematic fact, not specialist diagnosis or multi-step reasoning."
+      }
+    }
+  ],
+  "policyReadCorrection": {
+    "path": "/Users/eaafonasev/Projects/mindbattle/planning/docs/GAME_SPEC.md",
+    "section": "Content questions",
+    "actualLocator": "lines 135-285 inclusive; next section starts at line 286",
+    "readAt": "2026-10-23",
+    "readMethod": "single bounded successful sed -n 135,285p call; full untruncated returned output read personally",
+    "priorRead": "Earlier successful call covered only lines 135-168. Its accompanying ACK incorrectly said the full section had been read. This original partial-read/false-full-ACK remains uncured; the later full read is not retrocompliance.",
+    "holdReason": "The required full policy section was not read before the packet was first marked READY. The packet is now HOLD for coordinator disposition; no content/source cycle reset and no additional source attempt."
+  }
+}
