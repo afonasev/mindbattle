@@ -300,3 +300,26 @@ def alias_source77_own_prior_application(candidate,sp,ps,R):
   if v['id']==e['id']:v.update(card=copy.deepcopy(e['beforeCard']),sha256=e['beforeHash'])
  guard.update(card=copy.deepcopy(e['beforeCard']),sha256=e['beforeHash'])
  ps['technicalOwnPrior77SelfPreimageAlias']=proof;sp['technicalOwnPrior77SelfPreimageAlias']=proof
+
+
+def alias_source31_root_entry_identity(candidate, sp, R):
+ """Exact already-declared source31 root identity; derived view only, raw immutable."""
+ if R.name != 'source-human-medicine31' or candidate['sourceNativeId'] != '01a16731-2baf-76e3-a052-31ab747f1ff8':return
+ assert raw(R/'sourceproof.json') == '776b63fca4c3223ee4d7477c86dc56427f27b55cdc6e46b375212b2e3ea4f122'
+ assert candidate['cycle'] == sp['cycle'] == 0 and candidate['sourceNativeId'] == sp['sourceNativeId']
+ assert len(candidate['entries']) == len(sp['entries']) == 1
+ c = candidate['entries'][0];e = sp['entries'][0]
+ assert candidate['id'] == sp['id'] == c['id'] == 'human-medicine-brain-protection'
+ assert candidate['topicId'] == sp['topicId'] == c['topicId'] == 'human-medicine'
+ assert sp['sourceOrder'] == c['sourceOrder'] == 31 and sp['status'] == c['status'] == 'READY_FOR_INDEPENDENT_REVIEW'
+ q = c['proposedCard'];assert sha(q) == c['afterHash']
+ groups = {'prompt_ordered_answers_key':{'prompt':q['prompt'],'answers':[v['text'] for v in q['answers']],'correctIndex':q['correctIndex']},'explanation':q['explanation'],**{'note'+str(k):v['note'] for k,v in enumerate(q['answers'])}}
+ assert len(e['literalGroups']) == 6 and len(e['fourFullPromptAnswerNoteAssessments']) == 4
+ for g in e['literalGroups']:assert g['literal'] == groups[g['group']] and g['literalSHA256'] == sha(g['literal'])
+ for v in e['fourFullPromptAnswerNoteAssessments']:
+  a=q['answers'][v['slot']];tr={'prompt':q['prompt'],'answer':a['text'],'note':a['note']}
+  assert tr == {'prompt':v['fullPrompt'],'answer':v['answer'],'note':v['note']} and sha(tr) == v['tripleSHA256']
+ for k in ['id','topicId','sourceOrder','status']:
+  assert k not in e or e[k] == sp[k]
+  e[k] = sp[k]
+ e['technicalRootIdentityContainerAlias'] = {'originalSourceproofSHA256':raw(R/'sourceproof.json'),'originalPointers':['/id','/topicId','/sourceOrder','/status'],'operation':'Already explicit root identity aliased into sole entry; candidate, six literals, four triples, original assessments and raw unchanged. Original KeyError remains uncured.'}
