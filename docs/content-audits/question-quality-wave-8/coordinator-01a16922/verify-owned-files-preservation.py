@@ -11,6 +11,21 @@ topic='src/content/topics/'+x['activeRoute']['topicId']+'.json'
 canonical=C/f"docs/content-audits/question-quality-wave-{x['activeRoute']['wave']}/root-certified-source-checkpoint.json"
 assert Path(x['activeRoute']['sourceCheckpoint'])==canonical
 allowed={topic,str(canonical.relative_to(C))}
+recovery_metadata={}
+binding=D/'recovery-release-binding.json'
+if binding.is_file():
+ recovery=m.read(binding);auth=m.read(Path(recovery['authorization']))
+ assert recovery['owner']==auth['owner']==m.O
+ assert recovery['predecessor']==auth['predecessor']==m.read(Path(x['predecessorHandoff']))['rootNativeAudit']['threadId']
+ prior=Path(x['predecessorHandoff']).parent
+ exact={str((prior/n).relative_to(C)) for n in ['manifest.json','handoff-next.json']}
+ assert set(recovery['exactPredecessorMetadata'])==exact
+ for rel,digest in recovery['exactPredecessorMetadata'].items():
+  p=C/rel;assert m.raw(p)==digest
+  assert p.read_bytes()==subprocess.check_output(['git','-C',str(C),'show',recovery['supportedReleaseCode']+':'+rel])
+  assert p.read_bytes()==subprocess.check_output(['git','-C',str(C),'show',head+':'+rel])
+  recovery_metadata[rel]=digest
+ allowed.update(exact)
 changed=m.h.git(C,'diff','--name-only',base,head).splitlines()
 prefix=str(D.relative_to(C))+'/'
 assert all(p.startswith(prefix) or p in allowed for p in changed),[p for p in changed if not p.startswith(prefix) and p not in allowed]
@@ -37,5 +52,7 @@ for root,key in [(C,'code'),(P,'planning')]:
 assert m.h.git(C,'rev-parse','HEAD')==head
 out=D/'owned-files-preservation.json';assert not out.exists()
 m.write(out,{'owner':m.O,'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'privateHeadBeforeReport':head,'comparisonUsesForeignIndex':False,'ownedFileCount':len(bindings),'ownedFileSHA256':bindings,'changedPathsSinceTakeover':changed,'scope':'Only ownedD, exact active topic, and exact configured root-certified source checkpoint','canonicalCheckpoint':{'path':str(canonical),'rawSHA256':m.raw(canonical),'uniqueCurrentCards':len(ids),'fields':6*len(ids),'allExactAcceptedHashes':True,'ownerNativeIdMeaning':'Historical last certificate writer, not a live claim; preserve through release/takeover'},'CURRENT':x['CURRENT'],'remaining':x['remaining'],'foreignIndexesUnchanged':x['foreignIndexes'],'ownTemporaryResources':x['owncleanupCurrentOwner']['temporaryResources'],'allOwnedAuthorsArchived':all(a.get('archived',False) for k,a in x['actors'].items() if k.startswith('author')),'worktreeRetainedForAuthorizedContinuation':str(C),'noForeignCleanup':True})
+if recovery_metadata:
+ result=m.read(out);result.update(authorizedPredecessorReleaseMetadata=recovery_metadata,recoveryBinding=str(binding),scope='Only ownedD, exact active topic/checkpoint and two exact human-authorized predecessor release metadata files frozen at recorded release commit');m.write(out,result)
 print(m.savecode([out,Path(__file__)],'Preserve private-HEAD owned files and exact configured source checkpoint'))
 print({'ownedFileCount':len(bindings),'canonicalUniqueCurrentCards':len(ids),'canonicalFields':6*len(ids),'foreignIndexUsedForSnapshot':False})
