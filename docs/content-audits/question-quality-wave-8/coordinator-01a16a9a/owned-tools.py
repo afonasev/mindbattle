@@ -277,6 +277,7 @@ def alias_explicit_peer_inventory_projection(candidate,sp,ps,R):
 
 def alias_source83_clarified_literals(candidate,sp,ps,R):
  """Bind two author-clarified literal copies; original raw and grounds stay intact."""
+ if candidate['entries'][0]['topicId']!='history-russia':return
  if candidate['entries'][0]['sourceOrder']!=83 or candidate.get('cycle')!=0:return
  R=pathlib.Path(R);assert R==D/'source-history-russia83'
  uid='01a1627c-8cb4-7b52-b8b1-7f6752217e7f'
@@ -312,6 +313,7 @@ def alias_source83_clarified_literals(candidate,sp,ps,R):
 
 def alias_source83_cycle1_redundant_snapshot(candidate,sp,ps,R):
  """Reconcile exact known shared apply; preserve historical full snapshot."""
+ if candidate['entries'][0]['topicId']!='history-russia':return
  if candidate['entries'][0]['sourceOrder']!=83 or candidate.get('cycle')!=1:return
  R=pathlib.Path(R);assert R==D/'source-history-russia83-cycle1'
  uid='01a1627c-8cb4-7b52-b8b1-7f6752217e7f'
@@ -354,6 +356,7 @@ def alias_source83_cycle1_redundant_snapshot(candidate,sp,ps,R):
 
 def alias_source84_cycle1_variant_names(candidate,sp,ps,R):
  """Expose exact existing prompt and SHA-bound locator lists under contract names."""
+ if candidate['entries'][0]['topicId']!='history-russia':return
  if candidate['entries'][0]['sourceOrder']!=84 or candidate.get('cycle')!=1:return
  R=pathlib.Path(R);assert R==D/'source-history-russia84-cycle1'
  uid='01a16282-713c-7aa3-b66b-ca02fb99d0e1'
@@ -379,6 +382,7 @@ def alias_source84_cycle1_variant_names(candidate,sp,ps,R):
 
 def alias_source77_own_prior_application(candidate,sp,ps,R):
  """Exact own77 preapplication bookkeeping delta; no inventory-file hydration."""
+ if candidate['entries'][0]['topicId']!='history-russia':return
  if candidate.get('cycle')!=1 or candidate['entries'][0]['sourceOrder']!=77:return
  R=pathlib.Path(R);assert R.parent==D and R.name=='source-history-russia77-cycle1'
  assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId'] and sp['cycle']==ps['cycle']==1
