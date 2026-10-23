@@ -25,7 +25,8 @@ for name in ['pinned-question-revision-12e5581b.md','packet-contract.json','meth
   outputs=[(i,p) for i,p in items if p.get('type')=='custom_tool_call_output' and p.get('call_id')==call['call_id']];assert len(outputs)==1
   results=[x for x in decode(outputs[0][1]['output']) if 'exit_code' in x]
   proof={'path':name,'callLine':line,'resultLine':outputs[0][0],'call_id':call['call_id']}
-  exactWholeInvocation=call.get('input','').strip().startswith("text(await tools.exec_command({cmd:'cat ") and call.get('input','').strip().endswith("',max_output_tokens:12000}));")
+  invocation=call.get('input','').strip()
+  exactWholeInvocation=any(invocation.startswith('text(await tools.exec_command({cmd:'+quote+'cat ') and invocation.endswith(quote+',max_output_tokens:12000}));') for quote in ["'",'"'])
   if exactWholeInvocation and len(results)==1 and results[0]['exit_code']==0 and 'Warning: truncated output' not in results[0]['output']:
    successful.append({**proof,'exit_code':0})
   else:rejected.append({**proof,'structuredResultCount':len(results),'qualifiedFullRead':False,'originalOutputPreservedInNative':True})
