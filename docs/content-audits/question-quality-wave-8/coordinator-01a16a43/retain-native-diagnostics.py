@@ -38,7 +38,8 @@ for actor in [x['rootNativeAudit'], *x['actors'].values(), *x.get('retiredNative
     bad, truncated, inherited_warning_data = [], [], []
     own_reader_starts = [m.read(p)['taskStartLine'] for p in D.glob('reader*-native-network-audit.json') if m.read(p).get('readerNativeId') == actor['threadId']]
     first_own_reader_start = min(own_reader_starts) if own_reader_starts else None
-    inherited_actor = actor['threadId'] != m.O and actor['threadId'] not in x['createdNativeThreadsCurrentOwner'] and first_own_reader_start is None
+    created_here = actor['threadId'] == m.O or actor['threadId'] in x['createdNativeThreadsCurrentOwner']
+    inherited_actor = not created_here and first_own_reader_start is None
     for line, row in enumerate(rows,1):
         p = row.get('payload',{})
         if p.get('type')!='custom_tool_call_output' or p['call_id'] not in calls:
@@ -51,7 +52,7 @@ for actor in [x['rootNativeAudit'], *x['actors'].values(), *x.get('retiredNative
         codes += [v for v in legacy if v!=0]
         script_failed = any(t.startswith('Script failed') for t in texts)
         call_line, call = calls[p['call_id']]
-        evidence = {'nativeJournal':str(native),'callLine':call_line,'originalCallCanonicalSHA256':m.sha(call),'resultLine':line,'originalResultCanonicalSHA256':m.sha(row),'call_id':p['call_id'],'exitCodes':codes,'legacyOutputOnlyExitCode':legacy,'scriptFailed':script_failed,'inheritedBeforeCurrentOwner':inherited_actor or (first_own_reader_start is not None and call_line < first_own_reader_start)}
+        evidence = {'nativeJournal':str(native),'callLine':call_line,'originalCallCanonicalSHA256':m.sha(call),'resultLine':line,'originalResultCanonicalSHA256':m.sha(row),'call_id':p['call_id'],'exitCodes':codes,'legacyOutputOnlyExitCode':legacy,'scriptFailed':script_failed,'inheritedBeforeCurrentOwner':inherited_actor or (not created_here and first_own_reader_start is not None and call_line < first_own_reader_start)}
         if codes or script_failed:
             bad.append(evidence)
         actual_truncation = any(t.startswith('Warning: truncated output') for t in texts)
