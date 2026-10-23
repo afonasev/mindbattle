@@ -26,6 +26,7 @@ raw=[]
 for key,item in x.items():
  if not re.fullmatch('pendingHumanMedicine[0-9]+',key):continue
  order=int(key.removeprefix('pendingHumanMedicine'))
+ if order not in x['ownedSourceOrders']:continue
  for suffix,field in [('', 'rawFreeze'),('-cycle1','cycle1RawFreeze')]:
   R=D/('source-human-medicine'+str(order)+suffix);freeze=item.get(field)
   if not freeze or not R.is_dir():continue

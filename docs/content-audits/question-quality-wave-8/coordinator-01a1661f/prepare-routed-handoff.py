@@ -7,7 +7,7 @@ assert n==x['CURRENT'] and x['remaining']==2000-n and cp['owner']==cp['activeCoo
 assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and len(x['claims'])==4
 assert m.read(m.P/'.flow-leases.json')=={} and not any(a['stage'].startswith('START') for a in x['actors'].values())
 assert all(a.get('archived',False) for k,a in x['actors'].items() if k.startswith('author'))
-own={int(k.removeprefix('pendingHumanMedicine')):v for k,v in x.items() if re.fullmatch('pendingHumanMedicine[0-9]+',k)}
+own={int(k.removeprefix('pendingHumanMedicine')):v for k,v in x.items() if re.fullmatch('pendingHumanMedicine[0-9]+',k) and int(k.removeprefix('pendingHumanMedicine')) in x['ownedSourceOrders']}
 assert own
 for order,p in own.items():
  if p['qualityCredit']==1:assert p['status'].startswith('CERTIFIED_')
@@ -29,7 +29,7 @@ x.update(phase='READY_FOR_READONLY_SUCCESSOR_CURRENT'+str(n),claimsOwner=m.O,hel
 x['readScope']={**x['readScope'],'ownD':str(D),'nextUntouched':nextcard}
 x['rootNativeAudit'].update(actualCompactions=comp,lastInput=reason['lastInput'],modelWindow=reason['window'])
 x['helpers'][pathlib.Path(__file__).name]=str(pathlib.Path(__file__))
-diagnostics={'rootCounts':reason,'actorCounts':{'archivedAuthors':sum(k.startswith('author') and a.get('archived',False) for k,a in x['actors'].items()),'activeAuthors':0,'activeIndependentReviews':0,'retainedIdleReaders':1 if retained else 0},'retainedReaderCounts':{k:retained.get(k) for k in ['threadId','actualCompactions','lastInput','modelWindow','lastTaskEvent']} if retained else None,'evidencePointers':{'ownProceduralDiagnostics':str(D/'own-procedural-diagnostics.json'),'closedVerification':str(D/'handoff-verification.json'),'inheritedContinuation':str(D.parent/'coordinator-01a1656b/continuation-point.json')},'scope':'Technical counts and pointers only; no quality credit or procedural cure.'}
+diagnostics={'rootCounts':reason,'actorCounts':{'archivedAuthors':sum(k.startswith('author') and a.get('archived',False) for k,a in x['actors'].items()),'activeAuthors':0,'activeIndependentReviews':0,'retainedIdleReaders':1 if retained else 0},'retainedReaderCounts':{k:retained.get(k) for k in ['threadId','actualCompactions','lastInput','modelWindow','lastTaskEvent']} if retained else None,'evidencePointers':{'ownProceduralDiagnostics':str(D/'own-procedural-diagnostics.json'),'closedVerification':str(D/'handoff-verification.json'),'inheritedContinuation':str(pathlib.Path(x['predecessorHandoff']).parent/'continuation-point.json')},'scope':'Technical counts and pointers only; no quality credit or procedural cure.'}
 m.write(D/'technical-native-diagnostics.json',diagnostics)
 for p in [D/'manifest.json',D/'handoff-next.json']:m.write(p,x)
 cc=m.savecode([D/'manifest.json',D/'handoff-next.json',D/'technical-native-diagnostics.json',pathlib.Path(__file__)],'Preserve closed CURRENT and one readonly exact4 successor barrier');print('code',cc)
