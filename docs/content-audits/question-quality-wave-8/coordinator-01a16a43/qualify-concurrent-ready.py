@@ -52,12 +52,16 @@ assert [i for i,(a,b) in enumerate(zip(baseline['questions'],live['questions']),
 assert baseline['questions'][changed-1]==old and live['questions'][changed-1]==new
 same_topic_alias=None
 if 'sameTopicMAIN' not in ps:
- ip=pathlib.Path(ps['sourceInventoryPath']);assert ip.is_relative_to(R) and str(ip)==sp['sourceInventoryPath']
- assert m.raw(ip)==ps['sourceInventorySHA256']==sp['sourceInventorySHA256']
+ peer_inventory_reference_absent='sourceInventoryPath' not in ps
+ assert peer_inventory_reference_absent==('sourceInventorySHA256' not in ps)
+ ip=pathlib.Path(sp['sourceInventoryPath'] if peer_inventory_reference_absent else ps['sourceInventoryPath'])
+ assert ip.is_relative_to(R) and str(ip)==sp['sourceInventoryPath']
+ peer_inventory_digest=sp['sourceInventorySHA256'] if peer_inventory_reference_absent else ps['sourceInventorySHA256']
+ assert m.raw(ip)==peer_inventory_digest==sp['sourceInventorySHA256']
  inv=m.read(ip);assert inv['globalMAIN']==ps['globalMAIN'] and inv['actualCurrentPeers']==ps['actualCurrentPeers']
  assert inv['sameTopicMAIN']['questions']==baseline['questions'] and len(inv['sameTopicMAIN']['questions'])==100
  ps['sameTopicMAIN']=copy.deepcopy(inv['sameTopicMAIN'])
- same_topic_alias={'path':str(ip),'rawSHA256':m.raw(ip),'originalSameTopicContainerAbsent':True,'operation':'Exact same-author explicit sourceproof/peer inventory path+SHA, full100 bodies and global bindings verified; redundant container only. Raw and judgments unchanged.'}
+ same_topic_alias={'path':str(ip),'rawSHA256':m.raw(ip),'originalSameTopicContainerAbsent':True,'originalPeerRootInventoryReferenceAbsent':peer_inventory_reference_absent,'operation':'Exact same-author explicit sourceproof inventory path+SHA and identical original inline peer full100/global11000/file110 bindings verified; redundant container only. Raw and judgments unchanged.'}
 assert ps['sameTopicMAIN']['questions']==baseline['questions'] and ps['sameTopicMAIN']['fileSHA256']==__import__('hashlib').sha256(baseline_bytes).hexdigest()
 assert len(ps['actualCurrentPeers'])==100 and [p['sourceOrder'] for p in ps['actualCurrentPeers']]==list(range(1,101))
 assert [p['card'] for p in ps['actualCurrentPeers']]==baseline['questions']
