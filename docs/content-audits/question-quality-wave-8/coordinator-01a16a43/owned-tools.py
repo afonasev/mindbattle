@@ -18,6 +18,38 @@ def write(p,v):
  p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
 def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+def alias_explicit_inventory_file_digest(candidate,sp,ps,R):
+ """Alias an explicit inventory file digest only after full live bindings."""
+ g=ps.get('globalMAIN',{})
+ if 'sourceInventoryFileSHA256' not in g or 'sourceInventorySHA256' in g:return
+ R=pathlib.Path(R);assert R.parent==D
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==0
+ p=pathlib.Path(g['sourceInventoryPath']);p=p if p.is_absolute() else C/p
+ assert p.is_relative_to(R) and raw(p)==g['sourceInventoryFileSHA256']
+ inv=read(p);same=inv['sameTopicMAIN'];full=inv['globalMAIN'];e=candidate['entries'][0]
+ topic=read(C/same['path']);peers=ps['actualCurrentPeers']
+ assert same['topicId']==topic['id']==e['topicId']
+ assert len(peers)==same['questionCount']==len(topic['questions'])==100
+ assert [v['sourceOrder'] for v in peers]==list(range(1,101))
+ assert [v['card'] for v in peers]==same['questions']==topic['questions']
+ assert all(v['id']==v['card']['id'] and v['topicId']==topic['id'] and v['sha256']==sha(v['card']) for v in peers)
+ assert same['fileSHA256']==raw(C/same['path'])
+ assert full['questionCount']==g['questionCount']==11000 and full['topicFileCount']==g['topicFileCount']==110
+ assert full['rowsCanonicalSHA256']==g['rowsCanonicalSHA256']
+ assert full['allCurrentFileByteBindings']==g['allCurrentFileByteBindings'] and len(full['allCurrentFileByteBindings'])==110
+ rows=[]
+ for b in full['allCurrentFileByteBindings']:
+  assert raw(C/b['path'])==b['sha256'];t=read(C/b['path'])
+  rows.extend({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']} for q in t['questions'])
+ assert len(rows)==11000 and sha(rows)==g['rowsCanonicalSHA256']
+ if 'rows' in g:assert g['rows']==rows
+ assert 'sameTopicMAIN' not in ps and 'sourceInventoryPath' not in sp
+ proof={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalPath':g['sourceInventoryPath'],'originalFileSHA256':g['sourceInventoryFileSHA256'],'operation':'Exact explicit path/fileSHA and original ordered100 full bodies,110 live file digests,11000 MAIN digest verified. Redundant digest/container names and absolute path only; raw, literals, grounds and judgments unchanged.'}
+ g.update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
+ ps['sameTopicMAIN']={**same,'sourceInventoryPath':str(p),'sourceInventorySHA256':raw(p)}
+ sp.update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
+ ps['technicalExplicitInventoryFileDigestAlias']=proof
 def alias_explicit_cross_topic_peers(candidate,sp,ps,R):
  """Keep explicit foreign-topic peer bodies in the validator's peer container."""
  if 'crossCatalogClosestFullBodies' in ps:return
