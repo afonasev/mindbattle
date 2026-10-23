@@ -1,0 +1,101 @@
+{
+  "owner": "01a166df-2e31-7dd0-a5ff-b9d905dcc541",
+  "phase": "START_SOURCE_HUMAN_MEDICINE26_SOLE_DIRECTED_CYCLE1",
+  "sourceNativeId": "01a166e7-53d8-7f12-b001-ff70caeff28c",
+  "authorNativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/23/rollout-2026-10-23T08-56-38-01a166e7-53d8-7f12-b001-ff70caeff28c.jsonl",
+  "C": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle",
+  "P": "/Users/eaafonasev/Projects/mindbattle/planning",
+  "id": "human-medicine-purkinje-fibers",
+  "topicId": "human-medicine",
+  "sourceOrder": 26,
+  "cycle": 1,
+  "outputDirectory": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a166df/source-human-medicine26-cycle1",
+  "beforeCard": {
+    "id": "human-medicine-purkinje-fibers",
+    "difficulty": "hard",
+    "prompt": "Какую роль выполняют волокна Пуркинье в проводящей системе сердца?",
+    "answers": [
+      {
+        "text": "Передают возбуждение миокарду желудочков",
+        "note": "Импульс достигает всех сократительных клеток желудочков примерно за 75 мс."
+      },
+      {
+        "text": "Устанавливают нормальный сердечный ритм",
+        "note": "Синоатриальный узел с наибольшей частотой деполяризации инициирует синусовый, или нормальный, ритм."
+      },
+      {
+        "text": "Создают паузу перед передачей импульса к пучку Гиса",
+        "note": "Проведение через атриовентрикулярный узел занимает примерно 100 мс; эта пауза позволяет предсердиям завершить сокращение."
+      },
+      {
+        "text": "Проводят импульс через межжелудочковую перегородку",
+        "note": "Пучок Гиса проходит через межжелудочковую перегородку и делится на правую и левую ножки."
+      }
+    ],
+    "correctIndex": 0,
+    "explanation": "Волокна Пуркинье быстро распределяют электрическое возбуждение по миокарду желудочков. Благодаря этому сокращение желудочков начинается организованно, преимущественно от верхушки к основанию сердца.",
+    "source": {
+      "title": "OpenStax Anatomy and Physiology: 19.2 Cardiac Muscle and Electrical Activity",
+      "url": "https://openstax.org/books/anatomy-and-physiology/pages/19-2-cardiac-muscle-and-electrical-activity",
+      "verifiedAt": "2026-10-23"
+    }
+  },
+  "beforeHash": "a83f2a52c93619536794b89d28c288274c9cb8b1d0753d08a7c9fda55422b4ce",
+  "frozen": {
+    "id": "human-medicine-purkinje-fibers",
+    "topicId": "human-medicine",
+    "sourceOrder": 26,
+    "difficulty": "hard",
+    "correctIndex": 0
+  },
+  "initialReceipt": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a166df/independent-human-medicine26-initial/receipt.json",
+  "initialReceiptSHA256": "2b076bc2195b492ca842d2c1dd23745b8097ffdec866145300774a2b15a730bb",
+  "initialDefects": [
+    {
+      "code": "SLOT3_SEPTAL_CONDUCTION_NOT_EXCLUSIVE",
+      "kind": "substantive unique-key ambiguity",
+      "slot": 3,
+      "affectedGroups": [
+        "prompt_ordered_answers_key"
+      ],
+      "affectedVariantSlots": [
+        0,
+        3
+      ],
+      "literal": "Проводят импульс через межжелудочковую перегородку",
+      "finding": "The literal option names conduction through a myocardial location, not an exclusive His transit stage. Purkinje distribute through ventricular myocardium (19.2L74), and interventricularseptum is myocardial tissue (19.1L106/L108). L71 attributing one such route toHis does not show it cannot describe a part of Purkinje conduction. Question asks a role, so a merely less-specific true-compatible role is an invalid distractor. This is ambiguity, not a claim that source explicitly labels slot3 the principalPurkinje function.",
+      "minimumDirectedFix": "Author should replace onlyslot3 role with unambiguous normal-path endpoints belonging toHis, e.g. “Передают импульс от AV-узла к правой и левой ножкам пучка Гиса”, grounded inL63/L71. Preserve frozenkey0/HARD and retain good note/evidence as applicable; verify new literal against complete source and affected MAIN peers. Reviewer proposes direction, does not editcatalog.",
+      "nextOwner": "SOURCE26 author through current coordinator, sole directedcycle1",
+      "doNotChange": "75ms is supported distribution interval;100msAVdelay and225ms total have different scopes. Do not rewrite these values or other good prose to fixslot3.",
+      "sourcesLocators": [
+        {
+          "path": "docs/content-audits/question-quality-wave-8/coordinator-01a166df/source-human-medicine26/raw/openstax-cardiac-conduction.json",
+          "url": "https://openstax.org/books/anatomy-and-physiology/pages/19-2-cardiac-muscle-and-electrical-activity",
+          "completeOutputPointer": "/originalRecord/payload/output/1/text",
+          "locator": "19.2 L63, L71–L75"
+        },
+        {
+          "path": "docs/content-audits/question-quality-wave-8/coordinator-01a1661f/source-human-medicine11/raw/openstax-heart-anatomy.json",
+          "url": "https://openstax.org/books/anatomy-and-physiology/pages/19-1-heart-anatomy",
+          "completeOutputPointer": "/originalRecord/payload/output/1/text",
+          "locator": "19.1 L106–L108"
+        }
+      ]
+    }
+  ],
+  "scope": "Sole directed cycle1: replace only answer slot3 text to remove INITIAL unique-key ambiguity using normal-path endpoints in retained source. Preserve all prompt/explanation/notes/source metadata and other answer texts. Do not rewrite confirmed75/100ms or attempt procedural cure. If exact bound source does not support a clear distinct distractor, HOLD unchanged; no partial apply or new cycle.",
+  "sourceReuse": "Personally reuse relevant retained original full contexts already bound in original SOURCE26 and reader sources.json; no network, no recopy shared raw bodies. Original SOURCE11 and all source26 diagnostics remain uncured.",
+  "previousAuthorPacket": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a166df/source-human-medicine26",
+  "formatReference": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a1593a/packet-format.md",
+  "freshInventoryHelper": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a166df/current-inventory.py",
+  "inventoryUsage": "python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a166df/current-inventory.py human-medicine /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a166df/source-human-medicine26-cycle1/fresh-inventory.json",
+  "limits": "Write only new assigned cycle1 output. No catalog/P/Git/QA/claims/network/chats/messages/subagents/next card. You are not alone preserve others. Actual firstcompaction finish26cycle1 only; second preservationSTOP. No cycle2 or newINITIAL.",
+  "deliver": "Complete candidate/sourceproof/peer-snapshot, exactcurrentbefore+solecycle1after, sixgroups/fourtriples and affected relevant full MAIN peer bindings; reuse unchanged judgments transparently. READY_FOR_SAME_READER_FINAL or HOLD then STOP.",
+  "nativePreflight": {
+    "actualCompactions": 0,
+    "lastTaskEvent": "task_complete",
+    "lastInput": 154064,
+    "window": 258400,
+    "remaining": 104336
+  }
+}
