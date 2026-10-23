@@ -1,0 +1,106 @@
+{
+  "purpose": "Directed SOURCE46 concurrent-proposal dependency clarification before coordinator apply; no READY/INITIAL or acceptance status is changed.",
+  "sourceNativeId": "01a16883-692d-7ca0-9252-2801c97a7592",
+  "source46": {
+    "path": "qualified-source-human-medicine46/candidate.json#/entries/0/proposedCard",
+    "canonicalSHA256": "64103066d896f6aed855223a8c68775a2831e7ebea89c7db7e5657522ef33042",
+    "fullCard": {
+      "id": "human-medicine-tendon-connects",
+      "difficulty": "easy",
+      "prompt": "Что обычно соединяет сухожилие?",
+      "answers": [
+        {
+          "text": "Мышцу с кожей",
+          "note": "Некоторые лицевые скелетные мышцы прикрепляются к коже и двигают её при мимике."
+        },
+        {
+          "text": "Мышцу с костью",
+          "note": "Сухожилия — прочные полосы плотной упорядоченной соединительной ткани."
+        },
+        {
+          "text": "Кость с костью",
+          "note": "В некоторых суставах соседние кости соединены фиброзной соединительной тканью."
+        },
+        {
+          "text": "Кость с хрящом",
+          "note": "В хрящевом суставе кости соединены гиалиновым или волокнистым хрящом."
+        }
+      ],
+      "correctIndex": 1,
+      "explanation": "Сухожилия — прочные полосы плотной упорядоченной соединительной ткани; они передают костям усилие сокращающихся скелетных мышц. Так мышцы приводят кости в движение.",
+      "source": {
+        "title": "OpenStax Anatomy and Physiology 2e: Interactions of Skeletal Muscles",
+        "url": "https://openstax.org/books/anatomy-and-physiology-2e/pages/11-1-interactions-of-skeletal-muscles-their-fascicle-arrangement-and-their-lever-systems",
+        "verifiedAt": "2026-10-23"
+      }
+    }
+  },
+  "concurrentSource45": {
+    "path": "qualified-source-human-medicine45-cycle1/candidate.json#/entries/0/proposedCard",
+    "canonicalSHA256": "fed0ec078be62c70fca509ee04f419cda99d432760c57cb196ce1fa195fb690c",
+    "fullCard": {
+      "id": "human-medicine-joint-function",
+      "difficulty": "easy",
+      "prompt": "Как называется свободно подвижное соединение костей, поверхности которых соприкасаются внутри заполненной жидкостью полости?",
+      "answers": [
+        {
+          "text": "Сустав",
+          "note": "Плечевой и тазобедренный суставы позволяют конечности двигаться в нескольких направлениях и вращаться."
+        },
+        {
+          "text": "Сухожилие",
+          "note": "Сухожилие — прочная полоса соединительной ткани, которая соединяет мышцу с костью."
+        },
+        {
+          "text": "Мышца",
+          "note": "Сокращение мышечных волокон создаёт натяжение, которое передаётся сухожилиям для движения скелета."
+        },
+        {
+          "text": "Хрящ",
+          "note": "При хрящевом соединении кости связываются при участии гиалинового или волокнистого хряща."
+        }
+      ],
+      "correctIndex": 0,
+      "explanation": "Свободно подвижное соединение костей называется суставом. В его заполненной смазывающей жидкостью полости соприкасаются суставные поверхности.",
+      "source": {
+        "title": "OpenStax: Classification of Joints",
+        "url": "https://openstax.org/books/anatomy-and-physiology-2e/pages/9-1-classification-of-joints",
+        "verifiedAt": "2026-10-23"
+      }
+    },
+    "statusCaveat": "SOURCE45 cycle1 has an unresolved D1 Russian term/scope defect and is not accepted. This addendum does not inherit or imply a PASS and does not direct an automatic SOURCE45 fix."
+  },
+  "bilateralMAINAssessment": {
+    "source46Relation": {
+      "entity": "tendon",
+      "relation": "connects",
+      "value": "muscle to bone",
+      "context": "usual tendon attachment; prompt asks what a tendon connects"
+    },
+    "source45Relation": {
+      "entity": "freely movable/synovial joint",
+      "relation": "defined/classified by",
+      "value": "bone surfaces contacting inside a fluid-filled cavity",
+      "context": "prompt asks for a joint type"
+    },
+    "source46To45": "The questions ask for different entities and different relations/values. SOURCE46 asks for the structures joined by a tendon; SOURCE45 asks for the class of a freely movable joint and its cavity/surfaces. The candidate entities and relation values do not match, and SOURCE45 is not a direct reverse of the tendon-to-muscle/bone relation.",
+    "source45To46": "Viewed from SOURCE45, SOURCE46 does not ask for the definition or properties of a joint; it asks which structures a tendon connects. The options about bone-bone and bone-cartilage connections remain distractors, not a reverse or duplicate of the synovial-joint definition.",
+    "crossCardNoteOverlap": "SOURCE45 includes “Сухожилие” as a distractor with a note that a tendon connects muscle to bone, which states the SOURCE46 key fact. The overlap is canonical option teaching, not MAIN duplication; the pinned contract allows notes about facts keyed elsewhere and imposes no cross-note ban.",
+    "directReverse": "No. Neither card reverses the other card’s entity-relation-value-context.",
+    "effectOnEarlier46PeerConclusions": "No change needed. The SOURCE46 peer snapshot assessed CURRENT sourceOrder45 joint-function as a joint/articulation question and sourceOrder47 ligament-connects as a bone-bone connective-tissue question. The SOURCE45 proposal narrows the former to a freely movable/synovial-joint definition, which remains distinct from SOURCE46 tendon-to-muscle/bone. Its shared tendon note does not create a MAIN duplicate. The earlier SOURCE46 assessments remain valid."
+  },
+  "protectedPacketFileSHA256": {
+    "before": {
+      "candidate.json": "3cdfc275405cfbc7d7feec85a7142aea2365657f883685df08328ff5145f9f93",
+      "sourceproof.json": "a278707c1a3eecd9aa699ad7ce663bce0c750d1d438f54527aa303cbcd8a76bf",
+      "peer-snapshot.json": "572b8f096b5c2837a3f59fbd1ee2a34e56bdf43ceee94520b6256c0bd669db44"
+    },
+    "after": {
+      "candidate.json": "3cdfc275405cfbc7d7feec85a7142aea2365657f883685df08328ff5145f9f93",
+      "sourceproof.json": "a278707c1a3eecd9aa699ad7ce663bce0c750d1d438f54527aa303cbcd8a76bf",
+      "peer-snapshot.json": "572b8f096b5c2837a3f59fbd1ee2a34e56bdf43ceee94520b6256c0bd669db44"
+    },
+    "verification": "SHA256 of candidate.json, sourceproof.json, and peer-snapshot.json was measured before writing this addendum and rechecked after writing; all three remained byte-identical."
+  },
+  "boundaries": "Only this addendum was written. No card/packet edits, source fetch, QA, Git action, status reset, or acceptance verdict."
+}
