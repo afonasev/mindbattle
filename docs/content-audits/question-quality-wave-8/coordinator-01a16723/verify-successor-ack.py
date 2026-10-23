@@ -8,7 +8,9 @@ assert sum(r['type']=='compacted' for r in rows)==0
 assert next(r['payload']['type'] for r in reversed(rows) if r.get('payload',{}).get('type') in ['task_started','task_complete'])=='task_complete'
 def command_results(v):
  if isinstance(v,dict):
-  if 'exit_code' in v and 'output' in v:yield v
+  if 'exit_code' in v and 'output' in v:
+   yield v
+   return  # stdout/diagnostic source JSON is data, not a new command result.
   for a in v.values():yield from command_results(a)
  elif isinstance(v,list):
   for a in v:yield from command_results(a)
@@ -32,7 +34,7 @@ for i,r in enumerate(rows,1):
 docs=[m.C/'docs/content-audits/question-quality-wave-8'/p for p in ['coordinator-01a14377/pinned-question-revision-12e5581b.md','coordinator-01a13f31/packet-contract.json','coordinator-01a1593a/method-pilot.md','coordinator-01a1593a/packet-format.md']]
 reads=[]
 for p in docs:
- content=p.read_text().strip();matches=[cid for cid,b in bodies if content in b and str(p) in calls[cid][1]['payload'].get('input','') and all(str(other) not in calls[cid][1]['payload'].get('input','') for other in docs if other!=p)];assert matches,('No complete successful untruncated read',str(p));reads.append({'path':str(p),'rawSHA256':m.raw(p),'exactSuccessfulCallIds':matches})
+ content=p.read_text().strip();expected="text(await tools.exec_command({cmd:'cat "+str(p)+"',max_output_tokens:12000}));";matches=[cid for cid,b in bodies if b==p.read_text() and calls[cid][1]['payload'].get('input','').strip()==expected];assert matches,('No complete successful untruncated read',str(p));reads.append({'path':str(p),'rawSHA256':m.raw(p),'exactSuccessfulCallIds':matches})
 assert len({v['exactSuccessfulCallIds'][0] for v in reads})==4, 'Four separate full structured successful read calls required'
 finals=[(i,r) for i,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='message' and r['payload'].get('role')=='assistant' and r['payload'].get('phase')=='final_answer']
 assert finals

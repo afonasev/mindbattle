@@ -9,6 +9,8 @@ assert not any(a['stage'].startswith('START') for a in x['actors'].values())
 codes=[]
 def walk(v):
  if isinstance(v,dict):
+  if 'exit_code' in v and 'output' in v:
+   codes.append(v['exit_code']);return  # Original exec boundary; embedded old diagnostics are data.
   for k,a in v.items():
    if k=='exit_code':codes.append(a)
    else:walk(a)
