@@ -136,6 +136,13 @@ def alias_explicit_root_candidate(candidate,sp,ps,R):
  assert len(sp['entries'])==1
  keys=['id','topicId','sourceOrder','status','beforeCard','beforeHash','proposedCard','afterHash','fieldGroups']
  e={k:copy.deepcopy(candidate[k]) for k in keys};q=e['proposedCard'];b=e['beforeCard']
+ if 'id' not in ps:
+  own_peers=[(i,p) for i,p in enumerate(ps['actualCurrentPeers']) if p['id']==e['id']]
+  assert len(own_peers)==1
+  peer_index,peer=own_peers[0]
+  assert peer['card']==b and peer['sha256']==e['beforeHash']==sha(b) and peer['topicId']==e['topicId'] and peer['sourceOrder']==e['sourceOrder']
+  ps['id']=peer['id']
+  ps['technicalExplicitRootIdAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalRootIdAbsent':True,'originalSelfPreimagePointer':'/actualCurrentPeers/'+str(peer_index),'operation':'Expose the identical ID from the unique explicit full-before-body/hash/topic/order-bound peer. Existing root ID assertion retained; no guessed identity, raw change or new judgment.'}
  assert e['id']==b['id']==q['id']==sp['entries'][0]['id']==ps['id']
  assert e['topicId']==sp['topicId']==ps['topicId']
  if 'sourceOrder' not in ps:
