@@ -19,6 +19,7 @@ for R in packet_paths:
     name = R.name; B = D/('qualified-'+name)
     candidate, sp, ps = [m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
     m.alias_explicit_inventory_binding(candidate,sp,ps,R)
+    m.alias_explicit_cross_topic_peers(candidate,sp,ps,R)
     m.alias_same_topic_current_peer_container(candidate,sp,ps,R)
     m.alias_explicit_root_candidate(candidate,sp,ps,R)
     m.alias_source77_own_prior_application(candidate,sp,ps,R)
