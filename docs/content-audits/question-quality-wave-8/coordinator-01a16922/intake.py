@@ -317,6 +317,26 @@ for R in packet_paths:
                 ps['technicalExplicitPeerOrderAlias']={'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':m.raw(R/'peer-snapshot.json'),'originalSourceOrderAbsentFor':absent_orders,'originalFullTopicPointer':'/sameTopicMAIN/questions','frozenOrderCommit':checkpoint['baselineSHA'],'operation':'Exact peer ID/full body maps to existing explicit100-topic position, additionally identical to frozen baseline ID order. Original field absence and raw retained; no peer body or semantic judgment changed.'}
         assert all(v['topicId']==e['topicId'] and v['id']==v['card']['id'] and m.sha(v['card'])==v.get('sha256',v.get('canonicalSHA256')) for v in full)
         ps['technicalCompleteInlineSnapshotNoInventoryHydration']={'originalOptionalInventoryLocator':global_audit['inventoryPath'],'originalOptionalTopicInventoryLocator':original_topic_locator,'actualPeerCount':len(full),'candidateExcludedFromDistinctPeers':len(full)==99,'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':m.raw(R/'peer-snapshot.json'),'operation':'No inventory file read or SHA invented. Use already explicit full100 topic bodies, all110 raw file bindings and original11000 row digest, validated by unchanged downstream checks. Optional locator remains untrusted metadata; author raw and semantic grounds unchanged. A99peer list excludes self and remains unchanged.'}
+    if 'inventoryPath' in global_audit and 'sourceInventoryPath' in sp and 'inventoryPath' not in ps.get('sameTopicMAIN',{}):
+        # Redundant names only: both original files already bind one immutable
+        # author inventory and all100 full peer bodies, not an unbound hydration.
+        ip=pathlib.Path(global_audit['inventoryPath'])
+        assert ip.is_relative_to(R) and str(ip)==sp['sourceInventoryPath']
+        digest=global_audit['inventoryFileSHA256']
+        assert m.raw(ip)==digest==sp['sourceInventorySHA256']
+        inv=m.read(ip);same=ps['sameTopicMAIN'];full=ps['actualCurrentPeers']
+        assert inv['globalMAIN']['rowsCanonicalSHA256']==global_audit['rowsCanonicalSHA256']
+        assert inv['globalMAIN']['topicFileCount']==global_audit['topicFileCount']==110
+        assert inv['globalMAIN']['questionCount']==global_audit['questionCount']==11000
+        assert len(full)==same['questionCount']==100
+        assert [v['sourceOrder'] for v in full]==list(range(1,101))
+        assert [v['card'] for v in full]==inv['sameTopicMAIN']['questions']==topic['questions']
+        assert all(v['topicId']==topic['id'] and v['id']==v['card']['id'] and m.sha(v['card'])==v['sha256'] for v in full)
+        assert same['path']==inv['sameTopicMAIN']['path'] and same['topicId']==topic['id']
+        assert same['fileSHA256']==inv['sameTopicMAIN']['fileSHA256']==m.raw(C/same['path'])
+        global_audit['inventorySHA256']=digest
+        same.update(inventoryPath=str(ip),inventorySHA256=digest)
+        ps['technicalExactInventoryRedundantNamesAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':m.raw(R/'peer-snapshot.json'),'inventoryPath':str(ip),'inventoryFileSHA256':digest,'verifiedFullOrderedPeers':100,'operation':'Existing sourceproof/global path+SHA, exact full100 bodies and topic/file SHA verified; redundant names only. Raw, sources, judgments unchanged; original missing-field failure uncured.'}
     if 'inventoryPath' in global_audit and 'sourceInventoryPath' not in global_audit and 'sourceInventoryPath' in sp:
         inv_path=pathlib.Path(global_audit['inventoryPath'])
         inv_path=inv_path if inv_path.is_absolute() else C/inv_path
