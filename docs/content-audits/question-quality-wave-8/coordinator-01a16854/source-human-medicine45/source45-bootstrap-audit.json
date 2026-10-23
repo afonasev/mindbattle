@@ -1,0 +1,35 @@
+{
+  "purpose": "Preserve SOURCE45 bootstrap invocation failures and prior identity verification without repeating identity discovery after START.",
+  "nativeId": {
+    "value": "01a1686e-f3da-7b20-8d70-dbe6a4e13fa9",
+    "basis": "Exact returned ID in the assigned task; exact create input and matched original output plus matching session_meta were verified before START.",
+    "sessionMetaVerified": true,
+    "topLevelCompactedCount": 0,
+    "postStartRediscovery": "not performed per START instruction"
+  },
+  "observedFailures": [
+    {
+      "kind": "unavailable_command",
+      "command": "python",
+      "result": "zsh: command not found: python",
+      "exitCode": 127,
+      "correction": "Use python3 -B."
+    },
+    {
+      "kind": "incorrect_journal_path_argument",
+      "path": "/Users/eaafonasev/.codex/sessions/2026/10/23/rollout-2026-10-23T15-35-20-01a16854-59b3-7cd0-8e1b-1299742fbeeb.jsonl",
+      "result": "The command did not run because python was unavailable; this coordinator-ID path was not an authoritative native journal locator."
+    },
+    {
+      "kind": "guessed_timestamp_journal_path",
+      "path": "/Users/eaafonasev/.codex/sessions/2026/10/23/rollout-2026-10-23T15-35-20-01a1686e-f3da-7b20-8d70-dbe6a4e13fa9.jsonl",
+      "attempts": 2,
+      "result": "FileNotFoundError; timestamp was guessed and the path did not exist."
+    },
+    {
+      "kind": "decoder_error_suppression",
+      "detail": "An exploratory identity extraction script used a broad exception handler that suppressed JSON-decoding errors. Preserve this as a process defect; the accepted bootstrap verification was the exact create input, output matched by call_id, decoded returned ID, returned-ID journal lookup, matching session_meta, and zero top-level compacted records already observed before START."
+    }
+  ],
+  "scope": "This audit records bootstrap provenance only. No source content or assignment scope is changed."
+}
