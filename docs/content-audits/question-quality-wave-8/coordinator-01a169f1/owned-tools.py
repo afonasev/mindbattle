@@ -40,7 +40,16 @@ def alias_explicit_inventory_binding(candidate,sp,ps,R):
  import copy
  R=pathlib.Path(R);assert R.parent==D
  assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
- assert candidate['cycle']==sp['cycle']==ps['cycle']==0
+ cycle=candidate['cycle'];assert cycle==sp['cycle']==ps['cycle'] and cycle in [0,1]
+ if cycle==1:
+  assert R.name.endswith('-cycle1')
+  prior=read(R.with_name(R.name.removesuffix('-cycle1'))/'candidate.json')
+  current=candidate['entries'][0];original=prior['entries'][0]
+  assert prior['cycle']==0 and prior['sourceNativeId']==candidate['sourceNativeId']
+  assert current['id']==original['id'] and current['beforeCard']==original['proposedCard']
+  assert current['beforeHash']==original['afterHash']==sha(current['beforeCard'])
+  initial=read(D/f"independent-human-medicine{current['sourceOrder']}-initial/receipt.json")['entries'][0]
+  assert initial['status']=='FIX' and initial['currentCard']==current['beforeCard']
  e=candidate['entries'][0];b=ps['inventoryBinding'];p=pathlib.Path(b['path'])
  if 'sha256' not in b and 'fileSHA256' in b:
   assert p.is_relative_to(R) and raw(p)==b['fileSHA256']
