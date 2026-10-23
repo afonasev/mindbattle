@@ -19,6 +19,7 @@ for R in packet_paths:
     name = R.name; B = D/('qualified-'+name)
     candidate, sp, ps = [m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
     m.alias_source77_own_prior_application(candidate,sp,ps,R)
+    m.alias_source31_root_entry_identity(candidate,sp,R)
     m.alias_source83_clarified_literals(candidate,sp,ps,R)
     m.alias_source83_cycle1_redundant_snapshot(candidate,sp,ps,R)
     m.alias_source84_cycle1_variant_names(candidate,sp,ps,R)
