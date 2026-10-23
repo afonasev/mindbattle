@@ -83,6 +83,11 @@ def alias_explicit_inventory_binding(candidate,sp,ps,R):
   initial=read(D/f"independent-human-medicine{current['sourceOrder']}-initial/receipt.json")['entries'][0]
   assert initial['status']=='FIX' and initial['currentCard']==current['beforeCard']
  e=candidate['entries'][0];b=ps['inventoryBinding'];p=pathlib.Path(b['path'])
+ if not p.is_absolute():
+  original_path=b['path'];p=C/p
+  assert p.is_relative_to(R) and p.is_file() and raw(p)==b.get('fileSHA256',b.get('sha256'))
+  b['path']=str(p)
+  ps['technicalExplicitInventoryPathAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalPath':original_path,'absolutePath':str(p),'operation':'Exact declared repository-relative inventory path resolved within owned raw packet; original digest and all live inventory assertions retained. Raw bytes and grounds unchanged.'}
  if 'sha256' not in b and 'fileSHA256' in b:
   assert p.is_relative_to(R) and raw(p)==b['fileSHA256']
   inv=read(p);same=inv['sameTopicMAIN'];g=inv['globalMAIN']
