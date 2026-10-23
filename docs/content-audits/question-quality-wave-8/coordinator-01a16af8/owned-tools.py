@@ -469,6 +469,14 @@ def alias_same_topic_current_peer_container(candidate,sp,ps,R):
  rel='src/content/topics/'+tid+'.json';assert same['path']==rel and same['questionCount']==100
  topic=read(C/rel);peers=same['actualCurrentPeers']
  assert topic['id']==tid and raw(C/rel)==same['fileSHA256']
+ if len(peers)==99 and 'selfPreimageBinding' in same:
+  self_binding=same['selfPreimageBinding']
+  assert self_binding['countedAsDistinctPeer'] is False
+  assert self_binding['id']==e['id'] and self_binding['sourceOrder']==e['sourceOrder']
+  assert self_binding['card']==e['beforeCard']==topic['questions'][e['sourceOrder']-1] and self_binding['sha256']==e['beforeHash']==sha(e['beforeCard'])
+  assert all(p['id']!=self_binding['id'] for p in peers)
+  peers=sorted([*peers,{**self_binding,'topicId':tid}],key=lambda p:p['sourceOrder'])
+  ps['technicalExplicitSelfPreimagePeerAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalPeerPointer':'/sameTopicMAIN/actualCurrentPeers','originalSelfPointer':'/sameTopicMAIN/selfPreimageBinding','operation':'Exact99 full original peers plus explicitly separate full self preimage exposed as100 ordered current bindings. Self remains countedAsDistinctPeer=false; topicId comes from the same explicit verified topic. All live body/hash/order assertions retained; raw and judgments unchanged.'}
  assert len(peers)==100 and [p['sourceOrder'] for p in peers]==list(range(1,101))
  assert [p['card'] for p in peers]==topic['questions']
  assert all(p['topicId']==tid and p['id']==p['card']['id'] and sha(p['card'])==p.get('sha256',p.get('canonicalSHA256')) for p in peers)
