@@ -24,5 +24,5 @@ for check in proof['fourSeparateFullReads']:
  target=next((m.C/'docs/content-audits/question-quality-wave-8').rglob(check['path']));result=rows[check['resultLine']-1]['payload'];assert target.read_text() in list(strings(result['output']))
  whole.append({**check,'fileSHA256':m.raw(target),'originalWholeOutputEqualsFile':True})
 p=D/f'{role}{order}-content-policy-proof.json';assert not p.exists()
-m.write(p,{'owner':m.O,'sourceNativeId':uid,'actualNative':str(native),'fourExactWholeReadBytes':whole,'fullContentSection':{'path':str(path),'fileSHA256':m.raw(path),'lines':[start+1,end],'originalOutputs':matches},'verifiedBeforeSOURCEStart':True,'qualityCredit':0})
+m.write(p,{'owner':m.O,('readerNativeId' if reader else 'sourceNativeId'):uid,'actualNative':str(native),'fourExactWholeReadBytes':whole,'fullContentSection':{'path':str(path),'fileSHA256':m.raw(path),'lines':[start+1,end],'originalOutputs':matches},'verifiedBeforeSOURCEStart':not reader,'verifiedBeforeAssignedStageStart':True,'qualityCredit':0})
 print(m.savecode([p,pathlib.Path(__file__)],f'Bind exact full Content policy and pinned bytes before SOURCE{order} start'))
