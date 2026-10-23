@@ -11,7 +11,12 @@ items=[(i,r['payload']) for i,r in enumerate(rows,1) if r['type']=='response_ite
 def decode(v):
  if isinstance(v,str):
   try:yield from decode(json.loads(v))
-  except (ValueError,TypeError):pass
+  except (ValueError,TypeError):
+   # Some original create results encode content.text as an escaped JSON object.
+   # Decode that one quoting layer only; original native output remains immutable.
+   if v.startswith('{\\"'):
+    try:yield from decode(json.loads(v.replace('\\"','"')))
+    except (ValueError,TypeError):pass
  elif isinstance(v,dict):
   yield v
   for x in v.values():yield from decode(x)
