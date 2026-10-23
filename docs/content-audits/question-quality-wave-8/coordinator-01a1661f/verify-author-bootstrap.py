@@ -17,14 +17,19 @@ def decode(v):
   for x in v.values():yield from decode(x)
  elif isinstance(v,list):
   for x in v:yield from decode(x)
-checks=[]
+checks=[]; rejected=[]
 for name in ['pinned-question-revision-12e5581b.md','packet-contract.json','method-pilot.md','packet-format.md']:
  calls=[(i,p) for i,p in items if p.get('type')=='custom_tool_call' and name in p.get('input','') and 'cat ' in p.get('input','')]
- assert len(calls)==1
- line,call=calls[0];outputs=[(i,p) for i,p in items if p.get('type')=='custom_tool_call_output' and p.get('call_id')==call['call_id']];assert len(outputs)==1
- results=[x for x in decode(outputs[0][1]['output']) if 'exit_code' in x]
- assert len(results)==1 and results[0]['exit_code']==0 and 'Warning: truncated output' not in results[0]['output']
- checks.append({'path':name,'callLine':line,'resultLine':outputs[0][0],'call_id':call['call_id'],'exit_code':0})
+ successful=[]
+ for line,call in calls:
+  outputs=[(i,p) for i,p in items if p.get('type')=='custom_tool_call_output' and p.get('call_id')==call['call_id']];assert len(outputs)==1
+  results=[x for x in decode(outputs[0][1]['output']) if 'exit_code' in x]
+  proof={'path':name,'callLine':line,'resultLine':outputs[0][0],'call_id':call['call_id']}
+  if len(results)==1 and results[0]['exit_code']==0 and 'Warning: truncated output' not in results[0]['output']:
+   successful.append({**proof,'exit_code':0})
+  else:rejected.append({**proof,'structuredResultCount':len(results),'qualifiedFullRead':False,'originalOutputPreservedInNative':True})
+ assert len(successful)==1, (name,'exactly one successful whole structured read required',len(successful))
+ checks.extend(successful)
 root=pathlib.Path(m.read(D/'manifest.json')['rootNativeAudit']['nativeJournal'])
 items_root=[r['payload'] for l in root.open() if (r:=json.loads(l))['type']=='response_item']
 calls=[p for p in items_root if p.get('type')=='custom_tool_call' and 'tools.mcp__codex_app__create_thread({' in p.get('input','') and 'title:'+json.dumps(title,ensure_ascii=False) in p.get('input','')]
@@ -32,7 +37,7 @@ assert len(calls)==1
 outputs=[p for p in items_root if p.get('type')=='custom_tool_call_output' and p.get('call_id')==calls[0]['call_id']];assert len(outputs)==1
 decoded=list(decode(outputs[0]['output']));assert not any(x.get('isError') for x in decoded)
 assert {x['threadId'] for x in decoded if 'threadId' in x}=={uid}
-report={'owner':m.O,'sourceNativeId':uid,'nativeJournal':str(paths[0]),'actualCompactions':0,'fourSeparateFullReads':checks,'originalCreationCallId':calls[0]['call_id'],'originalCreationResultId':outputs[0]['id'],'qualityCredit':0}
+report={'owner':m.O,'sourceNativeId':uid,'nativeJournal':str(paths[0]),'actualCompactions':0,'fourSeparateFullReads':checks,'rejectedOriginalReadAttempts':rejected,'noRetrocompliance':True,'originalCreationCallId':calls[0]['call_id'],'originalCreationResultId':outputs[0]['id'],'qualityCredit':0}
 p=D/f'source{order}-bootstrap-proof.json';assert not p.exists();m.write(p,report)
 print(m.savecode([p,pathlib.Path(__file__)],'Verify original native author bootstrap without quality credit'))
 print(json.dumps(report,ensure_ascii=False))
