@@ -1,0 +1,98 @@
+{
+  "owner": "01a16a43-3ea0-73f0-bebf-b1495fa73f6c",
+  "sourceNativeId": "01a16a57-4bd1-7132-9d5c-a9db16ce628e",
+  "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/24/rollout-2026-10-24T00-57-48-01a16a57-4bd1-7132-9d5c-a9db16ce628e.jsonl",
+  "actualCompactions": 0,
+  "lastInput": 172445,
+  "modelWindow": 258400,
+  "packet": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16a43/source-human-medicine75",
+  "rawFileSHA256": {
+    "raw-nlm-parathyroid.json": "b0e2d5b5bdae4b8f959d68eb06ea5ebe5ba154ea9e89300b3268d4aa5e3d9587",
+    "build_packet.py": "bcd56ddb013e15b60523f11c2b03263d5ae5c74f33c755d2a4c6414ce8d86c43",
+    "candidate.json": "6785b6a2ff0c222771108298e12abc35fcea0ba73ddf711801f4f3119d17a6f3",
+    "fresh-inventory.json": "916d1d7bab036f3bac440620cc9fbef40194faac0590f9638d49d8b458d0b566",
+    "raw-nlm-melatonin.json": "90507b94c27240354ad795aa7ca286099cd5628a487b172730300977b65e8970",
+    "raw-nlm-cortisol.json": "ecdbb613363260f33b61bef3228f7a7f7a9147fe1634b1ea3e0210292be9a07e",
+    "raw-nlm-epinephrine.json": "b801934088318254fc006711ebba29a898d18d8754418b3c895243dde6263f88",
+    "peer-snapshot.json": "583257f4ddb1451d92d6c0697a59f6f949e54e46242a16636f644d9430b250ac",
+    "sourceproof.json": "cacf2c85c25f9d0361461e9438cae12fa56a2f2dad7746c209b1fbe6e68e8ee2"
+  },
+  "status": "READY_FOR_INDEPENDENT_REVIEW",
+  "beforeHash": "53469a1a792898da62e355a08dfaa0e65084e215860c44f9c08c396fe0c443b4",
+  "afterHash": "fbbb4e116d0c709b8076890020dfa1d1bb37d8a4bd843a10e5db8c2ac3467502",
+  "sixGroups": 6,
+  "fourVariants": 4,
+  "nativeCaptureBindings": [
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16a43/source-human-medicine75/raw-nlm-parathyroid.json",
+      "nativeId": "01a16a57-4bd1-7132-9d5c-a9db16ce628e",
+      "nativeLine": 325,
+      "originalRecordExact": true
+    },
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16a43/source-human-medicine75/raw-nlm-epinephrine.json",
+      "nativeId": "01a16a57-4bd1-7132-9d5c-a9db16ce628e",
+      "nativeLine": 334,
+      "originalRecordExact": true
+    },
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16a43/source-human-medicine75/raw-nlm-melatonin.json",
+      "nativeId": "01a16a57-4bd1-7132-9d5c-a9db16ce628e",
+      "nativeLine": 318,
+      "originalRecordExact": true
+    },
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16a43/source-human-medicine75/raw-nlm-cortisol.json",
+      "nativeId": "01a16a57-4bd1-7132-9d5c-a9db16ce628e",
+      "nativeLine": 358,
+      "originalRecordExact": true
+    }
+  ],
+  "qualityCredit": 0,
+  "networkCalls": [
+    {
+      "callLine": 250,
+      "call": "// @exec: {\"yield_time_ms\": 120000, \"max_output_tokens\": 12000}\nconst r=await tools.web__run({open:[{ref_id:\"https://openstax.org/books/anatomy-and-physiology-2e/pages/17-6-the-adrenal-glands\"},{ref_id:\"https://openstax.org/books/anatomy-and-physiology-2e/pages/17-7-the-pineal-gland\"}],response_length:\"long\"}); store(\"source75_primary_adrenal_pineal\",r); text(r);\n",
+      "resultLine": 253
+    },
+    {
+      "callLine": 299,
+      "call": "// @exec: {\"yield_time_ms\": 120000, \"max_output_tokens\": 6000}\nconst r=await tools.web__run({search_query:[{q:\"site:ncbi.nlm.nih.gov/books parathyroid hormone increases blood calcium bone kidney physiology\"},{q:\"site:ncbi.nlm.nih.gov/books epinephrine adrenal medulla acute stress hormone\"},{q:\"site:ncbi.nlm.nih.gov/books melatonin pineal gland darkness secretion\"}],response_length:\"long\"}); store(\"source75_primary_nih_search\",r); text(r);\n",
+      "resultLine": 302
+    },
+    {
+      "callLine": 308,
+      "call": "// @exec: {\"yield_time_ms\": 120000, \"max_output_tokens\": 4000}\nconst r=await tools.web__run({search_query:[{q:\"site:ncbi.nlm.nih.gov/books \\\"epinephrine\\\" \\\"adrenal medulla\\\" physiology\"},{q:\"site:ncbi.nlm.nih.gov/mesh Epinephrine adrenal medulla\"}],response_length:\"medium\"}); store(\"source75_epinephrine_search\",r); text(r);\n",
+      "resultLine": 311
+    },
+    {
+      "callLine": 315,
+      "call": "// @exec: {\"yield_time_ms\": 120000, \"max_output_tokens\": 10000}\nconst r=await tools.web__run({open:[{ref_id:\"https://www.ncbi.nlm.nih.gov/books/NBK482510/\"},{ref_id:\"https://www.ncbi.nlm.nih.gov/books/NBK507716/\"},{ref_id:\"https://www.ncbi.nlm.nih.gov/mesh/68008550\"}],response_length:\"long\"}); store(\"source75_primary_nih_full\",r); text(r);\n",
+      "resultLine": 318
+    },
+    {
+      "callLine": 322,
+      "call": "// @exec: {\"yield_time_ms\": 120000, \"max_output_tokens\": 5000}\nconst r=await tools.web__run({open:[{ref_id:\"https://www.ncbi.nlm.nih.gov/mesh/68010281\"},{ref_id:\"https://www.ncbi.nlm.nih.gov/mesh?Cmd=DetailsSearch%26Db=mesh%26Term=%22Epinephrine%22%5BMeSH+Terms%5D\"}],response_length:\"long\"}); store(\"source75_nih_mesh\",r); text(r);\n",
+      "resultLine": 325
+    },
+    {
+      "callLine": 331,
+      "call": "// @exec: {\"yield_time_ms\": 120000, \"max_output_tokens\": 4000}\nconst r=await tools.web__run({open:[{ref_id:\"https://www.ncbi.nlm.nih.gov/mesh?Cmd=DetailsSearch&Db=mesh&Term=%22Epinephrine%22%5BMeSH+Terms%5D\"}],response_length:\"long\"}); store(\"source75_epinephrine_mesh\",r); text(r);\n",
+      "resultLine": 334
+    },
+    {
+      "callLine": 346,
+      "call": "// @exec: {\"yield_time_ms\": 120000, \"max_output_tokens\": 3000}\nconst r=await tools.web__run({search_query:[{q:\"site:ncbi.nlm.nih.gov/mesh cortisol glucocorticoid adrenal cortex NLM MeSH\"}],response_length:\"short\"}); store(\"source75_cortisol_mesh_search\",r); text(r);\n",
+      "resultLine": 349
+    },
+    {
+      "callLine": 355,
+      "call": "// @exec: {\"yield_time_ms\": 120000, \"max_output_tokens\": 4000}\nconst r=await tools.web__run({open:[{ref_id:\"https://www.ncbi.nlm.nih.gov/mesh/68000305\"},{ref_id:\"https://www.ncbi.nlm.nih.gov/mesh/68003480\"}],response_length:\"long\"}); store(\"source75_cortisol_mesh\",r); text(r);\n",
+      "resultLine": 358
+    }
+  ],
+  "technicalTripleHashRepresentationChecks": [],
+  "explicitInventoryReadBinding": null,
+  "currentTaskStartLine": 121,
+  "priorTaskNetworkCalls": []
+}
