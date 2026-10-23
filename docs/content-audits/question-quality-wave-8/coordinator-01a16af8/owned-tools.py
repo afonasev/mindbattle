@@ -138,6 +138,13 @@ def alias_explicit_root_candidate(candidate,sp,ps,R):
  e={k:copy.deepcopy(candidate[k]) for k in keys};q=e['proposedCard'];b=e['beforeCard']
  assert e['id']==b['id']==q['id']==sp['entries'][0]['id']==ps['id']
  assert e['topicId']==sp['topicId']==ps['topicId']
+ if 'sourceOrder' not in ps:
+  own_peers=[(i,p) for i,p in enumerate(ps['actualCurrentPeers']) if p['id']==e['id']]
+  assert len(own_peers)==1
+  peer_index,peer=own_peers[0]
+  assert peer['card']==b and peer['sha256']==e['beforeHash']==sha(b) and peer['topicId']==e['topicId'] and peer['sourceOrder']==e['sourceOrder']
+  ps['sourceOrder']=peer['sourceOrder']
+  ps['technicalExplicitRootOrderAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalRootOrderAbsent':True,'originalSelfPreimagePointer':'/actualCurrentPeers/'+str(peer_index),'operation':'Expose the identical sourceOrder from the unique explicit ID/full-before-body/hash/topic-bound peer. Existing root order assertion retained; no guessed identity, raw change or new judgment.'}
  assert e['sourceOrder']==sp['sourceOrder']==ps['sourceOrder']
  assert e['status']==sp['entries'][0]['status']
  assert sha(b)==e['beforeHash'] and sha(q)==e['afterHash']
