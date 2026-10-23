@@ -18,6 +18,27 @@ def write(p,v):
  p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
 def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+def alias_explicit_root_candidate(candidate,sp,ps,R):
+ """Expose an explicit own single-card root as entries[0]; raw stays immutable."""
+ if 'entries' in candidate:return
+ import copy
+ R=pathlib.Path(R);x=read(D/'manifest.json');uid=candidate['sourceNativeId']
+ assert R.parent==D and uid in x['createdNativeThreadsCurrentOwner']
+ assert candidate['sourceOrder'] in x['ownedSourceOrders']
+ assert uid==sp['sourceNativeId']==ps['sourceNativeId']
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==0
+ assert len(sp['entries'])==1
+ keys=['id','topicId','sourceOrder','status','beforeCard','beforeHash','proposedCard','afterHash','fieldGroups']
+ e={k:copy.deepcopy(candidate[k]) for k in keys};q=e['proposedCard'];b=e['beforeCard']
+ assert e['id']==b['id']==q['id']==sp['entries'][0]['id']==ps['id']
+ assert e['topicId']==sp['topicId']==ps['topicId']
+ assert e['sourceOrder']==sp['sourceOrder']==ps['sourceOrder']
+ assert e['status']==sp['entries'][0]['status']
+ assert sha(b)==e['beforeHash'] and sha(q)==e['afterHash']
+ assert len(e['fieldGroups'])==6 and len(sp['entries'][0]['literalGroups'])==6
+ assert len(sp['entries'][0]['fourFullPromptAnswerNoteAssessments'])==4
+ candidate['entries']=[e]
+ candidate['technicalExplicitRootCandidateAlias']={'rawPath':str(R/'candidate.json'),'rawSHA256':raw(R/'candidate.json'),'originalRootFields':keys,'operation':'Exact explicit root single-card fields deep-copied to entries[0]; original root retained. No new literal, hash, source, judgment or status. Original format deviation remains uncured.'}
 def save(root,ref,files,message):
  paths=sorted(set(str(pathlib.Path(p).relative_to(root)) for p in files));idx=root/h.git(root,'rev-parse','--git-path','index');expected=read(D/'manifest.json')['foreignIndexes']['planning' if root==P else 'code'];assert raw(idx)==expected, 'Foreign index differs from exact task boundary';return h.save(root,ref,paths,message,expected)
 def savecode(files,message):return save(C,'refs/heads/codex/question-quality-wave-6',files,message)
