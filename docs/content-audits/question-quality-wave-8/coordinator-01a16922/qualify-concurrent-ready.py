@@ -14,12 +14,16 @@ def at(ref,p):return subprocess.check_output(['git','-C',str(m.C),'show',ref+':'
 nativeproof=m.read(D/f'{topic}{order}-native-proof.json')
 for name,digest in nativeproof['rawFileSHA256'].items():
  p=R/name;assert m.raw(p)==digest and at(freeze,p)==p.read_bytes()
-clarpath=R/f'concurrent{changed}-clarification.json';clar=m.read(clarpath)
+clar_name=sys.argv[5] if len(sys.argv)>5 else f'concurrent{changed}-clarification.json'
+assert pathlib.Path(clar_name).name==clar_name
+clarpath=R/clar_name;clar=m.read(clarpath)
 assert clar['protectedOriginalFiles']['unchanged']
 for name in ['candidate.json','sourceproof.json','peer-snapshot.json']:
  assert clar['protectedOriginalFiles']['sha256BeforeClarificationWrite'][name]==clar['protectedOriginalFiles']['sha256AfterClarificationWrite'][name]==m.raw(R/name)
 assert clar[f'source{order}']['proposedCard']==e['proposedCard'] and clar[f'source{order}']['canonicalSHA256']==e['afterHash']==m.sha(e['proposedCard'])
-reportpath=D/f'qualified-source-{topic}{changed}-apply.json';app=m.read(reportpath)['applied'][0]
+report_name=sys.argv[4] if len(sys.argv)>4 else f'qualified-source-{topic}{changed}-apply.json'
+assert pathlib.Path(report_name).name==report_name
+reportpath=D/report_name;app=m.read(reportpath)['applied'][0]
 old,new=app['beforeCard'],app['proposedCard'];changed_id=old['id'];assert app['sourceOrder']==changed
 decl=clar[f'changedCurrent{changed}'];assert decl['cardFromAuthoritativeApplyReport']==new and decl['canonicalSHA256']==decl['reportDeclaredSHA256']==m.sha(new)
 assessment=clar['bilateralSemanticAssessment']
@@ -46,6 +50,14 @@ task=m.read(D/f'source-{topic}{order}-task.json');baseline_bytes=at(task['baseli
 assert [q['id'] for q in baseline['questions']]==[q['id'] for q in live['questions']]
 assert [i for i,(a,b) in enumerate(zip(baseline['questions'],live['questions']),1) if a!=b]==[changed]
 assert baseline['questions'][changed-1]==old and live['questions'][changed-1]==new
+same_topic_alias=None
+if 'sameTopicMAIN' not in ps:
+ ip=pathlib.Path(ps['sourceInventoryPath']);assert ip.is_relative_to(R) and str(ip)==sp['sourceInventoryPath']
+ assert m.raw(ip)==ps['sourceInventorySHA256']==sp['sourceInventorySHA256']
+ inv=m.read(ip);assert inv['globalMAIN']==ps['globalMAIN'] and inv['actualCurrentPeers']==ps['actualCurrentPeers']
+ assert inv['sameTopicMAIN']['questions']==baseline['questions'] and len(inv['sameTopicMAIN']['questions'])==100
+ ps['sameTopicMAIN']=copy.deepcopy(inv['sameTopicMAIN'])
+ same_topic_alias={'path':str(ip),'rawSHA256':m.raw(ip),'originalSameTopicContainerAbsent':True,'operation':'Exact same-author explicit sourceproof/peer inventory path+SHA, full100 bodies and global bindings verified; redundant container only. Raw and judgments unchanged.'}
 assert ps['sameTopicMAIN']['questions']==baseline['questions'] and ps['sameTopicMAIN']['fileSHA256']==__import__('hashlib').sha256(baseline_bytes).hexdigest()
 assert len(ps['actualCurrentPeers'])==100 and [p['sourceOrder'] for p in ps['actualCurrentPeers']]==list(range(1,101))
 assert [p['card'] for p in ps['actualCurrentPeers']]==baseline['questions']
@@ -70,6 +82,8 @@ next(b for b in bindings if b['path']==str(tp.relative_to(m.C)))['sha256']=m.raw
 ps['technicalConcurrentDependencyAlias']=proof;sp['technicalConcurrentDependencyAlias']=proof
 if timing_alias:
  proof['exactNativeReadTimingNameAlias']=timing_alias
+if same_topic_alias:
+ proof['exactInventorySameTopicContainerAlias']=same_topic_alias
 for source in sp['rawSources']:
  p=pathlib.Path(source['path']);p=p if p.is_absolute() else m.C/p;assert m.raw(p)==source['sha256']
  cap=m.read(p);jp=pathlib.Path(cap['nativeJournal'])
