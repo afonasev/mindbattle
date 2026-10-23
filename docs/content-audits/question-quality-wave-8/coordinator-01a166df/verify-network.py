@@ -14,6 +14,14 @@ wrappers=[]
 for p in R.rglob('*.json'):
  z=m.read(p)
  if isinstance(z,dict) and 'originalRecord' in z:
+  if z.get('sourceNativeId') != uid:
+   prior=pathlib.Path(z['nativeJournal']);prior_id=z['sourceNativeId']
+   if not prior.exists():
+    prior_paths=list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+prior_id+'.jsonl'));assert len(prior_paths)==1;prior=prior_paths[0]
+   prior_rows=[json.loads(line) for line in prior.open()]
+   assert [r['payload']['id'] for r in prior_rows if r.get('type')=='session_meta']==[prior_id]
+   assert prior_rows[z['nativeRecordLine']-1]==z['originalRecord']
+   continue  # retained foreign-native source is not a new request by this actor
   if 'nativeRecordLine' in z:
    line=z['nativeRecordLine']
   elif 'callId' in z:
