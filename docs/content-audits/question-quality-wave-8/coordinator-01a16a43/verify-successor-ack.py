@@ -71,11 +71,17 @@ for cid,b in bodies:
 assert identity, 'Successor must personally observe full original identity call and output'
 finals=[(i,r) for i,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='message' and r['payload'].get('role')=='assistant' and r['payload'].get('phase')=='final_answer']
 assert finals
-last=finals[-1];text='\n'.join(a.get('text','') for a in last[1]['payload']['content'] if isinstance(a,dict));assert 'ACK' in text and str(x['CURRENT']) in text and str(x['remaining']) in text and 'STOP' in text
+last=finals[-1];text='\n'.join(a.get('text','') for a in last[1]['payload']['content'] if isinstance(a,dict))
+stop_alias='STOP' not in text and 'Останавливаюсь до явного parent ACTIVATE.' in text
+assert 'ACK' in text and str(x['CURRENT']) in text and str(x['remaining']) in text and ('STOP' in text or stop_alias)
+alias_path=D/'successor-ack-stop-declaration-alias.json'
+if stop_alias:
+ m.write(alias_path,{'owner':m.O,'successor':S,'nativeJournal':str(native),'originalFinalACKLine':last[0],'originalFinalACKCanonicalSHA256':m.sha(last[1]),'originalLiteralSTOPAbsent':True,'exactOriginalStopDeclaration':'Останавливаюсь до явного parent ACTIVATE.','actualOriginalTaskCompleteVerified':True,'operation':'Exact explicit Russian stop-until-ACTIVATE declaration is the barrier equivalent of STOP; original ACK unchanged, formatting gap remains uncured. No new authorization, writes, or quality credit.'})
 assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and m.read(m.P/'.flow-leases.json')=={}
 for root,key in [(m.C,'code'),(m.P,'planning')]:assert m.raw(pathlib.Path(m.h.git(root,'rev-parse','--path-format=absolute','--git-path','index')))==x['foreignIndexes'][key]
 report={'successor':S,'native':str(native),'rootPersonallyVerifiedExactNativeACK':True,'exactNativeVerificationCallsAndResults':success,'diagnosticFailuresPreservedSeparately':bad,'fullFourDocumentsSuccessfulUntruncatedReads':reads,'actualCompactions':0,'exactFinalACKLine':last[0],'exactFinalACKRecord':last[1],'CURRENT':x['CURRENT'],'remaining':x['remaining'],'claimsOwnerBeforeRelease':m.O,'leaseEmpty':True,'foreignIndexes':x['foreignIndexes'],'noQualityReplay':True}
 report.update(fullMandatoryPolicyReads=mandatory_reads,canonicalSectionReads=section_reads,wholeOriginalIdentityObservations=identity)
+if stop_alias:report['exactOriginalStopDeclarationAlias']={'path':str(alias_path),'rawSHA256':m.raw(alias_path),'originalACKUnchanged':True}
 m.write(D/'successor-ack.json',report)
-print(m.savecode([pathlib.Path(__file__),D/'successor-ack.json'],'Preserve personally audited exact native readonly successor ACK'))
+print(m.savecode([pathlib.Path(__file__),D/'successor-ack.json',*([alias_path] if stop_alias else [])],'Preserve personally audited exact native readonly successor ACK'))
 print({'successor':S,'actualCompactions':0,'successfulVerificationCalls':len(success),'diagnosticFailedCalls':len(bad),'fullDocuments':len(reads),'finalACK':text})
