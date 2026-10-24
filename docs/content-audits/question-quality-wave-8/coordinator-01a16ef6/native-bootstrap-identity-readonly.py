@@ -10,7 +10,7 @@ prefix = 'text(await tools.mcp__codex_app__create_thread({title:' + json.dumps(t
 calls = [(i, row) for i, row in enumerate(rows, 1)
          if row.get('type') == 'response_item'
          and row.get('payload', {}).get('type') == 'custom_tool_call'
-         and row['payload'].get('input', '').startswith(prefix)]
+         and any(line.startswith(prefix) for line in row['payload'].get('input', '').splitlines())]
 assert len(calls) == 1
 call_line, call = calls[0]
 call_id = call['payload']['call_id']
