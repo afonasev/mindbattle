@@ -1,4 +1,4 @@
-"""Freeze an unchanged terminal AUTHOR HOLD, including malformed raw metadata.
+"""Freeze a terminal AUTHOR HOLD, including malformed raw metadata.
 No normalization, qualification, source adoption, apply, QA or independent review.
 """
 import pathlib, json, importlib.util, sys, re
@@ -16,14 +16,27 @@ ca,sp,ps=[m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapsh
 e=ca['entries'][0];q=m.read(m.C/'src/content/topics/video-game-history.json')['questions'][order-1]
 assert ca['sourceNativeId']==sp['sourceNativeId']==uid
 assert e['status']=='HOLD' and e['sourceOrder']==order and e['id']==task['id']==q['id']
-assert e['beforeCard']==e['proposedCard']==q and e['beforeHash']==e['afterHash']==m.sha(q)==task['beforeHash']
+unapplied_proposal='--unapplied-proposal' in sys.argv[4:]
+assert e['beforeCard']==q and e['beforeHash']==m.sha(q)==task['beforeHash']
+assert m.sha(e['proposedCard'])==e['afterHash']
+assert all(e['proposedCard'][k]==q[k] for k in ['id','difficulty','correctIndex'])
+if not unapplied_proposal:assert e['proposedCard']==q and e['afterHash']==e['beforeHash']
 assert ca['cycle']==sp['cycle']==0
 entry=sp['entries'][0];assert entry['status']=='HOLD' and entry['id']==q['id']
 variants=entry['fourFullPromptAnswerNoteAssessments'];assert len(variants)==4
+variant_target=e['proposedCard'] if unapplied_proposal else q
+variant_gaps=[]
 for v in variants:
- a=q['answers'][v['slot']]
- assert v['fullPrompt']==q['prompt'] and v['answer']==a['text'] and v['note']==a['note']
+ a=variant_target['answers'][v['slot']]
+ exact=v.get('fullPrompt')==variant_target['prompt'] and v.get('answer')==a['text'] and v.get('note')==a['note']
+ if unapplied_proposal and not exact:variant_gaps.append(v['slot'])
+ else:assert exact
 defects=[]
+if unapplied_proposal:
+ binding=ps.get('inventoryBinding',{})
+ if isinstance(binding,dict) and 'sha256' not in binding and 'fileSHA256' not in binding:
+  defects.append({'file':'peer-snapshot.json','missingOrDifferentField':'inventoryBinding SHA256','required':'Explicit original inventory file digest for qualification','uncured':True})
+ if variant_gaps:defects.append({'file':'sourceproof.json','unalignedProposalVariantSlots':variant_gaps,'uncured':True})
 for k,expected in [('sourceNativeId',uid),('topicId','video-game-history'),('cycle',0)]:
  if ps.get(k)!=expected:defects.append({'file':'peer-snapshot.json','missingOrDifferentField':k,'actual':ps.get(k),'required':expected,'uncured':True})
 cp=m.read(pathlib.Path(x['canonicalCheckpoint']));assert cp['owner']==m.O and q['id'] in cp['currentRemainingIds']
@@ -38,6 +51,7 @@ for i,r in enumerate(nr,1):
   assert len(outs)==1;calls.append({'callLine':i,'call':p['input'],'resultLine':outs[0]})
 info=next(r['payload']['info'] for r in reversed(nr) if r['payload'].get('type')=='token_count')
 proof={'owner':m.O,'sourceNativeId':uid,'nativeJournal':actor['nativeJournal'],'actualCompactions':sum(r.get('type')=='compacted' for r in nr),'lastInput':info['last_token_usage']['input_tokens'],'modelWindow':info['model_context_window'],'packet':str(R),'rawFileSHA256':{str(p.relative_to(R)):m.raw(p) for p in R.rglob('*') if p.is_file()},'status':'HOLD','beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'currentTaskStartLine':start,'networkCalls':[v for v in calls if v['callLine']>start],'priorTaskNetworkCalls':[v for v in calls if v['callLine']<start],'qualityCredit':0,'noQualification':True,'unapplied':True,'noIndependentInitial':True,'rawSchemaDefectsUncured':defects,'missingTripleHashes':[v['slot'] for v in variants if 'tripleSHA256' not in v],'rawBytesUnchanged':True}
+proof['unappliedProposalPreservedWithoutQualification']=unapplied_proposal
 p=D/f'video-game-history{order}-native-proof.json';m.write(p,proof)
 actor.update(stage=f'IDLE_AFTER_SOURCE{order}_AUTHORHOLD_UNQUALIFIED',actualCompactions=proof['actualCompactions'],lastTaskEvent='task_complete',lastInput=proof['lastInput'],modelWindow=proof['modelWindow'],cursor=cursor,nativePreflightVerifiedBy=m.O)
 x[f'pendingVideoGameHistory{order}']={'id':q['id'],'status':'AUTHORHOLD_TERMINAL_UNAPPLIED','qualityCredit':0,'applied':False,'beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'rawNativeProof':str(p),'sourceActualCompactions':proof['actualCompactions'],'noQualificationApplyQAInitial':True,'noQA':True,'noIndependentInitial':True,'ordinaryCycle2Prohibited':True,'rawSchemaDefectsUncured':defects,'authorHoldSourceproof':str(R/'sourceproof.json')}
