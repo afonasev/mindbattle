@@ -8,4 +8,7 @@ assert B.parent==D and B.name.startswith('qualified-source-video-game-history') 
 assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and m.read(m.P/'.flow-leases.json')=={}
 for root,key in [(m.C,'code'),(m.P,'planning')]:
  assert m.raw(pathlib.Path(m.h.git(root,'rev-parse','--path-format=absolute','--git-path','index')))==x['foreignIndexes'][key]
-a.apply(B,candidate['sourceNativeId'],[candidate['entries'][0]['sourceOrder']],D/(sys.argv[1]+'-apply.json'),D/('qa-'+B.name+'.json'),pathlib.Path(__file__),peerSnapshot={'actualCurrentPeers':[p for p in peers['actualCurrentPeers'] if p['topicId']==topic]})
+assert not x['actors']['reviewer']['stage'].startswith('START'), 'Catalog frozen during independent verdict'
+peer_addendum=D/sys.argv[2] if len(sys.argv)>2 else None
+if peer_addendum:assert peer_addendum.parent==D and peer_addendum.is_file()
+a.apply(B,candidate['sourceNativeId'],[candidate['entries'][0]['sourceOrder']],D/(sys.argv[1]+'-apply.json'),D/('qa-'+B.name+'.json'),pathlib.Path(__file__),peerAddendum=peer_addendum,peerSnapshot={'actualCurrentPeers':[p for p in peers['actualCurrentPeers'] if p['topicId']==topic]})
