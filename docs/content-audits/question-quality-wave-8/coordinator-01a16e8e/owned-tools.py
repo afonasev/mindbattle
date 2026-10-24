@@ -348,10 +348,29 @@ def alias_explicit_global_inventory_file(candidate,sp,ps,R):
   rows.extend({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']} for q in t['questions'])
  assert len(rows)==11000 and sha(rows)==full['rowsCanonicalSHA256'] and full['rows']==rows
  byid={v['id']:v for v in peers};assessed=copy.deepcopy(ps['actualCurrentPeers'])
+ foreign=[]
  for v in assessed:
-  b=byid[v['id']];assert all(v[k]==b[k] for k in ['id','topicId','sourceOrder','card','sha256'])
+  if v['topicId']==e['topicId']:
+   b=byid[v['id']];assert all(v[k]==b[k] for k in ['id','topicId','sourceOrder','card','sha256'])
+  else:
+   t=read(C/('src/content/topics/'+v['topicId']+'.json'));q=t['questions'][v['sourceOrder']-1]
+   assert v['id']==q['id'] and v['card']==q and v['sha256']==sha(q)
+   foreign.append(copy.deepcopy(v))
+ if foreign:
+  existing=ps.setdefault('crossCatalogClosestFullBodies',[])
+  for v in foreign:
+   matches=[p for p in existing if p['id']==v['id']]
+   if matches:assert len(matches)==1 and matches[0]['card']==v['card'] and matches[0]['sha256']==v['sha256']
+   else:existing.append(v)
  assert ps['sameTopicMAIN']['questionCount']==100
  original_same=copy.deepcopy(ps['sameTopicMAIN'])
+ for k in ['path','topicId','fileSHA256','questionCount']:
+  if k in original_same:assert original_same[k]==same[k]
+ for k,value in [('inventoryPath',str(p)),('inventoryFileSHA256',raw(p))]:
+  if k in original_same:assert original_same[k]==value
+ if original_same.get('rowsCanonicalSHA256') is not None:
+  projected=[{'topicId':e['topicId'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']} for q in same['questions']]
+  assert original_same['rowsCanonicalSHA256'] in [sha(same['questions']),sha(projected)]
  for k in ['sourceInventoryPath','sourceInventorySHA256']:assert k not in sp
  ps['originalRelevantCurrentPeers']=assessed
  ps['actualCurrentPeers']=copy.deepcopy(peers)
