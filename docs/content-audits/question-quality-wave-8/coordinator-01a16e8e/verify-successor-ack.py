@@ -90,7 +90,7 @@ finals=[(i,r) for i,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='
 assert finals
 last=finals[-1];text='\n'.join(a.get('text','') for a in last[1]['payload']['content'] if isinstance(a,dict))
 stop_alias='STOP' not in text and 'Останавливаюсь до явного parent ACTIVATE.' in text
-assert 'ACK' in text and str(x['CURRENT']) in text and str(x['remaining']) in text and ('STOP' in text or stop_alias)
+assert 'ACK' in text and str(x['CURRENT']) in text and str(x['remaining']) in text and text.rstrip().splitlines()[-1]=='STOP'
 alias_path=D/'successor-ack-stop-declaration-alias.json'
 if stop_alias:
  m.write(alias_path,{'owner':m.O,'successor':S,'nativeJournal':str(native),'originalFinalACKLine':last[0],'originalFinalACKCanonicalSHA256':m.sha(last[1]),'originalLiteralSTOPAbsent':True,'exactOriginalStopDeclaration':'Останавливаюсь до явного parent ACTIVATE.','actualOriginalTaskCompleteVerified':True,'operation':'Exact explicit Russian stop-until-ACTIVATE declaration is the barrier equivalent of STOP; original ACK unchanged, formatting gap remains uncured. No new authorization, writes, or quality credit.'})
