@@ -2,12 +2,12 @@
 import pathlib,json,re,sys,importlib.util
 D=pathlib.Path(__file__).parent
 spec=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
-order=int(sys.argv[1]);key=sys.argv[2];R=D/f'source-human-medicine{order}';x=m.read(D/'manifest.json');actor=x['actors'][key]
+order=int(sys.argv[1]);key=sys.argv[2];R=D/f'source-video-game-history{order}';x=m.read(D/'manifest.json');actor=x['actors'][key]
 native=pathlib.Path(actor['nativeJournal']);rows=[json.loads(l) for l in native.open()];assert rows[0]['payload']['id']==actor['threadId']
 lastEvent=next(r['payload']['type'] for r in reversed(rows) if r.get('payload',{}).get('type') in ['task_started','task_complete']);assert lastEvent=='task_complete'
 comp=sum(r['type']=='compacted' for r in rows);info=next(r['payload']['info'] for r in reversed(rows) if r.get('payload',{}).get('type')=='token_count')
 a,sp,ps=[m.read(R/f) for f in ['candidate.json','sourceproof.json','peer-snapshot.json']];assert all(z['sourceNativeId']==actor['threadId'] for z in [a,sp,ps]);e=a['entries'][0]
-q=m.read(m.C/'src/content/topics/human-medicine.json')['questions'][order-1]
+q=m.read(m.C/'src/content/topics/video-game-history.json')['questions'][order-1]
 assert e['status']=='HOLD' and e['beforeCard']==q and m.sha(q)==e['beforeHash'] and e['sourceOrder']==order
 metadata_only='--metadata-proposal-only' in sys.argv[3:]
 if metadata_only:
@@ -26,5 +26,5 @@ proof={'owner':m.O,'sourceNativeId':actor['threadId'],'nativeJournal':str(native
 actor.update(actualCompactions=comp,lastTaskEvent=lastEvent,lastInput=proof['lastInput'],modelWindow=proof['modelWindow'],stage=f'IDLE_AFTER_SOURCE{order}_AUTHORHOLD_UNQUALIFIED',nativePreflightVerifiedBy=m.O)
 diagnostic=D/f'source{order}-original-format-diagnostics.json'
 if not diagnostic.exists():proof['originalPreservationFailureRetained']=None
-p=D/f'human-medicine{order}-native-proof.json';m.write(p,proof);m.write(D/'manifest.json',x);print(m.savecode([p,D/'manifest.json',pathlib.Path(__file__),*([diagnostic] if diagnostic.exists() else []),*[p for p in R.rglob('*') if p.is_file()]],f'Preserve SOURCE{order} unchanged unqualified AUTHORHOLD'))
+p=D/f'video-game-history{order}-native-proof.json';m.write(p,proof);m.write(D/'manifest.json',x);print(m.savecode([p,D/'manifest.json',pathlib.Path(__file__),*([diagnostic] if diagnostic.exists() else []),*[p for p in R.rglob('*') if p.is_file()]],f'Preserve SOURCE{order} unchanged unqualified AUTHORHOLD'))
 print(json.dumps({k:proof[k] for k in ['actualCompactions','lastInput','missingTripleHashes','qualityCredit']},ensure_ascii=False))
