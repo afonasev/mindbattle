@@ -27,6 +27,10 @@ report = {'owner':m.O, 'actors':{}, 'inheritedDiagnostics':str(pathlib.Path(x['p
 if (D/'technical-native-diagnostics.json').exists():
     report['priorDiagnosticPointer'] = str(D/'technical-native-diagnostics.json')
 for actor in [x['rootNativeAudit'], *x['actors'].values(), *x.get('retiredNativeReviewersCurrentOwner',[])]:
+    if isinstance(actor,str):
+        matches=[m.read(p) for p in D.glob('reader*-retirement.json') if m.read(p).get('readerNativeId')==actor]
+        assert len(matches)==1, 'Retired native ID requires unique exact retirement binding'
+        actor={'threadId':actor,'nativeJournal':matches[0]['nativeJournal']}
     native = pathlib.Path(actor['nativeJournal'])
     if not native.exists():
         matches = list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').rglob('*'+actor['threadId']+'.jsonl'))
