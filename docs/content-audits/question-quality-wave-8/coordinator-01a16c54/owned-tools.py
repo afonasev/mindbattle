@@ -1,0 +1,619 @@
+"""Owned exact-byte private saves; no quality credit."""
+import pathlib,importlib.util,hashlib,json,datetime
+C=pathlib.Path(__file__).resolve().parents[4]
+P=pathlib.Path('/Users/eaafonasev/Projects/mindbattle/planning')
+D=pathlib.Path(__file__).parent
+O='01a16c54-ae78-7fe3-bbac-bbc0f601960e'
+def mod(name,path):
+ s=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+h=mod('private_save',P/'evidence/question-revision-process-v2/private-save-helper-01a13cb1.py')
+flow=mod('owned_flow',C/'tools/flow.py').Flow(P)
+def read(p):return json.loads(pathlib.Path(p).read_text())
+def write(p,v):
+ p=pathlib.Path(p)
+ if P in p.parents:
+  assert read(P/'.flow-leases.json').get('planning',{}).get('owner')==O
+  index=pathlib.Path(h.git(P,'rev-parse','--path-format=absolute','--git-path','index'))
+  assert raw(index)==read(D/'manifest.json')['foreignIndexes']['planning']
+ p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+def alias_source96_distinct99_preimage(candidate,sp,ps,R):
+ """Exact original99 distinct bodies plus separately bound candidate self; no judgment."""
+ R=pathlib.Path(R)
+ if R.name!='source-human-medicine96' or candidate['sourceNativeId']!='01a16bab-b3d4-7be3-906c-3ed46a56bdb8':return
+ import copy,subprocess
+ assert R.parent==D and candidate['cycle']==sp['cycle']==ps['cycle']==0
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ expected={'candidate.json':'3261163c52d3b7139acc900ce63bca6a806eaf9c22c79071cafe4963ffa57454','sourceproof.json':'ff73d7a53384dc208b17e4bfe384951e7ed4eccfed18113e720675744815adb4','peer-snapshot.json':'3cfb5530bb43e28bf7d10a259d782080f2bbdb60a2b3ccebf30ebf8b8eda22e4'}
+ for name,digest in expected.items():
+  assert raw(R/name)==digest
+  assert (R/name).read_bytes()==subprocess.check_output(['git','--no-optional-locks','-C',str(C),'show','2e29932dee0e85251b5b791c1e6c0689a10a0985:'+str((R/name).relative_to(C))])
+ assert len(candidate['entries'])==len(sp['entries'])==1
+ e=candidate['entries'][0];assert e['id']=='human-medicine-ext-epinephrine' and e['sourceOrder']==96 and e['topicId']=='human-medicine'
+ assert sha(e['beforeCard'])==e['beforeHash'] and sha(e['proposedCard'])==e['afterHash']
+ same=ps['sameTopicMAIN'];assert same=={'path':'src/content/topics/human-medicine.json','topicId':'human-medicine','fileSHA256':raw(C/'src/content/topics/human-medicine.json'),'questionCount':100}
+ topic=read(C/same['path']);assert topic['questions'][95]==e['beforeCard']
+ peers=ps['actualCurrentPeers'];assert len(peers)==99 and [v['sourceOrder'] for v in peers]==[i for i in range(1,101) if i!=96]
+ assert all(v['topicId']=='human-medicine' and v['card']==topic['questions'][v['sourceOrder']-1] and v['id']==v['card']['id'] and v['sha256']==sha(v['card']) for v in peers)
+ assert all(v['id']!=e['id'] for v in peers)
+ self_binding={'id':e['id'],'topicId':e['topicId'],'sourceOrder':96,'card':copy.deepcopy(e['beforeCard']),'sha256':e['beforeHash'],'countedAsDistinctPeer':False}
+ ps['originalDistinctCurrentPeers']=copy.deepcopy(peers)
+ ps['actualCurrentPeers']=sorted([*peers,self_binding],key=lambda v:v['sourceOrder'])
+ same['questions']=[copy.deepcopy(v['card']) for v in ps['actualCurrentPeers']]
+ assert same['questions']==topic['questions']
+ ps['technicalSource96Distinct99PreimageAlias']={'rawFreeze':'2e29932dee0e85251b5b791c1e6c0689a10a0985','rawCriticalSHA256':expected,'originalPeerPointer':'/actualCurrentPeers','originalSelfPointer':'candidate.json#/entries/0/beforeCard','distinctPeerCountUnchanged':99,'currentBindings':100,'originalFormatGapUncured':True,'operation':'Existing99 distinct full bodies plus exact candidate beforeCard/hash/order become100 technical bindings. Self countedAsDistinctPeer=false. No new body, source, peer assessment, semantic decision or raw edit.'}
+def alias_explicit_inventory_file_digest(candidate,sp,ps,R):
+ """Alias an explicit inventory file digest only after full live bindings."""
+ g=ps.get('globalMAIN',{})
+ if 'sourceInventoryFileSHA256' not in g or 'sourceInventorySHA256' in g:return
+ R=pathlib.Path(R);assert R.parent==D
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==0
+ p=pathlib.Path(g['sourceInventoryPath']);p=p if p.is_absolute() else C/p
+ assert p.is_relative_to(R) and raw(p)==g['sourceInventoryFileSHA256']
+ inv=read(p);same=inv['sameTopicMAIN'];full=inv['globalMAIN'];e=candidate['entries'][0]
+ topic=read(C/same['path']);peers=ps['actualCurrentPeers']
+ assert same['topicId']==topic['id']==e['topicId']
+ assert len(peers)==same['questionCount']==len(topic['questions'])==100
+ assert [v['sourceOrder'] for v in peers]==list(range(1,101))
+ assert [v['card'] for v in peers]==same['questions']==topic['questions']
+ assert all(v['id']==v['card']['id'] and v['topicId']==topic['id'] and v['sha256']==sha(v['card']) for v in peers)
+ assert same['fileSHA256']==raw(C/same['path'])
+ assert full['questionCount']==g['questionCount']==11000 and full['topicFileCount']==g['topicFileCount']==110
+ assert full['rowsCanonicalSHA256']==g['rowsCanonicalSHA256']
+ assert full['allCurrentFileByteBindings']==g['allCurrentFileByteBindings'] and len(full['allCurrentFileByteBindings'])==110
+ rows=[]
+ for b in full['allCurrentFileByteBindings']:
+  assert raw(C/b['path'])==b['sha256'];t=read(C/b['path'])
+  rows.extend({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']} for q in t['questions'])
+ assert len(rows)==11000 and sha(rows)==g['rowsCanonicalSHA256']
+ if 'rows' in g:assert g['rows']==rows
+ assert 'sameTopicMAIN' not in ps and 'sourceInventoryPath' not in sp
+ proof={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalPath':g['sourceInventoryPath'],'originalFileSHA256':g['sourceInventoryFileSHA256'],'operation':'Exact explicit path/fileSHA and original ordered100 full bodies,110 live file digests,11000 MAIN digest verified. Redundant digest/container names and absolute path only; raw, literals, grounds and judgments unchanged.'}
+ g.update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
+ ps['sameTopicMAIN']={**same,'sourceInventoryPath':str(p),'sourceInventorySHA256':raw(p)}
+ sp.update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
+ ps['technicalExplicitInventoryFileDigestAlias']=proof
+def alias_explicit_fresh_inventory_context(candidate,sp,ps,R):
+ """Expose an explicit SHA/pointer-bound full snapshot; keep assessed peers distinct."""
+ if 'sameTopicMAIN' in ps or 'freshInventory' not in ps:return
+ import copy
+ R=pathlib.Path(R);assert R.parent==D
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==0 and len(candidate['entries'])==1
+ e=candidate['entries'][0];b=ps['freshInventory'];p=pathlib.Path(b['path']);p=p if p.is_absolute() else C/p
+ assert p.is_relative_to(R) and raw(p)==b['fileSHA256']
+ assert b['globalMAINPointer']=='/globalMAIN' and b['sameTopicMAINPointer']=='/sameTopicMAIN' and b['actualCurrentPeersPointer']=='/actualCurrentPeers'
+ inv=read(p);g=inv['globalMAIN'];same=inv['sameTopicMAIN'];full=inv['actualCurrentPeers'];topic=read(C/same['path'])
+ assert g==ps['globalMAIN'] and g['topicFileCount']==110 and g['questionCount']==11000
+ assert same['topicId']==topic['id']==e['topicId'] and same['questionCount']==len(full)==100
+ assert same['fileSHA256']==raw(C/same['path']) and same['questions']==topic['questions']
+ assert [v['sourceOrder'] for v in full]==list(range(1,101)) and [v['card'] for v in full]==topic['questions']
+ assert all(v['id']==v['card']['id'] and v['topicId']==e['topicId'] and v['sha256']==sha(v['card']) for v in full)
+ mapping={v['id']:v for v in full};assessed=ps['actualCurrentPeers'];assert assessed and isinstance(assessed,list)
+ for v in assessed:
+  bound=mapping[v['id']]
+  assert v['topicId']==bound['topicId'] and v['sourceOrder']==bound['sourceOrder'] and v['card']==bound['card'] and v['sha256']==bound['sha256']
+ assert len(g['allCurrentFileByteBindings'])==110
+ for v in g['allCurrentFileByteBindings']:assert raw(C/v['path'])==v['sha256']
+ assert 'sourceInventoryPath' not in sp and 'sourceInventoryPath' not in ps['globalMAIN']
+ ps['sameTopicMAIN']=copy.deepcopy(same)
+ ps['sameTopicMAIN'].update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
+ ps['globalMAIN'].update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
+ sp.update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
+ ps['technicalExplicitFreshInventoryContextAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalPointer':'/freshInventory','inventoryPath':str(p),'inventorySHA256':raw(p),'assessedPeerCountUnchanged':len(assessed),'fullSnapshotCards':100,'operation':'Original explicit path/fileSHA and three pointers bind the full100 machine snapshot and identical110/11000 global bindings. Original assessed peers unchanged; no invented peer judgment or raw edit. Original preservation assertion remains uncured.'}
+def alias_explicit_cross_topic_peers(candidate,sp,ps,R):
+ """Keep explicit foreign-topic peer bodies in the validator's peer container."""
+ if 'crossCatalogClosestFullBodies' in ps:return
+ containers=[k for k in ['actualRelevantCrossTopicPeers','relevantCrossTopicPeers','crossTopicCurrentPeers'] if k in ps]
+ if not containers:return
+ assert len(containers)==1
+ container=containers[0]
+ import copy
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ peers=ps[container]
+ for peer in peers:
+  t=read(C/('src/content/topics/'+peer['topicId']+'.json'))
+  q=t['questions'][peer['sourceOrder']-1]
+  assert peer['id']==q['id'] and peer['card']==q and peer['sha256']==sha(q)
+ ps['crossCatalogClosestFullBodies']=copy.deepcopy(peers)
+ ps['technicalCrossTopicContainerAlias']={'rawPeerSnapshot':str(pathlib.Path(R)/'peer-snapshot.json'),'rawPeerSHA256':raw(pathlib.Path(R)/'peer-snapshot.json'),'originalPointer':'/'+container,'operation':'Exact original explicit foreign-topic full bodies and hashes verified against CURRENT, redundant container name only; raw and bilateral assessments unchanged.'}
+def alias_explicit_inventory_binding(candidate,sp,ps,R):
+ """Expose only the author's explicit SHA-bound inventory; raw stays immutable."""
+ if 'sameTopicMAIN' in ps or 'inventoryBinding' not in ps:return
+ import copy
+ R=pathlib.Path(R);assert R.parent==D
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ cycle=candidate['cycle'];assert cycle==sp['cycle']==ps['cycle'] and cycle in [0,1]
+ if cycle==1:
+  assert R.name.endswith('-cycle1')
+  prior=read(R.with_name(R.name.removesuffix('-cycle1'))/'candidate.json')
+  current=candidate['entries'][0];original=prior['entries'][0]
+  assert prior['cycle']==0 and prior['sourceNativeId']==candidate['sourceNativeId']
+  assert current['id']==original['id'] and current['beforeCard']==original['proposedCard']
+  assert current['beforeHash']==original['afterHash']==sha(current['beforeCard'])
+  initial=read(D/f"independent-{current['topicId']}{current['sourceOrder']}-initial/receipt.json")['entries'][0]
+  assert initial['status']=='FIX' and initial['currentCard']==current['beforeCard']
+ e=candidate['entries'][0];b=ps['inventoryBinding'];p=pathlib.Path(b['path'])
+ if not p.is_absolute():
+  original_path=b['path'];p=C/p
+  assert p.is_relative_to(R) and p.is_file() and raw(p)==b.get('fileSHA256',b.get('sha256'))
+  b['path']=str(p)
+  ps['technicalExplicitInventoryPathAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalPath':original_path,'absolutePath':str(p),'operation':'Exact declared repository-relative inventory path resolved within owned raw packet; original digest and all live inventory assertions retained. Raw bytes and grounds unchanged.'}
+ if 'sha256' not in b and 'fileSHA256' in b:
+  assert p.is_relative_to(R) and raw(p)==b['fileSHA256']
+  inv=read(p);same=inv['sameTopicMAIN'];g=inv['globalMAIN']
+  peers=ps['actualCurrentPeers'];topic=read(C/same['path'])
+  assert len(peers)==100 and [v['sourceOrder'] for v in peers]==list(range(1,101))
+  assert [v['card'] for v in peers]==same['questions']==topic['questions']
+  assert all(v['topicId']==topic['id'] and v['id']==v['card']['id'] and v['sha256']==sha(v['card']) for v in peers)
+  assert same['topicId']==e['topicId']==topic['id'] and same['fileSHA256']==raw(C/same['path'])
+  assert g['questionCount']==11000 and g['topicFileCount']==110
+  assert g['rowsCanonicalSHA256']==ps['globalMAIN']['rowsCanonicalSHA256']
+  assert g['allCurrentFileByteBindings']==ps['globalMAIN']['allCurrentFileByteBindings']
+  ps['originalExplicitFileSHA256InventoryBinding']=copy.deepcopy(b)
+  b={**b,'sha256':b['fileSHA256'],'topicCards':100,'globalMAINRows':11000,'globalTopicFiles':110,'topicFileSHA256':same['fileSHA256']}
+  ps['inventoryBinding']=b
+  ps['technicalExplicitFileSHA256InventoryBindingAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawSHA256':raw(R/'peer-snapshot.json'),'originalPointer':'/inventoryBinding','operation':'Exact explicit fileSHA256-bound inventory plus original ordered100 full peers and live topic bytes; redundant names/count projections only. Original binding retained, no raw or judgment edit.'}
+ assert p.is_relative_to(R) and raw(p)==b['sha256']
+ inv=read(p);same=inv['sameTopicMAIN'];g=inv['globalMAIN'];topic=read(C/same['path'])
+ assert same['topicId']==e['topicId']==topic['id']
+ assert same['questions']==topic['questions'] and same['questionCount']==b['topicCards']==100
+ assert same['fileSHA256']==b['topicFileSHA256']==raw(C/same['path'])
+ assert g['questionCount']==b['globalMAINRows']==11000 and g['topicFileCount']==b['globalTopicFiles']==110
+ assert g['rowsCanonicalSHA256']==ps['globalMAIN']['rowsCanonicalSHA256']
+ assert g['allCurrentFileByteBindings']==ps['globalMAIN']['allCurrentFileByteBindings']
+ rows=[]
+ for f in g['allCurrentFileByteBindings']:
+  assert raw(C/f['path'])==f['sha256'];t=read(C/f['path'])
+  rows.extend({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']} for q in t['questions'])
+ assert len(rows)==11000 and sha(rows)==g['rowsCanonicalSHA256']
+ assert 'rows' not in ps['globalMAIN'] or ps['globalMAIN']['rows']==rows
+ ps['sameTopicMAIN']=copy.deepcopy(same)
+ sp.update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
+ ps['globalMAIN'].update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
+ if 'crossTopicCurrentPeers' in ps:
+  assert 'crossCatalogClosestFullBodies' not in ps
+  ps['crossCatalogClosestFullBodies']=copy.deepcopy(ps['crossTopicCurrentPeers'])
+ ps['technicalExplicitInventoryBindingAlias']={'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalPointer':'/inventoryBinding','inventoryPath':str(p),'inventorySHA256':raw(p),'operation':'Exact original path/SHA and full100/110/11000 live bindings expose redundant container names only. Original peers, cross-topic bodies, assessments and raw remain unchanged; no new ground or quality credit.'}
+def alias_explicit_root_candidate(candidate,sp,ps,R):
+ """Expose an explicit own single-card root as entries[0]; raw stays immutable."""
+ if 'entries' in candidate:return
+ import copy
+ R=pathlib.Path(R);x=read(D/'manifest.json');uid=candidate['sourceNativeId']
+ assert R.parent==D and uid in x['createdNativeThreadsCurrentOwner']
+ assert candidate['sourceOrder'] in x['ownedSourceOrders']
+ assert uid==sp['sourceNativeId']==ps['sourceNativeId']
+ cycle=candidate['cycle'];assert cycle==sp['cycle']==ps['cycle']
+ if cycle==1:
+  # Only this exact preserved directed98 raw triple may use the root-field alias.
+  assert R.name=='source-human-medicine98-cycle1' and uid=='01a16bce-a09e-7252-975d-487bfcf95800'
+  expected={'candidate.json':'b19c4348595fbd7096bdaa0d1e4e121950bc424f57eb1a570f3fffc1dd993de7','sourceproof.json':'b73046af4cde0ca8d266712b1a899fbeb07dfd36f532eda51c913cc7cb757376','peer-snapshot.json':'f14554d7c89975d837ffe5df7ae3450efbec5df16aa5d6c5731fea2b959955f5'}
+  import subprocess
+  for name,digest in expected.items():
+   assert raw(R/name)==digest
+   assert (R/name).read_bytes()==subprocess.check_output(['git','--no-optional-locks','-C',str(C),'show','8dd60f49c2e7ed5a99d3352e56c54daba612748f:'+str((R/name).relative_to(C))])
+  initial=read(D/'independent-human-medicine98-initial/receipt.json')['entries'][0]
+  prior=read(D/'qualified-source-human-medicine98/candidate.json')['entries'][0]
+  assert initial['stage']=='INITIAL' and initial['status']=='FIX' and initial['defects']
+  assert candidate['id']==initial['id']==prior['id']=='human-medicine-ext-prolactin'
+  assert candidate['beforeCard']==initial['currentCard']==prior['proposedCard']
+  assert candidate['beforeHash']==initial['currentCardCanonicalSHA256']==prior['afterHash']==sha(candidate['beforeCard'])
+  candidate['technicalExact98Cycle1RootAliasGuard']={'rawFreeze':'8dd60f49c2e7ed5a99d3352e56c54daba612748f','rawCriticalSHA256':expected,'originalFormatGapUncured':True,'operation':'Only exact same-author solecycle1 with beforeCard bound to its own INITIAL FIX and prior proposal. Existing root-field alias below, no new literal, source or judgment.'}
+ else:assert cycle==0
+ assert len(sp['entries'])==1
+ keys=['id','topicId','sourceOrder','status','beforeCard','beforeHash','proposedCard','afterHash','fieldGroups']
+ e={k:copy.deepcopy(candidate[k]) for k in keys};q=e['proposedCard'];b=e['beforeCard']
+ if 'id' not in ps:
+  own_peers=[(i,p) for i,p in enumerate(ps['actualCurrentPeers']) if p['id']==e['id']]
+  assert len(own_peers)==1
+  peer_index,peer=own_peers[0]
+  assert peer['card']==b and peer['sha256']==e['beforeHash']==sha(b) and peer['topicId']==e['topicId'] and peer['sourceOrder']==e['sourceOrder']
+  ps['id']=peer['id']
+  ps['technicalExplicitRootIdAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalRootIdAbsent':True,'originalSelfPreimagePointer':'/actualCurrentPeers/'+str(peer_index),'operation':'Expose the identical ID from the unique explicit full-before-body/hash/topic/order-bound peer. Existing root ID assertion retained; no guessed identity, raw change or new judgment.'}
+ assert e['id']==b['id']==q['id']==sp['entries'][0]['id']==ps['id']
+ assert e['topicId']==sp['topicId']==ps['topicId']
+ if 'sourceOrder' not in ps:
+  own_peers=[(i,p) for i,p in enumerate(ps['actualCurrentPeers']) if p['id']==e['id']]
+  assert len(own_peers)==1
+  peer_index,peer=own_peers[0]
+  assert peer['card']==b and peer['sha256']==e['beforeHash']==sha(b) and peer['topicId']==e['topicId'] and peer['sourceOrder']==e['sourceOrder']
+  ps['sourceOrder']=peer['sourceOrder']
+  ps['technicalExplicitRootOrderAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalRootOrderAbsent':True,'originalSelfPreimagePointer':'/actualCurrentPeers/'+str(peer_index),'operation':'Expose the identical sourceOrder from the unique explicit ID/full-before-body/hash/topic-bound peer. Existing root order assertion retained; no guessed identity, raw change or new judgment.'}
+ if 'sourceOrder' not in sp:
+  declared=sp['entries'];assert len(declared)==1
+  se=declared[0]
+  assert se['id']==sp['id']==e['id'] and se['topicId']==sp['topicId']==e['topicId']
+  assert se['sourceOrder']==e['sourceOrder'] and se['status']==sp['status']==e['status']
+  assert len(se['literalGroups'])==6 and len(se['fourFullPromptAnswerNoteAssessments'])==4
+  sp['sourceOrder']=se['sourceOrder']
+  sp['technicalExplicitEntryOrderAlias']={'rawSourceproof':str(R/'sourceproof.json'),'rawSHA256':raw(R/'sourceproof.json'),'originalPointer':'/entries/0/sourceOrder','originalRootOrderAbsent':True,'operation':'Exact sole entry ID/topic/order/status agrees with candidate and native identity; redundant root order name only. Original raw, groups and judgments unchanged; original KeyError uncured.'}
+ assert e['sourceOrder']==sp['sourceOrder']==ps['sourceOrder']
+ assert e['status']==sp['entries'][0]['status']
+ assert sha(b)==e['beforeHash'] and sha(q)==e['afterHash']
+ assert len(e['fieldGroups'])==6 and len(sp['entries'][0]['literalGroups'])==6
+ assert len(sp['entries'][0]['fourFullPromptAnswerNoteAssessments'])==4
+ candidate['entries']=[e]
+ candidate['technicalExplicitRootCandidateAlias']={'rawPath':str(R/'candidate.json'),'rawSHA256':raw(R/'candidate.json'),'originalRootFields':keys,'operation':'Exact explicit root single-card fields deep-copied to entries[0]; original root retained. No new literal, hash, source, judgment or status. Original format deviation remains uncured.'}
+def save(root,ref,files,message):
+ paths=sorted(set(str(pathlib.Path(p).relative_to(root)) for p in files));idx=root/h.git(root,'rev-parse','--git-path','index');expected=read(D/'manifest.json')['foreignIndexes']['planning' if root==P else 'code'];assert raw(idx)==expected, 'Foreign index differs from exact task boundary';return h.save(root,ref,paths,message,expected)
+def savecode(files,message):return save(C,'refs/heads/codex/question-quality-wave-6',files,message)
+def saveplan(files,message):
+ with flow.locked():flow.lease('acquire','planning',O)
+ try:return save(P,'refs/heads/codex/question-revision-resume-20261014',files,message)
+ finally:
+  with flow.locked():flow.lease('release','planning',O)
+
+def alias_full_prompt_answer_concatenation(candidate,sp):
+ e=candidate['entries'][0];q=e['proposedCard'];entry=sp['entries'][0]
+ variants=entry['fourFullPromptAnswerNoteAssessments']
+ if all(v['fullPrompt']==q['prompt'] for v in variants):return
+ assert len(variants)==4 and {v['slot'] for v in variants}==set(range(4))
+ assert sha(q)==e['afterHash']
+ group={'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']}
+ assert e['fieldGroups']['prompt_ordered_answers_key']['afterCanonicalSHA256']==sha(group)
+ literal=next(g for g in entry['literalGroups'] if g['group']=='prompt_ordered_answers_key')
+ assert literal['literal']==group and literal['literalSHA256']==sha(group)
+ for v in variants:
+  a=q['answers'][v['slot']]
+  assert v['answer']==a['text'] and v['note']==a['note']
+  triple={'prompt':q['prompt'],'answer':a['text'],'note':a['note']}
+  assert v['tripleSHA256']==sha(triple)
+  assert v['fullPrompt']==q['prompt']+' '+a['text']
+  v['originalPromptAnswerConcatenationLiteral']=v['fullPrompt']
+  v['technicalRedundantPromptAnswerDecomposition']={'originalCanonicalSHA256':sha(v['fullPrompt']),'candidatePromptCanonicalSHA256':sha(q['prompt']),'alreadyDeclaredTripleSHA256':v['tripleSHA256'],'operation':'Exact prompt + one ASCII space + exact separately bound answer; invertible redundant serialization decomposition only. Original literal retained; no answer, note, hash, primary ground or assessment changed.'}
+  v['fullPrompt']=q['prompt']
+
+def alias_explicit_nested_inventory(candidate,sp,ps,R):
+ """Lossless derived view of explicit SHA-bound inventory and original100 peers."""
+ if 'globalMAIN' in ps or 'globalMAINRetrieval' not in ps:return
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ assert candidate['cycle']==sp['cycle']==ps['cycle']
+ g=ps['globalMAINRetrieval'];b=sp['freshInventoryBinding'];i=ps['immutableInventoryRaw']
+ assert g['path']==b['path']==i['path'] and g['inventoryFileSHA256']==b['sha256']==i['sha256']
+ path=pathlib.Path(g['path']);path=path if path.is_absolute() else C/path
+ assert path.is_relative_to(R) and raw(path)==i['sha256']
+ inv=read(path);full=inv['globalMAIN'];same=ps['sameTopicMAIN'];retained=same['actualCurrentPeers']
+ assert g['topicFileCount']==full['topicFileCount']==110 and g['questionCount']==full['questionCount']==11000
+ assert g['rowsCanonicalSHA256']==full['rowsCanonicalSHA256']==b['globalRowsCanonicalSHA256']
+ assert len(full['allCurrentFileByteBindings'])==110
+ rows=[]
+ for f in full['allCurrentFileByteBindings']:
+  assert raw(C/f['path'])==f['sha256']
+  t=read(C/f['path']);rows.extend({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']} for q in t['questions'])
+ assert len(rows)==11000 and sha(rows)==full['rowsCanonicalSHA256']
+ topic=read(C/same['path']);assert len(retained)==same['questionCount']==100
+ assert [e['sourceOrder'] for e in retained]==list(range(1,101))
+ assert [e['card'] for e in retained]==inv['sameTopicMAIN']['questions']==topic['questions']
+ assert all(e['topicId']==topic['id'] and e['id']==e['card']['id'] and sha(e['card'])==e['sha256'] for e in retained)
+ assert same['fileSHA256']==inv['sameTopicMAIN']['fileSHA256']==b['sameTopicFileSHA256']==raw(C/same['path'])
+ ps['globalMAIN']={**full,'sourceInventoryPath':str(path),'sourceInventorySHA256':raw(path)}
+ ps['actualCurrentPeers']=retained
+ same.update(questions=[e['card'] for e in retained],sourceInventoryPath=str(path),sourceInventorySHA256=raw(path))
+ sp.update(sourceInventoryPath=str(path),sourceInventorySHA256=raw(path))
+ ps['technicalExplicitNestedInventoryAlias']={'originalPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'inventoryPath':str(path),'inventorySHA256':raw(path),'operation':'Exact explicit three-way path/SHA and live110/11000/100 bindings; nested original full peers aliased only, no new semantic assessment. Original relevantPairs retained.'}
+
+def alias_single_sourceproof_entry(candidate,sp):
+ """Alias a native-bound singular entry without changing author raw or grounds."""
+ if 'entries' in sp:return
+ if 'entry' not in sp:return
+ assert len(candidate['entries'])==1 and isinstance(sp['entry'],dict)
+ assert candidate['sourceNativeId']==sp['sourceNativeId'] and candidate['cycle']==sp['cycle']
+ c=candidate['entries'][0];e=sp['entry'];q=c['proposedCard']
+ assert e['id']==c['id']==q['id'] and e['topicId']==c['topicId']==sp['topicId']==candidate['topicId']
+ assert e['sourceOrder']==c['sourceOrder'] and e['status']==c['status']
+ assert len(e['literalGroups'])==6 and len(e['fourFullPromptAnswerNoteAssessments'])==4
+ assert {v['slot'] for v in e['fourFullPromptAnswerNoteAssessments']}==set(range(4))
+ for v in e['fourFullPromptAnswerNoteAssessments']:
+  a=q['answers'][v['slot']];assert v['fullPrompt']==q['prompt'] and v['answer']==a['text'] and v['note']==a['note']
+ sp['entries']=[json.loads(json.dumps(e,ensure_ascii=False))]
+ assert sp['entries'][0]==e
+ sp['technicalSingleEntryContainerAlias']={'originalKey':'entry','originalEntryCanonicalSHA256':sha(e),'sourceNativeId':sp['sourceNativeId'],'cycle':sp['cycle'],'operation':'Exact native/cycle/ID/topic/order/status and original six/four literals bound to candidate; singular original entry retained unchanged, deep-copied as entries[0]. No hydration, new ground, or raw edit.'}
+
+def alias_serialized_prompt_group(candidate,sp):
+ """Decode only exact canonical JSON serializations of the six bound literals."""
+ alias_single_sourceproof_entry(candidate,sp)
+ e=candidate['entries'][0];q=e['proposedCard'];expected={'prompt_ordered_answers_key':{'prompt':q['prompt'],'answers':[v['text'] for v in q['answers']],'correctIndex':q['correctIndex']},'explanation':q['explanation'],**{'note'+str(k):v['note'] for k,v in enumerate(q['answers'])}}
+ for g in sp['entries'][0].get('literalGroups',[]):
+  target=expected[g['group']]
+  if g['literal']==target or not isinstance(g['literal'],str) or not g['literal'].startswith(('{','"')):continue
+  original=g['literal'];assert json.loads(original)==target
+  assert original==json.dumps(target,ensure_ascii=False,sort_keys=True,separators=(',',':'))
+  assert hashlib.sha256(original.encode()).hexdigest()==g['literalSHA256']==e['fieldGroups'][g['group']]['afterCanonicalSHA256']==sha(target)
+  g.update(originalSerializedLiteral=original,originalSerializedLiteralSHA256=g['literalSHA256'],literal=target,literalSHA256=sha(target),technicalSerializedGroupAlias='Canonical JSON serialization of exact bound literal decoded to identical object/string; raw immutable, all values/grounds unchanged.')
+
+def alias_full_body_wrapper_digests(ps,R):
+ same=ps.get('sameTopicMAIN',{});wrappers=same.get('questions',[])
+ if len(wrappers)!=100 or not all(isinstance(w,dict) and 'card' in w for w in wrappers):return
+ if all('sha256' in w for w in wrappers):return
+ path=C/same['path'];topic=read(path)
+ assert same['questionCount']==100 and same['fileSHA256']==raw(path)
+ assert [w['sourceOrder'] for w in wrappers]==list(range(1,101))
+ assert [w['card'] for w in wrappers]==topic['questions']
+ assert all(w['id']==w['card']['id'] and w['topicId']==topic['id'] for w in wrappers)
+ for w in wrappers:
+  if 'sha256' in w:assert w['sha256']==sha(w['card'])
+  else:w.update(sha256=sha(w['card']),technicalDerivedBodyDigest='Exact original full card body, id, sourceOrder, topic path and fileSHA verified against live entire100; digest computed, raw untouched.')
+ ps['technicalFullBodyWrapperDigestAlias']={'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawSHA256':raw(R/'peer-snapshot.json'),'topicFileSHA256':raw(path),'orderedFullBodiesVerified':100,'operation':'Deterministic digest of explicit unchanged full bodies; no new peer assessment or unbound hydration.'}
+
+def alias_explicit_peer_inventory_projection(candidate,sp,ps,R):
+ """Recover only explicit SHA-bound full bodies behind author MAIN projections."""
+ if not isinstance(ps.get('actualCurrentPeers'),int):return
+ if not all(k in ps for k in ['freshInventoryPath','freshInventorySHA256','fullClosestCurrentPeers']):return
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==0
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ e=candidate['entries'][0];same=ps['sameTopicMAIN'];global_audit=ps['globalMAIN']
+ path=pathlib.Path(ps['freshInventoryPath']);path=path if path.is_absolute() else C/path
+ assert path.is_relative_to(R) and raw(path)==ps['freshInventorySHA256']
+ inv=read(path);full=inv['sameTopicMAIN']['questions'];topic=read(C/same['path'])
+ assert inv['sameTopicMAIN']['topicId']==same['topicId']==e['topicId']==topic['id']
+ assert ps['actualCurrentPeers']==same['questionCount']==len(full)==len(topic['questions'])==100
+ assert full==topic['questions']
+ assert same['fileSHA256']==inv['sameTopicMAIN']['fileSHA256']==raw(C/same['path'])
+ def projection(q):return {'topicId':topic['id'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']}
+ assert same['questions']==[projection(q) for q in full]
+ assert global_audit['topicFileCount']==inv['globalMAIN']['topicFileCount']==110
+ assert global_audit['questionCount']==inv['globalMAIN']['questionCount']==11000
+ assert global_audit['rowsCanonicalSHA256']==inv['globalMAIN']['rowsCanonicalSHA256']
+ assert global_audit['allCurrentFileByteBindings']==inv['globalMAIN']['allCurrentFileByteBindings']
+ assert len(global_audit['allCurrentFileByteBindings'])==110
+ for f in global_audit['allCurrentFileByteBindings']:assert raw(C/f['path'])==f['sha256']
+ mapping={q['id']:q for q in full};relevant=ps['fullClosestCurrentPeers'];assert relevant
+ for peer in relevant:
+  assert peer['topicId']==topic['id'] and peer['card']==mapping[peer['id']]
+  assert peer['card']==full[peer['sourceOrder']-1] and sha(peer['card'])==peer['sha256']
+ same['originalMAINProjectionQuestions']=same['questions'];same['questions']=json.loads(json.dumps(full,ensure_ascii=False))
+ ps['originalActualCurrentPeerInventoryCount']=ps['actualCurrentPeers'];ps['actualCurrentPeers']=json.loads(json.dumps(relevant,ensure_ascii=False))
+ global_audit.update(sourceInventoryPath=str(path),sourceInventorySHA256=raw(path))
+ same.update(sourceInventoryPath=str(path),sourceInventorySHA256=raw(path))
+ sp.update(sourceInventoryPath=str(path),sourceInventorySHA256=raw(path))
+ ps['technicalExplicitProjectedTopicSnapshotAlias']={'rawPeerSnapshot':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'inventoryPath':str(path),'inventorySHA256':raw(path),'operation':'Exact original top-level path/SHA,100MAIN projections,110filebindings,11000rowdigest and same-topic fileSHA bind the full100 bodies already retained by this author. Inventory count100 is not assessed-peer credit; only original fullClosestCurrentPeers are substantive peers. No unbound hydration, new peer assessment, literal or source ground.'}
+
+
+def alias_source83_clarified_literals(candidate,sp,ps,R):
+ """Bind two author-clarified literal copies; original raw and grounds stay intact."""
+ if candidate['entries'][0]['topicId']!='history-russia':return
+ if candidate['entries'][0]['sourceOrder']!=83 or candidate.get('cycle')!=0:return
+ R=pathlib.Path(R);assert R==D/'source-history-russia83'
+ uid='01a1627c-8cb4-7b52-b8b1-7f6752217e7f'
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']==uid
+ cp=R/'literal-binding-clarification.json';clar=read(cp)
+ assert clar['sourceNativeId']==uid and clar['networkCalls']==clar['cycle']==clar['qualityCredit']==0
+ freeze='463701e1cb541566022b1f042f32981a6153b761'
+ for name,proof in clar['originalPacketFiles'].items():
+  p=R/name;assert raw(p)==proof['sha256']
+  assert p.read_bytes()==__import__('subprocess').check_output(['git','-C',str(C),'show',freeze+':'+str(p.relative_to(C))])
+ e=candidate['entries'][0];assert sha(e['proposedCard'])==e['afterHash']==clar['originalPacketFiles']['candidate.json']['afterHash']
+ if isinstance(e['fieldGroups'],list):
+  original=e['fieldGroups'];assert len(original)==6 and {g['group'] for g in original}=={'prompt_ordered_answers_key','explanation','note0','note1','note2','note3'}
+  assert all(set(g)=={'group','beforeCanonicalSHA256','afterCanonicalSHA256'} for g in original)
+  e['originalFieldGroupsList']=original
+  e['fieldGroups']={g['group']:{k:v for k,v in g.items() if k!='group'} for g in original}
+  e['technicalFieldGroupsListAlias']='Six explicit distinct named before/after hash entries projected to dictionary; original ordered list retained unchanged.'
+ def pointer(value,path):
+  for key in path.split('/')[1:]:value=value[int(key)] if isinstance(value,list) else value[key]
+  return value
+ assert {v['group'] for v in clar['bindings']}=={'explanation','note2'} and len(clar['bindings'])==2
+ for b in clar['bindings']:
+  g=pointer(sp,b['originalSourceproofPointer']);literal=pointer(candidate,b['existingCandidatePointer'])
+  assert g['group']==b['group'] and g['literal']==b['originalLiteral'] and g['literalSHA256']==b['originalLiteralSHA256']==sha(g['literal'])
+  assert g['primaryGround']==b['unchangedPrimaryGround'] and g['sourcePaths']==b['unchangedSourcePaths'] and g['locator']==b['unchangedLocator']
+  assert literal==b['intendedLiteral'] and sha(literal)==b['intendedLiteralSHA256']==e['fieldGroups'][b['group']]['afterCanonicalSHA256']
+  if b['group']=='note2':
+   assert pointer(sp,b['existingVariantPointer'])['note']==literal
+   assert pointer(sp,b['existingCorrectNoteNewFactPointer'])['newFact']==literal
+  g['originalLiteralBindingBeforeClarification']={'literal':g['literal'],'literalSHA256':g['literalSHA256']}
+  g.update(literal=literal,literalSHA256=sha(literal))
+ sp['technicalAuthorClarifiedLiteralBinding']={'path':str(cp),'rawSHA256':raw(cp),'originalPacketFreeze':freeze,'temporalBoundary':clar['temporalBoundary'],'operation':'Two stale literal copies bound to already-emitted exact candidate and explicit author clarification. Original raw, all grounds/locators/source paths and judgments retained; no new source claim or quality credit.'}
+
+def alias_source83_cycle1_redundant_snapshot(candidate,sp,ps,R):
+ """Reconcile exact known shared apply; preserve historical full snapshot."""
+ if candidate['entries'][0]['topicId']!='history-russia':return
+ if candidate['entries'][0]['sourceOrder']!=83 or candidate.get('cycle')!=1:return
+ R=pathlib.Path(R);assert R==D/'source-history-russia83-cycle1'
+ uid='01a1627c-8cb4-7b52-b8b1-7f6752217e7f'
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']==uid
+ freeze='f2941aeffbcbc0757507313f92b0ff8bcc57599c'
+ for name in ['candidate.json','sourceproof.json','peer-snapshot.json']:
+  p=R/name;assert p.read_bytes()==__import__('subprocess').check_output(['git','-C',str(C),'show',freeze+':'+str(p.relative_to(C))])
+ topic_path=C/'src/content/topics/history-russia.json';topic=read(topic_path);live=topic['questions']
+ full=ps['actualCurrentPeers'];assert len(full)==6 and [v['sourceOrder'] for v in full]==[50,64,70,74,85,96]
+ assert all(v['card']==live[v['sourceOrder']-1] for v in full)
+ assert all(v['topicId']=='history-russia' and v['id']==v['card']['id'] and sha(v['card'])==v['sha256'] for v in full)
+ assert len(ps['fullClosestCurrentPeers'])==6 and all(v['card']==next(q for q in live if q['id']==v['id']) for v in ps['fullClosestCurrentPeers'])
+ batch=read(D/'source83-84-shared-apply.json')
+ oldbytes=__import__('subprocess').check_output(['git','-C',str(C),'show',batch['baseline']+':src/content/topics/history-russia.json'])
+ old=json.loads(oldbytes)['questions'];assert ps['sameTopicMAIN']['questions']==old
+ assert ps['sameTopicMAIN']['fileSHA256']==hashlib.sha256(oldbytes).hexdigest()
+ assert [i for i,(a,b) in enumerate(zip(old,live),1) if a!=b]==[83,84]
+ derived=__import__('copy').deepcopy(old);applied_bindings=[]
+ for order in [83,84]:
+  app=read(D/f'qualified-source-history-russia{order}-apply.json')['applied'][0]
+  assert old[order-1]==app['beforeCard'] and live[order-1]==app['proposedCard']
+  derived[order-1]=app['proposedCard']
+  applied_bindings.append({'path':str(D/f'qualified-source-history-russia{order}-apply.json'),'rawSHA256':raw(D/f'qualified-source-history-russia{order}-apply.json'),'beforeCanonicalSHA256':sha(app['beforeCard']),'afterCanonicalSHA256':sha(app['proposedCard'])})
+ assert derived==live
+ e=candidate['entries'][0];assert e['beforeCard']==live[82] and e['beforeHash']==sha(live[82])
+ assert ps['candidate']['beforeCard']==live[82] and ps['candidate']['proposedCard']==e['proposedCard']
+ bindings=ps['globalMAIN']['allCurrentFileByteBindings'];files=sorted((C/'src/content/topics').glob('*.json'));assert len(bindings)==len(files)==110
+ assert [b['path'] for b in bindings]==[str(f.relative_to(C)) for f in files]
+ rows=[]
+ for b,f in zip(bindings,files):
+  if f==topic_path:assert b['sha256']==hashlib.sha256(oldbytes).hexdigest()
+  else:assert b['sha256']==raw(f)
+  t=read(f);rows.extend({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']} for q in t['questions'])
+ assert len(rows)==11000 and sha(rows)==ps['globalMAIN']['rowsCanonicalSHA256']
+ proof={'originalRaw':str(R/'peer-snapshot.json'),'rawSHA256':raw(R/'peer-snapshot.json'),'rawFreeze':freeze,'historicalQuestionsPointer':'/sameTopicMAIN/questions','originalQuestionsCanonicalSHA256':sha(old),'explicitFreshRelevantPeersPointer':'/actualCurrentPeers','explicitFreshRelevantPeersCount':6,'currentQuestionsCanonicalSHA256':sha(derived),'oldTopicFileSHA256':hashlib.sha256(oldbytes).hexdigest(),'currentTopicFileSHA256':raw(topic_path),'knownSharedApply':str(D/'source83-84-shared-apply.json'),'exactAppliedBodyBindings':applied_bindings,'changedOrders':[83,84],'preapplicationOnly':True,'inventoryFileHydration':False,'operation':'Original cycle1 retains historical100 full bodies plus6 unchanged fresh relevant peers. Project only exact known applied83/84 before-to-after bodies into the historical full snapshot. All other98 bodies and110 file bindings proven unchanged. Original raw,6 relevant peer bodies and semantic comparisons/grounds remain unchanged. Original full100 is explicitly historical, not called fresh.'}
+ ps['sameTopicMAIN']['questions']=derived
+ ps['sameTopicMAIN']['fileSHA256']=raw(topic_path)
+ next(b for b in bindings if b['path']=='src/content/topics/history-russia.json')['sha256']=raw(topic_path)
+ ps['technicalRedundantSnapshotStageBinding']=proof;sp['technicalRedundantSnapshotStageBinding']=proof
+
+def alias_source84_cycle1_variant_names(candidate,sp,ps,R):
+ """Expose exact existing prompt and SHA-bound locator lists under contract names."""
+ if candidate['entries'][0]['topicId']!='history-russia':return
+ if candidate['entries'][0]['sourceOrder']!=84 or candidate.get('cycle')!=1:return
+ R=pathlib.Path(R);assert R==D/'source-history-russia84-cycle1'
+ uid='01a16282-713c-7aa3-b66b-ca02fb99d0e1'
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']==uid
+ for name in ['candidate.json','sourceproof.json','peer-snapshot.json']:
+  p=R/name;assert p.read_bytes()==__import__('subprocess').check_output(['git','-C',str(C),'show','d0baf3be7a148345b6dca8f9363b706338353c88:'+str(p.relative_to(C))])
+ q=candidate['entries'][0]['proposedCard'];sources={}
+ for source in sp['rawSources']:
+  p=pathlib.Path(source['path']);p=p if p.is_absolute() else C/p
+  assert raw(p)==source['sha256'];sources[str(p)]=source['sha256']
+ for v in sp['entries'][0]['fourFullPromptAnswerNoteAssessments']:
+  a=q['answers'][v['slot']];assert v['prompt']==q['prompt'] and v['answer']==a['text'] and v['note']==a['note']
+  assert v['tripleSHA256']==sha({'prompt':v['prompt'],'answer':v['answer'],'note':v['note']})
+  assert 'fullPrompt' not in v and 'sourcePaths' not in v and 'locator' not in v
+  paths=[];locators=[]
+  for loc in v['sourcesLocators']:
+   p=pathlib.Path(loc['path']);p=p if p.is_absolute() else C/p
+   assert sources[str(p)]==loc['fileSHA256']==raw(p)
+   paths.append(loc['path']);locators.append(loc['locator'])
+  assert paths
+  v.update(fullPrompt=v['prompt'],sourcePaths=list(dict.fromkeys(paths)),locator=' | '.join(locators))
+ sp['technicalVariantFieldNameAlias']={'rawSourceproof':str(R/'sourceproof.json'),'rawSHA256':raw(R/'sourceproof.json'),'operation':'Exact existing prompt literal and explicit original SHA-bound source locator paths exposed as fullPrompt/sourcePaths/locator. Original prompt/sourcesLocators and every judgment retained unchanged. Unchanged INITIAL reader judgments remain attributed to original reader, not claimed as new independent author review.'}
+
+def alias_source77_own_prior_application(candidate,sp,ps,R):
+ """Exact own77 preapplication bookkeeping delta; no inventory-file hydration."""
+ if candidate['entries'][0]['topicId']!='history-russia':return
+ if candidate.get('cycle')!=1 or candidate['entries'][0]['sourceOrder']!=77:return
+ R=pathlib.Path(R);assert R.parent==D and R.name=='source-history-russia77-cycle1'
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId'] and sp['cycle']==ps['cycle']==1
+ import copy
+ files=sorted((C/'src/content/topics').glob('*.json'));assert len(files)==110
+ live={};live_rows=[]
+ def project(t,q):return {'topicId':t,'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']}
+ for f in files:
+  t=read(f);live[t['id']]=t;live_rows.extend(project(t['id'],q) for q in t['questions'])
+ assert len(live_rows)==11000
+ if ps['globalMAIN']['rowsCanonicalSHA256']==sha(live_rows):return
+ I=R.with_name('source-history-russia77');initial=read(I/'candidate.json');oldps=read(I/'peer-snapshot.json');e0=initial['entries'][0];e=candidate['entries'][0]
+ assert initial['sourceNativeId']==candidate['sourceNativeId'] and initial['cycle']==0
+ assert e['id']==e0['id']=='history-russia-constitution-1993-method' and e['beforeCard']==e0['proposedCard'] and sha(e['beforeCard'])==e0['afterHash']
+ only=copy.deepcopy(e['proposedCard']);assert only['answers'][2]['text']=='Всенародным голосованием';only['answers'][2]['text']='Всенародное голосование';assert only==e['beforeCard']
+ assert ps['candidate']['beforeCard']==e['beforeCard'] and ps['candidate']['proposedCard']==e['proposedCard']
+ assert ps['globalMAIN']==oldps['globalMAIN'] and ps['sameTopicMAIN']==oldps['sameTopicMAIN'] and ps['actualCurrentPeers']==oldps['actualCurrentPeers'] and ps['fullClosestCurrentPeers']==oldps['fullClosestCurrentPeers'] and ps['currentGuardRows']==oldps['currentGuardRows']
+ oldtask=read(D/'source-history-russia77-task.json');oldbytes=__import__('subprocess').check_output(['git','--no-optional-locks','-C',str(C),'show',oldtask['baselineCode']+':src/content/topics/history-russia.json']);oldtopic=json.loads(oldbytes);now=live['history-russia']
+ assert oldtopic['questions'][76]==e0['beforeCard'] and now['questions'][76]==e0['proposedCard']
+ assert [i for i,(a,b) in enumerate(zip(oldtopic['questions'],now['questions']),1) if a!=b]==[77]
+ prior=read(D/'qualified-source-history-russia77-apply.json');assert prior['author']==candidate['sourceNativeId'] and prior['applied'][0]['beforeCard']==e0['beforeCard'] and prior['applied'][0]['proposedCard']==e['beforeCard']
+ binding=ps['globalMAIN']['allCurrentFileByteBindings'];assert len(binding)==110 and [v['path'] for v in binding]==[str(f.relative_to(C)) for f in files]
+ old_rows=[];history_field=None
+ for b,f in zip(binding,files):
+  key=next(k for k in ['sha256','fileSHA256','fileSha256','rawSHA256'] if k in b)
+  if f.name=='history-russia.json':assert b[key]==hashlib.sha256(oldbytes).hexdigest();t=oldtopic;history_field=key
+  else:assert b[key]==raw(f);t=live[f.stem]
+  old_rows.extend(project(t['id'],q) for q in t['questions'])
+ assert len(old_rows)==11000 and sha(old_rows)==ps['globalMAIN']['rowsCanonicalSHA256']
+ assert ps['sameTopicMAIN']['questions']==oldtopic['questions'] and ps['sameTopicMAIN']['fileSHA256']==hashlib.sha256(oldbytes).hexdigest()
+ peers=ps['actualCurrentPeers'];assert len(peers)==100 and [v['sourceOrder'] for v in peers]==list(range(1,101)) and [v['card'] for v in peers]==oldtopic['questions']
+ for v in peers:assert v['id']==v['card']['id'] and v['topicId']=='history-russia' and v['sha256']==sha(v['card'])
+ assert all(v['id']!=e['id'] for v in ps['fullClosestCurrentPeers'])
+ guard=ps['currentGuardRows']['currentTargetBeforeCard'];assert guard['card']==e0['beforeCard'] and guard['sha256']==e0['beforeHash']
+ proof={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'ownInitialCandidatePath':str(I/'candidate.json'),'ownInitialCandidateSHA256':raw(I/'candidate.json'),'ownInitialPeerPath':str(I/'peer-snapshot.json'),'ownInitialPeerSHA256':raw(I/'peer-snapshot.json'),'originalCatalogCommit':oldtask['baselineCode'],'oldGlobalRowSHA256':sha(old_rows),'currentGlobalRowSHA256':sha(live_rows),'oldSelfHash':e0['beforeHash'],'currentSelfHash':e['beforeHash'],'newGrammarProposalHash':e['afterHash'],'allOtherCardsAnd110FileBindingsProven':True,'inventoryFileHydration':False,'selfIsDistinctPeer':False,'operation':'Only exact own prior77 application replaces historical self-preimage in full100/110/11000 bookkeeping. Original raw unchanged; no literal, primaryGround or distinct-peer assessment changed.'}
+ ps['globalMAIN']['rowsCanonicalSHA256']=sha(live_rows)
+ for b in binding:
+  if b['path']=='src/content/topics/history-russia.json':b[history_field]=raw(C/b['path'])
+ ps['sameTopicMAIN']['questions']=copy.deepcopy(now['questions']);ps['sameTopicMAIN']['fileSHA256']=raw(C/'src/content/topics/history-russia.json')
+ for v in peers:
+  if v['id']==e['id']:v.update(card=copy.deepcopy(e['beforeCard']),sha256=e['beforeHash'])
+ guard.update(card=copy.deepcopy(e['beforeCard']),sha256=e['beforeHash'])
+ ps['technicalOwnPrior77SelfPreimageAlias']=proof;sp['technicalOwnPrior77SelfPreimageAlias']=proof
+
+
+def alias_source31_root_entry_identity(candidate, sp, R):
+ """Exact already-declared source31 root identity; derived view only, raw immutable."""
+ if R.name != 'source-human-medicine31' or candidate['sourceNativeId'] != '01a16731-2baf-76e3-a052-31ab747f1ff8':return
+ assert raw(R/'sourceproof.json') == '776b63fca4c3223ee4d7477c86dc56427f27b55cdc6e46b375212b2e3ea4f122'
+ assert candidate['cycle'] == sp['cycle'] == 0 and candidate['sourceNativeId'] == sp['sourceNativeId']
+ assert len(candidate['entries']) == len(sp['entries']) == 1
+ c = candidate['entries'][0];e = sp['entries'][0]
+ assert candidate['id'] == sp['id'] == c['id'] == 'human-medicine-brain-protection'
+ assert candidate['topicId'] == sp['topicId'] == c['topicId'] == 'human-medicine'
+ assert sp['sourceOrder'] == c['sourceOrder'] == 31 and sp['status'] == c['status'] == 'READY_FOR_INDEPENDENT_REVIEW'
+ q = c['proposedCard'];assert sha(q) == c['afterHash']
+ groups = {'prompt_ordered_answers_key':{'prompt':q['prompt'],'answers':[v['text'] for v in q['answers']],'correctIndex':q['correctIndex']},'explanation':q['explanation'],**{'note'+str(k):v['note'] for k,v in enumerate(q['answers'])}}
+ assert len(e['literalGroups']) == 6 and len(e['fourFullPromptAnswerNoteAssessments']) == 4
+ for g in e['literalGroups']:assert g['literal'] == groups[g['group']] and g['literalSHA256'] == sha(g['literal'])
+ for v in e['fourFullPromptAnswerNoteAssessments']:
+  a=q['answers'][v['slot']];tr={'prompt':q['prompt'],'answer':a['text'],'note':a['note']}
+  assert tr == {'prompt':v['fullPrompt'],'answer':v['answer'],'note':v['note']} and sha(tr) == v['tripleSHA256']
+ for k in ['id','topicId','sourceOrder','status']:
+  assert k not in e or e[k] == sp[k]
+  e[k] = sp[k]
+ e['technicalRootIdentityContainerAlias'] = {'originalSourceproofSHA256':raw(R/'sourceproof.json'),'originalPointers':['/id','/topicId','/sourceOrder','/status'],'operation':'Already explicit root identity aliased into sole entry; candidate, six literals, four triples, original assessments and raw unchanged. Original KeyError remains uncured.'}
+
+def alias_same_topic_current_peer_container(candidate,sp,ps,R):
+ """Expose exact original nested100 peers; no new body or judgment."""
+ if 'actualCurrentPeers' in ps:return
+ same=ps.get('sameTopicMAIN',{})
+ if 'actualCurrentPeers' not in same:return
+ R=pathlib.Path(R);assert R.parent==D
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ assert candidate['cycle']==sp['cycle']==ps['cycle']
+ assert len(candidate['entries'])==1
+ e=candidate['entries'][0];tid=e['topicId']
+ assert candidate['topicId']==sp['topicId']==ps['topicId']==same['topicId']==tid
+ rel='src/content/topics/'+tid+'.json';assert same['path']==rel and same['questionCount']==100
+ topic=read(C/rel);peers=same['actualCurrentPeers']
+ assert topic['id']==tid and raw(C/rel)==same['fileSHA256']
+ if len(peers)==99 and 'selfPreimageBinding' in same:
+  self_binding=same['selfPreimageBinding']
+  assert self_binding['countedAsDistinctPeer'] is False
+  assert self_binding['id']==e['id'] and self_binding['sourceOrder']==e['sourceOrder']
+  assert self_binding['card']==e['beforeCard']==topic['questions'][e['sourceOrder']-1] and self_binding['sha256']==e['beforeHash']==sha(e['beforeCard'])
+  assert all(p['id']!=self_binding['id'] for p in peers)
+  peers=sorted([*peers,{**self_binding,'topicId':tid}],key=lambda p:p['sourceOrder'])
+  ps['technicalExplicitSelfPreimagePeerAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalPeerPointer':'/sameTopicMAIN/actualCurrentPeers','originalSelfPointer':'/sameTopicMAIN/selfPreimageBinding','operation':'Exact99 full original peers plus explicitly separate full self preimage exposed as100 ordered current bindings. Self remains countedAsDistinctPeer=false; topicId comes from the same explicit verified topic. All live body/hash/order assertions retained; raw and judgments unchanged.'}
+ assert len(peers)==100 and [p['sourceOrder'] for p in peers]==list(range(1,101))
+ assert [p['card'] for p in peers]==topic['questions']
+ assert all(p['topicId']==tid and p['id']==p['card']['id'] and sha(p['card'])==p.get('sha256',p.get('canonicalSHA256')) for p in peers)
+ bindings=ps['globalMAIN']['allCurrentFileByteBindings']
+ b=next(b for b in bindings if b['path']==rel)
+ assert b.get('sha256',b.get('fileSHA256',b.get('fileSha256')))==same['fileSHA256']
+ ps['actualCurrentPeers']=peers
+ original_questions_absent='questions' not in same
+ if original_questions_absent:same['questions']=[peer['card'] for peer in peers]
+ ps['technicalExplicitNestedSameTopicPeerAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalPointer':'/sameTopicMAIN/actualCurrentPeers','originalTopLevelAbsent':True,'originalSameTopicQuestionsAbsent':original_questions_absent,'operation':'Exact100 original ordered full peer bodies, identity, digests and topic file binding verified; redundant container name only. Raw and judgments unchanged; original format gap uncured.'}
+
+def alias_exact_videogame2_distinct_peers(candidate,sp,ps,R):
+ """Exact native raw99 distinct plus explicit candidate self; no new judgment."""
+ R=pathlib.Path(R)
+ if R.name not in ['source-video-game-history2','source-video-game-history2-cycle1'] or candidate['sourceNativeId']!='01a16c14-487b-7060-8311-a40288bb963b':return
+ import copy,subprocess
+ cycle=1 if R.name.endswith('-cycle1') else 0
+ assert R.parent==D and candidate['cycle']==sp['cycle']==ps['cycle']==cycle
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ expected={'candidate.json':'e480b2d671e1259299d14a9964e9342b4aaacc27219bd12369fa65f8d1b86382','sourceproof.json':'916891162ee0d59c5d171634aeed74a86bb453397c5aea4581fda96e7e8eff96','peer-snapshot.json':'31553faa80c1a6228a0eca3e059280af87828d0e3173491ec38c683ac47d2312'}
+ freeze='08efc06fa1ff87f7210a435a0e0e57071bb621c2'
+ if cycle==1:
+  expected={'candidate.json':'6012c41bb4e953334a7ee73387e57be85c0bbbd8cdfed9ab92308981e7b432ff','sourceproof.json':'54128e0505c2b1e445a9eee9282a76d0b78bcdeffcba8227cf4839d8284365ec','peer-snapshot.json':'30d70aadad7dd41ef647f5937b3c71000fb3acd910e66b958d72af5aa960090a'}
+  freeze='80dfe074d5cab9984519491634d09affb5d65f45'
+  prior=read(R.with_name('source-video-game-history2')/'candidate.json')['entries'][0]
+  initial=read(D/'independent-video-game-history2-initial/receipt.json')['entries'][0]
+  current=candidate['entries'][0]
+  assert initial['stage']=='INITIAL' and initial['status']=='FIX' and initial['defects']
+  assert current['beforeCard']==initial['currentCard']==prior['proposedCard']
+  assert current['beforeHash']==initial['currentCardCanonicalSHA256']==prior['afterHash']==sha(current['beforeCard'])
+
+ for name,digest in expected.items():
+  assert raw(R/name)==digest
+  assert (R/name).read_bytes()==subprocess.check_output(['git','-C',str(C),'show',freeze+':'+str((R/name).relative_to(C))])
+ e=candidate['entries'][0];assert e['id']=='video-game-history-tetris-creator' and e['sourceOrder']==2 and e['topicId']=='video-game-history'
+ b=ps['inventoryBinding'];p=pathlib.Path(b['path']);assert p.is_relative_to(R) and raw(p)==b['fileSHA256']
+ assert b['selfPreimageIsCandidateBeforeCard'] is True and b['sameTopicActualCurrentPeersCount']==99
+ inv=read(p);same=inv['sameTopicMAIN'];g=inv['globalMAIN'];topic=read(C/'src/content/topics/video-game-history.json');peers=ps['actualCurrentPeers']
+ assert same['questions']==topic['questions'] and same['questionCount']==b['sameTopicCardCount']==100
+ assert same['fileSHA256']==b['sameTopicFileSHA256']==raw(C/b['sameTopicFile'])
+ assert g==ps['globalMAIN'] and g['topicFileCount']==b['globalTopicFileCount']==110 and g['questionCount']==b['globalMAINRowCount']==11000 and g['rowsCanonicalSHA256']==b['globalMAINRowsCanonicalSHA256']
+ assert len(peers)==99 and [v['sourceOrder'] for v in peers]==[i for i in range(1,101) if i!=2]
+ assert all(v['card']==topic['questions'][v['sourceOrder']-1] and v['id']==v['card']['id'] and v['topicId']==e['topicId'] and v['sha256']==sha(v['card']) for v in peers)
+ assert topic['questions'][1]==e['beforeCard'] and sha(e['beforeCard'])==e['beforeHash']
+ ps['originalDistinctCurrentPeers']=copy.deepcopy(peers)
+ ps['actualCurrentPeers']=sorted([*peers,{'id':e['id'],'topicId':e['topicId'],'sourceOrder':2,'card':copy.deepcopy(e['beforeCard']),'sha256':e['beforeHash'],'countedAsDistinctPeer':False}],key=lambda v:v['sourceOrder'])
+ ps['originalExplicitInventoryBinding']=copy.deepcopy(b)
+ b.update(sha256=b['fileSHA256'],topicCards=b['sameTopicCardCount'],globalMAINRows=b['globalMAINRowCount'],globalTopicFiles=b['globalTopicFileCount'],topicFileSHA256=b['sameTopicFileSHA256'])
+ ps['technicalExactVideoGame2PeerBindingAlias']={'rawFreeze':freeze,'rawCriticalSHA256':expected,'originalPeerPointer':'/actualCurrentPeers','selfPointer':'candidate.json#/entries/0/beforeCard','distinctPeerCountUnchanged':99,'technicalCurrentBindings':100,'operation':'Exact declared99 distinct full bodies plus separately declared candidate self preimage and SHA-bound100 inventory. Inventory redundant names only; no new source/body/peer judgment/raw edit/quality credit.'}
