@@ -1,0 +1,91 @@
+{
+  "owner": "01a16d13-f6ee-71f1-879b-5737c83b4e1a",
+  "sourceNativeId": "01a16d54-997d-74c1-9587-3795bbe34dfe",
+  "bootstrapDeviations": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16d13/source19-bootstrap-format-appendix.json",
+  "sourceReadScopeDeviationOriginals": [
+    {
+      "journal": "/Users/eaafonasev/.codex/sessions/2026/10/24/rollout-2026-10-24T14-53-43-01a16d54-997d-74c1-9587-3795bbe34dfe.jsonl",
+      "callLine": 173,
+      "resultLine": 176,
+      "callId": "call_212fba0abf144ec2bea86080509b8729",
+      "originalCall": {
+        "timestamp": "2026-10-24T10:00:44.958Z",
+        "ordinal": 172,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_03fa64b438ef450b016adc81cc6f6c8191b1175d71db1cff56",
+          "status": "completed",
+          "call_id": "call_212fba0abf144ec2bea86080509b8729",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"rg -n 'video-game-history-esrb-founded' /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle --glob '*.json' --glob '!**/node_modules/**' --glob '!**/Library/**'\",max_output_tokens:2000}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a16d5a-ef68-7a51-8a5a-aba31c061d9d",
+            "create_time": 1792836044.4380348
+          }
+        }
+      },
+      "originalResultSHA256": "2e6f57f1b5d521c67f4587d930408557085d1fdf1890c86f2065769fd98d5f2a",
+      "limitation": "Broad repo-wide exact-ID JSON search; large returned line/output truncated, not a complete scoped retrieval.",
+      "uncured": true
+    },
+    {
+      "journal": "/Users/eaafonasev/.codex/sessions/2026/10/24/rollout-2026-10-24T14-53-43-01a16d54-997d-74c1-9587-3795bbe34dfe.jsonl",
+      "callLine": 277,
+      "resultLine": 280,
+      "callId": "call_7405b4d5675b48c48e6884ec4b150d32",
+      "originalCall": {
+        "timestamp": "2026-10-24T10:01:42.866Z",
+        "ordinal": 276,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_03fa64b438ef450b016adc82044adc81918e5557135aedd4fc",
+          "status": "completed",
+          "call_id": "call_7405b4d5675b48c48e6884ec4b150d32",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport json,os\\nm=json.load(open('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16d13/manifest.json'))\\nterms=['nes','nintendo','children television act','children\\\\'s television','gamecube','xbox','2001 launch','1985']\\nprinted=set(); contexts=0\\nfor p in m['additionalRetainedSourceIndexes']:\\n if not isinstance(p,str) or not os.path.isfile(p): continue\\n d=json.load(open(p)); hits=[]\\n for r in d.get('rawSources',[]):\\n  s=json.dumps(r,ensure_ascii=False).lower()\\n  if any(t in s for t in terms): hits.append(r)\\n if hits:\\n  contexts+=1; print('INDEX',p,'topic',d.get('topicId'),'id',d.get('id'),'hits',len(hits))\\n  for r in hits:\\n   key=(r.get('path'),r.get('url'))\\n   if key not in printed: print(json.dumps(r,ensure_ascii=False)); printed.add(key)\\n  if contexts>=12: break\\nprint('contexts',contexts,'unique',len(printed))\\nPY\",max_output_tokens:10000}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a16d5a-ef68-7a51-8a5a-aba31c061d9d",
+            "create_time": 1792836100.3222413
+          }
+        }
+      },
+      "originalResultSHA256": "c46dc289bddfecfd6c02414c5820709a8a458dbafa780087d50d4eb5547aefc0",
+      "limitation": "Retained metadata query printed whole matching rawSources objects, capped indexes rather than unique contexts; truncated. Actual unique returned context count is not established.",
+      "uncured": true
+    },
+    {
+      "journal": "/Users/eaafonasev/.codex/sessions/2026/10/24/rollout-2026-10-24T14-53-43-01a16d54-997d-74c1-9587-3795bbe34dfe.jsonl",
+      "callLine": 323,
+      "resultLine": 326,
+      "callId": "call_bd39a102aa864b5c9dd88ff7b8801d16",
+      "originalCall": {
+        "timestamp": "2026-10-24T10:02:11.361Z",
+        "ordinal": 322,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_03fa64b438ef450b016adc822226dc81918ffc9008a8625042",
+          "status": "completed",
+          "call_id": "call_bd39a102aa864b5c9dd88ff7b8801d16",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport json,re\\np='/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a16d13/source-video-game-history19/fresh-inventory.json'\\nr=json.load(open(p))['globalMAIN']['rows']; rx=re.compile(r'основан|создан|учрежд|образован|сформир|появил|запущен|учредил',re.I)\\nh=[x for x in r if rx.search(x['prompt'])]\\nprint('creation/founding prompts',len(h))\\nfor x in h: print(x['topicId'],x['id'],x['prompt'])\\nPY\",max_output_tokens:5000}));\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a16d5a-ef68-7a51-8a5a-aba31c061d9d",
+            "create_time": 1792836130.1547678
+          }
+        }
+      },
+      "originalResultSHA256": "d72981ca03c0d33e4916f29d9176cac846e36b97bd0cc7fb18f6d299bae7bedd",
+      "limitation": "Broad cross-catalog founding/creation lexical MAIN search printed all matches and truncated; cannot establish semantic completeness or exhaustion.",
+      "uncured": true
+    }
+  ],
+  "readScopeDeviationCount": 5,
+  "truncatedOriginals": 3,
+  "allOriginalsUncured": true,
+  "rawSOURCEFreeze": "90bac0e86a0ced963bf33510de1547e62b2ec451",
+  "rule": "No completeness/exhaustion or quality credit from these three outputs. Actual full current peer bodies/primary context and substantive pair grounds require independent evaluation. No raw edits/content cycle/native or attempt reset.",
+  "qualityCredit": 0
+}
