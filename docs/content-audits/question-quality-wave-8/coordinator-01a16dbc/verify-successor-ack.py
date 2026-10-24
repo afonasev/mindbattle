@@ -36,6 +36,11 @@ reads=[]
 for p in docs:
  content=p.read_text().strip();expected="text(await tools.exec_command({cmd:'cat "+str(p)+"',max_output_tokens:12000}));";matches=[cid for cid,b in bodies if b==p.read_text() and calls[cid][1]['payload'].get('input','').strip()==expected];assert matches,('No complete successful untruncated read',str(p));reads.append({'path':str(p),'rawSHA256':m.raw(p),'exactSuccessfulCallIds':matches})
 assert len({v['exactSuccessfulCallIds'][0] for v in reads})==4, 'Four separate full structured successful read calls required'
+first_actual=[(i,r) for i,r in enumerate(rows,1) if r.get('payload',{}).get('type') in ['custom_tool_call','function_call']][:4]
+assert len(first_actual)==4
+for (_,r),p in zip(first_actual,docs):
+ assert r['payload'].get('type')=='custom_tool_call'
+ assert r['payload'].get('input','').strip()=="text(await tools.exec_command({cmd:'cat "+str(p)+"',max_output_tokens:12000}));"
 primary=pathlib.Path('/Users/eaafonasev/Projects/mindbattle')
 mandatory=[primary/'AGENTS.md',m.C/'AGENTS.md',
  *[primary/'.agents/references'/name for name in ['execution-policy.md','context-efficiency.md','coordination.md','project-policy/planning.md','flow/lifecycle.md','flow/efficiency.md','model-routing.md','delivery-workflow.md']],
@@ -44,9 +49,7 @@ mandatory=[primary/'AGENTS.md',m.C/'AGENTS.md',
  primary/'.agents/skills/flow-coordinate/references/project.md',
  primary/'.agents/skills/flow-coordinate/references/control.md',
  m.C/'docs/content-audits/question-authoring-guide-2026-09-02.md',
- D/'native-bootstrap-identity-readonly.py']
-if x.get('routeFrontier',{}).get('requiresSupportedBinding'):
- mandatory.append(D/'route-frontier.json')
+ D/'native-bootstrap-identity-readonly.py',D/'route-frontier.json',D/'successor-readonly-check.py']
 mandatory_reads=[]
 for p in mandatory:
  matches=[cid for cid,b in bodies if b==p.read_text() and str(p) in calls[cid][1]['payload'].get('input','')]
@@ -71,6 +74,18 @@ for cid,b in bodies:
  assert z['originalCreateOutput']==parent_rows[z['originalCreateOutputLine']-1]
  identity.append({'call_id':cid,'wholeOriginalCreateCallAndOutputObserved':True,'nativeJournal':str(native),'actualCompactions':0,'decodeErrorsPreserved':z['decodeErrorsPreserved']})
 assert identity, 'Successor must personally observe full original identity call and output'
+checker_launches=[{'callLine':line,'call_id':cid} for cid,(line,r) in calls.items()
+ if 'python3 -B '+str(D/'successor-readonly-check.py') in r['payload'].get('input','')]
+assert checker_launches, 'Actual pure readonly checker execution required'
+barriers=[]
+for cid,b in bodies:
+ try:z=json.loads(b)
+ except (ValueError,TypeError):continue
+ if not isinstance(z,dict) or z.get('READONLY_BARRIER')!='PASS':continue
+ assert z['CURRENT']==x['CURRENT'] and z['remaining']==x['remaining'] and z['successorRegistered']==S
+ assert z['HEAD']==m.h.git(m.C,'rev-parse','HEAD')==z['freshOriginFeature']
+ barriers.append({'actualCompletionCallLine':calls[cid][0],'call_id':cid,'exitCode':0,'boundedOriginalPASS':z})
+assert barriers, 'Actual exit0 checker completion required; async launch is not completion'
 finals=[(i,r) for i,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='message' and r['payload'].get('role')=='assistant' and r['payload'].get('phase')=='final_answer']
 assert finals
 last=finals[-1];text='\n'.join(a.get('text','') for a in last[1]['payload']['content'] if isinstance(a,dict))
@@ -83,6 +98,8 @@ assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and m.read(m
 for root,key in [(m.C,'code'),(m.P,'planning')]:assert m.raw(pathlib.Path(m.h.git(root,'rev-parse','--path-format=absolute','--git-path','index')))==x['foreignIndexes'][key]
 report={'successor':S,'native':str(native),'rootPersonallyVerifiedExactNativeACK':True,'exactNativeVerificationCallsAndResults':success,'diagnosticFailuresPreservedSeparately':bad,'fullFourDocumentsSuccessfulUntruncatedReads':reads,'actualCompactions':0,'exactFinalACKLine':last[0],'exactFinalACKRecord':last[1],'CURRENT':x['CURRENT'],'remaining':x['remaining'],'claimsOwnerBeforeRelease':m.O,'leaseEmpty':True,'foreignIndexes':x['foreignIndexes'],'noQualityReplay':True}
 report.update(fullMandatoryPolicyReads=mandatory_reads,canonicalSectionReads=section_reads,wholeOriginalIdentityObservations=identity)
+report.update(firstFourActualToolCallLines=[i for i,r in first_actual],firstFourActualToolsExactlyRequiredLiterals=True,
+              originalReadonlyCheckerLaunches=checker_launches,actualReadonlyCheckerExit0Completions=barriers)
 if stop_alias:report['exactOriginalStopDeclarationAlias']={'path':str(alias_path),'rawSHA256':m.raw(alias_path),'originalACKUnchanged':True}
 m.write(D/'successor-ack.json',report)
 print(m.savecode([pathlib.Path(__file__),D/'successor-ack.json',*([alias_path] if stop_alias else [])],'Preserve personally audited exact native readonly successor ACK'))
