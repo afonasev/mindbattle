@@ -67,6 +67,31 @@ report = {'owner':json.loads((D/'manifest.json').read_text())['owner'],'nativeId
     'wholeReadProofs':proof,'missingWholeOriginals':missing,'identityOriginalProofs':own_identity,
     'taskCompleteOriginalLines':complete,'qualityCredit':0}
 report['pass'] = not missing and len(literal)==4 and all(v['exact'] for v in literal) and bool(own_identity) and report['actualCompactions']==0 and bool(complete)
+if '--prospective-before-start-correction' in sys.argv:
+    # Explicit same-native SOURCE19 correction, preserving the original failure.
+    # This is not a replay or waiver of a finished content attempt.
+    deviation_path = D/'source19-bootstrap-original-deviation.json'
+    deviation = json.loads(deviation_path.read_text())
+    manifest = json.loads((D/'manifest.json').read_text())
+    assert deviation['sourceNativeId']==uid and deviation['originalFirstFourExact'] is False
+    assert deviation['uncured'] and 19 not in manifest['ownedSourceOrders']
+    assert manifest['actors']['author19']['stage']=='READONLY_BOOTSTRAP_LITERAL_CORRECTION_REQUIRED'
+    assert rows[deviation['originalFirstCombinedCallLine']-1]==deviation['originalFirstCombinedCall']
+    sequences = []
+    for position in range(len(calls)-3):
+        block = [calls[position+i] for i in range(4)]
+        exact = all(call.get('input','').strip()=="text(await tools.exec_command({cmd:'cat "+str(p)+"',max_output_tokens:12000}));" for (_,call),p in zip(block,first))
+        if not exact: continue
+        checks=[]
+        for (line,call),p in zip(block,first):
+            bodies=[v for v in valid if v['callId']==call['call_id'] and v['body']==p.read_text()]
+            if len(bodies)!=1:break
+            v=bodies[0];checks.append({'path':str(p),'callLine':line,'resultLine':v['resultLine'],'callId':call['call_id'],'wholeExit0':True})
+        if len(checks)==4 and any(i<checks[0]['callLine'] for i in complete) and any(i>checks[-1]['resultLine'] for i in complete):sequences.append(checks)
+    report.update(originalFirstFourExact=False,originalDeviation=str(deviation_path),originalDeviationUncured=True,
+                  prospectiveSeparateExactFourSequences=sequences,
+                  qualificationBasis='Same native prospective exact reads BEFORE any SOURCE19 START; original combined call and premature ACK stay uncured; explicit inherited SOURCE12 precedent.')
+    report['pass']=not missing and len(sequences)==1 and bool(own_identity) and report['actualCompactions']==0
 out = D / sys.argv[2]
 out.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
 print(json.dumps({'pass':report['pass'],'wholeReads':len(proof),'missing':missing,'firstFourExact':all(v['exact'] for v in literal),
