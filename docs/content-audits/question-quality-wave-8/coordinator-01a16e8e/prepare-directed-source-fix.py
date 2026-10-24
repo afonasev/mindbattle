@@ -4,7 +4,10 @@ import importlib.util,sys,json
 D=Path(__file__).parent;s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
 order=int(sys.argv[1]);snapshot=D/sys.argv[2];assert snapshot.parent==D
 x=m.read(D/'manifest.json');topic=x['activeRoute']['topicId'];assert topic=='video-game-history'
-key=f'author{order}';a=x['actors'][key];audit=m.read(snapshot);v=audit['actors'][a['threadId']]
+original_task=m.read(D/f'source-{topic}{order}-task.json')
+keys=[k for k,a in x['actors'].items() if k.startswith('author') and a['threadId']==original_task['authorNativeId']]
+assert len(keys)==1, 'The original author must resolve to one actual native actor'
+key=keys[0];a=x['actors'][key];audit=m.read(snapshot);v=audit['actors'][a['threadId']]
 assert audit['owner']==m.O and audit['actors'][m.O]['actualCompactions']<2 and v['actualCompactions']<2 and v['lastTaskEvent']=='task_complete'
 receipt=D/f'independent-{topic}{order}-initial/receipt.json';e=m.read(receipt)['entries'][0]
 assert e['stage']=='INITIAL' and e['status']=='FIX' and e['defects']
