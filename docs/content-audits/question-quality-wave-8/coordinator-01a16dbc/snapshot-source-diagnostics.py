@@ -2,7 +2,8 @@
 import pathlib,json,importlib.util,sys,re
 D=pathlib.Path(__file__).parent
 s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
-order=int(sys.argv[1]);suffix=sys.argv[2] if len(sys.argv)>2 else '';assert suffix in ['', '-cycle1'];x=m.read(D/'manifest.json');a=x['actors']['author'+str(order)];p=pathlib.Path(a['nativeJournal'])
+order=int(sys.argv[1]);suffix=sys.argv[2] if len(sys.argv)>2 else '';assert suffix in ['', '-cycle1'];x=m.read(D/'manifest.json');actor_key=sys.argv[3] if len(sys.argv)>3 else 'author'+str(order);a=x['actors'][actor_key];p=pathlib.Path(a['nativeJournal'])
+assert m.read(D/f'source-video-game-history{order}-task.json')['authorNativeId']==a['threadId']
 if not p.exists():
  matches=list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+a['threadId']+'.jsonl'));assert len(matches)==1;p=matches[0]
 rs=[json.loads(l) for l in p.open()];assert [r['payload']['id'] for r in rs if r['type']=='session_meta']==[a['threadId']]
@@ -29,7 +30,7 @@ for i,r in enumerate(rs,1):
   b=z.get('output','');match=re.match(r'Warning: truncated output \(original token count: (\d+)\)',b) if isinstance(b,str) else None
   if match and int(match[1])==z.get('original_token_count'):actual=True
  if actual:trunc.append(raw)
-taskStart=max(i for i,r in enumerate(rs,1) if r['type']=='event_msg' and r.get('payload',{}).get('type')=='task_started');out=D/f'source{order}{suffix}-procedural-diagnostics.json';assert not out.exists();m.write(out,{'taskStartLine':taskStart,'newTaskNonzero':sum(z['callLine']>taskStart for z in bad),'newTaskTruncated':sum(z['callLine']>taskStart for z in trunc),'owner':m.O,'sourceNativeId':x['actors']['author'+str(order)]['threadId'],'nativeJournalActual':str(p),'actualCompactions':sum(r['type']=='compacted' for r in rs),'nonzeroOriginals':bad,'truncatedOriginals':trunc,'allUncured':True,'noEmbeddedHistoricalExecutionsCountedAsNew':True})
+taskStart=max(i for i,r in enumerate(rs,1) if r['type']=='event_msg' and r.get('payload',{}).get('type')=='task_started');out=D/f'source{order}{suffix}-procedural-diagnostics.json';assert not out.exists();m.write(out,{'taskStartLine':taskStart,'newTaskNonzero':sum(z['callLine']>taskStart for z in bad),'newTaskTruncated':sum(z['callLine']>taskStart for z in trunc),'owner':m.O,'sourceNativeId':x['actors'][actor_key]['threadId'],'nativeJournalActual':str(p),'actualCompactions':sum(r['type']=='compacted' for r in rs),'nonzeroOriginals':bad,'truncatedOriginals':trunc,'allUncured':True,'noEmbeddedHistoricalExecutionsCountedAsNew':True})
 entry=x['pendingVideoGameHistory'+str(order)];entry['cycle1ProceduralDeviations' if suffix else 'proceduralDeviations']={'path':str(out),'rawSHA256':m.raw(out),'uncured':True,'nonzeroOriginals':len(bad),'truncatedOriginals':len(trunc),'contentPASSAndQAdoNotAssertProceduralCompliance':True};m.write(D/'manifest.json',x)
 print(m.savecode([pathlib.Path(__file__),out,D/'manifest.json'],'Preserve exact author procedural originals separately from content credit'))
 print({'order':order,'nonzeroOriginals':len(bad),'truncatedOriginals':len(trunc),'UNCURED':True})
