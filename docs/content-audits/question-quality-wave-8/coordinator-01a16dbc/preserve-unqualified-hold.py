@@ -1,0 +1,48 @@
+"""Freeze an unchanged terminal AUTHOR HOLD, including malformed raw metadata.
+No normalization, qualification, source adoption, apply, QA or independent review.
+"""
+import pathlib, json, importlib.util, sys, re
+D=pathlib.Path(__file__).parent
+s=importlib.util.spec_from_file_location('m',D/'owned-tools.py')
+m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+order=int(sys.argv[1]);key=sys.argv[2];cursor=sys.argv[3]
+x=m.read(D/'manifest.json');actor=x['actors'][key];uid=actor['threadId']
+R=D/f'source-video-game-history{order}';task=m.read(pathlib.Path(actor['task']))
+assert task['owner']==m.O and task['authorNativeId']==uid and order in x['ownedSourceOrders']
+nr=[json.loads(l) for l in pathlib.Path(actor['nativeJournal']).open()]
+assert [r['payload']['id'] for r in nr if r.get('type')=='session_meta']==[uid]
+assert next(r['payload']['type'] for r in reversed(nr) if r.get('type')=='event_msg' and r['payload'].get('type') in ['task_started','task_complete'])=='task_complete'
+ca,sp,ps=[m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
+e=ca['entries'][0];q=m.read(m.C/'src/content/topics/video-game-history.json')['questions'][order-1]
+assert ca['sourceNativeId']==sp['sourceNativeId']==uid
+assert e['status']=='HOLD' and e['sourceOrder']==order and e['id']==task['id']==q['id']
+assert e['beforeCard']==e['proposedCard']==q and e['beforeHash']==e['afterHash']==m.sha(q)==task['beforeHash']
+assert ca['cycle']==sp['cycle']==0
+entry=sp['entries'][0];assert entry['status']=='HOLD' and entry['id']==q['id']
+variants=entry['fourFullPromptAnswerNoteAssessments'];assert len(variants)==4
+for v in variants:
+ a=q['answers'][v['slot']]
+ assert v['fullPrompt']==q['prompt'] and v['answer']==a['text'] and v['note']==a['note']
+defects=[]
+for k,expected in [('sourceNativeId',uid),('topicId','video-game-history'),('cycle',0)]:
+ if ps.get(k)!=expected:defects.append({'file':'peer-snapshot.json','missingOrDifferentField':k,'actual':ps.get(k),'required':expected,'uncured':True})
+cp=m.read(pathlib.Path(x['canonicalCheckpoint']));assert cp['owner']==m.O and q['id'] in cp['currentRemainingIds']
+assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and m.read(m.P/'.flow-leases.json')=={}
+assert not (D/f'video-game-history{order}-native-proof.json').exists()
+start=max(i for i,r in enumerate(nr,1) if r.get('type')=='event_msg' and r['payload'].get('type')=='task_started')
+calls=[]
+for i,r in enumerate(nr,1):
+ p=r.get('payload',{});inp=re.sub(r'^// @exec:[^\n]*\n','',p.get('input','').lstrip())
+ if p.get('type')=='custom_tool_call' and re.match(r'^(?:(?:const|let|var)\s+\w+\s*=\s*|text\(\s*)?await\s+tools\.web__run\s*\(',inp):
+  outs=[j for j,z in enumerate(nr,1) if z.get('payload',{}).get('type')=='custom_tool_call_output' and z['payload'].get('call_id')==p['call_id']]
+  assert len(outs)==1;calls.append({'callLine':i,'call':p['input'],'resultLine':outs[0]})
+info=next(r['payload']['info'] for r in reversed(nr) if r['payload'].get('type')=='token_count')
+proof={'owner':m.O,'sourceNativeId':uid,'nativeJournal':actor['nativeJournal'],'actualCompactions':sum(r.get('type')=='compacted' for r in nr),'lastInput':info['last_token_usage']['input_tokens'],'modelWindow':info['model_context_window'],'packet':str(R),'rawFileSHA256':{str(p.relative_to(R)):m.raw(p) for p in R.rglob('*') if p.is_file()},'status':'HOLD','beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'currentTaskStartLine':start,'networkCalls':[v for v in calls if v['callLine']>start],'priorTaskNetworkCalls':[v for v in calls if v['callLine']<start],'qualityCredit':0,'noQualification':True,'unapplied':True,'noIndependentInitial':True,'rawSchemaDefectsUncured':defects,'missingTripleHashes':[v['slot'] for v in variants if 'tripleSHA256' not in v],'rawBytesUnchanged':True}
+p=D/f'video-game-history{order}-native-proof.json';m.write(p,proof)
+actor.update(stage=f'IDLE_AFTER_SOURCE{order}_AUTHORHOLD_UNQUALIFIED',actualCompactions=proof['actualCompactions'],lastTaskEvent='task_complete',lastInput=proof['lastInput'],modelWindow=proof['modelWindow'],cursor=cursor,nativePreflightVerifiedBy=m.O)
+x[f'pendingVideoGameHistory{order}']={'id':q['id'],'status':'AUTHORHOLD_TERMINAL_UNAPPLIED','qualityCredit':0,'applied':False,'beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'rawNativeProof':str(p),'sourceActualCompactions':proof['actualCompactions'],'noQualificationApplyQAInitial':True,'noQA':True,'noIndependentInitial':True,'ordinaryCycle2Prohibited':True,'rawSchemaDefectsUncured':defects,'authorHoldSourceproof':str(R/'sourceproof.json')}
+x['readyQueue']=[v for v in x.get('readyQueue',[]) if v.get('sourceOrder')!=order]
+x['sourceActorKeys']=[v for v in x['sourceActorKeys'] if v!=key]
+m.write(D/'manifest.json',x)
+cc=m.savecode([p,D/'manifest.json',pathlib.Path(__file__),*[p for p in R.rglob('*') if p.is_file()]],f'Preserve SOURCE{order} terminal raw AUTHORHOLD without qualification')
+print(json.dumps({'commit':cc,'order':order,'qualityCredit':0,'unapplied':True,'rawSchemaDefects':len(defects),'actualCompactions':proof['actualCompactions'],'networkTotalCalls':len(calls),'CURRENT':x['CURRENT']},ensure_ascii=False))
