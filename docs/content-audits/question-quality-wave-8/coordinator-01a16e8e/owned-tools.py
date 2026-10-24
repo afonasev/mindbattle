@@ -321,6 +321,44 @@ def alias_explicit_root_candidate(candidate,sp,ps,R):
 def save(root,ref,files,message):
  paths=sorted(set(str(pathlib.Path(p).relative_to(root)) for p in files));idx=root/h.git(root,'rev-parse','--git-path','index');expected=read(D/'manifest.json')['foreignIndexes']['planning' if root==P else 'code'];assert raw(idx)==expected, 'Foreign index differs from exact task boundary';return h.save(root,ref,paths,message,expected)
 def savecode(files,message):return save(C,'refs/heads/codex/question-quality-wave-6',files,message)
+def alias_explicit_global_inventory_file(candidate,sp,ps,R):
+ """Expose an already explicit global inventory file binding; raw stays immutable."""
+ g=ps.get('globalMAIN',{})
+ if 'inventoryPath' not in g or 'inventoryFileSHA256' not in g:return
+ if 'questions' in ps.get('sameTopicMAIN',{}):return
+ import copy
+ R=pathlib.Path(R);assert R.parent==D
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ assert candidate['cycle']==sp['cycle']==ps['cycle']
+ e=candidate['entries'][0];p=pathlib.Path(g['inventoryPath']);p=p if p.is_absolute() else C/p
+ assert p.is_relative_to(R) and raw(p)==g['inventoryFileSHA256']
+ inv=read(p);full=inv['globalMAIN'];same=inv['sameTopicMAIN'];peers=inv['actualCurrentPeers']
+ assert same['topicId']==e['topicId'] and same['questionCount']==100
+ topic=read(C/same['path']);assert topic['id']==e['topicId']
+ assert same['fileSHA256']==raw(C/same['path']) and same['questions']==topic['questions']
+ assert len(peers)==100 and [v['sourceOrder'] for v in peers]==list(range(1,101))
+ assert [v['card'] for v in peers]==topic['questions']
+ assert all(v['topicId']==e['topicId'] and v['id']==v['card']['id'] and v['sha256']==sha(v['card']) for v in peers)
+ assert full['topicFileCount']==g['topicFileCount']==110 and full['questionCount']==g['questionCount']==11000
+ assert full['rowsCanonicalSHA256']==g['rowsCanonicalSHA256']
+ assert full['allCurrentFileByteBindings']==g['allCurrentFileByteBindings']
+ rows=[]
+ for b in full['allCurrentFileByteBindings']:
+  assert raw(C/b['path'])==b['sha256'];t=read(C/b['path'])
+  rows.extend({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']} for q in t['questions'])
+ assert len(rows)==11000 and sha(rows)==full['rowsCanonicalSHA256'] and full['rows']==rows
+ byid={v['id']:v for v in peers};assessed=copy.deepcopy(ps['actualCurrentPeers'])
+ for v in assessed:
+  b=byid[v['id']];assert all(v[k]==b[k] for k in ['id','topicId','sourceOrder','card','sha256'])
+ assert ps['sameTopicMAIN']['questionCount']==100
+ original_same=copy.deepcopy(ps['sameTopicMAIN'])
+ for k in ['sourceInventoryPath','sourceInventorySHA256']:assert k not in sp
+ ps['originalRelevantCurrentPeers']=assessed
+ ps['actualCurrentPeers']=copy.deepcopy(peers)
+ ps['sameTopicMAIN']={**copy.deepcopy(same),'sourceInventoryPath':str(p),'sourceInventorySHA256':raw(p)}
+ g.update(rows=copy.deepcopy(rows),sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
+ sp.update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
+ ps['technicalExplicitGlobalInventoryFileAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalGlobalPathPointer':'/globalMAIN/inventoryPath','originalGlobalDigestPointer':'/globalMAIN/inventoryFileSHA256','inventoryPath':str(p),'inventoryFileSHA256':raw(p),'originalSameTopicContainer':original_same,'assessedPeerCountUnchanged':len(assessed),'machineBindings':100,'operation':'Exact original explicit path/file digest binds generated full100/110/11000 inventory. Full machine bodies exposed separately from unchanged assessed peers. No new body, hash hydration, source, semantic judgment, raw edit or quality credit.'}
 def saveplan(files,message):
  with flow.locked():flow.lease('acquire','planning',O)
  try:return save(P,'refs/heads/codex/question-revision-resume-20261014',files,message)
