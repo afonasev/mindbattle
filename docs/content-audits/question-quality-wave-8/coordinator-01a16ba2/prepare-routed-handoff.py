@@ -16,15 +16,32 @@ verification=m.read(D/'handoff-verification.json');assert verification['CURRENT'
 rows=[json.loads(l) for l in pathlib.Path(x['rootNativeAudit']['nativeJournal']).open()]
 assert [r['payload']['id'] for r in rows if r.get('type')=='session_meta']==[m.O]
 info=next(r['payload']['info'] for r in reversed(rows) if r.get('payload',{}).get('type')=='token_count');comp=sum(r.get('type')=='compacted' for r in rows)
-next_order=max(own)+1;topic=x['activeRoute']['topicId'];q=m.read(m.C/f'src/content/topics/{topic}.json')['questions'][next_order-1]
-assert q['id'] not in cp['currentEligibleCompletedIds'];f=next(v for v in cp['selectedCards'] if v['questionId']==q['id']);assert f['topicId']==topic and f['difficulty']==q['difficulty'] and f['correctIndex']==q['correctIndex']
-nextcard={'id':q['id'],'topicId':topic,'sourceOrder':next_order,'difficulty':q['difficulty'],'correctIndex':q['correctIndex'],'hash':m.sha(q)}
+next_order=max(own)+1;topic=x['activeRoute']['topicId'];topic_cards=m.read(m.C/f'src/content/topics/{topic}.json')['questions'];route_frontier=False
+if next_order<=len(topic_cards):
+ q=topic_cards[next_order-1]
+ assert q['id'] not in cp['currentEligibleCompletedIds'];f=next(v for v in cp['selectedCards'] if v['questionId']==q['id']);assert f['topicId']==topic and f['difficulty']==q['difficulty'] and f['correctIndex']==q['correctIndex']
+ nextcard={'id':q['id'],'topicId':topic,'sourceOrder':next_order,'difficulty':q['difficulty'],'correctIndex':q['correctIndex'],'hash':m.sha(q)}
+else:
+ # Canonical topic boundary, never index101 into a100-card topic or reopen its HOLDs.
+ assert next_order==len(topic_cards)+1 and x['routeFrontier']['requiresSupportedBinding']
+ frontier=m.read(D/'route-frontier.json');assert frontier['owner']==m.O and frontier['CURRENT']==n and frontier['remaining']==2000-n
+ assert frontier['closedTopic']==topic and frontier['requiresSupportedNewOwnerRouteBindingBeforeSOURCE']
+ wave=next(w for w in cp['waves'] if w['changeId']==x['activeRoute']['waveChangeId']);selection={e['questionId']:e for e in cp['selectedCards']}
+ topic_order=list(dict.fromkeys(selection[qid]['topicId'] for qid in wave['selectedIds']));assert topic_order==frontier['topicOrderFromOriginalSelectedIds']
+ nextcard=frontier['nextUntouched'];assert nextcard['topicId']==topic_order[topic_order.index(topic)+1]
+ next_cards=m.read(m.C/f"src/content/topics/{nextcard['topicId']}.json")['questions'];matches=[(i,q) for i,q in enumerate(next_cards,1) if q['id']==nextcard['id']];assert len(matches)==1
+ position,q=matches[0];assert position==nextcard['sourceOrder']==1 and q['id'] not in cp['currentEligibleCompletedIds']
+ f=selection[q['id']];assert f['topicId']==nextcard['topicId'] and f['difficulty']==q['difficulty']==nextcard['difficulty'] and f['correctIndex']==q['correctIndex']==nextcard['correctIndex']
+ assert m.sha(q)==nextcard['hash']==f['baselineCanonicalSha256'];route_frontier=True
 a=x['actors']['reviewer'];retained=None
 if not a.get('archived',False):
  assert a['stage'].startswith('IDLE_') and a['lastTaskEvent']=='task_complete'
  retained=dict(a)
 reason={'actualCompactions':comp,'lastInput':info['last_token_usage']['input_tokens'],'window':info['model_context_window'],'remaining':info['model_context_window']-info['last_token_usage']['input_tokens'],'meaning':'Real remaining context before new-card routing, not a summary reset; closed owned slice preserved for one replacement coordinator.'}
 next_action='One READONLY native successor ACK, supported EXACT4 release then ACTIVATE. Successor takes all4/CP/state/full2000goal under private CAS and short P lease, archives stopped predecessor, continues full2000 autonomously without new human GO. Fresh actual native/context budget before next SOURCE or reader assignment; all old/new HOLD0 and attempt/fix/alias fences persist.'
+if route_frontier:
+ reason['meaning']='Actual remaining native context at the canonical topic frontier; preserve the single-topic owned range and intake before a new bounded route. No compaction/context reset and no broad multi-topic helper rewrite.'
+ next_action+=' At this frontier personally read route-frontier.json; existing helpers remain bound to human-medicine. Only after durable takeover and parent archive bind own activeRoute/readScope/templates/paths/narrow helpers to exact canonical video-game-history/wave9, then start untouched1. No SOURCE via legacy human-medicine paths; no old HOLD reopening.'
 x.update(phase='READY_FOR_READONLY_SUCCESSOR_CURRENT'+str(n),claimsOwner=m.O,heldOwn=list(x['claims']),nextUntouched=nextcard,currentWork={'stage':'CLOSED_OWNED_SLICE_CURRENT'+str(n),'CURRENT':n,'remaining':2000-n,'fullGoal':2000},next=next_action,pendingBoundedWork=[],pendingReviews=[],sourceActorKeys=[],currentSourceActors=[],currentIndependentActors=[],currentSourceActorsCount=0,readyQueue=[],retainedIdleReviewer=retained,noRetainedIdleReviewer=retained is None,noRetainedIdleAuthor=True,retainedIdleAuthorsCurrentOwner=[],rootContextReason=reason,actualCompactions=comp,rootActualCompactions=comp,currentOwnedHandoffHelper=str(pathlib.Path(__file__)),closingVerificationCode=str(D/'verify-routed-closure.py'),closingVerificationPassed=True,handoffVerification=str(D/'handoff-verification.json'),continuationPoint=str(D/'continuation-point.json'),technicalDiagnosticsAuthority=str(D/'technical-native-diagnostics.json'),pendingSuccessor=None,successor=None,successorThreadId=None,successorStatus='AWAITING_READONLY_BOOTSTRAP',ordinaryWorkActivated=False,leaseHeld=False,at=datetime.datetime.now(datetime.timezone.utc).isoformat())
 x['readScope']={**x['readScope'],'ownD':str(D),'nextUntouched':nextcard}
 x['rootNativeAudit'].update(actualCompactions=comp,lastInput=reason['lastInput'],modelWindow=reason['window'])
