@@ -83,7 +83,8 @@ for cid,b in bodies:
  except (ValueError,TypeError):continue
  if not isinstance(z,dict) or z.get('READONLY_BARRIER')!='PASS':continue
  assert z['CURRENT']==x['CURRENT'] and z['remaining']==x['remaining'] and z['successorRegistered']==S
- assert z['HEAD']==m.h.git(m.C,'rev-parse','HEAD')==z['freshOriginFeature']
+ assert z['HEAD']==z['freshOriginFeature']
+ if z['HEAD']!=m.h.git(m.C,'rev-parse','HEAD'):continue  # Historical original PASS retained in success; latest HEAD needs its own PASS.
  barriers.append({'actualCompletionCallLine':calls[cid][0],'call_id':cid,'exitCode':0,'boundedOriginalPASS':z})
 assert barriers, 'Actual exit0 checker completion required; async launch is not completion'
 finals=[(i,r) for i,r in enumerate(rows,1) if r.get('payload',{}).get('type')=='message' and r['payload'].get('role')=='assistant' and r['payload'].get('phase')=='final_answer']
