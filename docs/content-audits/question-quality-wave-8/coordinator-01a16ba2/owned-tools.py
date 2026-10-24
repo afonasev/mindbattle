@@ -18,6 +18,31 @@ def write(p,v):
  p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
 def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+def alias_source96_distinct99_preimage(candidate,sp,ps,R):
+ """Exact original99 distinct bodies plus separately bound candidate self; no judgment."""
+ R=pathlib.Path(R)
+ if R.name!='source-human-medicine96' or candidate['sourceNativeId']!='01a16bab-b3d4-7be3-906c-3ed46a56bdb8':return
+ import copy,subprocess
+ assert R.parent==D and candidate['cycle']==sp['cycle']==ps['cycle']==0
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ expected={'candidate.json':'3261163c52d3b7139acc900ce63bca6a806eaf9c22c79071cafe4963ffa57454','sourceproof.json':'ff73d7a53384dc208b17e4bfe384951e7ed4eccfed18113e720675744815adb4','peer-snapshot.json':'3cfb5530bb43e28bf7d10a259d782080f2bbdb60a2b3ccebf30ebf8b8eda22e4'}
+ for name,digest in expected.items():
+  assert raw(R/name)==digest
+  assert (R/name).read_bytes()==subprocess.check_output(['git','--no-optional-locks','-C',str(C),'show','2e29932dee0e85251b5b791c1e6c0689a10a0985:'+str((R/name).relative_to(C))])
+ assert len(candidate['entries'])==len(sp['entries'])==1
+ e=candidate['entries'][0];assert e['id']=='human-medicine-ext-epinephrine' and e['sourceOrder']==96 and e['topicId']=='human-medicine'
+ assert sha(e['beforeCard'])==e['beforeHash'] and sha(e['proposedCard'])==e['afterHash']
+ same=ps['sameTopicMAIN'];assert same=={'path':'src/content/topics/human-medicine.json','topicId':'human-medicine','fileSHA256':raw(C/'src/content/topics/human-medicine.json'),'questionCount':100}
+ topic=read(C/same['path']);assert topic['questions'][95]==e['beforeCard']
+ peers=ps['actualCurrentPeers'];assert len(peers)==99 and [v['sourceOrder'] for v in peers]==[i for i in range(1,101) if i!=96]
+ assert all(v['topicId']=='human-medicine' and v['card']==topic['questions'][v['sourceOrder']-1] and v['id']==v['card']['id'] and v['sha256']==sha(v['card']) for v in peers)
+ assert all(v['id']!=e['id'] for v in peers)
+ self_binding={'id':e['id'],'topicId':e['topicId'],'sourceOrder':96,'card':copy.deepcopy(e['beforeCard']),'sha256':e['beforeHash'],'countedAsDistinctPeer':False}
+ ps['originalDistinctCurrentPeers']=copy.deepcopy(peers)
+ ps['actualCurrentPeers']=sorted([*peers,self_binding],key=lambda v:v['sourceOrder'])
+ same['questions']=[copy.deepcopy(v['card']) for v in ps['actualCurrentPeers']]
+ assert same['questions']==topic['questions']
+ ps['technicalSource96Distinct99PreimageAlias']={'rawFreeze':'2e29932dee0e85251b5b791c1e6c0689a10a0985','rawCriticalSHA256':expected,'originalPeerPointer':'/actualCurrentPeers','originalSelfPointer':'candidate.json#/entries/0/beforeCard','distinctPeerCountUnchanged':99,'currentBindings':100,'originalFormatGapUncured':True,'operation':'Existing99 distinct full bodies plus exact candidate beforeCard/hash/order become100 technical bindings. Self countedAsDistinctPeer=false. No new body, source, peer assessment, semantic decision or raw edit.'}
 def alias_explicit_inventory_file_digest(candidate,sp,ps,R):
  """Alias an explicit inventory file digest only after full live bindings."""
  g=ps.get('globalMAIN',{})
