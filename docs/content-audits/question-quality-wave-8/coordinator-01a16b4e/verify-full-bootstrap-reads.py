@@ -28,7 +28,10 @@ for path, span in expected:
     matches = []
     for line, row in enumerate(rows, 1):
         p = row.get('payload', {}); call = calls.get(p.get('call_id'))
-        if row.get('type') != 'response_item' or p.get('type') != 'custom_tool_call_output' or not call or needle not in call[1]:
+        # JS single-quoted command strings escape the sed apostrophes. This is
+        # only a locator comparison; exact output bytes remain authoritative.
+        invocation = call[1].replace("\\'", "'") if call else ''
+        if row.get('type') != 'response_item' or p.get('type') != 'custom_tool_call_output' or not call or needle not in invocation:
             continue
         blocks = p.get('output', [])
         if not isinstance(blocks, list):
