@@ -582,12 +582,23 @@ def alias_same_topic_current_peer_container(candidate,sp,ps,R):
 def alias_exact_videogame2_distinct_peers(candidate,sp,ps,R):
  """Exact native raw99 distinct plus explicit candidate self; no new judgment."""
  R=pathlib.Path(R)
- if R.name!='source-video-game-history2' or candidate['sourceNativeId']!='01a16c14-487b-7060-8311-a40288bb963b':return
+ if R.name not in ['source-video-game-history2','source-video-game-history2-cycle1'] or candidate['sourceNativeId']!='01a16c14-487b-7060-8311-a40288bb963b':return
  import copy,subprocess
- assert R.parent==D and candidate['cycle']==sp['cycle']==ps['cycle']==0
+ cycle=1 if R.name.endswith('-cycle1') else 0
+ assert R.parent==D and candidate['cycle']==sp['cycle']==ps['cycle']==cycle
  assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
  expected={'candidate.json':'e480b2d671e1259299d14a9964e9342b4aaacc27219bd12369fa65f8d1b86382','sourceproof.json':'916891162ee0d59c5d171634aeed74a86bb453397c5aea4581fda96e7e8eff96','peer-snapshot.json':'31553faa80c1a6228a0eca3e059280af87828d0e3173491ec38c683ac47d2312'}
  freeze='08efc06fa1ff87f7210a435a0e0e57071bb621c2'
+ if cycle==1:
+  expected={'candidate.json':'6012c41bb4e953334a7ee73387e57be85c0bbbd8cdfed9ab92308981e7b432ff','sourceproof.json':'54128e0505c2b1e445a9eee9282a76d0b78bcdeffcba8227cf4839d8284365ec','peer-snapshot.json':'30d70aadad7dd41ef647f5937b3c71000fb3acd910e66b958d72af5aa960090a'}
+  freeze='80dfe074d5cab9984519491634d09affb5d65f45'
+  prior=read(R.with_name('source-video-game-history2')/'candidate.json')['entries'][0]
+  initial=read(D/'independent-video-game-history2-initial/receipt.json')['entries'][0]
+  current=candidate['entries'][0]
+  assert initial['stage']=='INITIAL' and initial['status']=='FIX' and initial['defects']
+  assert current['beforeCard']==initial['currentCard']==prior['proposedCard']
+  assert current['beforeHash']==initial['currentCardCanonicalSHA256']==prior['afterHash']==sha(current['beforeCard'])
+
  for name,digest in expected.items():
   assert raw(R/name)==digest
   assert (R/name).read_bytes()==subprocess.check_output(['git','-C',str(C),'show',freeze+':'+str((R/name).relative_to(C))])
