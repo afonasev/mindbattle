@@ -185,7 +185,23 @@ def alias_explicit_root_candidate(candidate,sp,ps,R):
  assert R.parent==D and uid in x['createdNativeThreadsCurrentOwner']
  assert candidate['sourceOrder'] in x['ownedSourceOrders']
  assert uid==sp['sourceNativeId']==ps['sourceNativeId']
- assert candidate['cycle']==sp['cycle']==ps['cycle']==0
+ cycle=candidate['cycle'];assert cycle==sp['cycle']==ps['cycle']
+ if cycle==1:
+  # Only this exact preserved directed98 raw triple may use the root-field alias.
+  assert R.name=='source-human-medicine98-cycle1' and uid=='01a16bce-a09e-7252-975d-487bfcf95800'
+  expected={'candidate.json':'b19c4348595fbd7096bdaa0d1e4e121950bc424f57eb1a570f3fffc1dd993de7','sourceproof.json':'b73046af4cde0ca8d266712b1a899fbeb07dfd36f532eda51c913cc7cb757376','peer-snapshot.json':'f14554d7c89975d837ffe5df7ae3450efbec5df16aa5d6c5731fea2b959955f5'}
+  import subprocess
+  for name,digest in expected.items():
+   assert raw(R/name)==digest
+   assert (R/name).read_bytes()==subprocess.check_output(['git','--no-optional-locks','-C',str(C),'show','8dd60f49c2e7ed5a99d3352e56c54daba612748f:'+str((R/name).relative_to(C))])
+  initial=read(D/'independent-human-medicine98-initial/receipt.json')['entries'][0]
+  prior=read(D/'qualified-source-human-medicine98/candidate.json')['entries'][0]
+  assert initial['stage']=='INITIAL' and initial['status']=='FIX' and initial['defects']
+  assert candidate['id']==initial['id']==prior['id']=='human-medicine-ext-prolactin'
+  assert candidate['beforeCard']==initial['currentCard']==prior['proposedCard']
+  assert candidate['beforeHash']==initial['currentCardCanonicalSHA256']==prior['afterHash']==sha(candidate['beforeCard'])
+  candidate['technicalExact98Cycle1RootAliasGuard']={'rawFreeze':'8dd60f49c2e7ed5a99d3352e56c54daba612748f','rawCriticalSHA256':expected,'originalFormatGapUncured':True,'operation':'Only exact same-author solecycle1 with beforeCard bound to its own INITIAL FIX and prior proposal. Existing root-field alias below, no new literal, source or judgment.'}
+ else:assert cycle==0
  assert len(sp['entries'])==1
  keys=['id','topicId','sourceOrder','status','beforeCard','beforeHash','proposedCard','afterHash','fieldGroups']
  e={k:copy.deepcopy(candidate[k]) for k in keys};q=e['proposedCard'];b=e['beforeCard']
