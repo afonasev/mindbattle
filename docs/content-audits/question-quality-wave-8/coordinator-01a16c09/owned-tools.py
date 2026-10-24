@@ -133,7 +133,7 @@ def alias_explicit_inventory_binding(candidate,sp,ps,R):
   assert prior['cycle']==0 and prior['sourceNativeId']==candidate['sourceNativeId']
   assert current['id']==original['id'] and current['beforeCard']==original['proposedCard']
   assert current['beforeHash']==original['afterHash']==sha(current['beforeCard'])
-  initial=read(D/f"independent-human-medicine{current['sourceOrder']}-initial/receipt.json")['entries'][0]
+  initial=read(D/f"independent-{current['topicId']}{current['sourceOrder']}-initial/receipt.json")['entries'][0]
   assert initial['status']=='FIX' and initial['currentCard']==current['beforeCard']
  e=candidate['entries'][0];b=ps['inventoryBinding'];p=pathlib.Path(b['path'])
  if not p.is_absolute():
