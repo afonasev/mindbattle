@@ -194,12 +194,20 @@ def alias_explicit_cross_topic_peers(candidate,sp,ps,R):
  container=containers[0]
  import copy
  assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
- peers=ps[container]
+ peers=copy.deepcopy(ps[container]);position_aliases=[]
  for peer in peers:
   t=read(C/('src/content/topics/'+peer['topicId']+'.json'))
+  if 'sourceOrder' not in peer:
+   matches=[(i,q) for i,q in enumerate(t['questions'],1) if q['id']==peer['id']]
+   assert len(matches)==1
+   position,q=matches[0]
+   assert peer['card']==q and peer['sha256']==sha(q)
+   peer['sourceOrder']=position
+   position_aliases.append({'id':peer['id'],'topicId':peer['topicId'],'sourceOrder':position,'originalCardAndHashExact':True})
   q=t['questions'][peer['sourceOrder']-1]
   assert peer['id']==q['id'] and peer['card']==q and peer['sha256']==sha(q)
- ps['crossCatalogClosestFullBodies']=copy.deepcopy(peers)
+ ps['crossCatalogClosestFullBodies']=peers
+ if position_aliases:ps['technicalExactCrossTopicPositionAlias']={'bindings':position_aliases,'operation':'Position derived only from unique exact original ID plus full body/hash in CURRENT. Original container/raw and semantic assessments unchanged; original root KeyError uncured.'}
  ps['technicalCrossTopicContainerAlias']={'rawPeerSnapshot':str(pathlib.Path(R)/'peer-snapshot.json'),'rawPeerSHA256':raw(pathlib.Path(R)/'peer-snapshot.json'),'originalPointer':'/'+container,'operation':'Exact original explicit foreign-topic full bodies and hashes verified against CURRENT, redundant container name only; raw and bilateral assessments unchanged.'}
 def alias_explicit_inventory_binding(candidate,sp,ps,R):
  """Expose only the author's explicit SHA-bound inventory; raw stays immutable."""
