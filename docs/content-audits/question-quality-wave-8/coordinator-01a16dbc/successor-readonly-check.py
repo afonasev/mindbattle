@@ -41,8 +41,10 @@ for tid in {a['topicId'] for a in selected.values()}:
 assert frozen==2000 and len(cp['completedCardHashes'])==n
 assert {a['questionId'] for a in cp['completedCardHashes']}==done
 assert all(sha(current[a['questionId']])==a['cardCanonicalSha256'] for a in cp['completedCardHashes'])
-reg=read(x['activeRoute']['sourceCheckpoint'])
-assert reg['ownerNativeId']==O and reg['sourceEditorialCompletedCards']==len(reg['cards'])
+reg_path=pathlib.Path(x['activeRoute']['sourceCheckpoint']);reg=read(reg_path)
+assert subprocess.check_output(['git','-C',str(C),'show','HEAD:'+str(reg_path.relative_to(C))])==reg_path.read_bytes()
+assert isinstance(reg['ownerNativeId'],str) and reg['ownerNativeId']
+assert reg['sourceEditorialCompletedCards']==len(reg['cards'])
 assert reg['sourceEditorialCompletedFields']==6*len(reg['cards']) and reg['latestBatch']['CURRENT']==n
 accepted={a['questionId']:a['cardCanonicalSha256'] for a in cp['completedCardHashes']}
 assert len({a['questionId'] for a in reg['cards']})==len(reg['cards'])
@@ -94,4 +96,4 @@ assert read(C/f'src/content/topics/{topic}.json')['questions'][order-1]['id']==n
 assert next_card['id'] in remaining and current[next_card['id']]==base[next_card['id']]
 assert sha(current[next_card['id']])==next_card['hash']
 assert current[next_card['id']]['correctIndex']==next_card['correctIndex'] and current[next_card['id']]['difficulty']==next_card['difficulty']
-print(json.dumps({'READONLY_BARRIER':'PASS','CURRENT':n,'remaining':left,'owners':O,'exactClaims':4,'leaseEmpty':True,'all2000Frozen':True,'allAcceptedHashesExact':True,'canonicalCards':len(reg['cards']),'canonicalFields':reg['sourceEditorialCompletedFields'],'ownedFilesExactCurrentHEAD':count,'HEAD':head,'freshOriginFeature':refs['refs/heads/'+x['codeBranch']],'allFourRemotePushIdentical':True,'foreignIndexesExact':True,'actualQAReports':len(qa),'lastActualQA':qa[-1]['testedCatalogCommit'],'all110TopicFilesSameAsLastQA':True,'retainedReader':G,'readerOwnReceipts':r['readerOwnReceiptCount'],'readerActualCompactions':0,'readerRemaining':info['model_context_window']-info['last_token_usage']['input_tokens'],'fences':fences['totalFences'],'nextUntouched':next_card,'successorRegistered':x['successorThreadId'],'allDiagnosticsUncured':True,'noWritesOrQARerun':True},ensure_ascii=False))
+print(json.dumps({'READONLY_BARRIER':'PASS','CURRENT':n,'remaining':left,'owners':O,'exactClaims':4,'leaseEmpty':True,'all2000Frozen':True,'allAcceptedHashesExact':True,'canonicalHistoricalWriter':reg['ownerNativeId'],'canonicalCards':len(reg['cards']),'canonicalFields':reg['sourceEditorialCompletedFields'],'ownedFilesExactCurrentHEAD':count,'HEAD':head,'freshOriginFeature':refs['refs/heads/'+x['codeBranch']],'allFourRemotePushIdentical':True,'foreignIndexesExact':True,'actualQAReports':len(qa),'lastActualQA':qa[-1]['testedCatalogCommit'],'all110TopicFilesSameAsLastQA':True,'retainedReader':G,'readerOwnReceipts':r['readerOwnReceiptCount'],'readerActualCompactions':0,'readerRemaining':info['model_context_window']-info['last_token_usage']['input_tokens'],'fences':fences['totalFences'],'nextUntouched':next_card,'successorRegistered':x['successorThreadId'],'allDiagnosticsUncured':True,'noWritesOrQARerun':True},ensure_ascii=False))
