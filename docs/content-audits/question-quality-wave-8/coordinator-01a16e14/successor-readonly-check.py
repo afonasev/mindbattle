@@ -4,7 +4,7 @@ D=pathlib.Path(__file__).parent
 C=D.parents[3]
 P=pathlib.Path('/Users/eaafonasev/Projects/mindbattle/planning')
 O='01a16e14-682a-7d71-97be-918668832b34'
-G='01a16d2b-da45-79f0-8979-dd4a2a9e4a06'
+G='01a16e3d-bcb1-7460-aeff-2065e3bc8482'
 def read(p):return json.loads(pathlib.Path(p).read_text())
 def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
@@ -70,7 +70,7 @@ assert all(a.get('archived') for key,a in x['actors'].items() if key.startswith(
 assert not x['pendingReviews'] and not x['pendingBoundedWork'] and not x['readyQueue'] and not x.get('pendingBootstrapActors')
 r=read(D/'retained-reader-handoff.json');a=x['actors']['reviewer']
 assert a['threadId']==r['retainedIdleReader']['threadId']==G
-assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])>=5
+assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])==a['ownReceiptCount']==2
 for path,binding in r['readerOwnReceipts'].items():assert raw(path)==binding['rawSHA256']
 inherited=read(r['inheritedImmutable'])
 assert all(path in r['readerOwnReceipts'] and r['readerOwnReceipts'][path]['rawSHA256']==binding['rawSHA256'] for path,binding in inherited['readerOwnReceipts'].items())
