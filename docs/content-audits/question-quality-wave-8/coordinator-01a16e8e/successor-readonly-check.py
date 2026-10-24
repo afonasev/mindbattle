@@ -70,7 +70,7 @@ assert all(a.get('archived') for key,a in x['actors'].items() if key.startswith(
 assert not x['pendingReviews'] and not x['pendingBoundedWork'] and not x['readyQueue'] and not x.get('pendingBootstrapActors')
 r=read(D/'retained-reader-handoff.json');a=x['actors']['reviewer']
 assert a['threadId']==r['retainedIdleReader']['threadId']==G
-assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])==a['ownReceiptCount']==2
+assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])==a['ownReceiptCount']==8
 for path,binding in r['readerOwnReceipts'].items():assert raw(path)==binding['rawSHA256']
 inherited=read(r['inheritedImmutable'])
 assert all(path in r['readerOwnReceipts'] and r['readerOwnReceipts'][path]['rawSHA256']==binding['rawSHA256'] for path,binding in inherited['readerOwnReceipts'].items())
