@@ -78,7 +78,8 @@ for p,b in zip(files,bindings):
  assert b['sha256']==(__import__('hashlib').sha256(baseline_bytes).hexdigest() if p==tp else m.raw(p))
  oldrows.extend(projection(before['id'],q) for q in before['questions']);currentrows.extend(projection(now['id'],q) for q in now['questions'])
 assert len(oldrows)==len(currentrows)==11000 and ps['globalMAIN']['rows']==oldrows and ps['globalMAIN']['rowsCanonicalSHA256']==m.sha(oldrows)
-assert [i for i,(a,b) in enumerate(zip(oldrows,currentrows)) if a!=b]==[i for i,r in enumerate(oldrows) if r['id']==changed_id]
+expected_main_delta=[i for i,r in enumerate(oldrows) if r['id']==changed_id] if projection(topic,new)!=projection(topic,old) else []
+assert [i for i,(a,b) in enumerate(zip(oldrows,currentrows)) if a!=b]==expected_main_delta
 proof={'owner':m.O,'rawPacket':str(R),'rawFreeze':freeze,'rawCriticalSHA256':{n:m.raw(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']},'clarification':str(clarpath),'clarificationSHA256':m.raw(clarpath),'knownApplyReport':str(reportpath),'knownApplyReportSHA256':m.raw(reportpath),'changedOrder':changed,'changedId':changed_id,'beforeChangedSHA256':m.sha(old),'afterChangedSHA256':m.sha(new),'oldGlobalRowsCanonicalSHA256':m.sha(oldrows),'currentGlobalRowsCanonicalSHA256':m.sha(currentrows),'allOtherCardsAnd109FileBindingsExact':True,'originalInventoryExplicitlyHistorical':True,'firstRootByteFreezeAfterDeltaOnly':True,'preapplicationOnly':True,'noSemanticJudgmentOrQualityCredit':True,'operation':'Replace only exact already-applied dependency body in original full100/110/11000 bookkeeping. Original raw and original semantic comparisons retained; new dependency assessment is the same author’s separate immutable clarification.'}
 ps['sameTopicMAIN']['questions']=copy.deepcopy(live['questions']);ps['sameTopicMAIN']['fileSHA256']=m.raw(tp)
 for p in ps['actualCurrentPeers']:
