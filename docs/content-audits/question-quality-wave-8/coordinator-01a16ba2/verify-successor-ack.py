@@ -45,6 +45,8 @@ mandatory=[primary/'AGENTS.md',m.C/'AGENTS.md',
  primary/'.agents/skills/flow-coordinate/references/control.md',
  m.C/'docs/content-audits/question-authoring-guide-2026-09-02.md',
  D/'native-bootstrap-identity-readonly.py']
+if x.get('routeFrontier',{}).get('requiresSupportedBinding'):
+ mandatory.append(D/'route-frontier.json')
 mandatory_reads=[]
 for p in mandatory:
  matches=[cid for cid,b in bodies if b==p.read_text() and str(p) in calls[cid][1]['payload'].get('input','')]
