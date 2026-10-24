@@ -2,7 +2,7 @@
 import pathlib,json,re,importlib.util,sys,subprocess
 D=pathlib.Path(__file__).parent
 s=importlib.util.spec_from_file_location('owned',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
-order=int(sys.argv[1]);R=D/sys.argv[2];proof_path=D/(sys.argv[3] if len(sys.argv)>3 and not sys.argv[3].startswith('--') else f'human-medicine{order}-native-proof.json');proof=m.read(proof_path);uid=proof['sourceNativeId'];include_prior='--include-prior-tasks' in sys.argv
+order=int(sys.argv[1]);R=D/sys.argv[2];proof_path=D/(sys.argv[3] if len(sys.argv)>3 and not sys.argv[3].startswith('--') else f'video-game-history{order}-native-proof.json');proof=m.read(proof_path);uid=proof['sourceNativeId'];include_prior='--include-prior-tasks' in sys.argv
 p=pathlib.Path(proof['nativeJournal']);matches=[p] if p.exists() else list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+uid+'.jsonl'));assert len(matches)==1
 native=matches[0];rows=[json.loads(l) for l in native.open()];assert rows[0]['payload']['id']==uid
 start=proof['currentTaskStartLine'];calls=[]
@@ -47,7 +47,7 @@ for ordinal,(line,call) in enumerate(calls,1):
  assert len(results)==1
  resultline,result=results[0];found=[(p,z) for p,z in wrappers if z['originalRecord']==result]
  if not found:
-  p=D/f'human-medicine{order}-stored-native-result-{resultline}.json';z={'sourceNativeId':uid,'nativeJournalActual':str(native),'nativeRecordLine':resultline,'call_id':call['call_id'],'originalRecord':result,'operation':'Exact full stored native original recovered network0; author raw immutable. Not primary quality adoption.'}
+  p=D/f'video-game-history{order}-stored-native-result-{resultline}.json';z={'sourceNativeId':uid,'nativeJournalActual':str(native),'nativeRecordLine':resultline,'call_id':call['call_id'],'originalRecord':result,'operation':'Exact full stored native original recovered network0; author raw immutable. Not primary quality adoption.'}
   if p.exists():assert m.read(p)==z
   else:m.write(p,z)
   found=[(p,z)];owned.append(p);missing.append(resultline)
@@ -67,7 +67,7 @@ for ordinal,(line,call) in enumerate(calls,1):
    continue
  network.append({'ordinalOneBased':ordinal,'call_id':call['call_id'],'callLine':line,'resultLine':resultline,'call':call['input'],'originalResult':str(p),'fileSHA256':m.raw(p),'nativeExact':True,'identicalOriginalResultAliases':identical_aliases})
 report={'owner':m.O,'sourceNativeId':uid,'nativeJournalActual':str(native),'sourceOrder':order,'actualWebCalls':len(network),'candidateExecModules':len(calls),'preDispatchCompilationFailures':pre_dispatch,'includePriorTasks':include_prior,'proof':str(proof_path),'calls':network,'exactStoredRecoveryNetworkCalls':0,'missingAuthorResultLinesRecovered':missing,'rawPacketUnchanged':True,'qualityCredit':0}
-report_name=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--report-name=')),f'human-medicine{order}-network-accounting.json');assert pathlib.Path(report_name).name==report_name
+report_name=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--report-name=')),f'video-game-history{order}-network-accounting.json');assert pathlib.Path(report_name).name==report_name
 rp=D/report_name;m.write(rp,report)
 print(m.savecode([rp,pathlib.Path(__file__),*owned],f'Account SOURCE{order} exact stored native network results without quality credit'))
 print(json.dumps({'actualWebCalls':len(network),'preDispatchCompilationFailures':len(pre_dispatch),'recoveredMissingOriginals':missing,'qualityCredit':0}))
