@@ -24,13 +24,13 @@ assert all(m.sha(catalog[e['questionId']])==e['cardCanonicalSha256'] for e in cp
 def bytes_at(ref,p):return subprocess.check_output(['git','-C',str(C),'show',ref+':'+str(p.relative_to(C))])
 raw=[]
 for key,item in x.items():
- if not re.fullmatch('pendingHumanMedicine[0-9]+',key):continue
- order=int(key.removeprefix('pendingHumanMedicine'))
+ if not re.fullmatch('pendingVideoGameHistory[0-9]+',key):continue
+ order=int(key.removeprefix('pendingVideoGameHistory'))
  if order not in x['ownedSourceOrders']:continue
  for suffix,field in [('', 'rawFreeze'),('-cycle1','cycle1RawFreeze')]:
-  R=D/('source-human-medicine'+str(order)+suffix);freeze=item.get(field)
+  R=D/('source-video-game-history'+str(order)+suffix);freeze=item.get(field)
   if not freeze or not R.is_dir():continue
-  proof=m.read(D/('human-medicine'+str(order)+suffix+'-native-proof.json'));bindings=proof['rawFileSHA256']
+  proof=m.read(D/('video-game-history'+str(order)+suffix+'-native-proof.json'));bindings=proof['rawFileSHA256']
   assert {'candidate.json','sourceproof.json','peer-snapshot.json'}<=set(bindings)
   for rel,digest in bindings.items():
    p=R/rel;assert m.raw(p)==digest and bytes_at(freeze,p)==p.read_bytes(),str(p)
@@ -50,7 +50,7 @@ active_topic=x['activeRoute']['topicId'];active_rel='src/content/topics/'+active
 intake_topic=json.loads(m.h.git(C,'show',base+':'+active_rel));current_topic=m.read(C/active_rel)
 assert [q['id'] for q in intake_topic['questions']]==[q['id'] for q in current_topic['questions']]
 changed_qids=[b['id'] for a,b in zip(intake_topic['questions'],current_topic['questions']) if a!=b]
-applied_uncredited = {v['id']:v for k,v in x.items() if re.fullmatch('pendingHumanMedicine[0-9]+',k) and int(k.removeprefix('pendingHumanMedicine')) in x['ownedSourceOrders'] and v.get('qualityCredit')==0 and v.get('applied')}
+applied_uncredited = {v['id']:v for k,v in x.items() if re.fullmatch('pendingVideoGameHistory[0-9]+',k) and int(k.removeprefix('pendingVideoGameHistory')) in x['ownedSourceOrders'] and v.get('qualityCredit')==0 and v.get('applied')}
 assert set(changed_qids)==set(x['ownProgress']['accepted'])|set(applied_uncredited)
 for qid,item in applied_uncredited.items():
  assert item['status']=='TERMINAL_SAME_READER_FINAL_SOLE_CYCLE1_HOLD' and item['ordinaryCycle2Prohibited'] and qid in remaining
@@ -59,7 +59,7 @@ for qid,item in applied_uncredited.items():
  assert receipt['status']=='HOLD' and receipt['stage']=='FINAL' and receipt['defects'] and receipt['currentCard']==catalog[qid] and receipt['currentCardCanonicalSHA256']==item['appliedCurrentHash']
 
 for key,item in x.items():
- if re.fullmatch('pendingHumanMedicine[0-9]+',key) and int(key.removeprefix('pendingHumanMedicine')) in x['ownedSourceOrders'] and item['qualityCredit']==0:
+ if re.fullmatch('pendingVideoGameHistory[0-9]+',key) and int(key.removeprefix('pendingVideoGameHistory')) in x['ownedSourceOrders'] and item['qualityCredit']==0:
   assert 'HOLD' in item['status']
   if not item.get('applied'):assert m.sha(catalog[item['id']])==item['beforeHash'], 'Uncredited unapplied HOLD proposal must remain unapplied'
   else:assert item['id'] in applied_uncredited, 'Applied uncredited CURRENT requires exact terminal FINAL HOLD proof'

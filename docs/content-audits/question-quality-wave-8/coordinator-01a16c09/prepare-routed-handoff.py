@@ -1,4 +1,4 @@
-"""Closed medical SOURCE slice only: prepare one readonly successor barrier, keep ownership."""
+"""Closed active video-game-history SOURCE slice only: prepare one readonly successor barrier, keep ownership."""
 import pathlib,json,re,datetime,importlib.util
 D=pathlib.Path(__file__).parent
 s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
@@ -7,7 +7,7 @@ assert n==x['CURRENT'] and x['remaining']==2000-n and cp['owner']==cp['activeCoo
 assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and len(x['claims'])==4
 assert m.read(m.P/'.flow-leases.json')=={} and not any(a['stage'].startswith('START') for a in x['actors'].values())
 assert all(a.get('archived',False) for k,a in x['actors'].items() if k.startswith('author'))
-own={int(k.removeprefix('pendingHumanMedicine')):v for k,v in x.items() if re.fullmatch('pendingHumanMedicine[0-9]+',k) and int(k.removeprefix('pendingHumanMedicine')) in x['ownedSourceOrders']}
+own={int(k.removeprefix('pendingVideoGameHistory')):v for k,v in x.items() if re.fullmatch('pendingVideoGameHistory[0-9]+',k) and int(k.removeprefix('pendingVideoGameHistory')) in x['ownedSourceOrders']}
 assert own
 for order,p in own.items():
  if p['qualityCredit']==1:assert p['status'].startswith('CERTIFIED_')
@@ -41,7 +41,7 @@ reason={'actualCompactions':comp,'lastInput':info['last_token_usage']['input_tok
 next_action='One READONLY native successor ACK, supported EXACT4 release then ACTIVATE. Successor takes all4/CP/state/full2000goal under private CAS and short P lease, archives stopped predecessor, continues full2000 autonomously without new human GO. Fresh actual native/context budget before next SOURCE or reader assignment; all old/new HOLD0 and attempt/fix/alias fences persist.'
 if route_frontier:
  reason['meaning']='Actual remaining native context at the canonical topic frontier; preserve the single-topic owned range and intake before a new bounded route. No compaction/context reset and no broad multi-topic helper rewrite.'
- next_action+=' At this frontier personally read route-frontier.json; existing helpers remain bound to human-medicine. Only after durable takeover and parent archive bind own activeRoute/readScope/templates/paths/narrow helpers to exact canonical video-game-history/wave9, then start untouched1. No SOURCE via legacy human-medicine paths; no old HOLD reopening.'
+ next_action+=' At this frontier personally read route-frontier.json; existing helpers remain bound to video-game-history. Only after durable takeover and parent archive bind own activeRoute/readScope/templates/paths/narrow helpers to exact canonical video-game-history/wave9, then start untouched1. No SOURCE via legacy video-game-history paths; no old HOLD reopening.'
 x.update(phase='READY_FOR_READONLY_SUCCESSOR_CURRENT'+str(n),claimsOwner=m.O,heldOwn=list(x['claims']),nextUntouched=nextcard,currentWork={'stage':'CLOSED_OWNED_SLICE_CURRENT'+str(n),'CURRENT':n,'remaining':2000-n,'fullGoal':2000},next=next_action,pendingBoundedWork=[],pendingReviews=[],sourceActorKeys=[],currentSourceActors=[],currentIndependentActors=[],currentSourceActorsCount=0,readyQueue=[],retainedIdleReviewer=retained,noRetainedIdleReviewer=retained is None,noRetainedIdleAuthor=True,retainedIdleAuthorsCurrentOwner=[],rootContextReason=reason,actualCompactions=comp,rootActualCompactions=comp,currentOwnedHandoffHelper=str(pathlib.Path(__file__)),closingVerificationCode=str(D/'verify-routed-closure.py'),closingVerificationPassed=True,handoffVerification=str(D/'handoff-verification.json'),continuationPoint=str(D/'continuation-point.json'),technicalDiagnosticsAuthority=str(D/'technical-native-diagnostics.json'),pendingSuccessor=None,successor=None,successorThreadId=None,successorStatus='AWAITING_READONLY_BOOTSTRAP',ordinaryWorkActivated=False,leaseHeld=False,at=datetime.datetime.now(datetime.timezone.utc).isoformat())
 x['readScope']={**x['readScope'],'ownD':str(D),'nextUntouched':nextcard}
 x['rootNativeAudit'].update(actualCompactions=comp,lastInput=reason['lastInput'],modelWindow=reason['window'])
