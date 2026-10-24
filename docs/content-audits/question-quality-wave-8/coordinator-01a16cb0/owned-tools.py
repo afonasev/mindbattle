@@ -118,10 +118,23 @@ def alias_explicit_fresh_inventory_context(candidate,sp,ps,R):
  assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
  assert candidate['cycle']==sp['cycle']==ps['cycle']==0 and len(candidate['entries'])==1
  e=candidate['entries'][0];b=ps['freshInventory'];p=pathlib.Path(b['path']);p=p if p.is_absolute() else C/p
+ compact_binding='fileSHA256' not in b
+ original_compact_binding=copy.deepcopy(b)
+ if compact_binding:
+  assert set(b)=={'path','sha256'} and p.is_relative_to(R) and raw(p)==b['sha256']
+  b.update(fileSHA256=b['sha256'],globalMAINPointer='/globalMAIN',sameTopicMAINPointer='/sameTopicMAIN',actualCurrentPeersPointer='/actualCurrentPeers')
  assert p.is_relative_to(R) and raw(p)==b['fileSHA256']
  assert b['globalMAINPointer']=='/globalMAIN' and b['sameTopicMAINPointer']=='/sameTopicMAIN' and b['actualCurrentPeersPointer']=='/actualCurrentPeers'
  inv=read(p);g=inv['globalMAIN'];same=inv['sameTopicMAIN'];full=inv['actualCurrentPeers'];topic=read(C/same['path'])
- assert g==ps['globalMAIN'] and g['topicFileCount']==110 and g['questionCount']==11000
+ if compact_binding:
+  assert set(g)=={'rows','rowsCanonicalSHA256','topicFileCount','questionCount','allCurrentFileByteBindings'}
+  assert set(g)-{'rows'}<=set(ps['globalMAIN'])
+  assert all(ps['globalMAIN'][k]==v for k,v in g.items() if k in ps['globalMAIN'])
+  assert len(g['rows'])==11000 and sha(g['rows'])==g['rowsCanonicalSHA256']
+  ps['globalMAIN']['rows']=copy.deepcopy(g['rows'])
+  ps['technicalCompactFreshInventoryBinding']={'originalBinding':original_compact_binding,'inventoryPath':str(p),'inventorySHA256':raw(p),'operation':'Exact explicit whole-file path/SHA binds standard generated globalMAIN/sameTopicMAIN/actualCurrentPeers containers. Only redundant digest/pointer names and already SHA-bound machine rows exposed. Original eight/relevant peer judgments and extra query metadata retained; no raw or semantic change.'}
+ else:assert g==ps['globalMAIN']
+ assert g['topicFileCount']==110 and g['questionCount']==11000
  assert same['topicId']==topic['id']==e['topicId'] and same['questionCount']==len(full)==100
  assert same['fileSHA256']==raw(C/same['path']) and same['questions']==topic['questions']
  assert [v['sourceOrder'] for v in full]==list(range(1,101)) and [v['card'] for v in full]==topic['questions']
