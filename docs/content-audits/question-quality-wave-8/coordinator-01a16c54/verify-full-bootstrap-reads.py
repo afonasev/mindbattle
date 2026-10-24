@@ -25,13 +25,16 @@ for path, span in expected:
     if span:
         body = ''.join(body.splitlines(keepends=True)[span[0]-1:span[1]])
         needle = "sed -n '"+str(span[0])+','+str(span[1])+"p' "+str(path)
+    needles = [needle]
+    if span:
+        needles.append("cat "+str(path)+" | sed -n "+chr(39)+str(span[0])+","+str(span[1])+"p"+chr(39))
     matches = []
     for line, row in enumerate(rows, 1):
         p = row.get('payload', {}); call = calls.get(p.get('call_id'))
         # JS single-quoted command strings escape the sed apostrophes. This is
         # only a locator comparison; exact output bytes remain authoritative.
         invocation = call[1].replace("\\'", "'") if call else ''
-        if row.get('type') != 'response_item' or p.get('type') != 'custom_tool_call_output' or not call or needle not in invocation:
+        if row.get('type') != 'response_item' or p.get('type') != 'custom_tool_call_output' or not call or not any(n in invocation for n in needles):
             continue
         blocks = p.get('output', [])
         if not isinstance(blocks, list):
