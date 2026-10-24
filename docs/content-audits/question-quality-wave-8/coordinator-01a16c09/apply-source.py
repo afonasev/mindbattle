@@ -4,7 +4,7 @@ s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.uti
 s=importlib.util.spec_from_file_location('apply',m.C/'docs/content-audits/question-quality-wave-7/coordinator-01a13e5e/apply-standard.py');a=importlib.util.module_from_spec(s);s.loader.exec_module(a);a.P=m.P
 B=D/sys.argv[1];candidate=m.read(B/'candidate.json');topic=candidate['entries'][0]['topicId'];peers=m.read(B/'peer-snapshot.json')
 x=m.read(D/'manifest.json')
-assert B.parent==D and B.name.startswith('qualified-source-human-medicine') and topic==x['activeRoute']['topicId'] and x['activeRoute']['wave']==9
+assert B.parent==D and B.name.startswith('qualified-source-video-game-history') and topic==x['activeRoute']['topicId'] and x['activeRoute']['wave']==9
 assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and m.read(m.P/'.flow-leases.json')=={}
 for root,key in [(m.C,'code'),(m.P,'planning')]:
  assert m.raw(pathlib.Path(m.h.git(root,'rev-parse','--path-format=absolute','--git-path','index')))==x['foreignIndexes'][key]
