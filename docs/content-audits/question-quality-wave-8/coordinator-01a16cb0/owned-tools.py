@@ -18,6 +18,41 @@ def write(p,v):
  p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
 def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+def alias_explicit_author_readiness_amendment(candidate,sp,ps,R):
+ """Bind an explicit same-author readiness/date amendment; never reopen a terminal card."""
+ import copy
+ R=pathlib.Path(R);x=read(D/'manifest.json');e=candidate['entries'][0]
+ pending=x.get('pendingVideoGameHistory'+str(e['sourceOrder']),{})
+ if 'readinessAmendment' not in pending:return
+ assert R.parent==D and e['sourceOrder'] in x['ownedSourceOrders']
+ assert pending['status']=='AUTHOR_READINESS_CLARIFICATION_PENDING'
+ assert not (D/f"independent-{e['topicId']}{e['sourceOrder']}-initial").exists()
+ assert all(v['sourceOrder']!=e['sourceOrder'] for v in x['ownSourceCompletion'])
+ p=pathlib.Path(pending['readinessAmendment']);assert p.parent==D/(R.name+'-metadata-amendment')
+ amendment=read(p);uid=candidate['sourceNativeId']
+ assert amendment['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']==uid
+ assert amendment['id']==e['id'] and amendment['topicId']==e['topicId'] and amendment['sourceOrder']==e['sourceOrder']
+ assert amendment['cycle']==candidate['cycle']==sp['cycle']==ps['cycle']==0
+ assert amendment['qualityCredit']==0 and amendment['noSixGroupOrFrozenOrPeerJudgmentOrSourceBodyChanges'] is True
+ assert set(amendment['originalRawFileSHA256'])=={'candidate.json','sourceproof.json','peer-snapshot.json'}
+ for name,digest in amendment['originalRawFileSHA256'].items():assert raw(R/name)==digest
+ assert e['status']=='HOLD' and sp['entries'][0]['status']=='HOLD'
+ amended=amendment['amendedCandidateEntry'];expected=copy.deepcopy(e)
+ expected['status']='READY_FOR_INDEPENDENT_REVIEW'
+ expected['proposedCard']['source']['verifiedAt']=pending['readinessAmendmentReviewDate']
+ expected['afterHash']=sha(expected['proposedCard']);assert amended==expected
+ old_entry=sp['entries'][0];new_entry=amendment['amendedSourceproofEntry']
+ assert new_entry['resolution']['clarificationTurnId']==pending['readinessClarificationTurnId']
+ assert all(isinstance(v,str) and v for v in new_entry['resolution'].values())
+ expected_entry=copy.deepcopy(old_entry)
+ expected_entry.update(status='READY_FOR_INDEPENDENT_REVIEW',holdReasons=[],originalHoldReasons=old_entry['holdReasons'],resolution=new_entry['resolution'])
+ for field,value in [('beforeHash',amended['beforeHash']),('afterHash',amended['afterHash'])]:
+  if field in expected_entry:expected_entry[field]=value
+ assert new_entry==expected_entry
+ proof={'path':str(p),'rawSHA256':raw(p),'originalRawFileSHA256':amendment['originalRawFileSHA256'],'originalHOLDCardHash':e['afterHash'],'amendedCardHash':amended['afterHash'],'sameNativeId':uid,'cycleUnchanged':0,'clarificationTurnId':pending['readinessClarificationTurnId'],'operation':'Explicit same-author correction of sole unsupported readiness restriction plus actual review-date metadata. Six literal groups/four variants, frozen fields, peer judgments and source bodies unchanged. Original HOLD remains immutable; no new source/content cycle, reset or quality credit.'}
+ candidate['entries'][0]=copy.deepcopy(amended);sp['entries'][0]=copy.deepcopy(new_entry)
+ if sp.get('status')=='HOLD':sp['status']='READY_FOR_INDEPENDENT_REVIEW'
+ candidate['authorReadinessAmendment']=proof;sp['authorReadinessAmendment']=proof
 def alias_source96_distinct99_preimage(candidate,sp,ps,R):
  """Exact original99 distinct bodies plus separately bound candidate self; no judgment."""
  R=pathlib.Path(R)

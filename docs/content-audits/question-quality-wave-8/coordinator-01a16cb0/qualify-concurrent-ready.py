@@ -8,6 +8,7 @@ assert not B.exists(), 'Preapplication only; never replay'
 assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and m.read(m.P/'.flow-leases.json')=={}
 cp=m.read(pathlib.Path(x['canonicalCheckpoint']));assert cp['owner']==m.O
 ca,sp,ps=[m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
+m.alias_explicit_author_readiness_amendment(ca,sp,ps,R)
 e=ca['entries'][0];uid=ca['sourceNativeId'];assert ca['cycle']==sp['cycle']==ps['cycle']==0 and sp['sourceNativeId']==ps['sourceNativeId']==uid
 assert e['sourceOrder']==order and e['topicId']==topic and e['status']=='READY_FOR_INDEPENDENT_REVIEW' and e['id'] not in cp['currentEligibleCompletedIds']
 def at(ref,p):return subprocess.check_output(['git','-C',str(m.C),'show',ref+':'+str(p.relative_to(m.C))])
@@ -16,7 +17,8 @@ for name,digest in nativeproof['rawFileSHA256'].items():
  p=R/name;assert m.raw(p)==digest and at(freeze,p)==p.read_bytes()
 clar_name=sys.argv[5] if len(sys.argv)>5 else f'concurrent{changed}-clarification.json'
 assert pathlib.Path(clar_name).name==clar_name
-clarpath=R/clar_name;clar=m.read(clarpath)
+pending=x.get('pendingVideoGameHistory'+str(order),{})
+clarpath=(pathlib.Path(pending['readinessAmendment']).parent if pending.get('readinessAmendment') else R)/clar_name;clar=m.read(clarpath)
 assert clar['protectedOriginalFiles']['unchanged']
 for name in ['candidate.json','sourceproof.json','peer-snapshot.json']:
  assert clar['protectedOriginalFiles']['sha256BeforeClarificationWrite'][name]==clar['protectedOriginalFiles']['sha256AfterClarificationWrite'][name]==m.raw(R/name)
@@ -93,7 +95,7 @@ for source in sp['rawSources']:
  cap=m.read(p);jp=pathlib.Path(cap['nativeJournal'])
  if not jp.exists():
   matches=list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').rglob('*'+cap['sourceNativeId']+'.jsonl'));assert len(matches)==1;jp=matches[0]
- assert json.loads(jp.read_text().splitlines()[cap['nativeRecordLine']-1])==cap['originalRecord']
+ assert [json.loads(line) for line in jp.open()][cap['nativeRecordLine']-1]==cap['originalRecord']
  value=cap
  for k in source['completeOutputPointer'].split('/')[1:]:
   k=k.replace('~1','/').replace('~0','~');value=value[int(k)] if isinstance(value,list) else value[k]
