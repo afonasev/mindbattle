@@ -39,6 +39,9 @@ t.update(topicId='video-game-history', owner=m.O, manifest=str(D/'manifest.json'
          contextPreflight='Verify own native session_meta and actual compacted events; never use coordinator env identity. Reviewer '+x['actors']['reviewer']['threadId']+'. First actual compaction finish this card only; second preservationSTOP. Compact task only, no whole checkpoint/history/catalog dump.',
          history='Your INITIAL FIX is immutable at previousIndependentInitial. This is its sole directed ordinary cycle1 FINAL, PASS or terminal HOLD; no reset. SOURCE READY/QA19 do not grant credit.')
 t['returnSchema'] = t['returnSchema'].replace('stage INITIAL', 'stage FINAL').replace('status PASS/FIX/HOLD', 'status PASS/HOLD')
+if 'actualPeerDependencyAddendum' in t:
+ t['initialPeerDependencyHistory']={k:t.pop(k) for k in ['actualPeerDependencyAddendum','actualPeerDependencyBinding','peerCurrentRule'] if k in t}
+ t['peerCurrentRule']='This exact cycle1 author packet has a fresh CURRENT peer snapshot. Initial peer delta is provenance only; verify actual CURRENT and preserve your applicable own INITIAL judgments.'
 task_path = D/('reader-'+label+'-final-task.json')
 m.write(task_path, t)
 x['actors']['reviewer'].update(stage='START_FINAL_'+label.upper(), task=str(task_path),
