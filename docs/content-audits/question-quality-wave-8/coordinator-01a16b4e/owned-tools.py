@@ -152,6 +152,14 @@ def alias_explicit_root_candidate(candidate,sp,ps,R):
   assert peer['card']==b and peer['sha256']==e['beforeHash']==sha(b) and peer['topicId']==e['topicId'] and peer['sourceOrder']==e['sourceOrder']
   ps['sourceOrder']=peer['sourceOrder']
   ps['technicalExplicitRootOrderAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalRootOrderAbsent':True,'originalSelfPreimagePointer':'/actualCurrentPeers/'+str(peer_index),'operation':'Expose the identical sourceOrder from the unique explicit ID/full-before-body/hash/topic-bound peer. Existing root order assertion retained; no guessed identity, raw change or new judgment.'}
+ if 'sourceOrder' not in sp:
+  declared=sp['entries'];assert len(declared)==1
+  se=declared[0]
+  assert se['id']==sp['id']==e['id'] and se['topicId']==sp['topicId']==e['topicId']
+  assert se['sourceOrder']==e['sourceOrder'] and se['status']==sp['status']==e['status']
+  assert len(se['literalGroups'])==6 and len(se['fourFullPromptAnswerNoteAssessments'])==4
+  sp['sourceOrder']=se['sourceOrder']
+  sp['technicalExplicitEntryOrderAlias']={'rawSourceproof':str(R/'sourceproof.json'),'rawSHA256':raw(R/'sourceproof.json'),'originalPointer':'/entries/0/sourceOrder','originalRootOrderAbsent':True,'operation':'Exact sole entry ID/topic/order/status agrees with candidate and native identity; redundant root order name only. Original raw, groups and judgments unchanged; original KeyError uncured.'}
  assert e['sourceOrder']==sp['sourceOrder']==ps['sourceOrder']
  assert e['status']==sp['entries'][0]['status']
  assert sha(b)==e['beforeHash'] and sha(q)==e['afterHash']
