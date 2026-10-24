@@ -18,6 +18,40 @@ def write(p,v):
  p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
 def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+def alias_explicit_owned_packet_source_paths(candidate,sp,R):
+ """Resolve explicit ownD-relative captures by exact native bytes; derived view only."""
+ import copy
+ R=pathlib.Path(R);assert R.parent==D
+ aliases={};proof=[]
+ for source in sp['rawSources']:
+  declared=source['path'];p=pathlib.Path(declared)
+  if p.is_absolute() or (C/p).exists():continue
+  if not declared.startswith(R.name+'/'):continue
+  resolved=(D/p).resolve();assert resolved.is_relative_to(R.resolve()) and resolved.is_file()
+  assert raw(resolved)==source['sha256']
+  cap=read(resolved);assert cap['sourceNativeId']==candidate['sourceNativeId'] and cap['url']==source['url']
+  journal=pathlib.Path(cap['nativeJournal'])
+  if not journal.exists():
+   matches=list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+cap['sourceNativeId']+'.jsonl'));assert len(matches)==1;journal=matches[0]
+  original=[json.loads(line) for line in journal.open()][cap['nativeRecordLine']-1]
+  assert original==cap['originalRecord']
+  pointer=cap['completeOutputPointer'];body=cap
+  for part in pointer.split('/')[1:]:
+   part=part.replace('~1','/').replace('~0','~');body=body[int(part)] if isinstance(body,list) else body[part]
+  assert isinstance(body,str) and source['url'] in body and hashlib.sha256(body.encode()).hexdigest()==cap['completeOutputSHA256']
+  prior=copy.deepcopy(source);source.update(path=str(resolved),completeOutputPointer=source.get('completeOutputPointer',pointer),completeOutputSHA256=source.get('completeOutputSHA256',cap['completeOutputSHA256']))
+  assert source['completeOutputPointer']==pointer and source['completeOutputSHA256']==cap['completeOutputSHA256']
+  aliases[declared]=str(resolved);proof.append({'originalBinding':prior,'resolved':str(resolved),'rawFileSHA256':raw(resolved),'nativeId':cap['sourceNativeId'],'nativeLine':cap['nativeRecordLine'],'originalRecordExact':True,'completeBodySHA256':cap['completeOutputSHA256']})
+ if not aliases:return
+ def refs(v):
+  if isinstance(v,dict):
+   for k,w in v.items():
+    if k=='sourcePaths' and isinstance(w,list):v[k]=[aliases.get(p,p) for p in w]
+    else:refs(w)
+  elif isinstance(v,list):
+   for w in v:refs(w)
+ refs(sp)
+ sp['technicalExplicitOwnedPacketSourcePathAlias']={'rawSourceproof':str(R/'sourceproof.json'),'rawSHA256':raw(R/'sourceproof.json'),'bindings':proof,'operation':'Exact original ownD-relative capture paths plus SHA/native URL/body bindings exposed as absolute paths and already-declared capture pointers. No source/literal/ground/peer judgment/raw edit or quality credit. Original preservation failure uncured.'}
 def alias_explicit_author_readiness_amendment(candidate,sp,ps,R):
  """Bind an explicit same-author readiness/date amendment; never reopen a terminal card."""
  import copy

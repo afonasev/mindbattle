@@ -18,6 +18,7 @@ for R in packet_paths:
     assert R.parent==D and R.name.startswith("source-video-game-history"), "Only owned video-game-history packet"
     name = R.name; B = D/('qualified-'+name)
     candidate, sp, ps = [m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
+    m.alias_explicit_owned_packet_source_paths(candidate,sp,R)
     m.alias_source96_distinct99_preimage(candidate,sp,ps,R)
     m.alias_explicit_fresh_inventory_context(candidate,sp,ps,R)
     m.alias_explicit_inventory_file_digest(candidate,sp,ps,R)
