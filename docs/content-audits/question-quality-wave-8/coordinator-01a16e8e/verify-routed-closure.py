@@ -53,16 +53,31 @@ changed_qids=[b['id'] for a,b in zip(intake_topic['questions'],current_topic['qu
 applied_uncredited = {v['id']:v for k,v in x.items() if re.fullmatch('pendingVideoGameHistory[0-9]+',k) and int(k.removeprefix('pendingVideoGameHistory')) in x['ownedSourceOrders'] and v.get('qualityCredit')==0 and v.get('applied')}
 assert set(changed_qids)==set(x['ownProgress']['accepted'])|set(applied_uncredited)
 for qid,item in applied_uncredited.items():
- assert item['status']=='TERMINAL_SAME_READER_FINAL_SOLE_CYCLE1_HOLD' and item['ordinaryCycle2Prohibited'] and qid in remaining
- assert m.sha(catalog[qid])==item['appliedCurrentHash']==item['cycle1AfterHash']
- receipt=m.read(C/item['finalReceipt'])['entries'][0]
- assert receipt['status']=='HOLD' and receipt['stage']=='FINAL' and receipt['defects'] and receipt['currentCard']==catalog[qid] and receipt['currentCardCanonicalSHA256']==item['appliedCurrentHash']
+ assert item['ordinaryCycle2Prohibited'] and qid in remaining
+ assert m.sha(catalog[qid])==item['appliedCurrentHash']
+ if item['status']=='TERMINAL_SAME_READER_FINAL_SOLE_CYCLE1_HOLD':
+  assert item['appliedCurrentHash']==item['cycle1AfterHash']
+  receipt=m.read(C/item['finalReceipt'])['entries'][0]
+  assert receipt['status']=='HOLD' and receipt['stage']=='FINAL' and receipt['defects'] and receipt['currentCard']==catalog[qid] and receipt['currentCardCanonicalSHA256']==item['appliedCurrentHash']
+ else:
+  assert item['status']=='APPLIED_INITIAL_FIX_TERMINAL_AUTHOR_CYCLE1_HOLD'
+  assert item['initialApplied'] is True and item['cycle1Applied'] is False and item['cycle1NoQualificationApplyQAIndependentFINAL']
+  receipt=m.read(C/item['initialReceipt'])['entries'][0]
+  assert receipt['status']=='FIX' and receipt['stage']=='INITIAL' and receipt['defects'] and receipt['currentCard']==catalog[qid] and receipt['currentCardCanonicalSHA256']==item['appliedCurrentHash']
+  R=D/('source-video-game-history'+str(receipt['sourceOrder'])+'-cycle1')
+  candidate=m.read(R/'candidate.json');sourceproof=m.read(R/'sourceproof.json');entry=candidate['entries'][0]
+  assert candidate['cycle']==sourceproof['cycle']==1 and entry['status']==sourceproof['entries'][0]['status']=='HOLD'
+  assert candidate['sourceNativeId']==sourceproof['sourceNativeId']==m.read(item['cycle1RawNativeProof'])['sourceNativeId']
+  assert entry['beforeCard']==catalog[qid] and entry['beforeHash']==item['appliedCurrentHash']
+  assert m.sha(entry['proposedCard'])==entry['afterHash']==item['cycle1AfterHash']
+  assert all(entry['proposedCard'][k]==catalog[qid][k] for k in ['id','difficulty','correctIndex'])
+  assert not item.get('finalReceipt') and not (D/('independent-video-game-history'+str(receipt['sourceOrder'])+'-cycle1-final')).exists()
 
 for key,item in x.items():
  if re.fullmatch('pendingVideoGameHistory[0-9]+',key) and int(key.removeprefix('pendingVideoGameHistory')) in x['ownedSourceOrders'] and item['qualityCredit']==0:
   assert 'HOLD' in item['status']
   if not item.get('applied'):assert m.sha(catalog[item['id']])==item['beforeHash'], 'Uncredited unapplied HOLD proposal must remain unapplied'
-  else:assert item['id'] in applied_uncredited, 'Applied uncredited CURRENT requires exact terminal FINAL HOLD proof'
+  else:assert item['id'] in applied_uncredited, 'Applied uncredited CURRENT requires its exact typed terminal evidence'
 
 
 original83=C/'docs/content-audits/question-quality-wave-8/coordinator-01a16254/source-history-russia83'
