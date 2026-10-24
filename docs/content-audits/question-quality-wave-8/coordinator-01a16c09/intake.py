@@ -569,7 +569,7 @@ for R in packet_paths:
                     matches = list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+capture['sourceNativeId']+'.jsonl'))
                     assert len(matches) == 1
                     native_path = matches[0]
-                native_record = json.loads(native_path.read_text().splitlines()[capture['nativeRecordLine']-1])
+                native_record = json.loads(native_path.read_text().split('\n')[capture['nativeRecordLine']-1])
                 assert native_record == capture['originalRecord']
                 assert capture['sourceNativeId'] == candidate['sourceNativeId']
                 source['originalNativeRecordRelativePointer'] = source['completeOutputPointer']
@@ -589,7 +589,7 @@ for R in packet_paths:
                         matches = list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+capture['sourceNativeId']+'.jsonl'))
                         assert len(matches) == 1
                         native_path = matches[0]
-                    assert json.loads(native_path.read_text().splitlines()[capture['nativeRecordLine']-1]) == capture['originalRecord']
+                    assert json.loads(native_path.read_text().split('\n')[capture['nativeRecordLine']-1]) == capture['originalRecord']
                     bound = m.read(p)
                     pointer = capture['completeOutputPointer']
                     if pointer.startswith('/payload/'):
@@ -620,7 +620,7 @@ for R in packet_paths:
                     matches = list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+capture['sourceNativeId']+'.jsonl'))
                     assert len(matches) == 1
                     native_path = matches[0]
-                native_record = json.loads(native_path.read_text().splitlines()[capture['nativeRecordLine']-1])
+                native_record = json.loads(native_path.read_text().split('\n')[capture['nativeRecordLine']-1])
                 assert native_record == capture['originalRecord']
                 source['originalDeclaredCompleteOutputSHA256'] = declared
                 source['technicalNativeVerifiedCaptureHashAlias'] = {'nativeId':capture['sourceNativeId'], 'nativeRecordLine':capture['nativeRecordLine'], 'originalRecordByteEqual':True, 'captureBodySHA256':actual_body}

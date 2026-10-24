@@ -70,7 +70,7 @@ for source in sp['rawSources']:
   jp=pathlib.Path(cap['nativeJournal'])
   if not jp.exists():
    matches=list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+cap['sourceNativeId']+'.jsonl'));assert len(matches)==1;jp=matches[0]
-  record=json.loads(jp.read_text().splitlines()[cap['nativeRecordLine']-1]);assert record==cap['originalRecord']
+  record=json.loads(jp.read_text().split('\n')[cap['nativeRecordLine']-1]);assert record==cap['originalRecord']
   raw_checks.append({'path':str(p),'nativeId':cap['sourceNativeId'],'nativeLine':cap['nativeRecordLine'],'originalRecordExact':True})
 m.alias_explicit_nested_inventory(a,sp,ps,R)
 cat={};rows=[]

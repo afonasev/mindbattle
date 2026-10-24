@@ -5,7 +5,7 @@ s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.uti
 order=int(sys.argv[1]);suffix=sys.argv[2] if len(sys.argv)>2 else '';assert suffix in ['', '-cycle1'];x=m.read(D/'manifest.json');a=x['actors']['author'+str(order)];p=pathlib.Path(a['nativeJournal'])
 if not p.exists():
  matches=list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+a['threadId']+'.jsonl'));assert len(matches)==1;p=matches[0]
-rs=[json.loads(l) for l in p.read_text().splitlines()];assert [r['payload']['id'] for r in rs if r['type']=='session_meta']==[a['threadId']]
+rs=[json.loads(l) for l in p.open()];assert [r['payload']['id'] for r in rs if r['type']=='session_meta']==[a['threadId']]
 def results(v):
  if isinstance(v,dict):
   if 'exit_code' in v and 'output' in v:yield v;return
