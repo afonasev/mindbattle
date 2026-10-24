@@ -4,6 +4,7 @@ D = pathlib.Path(__file__).parent
 s = importlib.util.spec_from_file_location('m', D/'owned-tools.py')
 m = importlib.util.module_from_spec(s); s.loader.exec_module(m)
 x = m.read(D/'manifest.json'); name = sys.argv[1]
+predecessor = pathlib.Path(x['predecessorHandoff']).parent
 assert pathlib.Path(name).name == name and name.endswith('.json')
 out = D/name; assert not out.exists()
 actors = {}
@@ -61,9 +62,9 @@ for actor in [x['rootNativeAudit'], *x['actors'].values()]:
                    'remaining': info['model_context_window']-info['last_token_usage']['input_tokens']}
 m.write(out, {'owner': m.O, 'actors': actors,
               'bootstrapSnapshotImmutable': str(D/'technical-native-originals.json'),
-              'priorOwnSnapshotImmutable': str(D/'own-originals-before-initial92-result.json'),
-              'inheritedRootAccountingImmutable': str(D.parent/'coordinator-01a16af8/own-root-original-accounting.json'),
-              'inheritedLateOriginalsImmutable': str(D.parent/'coordinator-01a16af8/late-release-check-original-binding.json'),
+              'priorOwnSnapshotImmutable': str(D/'own-originals-before-initial92-result.json') if (D/'own-originals-before-initial92-result.json').exists() else None,
+              'inheritedRootAccountingImmutable': str(predecessor/'own-root-original-accounting.json'),
+              'inheritedLateOriginalsImmutable': str(predecessor/'late-release-check-original-binding.json') if (predecessor/'late-release-check-original-binding.json').exists() else None,
               'rootReadScopeDeviationUNCURED': m.read(D/'technical-native-originals.json')['readScopeDeviations'],
               'ownRootProceduralAppendices': x['ownRootProceduralAppendices'],
               'stdoutEmbeddedExitCodesAreDataNotExecutions': True,
