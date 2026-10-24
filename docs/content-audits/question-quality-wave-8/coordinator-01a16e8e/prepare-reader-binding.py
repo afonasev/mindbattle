@@ -17,7 +17,7 @@ case['reportBase']['sourceNetworkTotalCalls']=pending.get('cycle1NetworkTotalCal
 if pending.get('sourceProvenanceDeviation'):
  dev=pending['sourceProvenanceDeviation'];assert dev['uncured'] and dev['contentPASSAndQAdoNotAssertProceduralCompliance'] and m.raw(dev['rawClarification'])==dev['rawSHA256']
  case['reportBase']['sourceProvenanceDeviation']=dev
-for field in ['proceduralDeviations','cycle1ProceduralDeviations','initialOrdinalAlias','procedureNotes','attemptFence']:
+for field in ['proceduralDeviations','cycle1ProceduralDeviations','readScopeDeviation','outputScopeCaveat','cycle1ProjectedResultCoverage','initialOrdinalAlias','procedureNotes','attemptFence']:
  if field in pending:case['reportBase'][field]=pending[field]
 if pending.get('proceduralDeviations',{}).get('uncured'):case['reportBase']['contentPASSAndQAdoNotAssertProceduralCompliance']=True
 if stage=='final':
