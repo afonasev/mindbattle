@@ -4,7 +4,7 @@ D=pathlib.Path(__file__).parent
 C=D.parents[3]
 P=pathlib.Path('/Users/eaafonasev/Projects/mindbattle/planning')
 O='01a16ef6-8875-7cd0-84b6-fc80f3b7e96c'
-G='01a16e3d-bcb1-7460-aeff-2065e3bc8482'
+G='01a16f3e-baf7-7f43-b823-cc60e17d7c78'
 def read(p):return json.loads(pathlib.Path(p).read_text())
 def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
@@ -70,7 +70,10 @@ assert all(a.get('archived') for key,a in x['actors'].items() if key.startswith(
 assert not x['pendingReviews'] and not x['pendingBoundedWork'] and not x['readyQueue'] and not x.get('pendingBootstrapActors')
 r=read(D/'retained-reader-handoff.json');a=x['actors']['reviewer']
 assert a['threadId']==r['retainedIdleReader']['threadId']==G
-assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])==a['ownReceiptCount']==8
+assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])==a['ownReceiptCount']==0
+identity=read(D/'reader33-identity.json');assert identity['verifiedSessionMetaId']==identity['decodedResult']['threadId']==G and identity['nativeJournal']==a['nativeJournal']
+seed=read(r['inheritedImmutable']);assert seed['retainedIdleReader']['threadId']==G and seed['readerOwnReceiptCount']==len(seed['readerOwnReceipts'])==0
+retired=read(D/'reader32-completed-budget-handoff.json');assert retired['readerOwnReceiptCount']==len(retired['readerOwnReceipts'])==13 and retired['retainedIdleReader']['threadId']!=G
 for path,binding in r['readerOwnReceipts'].items():assert raw(path)==binding['rawSHA256']
 inherited=read(r['inheritedImmutable'])
 assert all(path in r['readerOwnReceipts'] and r['readerOwnReceipts'][path]['rawSHA256']==binding['rawSHA256'] for path,binding in inherited['readerOwnReceipts'].items())
