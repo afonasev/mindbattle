@@ -9,6 +9,7 @@ comp=sum(o['type']=='compacted' for o in journal);last=next(o['payload']['info']
 a,sp,ps=[m.read(R/f) for f in ['candidate.json','sourceproof.json','peer-snapshot.json']]
 m.alias_source96_distinct99_preimage(a,sp,ps,R)
 m.alias_explicit_fresh_inventory_context(a,sp,ps,R)
+m.alias_exact_videogame2_distinct_peers(a,sp,ps,R)
 m.alias_explicit_inventory_binding(a,sp,ps,R)
 m.alias_same_topic_current_peer_container(a,sp,ps,R)
 m.alias_explicit_root_candidate(a,sp,ps,R)

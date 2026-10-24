@@ -21,6 +21,7 @@ for R in packet_paths:
     m.alias_source96_distinct99_preimage(candidate,sp,ps,R)
     m.alias_explicit_fresh_inventory_context(candidate,sp,ps,R)
     m.alias_explicit_inventory_file_digest(candidate,sp,ps,R)
+    m.alias_exact_videogame2_distinct_peers(candidate,sp,ps,R)
     m.alias_explicit_inventory_binding(candidate,sp,ps,R)
     m.alias_explicit_cross_topic_peers(candidate,sp,ps,R)
     m.alias_same_topic_current_peer_container(candidate,sp,ps,R)
