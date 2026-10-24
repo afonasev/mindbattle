@@ -617,3 +617,44 @@ def alias_exact_videogame2_distinct_peers(candidate,sp,ps,R):
  ps['originalExplicitInventoryBinding']=copy.deepcopy(b)
  b.update(sha256=b['fileSHA256'],topicCards=b['sameTopicCardCount'],globalMAINRows=b['globalMAINRowCount'],globalTopicFiles=b['globalTopicFileCount'],topicFileSHA256=b['sameTopicFileSHA256'])
  ps['technicalExactVideoGame2PeerBindingAlias']={'rawFreeze':freeze,'rawCriticalSHA256':expected,'originalPeerPointer':'/actualCurrentPeers','selfPointer':'candidate.json#/entries/0/beforeCard','distinctPeerCountUnchanged':99,'technicalCurrentBindings':100,'operation':'Exact declared99 distinct full bodies plus separately declared candidate self preimage and SHA-bound100 inventory. Inventory redundant names only; no new source/body/peer judgment/raw edit/quality credit.'}
+
+def alias_explicit_complete_inventory_paths(candidate,sp,ps,R):
+ """Expose original completeCardsPath/completeRowsPath SHA-bound full inventory only."""
+ same=ps.get('sameTopicMAIN',{});g=ps.get('globalMAIN',{})
+ if 'completeCardsPath' not in same or 'completeRowsPath' not in g:return
+ import copy
+ R=pathlib.Path(R);assert R.parent==D
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ e=candidate['entries'][0]
+ if 'cycle' not in ps:
+  task=read(R.with_name(R.name+'-task.json'))
+  assert task['cycle']==candidate['cycle']==sp['cycle']==0 and task['owner']==O
+  assert task['id']==e['id']==sp['id'] and task['sourceOrder']==e['sourceOrder']==ps['sourceOrder']
+  assert task['authorNativeId']==candidate['sourceNativeId'] and task['beforeHash']==e['beforeHash']==sha(e['beforeCard'])
+  assert R.name=='source-'+e['topicId']+str(e['sourceOrder']) and not (D/('independent-'+e['topicId']+str(e['sourceOrder'])+'-initial/receipt.json')).exists()
+  ps['cycle']=task['cycle']
+  ps['technicalExactInitialCycleAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalCycleAbsent':True,'task':str(R.with_name(R.name+'-task.json')),'taskSHA256':raw(R.with_name(R.name+'-task.json')),'operation':'Expose identical cycle0 from own exact native initial task and unchanged candidate/sourceproof, with exact ID/topic/order/preimage and no prior INITIAL. Original omission and root KeyError remain uncured.'}
+ assert candidate['cycle']==sp['cycle']==ps['cycle']
+ declared=sp['sourceInventoryPath'];assert declared==same['completeCardsPath']==g['completeRowsPath']
+ p=pathlib.Path(declared);p=p if p.is_absolute() else C/p
+ assert p.is_relative_to(R) and raw(p)==sp['sourceInventorySHA256']==g['completeInventoryFileSHA256']
+ inv=read(p);full=inv['sameTopicMAIN'];glob=inv['globalMAIN'];peers=inv['actualCurrentPeers'];e=candidate['entries'][0]
+ topic=read(C/full['path']);assert topic['id']==full['topicId']==same['topicId']==e['topicId']
+ assert full['path']==same['path'] and full['fileSHA256']==same['fileSHA256']==raw(C/full['path'])
+ assert full['questionCount']==same['questionCount']==len(peers)==100
+ assert full['questions']==topic['questions']==[v['card'] for v in peers]
+ assert [v['sourceOrder'] for v in peers]==list(range(1,101))
+ assert all(v['id']==v['card']['id'] and v['topicId']==topic['id'] and v['sha256']==sha(v['card']) for v in peers)
+ original=ps['actualCurrentPeers'];byid={v['id']:v for v in peers}
+ assert all(v['id'] in byid and v['card']==byid[v['id']]['card'] and v.get('sha256',v.get('canonicalSHA256'))==byid[v['id']]['sha256'] for v in original)
+ assert glob['questionCount']==g['questionCount']==11000 and glob['topicFileCount']==g['topicFileCount']==110
+ assert glob['rowsCanonicalSHA256']==g['rowsCanonicalSHA256'] and glob['allCurrentFileByteBindings']==g['allCurrentFileByteBindings']
+ rows=[]
+ for b in glob['allCurrentFileByteBindings']:
+  assert raw(C/b['path'])==b['sha256'];t=read(C/b['path'])
+  rows.extend({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']} for q in t['questions'])
+ assert len(rows)==11000 and sha(rows)==glob['rowsCanonicalSHA256'] and glob['rows']==rows
+ ps['originalRelevantCurrentPeers']=copy.deepcopy(original)
+ ps['actualCurrentPeers']=copy.deepcopy(peers);same['questions']=copy.deepcopy(full['questions'])
+ ps['globalMAIN']['rows']=copy.deepcopy(glob['rows'])
+ ps['technicalExplicitCompleteInventoryPathsAlias']={'rawPeerPath':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalCompleteCardsPointer':'/sameTopicMAIN/completeCardsPath','originalCompleteRowsPointer':'/globalMAIN/completeRowsPath','inventoryPath':str(p),'inventorySHA256':raw(p),'operation':'Exact original author sameTopic/global complete path and sourceproof SHA references expose existing full100 bodies/11000 rows. Original ten relevant peer bodies and all judgments retained separately. No new judgment or quality credit; raw unchanged.'}
