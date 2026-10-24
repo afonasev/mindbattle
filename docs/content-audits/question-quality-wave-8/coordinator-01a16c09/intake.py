@@ -15,7 +15,7 @@ reports = []
 packet_paths = [pathlib.Path(p).resolve() for p in sys.argv[1:]] if len(sys.argv)>1 else [OLD/n for n in ['source-polar41-cycle1-fresh', 'source-parks31-complete']]
 assert len(sys.argv)>1, "Explicit new route packet required; no inherited fallback"
 for R in packet_paths:
-    assert R.parent==D and R.name.startswith("source-human-medicine"), "Only owned medicine packet"
+    assert R.parent==D and R.name.startswith("source-video-game-history"), "Only owned video-game-history packet"
     name = R.name; B = D/('qualified-'+name)
     candidate, sp, ps = [m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
     m.alias_source96_distinct99_preimage(candidate,sp,ps,R)
@@ -53,7 +53,7 @@ for R in packet_paths:
     before, after = groups(e['beforeCard']), groups(e['proposedCard'])
     if e['status'] == 'READY_FOR_SAME_READER_FINAL':
         assert candidate['cycle'] == 1 and R.name.endswith('-cycle1')
-        initial = m.read(D/('independent-human-medicine'+str(e['sourceOrder'])+'-initial/receipt.json'))
+        initial = m.read(D/('independent-video-game-history'+str(e['sourceOrder'])+'-initial/receipt.json'))
         assert initial['entries'][0]['id'] == e['id'] and initial['entries'][0]['status'] == 'FIX'
         e['originalDirectedFinalStatus'] = e['status']
         e['status'] = 'READY_FOR_INDEPENDENT_REVIEW'
@@ -191,7 +191,7 @@ for R in packet_paths:
                 original_candidate=m.read(R.with_name(R.name.removesuffix('-cycle1'))/'candidate.json')
                 assert candidate['sourceNativeId']==original_candidate['sourceNativeId']
                 assert e['beforeCard']==original_candidate['entries'][0]['proposedCard']
-                assert m.read(D/('independent-human-medicine'+str(e['sourceOrder'])+'-initial/receipt.json'))['entries'][0]['status']=='FIX'
+                assert m.read(D/('independent-video-game-history'+str(e['sourceOrder'])+'-initial/receipt.json'))['entries'][0]['status']=='FIX'
             assert explicit['path']==declared and explicit['sha256']==global_audit['freshInventorySHA256']==m.raw(inv_path)
             bound_inventory=m.read(inv_path)
             assert explicit['globalRowsCanonicalSHA256']==global_audit['rowsCanonicalSHA256']==bound_inventory['globalMAIN']['rowsCanonicalSHA256']

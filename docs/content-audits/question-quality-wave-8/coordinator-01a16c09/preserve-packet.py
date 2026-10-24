@@ -2,7 +2,7 @@
 import pathlib, json, importlib.util, sys, re
 D=pathlib.Path(__file__).parent
 s=importlib.util.spec_from_file_location('owned',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
-order=int(sys.argv[1]);actor_key=sys.argv[2];name=sys.argv[3] if len(sys.argv)>3 else f'source-human-medicine{order}'
+order=int(sys.argv[1]);actor_key=sys.argv[2];name=sys.argv[3] if len(sys.argv)>3 else f'source-video-game-history{order}'
 R=D/name;x=m.read(D/'manifest.json');actor=x['actors'][actor_key];uid=actor['threadId'];native=pathlib.Path(actor['nativeJournal']);journal=[json.loads(l) for l in native.open()]
 assert journal[0]['payload']['id']==uid
 comp=sum(o['type']=='compacted' for o in journal);last=next(o['payload']['info'] for o in reversed(journal) if o.get('payload',{}).get('type')=='token_count')
@@ -24,7 +24,7 @@ assert len(a['entries'])==len(sp['entries'])==1
 m.alias_serialized_prompt_group(a,sp)
 m.alias_full_prompt_answer_concatenation(a,sp)
 m.alias_full_body_wrapper_digests(ps,R)
-e=a['entries'][0];q=m.read(m.C/'src/content/topics/human-medicine.json')['questions'][order-1]
+e=a['entries'][0];q=m.read(m.C/'src/content/topics/video-game-history.json')['questions'][order-1]
 assert e['sourceOrder']==order and e['beforeCard']==q and m.sha(q)==e['beforeHash'] and m.sha(e['proposedCard'])==e['afterHash']
 assert e['id']==q['id'] and e['status'] in ['HOLD','READY_FOR_INDEPENDENT_REVIEW','READY_FOR_SAME_READER_FINAL']
 cp=m.read(pathlib.Path(x['canonicalCheckpoint']));f=next(z for z in cp['selectedCards'] if z['questionId']==e['id']);assert q['difficulty']==e['proposedCard']['difficulty']==f['difficulty'] and q['correctIndex']==e['proposedCard']['correctIndex']==f['correctIndex']
@@ -87,7 +87,7 @@ if file_bindings is None:
  assert m.raw(inv_path)==sp['sourceInventorySHA256']==ps['globalMAIN']['inventorySHA256']==ps['sameTopicMAIN']['inventorySHA256']
  inv=m.read(inv_path);assert inv['globalMAIN']['rowsCanonicalSHA256']==ps['globalMAIN']['rowsCanonicalSHA256']==m.sha(rows)
  assert inv['globalMAIN']['topicFileCount']==110 and inv['globalMAIN']['questionCount']==11000
- assert inv['sameTopicMAIN']['questions']==m.read(m.C/'src/content/topics/human-medicine.json')['questions']
+ assert inv['sameTopicMAIN']['questions']==m.read(m.C/'src/content/topics/video-game-history.json')['questions']
  file_bindings=inv['globalMAIN']['allCurrentFileByteBindings'];assert len(file_bindings)==110
  inventory_read_binding={'path':str(inv_path),'fileSHA256':m.raw(inv_path),'operation':'Read exact original sourceproof+peer SHA-bound inventory; all existing rows11000/topic100/files110 assertions retained, raw untouched.'}
 for b in file_bindings:assert m.raw(m.C/b['path'])==b.get('sha256',b.get('fileSHA256',b.get('fileSha256')))
@@ -95,14 +95,14 @@ if 'questions' in ps.get('sameTopicMAIN',{}):
  saved_questions=ps['sameTopicMAIN']['questions']
  if len(saved_questions)==100 and all(isinstance(p,dict) and 'card' in p for p in saved_questions):
   assert [p['sourceOrder'] for p in saved_questions]==list(range(1,101))
-  assert all(p['topicId']=='human-medicine' and p['id']==p['card']['id'] and m.sha(p['card'])==p['sha256'] for p in saved_questions)
+  assert all(p['topicId']=='video-game-history' and p['id']==p['card']['id'] and m.sha(p['card'])==p['sha256'] for p in saved_questions)
   saved_questions=[p['card'] for p in saved_questions]
- assert saved_questions==m.read(m.C/'src/content/topics/human-medicine.json')['questions']
+ assert saved_questions==m.read(m.C/'src/content/topics/video-game-history.json')['questions']
 else:
  # Preservation only: all100 exact ordered peer bodies are an equivalent
  # retained full topic snapshot. Do not hydrate or qualify the raw packet.
- topic_cards=m.read(m.C/'src/content/topics/human-medicine.json')['questions']
- full_peers=[p for p in ps['actualCurrentPeers'] if p['topicId']=='human-medicine']
+ topic_cards=m.read(m.C/'src/content/topics/video-game-history.json')['questions']
+ full_peers=[p for p in ps['actualCurrentPeers'] if p['topicId']=='video-game-history']
  assert len(full_peers)==100 and [p['sourceOrder'] for p in full_peers]==list(range(1,101))
  assert [p['card'] for p in full_peers]==topic_cards
 for p in ps['actualCurrentPeers']:assert m.sha(p['card'])==p.get('sha256',p.get('canonicalSHA256')) and p['card']==cat[p['id']]
