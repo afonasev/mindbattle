@@ -5,7 +5,12 @@ s=importlib.util.spec_from_file_location('owned',D/'owned-tools.py');m=importlib
 order=int(sys.argv[1]);R=D/sys.argv[2];proof_path=D/(sys.argv[3] if len(sys.argv)>3 and not sys.argv[3].startswith('--') else f'video-game-history{order}-native-proof.json');proof=m.read(proof_path);uid=proof['sourceNativeId'];include_prior='--include-prior-tasks' in sys.argv
 p=pathlib.Path(proof['nativeJournal']);matches=[p] if p.exists() else list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+uid+'.jsonl'));assert len(matches)==1
 native=matches[0];rows=[json.loads(l) for l in native.open()];assert rows[0]['payload']['id']==uid
-start=proof['currentTaskStartLine'];calls=[]
+start=proof['currentTaskStartLine']
+# The same native may already be on its next authorized card. Account only
+# originals up to the completed task that produced this immutable proof.
+ends=[n for n,row in enumerate(rows,1) if n>start and row.get('type')=='event_msg' and row.get('payload',{}).get('type')=='task_complete']
+assert ends, 'SOURCE proof requires an actually completed task'
+end=min(ends);rows=rows[:end];calls=[]
 for n,row in enumerate(rows,1):
  p=row.get('payload',{})
  if (include_prior or n>start) and p.get('type')=='custom_tool_call' and re.match(r'^(?:(?:const|let|var)\s+\w+\s*=\s*|text\(\s*)?await\s+tools\.web__run\s*\(', re.sub(r'^// @exec:[^\n]*\n', '', p.get('input','').lstrip())):calls.append((n,p))
@@ -66,7 +71,7 @@ for ordinal,(line,call) in enumerate(calls,1):
    pre_dispatch.append({'call_id':call['call_id'],'callLine':line,'resultLine':resultline,'originalResult':str(p),'fileSHA256':m.raw(p),'nativeExact':True,'actualWebCalls':0,'reason':'Entire exec module rejected before execution; exact input fails compile-only Node syntax check. No source request dispatched.','compileOnlyExitCode':check.returncode,'compileOnlyStderr':check.stderr})
    continue
  network.append({'ordinalOneBased':ordinal,'call_id':call['call_id'],'callLine':line,'resultLine':resultline,'call':call['input'],'originalResult':str(p),'fileSHA256':m.raw(p),'nativeExact':True,'identicalOriginalResultAliases':identical_aliases})
-report={'owner':m.O,'sourceNativeId':uid,'nativeJournalActual':str(native),'sourceOrder':order,'actualWebCalls':len(network),'candidateExecModules':len(calls),'preDispatchCompilationFailures':pre_dispatch,'includePriorTasks':include_prior,'proof':str(proof_path),'calls':network,'exactStoredRecoveryNetworkCalls':0,'missingAuthorResultLinesRecovered':missing,'rawPacketUnchanged':True,'qualityCredit':0}
+report={'owner':m.O,'sourceNativeId':uid,'nativeJournalActual':str(native),'sourceOrder':order,'actualWebCalls':len(network),'candidateExecModules':len(calls),'preDispatchCompilationFailures':pre_dispatch,'includePriorTasks':include_prior,'proof':str(proof_path),'taskStartLine':start,'taskCompleteLine':end,'calls':network,'exactStoredRecoveryNetworkCalls':0,'missingAuthorResultLinesRecovered':missing,'rawPacketUnchanged':True,'qualityCredit':0}
 report_name=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--report-name=')),f'video-game-history{order}-network-accounting.json');assert pathlib.Path(report_name).name==report_name
 rp=D/report_name;m.write(rp,report)
 print(m.savecode([rp,pathlib.Path(__file__),*owned],f'Account SOURCE{order} exact stored native network results without quality credit'))
