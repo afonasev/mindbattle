@@ -13,6 +13,8 @@ selected={v['questionId']:v for v in cp['selectedCards']}
 cards=[]
 for order in orders:
  q=qs[order-1];f=selected[q['id']]
+ assert not x.get(f'pendingVideoGameHistory{order}'), 'Never replay an already processed card'
+ assert not any(isinstance(v,dict) and q['id'] in [v.get('id'),v.get('questionId')] for v in x['newAttemptFences'])
  assert q['id'] in cp['currentRemainingIds'] and m.sha(q)==f['baselineCanonicalSha256']
  out=D/f'source-video-game-history{order}';assert not out.exists()
  cards.append({'id':q['id'],'topicId':'video-game-history','sourceOrder':order,'difficulty':q['difficulty'],'correctIndex':q['correctIndex'],'beforeHash':m.sha(q),'cycle':0,'outputDirectory':str(out),'currentCardLocator':{'path':str(m.C/'src/content/topics/video-game-history.json'),'jsonPointer':f'/questions/{order-1}'},'designatedSourceURL':q['source']['url']})
@@ -43,6 +45,7 @@ task={
  'readDiscipline':'Inventory helper stdout is only counts; never print entire inventory/topic/index/fence chain. Query exact relevant IDs/URLs internally, then personally read relevant whole bodies. Do not copy old author verdicts. Read each applicable policy once per revision, not each card.',
  'limits':'Writes only current assigned outputDirectory and descendants. You are not alone: preserve others. No catalog/planning/Git/index/claims/QA/runtime/build/deploy/newchats/subagents/model changes. First actualcompaction finish already-started current ID only, no nextcard; second preservationSTOP. Root identity is not author identity.',
  'stop':'One complete current-ID READY_FOR_INDEPENDENT_REVIEW or specific HOLD then end turn. READY/metadata/schema confer0credit. No next ID before same-batch operational CONTINUE.'}
+task['recentRetainedSources']=x.setdefault('continuationRetainedSourceMetadata',task['recentRetainedSources'])
 p=D/f'{key}-batch-task.json';m.write(p,task)
 x.setdefault('activeAuthorBatches',{})[key]={'orders':orders,'assignment':str(p),'currentOrder':orders[0],'status':'AWAITING_IDENTITY_START'}
 x.setdefault('continuationRun',{'startedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'intakeCURRENT':x['CURRENT'],'processedOrders':[],'acceptedDelta':0,'holds':[]})
