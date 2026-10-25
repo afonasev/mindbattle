@@ -22,6 +22,10 @@ for field in ['proceduralDeviations','cycle1ProceduralDeviations','readScopeDevi
 if pending.get('proceduralDeviations',{}).get('uncured'):case['reportBase']['contentPASSAndQAdoNotAssertProceduralCompliance']=True
 if stage=='final':
  case['reportBase'].update(sourceNetworkCallsScope='This sole SOURCE cycle only',sourceInitialNetworkCalls=pending['actualWebCalls'],sourceCycle1NetworkCalls=pending['cycle1NetworkCalls'],sourceTotalNetworkCalls=pending['actualWebCalls']+pending['cycle1NetworkCalls'],sourceInitialNetworkAccounting=pending['sourceNetworkAccounting'],sourceInitialRawFreeze=pending['rawFreeze'],previousIndependentInitial=task['previousIndependentInitial'],previousIndependentInitialSHA256=m.raw(task['previousIndependentInitial']))
+actual_source_proof=pending.get('cycle1SourceNativeProof' if stage=='final' else 'sourceNativeProof')
+if actual_source_proof:
+ proof=m.read(actual_source_proof);assert proof['sourceNativeId']==task['authorNativeId'] and proof['afterHash']==task['cardHash']
+ case['reportBase']['nativeSourceProof']=rel(actual_source_proof)
 casePath=D/f'case-video-game-history{order}-{stage}-{status.lower()}.json';m.write(casePath,case)
 a.update(stage=f'IDLE_AFTER_{stage.upper()}{order}_{status}',lastInput=audit['lastInput'],modelWindow=audit['modelWindow'],actualCompactions=comp,lastTaskEvent=lastEvent,cursor=cursor,nativePreflightVerifiedBy=m.O);x['retainedIdleReviewer']=dict(a);x['noRetainedIdleReviewer']=False;x['currentWork']['stage']=a['stage'] if x['currentWork'].get('id')==task['id'] else x['currentWork']['stage'];x['lastIndependentResult']={'id':task['id'],'sourceOrder':order,'stage':stage,'status':status,'case':str(casePath)};x[f'pendingVideoGameHistory{order}'].update(independentStatus=status,readerNativeId=a['threadId'],readerNetworkCalls=len(calls));x[f'pendingVideoGameHistory{order}']['finalReceipt' if stage=='final' else 'initialReceipt']=rel(R/'receipt.json');m.write(D/'manifest.json',x)
 print('code',m.savecode([auditPath,casePath,D/'manifest.json',pathlib.Path(__file__),*[p for p in R.rglob('*') if p.is_file()]],f'Freeze exact independent {stage.upper()}{order} {status} before strict binding'))
