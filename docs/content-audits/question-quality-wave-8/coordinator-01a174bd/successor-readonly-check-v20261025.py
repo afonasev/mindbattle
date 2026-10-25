@@ -82,7 +82,7 @@ assert a['threadId']==r['retainedIdleReader']['threadId']==G
 assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])==a['ownReceiptCount']==expected_reader_count
 identity=read(x['currentReaderNativeIdentity']);assert identity['verifiedSessionMetaId']==identity['decodedResult']['threadId']==G and identity['nativeJournal']==a['nativeJournal']
 seed=read(r['inheritedImmutable']);assert seed['retainedIdleReader']['threadId']==G and seed['readerOwnReceiptCount']==len(seed['readerOwnReceipts'])
-retired=read(r['retiredReader32Own13']);assert retired['readerOwnReceiptCount']==len(retired['readerOwnReceipts'])==13 and retired['retainedIdleReader']['threadId']!=G
+retired=read(r['retiredReader33']);assert retired['readerOwnReceiptCount']==len(retired['readerOwnReceipts'])==18 and retired['readerNativeId']!=G
 for path,binding in r['readerOwnReceipts'].items():
  assert raw(path)==binding['rawSHA256']
  receipt=read(path);entry=receipt['entries'][0]
@@ -108,7 +108,7 @@ files=list((C/'src/content/topics').glob('*.json'));assert len(files)==110
 for path in files:
  assert subprocess.check_output(['git','-C',str(C),'show',qa[-1]['testedCatalogCommit']+':'+str(path.relative_to(C))])==path.read_bytes()
 next_card=x['nextUntouched'];order=next_card['sourceOrder'];topic=next_card['topicId']
-assert order==min(x.get('unfinishedAuthorBatchOrders',[max(x['ownedSourceOrders'])+1])) and topic==x['activeRoute']['topicId']
+assert order==min(x.get('unfinishedAuthorBatchOrders') or [max(x['ownedSourceOrders'])+1]) and topic==x['activeRoute']['topicId']
 assert read(C/f'src/content/topics/{topic}.json')['questions'][order-1]['id']==next_card['id']
 assert next_card['id'] in remaining and current[next_card['id']]==base[next_card['id']]
 assert sha(current[next_card['id']])==next_card['hash']

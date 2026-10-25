@@ -16,7 +16,7 @@ root=native(x['rootNativeAudit']);actors=[]
 for k,a in x['actors'].items():
  if a.get('archived',False) or a['stage'].startswith(('ARCHIVED','RETIRED')):continue
  actors.append({'key':k,'stage':a['stage'],'task':a.get('task'),'cursor':a.get('cursor'),'model':a['model'],'thinking':a['thinking'],'native':native(a)})
-fields=['id','status','qualityCredit','applied','beforeHash','afterHash','appliedCurrentHash','appliedCommit','initialAppliedCurrentHash','unappliedProposalHash','rawFreeze','qualifiedFreeze','catalogCommit','qa','certification','certificationCodeCommit','actualWebCalls','sourceActualCompactions','sourceNetworkAccounting','cycle1RawFreeze','cycle1QualifiedFreeze','cycle1AfterHash','cycle1Status','cycle1CatalogCommit','cycle1QA','ordinaryCycle2Prohibited','noQA','noIndependentInitial','noQualificationApplyQAInitial']
+fields=['id','status','qualityCredit','applied','beforeHash','afterHash','appliedCurrentHash','appliedCommit','initialAppliedCurrentHash','unappliedProposalHash','rawFreeze','qualifiedFreeze','catalogCommit','qa','certification','certificationCodeCommit','actualWebCalls','sourceActualCompactions','sourceNetworkAccounting','cycle1RawFreeze','cycle1QualifiedFreeze','cycle1AfterHash','cycle1Status','cycle1CatalogCommit','cycle1QA','ordinaryCycle2Prohibited','noQA','noIndependentInitial','noQualificationApplyQAInitial','sourceProvenanceDeviation']
 owned_orders=set(x['ownedSourceOrders'])
 own={k.removeprefix('pendingVideoGameHistory'):{f:v[f] for f in fields if f in v} for k,v in x.items() if re.fullmatch('pendingVideoGameHistory[0-9]+',k) and int(k.removeprefix('pendingVideoGameHistory')) in owned_orders}
 push=[m.flow.get(cid)[1]['evidence'].get('remote_push') for cid in x['claims']]
