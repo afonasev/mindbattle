@@ -88,7 +88,7 @@ for path in sorted((m.C/'src/content/topics').glob('*.json')):
   cat[card['id']]=card;rows.append({'topicId':t['id'],'id':card['id'],'prompt':card['prompt'],'answers':[a['text'] for a in card['answers']],'correctIndex':card['correctIndex']})
 assert len(rows)==11000 and m.sha(rows)==ps['globalMAIN']['rowsCanonicalSHA256']
 inventory_read_binding=None
-file_bindings=ps['globalMAIN'].get('allCurrentFileByteBindings')
+file_bindings=ps['globalMAIN'].get('allCurrentFileByteBindings',ps['globalMAIN'].get('currentFileByteBindings'))
 if file_bindings is None:
  # Equivalent explicit author SHA-bound inventory; raw packet remains untouched.
  inv_path=pathlib.Path(sp['sourceInventoryPath']);inv_path=inv_path if inv_path.is_absolute() else m.C/inv_path
