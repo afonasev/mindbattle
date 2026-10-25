@@ -7,6 +7,7 @@ key=sys.argv[1];n=int(sys.argv[2]);completion='--initial-completion' in sys.argv
 x=m.read(D/'manifest.json');a=x['actors'][key];batch=x['activeAuthorBatches'][key]
 assert n in batch['orders'] and not a.get('archived')
 rows=[json.loads(l) for l in Path(a['nativeJournal']).open()]
+assert [r['payload']['id'] for r in rows if r.get('type')=='session_meta']==[a['threadId']]
 comp=sum(r.get('type')=='compacted' for r in rows);assert comp==0
 assert next(r['payload']['type'] for r in reversed(rows) if r.get('payload',{}).get('type') in ['task_started','task_complete'])=='task_complete'
 info=next(r['payload']['info'] for r in reversed(rows) if r.get('payload',{}).get('type')=='token_count')
