@@ -28,7 +28,9 @@ x['coordinatorSlicesToPreserve']=m.read(pathlib.Path(x['predecessorHandoff']))['
 x['currentWork'].update(CURRENT=n,remaining=2000-n)
 x['additionalRetainedSourceIndexes']=list(dict.fromkeys(x['additionalRetainedSourceIndexes']+[x['sourceIndex']]))
 packet='qualified-source-video-game-history'+str(order)+('-cycle1' if 'FINAL' in status else '')
-x['sourceIndex']=str(D/packet/'sourceproof.json')
+actual_packet=x[f'pendingVideoGameHistory{order}'].get('cycle1QualifiedPacket' if 'FINAL' in status else 'qualifiedPacket')
+x['sourceIndex']=str((__import__('pathlib').Path(actual_packet) if actual_packet else D/packet)/'sourceproof.json')
+assert __import__('pathlib').Path(x['sourceIndex']).is_file()
 x['helpers']['record-progress.py']=str(pathlib.Path(__file__))
 x['readyQueue']=[v for v in x.get('readyQueue',[]) if v.get('sourceOrder')!=order]
 m.write(D/'manifest.json',x);print('code',m.savecode([D/'manifest.json',pathlib.Path(__file__)],f'Record exact CURRENT{n} certificate projection and author cleanup'))
