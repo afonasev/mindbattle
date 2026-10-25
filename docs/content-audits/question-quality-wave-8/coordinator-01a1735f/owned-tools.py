@@ -188,7 +188,7 @@ def alias_explicit_fresh_inventory_context(candidate,sp,ps,R):
 def alias_explicit_cross_topic_peers(candidate,sp,ps,R):
  """Keep explicit foreign-topic peer bodies in the validator's peer container."""
  if 'crossCatalogClosestFullBodies' in ps:return
- containers=[k for k in ['actualRelevantCrossTopicPeers','relevantCrossTopicPeers','crossTopicCurrentPeers'] if k in ps]
+ containers=[k for k in ['actualRelevantCrossTopicPeers','relevantCrossTopicPeers','crossTopicCurrentPeers','relevantCrossTopicCurrentPeers'] if k in ps]
  if not containers:return
  assert len(containers)==1
  container=containers[0]
