@@ -3,6 +3,11 @@ import pathlib, json, importlib.util, sys, re
 D=pathlib.Path(__file__).parent
 s=importlib.util.spec_from_file_location('owned',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
 order=int(sys.argv[1]);actor_key=sys.argv[2];name=sys.argv[3] if len(sys.argv)>3 else f'source-video-game-history{order}'
+baseline=sys.argv[sys.argv.index('--baseline')+1] if '--baseline' in sys.argv else None
+def topic_read(path):
+ if baseline and str(path).startswith(str(m.C/'src/content/topics')):
+  return json.loads(m.h.git(m.C,'show',baseline+':'+str(path.relative_to(m.C))))
+ return m.read(path)
 R=D/name;x=m.read(D/'manifest.json');actor=x['actors'][actor_key];uid=actor['threadId'];native=pathlib.Path(actor['nativeJournal']);journal=[json.loads(l) for l in native.open()]
 assert journal[0]['payload']['id']==uid
 comp=sum(o['type']=='compacted' for o in journal);last=next(o['payload']['info'] for o in reversed(journal) if o.get('payload',{}).get('type')=='token_count')
@@ -28,7 +33,7 @@ assert len(a['entries'])==len(sp['entries'])==1
 m.alias_serialized_prompt_group(a,sp)
 m.alias_full_prompt_answer_concatenation(a,sp)
 m.alias_full_body_wrapper_digests(ps,R)
-e=a['entries'][0];q=m.read(m.C/'src/content/topics/video-game-history.json')['questions'][order-1]
+e=a['entries'][0];q=topic_read(m.C/'src/content/topics/video-game-history.json')['questions'][order-1]
 assert e['sourceOrder']==order and e['beforeCard']==q and m.sha(q)==e['beforeHash'] and m.sha(e['proposedCard'])==e['afterHash']
 assert e['id']==q['id'] and e['status'] in ['HOLD','READY_FOR_INDEPENDENT_REVIEW','READY_FOR_SAME_READER_FINAL']
 cp=m.read(pathlib.Path(x['canonicalCheckpoint']));f=next(z for z in cp['selectedCards'] if z['questionId']==e['id']);assert q['difficulty']==e['proposedCard']['difficulty']==f['difficulty'] and q['correctIndex']==e['proposedCard']['correctIndex']==f['correctIndex']
@@ -78,7 +83,7 @@ for source in sp['rawSources']:
 m.alias_explicit_nested_inventory(a,sp,ps,R)
 cat={};rows=[]
 for path in sorted((m.C/'src/content/topics').glob('*.json')):
- t=m.read(path)
+ t=topic_read(path)
  for card in t['questions']:
   cat[card['id']]=card;rows.append({'topicId':t['id'],'id':card['id'],'prompt':card['prompt'],'answers':[a['text'] for a in card['answers']],'correctIndex':card['correctIndex']})
 assert len(rows)==11000 and m.sha(rows)==ps['globalMAIN']['rowsCanonicalSHA256']
@@ -91,27 +96,27 @@ if file_bindings is None:
  assert m.raw(inv_path)==sp['sourceInventorySHA256']==ps['globalMAIN']['inventorySHA256']==ps['sameTopicMAIN']['inventorySHA256']
  inv=m.read(inv_path);assert inv['globalMAIN']['rowsCanonicalSHA256']==ps['globalMAIN']['rowsCanonicalSHA256']==m.sha(rows)
  assert inv['globalMAIN']['topicFileCount']==110 and inv['globalMAIN']['questionCount']==11000
- assert inv['sameTopicMAIN']['questions']==m.read(m.C/'src/content/topics/video-game-history.json')['questions']
+ assert inv['sameTopicMAIN']['questions']==topic_read(m.C/'src/content/topics/video-game-history.json')['questions']
  file_bindings=inv['globalMAIN']['allCurrentFileByteBindings'];assert len(file_bindings)==110
  inventory_read_binding={'path':str(inv_path),'fileSHA256':m.raw(inv_path),'operation':'Read exact original sourceproof+peer SHA-bound inventory; all existing rows11000/topic100/files110 assertions retained, raw untouched.'}
-for b in file_bindings:assert m.raw(m.C/b['path'])==b.get('sha256',b.get('fileSHA256',b.get('fileSha256')))
+for b in file_bindings:assert (__import__('hashlib').sha256(__import__('subprocess').check_output(['git','-C',str(m.C),'show',baseline+':'+b['path']])).hexdigest() if baseline else m.raw(m.C/b['path']))==b.get('sha256',b.get('fileSHA256',b.get('fileSha256')))
 if 'questions' in ps.get('sameTopicMAIN',{}):
  saved_questions=ps['sameTopicMAIN']['questions']
  if len(saved_questions)==100 and all(isinstance(p,dict) and 'card' in p for p in saved_questions):
   assert [p['sourceOrder'] for p in saved_questions]==list(range(1,101))
   assert all(p['topicId']=='video-game-history' and p['id']==p['card']['id'] and m.sha(p['card'])==p['sha256'] for p in saved_questions)
   saved_questions=[p['card'] for p in saved_questions]
- assert saved_questions==m.read(m.C/'src/content/topics/video-game-history.json')['questions']
+ assert saved_questions==topic_read(m.C/'src/content/topics/video-game-history.json')['questions']
 else:
  # Preservation only: all100 exact ordered peer bodies are an equivalent
  # retained full topic snapshot. Do not hydrate or qualify the raw packet.
- topic_cards=m.read(m.C/'src/content/topics/video-game-history.json')['questions']
+ topic_cards=topic_read(m.C/'src/content/topics/video-game-history.json')['questions']
  full_peers=[p for p in ps['actualCurrentPeers'] if p['topicId']=='video-game-history']
  assert len(full_peers)==100 and [p['sourceOrder'] for p in full_peers]==list(range(1,101))
  assert [p['card'] for p in full_peers]==topic_cards
 for p in ps['actualCurrentPeers']:assert m.sha(p['card'])==p.get('sha256',p.get('canonicalSHA256')) and p['card']==cat[p['id']]
 
-proof={'owner':m.O,'sourceNativeId':uid,'nativeJournal':str(native),'actualCompactions':comp,'lastInput':last['last_token_usage']['input_tokens'],'modelWindow':last['model_context_window'],'packet':str(R),'rawFileSHA256':{str(p.relative_to(R)):m.raw(p) for p in R.rglob('*') if p.is_file()},'status':e['status'],'beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'sixGroups':6,'fourVariants':4,'nativeCaptureBindings':raw_checks,'qualityCredit':0,'networkCalls':[],'technicalTripleHashRepresentationChecks':triple_checks,'explicitInventoryReadBinding':inventory_read_binding}
+proof={'owner':m.O,'sourceNativeId':uid,'nativeJournal':str(native),'actualCompactions':comp,'lastInput':last['last_token_usage']['input_tokens'],'modelWindow':last['model_context_window'],'packet':str(R),'rawFileSHA256':{str(p.relative_to(R)):m.raw(p) for p in R.rglob('*') if p.is_file()},'status':e['status'],'preservedCatalogBaseline':baseline,'beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'sixGroups':6,'fourVariants':4,'nativeCaptureBindings':raw_checks,'qualityCredit':0,'networkCalls':[],'technicalTripleHashRepresentationChecks':triple_checks,'explicitInventoryReadBinding':inventory_read_binding}
 for i,o in enumerate(journal,1):
  p=o.get('payload',{})
  if o['type']=='response_item' and p.get('type')=='custom_tool_call' and re.match(r'^(?:(?:const|let|var)\s+\w+\s*=\s*|text\(\s*)?await\s+tools\.web__run\s*\(', re.sub(r'^const urls\s*=\s*\[(?:\s*"[^"\\]*(?:\\.[^"\\]*)*"\s*,?)*\s*\];\s*', '', re.sub(r'^// @exec:[^\n]*\n', '', p.get('input','').lstrip()))):
