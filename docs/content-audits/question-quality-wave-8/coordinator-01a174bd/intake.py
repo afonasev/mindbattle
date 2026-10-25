@@ -18,6 +18,7 @@ for R in packet_paths:
     assert R.parent==D and R.name.startswith("source-video-game-history"), "Only owned video-game-history packet"
     name = R.name; B = D/('qualified-'+name)
     candidate, sp, ps = [m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
+    m.alias_source78_concurrent74_snapshot(candidate,sp,ps,R)
     m.alias_source74_cycle1_own_global_metadata(candidate,sp,ps,R)
     if R.name=='source-video-game-history70' and (R/'concurrent66-addendum.json').exists():
         clar=m.read(R/'concurrent66-addendum.json');cor=m.read(R/'concurrent66-identity-correction.json')
