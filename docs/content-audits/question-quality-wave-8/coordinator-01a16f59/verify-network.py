@@ -8,7 +8,8 @@ native=matches[0];rows=[json.loads(l) for l in native.open()];assert rows[0]['pa
 start=proof['currentTaskStartLine']
 # The same native may already be on its next authorized card. Account only
 # originals up to the completed task that produced this immutable proof.
-ends=[n for n,row in enumerate(rows,1) if n>start and row.get('type')=='event_msg' and row.get('payload',{}).get('type')=='task_complete']
+last_turn_start=proof.get('currentTaskLastTurnStartLine',start);assert last_turn_start>=start
+ends=[n for n,row in enumerate(rows,1) if n>last_turn_start and row.get('type')=='event_msg' and row.get('payload',{}).get('type')=='task_complete']
 assert ends, 'SOURCE proof requires an actually completed task'
 end=min(ends);rows=rows[:end];calls=[]
 for n,row in enumerate(rows,1):

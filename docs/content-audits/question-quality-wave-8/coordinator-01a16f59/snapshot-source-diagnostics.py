@@ -30,7 +30,12 @@ for i,r in enumerate(rs,1):
   b=z.get('output','');match=re.match(r'Warning: truncated output \(original token count: (\d+)\)',b) if isinstance(b,str) else None
   if match and int(match[1])==z.get('original_token_count'):actual=True
  if actual:trunc.append(raw)
-taskStart=max(i for i,r in enumerate(rs,1) if r['type']=='event_msg' and r.get('payload',{}).get('type')=='task_started');out=D/f'source{order}{suffix}-procedural-diagnostics.json';assert not out.exists();m.write(out,{'taskStartLine':taskStart,'newTaskNonzero':sum(z['callLine']>taskStart for z in bad),'newTaskTruncated':sum(z['callLine']>taskStart for z in trunc),'owner':m.O,'sourceNativeId':x['actors'][actor_key]['threadId'],'nativeJournalActual':str(p),'actualCompactions':sum(r['type']=='compacted' for r in rs),'nonzeroOriginals':bad,'truncatedOriginals':trunc,'allUncured':True,'noEmbeddedHistoricalExecutionsCountedAsNew':True})
+lastTurnStart=max(i for i,r in enumerate(rs,1) if r['type']=='event_msg' and r.get('payload',{}).get('type')=='task_started');taskStart=lastTurnStart
+continuation=x.get('pendingVideoGameHistory'+str(order),{}).get('cycle1Continuation') if suffix else None
+if continuation:
+ continued=m.read(continuation);assert continued['sourceNativeId']==x['actors'][actor_key]['threadId']
+ taskStart=continued['firstTaskStartLine'];assert taskStart<=lastTurnStart and rs[taskStart-1]==continued['originalFirstTaskStarted']
+out=D/f'source{order}{suffix}-procedural-diagnostics.json';assert not out.exists();m.write(out,{'taskStartLine':taskStart,'lastTaskTurnStartLine':lastTurnStart,'sameCycleContinuation':continuation,'newTaskNonzero':sum(z['callLine']>taskStart for z in bad),'newTaskTruncated':sum(z['callLine']>taskStart for z in trunc),'owner':m.O,'sourceNativeId':x['actors'][actor_key]['threadId'],'nativeJournalActual':str(p),'actualCompactions':sum(r['type']=='compacted' for r in rs),'nonzeroOriginals':bad,'truncatedOriginals':trunc,'allUncured':True,'noEmbeddedHistoricalExecutionsCountedAsNew':True})
 entry=x['pendingVideoGameHistory'+str(order)];entry['cycle1ProceduralDeviations' if suffix else 'proceduralDeviations']={'path':str(out),'rawSHA256':m.raw(out),'uncured':True,'nonzeroOriginals':len(bad),'truncatedOriginals':len(trunc),'contentPASSAndQAdoNotAssertProceduralCompliance':True};m.write(D/'manifest.json',x)
 print(m.savecode([pathlib.Path(__file__),out,D/'manifest.json'],'Preserve exact author procedural originals separately from content credit'))
 print({'order':order,'nonzeroOriginals':len(bad),'truncatedOriginals':len(trunc),'UNCURED':True})

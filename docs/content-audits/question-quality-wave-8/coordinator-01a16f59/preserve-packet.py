@@ -117,8 +117,19 @@ for i,o in enumerate(journal,1):
  if o['type']=='response_item' and p.get('type')=='custom_tool_call' and re.match(r'^(?:(?:const|let|var)\s+\w+\s*=\s*|text\(\s*)?await\s+tools\.web__run\s*\(', re.sub(r'^// @exec:[^\n]*\n', '', p.get('input','').lstrip())):
   callid=p['call_id'];result=next(((j,z) for j,z in enumerate(journal,1) if z.get('payload',{}).get('type')=='custom_tool_call_output' and z['payload'].get('call_id')==callid),None)
   proof['networkCalls'].append({'callLine':i,'call':p['input'],'resultLine':result[0] if result else None})
-task_start=max(i for i,o in enumerate(journal,1) if o['type']=='event_msg' and o.get('payload',{}).get('type')=='task_started')
+last_turn_start=max(i for i,o in enumerate(journal,1) if o['type']=='event_msg' and o.get('payload',{}).get('type')=='task_started')
+task_start=last_turn_start
+continuation=x.get('pendingVideoGameHistory'+str(order),{}).get('cycle1Continuation') if a['cycle']==1 else None
+if continuation:
+ continued=m.read(continuation);original_task=m.read(actor['task'])
+ assert continued['owner']==m.O and continued['sourceNativeId']==uid
+ assert continued['originalTask']==actor['task'] and m.raw(actor['task'])==continued['originalTaskSHA256']
+ assert original_task['cycle']==1 and original_task['sourceOrder']==order and original_task['authorNativeId']==uid
+ task_start=continued['firstTaskStartLine']
+ assert task_start<=last_turn_start and journal[task_start-1]==continued['originalFirstTaskStarted']
+ proof['sameCycleContinuation']={'path':continuation,'rawSHA256':m.raw(continuation),'noCycleReset':True}
 proof['currentTaskStartLine']=task_start
+proof['currentTaskLastTurnStartLine']=last_turn_start
 proof['priorTaskNetworkCalls']=[v for v in proof['networkCalls'] if v['callLine']<task_start]
 proof['networkCalls']=[v for v in proof['networkCalls'] if v['callLine']>task_start]
 actor.update(actualCompactions=comp,lastInput=proof['lastInput'],modelWindow=proof['modelWindow'],lastTaskEvent='task_complete',stage=f'IDLE_AFTER_SOURCE{order}_{e["status"]}',nativePreflightVerifiedBy=m.O)
