@@ -32,11 +32,15 @@ for order in x['ownedSourceOrders']:
   assert 'HOLD' in p['status'] and p['id'] in left
   if p.get('applied'):assert m.sha(cat[p['id']])==p['appliedCurrentHash']
   else:assert m.sha(cat[p['id']])==p['beforeHash']
- pairs=[(Path(p['rawPacket']),p['rawFreeze'])]
- if p.get('cycle1RawFreeze'):pairs.append((D/f'source-video-game-history{order}-cycle1',p['cycle1RawFreeze']))
+ pairs=[(Path(p.get('rawPacket',str(D/f'source-video-game-history{order}'))),p['rawFreeze'])]
+ if p.get('cycle1RawFreeze'):pairs.append((Path(p.get('cycle1RawPacket',str(D/f'source-video-game-history{order}-cycle1'))),p['cycle1RawFreeze']))
  if p.get('originalRawFreeze'):pairs.append((D/f'source-video-game-history{order}',p['originalRawFreeze']))
+ if p.get('originalUnsafeRawFreeze'):pairs.append((D/f'source-video-game-history{order}',p['originalUnsafeRawFreeze']))
+ if p.get('cycle1RawSchemaFailure'):
+  failed=p['cycle1RawSchemaFailure'];pairs.append((Path(failed['rawPacket']),failed['rawFreeze']))
  for packet,freeze in pairs:
-  for name in ['candidate.json','sourceproof.json','peer-snapshot.json']:
+  names=['hold.json'] if (packet/'hold.json').exists() and not (packet/'candidate.json').exists() else ['candidate.json','sourceproof.json','peer-snapshot.json']
+  for name in names:
    f=packet/name;assert subprocess.check_output(['git','-C',str(m.C),'show',freeze+':'+str(f.relative_to(m.C))])==f.read_bytes()
   raw.append({'sourceOrder':order,'packet':str(packet),'freeze':freeze})
 qa=x['ownAffectedRuns'];assert qa
