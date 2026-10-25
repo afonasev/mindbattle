@@ -119,12 +119,12 @@ for i,o in enumerate(journal,1):
   proof['networkCalls'].append({'callLine':i,'call':p['input'],'resultLine':result[0] if result else None})
 last_turn_start=max(i for i,o in enumerate(journal,1) if o['type']=='event_msg' and o.get('payload',{}).get('type')=='task_started')
 task_start=last_turn_start
-continuation=x.get('pendingVideoGameHistory'+str(order),{}).get('cycle1Continuation') if a['cycle']==1 else None
+continuation=x.get('pendingVideoGameHistory'+str(order),{}).get('cycle1Continuation' if a['cycle']==1 else 'initialContinuation')
 if continuation:
  continued=m.read(continuation);original_task=m.read(actor['task'])
  assert continued['owner']==m.O and continued['sourceNativeId']==uid
  assert continued['originalTask']==actor['task'] and m.raw(actor['task'])==continued['originalTaskSHA256']
- assert original_task['cycle']==1 and original_task['sourceOrder']==order and original_task['authorNativeId']==uid
+ assert original_task['cycle']==a['cycle'] and original_task['sourceOrder']==order and original_task['authorNativeId']==uid
  task_start=continued['firstTaskStartLine']
  assert task_start<=last_turn_start and journal[task_start-1]==continued['originalFirstTaskStarted']
  proof['sameCycleContinuation']={'path':continuation,'rawSHA256':m.raw(continuation),'noCycleReset':True}
