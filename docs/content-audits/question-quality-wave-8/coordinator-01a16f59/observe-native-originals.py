@@ -29,9 +29,11 @@ for actor in [x['rootNativeAudit'], *x['actors'].values()]:
                'resultCanonicalSHA256': m.sha(row), 'uncured': True}
         value = payload.get('output'); blocks = value if isinstance(value, list) else [value]
         call_input=call[1]['payload'].get('input','')
-        # Match an actual outer statement, not text inside a quoted shell program.
+        # Ignore quoted shell programs/comments; retain real same-line projections.
         # Earlier snapshots stay immutable, including their regex false positives.
-        projected_exec='tools.exec_command(' in call_input and bool(re.search(r'(?m)^\s*text\(\s*[A-Za-z_$][A-Za-z0-9_$]*\.output\s*\)\s*;?\s*$',call_input))
+        outer_js=re.sub(r"'(?:\\.|[^'\\])*'|\"(?:\\.|[^\"\\])*\"|`(?:\\.|[^`\\])*`",' ',call_input,flags=re.S)
+        outer_js=re.sub(r'//[^\n]*|/\*.*?\*/',' ',outer_js,flags=re.S)
+        projected_exec='tools.exec_command(' in outer_js and bool(re.search(r'\btext\(\s*[A-Za-z_$][A-Za-z0-9_$]*\.output\s*\)',outer_js))
         if projected_exec:projected.append(ref)
         codes, cut = [], False
         for block in blocks:
