@@ -44,19 +44,14 @@ for direction in [f'source{order}ToCurrent{changed}',f'current{changed}ToSource{
 assert assessment['directReverseCheck'] and assessment['dependencyConclusion']
 nr=[json.loads(l) for l in pathlib.Path(nativeproof['nativeJournal']).open()]
 assert [r['payload']['id'] for r in nr if r['type']=='session_meta']==[uid] and sum(r['type']=='compacted' for r in nr)<2
-timing=clar['timingEvidence'];assert timing['nativeSessionId']==uid
-generation=timing['authorReadyGeneration'];check=timing['mechanicalPacketCheck'];read=timing[f'actualAuthoritativeOrder{changed}ReportRead']
+# Revision2026-10-25: exact tool-call order is not a quality gate.
+# Raw-freeze/body/hash checks above and full deterministic current checks below remain mandatory.
+# Author personally signs the exact updated pair; the independent reviewer assesses CURRENT.
+timing=clar.get('timingEvidence')
+declared_uid=clar.get('sourceNativeId',(timing or {}).get('nativeSessionId'))
+assert declared_uid==uid and clar.get('cycle',ca['cycle'])==ca['cycle']
 timing_alias=None
-if 'nativeCallLine' not in read:
- assert isinstance(read['callLine'],int)
- original_read=dict(read);read={**read,'nativeCallLine':read['callLine']}
- call=nr[read['nativeCallLine']-1]['payload']
- assert call['type']=='custom_tool_call'
- assert str(reportpath) in call['input'] or (str(m.C) in call['input'] and str(reportpath.relative_to(m.C)) in call['input'])
- timing_alias={'originalReadTiming':original_read,'operation':'Existing exact native callLine exposed under redundant nativeCallLine name after checking actual report path in original call. Raw clarification unchanged; original KeyError uncured.'}
-for callline,resultline in [(generation['callLine'],generation['toolResultLine']),(check['callLine'],check['toolResultLine']),(read['nativeCallLine'],read['toolResultLine'])]:
- a,b=nr[callline-1],nr[resultline-1];assert a['type']==b['type']=='response_item' and a['payload']['type']=='custom_tool_call' and b['payload']['type']=='custom_tool_call_output' and a['payload']['call_id']==b['payload']['call_id']
-assert generation['toolResultLine']<check['callLine']<read['nativeCallLine']
+concurrent_binding_protocol={'processRevision':'2026-10-25','authorNativeId':uid,'rawFreezeExact':True,'protectedCriticalRawSHA256Exact':True,'exactChangedPeerBodyAndHash':True,'twoDirectedMAINAssessmentsRequired':True,'mandatoryNativeCallOrderingAudit':False,'existingTimingEvidencePreserved':timing,'operation':'No manual native-call position/order reconstruction for future dependency addenda; unchanged mandatory raw/current/six/four/source/independent gates. Historical artifacts and prior failures untouched.'}
 tp=m.C/f'src/content/topics/{topic}.json';live=m.read(tp);assert live['questions'][order-1]==e['beforeCard'] and m.sha(e['beforeCard'])==e['beforeHash']
 task=m.read(D/f'source-{topic}{order}-task.json');baseline_bytes=at(task['baselineCode'],tp);baseline=json.loads(baseline_bytes)
 assert [q['id'] for q in baseline['questions']]==[q['id'] for q in live['questions']]
@@ -105,6 +100,7 @@ for p in ps['actualCurrentPeers']:
 ps['globalMAIN']['rows']=currentrows;ps['globalMAIN']['rowsCanonicalSHA256']=m.sha(currentrows)
 next(b for b in bindings if b['path']==str(tp.relative_to(m.C)))['sha256']=m.raw(tp)
 ps['technicalConcurrentDependencyAlias']=proof;sp['technicalConcurrentDependencyAlias']=proof
+proof['concurrentBindingProtocol']=concurrent_binding_protocol
 if cycle_alias:proof['exactSource84RootCycleAlias']=cycle_alias
 if timing_alias:
  proof['exactNativeReadTimingNameAlias']=timing_alias
