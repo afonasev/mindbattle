@@ -877,3 +877,28 @@ def assert_retained_source_admissibility(sp):
    if path.suffix=='.json':
     cap=read(path)
     if isinstance(cap,dict) and all(origin):assert (cap.get('sourceNativeId'),cap.get('nativeRecordLine'))!=origin, ('RENAMED_INADMISSIBLE_NATIVE_CAPTURE',str(path),origin)
+
+
+def alias_source83_cycle1_copied_same_topic(candidate,sp,ps,R):
+ """Exact own83cycle1 redundant copied container; preserve original and judgments."""
+ R=pathlib.Path(R)
+ if R!=D/'source-video-game-history83-cycle1':return
+ import copy,subprocess
+ expected={'candidate.json':'c424b0f2e7e9023eec4c538bf8af2ecae93803fe8d58249e1f828dad92e4df14','sourceproof.json':'9b9142b15314146b53cc36a1f04be906855619a4d254cf767c6771a30c24d223','peer-snapshot.json':'1fd8134e58dbb2ece83dd1584805142189d3be2d43fb514260106adfae5d468a'}
+ for name,digest in expected.items():
+  assert raw(R/name)==digest
+  assert (R/name).read_bytes()==subprocess.check_output(['git','-C',str(C),'show','9baeed109306552e8aef588f9b6e3340e0d7ead2:'+str((R/name).relative_to(C))])
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==1
+ uid='01a17544-0206-7353-af92-26b8e9323ed9';assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']==uid
+ e=candidate['entries'][0];live=read(C/'src/content/topics/video-game-history.json');initial=read(D/'independent-video-game-history83-initial/receipt.json')['entries'][0]
+ assert e['sourceOrder']==83 and e['beforeCard']==initial['currentCard']==live['questions'][82] and e['beforeHash']==initial['currentCardCanonicalSHA256']==sha(e['beforeCard']) and initial['status']=='FIX'
+ original=copy.deepcopy(ps['sameTopicMAIN']);old=read(D/'qualified-source-video-game-history83-initial-complete/peer-snapshot.json')['sameTopicMAIN'];assert original==old
+ peers=ps['actualCurrentPeers'];assert len(peers)==100 and [v['sourceOrder'] for v in peers]==list(range(1,101))
+ assert [v['card'] for v in peers]==live['questions'] and all(v['id']==v['card']['id'] and v['topicId']=='video-game-history' and v['sha256']==sha(v['card']) for v in peers)
+ g=ps['globalMAIN'];rows=[];assert len(g['allCurrentFileByteBindings'])==110
+ for b in g['allCurrentFileByteBindings']:
+  p=C/b['path'];assert raw(p)==b['sha256'];t=read(p);rows.extend({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']} for q in t['questions'])
+ assert len(rows)==11000 and rows==g['rows'] and sha(rows)==g['rowsCanonicalSHA256']
+ ps['sameTopicMAIN']={**original,'questions':copy.deepcopy(live['questions']),'fileSHA256':raw(C/'src/content/topics/video-game-history.json')}
+ proof={'rawFreeze':'9baeed109306552e8aef588f9b6e3340e0d7ead2','rawCriticalSHA256':expected,'originalCopiedSameTopicMAIN':original,'freshActual100AndGlobal11000Exact':True,'originalFailureUncured':True,'operation':'Only exact same-author83 solecycle1 already contains full ordered current100 peers and current110 file bindings/11000rows. Expose identical existing current bodies under redundant sameTopicMAIN copied from own initialqualified container. All raw, content, sources and author semantic assessments unchanged.'}
+ ps['technicalSource83Cycle1RedundantSnapshotAlias']=proof;sp['technicalSource83Cycle1RedundantSnapshotAlias']=proof
