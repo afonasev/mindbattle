@@ -13,9 +13,9 @@ diff_check={'fullExitCode':gate.returncode,'fullStdout':gate.stdout,'fullStderr'
 if gate.returncode:
  exception=m.read(D/'frozen-raw-whitespace-exception.json')
  artifact=pathlib.Path(exception['artifactPath']);rel=exception['repoRelativePath']
- assert artifact==D/'source-human-medicine75/build_packet.py' and str(artifact.relative_to(m.C))==rel
+ assert artifact==D/'source-video-game-history62/museumofplay-relevant-context.txt' and str(artifact.relative_to(m.C))==rel
  assert gate.returncode==2 and gate.stdout==exception['expectedDiffCheckStdout'] and not gate.stderr
- assert m.raw(artifact)==exception['rawFileSHA256']==m.read(exception['nativeProof'])['rawFileSHA256']['build_packet.py']
+ assert m.raw(artifact)==exception['rawFileSHA256']==m.read(exception['nativeProof'])['rawFileSHA256']['museumofplay-relevant-context.txt']
  assert subprocess.check_output(['git','-C',str(m.C),'show',exception['immutableRawFreeze']+':'+rel])==artifact.read_bytes()==subprocess.check_output(['git','-C',str(m.C),'show',head+':'+rel])
  others=[p for p in m.h.git(m.C,'diff','--name-only',base,head).splitlines() if p!=rel]
  assert others
