@@ -18,6 +18,40 @@ for R in packet_paths:
     assert R.parent==D and R.name.startswith("source-video-game-history"), "Only owned video-game-history packet"
     name = R.name; B = D/('qualified-'+name)
     candidate, sp, ps = [m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
+    if R.name=='source-video-game-history70' and (R/'concurrent66-addendum.json').exists():
+        clar=m.read(R/'concurrent66-addendum.json');cor=m.read(R/'concurrent66-identity-correction.json')
+        uid=candidate['sourceNativeId'];assert uid==sp['sourceNativeId']==ps['sourceNativeId']==m.read(D/'manifest.json')['actors']['author68']['threadId']
+        assert cor['actualSourceNativeId']==cor['correctedId']==uid and cor['wrongDeclaredId']==clar['sourceNativeId']
+        original_ref=cor['originalAddendum'];assert original_ref['path']==str(R/'concurrent66-addendum.json') and original_ref['rawSHA256']==m.raw(R/'concurrent66-addendum.json')
+        assert clar['cycle']==candidate['cycle']==sp['cycle']==ps['cycle']==0 and clar['targetOrder']==70 and clar['changedOrder']==66
+        proof=m.read(D/'video-game-history70-native-proof.json');baseline=proof['preservedCatalogBaseline'];tp=C/'src/content/topics/video-game-history.json'
+        old_bytes=subprocess.check_output(['git','-C',str(C),'show',baseline+':'+str(tp.relative_to(C))]);old=json.loads(old_bytes);live=m.read(tp)
+        assert [i for i,(a,b) in enumerate(zip(old['questions'],live['questions']),1) if a!=b]==[66]
+        assert [v['card'] for v in ps['actualCurrentPeers']]==old['questions'] and all(m.sha(v['card'])==v['sha256'] for v in ps['actualCurrentPeers'])
+        for fn,digest in clar['originalCriticalSHA256'].items():
+            assert m.raw(R/fn)==digest==clar['originalCriticalSHA256After'][fn]==proof['rawFileSHA256'][fn]
+        report=pathlib.Path(clar['knownApplyReport']['path']);assert report==D/'qualified-source-video-game-history66-apply.json' and m.raw(report)==clar['knownApplyReport']['sha256']
+        applied=m.read(report)['applied'][0];assert applied['beforeCard']==old['questions'][65] and applied['proposedCard']==live['questions'][65]
+        assert clar['exactCurrent66']['body']==live['questions'][65] and clar['exactCurrent66']['hash']==m.sha(live['questions'][65])
+        e=candidate['entries'][0];assert clar['unchangedProposed70']['body']==e['proposedCard'] and clar['unchangedProposed70']['hash']==e['afterHash']==m.sha(e['proposedCard'])
+        assert len(clar['bilateralMAINComparison'])==2 and all(all(v[k] for k in ['direction','entity','relation','value','context','finding']) for v in clar['bilateralMAINComparison'])
+        assert clar['directReverseCheck']['compared'] and clar['directReverseCheck']['result'] and clar['dependencyConclusion']
+        ip=pathlib.Path(clar['freshCurrentInventory']['path']);assert ip.parent==R and m.raw(ip)==clar['freshCurrentInventory']['sha256'];inv=m.read(ip)
+        assert inv['sameTopicMAIN']['questions']==live['questions'] and inv['sameTopicMAIN']['fileSHA256']==m.raw(tp)
+        bindings=ps['globalMAIN']['allCurrentFileByteBindings'];fresh=inv['globalMAIN']['allCurrentFileByteBindings'];assert len(bindings)==len(fresh)==110
+        for b,f in zip(bindings,fresh):
+            assert b['path']==f['path'] and m.raw(C/f['path'])==f['sha256']
+            assert b['sha256']==(hashlib.sha256(old_bytes).hexdigest() if b['path']==str(tp.relative_to(C)) else f['sha256'])
+        rows=[]
+        for b in bindings:
+            t=old if b['path']==str(tp.relative_to(C)) else m.read(C/b['path'])
+            rows.extend({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[v['text'] for v in q['answers']],'correctIndex':q['correctIndex']} for q in t['questions'])
+        assert len(rows)==11000 and ps['globalMAIN']['rows']==rows and ps['globalMAIN']['rowsCanonicalSHA256']==m.sha(rows)
+        ps['historicalGlobalMAINBinding']={'rawPath':str(R/'peer-snapshot.json'),'rawSHA256':m.raw(R/'peer-snapshot.json'),'baseline':baseline}
+        ps['globalMAIN']=inv['globalMAIN'];ps['actualCurrentPeers']=inv['actualCurrentPeers'];ps['sameTopicMAIN']=inv['sameTopicMAIN']
+        sp['sourceInventoryPath']=str(ip);sp['sourceInventorySHA256']=m.raw(ip)
+        binding={'rawPacket':str(R),'rawFreeze':proof['preservedCatalogBaseline'],'originalPacketProof':str(D/'video-game-history70-native-proof.json'),'sameAuthorDependencyAddendum':str(R/'concurrent66-addendum.json'),'addendumSHA256':m.raw(R/'concurrent66-addendum.json'),'identityCorrection':str(R/'concurrent66-identity-correction.json'),'identityCorrectionSHA256':m.raw(R/'concurrent66-identity-correction.json'),'knownAppliedDeltaOnly':66,'originalsUnchanged':True,'noRootSemanticDecision':True,'qualityCredit':0}
+        ps['technicalConcurrentDependencyAlias']=binding;sp['technicalConcurrentDependencyAlias']=binding
     m.alias_explicit_global_inventory_file(candidate,sp,ps,R)
     m.alias_explicit_owned_packet_source_paths(candidate,sp,R)
     m.alias_source96_distinct99_preimage(candidate,sp,ps,R)
