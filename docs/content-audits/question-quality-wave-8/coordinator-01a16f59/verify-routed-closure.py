@@ -22,6 +22,14 @@ for qid,e in sel.items():
 assert len(cp['completedCardHashes'])==n and {e['questionId'] for e in cp['completedCardHashes']}==done
 assert all(m.sha(catalog[e['questionId']])==e['cardCanonicalSha256'] for e in cp['completedCardHashes'])
 def bytes_at(ref,p):return subprocess.check_output(['git','-C',str(C),'show',ref+':'+str(p.relative_to(C))])
+inherited=m.read(x['predecessorHandoff']);fences=m.read(x['ownConsumedSourceFences'])
+assert fences['owner']==O and fences['inheritedPointer']==inherited['ownConsumedSourceFences']
+assert fences['inheritedFenceCount']==len(inherited['newAttemptFences'])
+assert x['newAttemptFences']==inherited['newAttemptFences']+fences['ownClosedRecords']
+assert fences['totalFences']==len(x['newAttemptFences'])
+inherited_fences=pathlib.Path(fences['inheritedPointer'])
+assert m.raw(inherited_fences)==fences['inheritedRawSHA256']
+assert bytes_at(m.read(D/'takeover.json')['predecessorRemotePush']['commit'],inherited_fences)==inherited_fences.read_bytes()
 raw=[]
 for key,item in x.items():
  if not re.fullmatch('pendingVideoGameHistory[0-9]+',key):continue
@@ -100,6 +108,16 @@ main=refs['refs/heads/main'];maincards={}
 for tid in {e['topicId'] for e in sel.values()}:maincards.update({q['id']:q for q in json.loads(m.h.git(C,'show',main+':src/content/topics/'+tid+'.json'))['questions']})
 ancestor=subprocess.run(['git','-C',str(C),'merge-base','--is-ancestor','HEAD',main]);assert ancestor.returncode in [0,1]
 report={'owner':O,'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'CURRENT':n,'remaining':2000-n,'fullGoal':2000,'partitionCompleteDisjoint':True,'allCurrentAcceptedHashesExact':True,'all2000FrozenIdTopicOrderDifficultyNumericKey':True,'baseline':cp['baselineSHA'],'ownRawFreezes':raw,'ownQAReports':qa,'noSemanticRereviewOrQARerun':True,'source83OriginalByteExact':True,'allOldTopicFilesUnchangedSinceIntake':True,'ownChangedTopicPaths':changed,'ownChangedQuestionIds':changed_qids,'allUnappliedOwnHOLDPreimagesUnchanged':True,'ownAppliedUncreditedHolds':{qid:v['appliedCurrentHash'] for qid,v in applied_uncredited.items()},'claims':x['claims'],'leaseEmpty':True,'foreignIndexes':x['foreignIndexes'],'liveIdleActors':actors,'authoritativeRemotePushAtVerification':pushes[0],'originMain':main,'acceptedExactHashesOnMain':sum(m.sha(maincards[e['questionId']])==e['cardCanonicalSha256'] for e in cp['completedCardHashes']),'featureHeadAncestorOfMain':ancestor.returncode==0,'mainIntegrationPerformed':False,'codeBranch':x['codeBranch'],'codeHeadBeforeReport':m.h.git(C,'rev-parse','HEAD'),'planningManagedBranch':x['planningBranch'],'planningManagedSHA':m.h.git(P,'rev-parse','refs/heads/'+x['planningBranch']),'planningCheckout':m.h.git(P,'branch','--show-current'),'diagnostics':str(D/'own-procedural-diagnostics.json'),'originalSource1PreHoldMetadataByteGapUncured':True,'allHOLDQualityCredit':0,'goalComplete':False,'notRun':['full suite','runtime','browser','Player/build','deploy','release','OpenSpec archive','human/device acceptance']}
+reader=x['actors']['reviewer'];reader_handoff=m.read(x['retainedReaderHandoff'])
+assert reader_handoff['retainedIdleReader']['threadId']==reader['threadId']
+assert reader_handoff['readerOwnReceiptCount']==len(reader_handoff['readerOwnReceipts'])==reader['ownReceiptCount']
+reader_identity=m.read(x['currentReaderNativeIdentity'])
+assert reader_identity['verifiedSessionMetaId']==reader_identity['decodedResult']['threadId']==reader['threadId']
+assert reader_identity['nativeJournal']==reader['nativeJournal']
+for path,binding in reader_handoff['readerOwnReceipts'].items():
+ receipt=m.read(path);assert m.raw(path)==binding['rawSHA256']
+ assert receipt.get('reviewerNativeId',receipt.get('readerNativeId'))==reader['threadId']
+report.update(retainedReaderNativeId=reader['threadId'],retainedReaderOwnReceiptCount=reader['ownReceiptCount'],retainedReaderIdentity=x['currentReaderNativeIdentity'],inheritedFencesByteExact=True,totalFences=fences['totalFences'])
 out=D/'handoff-verification.json';assert not out.exists();m.write(out,report)
 print(m.savecode([out,pathlib.Path(__file__)],'Preserve closed exact current hashes raw freezes and bounded QA evidence'))
 print({'CURRENT':n,'remaining':2000-n,'rawFreezes':len(raw),'QAReports':len(qa),'allFrozen2000':True,'acceptedHashesOnMain':report['acceptedExactHashesOnMain'],'idleActors':len(actors)})

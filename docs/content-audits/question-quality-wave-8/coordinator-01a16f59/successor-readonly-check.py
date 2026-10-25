@@ -4,12 +4,12 @@ D=pathlib.Path(__file__).parent
 C=D.parents[3]
 P=pathlib.Path('/Users/eaafonasev/Projects/mindbattle/planning')
 O='01a16f59-675f-7e32-bcd6-4123dc3cc3a4'
-G='01a16f3e-baf7-7f43-b823-cc60e17d7c78'
 def read(p):return json.loads(pathlib.Path(p).read_text())
 def raw(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
 def sha(v):return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 def git(*args):return subprocess.check_output(['git','-C',str(C),*args],text=True).strip()
 x=read(D/'handoff-next.json');v=read(D/'handoff-verification.json')
+G=v['retainedReaderNativeId'];expected_reader_count=v['retainedReaderOwnReceiptCount']
 n=v['CURRENT'];left=2000-n
 assert x['CURRENT']==n and x['remaining']==left and x['fullGoal']==2000
 assert v['allCurrentAcceptedHashesExact'] and v['all2000FrozenIdTopicOrderDifficultyNumericKey']
@@ -66,15 +66,27 @@ for root,key in [(C,'code'),(P,'planning')]:
  assert raw(index)==x['foreignIndexes'][key]
 fences=read(D/'own-consumed-source-fences.json')
 assert fences['totalFences']==len(x['newAttemptFences'])==fences['inheritedFenceCount']+len(fences['ownClosedRecords'])
+assert v['inheritedFencesByteExact'] and v['totalFences']==fences['totalFences']
+inherited_handoff=read(x['predecessorHandoff'])
+assert fences['inheritedPointer']==inherited_handoff['ownConsumedSourceFences']
+assert x['newAttemptFences']==inherited_handoff['newAttemptFences']+fences['ownClosedRecords']
+inherited_fences=pathlib.Path(fences['inheritedPointer'])
+assert raw(inherited_fences)==fences['inheritedRawSHA256']
+assert subprocess.check_output(['git','-C',str(C),'show',read(D/'takeover.json')['predecessorRemotePush']['commit']+':'+str(inherited_fences.relative_to(C))])==inherited_fences.read_bytes()
 assert all(a.get('archived') for key,a in x['actors'].items() if key.startswith('author'))
 assert not x['pendingReviews'] and not x['pendingBoundedWork'] and not x['readyQueue'] and not x.get('pendingBootstrapActors')
 r=read(D/'retained-reader-handoff.json');a=x['actors']['reviewer']
 assert a['threadId']==r['retainedIdleReader']['threadId']==G
-assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])==a['ownReceiptCount']==0
-identity=read(D/'reader33-identity.json');assert identity['verifiedSessionMetaId']==identity['decodedResult']['threadId']==G and identity['nativeJournal']==a['nativeJournal']
-seed=read(r['inheritedImmutable']);assert seed['retainedIdleReader']['threadId']==G and seed['readerOwnReceiptCount']==len(seed['readerOwnReceipts'])==0
-retired=read(D/'reader32-completed-budget-handoff.json');assert retired['readerOwnReceiptCount']==len(retired['readerOwnReceipts'])==13 and retired['retainedIdleReader']['threadId']!=G
-for path,binding in r['readerOwnReceipts'].items():assert raw(path)==binding['rawSHA256']
+assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])==a['ownReceiptCount']==expected_reader_count
+identity=read(x['currentReaderNativeIdentity']);assert identity['verifiedSessionMetaId']==identity['decodedResult']['threadId']==G and identity['nativeJournal']==a['nativeJournal']
+seed=read(r['inheritedImmutable']);assert seed['retainedIdleReader']['threadId']==G and seed['readerOwnReceiptCount']==len(seed['readerOwnReceipts'])
+retired=read(r['retiredReader32Own13']);assert retired['readerOwnReceiptCount']==len(retired['readerOwnReceipts'])==13 and retired['retainedIdleReader']['threadId']!=G
+for path,binding in r['readerOwnReceipts'].items():
+ assert raw(path)==binding['rawSHA256']
+ receipt=read(path);entry=receipt['entries'][0]
+ assert receipt.get('reviewerNativeId',receipt.get('readerNativeId'))==G
+ assert entry['stage']==binding['stage'] and entry['status']==binding['status'] and entry['sourceOrder']==binding['sourceOrder']
+ assert entry['currentCardCanonicalSHA256']==binding['currentCardCanonicalSHA256']
 inherited=read(r['inheritedImmutable'])
 assert all(path in r['readerOwnReceipts'] and r['readerOwnReceipts'][path]['rawSHA256']==binding['rawSHA256'] for path,binding in inherited['readerOwnReceipts'].items())
 for path in D.glob('independent-*/receipt.json'):
