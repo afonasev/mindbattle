@@ -47,11 +47,17 @@ task={
  'stop':'One complete current-ID READY_FOR_INDEPENDENT_REVIEW or specific HOLD then end turn. READY/metadata/schema confer0credit. No next ID before same-batch operational CONTINUE.'}
 task['editorialClarification']=x.get('authorEditorialClarification','')
 task['recentRetainedSources']=x.setdefault('continuationRetainedSourceMetadata',task['recentRetainedSources'])
-p=D/f'{key}-batch-task.json';m.write(p,task)
+p=D/f'{key}-batch-task.json'
+if p.exists():
+ old=x.get('activeAuthorBatches',{}).get(key)
+ if old:x.setdefault('completedAuthorBatchAssignments',[]).append(dict(old))
+ p=D/f'{key}-batch{orders[0]}-{orders[-1]}-task.json'
+assert not p.exists(), 'Preserve immutable prior batch assignment'
+m.write(p,task)
 x.setdefault('activeAuthorBatches',{})[key]={'orders':orders,'assignment':str(p),'currentOrder':orders[0],'status':'AWAITING_IDENTITY_START'}
 x.setdefault('continuationRun',{'startedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'intakeCURRENT':x['CURRENT'],'processedOrders':[],'acceptedDelta':0,'holds':[]})
 x['phase']='ACTIVE_FULL2000_CONTINUATION'
-x['next']='Continue full2000 via two bounded author batches65–67/68–70; reuse retained originals, one reviewer, exact176 historical fences retained.'
+x['next']='Continue full2000 with existing authorized author roles and one independent reviewer; preserve all historical attempt and compaction fences.'
 x['helpers'][Path(__file__).name]=str(Path(__file__))
 m.write(D/'manifest.json',x)
 print(m.savecode([p,D/'manifest.json',Path(__file__)],'Prepare bounded full2000 continuation author assignment'))
