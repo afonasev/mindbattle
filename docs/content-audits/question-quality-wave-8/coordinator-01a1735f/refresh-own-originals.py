@@ -47,6 +47,9 @@ x['technicalNativeOriginalsSHA256']=m.raw(p);m.write(D/'manifest.json',x)
 diag=D/'own-procedural-diagnostics.json'
 m.write(diag,{'owner':m.O,'nativeJournal':a['nativeJournal'],'actualCompactions':a['actualCompactions'],
     'structuredNonzeroExec':a['observedStructuredNonzero'],'failingCustomToolCalls':len(bad),
+    'explicitProjectedExecStatusGapOriginals':a.get('explicitProjectedExecStatusGapOriginals',[]),
+    'explicitProjectedExecStatusGapCount':len(a.get('explicitProjectedExecStatusGapOriginals',[])),
+    'fullFailureTotal':'UNKNOWN',
     'truncatedToolCalls':len(cut),'nonzeroOriginals':bad,'truncatedOriginals':cut,
     'readScopeDeviations':a['readScopeDeviations'],'allUncured':True,
     'bootstrapSnapshotHistoricalImmutable':x['bootstrapOriginalsImmutable'],
