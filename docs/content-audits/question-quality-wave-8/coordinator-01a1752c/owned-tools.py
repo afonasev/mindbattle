@@ -902,3 +902,18 @@ def alias_source83_cycle1_copied_same_topic(candidate,sp,ps,R):
  ps['sameTopicMAIN']={**original,'questions':copy.deepcopy(live['questions']),'fileSHA256':raw(C/'src/content/topics/video-game-history.json')}
  proof={'rawFreeze':'9baeed109306552e8aef588f9b6e3340e0d7ead2','rawCriticalSHA256':expected,'originalCopiedSameTopicMAIN':original,'freshActual100AndGlobal11000Exact':True,'originalFailureUncured':True,'operation':'Only exact same-author83 solecycle1 already contains full ordered current100 peers and current110 file bindings/11000rows. Expose identical existing current bodies under redundant sameTopicMAIN copied from own initialqualified container. All raw, content, sources and author semantic assessments unchanged.'}
  ps['technicalSource83Cycle1RedundantSnapshotAlias']=proof;sp['technicalSource83Cycle1RedundantSnapshotAlias']=proof
+
+
+def alias_source86_single_peer_entry(candidate,sp,ps,R):
+ """Only exact own86 nested single entry; no new data or judgments."""
+ R=pathlib.Path(R)
+ if R!=D/'source-video-game-history86' or 'globalMAIN' in ps:return
+ import copy,subprocess
+ for name in ['candidate.json','sourceproof.json','peer-snapshot.json']:
+  assert (R/name).read_bytes()==subprocess.check_output(['git','-C',str(C),'show','859b464044b09a32c3e26f26aa7c98962c2774cd:'+str((R/name).relative_to(C))])
+ uid='01a17560-9396-7bc0-8d8c-b899b68d34cf';assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']==uid
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==0 and len(candidate['entries'])==len(sp['entries'])==len(ps['entries'])==1
+ e=ps['entries'][0];q=candidate['entries'][0];assert e['id']==q['id']==sp['entries'][0]['id'] and q['sourceOrder']==86
+ for key in ['globalMAIN','sameTopicMAIN','actualCurrentPeers','relevantProposedPairs','crossCatalogDirectReverseSearch','sourceInventory']:
+  assert key in e and key not in ps;ps[key]=copy.deepcopy(e[key])
+ ps['technicalSingleOwnPeerEntryContainerAlias']={'rawFreeze':'859b464044b09a32c3e26f26aa7c98962c2774cd','originalPointer':'/entries/0','originalEntrySHA256':sha(e),'originalKeyErrorUncured':True,'operation':'Exact same author/cycle/ID single peer entry already contains all data. Expose identical original containers at root; preserve raw, original entry, semantic assessments and all normal full100/110/11000 assertions.'}
