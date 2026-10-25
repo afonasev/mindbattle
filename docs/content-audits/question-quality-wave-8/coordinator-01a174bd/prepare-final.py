@@ -8,7 +8,9 @@ order, catalog_commit, raw_freeze, qualified_freeze = sys.argv[1:5]
 order = int(order)
 assert m.h.git(m.C,'rev-parse','--verify',catalog_commit+'^{commit}')==catalog_commit, 'Exact full tested catalog commit required'
 label = 'video-game-history' + str(order) + '-cycle1'
-B = D/('qualified-source-' + label)
+packet_name=sys.argv[6] if len(sys.argv)>6 else 'source-'+label
+assert packet_name.startswith('source-video-game-history'+str(order)) and packet_name.endswith('-cycle1') and pathlib.Path(packet_name).name==packet_name
+B = D/('qualified-' + packet_name)
 e = m.read(B/'candidate.json')['entries'][0]
 q = m.read(m.C/'src/content/topics/video-game-history.json')['questions'][order-1]
 assert q == e['proposedCard'] and m.sha(q) == e['afterHash']
@@ -28,8 +30,8 @@ t.update(topicId='video-game-history', owner=m.O, manifest=str(D/'manifest.json'
          catalogCommit=catalog_commit, cardHash=m.sha(q),
          sourceFreeze=qualified_freeze, rawAuthorFreeze=raw_freeze,
          authorNativeId=m.read(B/'candidate.json')['sourceNativeId'],
-         authorPacket=str(B), immutableRawAuthorPacket=str(D/('source-'+label)),
-         applyReport=str(D/('qualified-source-'+label+'-apply.json')),
+         authorPacket=str(B), immutableRawAuthorPacket=str(D/packet_name),
+         applyReport=str(D/('qualified-'+packet_name+'-apply.json')),
          qa=str(qa_path), qaSHA256=m.raw(qa_path), qaReportCommit=qa_commit,
          outputDirectory=str(D/('independent-'+label+'-final')),
          frozen={'id':q['id'], 'topicId':'video-game-history', 'sourceOrder':order,
