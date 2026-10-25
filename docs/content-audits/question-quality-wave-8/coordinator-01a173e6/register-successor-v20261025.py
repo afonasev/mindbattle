@@ -12,7 +12,7 @@ proof=D/'successor-create-native-proof.json'
 m.write(proof,{'parent':m.O,'processRevision':'2026-10-25','supportedCreateResult':str(result_path),'supportedCreateResultSHA256':m.raw(result_path),'returnedSuccessorThreadId':S,'successorNativeJournal':str(ps[0]),'successorNativeSessionMetaId':S,'identityBasis':'Supported create_thread returned ID plus one exact matching runtime session metadata; no manual create journal reconstruction.'})
 x=m.read(D/'manifest.json');assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']);x.update(successorThreadId=S,successorNativeJournal=str(ps[0]),successorCreationProof=str(proof),successorNativeProof=str(proof),successorStatus='READONLY_BOOTSTRAP_REGISTERED')
 for p in [D/'manifest.json',D/'handoff-next.json']:m.write(p,x)
-cc=m.savecode([D/'manifest.json',D/'handoff-next.json',proof,pathlib.Path(__file__)],f'Register exact returned readonly successor CURRENT{x["CURRENT"]}');print('code',cc)
+cc=m.savecode([D/'manifest.json',D/'handoff-next.json',proof,result_path,pathlib.Path(__file__)],f'Register exact returned readonly successor CURRENT{x["CURRENT"]}');print('code',cc)
 planningIndex=pathlib.Path(m.h.git(m.P,'rev-parse','--path-format=absolute','--git-path','index'));expectedPlanningIndex=m.raw(planningIndex)
 assert expectedPlanningIndex==x['foreignIndexes']['planning']
 with m.flow.locked():m.flow.lease('acquire','planning',m.O)

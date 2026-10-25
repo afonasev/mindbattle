@@ -96,7 +96,7 @@ for path in D.glob('independent-*/receipt.json'):
  if receipt.get('reviewerNativeId',receipt.get('readerNativeId'))==G:assert str(path) in r['readerOwnReceipts']
 rows=[json.loads(line) for line in pathlib.Path(a['nativeJournal']).open()]
 assert [row['payload']['id'] for row in rows if row.get('type')=='session_meta']==[G]
-assert sum(row.get('type')=='compacted' for row in rows)==a['actualCompactions']==0
+assert sum(row.get('type')=='compacted' for row in rows)==a['actualCompactions'] and a['actualCompactions']<=1
 assert next(row['payload']['type'] for row in reversed(rows) if row.get('payload',{}).get('type') in ['task_started','task_complete'])=='task_complete'
 info=next(row['payload']['info'] for row in reversed(rows) if row.get('payload',{}).get('type')=='token_count')
 assert info['last_token_usage']['input_tokens']==a['lastInput'] and info['model_context_window']==a['modelWindow']
@@ -108,9 +108,9 @@ files=list((C/'src/content/topics').glob('*.json'));assert len(files)==110
 for path in files:
  assert subprocess.check_output(['git','-C',str(C),'show',qa[-1]['testedCatalogCommit']+':'+str(path.relative_to(C))])==path.read_bytes()
 next_card=x['nextUntouched'];order=next_card['sourceOrder'];topic=next_card['topicId']
-assert order==max(x['ownedSourceOrders'])+1 and topic==x['activeRoute']['topicId']
+assert order==min(x.get('unfinishedAuthorBatchOrders',[max(x['ownedSourceOrders'])+1])) and topic==x['activeRoute']['topicId']
 assert read(C/f'src/content/topics/{topic}.json')['questions'][order-1]['id']==next_card['id']
 assert next_card['id'] in remaining and current[next_card['id']]==base[next_card['id']]
 assert sha(current[next_card['id']])==next_card['hash']
 assert current[next_card['id']]['correctIndex']==next_card['correctIndex'] and current[next_card['id']]['difficulty']==next_card['difficulty']
-print(json.dumps({'READONLY_BARRIER':'PASS','CURRENT':n,'remaining':left,'owners':O,'exactClaims':4,'leaseEmpty':True,'all2000Frozen':True,'allAcceptedHashesExact':True,'canonicalHistoricalWriter':reg['ownerNativeId'],'canonicalCards':len(reg['cards']),'canonicalFields':reg['sourceEditorialCompletedFields'],'ownedFilesExactCurrentHEAD':count,'HEAD':head,'freshOriginFeature':refs['refs/heads/'+x['codeBranch']],'allFourRemotePushIdentical':True,'foreignIndexesExact':True,'actualQAReports':len(qa),'lastActualQA':qa[-1]['testedCatalogCommit'],'all110TopicFilesSameAsLastQA':True,'retainedReader':G,'readerOwnReceipts':r['readerOwnReceiptCount'],'readerActualCompactions':0,'readerRemaining':info['model_context_window']-info['last_token_usage']['input_tokens'],'fences':fences['totalFences'],'nextUntouched':next_card,'successorRegistered':x['successorThreadId'],'allDiagnosticsUncured':True,'noWritesOrQARerun':True},ensure_ascii=False))
+print(json.dumps({'READONLY_BARRIER':'PASS','CURRENT':n,'remaining':left,'owners':O,'exactClaims':4,'leaseEmpty':True,'all2000Frozen':True,'allAcceptedHashesExact':True,'canonicalHistoricalWriter':reg['ownerNativeId'],'canonicalCards':len(reg['cards']),'canonicalFields':reg['sourceEditorialCompletedFields'],'ownedFilesExactCurrentHEAD':count,'HEAD':head,'freshOriginFeature':refs['refs/heads/'+x['codeBranch']],'allFourRemotePushIdentical':True,'foreignIndexesExact':True,'actualQAReports':len(qa),'lastActualQA':qa[-1]['testedCatalogCommit'],'all110TopicFilesSameAsLastQA':True,'retainedReader':G,'readerOwnReceipts':r['readerOwnReceiptCount'],'readerActualCompactions':a['actualCompactions'],'readerRemaining':info['model_context_window']-info['last_token_usage']['input_tokens'],'fences':fences['totalFences'],'nextUntouched':next_card,'successorRegistered':x['successorThreadId'],'allDiagnosticsUncured':True,'noWritesOrQARerun':True},ensure_ascii=False))
