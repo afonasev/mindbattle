@@ -58,6 +58,7 @@ for R in packet_paths:
         bindings=ps['globalMAIN']['currentFileByteBindings'];assert len(bindings)==110 and all(m.raw(C/v['path'])==v['sha256'] for v in bindings)
         ps['globalMAIN']['allCurrentFileByteBindings']=bindings
         ps['technicalCurrentFileByteBindingNameAlias']={'rawPeer':str(R/'peer-snapshot.json'),'rawSHA256':m.raw(R/'peer-snapshot.json'),'originalPointer':'/globalMAIN/currentFileByteBindings','operation':'Exact110 live file path/hash bindings; redundant container name only, raw and judgments unchanged.'}
+    m.assert_retained_source_admissibility(sp)
     m.alias_explicit_global_inventory_file(candidate,sp,ps,R)
     m.alias_explicit_owned_packet_source_paths(candidate,sp,R)
     m.alias_source96_distinct99_preimage(candidate,sp,ps,R)

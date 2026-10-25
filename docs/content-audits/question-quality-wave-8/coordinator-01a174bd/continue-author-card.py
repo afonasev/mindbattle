@@ -41,6 +41,7 @@ batch.update(currentOrder=n,status='ACTIVE')
 x['sourceActorKeys']=list(dict.fromkeys([k for k in x['sourceActorKeys'] if x['actors'][k]['stage'].startswith('START')]+[key]))
 assert len(x['sourceActorKeys'])<=2
 x['currentWork']={'stage':'FULL2000_AUTHORS_ACTIVE','orders':[x['activeAuthorBatches'][k]['currentOrder'] for k in x['sourceActorKeys']],'CURRENT':x['CURRENT'],'remaining':x['remaining']}
+x['ownedSourceOrders']=sorted(set(x.get('ownedSourceOrders',[])+[n]))
 x['helpers'][Path(__file__).name]=str(Path(__file__))
 m.write(D/'manifest.json',x)
 print(m.savecode([task,D/'manifest.json',Path(__file__),*files],'Continue authorized author batch with explicit editorial scope'))
