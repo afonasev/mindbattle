@@ -63,6 +63,14 @@ assert [q['id'] for q in baseline['questions']]==[q['id'] for q in live['questio
 assert [i for i,(a,b) in enumerate(zip(baseline['questions'],live['questions']),1) if a!=b]==[changed]
 assert baseline['questions'][changed-1]==old and live['questions'][changed-1]==new
 same_topic_alias=None
+if order==82 and 'sameTopicMAIN' not in ps and 'inventorySource' in ps:
+ ip=pathlib.Path(ps['inventorySource']);assert ip.is_relative_to(R)
+ assert m.raw(ip)==nativeproof['rawFileSHA256'][str(ip.relative_to(R))]
+ inv=m.read(ip);assert inv['globalMAIN']==ps['globalMAIN'] and inv['actualCurrentPeers']==ps['actualCurrentPeers']
+ assert inv['sameTopicMAIN']['questions']==baseline['questions'] and len(inv['sameTopicMAIN']['questions'])==100
+ ps['sameTopicMAIN']=copy.deepcopy(inv['sameTopicMAIN'])
+ sp.update(sourceInventoryPath=str(ip),sourceInventorySHA256=m.raw(ip))
+ same_topic_alias={'path':str(ip),'rawSHA256':m.raw(ip),'originalPeerPointer':'/inventorySource','preservedNativeProof':str(D/'video-game-history82-native-proof.json'),'originalRootKeyErrorUncured':True,'operation':'Exact explicitly named own inventory file bound by initial raw freeze, full100 peer equality and full globalMAIN equality. Redundant sameTopic container only; raw and judgments unchanged.'}
 if 'sameTopicMAIN' not in ps:
  peer_inventory_reference_absent='sourceInventoryPath' not in ps
  assert peer_inventory_reference_absent==('sourceInventorySHA256' not in ps)
@@ -108,6 +116,12 @@ for source in sp['rawSources']:
  if not jp.exists():
   matches=list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').rglob('*'+cap['sourceNativeId']+'.jsonl'));assert len(matches)==1;jp=matches[0]
  assert [json.loads(line) for line in jp.open()][cap['nativeRecordLine']-1]==cap['originalRecord']
+ if order==82 and 'completeOutputPointer' not in source:
+  pointer=cap['completeOutputPointer'];assert pointer in source['locator'] and cap['url']==source['url']
+  body=cap
+  for key in pointer.split('/')[1:]:body=body[int(key)] if isinstance(body,list) else body[key]
+  assert isinstance(body,str) and source['url'] in body and __import__('hashlib').sha256(body.encode()).hexdigest()==cap['completeOutputSHA256']
+  source.update(completeOutputPointer=pointer,completeOutputSHA256=cap['completeOutputSHA256'],technicalExplicitNativeWrapperBodyAlias={'originalLocator':source['locator'],'captureNativeRecordExact':True,'originalRootKeyErrorUncured':True,'operation':'Existing original locator explicitly names exact native-bound capture pointer; expose its verified unchanged body digest. Raw and source judgments unchanged.'})
  value=cap
  for k in source['completeOutputPointer'].split('/')[1:]:
   k=k.replace('~1','/').replace('~0','~');value=value[int(k)] if isinstance(value,list) else value[k]
