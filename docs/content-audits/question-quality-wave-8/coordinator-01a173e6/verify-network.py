@@ -14,7 +14,7 @@ assert ends, 'SOURCE proof requires an actually completed task'
 end=min(ends);rows=rows[:end];calls=[]
 for n,row in enumerate(rows,1):
  p=row.get('payload',{})
- if (include_prior or n>start) and p.get('type')=='custom_tool_call' and re.match(r'^(?:(?:const|let|var)\s+\w+\s*=\s*|text\(\s*)?await\s+tools\.web__run\s*\(', re.sub(r'^// @exec:[^\n]*\n', '', p.get('input','').lstrip())):calls.append((n,p))
+ if (include_prior or n>start) and p.get('type')=='custom_tool_call' and re.match(r'^(?:(?:const|let|var)\s+\w+\s*=\s*|text\(\s*)?await\s+tools\.web__run\s*\(', re.sub(r'^const urls\s*=\s*\[(?:\s*"[^"\\]*(?:\\.[^"\\]*)*"\s*,?)*\s*\];\s*', '', re.sub(r'^// @exec:[^\n]*\n', '', p.get('input','').lstrip()))):calls.append((n,p))
 assert len(calls)==len(proof['networkCalls'])+ (len(proof.get('priorTaskNetworkCalls',[])) if include_prior else 0)
 wrappers=[]
 for p in R.rglob('*.json'):
