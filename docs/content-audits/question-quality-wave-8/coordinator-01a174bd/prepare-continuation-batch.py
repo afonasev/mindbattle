@@ -45,6 +45,7 @@ task={
  'readDiscipline':'Inventory helper stdout is only counts; never print entire inventory/topic/index/fence chain. Query exact relevant IDs/URLs internally, then personally read relevant whole bodies. Do not copy old author verdicts. Read each applicable policy once per revision, not each card.',
  'limits':'Writes only current assigned outputDirectory and descendants. You are not alone: preserve others. No catalog/planning/Git/index/claims/QA/runtime/build/deploy/newchats/subagents/model changes. First actualcompaction finish already-started current ID only, no nextcard; second preservationSTOP. Root identity is not author identity.',
  'stop':'One complete current-ID READY_FOR_INDEPENDENT_REVIEW or specific HOLD then end turn. READY/metadata/schema confer0credit. No next ID before same-batch operational CONTINUE.'}
+task['inadmissibleRetainedSources']=x.get('inadmissibleRetainedSources',[])
 task['editorialClarification']=x.get('authorEditorialClarification','')
 task['recentRetainedSources']=x.setdefault('continuationRetainedSourceMetadata',task['recentRetainedSources'])
 p=D/f'{key}-batch-task.json'

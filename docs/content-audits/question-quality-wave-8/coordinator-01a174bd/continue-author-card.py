@@ -18,6 +18,7 @@ out=D/(f'source-video-game-history{n}-initial-complete' if completion else f'sou
 assert not out.exists()
 if not completion:assert not x.get(f'pendingVideoGameHistory{n}')
 t.update(card);t.update(authorNativeId=a['threadId'],authorNativeJournal=a['nativeJournal'],outputDirectory=str(out),originalBatch=batch['assignment'],baselineCode=m.h.git(m.C,'rev-parse','HEAD'),catalogCandidate=m.h.git(m.C,'rev-parse','HEAD'),phase=f'CONTINUE_SAME_BATCH_SOURCE{n}',frozen={k:card[k] for k in ['id','topicId','sourceOrder','difficulty','correctIndex']},inventoryUsage=f'python3 -B {D}/current-inventory.py video-game-history {out}/fresh-inventory.json')
+t['inadmissibleRetainedSources']=x.get('inadmissibleRetainedSources',[])
 t['editorialClarification']='Perform editorial corrections, not only audit the original. Prompt/answer TEXTS (including correct answer text), explanation, notes and source can change when necessary; frozen fields are ONLY ID/topic/order/difficulty/integer correctIndex. Resolve ordinary repairable draft defects before spending sources. Use already available source context to choose a supported unique MAIN and comparable row; do not keep an unsupported or wrong-level original merely because it existed. Never change MAIN to evade an already exhausted claim or historical terminal HOLD.'
 t.update(owner=m.O,manifest=str(D/'manifest.json'),sourceIndex=x['sourceIndex'],freshInventoryHelper=str(D/'current-inventory.py'),captureHelper=str(D/'capture-native.py'),captureMethod=str(D/'capture-method.md'))
 files=[]
