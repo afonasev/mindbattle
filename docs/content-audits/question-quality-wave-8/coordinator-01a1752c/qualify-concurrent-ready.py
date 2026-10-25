@@ -9,7 +9,17 @@ assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and m.read(m
 cp=m.read(pathlib.Path(x['canonicalCheckpoint']));assert cp['owner']==m.O
 ca,sp,ps=[m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
 m.alias_explicit_author_readiness_amendment(ca,sp,ps,R)
-e=ca['entries'][0];uid=ca['sourceNativeId'];assert ca['cycle']==sp['cycle']==ps['cycle']==0 and sp['sourceNativeId']==ps['sourceNativeId']==uid
+e=ca['entries'][0];uid=ca['sourceNativeId']
+cycle_alias=None
+if order==84 and ('cycle' not in sp or 'cycle' not in ps):
+ assert ca['cycle']==sp['entries'][0]['cycle']==0 and sp['entries'][0]['id']==e['id']
+ assert uid==sp['sourceNativeId']==ps['sourceNativeId']==x['actors']['author78']['threadId']
+ preserved=m.read(D/'video-game-history84-native-proof.json');assert preserved['status']=='READY_FOR_INDEPENDENT_REVIEW' and preserved['sixGroups']==6 and preserved['fourVariants']==4
+ assert preserved['sourceNativeId']==uid and preserved['beforeHash']==e['beforeHash'] and preserved['afterHash']==e['afterHash']
+ for name in ['candidate.json','sourceproof.json','peer-snapshot.json']:assert preserved['rawFileSHA256'][name]==m.raw(R/name)
+ cycle_alias={'candidateCycle':0,'sourceproofEntryCycle':0,'missingRootCycleFields':[name for name,v in [('sourceproof',sp),('peer',ps)] if 'cycle' not in v],'originalKeyErrorUncured':True,'operation':'Exact preserved native SOURCE84 candidate/entry cycle0, ID/preimage/proposal/six/four and raw hashes bind this same packet. Redundant root metadata only; raw and judgments unchanged.'}
+ sp.setdefault('cycle',0);ps.setdefault('cycle',0)
+assert ca['cycle']==sp['cycle']==ps['cycle']==0 and sp['sourceNativeId']==ps['sourceNativeId']==uid
 assert e['sourceOrder']==order and e['topicId']==topic and e['status']=='READY_FOR_INDEPENDENT_REVIEW' and e['id'] not in cp['currentEligibleCompletedIds']
 def at(ref,p):return subprocess.check_output(['git','-C',str(m.C),'show',ref+':'+str(p.relative_to(m.C))])
 nativeproof=m.read(D/f'{topic}{order}-native-proof.json')
@@ -87,6 +97,7 @@ for p in ps['actualCurrentPeers']:
 ps['globalMAIN']['rows']=currentrows;ps['globalMAIN']['rowsCanonicalSHA256']=m.sha(currentrows)
 next(b for b in bindings if b['path']==str(tp.relative_to(m.C)))['sha256']=m.raw(tp)
 ps['technicalConcurrentDependencyAlias']=proof;sp['technicalConcurrentDependencyAlias']=proof
+if cycle_alias:proof['exactSource84RootCycleAlias']=cycle_alias
 if timing_alias:
  proof['exactNativeReadTimingNameAlias']=timing_alias
 if same_topic_alias:
