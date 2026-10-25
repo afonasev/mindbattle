@@ -27,10 +27,10 @@ for name in sys.argv[1:]:
  for entry in report['applied']:
   assert entry['id'] not in replacements;replacements[entry['id']]=entry['proposedCard']
  reports.append((name,report));files += [p for p in B.rglob('*') if p.is_file()]
-tp=m.C/'src/content/topics/video-game-history.json';before=m.read(tp);after={**before,'questions':[replacements.get(q['id'],q) for q in before['questions']]};assert a.read_issues(after)==[]
+tp=m.C/'src/content/topics/video-game-history.json';before_raw_sha=m.raw(tp);before=m.read(tp);after={**before,'questions':[replacements.get(q['id'],q) for q in before['questions']]};assert a.read_issues(after)==[]
 selection={'command':'node node_modules/vitest/vitest.mjs run tests/unit/catalog-topics.test.ts tests/unit/content.test.ts tests/unit/content-answer-notes.test.ts --reporter=json --outputFile='+str(qa.relative_to(m.C)),'reason':f'Only exact SOURCE{batch_label} JSON candidates; full preimages/six/four/frozen contracts individually qualified against same baseline, combined catalog validation passed. One minimal affected19 run on exact common version, no full/runtime/build.'}
 for name,report in reports:
  report.update(stage='Applied exact author CURRENT pending affected19 and exact independent stage',qualityCredit=0,qaSelection=selection,sharedBatch={'baselineCatalogCommit':baseline,'ids':list(replacements),'applyCount':len(replacements),'catalogFrozenUntilIndependentVerdicts':True});p=D/(name+'-apply.json');m.write(p,report);files.append(p)
 m.write(tp,after);files.append(tp)
-rp=D/f'source{batch_label}-shared-apply.json';m.write(rp,{'owner':m.O,'baseline':baseline,'ids':list(replacements),'rawBeforeSHA256':m.sha(before),'rawAfterSHA256':m.sha(after),'perCardApplyReports':[str((D/(name+'-apply.json')).relative_to(m.C)) for name,_ in reports],'qaSelection':selection,'qualityCredit':0});files.append(rp)
+rp=D/f'source{batch_label}-shared-apply.json';m.write(rp,{'owner':m.O,'baseline':baseline,'ids':list(replacements),'rawBeforeSHA256':before_raw_sha,'rawAfterSHA256':m.raw(tp),'beforeCanonicalSHA256':m.sha(before),'afterCanonicalSHA256':m.sha(after),'perCardApplyReports':[str((D/(name+'-apply.json')).relative_to(m.C)) for name,_ in reports],'qaSelection':selection,'qualityCredit':0});files.append(rp)
 print(m.savecode(files,f'Apply exact qualified SOURCE{batch_label} candidates on one catalog version without quality credit'))
