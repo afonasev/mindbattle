@@ -50,7 +50,14 @@ for k,expected in [('sourceNativeId',uid),('topicId','video-game-history'),('cyc
 cp=m.read(pathlib.Path(x['canonicalCheckpoint']));assert cp['owner']==m.O and q['id'] in cp['currentRemainingIds']
 assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and m.read(m.P/'.flow-leases.json')=={}
 assert not (D/f'video-game-history{order}{suffix}-native-proof.json').exists()
-start=max(i for i,r in enumerate(nr,1) if r.get('type')=='event_msg' and r['payload'].get('type')=='task_started')
+last_turn_start=max(i for i,r in enumerate(nr,1) if r.get('type')=='event_msg' and r['payload'].get('type')=='task_started')
+start=last_turn_start
+continuation=x.get('pendingVideoGameHistory'+str(order),{}).get('cycle1Continuation') if cycle else None
+if continuation:
+ continued=m.read(continuation)
+ assert continued['owner']==m.O and continued['sourceNativeId']==uid
+ assert continued['originalTask']==actor['task'] and m.raw(actor['task'])==continued['originalTaskSHA256']
+ start=continued['firstTaskStartLine'];assert start<=last_turn_start and nr[start-1]==continued['originalFirstTaskStarted']
 calls=[]
 for i,r in enumerate(nr,1):
  p=r.get('payload',{});inp=re.sub(r'^// @exec:[^\n]*\n','',p.get('input','').lstrip())
@@ -60,6 +67,8 @@ for i,r in enumerate(nr,1):
 info=next(r['payload']['info'] for r in reversed(nr) if r['payload'].get('type')=='token_count')
 proof={'owner':m.O,'sourceNativeId':uid,'nativeJournal':actor['nativeJournal'],'actualCompactions':sum(r.get('type')=='compacted' for r in nr),'lastInput':info['last_token_usage']['input_tokens'],'modelWindow':info['model_context_window'],'packet':str(R),'rawFileSHA256':{str(p.relative_to(R)):m.raw(p) for p in R.rglob('*') if p.is_file()},'status':'HOLD','beforeHash':e['beforeHash'],'afterHash':e['afterHash'],'currentTaskStartLine':start,'networkCalls':[v for v in calls if v['callLine']>start],'priorTaskNetworkCalls':[v for v in calls if v['callLine']<start],'qualityCredit':0,'noQualification':True,'unapplied':True,'noIndependentInitial':True,'rawSchemaDefectsUncured':defects,'missingTripleHashes':[v['slot'] for v in variants if 'tripleSHA256' not in v],'rawBytesUnchanged':True}
 proof['unappliedProposalPreservedWithoutQualification']=unapplied_proposal
+proof['currentTaskLastTurnStartLine']=last_turn_start
+if continuation:proof['sameCycleContinuation']={'path':continuation,'rawSHA256':m.raw(continuation),'noCycleReset':True}
 proof.update(cycle=cycle,initialAlreadyApplied=bool(cycle),noIndependentInitial=not bool(cycle),noIndependentFinal=bool(cycle))
 p=D/f'video-game-history{order}{suffix}-native-proof.json';m.write(p,proof)
 actor.update(stage=f'IDLE_AFTER_SOURCE{order}{suffix}_AUTHORHOLD_UNQUALIFIED',actualCompactions=proof['actualCompactions'],lastTaskEvent='task_complete',lastInput=proof['lastInput'],modelWindow=proof['modelWindow'],cursor=cursor,nativePreflightVerifiedBy=m.O)
