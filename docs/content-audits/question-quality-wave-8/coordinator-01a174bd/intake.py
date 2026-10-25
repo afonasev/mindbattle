@@ -52,6 +52,10 @@ for R in packet_paths:
         sp['sourceInventoryPath']=str(ip);sp['sourceInventorySHA256']=m.raw(ip)
         binding={'rawPacket':str(R),'rawFreeze':proof['preservedCatalogBaseline'],'originalPacketProof':str(D/'video-game-history70-native-proof.json'),'sameAuthorDependencyAddendum':str(R/'concurrent66-addendum.json'),'addendumSHA256':m.raw(R/'concurrent66-addendum.json'),'identityCorrection':str(R/'concurrent66-identity-correction.json'),'identityCorrectionSHA256':m.raw(R/'concurrent66-identity-correction.json'),'knownAppliedDeltaOnly':66,'originalsUnchanged':True,'noRootSemanticDecision':True,'qualityCredit':0}
         ps['technicalConcurrentDependencyAlias']=binding;sp['technicalConcurrentDependencyAlias']=binding
+    if 'allCurrentFileByteBindings' not in ps.get('globalMAIN',{}) and 'currentFileByteBindings' in ps.get('globalMAIN',{}):
+        bindings=ps['globalMAIN']['currentFileByteBindings'];assert len(bindings)==110 and all(m.raw(C/v['path'])==v['sha256'] for v in bindings)
+        ps['globalMAIN']['allCurrentFileByteBindings']=bindings
+        ps['technicalCurrentFileByteBindingNameAlias']={'rawPeer':str(R/'peer-snapshot.json'),'rawSHA256':m.raw(R/'peer-snapshot.json'),'originalPointer':'/globalMAIN/currentFileByteBindings','operation':'Exact110 live file path/hash bindings; redundant container name only, raw and judgments unchanged.'}
     m.alias_explicit_global_inventory_file(candidate,sp,ps,R)
     m.alias_explicit_owned_packet_source_paths(candidate,sp,R)
     m.alias_source96_distinct99_preimage(candidate,sp,ps,R)
