@@ -34,11 +34,11 @@ for i,r in enumerate(rows,1):
 out=D/f'reader{order}-{stage}-procedural-diagnostics.json';assert not out.exists()
 m.write(out,{'owner':m.O,'readerNativeId':a['threadId'],'taskStartLine':audit['taskStartLine'],'nonzeroOriginals':bad,'truncatedOriginals':trunc,'allUncured':True,'scope':'This exact stage only; old embedded error/warning content is data, not execution'})
 if '--appendix-only' in sys.argv:
- assert (D/f'certification-video-game-history{order}.json').is_file()
+ assert (D/f'certification-cars-road-transport{order}.json').is_file()
  print(m.savecode([Path(__file__),out],'Preserve reader procedural appendix after certification without changing case or certificate'))
  print({'order':order,'stage':stage,'nonzeroOriginals':len(bad),'truncatedOriginals':len(trunc),'UNCURED':True,'caseUnchanged':True})
  raise SystemExit(0)
-case=D/f'case-video-game-history{order}-{stage}-{audit["status"].lower()}.json';v=m.read(case)
+case=D/f'case-cars-road-transport{order}-{stage}-{audit["status"].lower()}.json';v=m.read(case)
 v['reportBase']['readerProceduralDeviations']={'path':str(out),'rawSHA256':m.raw(out),'newNonzeroOriginals':len(bad),'newTruncatedOriginals':len(trunc),'uncured':True,'contentPASSAndQAdoNotAssertProceduralCompliance':True}
 m.write(case,v)
 print(m.savecode([Path(__file__),out,case],'Preserve exact independent-stage diagnostics without procedural cure'))
