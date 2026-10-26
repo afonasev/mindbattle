@@ -22,7 +22,7 @@ for name in ['candidate.json','sourceproof.json','peer-snapshot.json']:
 native_proof=m.read(D/f'{topic}{order}-native-proof.json')
 for name,digest in native_proof['rawFileSHA256'].items():
  p=R/name;assert m.raw(p)==digest and p.read_bytes()==at(raw_freeze,p)
-for name,digest in clar['originalInputsBeforeDependencyRefresh'].items():assert m.raw(name)==digest
+for name,digest in clar['originalInputsBeforeDependencyRefresh'].items():assert m.raw(name)==(digest['sha256'] if isinstance(digest,dict) and set(digest)=={'sha256'} else digest)
 rows=[json.loads(l) for l in pathlib.Path(native_proof['nativeJournal']).open()]
 assert [r['payload']['id'] for r in rows if r.get('type')=='session_meta']==[uid]
 assert sum(r.get('type')=='compacted' for r in rows)<2
@@ -35,7 +35,13 @@ unchanged=clar[f'source{order}Unchanged'];assert unchanged['proposedCard']==e['p
 assert unchanged['preimageSHA256']==e['beforeHash']
 assessment=clar['bilateralMAINComparison'];assert len(assessment['results'])==2
 assert {r['direction'] for r in assessment['results']}=={f'{changed} to {order}',f'{order} to {changed}'}
-assert all(all(r[k] for k in ['entity','relation','value','context','assessment']) and isinstance(r['directReverse'],bool) for r in assessment['results'])
+for r in assessment['results']:
+ assert r['assessment'] and isinstance(r['directReverse'],bool)
+ if 'from' in r and 'to' in r:
+  assert all(all(r[side][k] for k in ['id','entity','relation','value','context']) for side in ['from','to'])
+  expected_ids=[new['id'],e['id']] if r['direction']==f'{changed} to {order}' else [e['id'],new['id']]
+  assert [r[side]['id'] for side in ['from','to']]==expected_ids
+ else:assert all(r[k] for k in ['entity','relation','value','context'])
 # Revision2026-10-25 removes manual native-call ordering as a gate.
 # Same-native declaration, original SHA bindings and exact whole-card dependencies remain required.
 assert clar['dependencyConclusion']
