@@ -79,7 +79,7 @@ for source in sp['rawSources']:
   raw_checks.append({'path':str(p),'originalFileSHA256':source['fileSHA256'],'operation':'Exact declared immutable file digest name alias only; no invented hash/body or raw edit.'})
  assert m.raw(p)==source['sha256'];cap=m.read(p) if p.suffix=='.json' else None
  if isinstance(cap,dict) and 'originalRecord' in cap:
-  jp=pathlib.Path(cap['nativeJournal'])
+  jp=pathlib.Path(cap.get('nativeJournal') or cap['nativeJournalActual'])
   if not jp.exists():
    matches=list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+cap['sourceNativeId']+'.jsonl'));assert len(matches)==1;jp=matches[0]
   record=json.loads(jp.read_text().split('\n')[cap['nativeRecordLine']-1]);assert record==cap['originalRecord']

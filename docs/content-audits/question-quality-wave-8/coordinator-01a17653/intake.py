@@ -611,7 +611,7 @@ for R in packet_paths:
             if isinstance(capture,dict) and 'originalRecord' in capture and source['completeOutputPointer'].startswith('/payload/'):
                 # Capture helper pointer is relative to retained native record.
                 # Verify exact native lineage before adding its wrapper prefix.
-                native_path = pathlib.Path(capture['nativeJournal'])
+                native_path = pathlib.Path(capture.get('nativeJournal') or capture['nativeJournalActual'])
                 if not native_path.exists():
                     matches = list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+capture['sourceNativeId']+'.jsonl'))
                     assert len(matches) == 1
@@ -631,7 +631,7 @@ for R in packet_paths:
                     for key in source['completeOutputPointer'].split('/')[1:]:
                         probe = probe[int(key)] if isinstance(probe,list) else probe[key]
                 except (KeyError,IndexError,TypeError,ValueError):
-                    native_path = pathlib.Path(capture['nativeJournal'])
+                    native_path = pathlib.Path(capture.get('nativeJournal') or capture['nativeJournalActual'])
                     if not native_path.exists():
                         matches = list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+capture['sourceNativeId']+'.jsonl'))
                         assert len(matches) == 1
@@ -662,7 +662,7 @@ for R in packet_paths:
                 # lossless alias of a separately mistyped packet declaration.
                 assert capture['completeOutputPointer'] == source['completeOutputPointer']
                 assert capture['completeOutputSHA256'] == actual_body and source['url'] in body
-                native_path = pathlib.Path(capture['nativeJournal'])
+                native_path = pathlib.Path(capture.get('nativeJournal') or capture['nativeJournalActual'])
                 if not native_path.exists():
                     matches = list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+capture['sourceNativeId']+'.jsonl'))
                     assert len(matches) == 1
