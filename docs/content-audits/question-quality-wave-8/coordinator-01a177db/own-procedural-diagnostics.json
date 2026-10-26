@@ -1,0 +1,80 @@
+{
+  "owner": "01a177db-64fc-7151-b0f6-da7399017b04",
+  "inheritedDiagnostics": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a176d6/own-procedural-diagnostics.json",
+  "targetedKnownFailures": [
+    {
+      "callLine": 183,
+      "resultLine": 187,
+      "originalCall": {
+        "timestamp": "2026-10-26T11:02:25.916Z",
+        "ordinal": 182,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_0f9f6dd13a199d1b016adf333e7b7c8191ae1b42cd4425df27",
+          "status": "completed",
+          "call_id": "call_2b0a65a21947412c8420027fbf70e6d1",
+          "name": "exec",
+          "input": "text(await tools.mcp__codex_app__wait_threads({targets:[{threadId:\"01a176d6-b811-76d2-9ba1-bec22746198a\",hostId:\"local\"}],timeoutMs:0}));\ntext((await tools.exec_command({cmd:\"python3 -B - <<'PY'\\nimport json,pathlib\\np=pathlib.Path('/Users/eaafonasev/.codex/sessions/2026/10/26/rollout-2026-10-26T11-12-25-01a176d6-b811-76d2-9ba1-bec22746198a.jsonl');rs=[json.loads(l) for l in p.open()];events=[{'nativeLine':i,'timestamp':r.get('timestamp'),'payload':r['payload']} for i,r in enumerate(rs,1) if r.get('type')=='event_msg' and r.get('payload',{}).get('type') in ['task_started','task_complete']];print(json.dumps(events[-2:],ensure_ascii=False));assert events[-1]['payload']['type']=='task_complete' and events[-1]['payload']['turn_id']=='01a1778a-0111-7782-8bc6-6149417bde09'\\nPY\",\"max_output_tokens\":1500})).output);\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a177e0-140a-7661-b5ff-1187d6678c37",
+            "create_time": 1793012542.5756326
+          }
+        }
+      },
+      "originalResult": {
+        "timestamp": "2026-10-26T11:02:26.214Z",
+        "ordinal": 186,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a177e0-3aa6-78d3-a8a6-c86f133f0393",
+          "call_id": "call_2b0a65a21947412c8420027fbf70e6d1",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.3 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": "{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"timedOut\\\":true,\\\"wake\\\":null,\\\"polls\\\":[{\\\"schemaVersion\\\":1,\\\"cursor\\\":\\\"beee7e83-1c37-4640-bd82-519f959ba3b2:1\\\",\\\"revision\\\":1,\\\"changed\\\":true,\\\"thread\\\":{\\\"id\\\":\\\"01a176d6-b811-76d2-9ba1-bec22746198a\\\",\\\"hostId\\\":\\\"local\\\",\\\"status\\\":{\\\"type\\\":\\\"active\\\",\\\"activeFlags\\\":[]}},\\\"latestTurn\\\":{\\\"id\\\":\\\"01a1778a-0111-7782-8bc6-6149417bde09\\\",\\\"status\\\":\\\"inProgress\\\",\\\"error\\\":null,\\\"startedAt\\\":1793006895,\\\"completedAt\\\":null,\\\"durationMs\\\":null},\\\"latestAssistantMessageId\\\":\\\"msg_0e85a950c93f8c20016adf32c09fd48191b382075c675f6a0a\\\",\\\"latestAssistantMessage\\\":{\\\"id\\\":\\\"msg_0e85a950c93f8c20016adf32c09fd48191b382075c675f6a0a\\\",\\\"turnId\\\":\\\"01a1778a-0111-7782-8bc6-6149417bde09\\\",\\\"phase\\\":\\\"commentary\\\",\\\"text\\\":\\\"Read-only ACK получен, проверка завершилась с exit 0. Все четыре claims освобождены для подтверждённого преемника; общий lease пуст, чужие индексы сохранены. Осталось подтвердить durable takeover в канонических записях, после чего этот чат остановится.\\\"},\\\"latestToolMarkerId\\\":\\\"exec-35be05a7-9fa1-4278-8223-05f2b4f562d5\\\",\\\"latestToolMarker\\\":{\\\"id\\\":\\\"exec-35be05a7-9fa1-4278-8223-05f2b4f562d5\\\",\\\"turnId\\\":\\\"01a1778a-0111-7782-8bc6-6149417bde09\\\",\\\"type\\\":\\\"mcpToolCall\\\",\\\"name\\\":\\\"send_message_to_thread\\\",\\\"status\\\":\\\"completed\\\"}}]}\"}],\"isError\":false}"
+            },
+            {
+              "type": "input_text",
+              "text": "[{\"nativeLine\": 124, \"timestamp\": \"2026-10-26T06:16:47.121Z\", \"payload\": {\"type\": \"task_started\", \"turn_attribution\": {\"turn_id\": \"01a176da-b4f1-7aa0-bc96-78e0bfc12e17\", \"turn_trigger\": \"app_tool_send_message\", \"parent_turn_id\": \"01a17657-b83b-7de2-8c87-73f7e4ef4b10\", \"initiating_agent_path\": null, \"root_turn_id\": \"01a174c1-856a-79e3-9001-a1b5f461c54d\"}, \"turn_id\": \"01a176da-b4f1-7aa0-bc96-78e0bfc12e17\", \"root_turn_id\": \"01a174c1-856a-79e3-9001-a1b5f461c54d\", \"started_at\": 1792995407, \"model_context_window\": 475000, \"collaboration_mode_kind\": \"default\"}}, {\"nativeLine\": 1764, \"timestamp\": \"2026-10-26T09:28:15.384Z\", \"payload\": {\"type\": \"task_started\", \"turn_attribution\": {\"turn_id\": \"01a1778a-0111-7782-8bc6-6149417bde09\", \"turn_trigger\": \"resume_interrupted_task\", \"parent_turn_id\": null, \"initiating_agent_path\": null, \"root_turn_id\": \"01a1778a-0111-7782-8bc6-6149417bde09\"}, \"turn_id\": \"01a1778a-0111-7782-8bc6-6149417bde09\", \"root_turn_id\": \"01a1778a-0111-7782-8bc6-6149417bde09\", \"started_at\": 1793006895, \"model_context_window\": 475000, \"collaboration_mode_kind\": \"default\"}}]\nTraceback (most recent call last):\n  File \"<stdin>\", line 2, in <module>\nAssertionError\n"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a177e0-140a-7661-b5ff-1187d6678c37",
+            "create_time": 1793012546.214764
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000,
+          "mcp_attribution": {
+            "status": "complete",
+            "sources": [
+              {
+                "plugin_id": "codex-app-tools@openai-bundled",
+                "server_name": "codex_app",
+                "tool_name": "wait_threads",
+                "first_turn_id": "01a177e0-140a-7661-b5ff-1187d6678c37"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "scope": "Only known early parent-completion assertion ran while parent was still active; successful supported wait and exact final native event later confirmed before archive. Original failure remains uncured. Bootstrap missing-reference/truncated projections preserved in immutable bootstrap-original snapshot; completed bounded policy reads are separate observations. No whole-output audit.",
+  "bootstrapOriginalsImmutable": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a177db/bootstrap-native-originals-immutable.json",
+  "allOriginalFailuresUncured": true,
+  "contentPASSDoesNotAssertProceduralCompliance": true,
+  "sourceClaimsUncured": [
+    36,
+    38,
+    39
+  ],
+  "protectedSource60NoNewCardOrArchive": true
+}
