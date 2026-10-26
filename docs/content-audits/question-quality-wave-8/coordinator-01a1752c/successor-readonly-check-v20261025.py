@@ -83,6 +83,8 @@ assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])==a['ownReceiptCou
 identity=read(x['currentReaderNativeIdentity']);assert identity['verifiedSessionMetaId']==identity['decodedResult']['threadId']==G and identity['nativeJournal']==a['nativeJournal']
 seed=read(r['inheritedImmutable']);assert seed['retainedIdleReader']['threadId']==G and seed['readerOwnReceiptCount']==len(seed['readerOwnReceipts'])
 retired=read(r['retiredReader33']);assert retired['readerOwnReceiptCount']==len(retired['readerOwnReceipts'])==18 and retired['readerNativeId']!=G
+retired34=read(r['retiredReader34']);assert retired34['readerOwnReceiptCount']==len(retired34['readerOwnReceipts'])==18 and retired34['readerNativeId'] not in [G,retired['readerNativeId']]
+for path,binding in retired34['readerOwnReceipts'].items():assert raw(path)==binding['rawSHA256']
 for path,binding in r['readerOwnReceipts'].items():
  assert raw(path)==binding['rawSHA256']
  receipt=read(path);entry=receipt['entries'][0]
