@@ -1,0 +1,382 @@
+{
+  "readerNativeId": "01a17851-1874-78f1-921e-529a8e82b6a4",
+  "role": "same independent reviewer37 directed FINAL58",
+  "processRevision": "2026-10-25",
+  "stage": "FINAL",
+  "cycle": 1,
+  "previousIndependentInitial": {
+    "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/independent-cars-road-transport58-initial/receipt.json",
+    "rawSHA256": "345c5072520adf98dc5d0011bef940519db8d1d07205ba26ae305de8f5411c8c"
+  },
+  "entries": [
+    {
+      "id": "cars-road-transport-hybrid-two-sources",
+      "topicId": "cars-road-transport",
+      "sourceOrder": 58,
+      "stage": "FINAL",
+      "status": "PASS",
+      "currentCard": {
+        "id": "cars-road-transport-hybrid-two-sources",
+        "difficulty": "easy",
+        "prompt": "Какой тип автомобиля сочетает двигатель внутреннего сгорания с одним или несколькими электромоторами?",
+        "answers": [
+          {
+            "text": "Обычный автомобиль с ДВС",
+            "note": "AFDC сообщает: запас хода BEV на одном заряде обычно меньше, чем у сопоставимого обычного автомобиля на баке топлива; рост дальности новых моделей, ёмкости батарей и развитие мощных зарядных устройств сокращают разрыв."
+          },
+          {
+            "text": "Аккумуляторный электромобиль (BEV)",
+            "note": "BEV хранит электрическую энергию в тяговой батарее, которой питается мотор; батарея заряжается от внешнего источника."
+          },
+          {
+            "text": "Водородный автомобиль на топливных элементах (FCEV)",
+            "note": "В FCEV топливный элемент преобразует водород из бортового бака в электричество для тягового мотора."
+          },
+          {
+            "text": "Гибридный электромобиль (HEV)",
+            "note": "У обычного HEV батарея заряжается рекуперативным торможением и двигателем; подключать его к сети не требуется."
+          }
+        ],
+        "correctIndex": 3,
+        "explanation": "Гибридный электромобиль (HEV) сочетает двигатель внутреннего сгорания с одним или несколькими электромоторами, питаемыми от батареи. В обычном HEV батарея заряжается рекуперацией и двигателем, поэтому его не подключают к электросети.",
+        "source": {
+          "title": "U.S. Department of Energy, Alternative Fuels Data Center",
+          "url": "https://afdc.energy.gov/vehicles/how-do-hybrid-electric-cars-work",
+          "verifiedAt": "2026-10-26"
+        }
+      },
+      "currentCardCanonicalSHA256": "6b1994bbc7131f847b8cba4af7dcdec7e94d296aa557ef5e3b5cbaa0439f2676",
+      "sixLiteralCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой тип автомобиля сочетает двигатель внутреннего сгорания с одним или несколькими электромоторами?",
+            "answers": [
+              "Обычный автомобиль с ДВС",
+              "Аккумуляторный электромобиль (BEV)",
+              "Водородный автомобиль на топливных элементах (FCEV)",
+              "Гибридный электромобиль (HEV)"
+            ],
+            "correctIndex": 3
+          },
+          "canonicalSHA256": "fd9f46bc9f8445e84ccac621360a2bedb8a9a4234ea72f1d9e388ee171cb2b1a",
+          "individualGround": "D1 закрыт: slot0 теперь «Обычный автомобиль с ДВС», без слова «только», заранее отрицающего запрошенную комбинацию. Все четыре ответа — реальные типы авто; для выбора нужно различить обычную топливную, аккумуляторную, водородно-топливно-элементную и гибридную тяговые архитектуры. В контексте вопроса о типе автомобиля «сочетает двигатель ... с электромоторами» описывает силовую установку, как HEV L55/L65/L78, а не перечисление стартера/вспомогательных электроприборов (auxiliary отдельно L60). HEV L55 прямо задаёт ICE plus one or more motors, BEV EV L58 — battery-only electric type, FCEV L62-L63 — hydrogen/fuel-cell. Поэтому slot3 — один ключ. У conventional slot0 наличие ICE теперь не исключено буквальным текстом: незнающий может ошибочно считать электрическое оснащение/батарею достаточным для этой классификации, а правильное разграничение требует простого предметного знания. Frozen index не служил доказательством.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55 full definition ICE and one or more motors; L60/L65/L76/L78 auxiliary versus traction and transmission context"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/electric-basics-ev.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L58-L61: BEV definition; conventional/hybrid comparison and range"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/fuel-cell-vehicles.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L58-L63; L66-L67: FCEV hydrogen/fuel-cell/motor context"
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Гибридный электромобиль (HEV) сочетает двигатель внутреннего сгорания с одним или несколькими электромоторами, питаемыми от батареи. В обычном HEV батарея заряжается рекуперацией и двигателем, поэтому его не подключают к электросети.",
+          "canonicalSHA256": "92e9c0574115f60d65ccbb8c824dc02c16f0de2818e4792321b3c4f98d7c0107",
+          "individualGround": "Первое из двух предложений точно передаёт HEV L55: ICE plus one or more motors using energy in batteries. Второе сохраняет «обычный HEV» для описанного на странице non-plug-in типа: battery charged by regeneration and engine, not plugged in. L82 отдельно ссылается на plug-in hybrids, поэтому текст не переносит запрет внешнего заряда на все возможные hybrid subclasses. Ключ прямо назван и объяснён.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55 full definition/charging; L63/L65/L76; L79-L84 separate related PHEV/other categories"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/independent-cars-road-transport58-initial/receipt.json",
+            "rawSHA256": "345c5072520adf98dc5d0011bef940519db8d1d07205ba26ae305de8f5411c8c",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/1",
+            "unchangedLiteralCanonicalSHA256": "92e9c0574115f60d65ccbb8c824dc02c16f0de2818e4792321b3c4f98d7c0107",
+            "applicability": "Собственный INITIAL-вывод для неизменного литерала остаётся применим: prompt/key/его собственный вариант и source context неизменны. Directed изменения slot0 не меняют правдивость, grammar и полезность этого объяснения/note."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "AFDC сообщает: запас хода BEV на одном заряде обычно меньше, чем у сопоставимого обычного автомобиля на баке топлива; рост дальности новых моделей, ёмкости батарей и развитие мощных зарядных устройств сокращают разрыв.",
+          "canonicalSHA256": "6bc65d1a75aa31cc48c3b233f27c99e2126cbc07ecb979b111a78e40c3dc17d0",
+          "individualGround": "D2 закрыт: вместо «источник сравнивает» note передаёт собственное содержательное отношение conventional option к BEV. Полный EV L61: today/generally BEV per-charge range shorter than comparable conventional per-tank range; increasing new-model range/higher-energy batteries/high-powered charging narrow gap. Сохранены AFDC, «обычно», сопоставимость, единицы заряд/бак и сокращающийся разрыв, перечислены все три источниковых фактора. Это не обещание для каждого авто/условий и не утверждение о полном жизненном цикле. «Ёмкость» передаёт higher-energy batteries в контексте хранимой энергии и range, а не иной химии. Это полезный факт о своём conventional варианте; старые ignition/gasoline/diesel claims не принимались.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/electric-basics-ev.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L61 full paragraph; L62 driving-condition limits remain surrounding context"
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "BEV хранит электрическую энергию в тяговой батарее, которой питается мотор; батарея заряжается от внешнего источника.",
+          "canonicalSHA256": "b0699e8dfd8941542099d6879f23b1a460273325cb2369a8442db8f5c2cb2049",
+          "individualGround": "EV L58 говорит, что BEV battery pack stores electrical energy that powers motor и battery charged by plugging vehicle into electric power source. Note сообщает оба собственных признака именно BEV. «Которой питается мотор» грамматически относится к тяговой батарее и не приписывает BEV гибридный ICE.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/electric-basics-ev.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L58: battery pack stores energy for motor and plug-in charging"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/independent-cars-road-transport58-initial/receipt.json",
+            "rawSHA256": "345c5072520adf98dc5d0011bef940519db8d1d07205ba26ae305de8f5411c8c",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/3",
+            "unchangedLiteralCanonicalSHA256": "b0699e8dfd8941542099d6879f23b1a460273325cb2369a8442db8f5c2cb2049",
+            "applicability": "Собственный INITIAL-вывод для неизменного литерала остаётся применим: prompt/key/его собственный вариант и source context неизменны. Directed изменения slot0 не меняют правдивость, grammar и полезность этого объяснения/note."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "В FCEV топливный элемент преобразует водород из бортового бака в электричество для тягового мотора.",
+          "canonicalSHA256": "3276e06bc13eb9b9a4184444768d189816d6cdc0272697c7d856cf7c2214359f",
+          "individualGround": "FC L62 даёт hydrogen energy -> electricity by fuel cell, L63 — pure hydrogen gas stored onboard tank, L67 — electricity powers motor. Note представляет допустимое краткое описание преобразования энергии водорода в электрическую для motor, относится именно к FCEV и не выдаёт hydrogen/tank за BEV charging.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/fuel-cell-vehicles.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L62-L63; L66-L67: stored tank hydrogen, fuel-cell conversion and motor electricity"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/independent-cars-road-transport58-initial/receipt.json",
+            "rawSHA256": "345c5072520adf98dc5d0011bef940519db8d1d07205ba26ae305de8f5411c8c",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/4",
+            "unchangedLiteralCanonicalSHA256": "3276e06bc13eb9b9a4184444768d189816d6cdc0272697c7d856cf7c2214359f",
+            "applicability": "Собственный INITIAL-вывод для неизменного литерала остаётся применим: prompt/key/его собственный вариант и source context неизменны. Directed изменения slot0 не меняют правдивость, grammar и полезность этого объяснения/note."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "У обычного HEV батарея заряжается рекуперативным торможением и двигателем; подключать его к сети не требуется.",
+          "canonicalSHA256": "45443b59ddde0948fb1bcde17c8cc22cbcc43362a0d492e5365453f97d57d149",
+          "individualGround": "HEV L55 прямо подтверждает charging through regenerative braking and ICE, cannot be plugged in. Слово «обычный» сохраняет non-plug-in scope; отдельная PHEV-ссылка L82 показывает, почему нельзя убрать этот qualifier. Это дополнительный собственный факт HEV сверх prompt/key о сочетании силовых агрегатов; его повтор в explanation разрешён.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55: no plug-in; battery charged by regenerative braking and ICE; L63/L65/L76 component context"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/independent-cars-road-transport58-initial/receipt.json",
+            "rawSHA256": "345c5072520adf98dc5d0011bef940519db8d1d07205ba26ae305de8f5411c8c",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/5",
+            "unchangedLiteralCanonicalSHA256": "45443b59ddde0948fb1bcde17c8cc22cbcc43362a0d492e5365453f97d57d149",
+            "applicability": "Собственный INITIAL-вывод для неизменного литерала остаётся применим: prompt/key/его собственный вариант и source context неизменны. Directed изменения slot0 не меняют правдивость, grammar и полезность этого объяснения/note."
+          }
+        }
+      ],
+      "fourFullPromptAnswerNoteVariants": [
+        {
+          "slot": 0,
+          "prompt": "Какой тип автомобиля сочетает двигатель внутреннего сгорания с одним или несколькими электромоторами?",
+          "answer": "Обычный автомобиль с ДВС",
+          "note": "AFDC сообщает: запас хода BEV на одном заряде обычно меньше, чем у сопоставимого обычного автомобиля на баке топлива; рост дальности новых моделей, ёмкости батарей и развитие мощных зарядных устройств сокращают разрыв.",
+          "tripleCanonicalSHA256": "b1fd4e08066ccf5540bc122cfe93aef3f6b5959322c6a60902a36646122ad428",
+          "grammar": "Лично прочитаны целый prompt, «Обычный автомобиль с ДВС» и новая note0. Именная самостоятельная подпись согласована с остальными типами; в note сравнительная конструкция «меньше, чем у сопоставимого ... на баке» и перечисление факторов грамматически корректны. Удаление «только» не нарушило форму ответа.",
+          "plausibility": "Реальный conventional type из AFDC. Он больше не отвергается одним словом «только», противопоставленным «сочетает». Требуется понять различие обычной ICE тяги и полноценной hybrid propulsion; электрические вспомогательные устройства не превращают тип в HEV. Это приемлемый простой дистрактор EASY.",
+          "truthUniqueKey": "HEV L55/L65/L78 определяет комбинированный тяговый тип, conventional контекст EV L59-L61/FCEV L58-L63 отделён. Обычный conventional type не является вторым ключом. Классификация не основана на ошибочном утверждении об отсутствии любого вспомогательного электромотора у ICE авто.",
+          "noteTruthUsefulness": "D2 закрыт: вместо «источник сравнивает» note передаёт собственное содержательное отношение conventional option к BEV. Полный EV L61: today/generally BEV per-charge range shorter than comparable conventional per-tank range; increasing new-model range/higher-energy batteries/high-powered charging narrow gap. Сохранены AFDC, «обычно», сопоставимость, единицы заряд/бак и сокращающийся разрыв, перечислены все три источниковых фактора. Это не обещание для каждого авто/условий и не утверждение о полном жизненном цикле. «Ёмкость» передаёт higher-energy batteries в контексте хранимой энергии и range, а не иной химии. Это полезный факт о своём conventional варианте; старые ignition/gasoline/diesel claims не принимались.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55 full definition ICE and one or more motors; L60/L65/L76/L78 auxiliary versus traction and transmission context"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/electric-basics-ev.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L58-L61: BEV definition; conventional/hybrid comparison and range"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/fuel-cell-vehicles.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L58-L63; L66-L67: FCEV hydrogen/fuel-cell/motor context"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/electric-basics-ev.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L61 full paragraph; L62 driving-condition limits remain surrounding context"
+            }
+          ]
+        },
+        {
+          "slot": 1,
+          "prompt": "Какой тип автомобиля сочетает двигатель внутреннего сгорания с одним или несколькими электромоторами?",
+          "answer": "Аккумуляторный электромобиль (BEV)",
+          "note": "BEV хранит электрическую энергию в тяговой батарее, которой питается мотор; батарея заряжается от внешнего источника.",
+          "tripleCanonicalSHA256": "b0214fe75b7c5b58d6fb9f98678c615d3e1302771c64f96d3894af471c7d4278",
+          "grammar": "Лично прочитана полная подстановка: «Какой тип автомобиля сочетает двигатель внутреннего сгорания с одним или несколькими электромоторами? — Аккумуляторный электромобиль (BEV)», затем вся note. Prompt согласует «сочетает двигатель ... с одним или несколькими электромоторами»; ответы — единообразные самостоятельные именные подписи. Падеж/число/управление в варианте и note корректны; slot0 отклонён по смысловой правдоподобности, не грамматике.",
+          "plausibility": "BEV — сопоставимый класс электрического транспорта: незнающий может смешивать названия hybrid/electric; нужен смысловой признак присутствия ICE, а не длина или грамматика. Directed FINAL: замена slot0 не изменила comparable whole-vehicle row; старое explicit-only исключение убрано. Для выбора по-прежнему нужно различить силовые архитектуры, а не грамматику/длину.",
+          "truthUniqueKey": "EV L58 определяет all-electric/BEV: stored battery electricity feeds motor and externally charged. Это не сочетание ICE and motor из HEV L55, поэтому slot1 не второй ключ.",
+          "noteTruthUsefulness": "EV L58 говорит, что BEV battery pack stores electrical energy that powers motor и battery charged by plugging vehicle into electric power source. Note сообщает оба собственных признака именно BEV. «Которой питается мотор» грамматически относится к тяговой батарее и не приписывает BEV гибридный ICE.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55 complete paragraph: ICE plus one or more electric motors; regenerative/engine charging and no plug-in; L65/L76 traction motor/battery"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/electric-basics-ev.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L58: all-electric/BEV battery-powered motor and external charging"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/fuel-cell-vehicles.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L58-L63; L66-L67: hydrogen energy/fuel-cell electricity/motor"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/electric-basics-ev.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L58: battery pack stores energy for motor and plug-in charging"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/independent-cars-road-transport58-initial/receipt.json",
+            "rawSHA256": "345c5072520adf98dc5d0011bef940519db8d1d07205ba26ae305de8f5411c8c",
+            "pointer": "/entries/0/fourFullPromptAnswerNoteVariants/1",
+            "unchangedTripleCanonicalSHA256": "b0214fe75b7c5b58d6fb9f98678c615d3e1302771c64f96d3894af471c7d4278"
+          }
+        },
+        {
+          "slot": 2,
+          "prompt": "Какой тип автомобиля сочетает двигатель внутреннего сгорания с одним или несколькими электромоторами?",
+          "answer": "Водородный автомобиль на топливных элементах (FCEV)",
+          "note": "В FCEV топливный элемент преобразует водород из бортового бака в электричество для тягового мотора.",
+          "tripleCanonicalSHA256": "c8de9c7215146191081196bc3aaa24b2e5238f05f73bb18c99416299adbdbc8e",
+          "grammar": "Лично прочитана полная подстановка: «Какой тип автомобиля сочетает двигатель внутреннего сгорания с одним или несколькими электромоторами? — Водородный автомобиль на топливных элементах (FCEV)», затем вся note. Prompt согласует «сочетает двигатель ... с одним или несколькими электромоторами»; ответы — единообразные самостоятельные именные подписи. Падеж/число/управление в варианте и note корректны; slot0 отклонён по смысловой правдоподобности, не грамматике.",
+          "plausibility": "FCEV также имеет электрический тяговый мотор и связанное бортовое энергооборудование, поэтому тематически правдоподобен, но это hydrogen/fuel-cell схема вместо ICE+motor. Directed FINAL: замена slot0 не изменила comparable whole-vehicle row; старое explicit-only исключение убрано. Для выбора по-прежнему нужно различить силовые архитектуры, а не грамматику/длину.",
+          "truthUniqueKey": "FC L62-L63 описывает hydrogen/fuel cell propulsion и L67 motor power; наличие electric motor не означает наличие ICE. Это отличный от HEV тип и не второй ключ.",
+          "noteTruthUsefulness": "FC L62 даёт hydrogen energy -> electricity by fuel cell, L63 — pure hydrogen gas stored onboard tank, L67 — electricity powers motor. Note представляет допустимое краткое описание преобразования энергии водорода в электрическую для motor, относится именно к FCEV и не выдаёт hydrogen/tank за BEV charging.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55 complete paragraph: ICE plus one or more electric motors; regenerative/engine charging and no plug-in; L65/L76 traction motor/battery"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/electric-basics-ev.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L58: all-electric/BEV battery-powered motor and external charging"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/fuel-cell-vehicles.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L58-L63; L66-L67: hydrogen energy/fuel-cell electricity/motor"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/fuel-cell-vehicles.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L62-L63; L66-L67: stored tank hydrogen, fuel-cell conversion and motor electricity"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/independent-cars-road-transport58-initial/receipt.json",
+            "rawSHA256": "345c5072520adf98dc5d0011bef940519db8d1d07205ba26ae305de8f5411c8c",
+            "pointer": "/entries/0/fourFullPromptAnswerNoteVariants/2",
+            "unchangedTripleCanonicalSHA256": "c8de9c7215146191081196bc3aaa24b2e5238f05f73bb18c99416299adbdbc8e"
+          }
+        },
+        {
+          "slot": 3,
+          "prompt": "Какой тип автомобиля сочетает двигатель внутреннего сгорания с одним или несколькими электромоторами?",
+          "answer": "Гибридный электромобиль (HEV)",
+          "note": "У обычного HEV батарея заряжается рекуперативным торможением и двигателем; подключать его к сети не требуется.",
+          "tripleCanonicalSHA256": "3ad7e765077b68e9be4c3d37ef54c54803d049d7dd8f3eb8de40c24099454b10",
+          "grammar": "Лично прочитана полная подстановка: «Какой тип автомобиля сочетает двигатель внутреннего сгорания с одним или несколькими электромоторами? — Гибридный электромобиль (HEV)», затем вся note. Prompt согласует «сочетает двигатель ... с одним или несколькими электромоторами»; ответы — единообразные самостоятельные именные подписи. Падеж/число/управление в варианте и note корректны; slot0 отклонён по смысловой правдоподобности, не грамматике.",
+          "plausibility": "Стандартное название HEV отвечает комбинированной силовой установке из HEV L55. Слово «гибридный» — реальный термин класса, не искусственно дописанная в ключ полная формулировка вопроса. Directed FINAL: замена slot0 не изменила comparable whole-vehicle row; старое explicit-only исключение убрано. Для выбора по-прежнему нужно различить силовые архитектуры, а не грамматику/длину.",
+          "truthUniqueKey": "HEV L55 непосредственно совпадает с combined ICE plus one or more motors, питаемых батареей. Это предметное доказательство slot3, не вывод из frozen correctIndex. PHEV — гибридный подкласс, а не отдельный второй вариант в данном ряду.",
+          "noteTruthUsefulness": "HEV L55 прямо подтверждает charging through regenerative braking and ICE, cannot be plugged in. Слово «обычный» сохраняет non-plug-in scope; отдельная PHEV-ссылка L82 показывает, почему нельзя убрать этот qualifier. Это дополнительный собственный факт HEV сверх prompt/key о сочетании силовых агрегатов; его повтор в explanation разрешён.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55 complete paragraph: ICE plus one or more electric motors; regenerative/engine charging and no plug-in; L65/L76 traction motor/battery"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/electric-basics-ev.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L58: all-electric/BEV battery-powered motor and external charging"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport57/fuel-cell-vehicles.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L58-L63; L66-L67: hydrogen energy/fuel-cell electricity/motor"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55: no plug-in; battery charged by regenerative braking and ICE; L63/L65/L76 component context"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/independent-cars-road-transport58-initial/receipt.json",
+            "rawSHA256": "345c5072520adf98dc5d0011bef940519db8d1d07205ba26ae305de8f5411c8c",
+            "pointer": "/entries/0/fourFullPromptAnswerNoteVariants/3",
+            "unchangedTripleCanonicalSHA256": "3ad7e765077b68e9be4c3d37ef54c54803d049d7dd8f3eb8de40c24099454b10"
+          }
+        }
+      ],
+      "absoluteLevel": {
+        "frozen": "easy",
+        "judgment": "Узнать гибрид как сочетание топливного и электрического привода может широкая взрослая группа, знакомая с современным автотранспортом; не требуется знать PHEV charging details, электронику или химию. Это допустимый EASY-факт. Directed FINAL: после снятия explicit «только» препятствия ряд требует простого различения современных vehicle classes; основной факт остаётся общеизвестным для широкой взрослой автомобильной группы, без необходимости знать химию/электронику. Это EASY по аудитории, не по авторскому уровню или шаблонному keyword matching.",
+        "retainedOwnAudienceJudgment": {
+          "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/independent-cars-road-transport58-initial/receipt.json",
+          "rawSHA256": "345c5072520adf98dc5d0011bef940519db8d1d07205ba26ae305de8f5411c8c",
+          "pointer": "/entries/0/absoluteLevel"
+        }
+      },
+      "correctNoteExtraFact": {
+        "fact": "У обычного HEV батарея заряжается рекуперативным торможением и двигателем; подключать его к сети не требуется.",
+        "ground": "HEV L55 прямо подтверждает charging through regenerative braking and ICE, cannot be plugged in. Слово «обычный» сохраняет non-plug-in scope; отдельная PHEV-ссылка L82 показывает, почему нельзя убрать этот qualifier. Это дополнительный собственный факт HEV сверх prompt/key о сочетании силовых агрегатов; его повтор в explanation разрешён.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+            "completeOutputPointer": "/originalRecord/payload/output/1/text",
+            "locator": "L55: no plug-in; battery charged by regenerative braking and ICE; L63/L65/L76 component context"
+          }
+        ],
+        "retainedOwnJudgment": {
+          "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/independent-cars-road-transport58-initial/receipt.json",
+          "rawSHA256": "345c5072520adf98dc5d0011bef940519db8d1d07205ba26ae305de8f5411c8c",
+          "pointer": "/entries/0/sixLiteralCanonicalGroups/5",
+          "unchangedLiteralCanonicalSHA256": "45443b59ddde0948fb1bcde17c8cc22cbcc43362a0d492e5365453f97d57d149",
+          "applicability": "Собственный INITIAL-вывод для неизменного литерала остаётся применим: prompt/key/его собственный вариант и source context неизменны. Directed изменения slot0 не меняют правдивость, grammar и полезность этого объяснения/note."
+        }
+      },
+      "defects": [],
+      "frozen": {
+        "id": "cars-road-transport-hybrid-two-sources",
+        "topicId": "cars-road-transport",
+        "sourceOrder": 58,
+        "difficulty": "easy",
+        "correctIndex": 3
+      },
+      "directedDefectResolution": [
+        {
+          "id": "INITIAL58-D1",
+          "status": "RESOLVED",
+          "initialPointer": "/entries/0/defects/0",
+          "ground": "Удалено «только» в conventional option; теперь его отклонение требует понимания тяговой архитектуры, а не буквального отрицания комбинации."
+        },
+        {
+          "id": "INITIAL58-D2",
+          "status": "RESOLVED",
+          "initialPointer": "/entries/0/defects/1",
+          "ground": "Новая note0 содержит реальное qualified range comparison и narrowing-gap факторы из полного EV L61 вместо метафразы о сравнении/упоминании."
+        }
+      ]
+    }
+  ],
+  "qualityCredit": 0,
+  "qualityCreditReason": "Independent PASS must still be bound/certified by coordinator with required checks.",
+  "stop": "Sole directed cycle1 FINAL completed; no new INITIAL, ordinary cycle2 or third full review."
+}
