@@ -1,0 +1,271 @@
+{
+  "readerNativeId": "01a17851-1874-78f1-921e-529a8e82b6a4",
+  "role": "independent reviewer37",
+  "processRevision": "2026-10-25",
+  "stage": "INITIAL",
+  "cycle": 0,
+  "entries": [
+    {
+      "id": "cars-road-transport-ev-traction-battery",
+      "topicId": "cars-road-transport",
+      "sourceOrder": 61,
+      "stage": "INITIAL",
+      "status": "FIX",
+      "currentCard": {
+        "id": "cars-road-transport-ev-traction-battery",
+        "difficulty": "medium",
+        "prompt": "В аккумуляторном электромобиле какой узел хранит электричество для тягового электромотора?",
+        "answers": [
+          {
+            "text": "Тяговая батарея",
+            "note": "Автомобиль подключают через порт к розетке или зарядному оборудованию; при зарядке бортовое устройство отслеживает напряжение, ток, температуру и уровень заряда."
+          },
+          {
+            "text": "Вспомогательная батарея",
+            "note": "Вспомогательная батарея электромобиля подаёт электричество на его аксессуары."
+          },
+          {
+            "text": "Порт зарядки",
+            "note": "Порт зарядки соединяет автомобиль с внешним источником питания, чтобы заряжать тяговый батарейный блок."
+          },
+          {
+            "text": "Преобразователь DC/DC",
+            "note": "Преобразователь DC/DC снижает напряжение постоянного тока от тяговой батареи для питания аксессуаров и зарядки вспомогательной батареи."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Тяговая батарея хранит электричество для тягового электромотора. Для её зарядки автомобиль подключают к розетке или зарядному оборудованию; бортовое зарядное устройство преобразует поступающий переменный ток в постоянный.",
+        "source": {
+          "title": "U.S. Department of Energy, Alternative Fuels Data Center",
+          "url": "https://afdc.energy.gov/vehicles/how-do-all-electric-cars-work",
+          "verifiedAt": "2026-10-26"
+        }
+      },
+      "currentCardCanonicalSHA256": "60174d1dc9929c42e8c3ec25ac4bec5c132659615de69c14e333249fff4ed37a",
+      "sixLiteralCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В аккумуляторном электромобиле какой узел хранит электричество для тягового электромотора?",
+            "answers": [
+              "Тяговая батарея",
+              "Вспомогательная батарея",
+              "Порт зарядки",
+              "Преобразователь DC/DC"
+            ],
+            "correctIndex": 0
+          },
+          "canonicalSHA256": "05a051e1d1d4856dd22dbba879a1a0aa409ff423c997d85389d52abe352fc384",
+          "individualGround": "L71 directly defines traction battery pack as storing electricity for electric traction motor; L55/L65 confirm power path. Auxiliary L60 powers accessories, charge port L62 is external interface, DC/DC L64 converts supply voltage. Это обеспечивает intended unique key0 по функции, не по frozen index. Четыре подписи — реальные EV components. Но prompt и key повторяют тяговой, а storage battery generic knowledge без предметной подготовки даёт выбор, поэтому frozen MEDIUM не подтверждён (D1).",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79: BEV description and all component definitions; L55/L60/L62/L64/L65/L66/L68/L71/L73"
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Тяговая батарея хранит электричество для тягового электромотора. Для её зарядки автомобиль подключают к розетке или зарядному оборудованию; бортовое зарядное устройство преобразует поступающий переменный ток в постоянный.",
+          "canonicalSHA256": "fd9c791bc0b51f841dc98b96c151ee52089361c8f0419d57f8df92f235089121",
+          "individualGround": "Два предложения: L71 хранение для traction motor; L55 plug into wall outlet/EVSE; полный L66 — onboard charger takes incoming AC via port and converts to DC to charge traction battery. Explanation не утверждает, что любой DC fast charging обязательно проходит через onboard AC conversion, а описывает подтверждённый AC путь. Ключ прямо назван.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55/L62/L66/L71 full paragraphs"
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Автомобиль подключают через порт к розетке или зарядному оборудованию; при зарядке бортовое устройство отслеживает напряжение, ток, температуру и уровень заряда.",
+          "canonicalSHA256": "f469aa471e0667e134cba245667fbbd9f18cceb2d740b289d8bd8b251721427e",
+          "individualGround": "L55/L62 подтверждают подключение к external supply для заряда traction pack; L66 указывает, что onboard charger при charging pack monitors battery voltage/current/temperature/state of charge. Это дополнительный собственный факт о процессе заряда и контролируемых параметрах тяговой батареи сверх MAIN о хранении для motor. Хотя действующим контролирующим узлом является charger, отношение прямо включает именно заряжаемую traction battery, поэтому это не просто посторонний факт о порте. Note не называет хранение повторно как единственное дополнение.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55/L62 charging vehicle/traction pack; L66 full onboard charger paragraph, including battery characteristics voltage/current/temperature/state of charge"
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Вспомогательная батарея электромобиля подаёт электричество на его аксессуары.",
+          "canonicalSHA256": "d693cfbe940a73fee4937e1ab9d13e7f3fbb4ea578fc4b43327a427b33bf21cd",
+          "individualGround": "L60 определяет all-electric auxiliary battery: electricity to power vehicle accessories. Note точно сообщает собственную функцию этого battery option, без подстановки main traction role и без неподтверждённых starter/chemistry деталей.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L60: auxiliary battery powers vehicle accessories"
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Порт зарядки соединяет автомобиль с внешним источником питания, чтобы заряжать тяговый батарейный блок.",
+          "canonicalSHA256": "925fca11f2ac77259fe5f1f7ba3f7498535dd45722b9dc49575fb59000846364",
+          "individualGround": "L62 прямо связывает charge port с внешним power supply для charge traction pack. Note содержит собственную проверенную функцию интерфейса; это не storage function и не путаница с onboard charger conversion.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L62: external connection via charge port charges traction battery pack"
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "Преобразователь DC/DC снижает напряжение постоянного тока от тяговой батареи для питания аксессуаров и зарядки вспомогательной батареи.",
+          "canonicalSHA256": "e943590c1d839ffa38bb6608057a4b33f6d718b0bec44bb53b74b2fcd63c344e",
+          "individualGround": "L64 полностью задаёт higher-voltage DC from traction pack -> lower-voltage DC for accessories and recharge auxiliary battery. Note сохраняет направление DC/DC, назначение и оба получателя, не делает AC-to-DC converter из этого узла.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L64: higher-voltage DC traction pack -> lower-voltage DC accessories/recharge auxiliary battery"
+            }
+          ]
+        }
+      ],
+      "fourFullPromptAnswerNoteVariants": [
+        {
+          "slot": 0,
+          "prompt": "В аккумуляторном электромобиле какой узел хранит электричество для тягового электромотора?",
+          "answer": "Тяговая батарея",
+          "note": "Автомобиль подключают через порт к розетке или зарядному оборудованию; при зарядке бортовое устройство отслеживает напряжение, ток, температуру и уровень заряда.",
+          "tripleCanonicalSHA256": "eea0b3c79f7b8ef98a6a226637d68456b986a272a5103d9dba8c0ec391724b98",
+          "grammar": "Лично прочитана полная подстановка: «В аккумуляторном электромобиле какой узел хранит электричество для тягового электромотора? — Тяговая батарея», затем вся note. Все названия — последовательные самостоятельные именные подписи; управление «для тягового электромотора», род/число и форма note корректны. Нельзя выдать lexical cue за грамматическую ошибку: D1 — про содержательную сложность и повтор признака.",
+          "plausibility": "Реальный component и правильный storage function. Но совпадение «тягового» с названием ключа превращает сравнение с auxiliary battery в словесный выбор и не поддерживает frozen MEDIUM (D1).",
+          "truthUniqueKey": "L71 однозначно связывает traction pack storage с motor; key0 предметно верен независимо от индекса. D1 касается уровня/ключевой подсказки, не истинности storage relation.",
+          "noteTruthUsefulness": "L55/L62 подтверждают подключение к external supply для заряда traction pack; L66 указывает, что onboard charger при charging pack monitors battery voltage/current/temperature/state of charge. Это дополнительный собственный факт о процессе заряда и контролируемых параметрах тяговой батареи сверх MAIN о хранении для motor. Хотя действующим контролирующим узлом является charger, отношение прямо включает именно заряжаемую traction battery, поэтому это не просто посторонний факт о порте. Note не называет хранение повторно как единственное дополнение.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79: BEV description and all component definitions; L55/L60/L62/L64/L65/L66/L68/L71/L73"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55/L62 charging vehicle/traction pack; L66 full onboard charger paragraph, including battery characteristics voltage/current/temperature/state of charge"
+            }
+          ]
+        },
+        {
+          "slot": 1,
+          "prompt": "В аккумуляторном электромобиле какой узел хранит электричество для тягового электромотора?",
+          "answer": "Вспомогательная батарея",
+          "note": "Вспомогательная батарея электромобиля подаёт электричество на его аксессуары.",
+          "tripleCanonicalSHA256": "abb5e200eaa47b27c725de1b0587563c84bb61d9eda13f8eeefd884e6e57e4bb",
+          "grammar": "Лично прочитана полная подстановка: «В аккумуляторном электромобиле какой узел хранит электричество для тягового электромотора? — Вспомогательная батарея», затем вся note. Все названия — последовательные самостоятельные именные подписи; управление «для тягового электромотора», род/число и форма note корректны. Нельзя выдать lexical cue за грамматическую ошибку: D1 — про содержательную сложность и повтор признака.",
+          "plausibility": "Самый содержательно близкий distractor: тоже battery и хранит энергию, но L60 задаёт accessory role. Однако название «Вспомогательная» против повторённого «тягового/Тяговая» делает выбор доступным без знания EV.",
+          "truthUniqueKey": "L60 задаёт accessories, не питание traction motor; это не второй ключ в данной классификации.",
+          "noteTruthUsefulness": "L60 определяет all-electric auxiliary battery: electricity to power vehicle accessories. Note точно сообщает собственную функцию этого battery option, без подстановки main traction role и без неподтверждённых starter/chemistry деталей.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79: BEV description and all component definitions; L55/L60/L62/L64/L65/L66/L68/L71/L73"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L60: auxiliary battery powers vehicle accessories"
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "prompt": "В аккумуляторном электромобиле какой узел хранит электричество для тягового электромотора?",
+          "answer": "Порт зарядки",
+          "note": "Порт зарядки соединяет автомобиль с внешним источником питания, чтобы заряжать тяговый батарейный блок.",
+          "tripleCanonicalSHA256": "c690f239010eec5cc60a85dc85ad7c31c5341d6cd1075306655f1c3968ee946c",
+          "grammar": "Лично прочитана полная подстановка: «В аккумуляторном электромобиле какой узел хранит электричество для тягового электромотора? — Порт зарядки», затем вся note. Все названия — последовательные самостоятельные именные подписи; управление «для тягового электромотора», род/число и форма note корректны. Нельзя выдать lexical cue за грамматическую ошибку: D1 — про содержательную сложность и повтор признака.",
+          "plausibility": "Реальный EV component, тематически сопоставим, однако даже бытовое понимание слова «порт» связывает его с соединением, не накоплением. В этом exact prompt он не повышает задачу до medium (D1).",
+          "truthUniqueKey": "L62 определяет интерфейс подключения/заряда, не хранилище электроэнергии; key не дублируется.",
+          "noteTruthUsefulness": "L62 прямо связывает charge port с внешним power supply для charge traction pack. Note содержит собственную проверенную функцию интерфейса; это не storage function и не путаница с onboard charger conversion.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79: BEV description and all component definitions; L55/L60/L62/L64/L65/L66/L68/L71/L73"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L62: external connection via charge port charges traction battery pack"
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "prompt": "В аккумуляторном электромобиле какой узел хранит электричество для тягового электромотора?",
+          "answer": "Преобразователь DC/DC",
+          "note": "Преобразователь DC/DC снижает напряжение постоянного тока от тяговой батареи для питания аксессуаров и зарядки вспомогательной батареи.",
+          "tripleCanonicalSHA256": "4ca19a80ebe2db29c500114aa7ed3021bd33a4804a668319a9d9cfe884811b67",
+          "grammar": "Лично прочитана полная подстановка: «В аккумуляторном электромобиле какой узел хранит электричество для тягового электромотора? — Преобразователь DC/DC», затем вся note. Все названия — последовательные самостоятельные именные подписи; управление «для тягового электромотора», род/число и форма note корректны. Нельзя выдать lexical cue за грамматическую ошибку: D1 — про содержательную сложность и повтор признака.",
+          "plausibility": "Реальный power component, но само название «преобразователь» сообщает преобразование, не хранение. Техническая аббревиатура DC/DC в неверном варианте не доказывает medium для выбора очевидной батареи.",
+          "truthUniqueKey": "L64 определяет DC voltage conversion/auxiliary supply, не traction storage; второй ключ не возникает.",
+          "noteTruthUsefulness": "L64 полностью задаёт higher-voltage DC from traction pack -> lower-voltage DC for accessories and recharge auxiliary battery. Note сохраняет направление DC/DC, назначение и оба получателя, не делает AC-to-DC converter из этого узла.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79: BEV description and all component definitions; L55/L60/L62/L64/L65/L66/L68/L71/L73"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L64: higher-voltage DC traction pack -> lower-voltage DC accessories/recharge auxiliary battery"
+            }
+          ]
+        }
+      ],
+      "absoluteLevel": {
+        "frozen": "medium",
+        "judgment": "Frozen MEDIUM не подтверждён: взрослому вне EV достаточно знать, что батарея хранит электричество, и сопоставить повторённое слово тяговой. Ни различение EV архитектуры, ни тематическое узнавание конкретной специфической функции фактически не требуются. Текущая операция ближе к EASY с дополнительной словесной подсказкой. Карточка должна остаться medium по frozen scope и получить содержательный ремонт, а не silent relabel."
+      },
+      "correctNoteExtraFact": {
+        "fact": "При зарядке traction pack onboard charger контролирует параметры батареи: напряжение, ток, температуру и уровень заряда; её заряжают внешним подключением.",
+        "ground": "L55/L62 подтверждают подключение к external supply для заряда traction pack; L66 указывает, что onboard charger при charging pack monitors battery voltage/current/temperature/state of charge. Это дополнительный собственный факт о процессе заряда и контролируемых параметрах тяговой батареи сверх MAIN о хранении для motor. Хотя действующим контролирующим узлом является charger, отношение прямо включает именно заряжаемую traction battery, поэтому это не просто посторонний факт о порте. Note не называет хранение повторно как единственное дополнение.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+            "completeOutputPointer": "/originalRecord/payload/output/1/text",
+            "locator": "L55/L62 charging vehicle/traction pack; L66 full onboard charger paragraph, including battery characteristics voltage/current/temperature/state of charge"
+          }
+        ]
+      },
+      "defects": [
+        {
+          "id": "INITIAL61-D1",
+          "severity": "substantive",
+          "kind": "absolute_medium_not_supported_and_lexical_key_cue",
+          "fields": [
+            "prompt",
+            "answers[0].text",
+            "prompt_ordered_answers_key"
+          ],
+          "evidence": "Exact task/card freezes medium. Текущий prompt спрашивает, какой узел «хранит электричество для тягового электромотора»; правильный ответ — «Тяговая батарея». Общеизвестная функция батареи как накопителя сразу оставляет два battery названия, а повтор «тягового/Тяговая» выбирает ключ вместо «Вспомогательная». Порт и преобразователь уже названиями обозначают соединение/преобразование, а не хранение. Внешний к теме взрослый получает ответ без знания архитектуры EV, требуемого для medium. Само присутствие технических слов не делает эту операцию medium.",
+          "requiredDirectedFix": "Сохранить frozen medium/key0/id/topic/order; содержательно переработать требуемое различение/ряд на основании полных сохранённых источников так, чтобы уровень определялся знанием EV-функций или осмысленным выводом, а ключ не выбирался совпадением тягового/тяговая. Одного косметического удаления слова недостаточно, если остаётся общая функция батареи с очевидно не-хранящими альтернативами. Проверить уникальность относительно auxiliary battery и соседние MAIN; новые свойства без источника не добавлять. Не менять difficulty ради формального PASS.",
+          "sourceBoundary": "Источник L71 правдиво подтверждает storage relation, L60 даёт auxiliary role, L64/L66/L68 — другие EV functions. Фактологическая истинность не является доказательством absolute MEDIUM.",
+          "dispatchLevelClarification": "Short START said EASY, but exact task explicitly freezes medium and focuses MEDIUM; review preserves detailed exact frozen contract without editing level."
+        }
+      ],
+      "frozen": {
+        "id": "cars-road-transport-ev-traction-battery",
+        "topicId": "cars-road-transport",
+        "sourceOrder": 61,
+        "difficulty": "medium",
+        "correctIndex": 0
+      }
+    }
+  ],
+  "qualityCredit": 0,
+  "nextStep": "One directed author fix-cycle for absolute-medium/lexical-cue D1; same-reader FINAL on exact revised applied CURRENT and affected MAIN/source dependencies.",
+  "stop": "One assigned INITIAL61 completed; no adjacent content review."
+}
