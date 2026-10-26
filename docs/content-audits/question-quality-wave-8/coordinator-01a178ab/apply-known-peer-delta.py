@@ -62,6 +62,15 @@ for p,b,f in zip(files,bindings,fresh):
  now=m.read(p);before=json.loads(old_bytes) if p==tp else now
  assert b['sha256']==(hashlib.sha256(old_bytes).hexdigest() if p==tp else m.raw(p)) and f['sha256']==m.raw(p)
  old_rows.extend(project(before['id'],q) for q in before['questions']);current_rows.extend(project(now['id'],q) for q in now['questions'])
+if 'rows' not in ps['globalMAIN']:
+ ip=pathlib.Path(ps['freshInventoryPath']);ip=ip if ip.is_absolute() else m.C/ip
+ assert ip.is_relative_to(R) and m.raw(ip)==ps['freshInventorySHA256']==native_proof['rawFileSHA256'][str(ip.relative_to(R))]
+ assert at(raw_freeze,ip)==ip.read_bytes()
+ retained_inventory=m.read(ip)
+ assert retained_inventory['actualCurrentPeers']==old_peers
+ assert all(ps['globalMAIN'][k]==v for k,v in retained_inventory['globalMAIN'].items() if k in ps['globalMAIN'])
+ assert retained_inventory['globalMAIN']['rows']==old_rows
+ ps['globalMAIN']['rows']=retained_inventory['globalMAIN']['rows']
 assert len(old_rows)==len(current_rows)==11000 and ps['globalMAIN']['rows']==old_rows and ps['globalMAIN']['rowsCanonicalSHA256']==m.sha(old_rows)
 assert inventory['globalMAIN']['rows']==current_rows and inventory['globalMAIN']['rowsCanonicalSHA256']==m.sha(current_rows)
 expected_delta=[i for i,q in enumerate(old_rows) if q['id']==new['id']] if project(topic,old)!=project(topic,new) else []
