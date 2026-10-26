@@ -1,0 +1,192 @@
+{
+  "sourceNativeId": "01a17697-4179-7a12-8ada-c0b1866aa6ac",
+  "topicId": "cars-road-transport",
+  "cycle": 0,
+  "rawSources": [
+    {
+      "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport20/hella-drum-brake-capture.json",
+      "url": "https://www.hella.com/techworld/cz/lounge/the-comeback-of-the-drum-brake/",
+      "sha256": "2defa8bc792931ddcf1580f5927c94291ef9baf81872728acaabd73ff4175270",
+      "captureReadProvenance": "Captured exact official HELLA full-page open from the supported native journal and personally read the complete page.",
+      "completeOutputPointer": "/originalRecord/payload/output/1/text",
+      "completeOutputSHA256": "a6c2015ccbf44357b5572f35daebde9f1e122c7e7f933e5dc4af0b7b3a234c52",
+      "locator": "L168-L175, L181-L188"
+    }
+  ],
+  "sourceAttempts": [
+    {
+      "claim": "A drum brake working shoe is hidden inside and presses against the inner surface of the cylindrical drum.",
+      "requestCount": 2,
+      "requests": [
+        {
+          "sequence": 1,
+          "role": "single official manufacturer-source discovery query",
+          "query": "site:hella.com/techworld drum brake brake shoes press against inside of drum wheel cylinder return spring",
+          "sourceNativeId": "01a17697-4179-7a12-8ada-c0b1866aa6ac",
+          "nativeJournalLine": 663,
+          "result": "Search identified HELLA official drum-brake article among results; no additional query was made.",
+          "nativeCallId": "call_19273346096d4f89941978576cc5f2b5"
+        },
+        {
+          "sequence": 2,
+          "role": "single full-page open of selected official manufacturer result",
+          "url": "https://www.hella.com/techworld/cz/lounge/the-comeback-of-the-drum-brake/",
+          "sourceNativeId": "01a17697-4179-7a12-8ada-c0b1866aa6ac",
+          "nativeJournalLine": 690,
+          "result": "Full page opened and read. It describes closed-in design, shoe kits, wear and self-reinforcement but does not state the exact shoe-to-inner-drum contact relationship.",
+          "nativeCallId": "call_f180932d23784a68abe4cb4dc11c3992"
+        }
+      ],
+      "officialAlternativeAttempted": false,
+      "attemptBudgetStatus": "HOLD_AFTER_TWO_OPERATIONS_MAIN_UNSUPPORTED"
+    }
+  ],
+  "entries": [
+    {
+      "id": "cars-road-transport-drum-brake-shoes",
+      "status": "HOLD",
+      "literalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой тормоз скрывает рабочие колодки внутри цилиндрического корпуса?",
+            "answers": [
+              "Дисковый тормоз",
+              "Антиблокировочная система",
+              "Стояночный тормоз",
+              "Барабанный тормоз"
+            ],
+            "correctIndex": 3
+          },
+          "literalSHA256": "da87f140d19d795a136383f213889ba84a7fa0df11d46f8b477addf7e3f1eff2",
+          "primaryGround": "The complete HELLA article describes the drum brake as a closed-in design and mentions brake shoes, drums and self-reinforcement, but it does not explicitly state that the working shoes press against the drum inner surface. This exact MAIN remains unverified after the allowed one-query plus one-open budget.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport20/hella-drum-brake-capture.json"
+          ],
+          "locator": "L168-L175; L181-L188"
+        },
+        {
+          "group": "explanation",
+          "literal": "В барабанном тормозе колодки разжимаются к внутренней поверхности вращающегося барабана. Самоусиление уменьшает нужное усилие.",
+          "literalSHA256": "1d2b8e05f351631b38c0c4ed2b3ea343654ca598d84c84380f013ef04569ce95",
+          "primaryGround": "The complete HELLA article describes the drum brake as a closed-in design and mentions brake shoes, drums and self-reinforcement, but it does not explicitly state that the working shoes press against the drum inner surface. This exact MAIN remains unverified after the allowed one-query plus one-open budget.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport20/hella-drum-brake-capture.json"
+          ],
+          "locator": "L168-L175"
+        },
+        {
+          "group": "note0",
+          "literal": "В дисковом тормозе суппорт прижимает колодки к вращающемуся диску.",
+          "literalSHA256": "f353bb66b81fb9c523df81dd2b2f3ed7b1b1e7beba843b91cccc4f6d5af144f6",
+          "primaryGround": "Not qualified: the note asserts the disc-caliper action that belongs to source19 terminal HOLD; source19 captures are inadmissible and are not adopted.",
+          "sourcePaths": [],
+          "locator": "No admissible supporting passage in the bounded source context."
+        },
+        {
+          "group": "note1",
+          "literal": "ABS быстро регулирует давление, чтобы колёса не блокировались при сильном торможении.",
+          "literalSHA256": "80a271c2425fd970f89b0ed11f691580fd8c46067b69aac2364b56037a6d63a7",
+          "primaryGround": "Not qualified by the opened HELLA context: it does not describe ABS pressure modulation.",
+          "sourcePaths": [],
+          "locator": "No admissible supporting passage in the bounded source context."
+        },
+        {
+          "group": "note2",
+          "literal": "Стояночный тормоз удерживает неподвижный автомобиль независимо от основной педали.",
+          "literalSHA256": "a87115a8d80f922ee3c8585db4a1e587015582a8c277c993377b7ebd1e5d64c9",
+          "primaryGround": "Not qualified by the opened HELLA context: it does not establish the parking-brake holding claim.",
+          "sourcePaths": [],
+          "locator": "No admissible supporting passage in the bounded source context."
+        },
+        {
+          "group": "note3",
+          "literal": "В барабанном тормозе колодки разжимаются к внутренней поверхности вращающегося барабана.",
+          "literalSHA256": "09c0b5c4004ec2f6809a7422a94e9d4046f6260d34ab2c68445b9328415a7fdc",
+          "primaryGround": "The page supports the general self-reinforcing property of drum brakes at L172, but does not verify the exact shoe-to-inner-drum contact literal in this note.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport20/hella-drum-brake-capture.json"
+          ],
+          "locator": "L171-L175"
+        }
+      ],
+      "fourFullPromptAnswerNoteAssessments": [
+        {
+          "slot": 0,
+          "fullPrompt": "Какой тормоз скрывает рабочие колодки внутри цилиндрического корпуса?",
+          "answer": "Дисковый тормоз",
+          "note": "В дисковом тормозе суппорт прижимает колодки к вращающемуся диску.",
+          "tripleSHA256": "996a8db6ae2f4e6137c5c16c6b560366f81fdf6b935efc6bb563981479ed4296",
+          "grammar": "The original stem and answer labels are retained unchanged under HOLD; no grammar repair is proposed.",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "HOLD: this disc-brake caliper fact is covered by the separate terminal source19 hold and cannot be reused here.",
+          "sourcePaths": [],
+          "locator": "Not established in the retained full HELLA context."
+        },
+        {
+          "slot": 1,
+          "fullPrompt": "Какой тормоз скрывает рабочие колодки внутри цилиндрического корпуса?",
+          "answer": "Антиблокировочная система",
+          "note": "ABS быстро регулирует давление, чтобы колёса не блокировались при сильном торможении.",
+          "tripleSHA256": "d73a2bc6d3def6e135a0a327fcc6190bfd173c52be0537a1650dd77f5a0b1bc6",
+          "grammar": "The original stem and answer labels are retained unchanged under HOLD; no grammar repair is proposed.",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "HOLD: the current bounded HELLA source does not establish the ABS pressure-control statement.",
+          "sourcePaths": [],
+          "locator": "Not established in the retained full HELLA context."
+        },
+        {
+          "slot": 2,
+          "fullPrompt": "Какой тормоз скрывает рабочие колодки внутри цилиндрического корпуса?",
+          "answer": "Стояночный тормоз",
+          "note": "Стояночный тормоз удерживает неподвижный автомобиль независимо от основной педали.",
+          "tripleSHA256": "d7f0443f059b8ad53a81544c7a67c3a9d874c8380b8d6c6aba802242a63d2d5c",
+          "grammar": "The original stem and answer labels are retained unchanged under HOLD; no grammar repair is proposed.",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "HOLD: the current bounded HELLA source does not establish the parking-brake holding statement.",
+          "sourcePaths": [],
+          "locator": "Not established in the retained full HELLA context."
+        },
+        {
+          "slot": 3,
+          "fullPrompt": "Какой тормоз скрывает рабочие колодки внутри цилиндрического корпуса?",
+          "answer": "Барабанный тормоз",
+          "note": "В барабанном тормозе колодки разжимаются к внутренней поверхности вращающегося барабана.",
+          "tripleSHA256": "ab84e355cc47ed9471663e8763b21e722e2ec31d4238fccfba606e06dcf64a8a",
+          "grammar": "The original stem and answer labels are retained unchanged under HOLD; no grammar repair is proposed.",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "HOLD: the source describes closed-in drum-brake design and self-reinforcement, but does not expressly ground this precise shoe-contact statement.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport20/hella-drum-brake-capture.json"
+          ],
+          "locator": "L171-L175"
+        }
+      ],
+      "correctNoteNewFact": {
+        "status": "HOLD",
+        "fact": "No distinct source-backed additional fact is admitted for the correct option; the retained note repeats the unsupported exact shoe-contact MAIN.",
+        "locator": "L168-L175 is related context only; not direct proof.",
+        "sourcePaths": [
+          "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport20/hella-drum-brake-capture.json"
+        ]
+      },
+      "absoluteDifficulty": {
+        "level": "medium",
+        "status": "NOT_FINALIZED_DUE_TO_MAIN_HOLD",
+        "ground": "The frozen medium level is preserved, but an absolute final assessment is not issued because the exact MAIN remains unsupported within the bounded source operations."
+      },
+      "hold": {
+        "reason": "The complete HELLA article describes the drum brake as a closed-in design and mentions brake shoes, drums and self-reinforcement, but it does not explicitly state that the working shoes press against the drum inner surface. This exact MAIN remains unverified after the allowed one-query plus one-open budget.",
+        "actualOperations": 2,
+        "allowedOperations": 2,
+        "alternativeAttempted": false
+      }
+    }
+  ],
+  "discardedNonMainClaims": [
+    {
+      "claim": "Disc-brake caliper presses pads against the rotor (baseline note0).",
+      "status": "TERMINAL_HOLD_NOT_ADOPTED",
+      "questionId": "cars-road-transport-disc-brake-caliper",
+      "reference": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17653/source19-procedural-main-budget-hold.json",
+      "note": "No source19 Bosch/Brembo capture, note, or verdict was adopted; the historical HOLD remains separate."
+    }
+  ],
+  "qualityCredit": 0
+}
