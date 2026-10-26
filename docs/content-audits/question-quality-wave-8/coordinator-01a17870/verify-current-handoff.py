@@ -29,6 +29,10 @@ raw_proofs={}
 for proof_path in D.glob('*-native-proof.json'):
  proof=m.read(proof_path)
  if 'packet' in proof and 'rawFileSHA256' in proof:
+  if 'originalNetworkScannerDiagnostic' in proof:
+   binding=proof['originalNetworkScannerDiagnostic'];original=m.read(binding['path'])
+   assert m.raw(binding['path'])==binding['rawSHA256'] and proof['packet']==original['packet'] and proof['rawFileSHA256']==original['rawFileSHA256']
+   continue  # Accounting-only derived proof preserves the unique original raw snapshot.
   assert proof['packet'] not in raw_proofs
   raw_proofs[proof['packet']]={'path':str(proof_path),'data':proof}
 for order in x['ownedSourceOrders']:
