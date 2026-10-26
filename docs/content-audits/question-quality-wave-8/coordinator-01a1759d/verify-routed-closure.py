@@ -35,14 +35,21 @@ for key,item in x.items():
  if not re.fullmatch('pendingVideoGameHistory[0-9]+',key):continue
  order=int(key.removeprefix('pendingVideoGameHistory'))
  if order not in x['ownedSourceOrders']:continue
+ bindings_to_check=[]
  for suffix,field in [('', 'rawFreeze'),('-cycle1','cycle1RawFreeze')]:
-  R=D/('source-video-game-history'+str(order)+suffix);freeze=item.get(field)
+  R=pathlib.Path(item.get('cycle1RawPacket' if suffix else 'rawPacket',D/('source-video-game-history'+str(order)+suffix)));freeze=item.get(field)
   if not freeze or not R.is_dir():continue
-  proof=m.read(D/('video-game-history'+str(order)+suffix+'-native-proof.json'));bindings=proof['rawFileSHA256']
+  proof_path=pathlib.Path(item.get('cycle1SourceNativeProof' if suffix else 'sourceNativeProof',D/('video-game-history'+str(order)+suffix+'-native-proof.json')))
+  bindings_to_check.append((R,freeze,proof_path,1 if suffix else 0))
+ if item.get('initialContinuation'):
+  continuation=m.read(item['initialContinuation']);R=pathlib.Path(continuation['originalRawPacket'])
+  bindings_to_check.append((R,continuation['originalRawFreeze'],D/(R.name.removeprefix('source-')+'-native-proof.json'),0))
+ for R,freeze,proof_path,cycle in bindings_to_check:
+  proof=m.read(proof_path);assert pathlib.Path(proof['packet'])==R;bindings=proof['rawFileSHA256']
   assert {'candidate.json','sourceproof.json','peer-snapshot.json'}<=set(bindings)
   for rel,digest in bindings.items():
    p=R/rel;assert m.raw(p)==digest and bytes_at(freeze,p)==p.read_bytes(),str(p)
-  raw.append({'order':order,'cycle':1 if suffix else 0,'freeze':freeze,'filesByteExact':len(bindings)})
+  raw.append({'order':order,'cycle':cycle,'packet':str(R),'proof':str(proof_path),'freeze':freeze,'filesByteExact':len(bindings)})
 qa=[]
 for item in x['ownAffectedRuns']:
  p=pathlib.Path(item['path']);v=m.read(p);assert m.raw(p)==item['rawSHA256'] and bytes_at('HEAD',p)==p.read_bytes()
