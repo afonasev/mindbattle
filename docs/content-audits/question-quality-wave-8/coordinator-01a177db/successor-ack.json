@@ -1,0 +1,109 @@
+{
+  "parent": "01a177db-64fc-7151-b0f6-da7399017b04",
+  "successor": "01a177ff-70f4-7290-aab1-98ffe793463a",
+  "CURRENT": 1132,
+  "remaining": 868,
+  "fullGoal": 2000,
+  "processRevision": "2026-10-25",
+  "rootPersonallyVerifiedExactNativeACK": true,
+  "rootPersonallyVerifiedSupportedACK": true,
+  "supportedCompletion": {
+    "threadId": "01a177ff-70f4-7290-aab1-98ffe793463a",
+    "turnId": "01a17800-dad6-7b90-950b-70da5f519f5e",
+    "status": "completed",
+    "cursor": "e3d579a4-ca61-41bb-8584-51971076f7c8:10",
+    "basis": "Observed supported wait_threads turnCompleted actual result"
+  },
+  "readOnlyIntakeGuard": "PASS",
+  "guardExitCode": 0,
+  "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/26/rollout-2026-10-26T16-36-31-01a177ff-70f4-7290-aab1-98ffe793463a.jsonl",
+  "actualGuardOriginal": {
+    "line": 94,
+    "originalResult": {
+      "timestamp": "2026-10-26T11:39:08.380Z",
+      "ordinal": 93,
+      "type": "response_item",
+      "payload": {
+        "type": "custom_tool_call_output",
+        "id": "ctco_01a17801-d4dc-7940-a75a-dbae5f1ccbcd",
+        "call_id": "call_0e8e1e5183784b6b94bfbbfc051e2487",
+        "output": [
+          {
+            "type": "input_text",
+            "text": "Script completed\nWall time 0.1 seconds\nOutput:\n"
+          },
+          {
+            "type": "input_text",
+            "text": "- Каждый вопрос содержит источник и дату фактологической проверки. Название источника и ссылка показываются после объяснения раскрытого ответа; дата проверки остаётся служебной. Вопросы о современной культуре используют явный временной контекст и не формулируются через меняющееся «на сегодняшний день».\n- Вопрос и все четыре ответа проверяются как законченные конструкции или подстановки: падеж, число, род, управление, пунктуация и написание имён согласуются без грамматической подсказки к правильному варианту.\n- Локальная история заданных вопросов переживает новые партии. Вопрос помечается использованным сразу при показе, независимо от ответа и последующего рестарта.\n- Для каждой пары «тематика × сложность» используется отдельная сохраняемая shuffle-bag полного размера уровня: 40/40/20, 80/80/40 или 120/120/60 для easy/medium/hard. В рамках одного цикла каждый вопрос показывается ровно один раз в воспроизводимо перемешанном порядке.\n- После исчерпания bag создаётся новая seeded-перестановка: она не должна полностью совпадать с предыдущей, а первый вопрос нового цикла не может быть последним вопросом предыдущего цикла.\n- Внутри одной партии выбранные темы и вопросы исключаются из повторного выбора. Исключение для темы: если иначе невозможно соблюсти лимит групп, возвращается минимально необходимое число ранее выбранных тем с новыми доступными вопросами. Возвращение темы не сбрасывает историю сыгранных вопросов; существующие отдельные правила полного исчерпания вопросов сохраняются. Показанные, но не выбранные темы имеют пониженный приоритет.\n- Каждая тема принадлежит одной из существующих 13 явных валидируемых областей taxonomy; эти области служат группами для выбора. Профиль разнообразия `topic-diversity-v1` применяется к solo, classic, network и финальному выбору: обычный и финальный набор — не более одной темы группы; бонусный набор из 3 тем — не более одной, из 4–5 тем — не более двух. При возможности группы всех карточек различаются; повтор группы в большом бонусе допустим только при нехватке разных доступных групп. Лимит относится к одному набору, а не к соседним вопросам. В одном наборе topicId уникален; равноприоритетные варианты воспроизводимы от seed. При истинном исчерпании лимит не ослабляется молча.\n- История вопросов хранит только компактные сведения, необходимые для частоты и давности повторов, а не полные результаты прошлых партий.\n- В настройках доступен отдельный сброс истории вопросов с явным подтверждением; сохранённая незавершённая партия этим действием не удаляется.\n- Каждый вопрос имеет минимум один проверяемый авторитетный источник. После подготовки каждый пакет проходит отдельную редакторскую проверку другим агентом по фактологии, индексу ответа, уровню, дистракторам, справкам вариантов, русской грамматике и дублям до интеграции.\n- Оценки assigned/perceived difficulty используются только как редакторский сигнал. Одиночный голос не переносит вопрос автоматически; отчёт показывает объём выборки и силу расхождения, а итоговый уровень всегда подтверждается ручным аудитом.\n\n- Инициатива `catalog-question-quality` охватывает все 11 000 вопросов и 110 тем: общий поиск дефектов prompt/key/answer/note/explanation формирует проверяемую очередь точных и смысловых повторов, утечек ключа, пересекающихся ответов и несоответствия теме; автоматический scan не подтверждает фактическую истинность. Полная редактура проводится волнами по 5 тем / 500 вопросов с поштучной проверкой ключа, четырёх notes, explanation и содержательных passages реально прочитанных источников, затем независимой редакторской проверкой и отдельной поставкой. Состав каждой следующей волны фиксируется отдельным change по актуальной очереди; четвёртая технически поставленная волна — food-ingredients, computers-internet, world-exploration, history-italy, world-cinema; пятая волна (chemistry, television-media, energy-power, countries-flags, opera-musical-theatre) возобновлена 2026-10-03 по команде пользователя «продолжи улучшение вопросов по плану»; production для этого продолжения не разрешён; исправляется весь найденный объём, квоты сложности, размеры тем и позиции ключа сохраняются проверяемыми компенсациями, внешние компенсации считаются отдельно. CDC проверяется отдельно через suitability/source/target-boundary/notes/quota/repeat gate; разрешённое направление переноса не подтверждает совет.\n- На 2026-09-29 завершены четыре волны полной проверки: 20 тем / 2000 карточек. Остались 90 тем / 9000 карточек до полной тематической проверки; 12 из них отдельно проверены в пилоте (ещё 8 пилотных входят в четыре волны). Точные списки, хеши и статус продолжения сохраняются в main: `docs/content-audits/question-quality-status.md` и `.json`. Дальнейшая редактура приостановлена, продолжение — отдельная будущая задача. Пользователь явно разрешил разовую поставку всех текущих обновлений main на production; это не ручная приёмка отчётов.\n- Цель инициативы — актуальный результат полной проверки каждой карточки: неподтверждённые ключи исключаются из игры с сохранением исходников в hold, независимые замены проверяются полностью. Покрытие измеряется полностью проверенными карточками и темами, исправленными и открытыми дефектами, holds и очередью повторов. Исторические approved reviews сохраняют историю и не служат новым сертификатом; новые результаты связываются с хешами точных карточек и отдельно проверенными полями. Качество всего каталога не экстраполируется из пилота. Сложность редакторская до отдельной телеметрической калибровки. Приёмка каждой итоговой волны — явное общее решение человека по отчёту и показательным примерам; production deploy требует отдельного разрешения.\n\n### Тематики прототипа\n\nПервые 30 утверждённых тематик сохраняются. После полного аудита прежних 1500 вопросов утверждены ещё 80 тематик по широте взрослой аудитории, наличию минимум 100 независимых проверяемых фактов, возможности сформировать 40 сильных easy и отсутствию неуправляемого пересечения. Десять дополнительных страновых историй выделены отдельно из всемирной истории по явному решению пользователя. `taxonomy-manifest` задаёт точные идентификаторы, границы и размеры пакетов.\n"
+          },
+          {
+            "type": "input_text",
+            "text": "{\"chunk_id\":\"0aa687\",\"wall_time_seconds\":0.00000625,\"exit_code\":0,\"original_token_count\":296,\"output\":\"{\\\"READONLY_BARRIER\\\": \\\"PASS\\\", \\\"CURRENT\\\": 1132, \\\"remaining\\\": 868, \\\"owners\\\": \\\"01a177db-64fc-7151-b0f6-da7399017b04\\\", \\\"exactClaims\\\": 4, \\\"leaseEmpty\\\": true, \\\"all2000Frozen\\\": true, \\\"allAcceptedHashesExact\\\": true, \\\"canonicalHistoricalWriter\\\": \\\"01a177db-64fc-7151-b0f6-da7399017b04\\\", \\\"canonicalCards\\\": 138, \\\"canonicalFields\\\": 828, \\\"ownedFilesExactCurrentHEAD\\\": 136, \\\"HEAD\\\": \\\"06fbc25549d374061030f26295ad94c19ec2d2db\\\", \\\"freshOriginFeature\\\": \\\"06fbc25549d374061030f26295ad94c19ec2d2db\\\", \\\"allFourRemotePushIdentical\\\": true, \\\"foreignIndexesExact\\\": true, \\\"actualQAReports\\\": 1, \\\"lastActualQA\\\": \\\"79be76b6c1a5cb247aac982c72a58b8d8afbca85\\\", \\\"all110TopicFilesSameAsLastQA\\\": true, \\\"retainedReader\\\": \\\"01a1767d-df16-78f0-8fbb-3e824a4f82d2\\\", \\\"readerOwnReceipts\\\": 18, \\\"readerActualCompactions\\\": 0, \\\"readerRemaining\\\": 55856, \\\"fences\\\": 240, \\\"nextUntouched\\\": {\\\"id\\\": \\\"cars-road-transport-antiroll-bar-links-sides\\\", \\\"topicId\\\": \\\"cars-road-transport\\\", \\\"sourceOrder\\\": 40, \\\"difficulty\\\": \\\"medium\\\", \\\"correctIndex\\\": 1, \\\"hash\\\": \\\"5ef69ef96d80fceeba06fd6b95d2abed5b76d4c147add195764c082819ccadc9\\\"}, \\\"successorRegistered\\\": \\\"01a177ff-70f4-7290-aab1-98ffe793463a\\\", \\\"allDiagnosticsUncured\\\": true, \\\"noWritesOrQARerun\\\": true}\\n\"}"
+          }
+        ],
+        "internal_chat_message_metadata_passthrough": {
+          "turn_id": "01a17800-dad6-7b90-950b-70da5f519f5e",
+          "create_time": 1793014748.380836
+        }
+      },
+      "metadata": {
+        "client_authored": false,
+        "fallback_token_limit_override": 12000
+      }
+    },
+    "actualGuard": {
+      "READONLY_BARRIER": "PASS",
+      "CURRENT": 1132,
+      "remaining": 868,
+      "owners": "01a177db-64fc-7151-b0f6-da7399017b04",
+      "exactClaims": 4,
+      "leaseEmpty": true,
+      "all2000Frozen": true,
+      "allAcceptedHashesExact": true,
+      "canonicalHistoricalWriter": "01a177db-64fc-7151-b0f6-da7399017b04",
+      "canonicalCards": 138,
+      "canonicalFields": 828,
+      "ownedFilesExactCurrentHEAD": 136,
+      "HEAD": "06fbc25549d374061030f26295ad94c19ec2d2db",
+      "freshOriginFeature": "06fbc25549d374061030f26295ad94c19ec2d2db",
+      "allFourRemotePushIdentical": true,
+      "foreignIndexesExact": true,
+      "actualQAReports": 1,
+      "lastActualQA": "79be76b6c1a5cb247aac982c72a58b8d8afbca85",
+      "all110TopicFilesSameAsLastQA": true,
+      "retainedReader": "01a1767d-df16-78f0-8fbb-3e824a4f82d2",
+      "readerOwnReceipts": 18,
+      "readerActualCompactions": 0,
+      "readerRemaining": 55856,
+      "fences": 240,
+      "nextUntouched": {
+        "id": "cars-road-transport-antiroll-bar-links-sides",
+        "topicId": "cars-road-transport",
+        "sourceOrder": 40,
+        "difficulty": "medium",
+        "correctIndex": 1,
+        "hash": "5ef69ef96d80fceeba06fd6b95d2abed5b76d4c147add195764c082819ccadc9"
+      },
+      "successorRegistered": "01a177ff-70f4-7290-aab1-98ffe793463a",
+      "allDiagnosticsUncured": true,
+      "noWritesOrQARerun": true
+    },
+    "exitCode": 0
+  },
+  "exactCompletedEvent": {
+    "timestamp": "2026-10-26T11:39:16.132Z",
+    "ordinal": 99,
+    "type": "event_msg",
+    "payload": {
+      "type": "task_complete",
+      "root_turn_id": "01a1778a-0111-7782-8bc6-6149417bde09",
+      "turn_id": "01a17800-dad6-7b90-950b-70da5f519f5e",
+      "last_agent_message": "ACK CURRENT1132/2000, remaining868. READONLY guard: PASS, exit 0.\n\n- Supported identity: `01a177ff-70f4-7290-aab1-98ffe793463a`.\n- Все 4 claims принадлежат parent `01a177db-64fc-7151-b0f6-da7399017b04`; lease пуст.\n- Reader36: actual0, remaining55856, 18 receipts. Author37 архивирован: actual0, remaining21844; новых карточек не получает. Source60 actual1 защищён.\n- Все 240 fences сохранены; исторические ошибки остаются uncured.\n- Следующая карточка — cars40 antiroll, MEDIUM, key1.\n- Ветка `codex/question-quality-wave-6`, HEAD/origin `06fbc25549d374061030f26295ad94c19ec2d2db`; интеграции в main нет.\n\nПолная цель 2000 сохранена. До ACTIVATE — STOP.",
+      "started_at": 1793014684,
+      "completed_at": 1793014756,
+      "duration_ms": 71744,
+      "time_to_first_token_ms": 3878
+    }
+  },
+  "noQualityReplay": true
+}
