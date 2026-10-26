@@ -12,6 +12,7 @@ R=D/name;x=m.read(D/'manifest.json');actor=x['actors'][actor_key];uid=actor['thr
 assert journal[0]['payload']['id']==uid
 comp=sum(o['type']=='compacted' for o in journal);last=next(o['payload']['info'] for o in reversed(journal) if o.get('payload',{}).get('type')=='token_count')
 a,sp,ps=[m.read(R/f) for f in ['candidate.json','sourceproof.json','peer-snapshot.json']]
+m.alias_source22_peer_header(a,sp,ps,R)
 m.alias_source9_global_field_names(a,sp,ps,R)
 m.alias_source86_single_peer_entry(a,sp,ps,R)
 m.alias_source83_cycle1_copied_same_topic(a,sp,ps,R)
@@ -133,7 +134,7 @@ if continuation:
  continued=m.read(continuation);original_task=m.read(actor['task'])
  assert continued['owner']==m.O and continued['sourceNativeId']==uid
  assert continued['originalTask']==actor['task'] and m.raw(actor['task'])==continued['originalTaskSHA256']
- assert original_task['cycle']==a['cycle'] and original_task['sourceOrder']==order and original_task['authorNativeId']==uid
+ assert original_task['cycle']==a['cycle'] and original_task['sourceOrder']==order and original_task.get('authorNativeId',original_task.get('sourceNativeId'))==uid
  task_start=continued['firstTaskStartLine']
  assert task_start<=last_turn_start and journal[task_start-1]==continued['originalFirstTaskStarted']
  proof['sameCycleContinuation']={'path':continuation,'rawSHA256':m.raw(continuation),'noCycleReset':True}

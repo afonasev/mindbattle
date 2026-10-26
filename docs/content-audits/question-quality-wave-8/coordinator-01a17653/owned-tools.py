@@ -934,3 +934,22 @@ def alias_source9_global_field_names(candidate,sp,ps,R):
  assert inv['globalMAIN']['topicFileCount']==g['topicFiles'] and inv['globalMAIN']['questionCount']==g['rowCount']
  g.update(allCurrentFileByteBindings=g['fileBindings'],topicFileCount=g['topicFiles'],questionCount=g['rowCount'])
  ps['technicalOwn9GlobalFieldNamesAlias']={'rawPeer':str(R/'peer-snapshot.json'),'rawSHA256':raw(R/'peer-snapshot.json'),'originalFields':['fileBindings','topicFiles','rowCount'],'inventory':str(ip),'inventorySHA256':raw(ip),'operation':'Only exact immutable author field names exposed under standard names; all110 live file bindings and existing inventory digest/counts match. Raw, source bodies and semantic judgments unchanged; original helper failures uncured.'}
+
+
+def alias_source22_peer_header(candidate,sp,ps,R):
+ """Same author's explicit missing raw22 header addendum; raw unchanged."""
+ R=pathlib.Path(R)
+ if R!=D/'source-cars-road-transport22':return
+ frozen=read(D/'source22-raw-freeze.json');ap=D/'source22-peer-header-addendum/metadata.json';a=read(ap)
+ assert a['rawFileSHA256Before']==a['rawFileSHA256After']==frozen['files'] and not a['rawBytesChanged'] and not a['sourceBodiesOrGroundsChanged']
+ for name,digest in frozen['files'].items():assert raw(R/name)==digest
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==a['sourceNativeId']==read(D/'source-cars-road-transport22-task.json')['authorNativeId']
+ assert candidate['cycle']==sp['cycle']==a['cycle']==0 and candidate['topicId']==sp['topicId']==a['topicId']==ps['sameTopicMAIN']['topicId']=='cars-road-transport'
+ assert a['sourceOrder']==candidate['entries'][0]['sourceOrder']==22 and a['samePacketBinding']
+ for kind,name in [('peerSnapshot','peer-snapshot.json'),('candidate','candidate.json'),('sourceproof','sourceproof.json')]:assert a[kind+'Path']==str(R/name) and a[kind+'SHA256']==raw(R/name)
+ missing=[]
+ for key in ['sourceNativeId','topicId','cycle']:
+  if key in ps:assert ps[key]==a[key]
+  else:missing.append(key);ps[key]=a[key]
+ assert missing==a['originalMissingHeaderFields']
+ ps['technicalOwn22HeaderAddendum']={'authorAddendum':str(ap),'addendumSHA256':raw(ap),'rawPeer':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalMissingHeaderFields':missing,'originalFailureUncured':True,'operation':'Expose exact same-author explicit UID/topic/cycle declaration and SHA-bound immutable peer packet at standard header names. No raw, body, source, ground or identity invention.'}
