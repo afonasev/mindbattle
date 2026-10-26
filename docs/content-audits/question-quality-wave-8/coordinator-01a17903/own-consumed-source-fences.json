@@ -275,7 +275,70 @@
       "noQualificationApplyQAInitial": true,
       "noRetryThirdSourceOrMAINRoutearound": true,
       "scopeClarification": "Exact68 claim allowance only; primaryBritannica and soleFHWAalternative returned nonretryable errors. Not blanket URL/topic/subgrade exhaustion for distinct futureclaims. No retry/reset/finishedcardreplay."
+    },
+    {
+      "questionId": "cars-road-transport-centerline-opposing",
+      "topicId": "cars-road-transport",
+      "sourceOrder": 69,
+      "status": "TERMINAL_AUTHORHOLD_UNAPPLIED",
+      "scope": "EXACT69_MAIN_SOURCE_PRIMARY_EXTRACTION_LIMIT_AND_OFFICIAL_ALTERNATIVE_INACCESSIBLE",
+      "claim": "The centerline is the longitudinal marking near the center of a two-way roadway that separates opposing traffic directions.",
+      "sourceAttempts": [
+        {
+          "sequence": 1,
+          "role": "designated primary full-page open",
+          "claim": "The centerline is the longitudinal marking near the center of a two-way roadway that separates opposing traffic directions.",
+          "url": "https://highways.dot.gov/media/111846",
+          "result": "tool returned an error: failed to fetch because content length is too large (29,368,000 bytes); no readable body",
+          "attemptRecord": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport69/primary-fhwa-111846-failure.json",
+          "sourceNativeId": "01a17937-cb33-7ea1-bfce-b4b18f244f05",
+          "callId": "call_020aa3361e7240bb9be5240d3a70241a",
+          "qualityCredit": 0
+        },
+        {
+          "sequence": 2,
+          "role": "one official alternative full-page open",
+          "claim": "same exact MAIN claim",
+          "url": "https://mutcd.fhwa.dot.gov/htm/11th_Edition/part3/part3a.htm",
+          "result": "non-retryable error: URL is not accessible via this tool; no readable body",
+          "attemptRecord": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport69/alternative-mutcd-failure.json",
+          "sourceNativeId": "01a17937-cb33-7ea1-bfce-b4b18f244f05",
+          "callId": "call_c962ca7237b44a1fa1113e601b12e539",
+          "qualityCredit": 0
+        }
+      ],
+      "actualThisTaskCalls": [
+        {
+          "callLine": 341,
+          "call": "const r=await tools.web__run({open:[{ref_id:\"https://highways.dot.gov/media/111846\"}],response_length:\"long\"});store(\"source69_primary_fhwa_media_111846\",r);text(r);\n",
+          "resultLine": 344
+        },
+        {
+          "callLine": 364,
+          "call": "const r=await tools.web__run({open:[{ref_id:\"https://mutcd.fhwa.dot.gov/htm/11th_Edition/part3/part3a.htm\"}],response_length:\"long\"});store(\"source69_alternative_mutcd_11e_part3a\",r);text(r);\n",
+          "resultLine": 367
+        }
+      ],
+      "holdReason": "HOLD: The exact MAIN claim is that the centerline is the longitudinal pavement marking located near the roadway center and separating traffic moving in opposite directions on a two-way road. The designated FHWA media source failed because its 29,368,000-byte content exceeded the tool limit and no readable full body was returned. The one official MUTCD alternative URL was inaccessible. Both attempts are preserved; the two-request claim budget is exhausted. No retry, third source, or alternate MAIN is permitted, and the baseline text cannot be qualified.",
+      "rawNativeProof": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17903/cars-road-transport69-native-proof.json",
+      "rawSourceproof": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport69/sourceproof.json",
+      "rawSourceproofSHA256": "09b6443cd7906f52564d8d7d022c6d63f25f098160516e7bacac2e4d5058a62a",
+      "rawFreeze": "6069e170dc243a12722f7bfb497a45df400ca515",
+      "rawSchemaDefectsUncured": [
+        {
+          "file": "peer-snapshot.json",
+          "missingOrDifferentField": "topicId",
+          "actual": null,
+          "required": "cars-road-transport",
+          "uncured": true
+        }
+      ],
+      "qualityCredit": 0,
+      "applied": false,
+      "noQualificationApplyQAInitial": true,
+      "noRetryThirdSourceOrMAINRoutearound": true,
+      "scopeClarification": "Exact69 claim allowance only; primary extraction-limit and single official-alternative unavailability preserved, no third call/access workaround/reset. Not blanket FHWA/MUTCD/topic exhaustion for distinct futureclaims."
     }
   ],
-  "totalFences": 261
+  "totalFences": 262
 }
