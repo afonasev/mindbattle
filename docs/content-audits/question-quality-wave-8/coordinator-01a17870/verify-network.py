@@ -1,6 +1,9 @@
 """Deterministic network accounting; exact stored native recovery only, no quality credit."""
 import pathlib,json,re,importlib.util,sys,subprocess
 D=pathlib.Path(__file__).parent
+def source_exec_body(value):
+ value=re.sub(r'^// @exec:[^\n]*\n','',value.lstrip())
+ return re.sub(r'^const url\s*=\s*"[^"\n]*";\s*','',value)
 s=importlib.util.spec_from_file_location('owned',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
 order=int(sys.argv[1]);R=D/sys.argv[2];proof_path=D/(sys.argv[3] if len(sys.argv)>3 and not sys.argv[3].startswith('--') else f'cars-road-transport{order}-native-proof.json');proof=m.read(proof_path);uid=proof['sourceNativeId'];include_prior='--include-prior-tasks' in sys.argv
 p=pathlib.Path(proof['nativeJournal']);matches=[p] if p.exists() else list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+uid+'.jsonl'));assert len(matches)==1
@@ -14,7 +17,7 @@ assert ends, 'SOURCE proof requires an actually completed task'
 end=min(ends);rows=rows[:end];calls=[]
 for n,row in enumerate(rows,1):
  p=row.get('payload',{})
- if (include_prior or n>start) and p.get('type')=='custom_tool_call' and re.match(r'^(?:(?:const|let|var)\s+\w+\s*=\s*|text\(\s*)?await\s+tools\.web__run\s*\(', re.sub(r'^const urls\s*=\s*\[(?:\s*"[^"\\]*(?:\\.[^"\\]*)*"\s*,?)*\s*\];\s*', '', re.sub(r'^// @exec:[^\n]*\n', '', p.get('input','').lstrip()))):calls.append((n,p))
+ if (include_prior or n>start) and p.get('type')=='custom_tool_call' and re.match(r'^(?:(?:const|let|var)\s+\w+\s*=\s*|text\(\s*)?await\s+tools\.web__run\s*\(', re.sub(r'^const urls\s*=\s*\[(?:\s*"[^"\\]*(?:\\.[^"\\]*)*"\s*,?)*\s*\];\s*', '', re.sub(r'^// @exec:[^\n]*\n', '', source_exec_body(p.get('input',''))))):calls.append((n,p))
 assert len(calls)==len(proof['networkCalls'])+ (len(proof.get('priorTaskNetworkCalls',[])) if include_prior else 0)
 wrappers=[]
 for p in R.rglob('*.json'):
