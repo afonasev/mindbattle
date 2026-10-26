@@ -1,0 +1,177 @@
+{
+  "sourceNativeId": "01a17a72-63d0-7d02-afb9-db3621ad517f",
+  "topicId": "cars-road-transport",
+  "cycle": 0,
+  "rawSources": [
+    {
+      "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/ti-can-physical-layer.json",
+      "url": "https://www.ti.com/lit/an/slla270/slla270.pdf",
+      "sha256": "b744eb99231a1a13aad2d1737814b0c8ffe6b76f0618ec6895d2669af2fbeb8a",
+      "captureReadProvenance": {
+        "sourceNativeId": "01a17a72-63d0-7d02-afb9-db3621ad517f",
+        "nativeRecordLine": 515,
+        "completeOutputPointer": "/originalRecord/payload/output/1/text",
+        "completeOutputSHA256": "fa5912fe111a74455273b041acb780cc2d3bdd68b53bbd8c46b22d8e005100ce",
+        "personalRead": "L80-L85,L177-L199,L215-L232,L418-L422; official TI application report; relevant full contexts read 2026-10-27."
+      },
+      "locator": "L80-L85 robust protocol and control applications; L177-L195 broadcast, identifiers, priority/content-oriented addressing; L215-L226 arbitration and dominant-bit winner; L418-L422 noise filtering/EMC."
+    },
+    {
+      "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/flexray-protocol-nxp.json",
+      "url": "https://www.nxp.com/docs/en/fact-sheet/FLEXRAYPROTOFS.pdf",
+      "sha256": "801f4c2e85aad29af2f17e15cd4de995c3eb0d0bbcd7ee1777067564e50707e5",
+      "captureReadProvenance": {
+        "sourceNativeId": "01a17a72-63d0-7d02-afb9-db3621ad517f",
+        "nativeRecordLine": 610,
+        "completeOutputPointer": "/originalRecord/payload/output/1/text",
+        "completeOutputSHA256": "4b9b7a6d1edc9538f8177d562ec89ad339f0896663be2cb03c17ee83bbd4a561",
+        "personalRead": "L21-L40,L53-L70,L81-L90; official NXP/Freescale fact sheet; relevant full contexts read 2026-10-27."
+      },
+      "locator": "L21-L40 automotive communications protocol; L53-L70 time/event-triggered and fault-tolerant feature set; L81-L90 automotive applications."
+    }
+  ],
+  "entries": [
+    {
+      "id": "cars-road-transport-can-robust-network",
+      "topicId": "cars-road-transport",
+      "sourceOrder": 97,
+      "status": "HOLD",
+      "literalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какая автомобильная сеть использует побитовый арбитраж идентификаторов?",
+            "answers": [
+              "LIN",
+              "CAN",
+              "FlexRay",
+              "OBD-II"
+            ],
+            "correctIndex": 1
+          },
+          "literalSHA256": "660dd218e7e7e729c3b8e2702da16fbfb60bd783f1d7646c44c7e75ee5fa33c2",
+          "primaryGround": "TI documents CAN identifiers and message priority (L182-L185), arbitration with dominant-bit victory (L215-L226). The non-key alternatives still require source-backed plausibility/category review; LIN note is terminal HOLD and OBD-II category remains open.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/ti-can-physical-layer.json"
+          ],
+          "locator": "L80-L85 robust protocol and control applications; L177-L195 broadcast, identifiers, priority/content-oriented addressing; L215-L226 arbitration and dominant-bit winner; L418-L422 noise filtering/EMC."
+        },
+        {
+          "group": "explanation",
+          "literal": "Шина CAN — приоритетная многомастерная сеть без отдельного центрального адресата сообщения. Она передаёт данные всем узлам, а каждый узел фильтрует ненужные ему сообщения.",
+          "literalSHA256": "351343a8bd8b2728d6b1b8a4f6738f5728fe8565e0eff921642750b94754dfc9",
+          "primaryGround": "TI documents the identifier priority/arbitration mechanism and broadcast filtering by receiving nodes (L177-L195,L215-L226); the proposed wording is limited to those supported properties.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/ti-can-physical-layer.json"
+          ],
+          "locator": "L80-L85 robust protocol and control applications; L177-L195 broadcast, identifiers, priority/content-oriented addressing; L215-L226 arbitration and dominant-bit winner; L418-L422 noise filtering/EMC."
+        },
+        {
+          "group": "note0",
+          "literal": "LIN — дешёвая однопроводная сеть с одним планировщиком для простых устройств кузова.",
+          "literalSHA256": "bd6dd8eaca9d2ca32d56d9dad63dca7018961c7fa15dc962fd0900bb7e4223a9",
+          "primaryGround": "HOLD: exact non-MAIN LIN note claim (single-wire, low-cost, one scheduler, simple body devices) cannot be supported by an admissible full retained context. The attempted NXP URL was an I2C manual; the official LIN specification URL was inaccessible. Both permitted requests consumed; no third request. The LIN note remains unapplied/unverified.",
+          "sourcePaths": [],
+          "locator": "No admissible retained source; see source-attempts.json."
+        },
+        {
+          "group": "note1",
+          "literal": "Шина CAN — приоритетная многомастерная сеть без отдельного центрального адресата сообщения.",
+          "literalSHA256": "e401574126733181fe95956890218e80f15ffa521710bddef4be61fcaa75c698",
+          "primaryGround": "TI describes CAN as a broadcast bus, uses identifiers to prioritize messages, and shows nodes participating in arbitration; a message is available to all nodes and each node filters data it needs (L177-L195,L215-L226).",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/ti-can-physical-layer.json"
+          ],
+          "locator": "L80-L85 robust protocol and control applications; L177-L195 broadcast, identifiers, priority/content-oriented addressing; L215-L226 arbitration and dominant-bit winner; L418-L422 noise filtering/EMC."
+        },
+        {
+          "group": "note2",
+          "literal": "FlexRay — автомобильный протокол связи для сложных систем управления; он поддерживает временной и событийный режимы, включая отказоустойчивые системы.",
+          "literalSHA256": "754d4aa67e71e2910ad9441adc7d7a7c2d8c607f322b8844376339cc7f6646fd",
+          "primaryGround": "NXP/Freescale identifies FlexRay as an automotive communications protocol for advanced controls and lists time/event-triggered communication and fault-tolerant systems (L21-L40,L53-L70).",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/flexray-protocol-nxp.json"
+          ],
+          "locator": "L21-L40 automotive communications protocol; L53-L70 time/event-triggered and fault-tolerant feature set; L81-L90 automotive applications."
+        },
+        {
+          "group": "note3",
+          "literal": "OBD-II стандартизирует диагностический разъём, коды неисправностей и доступ к данным системы выбросов.",
+          "literalSHA256": "79a0a3713fcb9220ddd07b4b090e02d4c164bbfa90080cdb146a3d63fb2a14ad",
+          "primaryGround": "Unverified: the OBD-II option is a diagnostic interface/standard rather than plainly the same network category. No source request was spent; the candidate remains HOLD pending the unresolved LIN evidence and category review.",
+          "sourcePaths": [],
+          "locator": "No admissible retained source; see source-attempts.json."
+        }
+      ],
+      "fourFullPromptAnswerNoteAssessments": [
+        {
+          "slot": 0,
+          "fullPrompt": "Какая автомобильная сеть использует побитовый арбитраж идентификаторов?",
+          "answer": "LIN",
+          "note": "LIN — дешёвая однопроводная сеть с одним планировщиком для простых устройств кузова.",
+          "tripleSHA256": "a950a91703c123e8b867cbeff75bc4f9861eef985c2bcbed44ecd4582dff0b5e",
+          "grammar": "Russian question and option form are readable; factual/category assessment is recorded separately.",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "HOLD: exact non-MAIN LIN note claim (single-wire, low-cost, one scheduler, simple body devices) cannot be supported by an admissible full retained context. The attempted NXP URL was an I2C manual; the official LIN specification URL was inaccessible. Both permitted requests consumed; no third request. The LIN note remains unapplied/unverified. Whole-row category/uniqueness is HOLD until every alternative has source-backed review.",
+          "sourcePaths": [],
+          "locator": "No admissible retained source; see source-attempts.json."
+        },
+        {
+          "slot": 1,
+          "fullPrompt": "Какая автомобильная сеть использует побитовый арбитраж идентификаторов?",
+          "answer": "CAN",
+          "note": "Шина CAN — приоритетная многомастерная сеть без отдельного центрального адресата сообщения.",
+          "tripleSHA256": "61a738632c6d5bb7de2f5de57b1a1b4a9588c19a3012357316bb89f0bed84b71",
+          "grammar": "Russian question and option form are readable; factual/category assessment is recorded separately.",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "TI L177-L195 confirms CAN broadcast delivery, node filtering, and identifiers used to prioritize messages; L215-L226 describes arbitration and the dominant-bit winner. Whole-row category/uniqueness is HOLD until every alternative has source-backed review.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/ti-can-physical-layer.json"
+          ],
+          "locator": "L80-L85 robust protocol and control applications; L177-L195 broadcast, identifiers, priority/content-oriented addressing; L215-L226 arbitration and dominant-bit winner; L418-L422 noise filtering/EMC."
+        },
+        {
+          "slot": 2,
+          "fullPrompt": "Какая автомобильная сеть использует побитовый арбитраж идентификаторов?",
+          "answer": "FlexRay",
+          "note": "FlexRay — автомобильный протокол связи для сложных систем управления; он поддерживает временной и событийный режимы, включая отказоустойчивые системы.",
+          "tripleSHA256": "6db466a216188741a0e84b0c5f941837cbea24b999e9fccef3f8d69c35037ca7",
+          "grammar": "Russian question and option form are readable; factual/category assessment is recorded separately.",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "NXP/Freescale L21-L40 and L53-L70 support FlexRay as an automotive communications protocol with time/event-triggered and fault-tolerant features. Whole-row category/uniqueness is HOLD until every alternative has source-backed review.",
+          "sourcePaths": [
+            "docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/flexray-protocol-nxp.json"
+          ],
+          "locator": "L21-L40 automotive communications protocol; L53-L70 time/event-triggered and fault-tolerant feature set; L81-L90 automotive applications."
+        },
+        {
+          "slot": 3,
+          "fullPrompt": "Какая автомобильная сеть использует побитовый арбитраж идентификаторов?",
+          "answer": "OBD-II",
+          "note": "OBD-II стандартизирует диагностический разъём, коды неисправностей и доступ к данным системы выбросов.",
+          "tripleSHA256": "6956c7852339e6396f151600a9eca4eaa08fddb94ca8c3a5cd8e56fbab503634",
+          "grammar": "Russian question and option form are readable; factual/category assessment is recorded separately.",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "Unverified: the OBD-II option is a diagnostic interface/standard rather than plainly the same network category. No source request was spent; the candidate remains HOLD pending the unresolved LIN evidence and category review. Whole-row category/uniqueness is HOLD until every alternative has source-backed review.",
+          "sourcePaths": [],
+          "locator": "No admissible retained source; see source-attempts.json."
+        }
+      ],
+      "correctNoteNewFact": {
+        "assessment": "CAN note adds that it is a multi-master broadcast network without a central per-message recipient, beyond the prompt/key; TI supports broadcast to all nodes and content-oriented addressing (L177-L195).",
+        "sourcePaths": [
+          "docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/ti-can-physical-layer.json"
+        ],
+        "locator": "TI L177-L195."
+      },
+      "absoluteDifficulty": {
+        "level": "hard",
+        "assessment": "Specific knowledge of vehicle network identifiers and bitwise arbitration is specialist-level; exact-row substantiation is incomplete because LIN is unverified and OBD-II category is open.",
+        "status": "HOLD",
+        "sourcePaths": [
+          "docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/ti-can-physical-layer.json"
+        ],
+        "locator": "TI L182-L185,L215-L226."
+      },
+      "holdReason": "HOLD: exact non-MAIN LIN note claim (single-wire, low-cost, one scheduler, simple body devices) cannot be supported by an admissible full retained context. The attempted NXP URL was an I2C manual; the official LIN specification URL was inaccessible. Both permitted requests consumed; no third request. The LIN note remains unapplied/unverified. Unverified: the OBD-II option is a diagnostic interface/standard rather than plainly the same network category. No source request was spent; the candidate remains HOLD pending the unresolved LIN evidence and category review.",
+      "qualityCredit": 0
+    }
+  ],
+  "sourceAttemptEvidencePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/source-attempts.json"
+}
