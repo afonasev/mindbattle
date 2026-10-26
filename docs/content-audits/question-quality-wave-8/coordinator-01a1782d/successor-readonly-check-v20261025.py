@@ -82,6 +82,12 @@ assert a['threadId']==r['retainedIdleReader']['threadId']==G
 assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])==a['ownReceiptCount']==expected_reader_count
 identity=read(x['currentReaderNativeIdentity'])
 returned=identity.get('decodedResult',identity.get('supportedCreateResult'))
+if isinstance(returned,str):
+ # The same supported result may be retained as a SHA-bound artifact path.
+ assert raw(returned)==identity['supportedCreateResultSHA256']
+ supported=read(returned);assert not supported.get('isError',False)
+ returned=json.loads(supported['content'][0]['text'])
+ assert returned['threadId']==identity['returnedThreadId']
 assert identity.get('verifiedSessionMetaId',identity.get('nativeSessionMetaId'))==returned['threadId']==G and identity['nativeJournal']==a['nativeJournal']
 if r.get('inheritedImmutable'):
  seed=read(r['inheritedImmutable']);assert seed['retainedIdleReader']['threadId']==G and seed['readerOwnReceiptCount']==len(seed['readerOwnReceipts'])
