@@ -1,0 +1,256 @@
+{
+  "readerNativeId": "01a17851-1874-78f1-921e-529a8e82b6a4",
+  "role": "independent reviewer37",
+  "processRevision": "2026-10-25",
+  "stage": "INITIAL",
+  "cycle": 0,
+  "entries": [
+    {
+      "id": "cars-road-transport-ev-onboard-charger",
+      "topicId": "cars-road-transport",
+      "sourceOrder": 64,
+      "stage": "INITIAL",
+      "status": "PASS",
+      "currentCard": {
+        "id": "cars-road-transport-ev-onboard-charger",
+        "difficulty": "medium",
+        "prompt": "Какой узел электромобиля при зарядке через порт взаимодействует с зарядным оборудованием и отслеживает напряжение, ток, температуру и уровень заряда батареи?",
+        "answers": [
+          {
+            "text": "Тяговая батарея",
+            "note": "Тяговая батарея хранит электричество для использования тяговым электродвигателем."
+          },
+          {
+            "text": "Бортовое зарядное устройство",
+            "note": "Бортовое зарядное устройство преобразует входящий через зарядный порт переменный ток в постоянный для зарядки тяговой батареи."
+          },
+          {
+            "text": "Силовой электронный контроллер",
+            "note": "Силовой электронный контроллер управляет потоком энергии от тяговой батареи и регулирует скорость и крутящий момент электродвигателя."
+          },
+          {
+            "text": "Тяговый электродвигатель",
+            "note": "Тяговый электродвигатель использует энергию тяговой батареи, чтобы приводить в движение колёса автомобиля."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Бортовое зарядное устройство преобразует переменный ток через зарядный порт в постоянный для батареи, взаимодействует с зарядным оборудованием и отслеживает напряжение, ток, температуру и уровень заряда во время зарядки. Силовой контроллер управляет потоком энергии от батареи и работой электродвигателя.",
+        "source": {
+          "title": "U.S. Department of Energy, Alternative Fuels Data Center",
+          "url": "https://afdc.energy.gov/vehicles/how-do-all-electric-cars-work",
+          "verifiedAt": "2026-10-26"
+        }
+      },
+      "currentCardCanonicalSHA256": "3a78f86ce86595f15708c8907b46ed384030f2b007f0024d784b4050704a19f3",
+      "sixLiteralCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой узел электромобиля при зарядке через порт взаимодействует с зарядным оборудованием и отслеживает напряжение, ток, температуру и уровень заряда батареи?",
+            "answers": [
+              "Тяговая батарея",
+              "Бортовое зарядное устройство",
+              "Силовой электронный контроллер",
+              "Тяговый электродвигатель"
+            ],
+            "correctIndex": 1
+          },
+          "canonicalSHA256": "495c24d9cb38754b9b7ad3dbb4d18efa1da2f510a466fa75ed45e86fde85517b",
+          "individualGround": "Полный L66 даёт именно onboard charger: it also communicates with charging equipment and monitors battery voltage/current/temperature/state of charge while charging pack. Prompt сохраняет эти операции и charging context, поэтому key1 предметно подтверждён независимо от frozen numeric key. Controller L68 управляет motor delivery/speed/torque, pack L71 хранит электричество, motor L65 drives wheels. Battery monitoring/charging coordination в отличие от driving controller не определяется одним общим понятием controller, поэтому controller — содержательно близкая альтернатива. Текст спрашивает функцию узла в описанном onboard charging context, а не утверждает его обязательное участие в любом DC-fast-charge режиме; explanation/note прямо задают source AC-to-DC scope.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Complete L54-L79 component context; L66 full onboard charger AC/DC+communication+monitoring, L68 controller motor-flow role, L65 motor, L71 battery"
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Бортовое зарядное устройство преобразует переменный ток через зарядный порт в постоянный для батареи, взаимодействует с зарядным оборудованием и отслеживает напряжение, ток, температуру и уровень заряда во время зарядки. Силовой контроллер управляет потоком энергии от батареи и работой электродвигателя.",
+          "canonicalSHA256": "e27dcea3c13803be8fba1354e37db642348514a3f0bd61cc0390dbdf9fd36778",
+          "individualGround": "Два предложения правильно пересказывают весь L66: AC через port -> DC для батареи, взаимодействие с charging equipment и мониторинг четырёх названных battery characteristics. Первое прямо обозначает AC context и не переносит конверсию на все виды зарядки. Второе соответствует L68 motor-power/controller role; оно не содержит causal premise из HOLD62 и не смешивает DC/DC input или current/voltage из HOLD61.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Complete L54-L79 component context; L66 full onboard charger AC/DC+communication+monitoring, L68 controller motor-flow role, L65 motor, L71 battery"
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Тяговая батарея хранит электричество для использования тяговым электродвигателем.",
+          "canonicalSHA256": "15c3ec562fc88f60cabea2ff5be86244856a57ca312eb372d46bbb6fb571aa07",
+          "individualGround": "L71 напрямую подтверждает traction pack storage for motor. Note — полезный собственный факт батареи, не charging communication/monitoring responsibility.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L71: traction pack stores electricity for electric traction motor"
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Бортовое зарядное устройство преобразует входящий через зарядный порт переменный ток в постоянный для зарядки тяговой батареи.",
+          "canonicalSHA256": "e7e2fd7508a90bb296258e3f87d1514a91569c3087716f875f761caac662258c",
+          "individualGround": "L66 first sentence прямо сообщает AC supplied via port -> DC for traction battery charging. Это собственный дополнительный факт onboard charger сверх спрашиваемых communication/monitoring операций. Дополнение может повторяться в explanation; оно не просто повторяет prompt/key и не является фактом другого варианта.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L66 first sentence: incoming AC via charge port converted to DC to charge traction battery"
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Силовой электронный контроллер управляет потоком энергии от тяговой батареи и регулирует скорость и крутящий момент электродвигателя.",
+          "canonicalSHA256": "a1c44b011ffb56d7554d87db654495cc2fc0f3ec2049c990fafb739cc7a7b4bd",
+          "individualGround": "L68 задаёт именно flow delivered by traction battery and control of motor speed/torque. Note сохраняет эту driving-power role и не утверждает, что любой сдвиг потока всегда меняет оба параметра. Использование отдельного корректного source claim не принимает terminal-HOLD62 как карточку.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L68: controller manages battery energy flow and motor speed/torque"
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "Тяговый электродвигатель использует энергию тяговой батареи, чтобы приводить в движение колёса автомобиля.",
+          "canonicalSHA256": "08816df595f8827ef7f95f202b4fba81f3a1d33252e0f70fb46f90594dcfc40d",
+          "individualGround": "L65 подтверждает using power from traction battery pack motor drives wheels. Note точно даёт собственный actuator fact; она не приписывает motor функцию AC-to-DC onboard charger или battery monitoring.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L65: motor uses traction-pack energy to drive wheels"
+            }
+          ]
+        }
+      ],
+      "fourFullPromptAnswerNoteVariants": [
+        {
+          "slot": 0,
+          "prompt": "Какой узел электромобиля при зарядке через порт взаимодействует с зарядным оборудованием и отслеживает напряжение, ток, температуру и уровень заряда батареи?",
+          "answer": "Тяговая батарея",
+          "note": "Тяговая батарея хранит электричество для использования тяговым электродвигателем.",
+          "tripleCanonicalSHA256": "0228a78b12d914628fff0bf1ba477e8df17a57aa4a3be2532a1f22c5084dbb72",
+          "grammar": "Лично прочитаны весь prompt, самостоятельная именная подпись «Тяговая батарея» и вся note. Все четыре названия оформлены единообразно; управление «взаимодействует с ... отслеживает ...» и перечисление параметров согласованы. Note относится к собственному варианту по смыслу и грамматике, падежной/родовой подсказки ключа нет.",
+          "plausibility": "Battery — объект контролируемых параметров и зарядки, поэтому тематически близка; но storage unit не описанная communication/monitoring onboard function.",
+          "truthUniqueKey": "L71 определяет storage for motor, не взаимодействие с charging equipment; pack не второй key в данной функциональной классификации.",
+          "noteTruthUsefulness": "L71 напрямую подтверждает traction pack storage for motor. Note — полезный собственный факт батареи, не charging communication/monitoring responsibility.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Complete L54-L79 component context; L66 full onboard charger AC/DC+communication+monitoring, L68 controller motor-flow role, L65 motor, L71 battery"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L71: traction pack stores electricity for electric traction motor"
+            }
+          ]
+        },
+        {
+          "slot": 1,
+          "prompt": "Какой узел электромобиля при зарядке через порт взаимодействует с зарядным оборудованием и отслеживает напряжение, ток, температуру и уровень заряда батареи?",
+          "answer": "Бортовое зарядное устройство",
+          "note": "Бортовое зарядное устройство преобразует входящий через зарядный порт переменный ток в постоянный для зарядки тяговой батареи.",
+          "tripleCanonicalSHA256": "d41182400574bb7a3db1d1641dc656fdfd8fcfa7582a4f02abb7688ea0c7379e",
+          "grammar": "Лично прочитаны весь prompt, самостоятельная именная подпись «Бортовое зарядное устройство» и вся note. Все четыре названия оформлены единообразно; управление «взаимодействует с ... отслеживает ...» и перечисление параметров согласованы. Note относится к собственному варианту по смыслу и грамматике, падежной/родовой подсказки ключа нет.",
+          "plausibility": "Верный реальный charger имеет дополнительную monitoring/coordination роль, не просто подаёт ток. Требуется знать именно эту ответственность, а не одну общую зарядную связь.",
+          "truthUniqueKey": "L66 прямо именует все перечисленные communication/monitoring duties, поэтому key1 уникален по source-defined role. Вопрос не certifies любую возможную архитектуру/BMS терминологию вне данного контекста.",
+          "noteTruthUsefulness": "L66 first sentence прямо сообщает AC supplied via port -> DC for traction battery charging. Это собственный дополнительный факт onboard charger сверх спрашиваемых communication/monitoring операций. Дополнение может повторяться в explanation; оно не просто повторяет prompt/key и не является фактом другого варианта.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Complete L54-L79 component context; L66 full onboard charger AC/DC+communication+monitoring, L68 controller motor-flow role, L65 motor, L71 battery"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L66 first sentence: incoming AC via charge port converted to DC to charge traction battery"
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "prompt": "Какой узел электромобиля при зарядке через порт взаимодействует с зарядным оборудованием и отслеживает напряжение, ток, температуру и уровень заряда батареи?",
+          "answer": "Силовой электронный контроллер",
+          "note": "Силовой электронный контроллер управляет потоком энергии от тяговой батареи и регулирует скорость и крутящий момент электродвигателя.",
+          "tripleCanonicalSHA256": "b380cd4dee7ab74d17490e2fa56801ce5e1a4941dfcdb26a5a330d0154779245",
+          "grammar": "Лично прочитаны весь prompt, самостоятельная именная подпись «Силовой электронный контроллер» и вся note. Все четыре названия оформлены единообразно; управление «взаимодействует с ... отслеживает ...» и перечисление параметров согласованы. Note относится к собственному варианту по смыслу и грамматике, падежной/родовой подсказки ключа нет.",
+          "plausibility": "Power electronics controller — сильный близкий distractor: по общему значению может ассоциироваться с контролем параметров, но source L68 связывает его с motor power, а L66 — onboard charger с charging equipment/battery monitoring. Незнающему остаётся осмысленное сужение/выбор.",
+          "truthUniqueKey": "L68 motor speed/torque-energy-flow controller не L66 charging communications/monitoring role; slot2 не второй key.",
+          "noteTruthUsefulness": "L68 задаёт именно flow delivered by traction battery and control of motor speed/torque. Note сохраняет эту driving-power role и не утверждает, что любой сдвиг потока всегда меняет оба параметра. Использование отдельного корректного source claim не принимает terminal-HOLD62 как карточку.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Complete L54-L79 component context; L66 full onboard charger AC/DC+communication+monitoring, L68 controller motor-flow role, L65 motor, L71 battery"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L68: controller manages battery energy flow and motor speed/torque"
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "prompt": "Какой узел электромобиля при зарядке через порт взаимодействует с зарядным оборудованием и отслеживает напряжение, ток, температуру и уровень заряда батареи?",
+          "answer": "Тяговый электродвигатель",
+          "note": "Тяговый электродвигатель использует энергию тяговой батареи, чтобы приводить в движение колёса автомобиля.",
+          "tripleCanonicalSHA256": "62dcb6fa0fa24d14a47f62aad6963c403701df694d79d26dbaf70bcb503a53f3",
+          "grammar": "Лично прочитаны весь prompt, самостоятельная именная подпись «Тяговый электродвигатель» и вся note. Все четыре названия оформлены единообразно; управление «взаимодействует с ... отслеживает ...» и перечисление параметров согласованы. Note относится к собственному варианту по смыслу и грамматике, падежной/родовой подсказки ключа нет.",
+          "plausibility": "Motor — реальный соседний EV component, получает battery power, но должен быть отличён от внешнего charging/monitoring subsystem по собственной функции actuation.",
+          "truthUniqueKey": "L65 drive wheels не onboard charging management, поэтому motor не второй key.",
+          "noteTruthUsefulness": "L65 подтверждает using power from traction battery pack motor drives wheels. Note точно даёт собственный actuator fact; она не приписывает motor функцию AC-to-DC onboard charger или battery monitoring.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Complete L54-L79 component context; L66 full onboard charger AC/DC+communication+monitoring, L68 controller motor-flow role, L65 motor, L71 battery"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L65: motor uses traction-pack energy to drive wheels"
+            }
+          ]
+        }
+      ],
+      "absoluteLevel": {
+        "frozen": "medium",
+        "judgment": "Конкретная ответственность onboard charger за связь с charging equipment и мониторинг voltage/current/temperature/state of charge — тематическое знание EV architecture, а не просто бытовой факт о накопителе/приводе. Внешний взрослый может сузить выбор до charger/controller, но общее значение слова controller не определяет, какая из двух электронных подсистем делает именно charging coordination. Знакомый с темой скорее узнаёт L66 role. Поэтому MEDIUM поддержан без узкопрофессиональных расчётов/протоколов и без необходимости читать численные source details."
+      },
+      "correctNoteExtraFact": {
+        "fact": "Onboard charger преобразует входящий через port AC в DC для заряда traction battery.",
+        "ground": "L66 first sentence прямо сообщает AC supplied via port -> DC for traction battery charging. Это собственный дополнительный факт onboard charger сверх спрашиваемых communication/monitoring операций. Дополнение может повторяться в explanation; оно не просто повторяет prompt/key и не является фактом другого варианта.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+            "completeOutputPointer": "/originalRecord/payload/output/1/text",
+            "locator": "L66 first sentence: incoming AC via charge port converted to DC to charge traction battery"
+          }
+        ]
+      },
+      "defects": [],
+      "frozen": {
+        "id": "cars-road-transport-ev-onboard-charger",
+        "topicId": "cars-road-transport",
+        "sourceOrder": 64,
+        "difficulty": "medium",
+        "correctIndex": 1
+      }
+    }
+  ],
+  "qualityCredit": 0,
+  "qualityCreditReason": "Independent exact INITIAL PASS is evidence only; coordinator exact binding and required checks govern credit.",
+  "stop": "One assigned INITIAL64 complete. Prior receipts and terminal-HOLD61/62 unchanged; no adjacent work."
+}
