@@ -1,0 +1,368 @@
+{
+  "readerNativeId": "01a17851-1874-78f1-921e-529a8e82b6a4",
+  "role": "same independent reviewer37 directed FINAL63",
+  "processRevision": "2026-10-25",
+  "stage": "FINAL",
+  "cycle": 1,
+  "previousIndependentInitial": {
+    "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport63-initial/receipt.json",
+    "rawSHA256": "929bd65f3c8048252aca6357e14c8fa3c49de36067d6d26c550985378458eadf"
+  },
+  "entries": [
+    {
+      "id": "cars-road-transport-ev-motor",
+      "topicId": "cars-road-transport",
+      "sourceOrder": 63,
+      "stage": "FINAL",
+      "status": "PASS",
+      "currentCard": {
+        "id": "cars-road-transport-ev-motor",
+        "difficulty": "medium",
+        "prompt": "Какой узел некоторых аккумуляторных электромобилей при торможении может преобразовать энергию вращающихся колёс в электричество для тяговой батареи?",
+        "answers": [
+          {
+            "text": "Тяговая батарея",
+            "note": "Тяговая батарея хранит электричество для тягового электродвигателя."
+          },
+          {
+            "text": "Тяговый электродвигатель",
+            "note": "Тяговый электродвигатель получает энергию от батареи, которую автомобиль заряжает через порт от внешнего источника."
+          },
+          {
+            "text": "Силовой электронный контроллер",
+            "note": "Он управляет потоком энергии от тяговой батареи и регулирует скорость электродвигателя и его крутящий момент."
+          },
+          {
+            "text": "Бортовое зарядное устройство",
+            "note": "Оно преобразует входящий через зарядный порт переменный ток в постоянный и контролирует параметры батареи во время зарядки."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "Тяговый электродвигатель приводит колёса, а в некоторых моделях мотор-генератор при торможении возвращает часть энергии в тяговую батарею. Силовой контроллер управляет энергией батареи, скоростью и крутящим моментом электромотора.",
+        "source": {
+          "title": "U.S. Department of Energy, Alternative Fuels Data Center",
+          "url": "https://afdc.energy.gov/vehicles/how-do-all-electric-cars-work",
+          "verifiedAt": "2026-10-26"
+        }
+      },
+      "currentCardCanonicalSHA256": "00575f03a046e5c9c184332ec138042542719f8e4a4fa60c2a8bdc6c8da727ff",
+      "sixLiteralCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой узел некоторых аккумуляторных электромобилей при торможении может преобразовать энергию вращающихся колёс в электричество для тяговой батареи?",
+            "answers": [
+              "Тяговая батарея",
+              "Тяговый электродвигатель",
+              "Силовой электронный контроллер",
+              "Бортовое зарядное устройство"
+            ],
+            "correctIndex": 1
+          },
+          "canonicalSHA256": "cd5a1f476b2241f4179579a72a1f8b0ccd83b5c18ec92b729f0bd270545a40c1",
+          "individualGround": "D1 устранён: prompt больше не содержит независимую подсказку «также приводить колёса». Теперь требуется распознать преобразование механической энергии вращающихся колёс в электричество для батареи в braking mode. EV L65 прямо устанавливает some-BEV motor-generators with drive/regeneration; HEV L63-L65 раскрывает эту регенерацию как rotating wheels -> electricity -> traction pack. HEV используется только для определения функции, не для переноса ICE/non-plug-in правил. Батарея L71 хранит/принимает, controller L68 управляет потоком, onboard charger L66 преобразует входящий электрический AC в DC; только motor-generator выполняет механико-электрическое преобразование при торможении. Key1 уникален по физической роли независимо от frozen index. Нужен тематический EV/reversible motor knowledge, а не generic wheel-drive cue: absolute MEDIUM подтверждён.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79; L65 some BEV motor-generators perform drive and regeneration"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L55-L78; L63 generator makes electricity from rotating wheels while braking, returns energy to traction pack; L65 dual motor-generator role"
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Тяговый электродвигатель приводит колёса, а в некоторых моделях мотор-генератор при торможении возвращает часть энергии в тяговую батарею. Силовой контроллер управляет энергией батареи, скоростью и крутящим моментом электромотора.",
+          "canonicalSHA256": "07648c3a950dca424838bb6e5c4711c084e5f273b877726228ef1d871bdad608",
+          "individualGround": "Два предложения: первое сохраняет some models и часть возвращаемой энергии, связывая EV L65 dual-role с точной definition HEV L63; оно не утверждает, что каждый motor/каждый BEV обязательно выполняет regeneration. Второе faithfully пересказывает controller L68: energy-flow/speed/torque control. Неподтверждённое безусловное causal premise из HOLD62 сюда не перенесено.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55/L62/L65-L71 full component contexts; L65 some motor-generators drive and regenerate"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55-L78 full HEV component context; L63 generator recovers rotating-wheel braking energy to traction battery; L65 dual motor-generator role"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport63-initial/receipt.json",
+            "rawSHA256": "929bd65f3c8048252aca6357e14c8fa3c49de36067d6d26c550985378458eadf",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/1",
+            "unchangedLiteralCanonicalSHA256": "07648c3a950dca424838bb6e5c4711c084e5f273b877726228ef1d871bdad608",
+            "applicability": "Собственное INITIAL-суждение о том же литерале/его source context. Удаление wheel-drive giveaway не меняет истинность unchanged explanation/notes или связь дополнительного power-supply факта с correct motor."
+          }
+        },
+        {
+          "group": "note0",
+          "literal": "Тяговая батарея хранит электричество для тягового электродвигателя.",
+          "canonicalSHA256": "a76ca3f0ab665c41008178292c00e74a485345d98554aa4c01ae3a11fc506e71",
+          "individualGround": "EV L71 точно сообщает traction pack stores electricity for traction motor. Это собственный полезный факт батареи, не motor actuation/regeneration function.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L71 traction pack storage for traction motor"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport63-initial/receipt.json",
+            "rawSHA256": "929bd65f3c8048252aca6357e14c8fa3c49de36067d6d26c550985378458eadf",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/2",
+            "unchangedLiteralCanonicalSHA256": "a76ca3f0ab665c41008178292c00e74a485345d98554aa4c01ae3a11fc506e71",
+            "applicability": "Собственное INITIAL-суждение о том же литерале/его source context. Удаление wheel-drive giveaway не меняет истинность unchanged explanation/notes или связь дополнительного power-supply факта с correct motor."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "Тяговый электродвигатель получает энергию от батареи, которую автомобиль заряжает через порт от внешнего источника.",
+          "canonicalSHA256": "587bc15554cab29f825d9297fa666ef509b46f0b2293a9b52109aaf60de54a3d",
+          "individualGround": "EV L65 прямо задаёт energy supply from traction pack to motor, а L55/L62 — recharge pack через external source/charge port. Это дополнительный собственный факт правильного motor: источник его энергии и питание от externally charged pack, сверх запрошенного возврата энергии и wheel actuation. Main обратного braking flow не заменяет этот forward supply relation; подробности charge hardware привязаны к питающему motor pack, а не к случайному соседнему устройству.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55/L62/L65: pack supplies motor and is charged via external connection"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport63-initial/receipt.json",
+            "rawSHA256": "929bd65f3c8048252aca6357e14c8fa3c49de36067d6d26c550985378458eadf",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/3",
+            "unchangedLiteralCanonicalSHA256": "587bc15554cab29f825d9297fa666ef509b46f0b2293a9b52109aaf60de54a3d",
+            "applicability": "Собственное INITIAL-суждение о том же литерале/его source context. Удаление wheel-drive giveaway не меняет истинность unchanged explanation/notes или связь дополнительного power-supply факта с correct motor."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Он управляет потоком энергии от тяговой батареи и регулирует скорость электродвигателя и его крутящий момент.",
+          "canonicalSHA256": "18c10bebe2051cefd50e949dab7c3dd1ff1d6054f345a812876a426dec0b8011",
+          "individualGround": "EV L68 определяет controller managing flow delivered by battery and regulating motor speed/torque. Note точно сохраняет эти роли, без усиления до обязательного изменения обоих параметров. Совпадение с корректным source claim не является adoption terminal-HOLD62 целиком.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L68 exact controller flow/speed/torque role"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport63-initial/receipt.json",
+            "rawSHA256": "929bd65f3c8048252aca6357e14c8fa3c49de36067d6d26c550985378458eadf",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/4",
+            "unchangedLiteralCanonicalSHA256": "18c10bebe2051cefd50e949dab7c3dd1ff1d6054f345a812876a426dec0b8011",
+            "applicability": "Собственное INITIAL-суждение о том же литерале/его source context. Удаление wheel-drive giveaway не меняет истинность unchanged explanation/notes или связь дополнительного power-supply факта с correct motor."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "Оно преобразует входящий через зарядный порт переменный ток в постоянный и контролирует параметры батареи во время зарядки.",
+          "canonicalSHA256": "39ce89794a967d794b97a16ad95c2ea16314735a754a7e2b6495e46517e617cc",
+          "individualGround": "EV L66 содержит incoming AC via port converted to DC for battery charging и battery-characteristic monitoring while charging. Note передаёт оба собственных факта onboard charger; грамматическое «Оно» согласовано с названием «устройство». Это не motor-generator braking function.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L66 complete onboard charger AC-to-DC and battery monitoring"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport63-initial/receipt.json",
+            "rawSHA256": "929bd65f3c8048252aca6357e14c8fa3c49de36067d6d26c550985378458eadf",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/5",
+            "unchangedLiteralCanonicalSHA256": "39ce89794a967d794b97a16ad95c2ea16314735a754a7e2b6495e46517e617cc",
+            "applicability": "Собственное INITIAL-суждение о том же литерале/его source context. Удаление wheel-drive giveaway не меняет истинность unchanged explanation/notes или связь дополнительного power-supply факта с correct motor."
+          }
+        }
+      ],
+      "fourFullPromptAnswerNoteVariants": [
+        {
+          "slot": 0,
+          "prompt": "Какой узел некоторых аккумуляторных электромобилей при торможении может преобразовать энергию вращающихся колёс в электричество для тяговой батареи?",
+          "answer": "Тяговая батарея",
+          "note": "Тяговая батарея хранит электричество для тягового электродвигателя.",
+          "tripleCanonicalSHA256": "efa5b03e30bf22a6c60aa313b9b09c97c4e62562c8eb303258cca71f3d1ed078",
+          "grammar": "Лично прочитаны весь новый prompt, самостоятельная именная подпись «Тяговая батарея» и неизменённая note. Согласованы «узел ... может преобразовать ... энергию ... в электричество» и qualifier «некоторых». Все подписи единообразны; источник кинетической энергии/получатель pack обозначены без actor/voltage/current смешения.",
+          "plausibility": "Battery связана с принимаемой/хранимой энергией и потому правдоподобна для незнающего, но L71 не задаёт механическое преобразование вращающихся колёс в ток.",
+          "truthUniqueKey": "Battery L71 — storage/reception, не rotating-wheel generator; это не второй ключ.",
+          "noteTruthUsefulness": "EV L71 точно сообщает traction pack stores electricity for traction motor. Это собственный полезный факт батареи, не motor actuation/regeneration function.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79; L65 some BEV motor-generators perform drive and regeneration"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L55-L78; L63 generator makes electricity from rotating wheels while braking, returns energy to traction pack; L65 dual motor-generator role"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L71 traction pack storage for traction motor"
+            }
+          ],
+          "retainedOwnNoteJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport63-initial/receipt.json",
+            "rawSHA256": "929bd65f3c8048252aca6357e14c8fa3c49de36067d6d26c550985378458eadf",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/2",
+            "unchangedLiteralCanonicalSHA256": "a76ca3f0ab665c41008178292c00e74a485345d98554aa4c01ae3a11fc506e71",
+            "applicability": "Собственное INITIAL-суждение о том же литерале/его source context. Удаление wheel-drive giveaway не меняет истинность unchanged explanation/notes или связь дополнительного power-supply факта с correct motor."
+          }
+        },
+        {
+          "slot": 1,
+          "prompt": "Какой узел некоторых аккумуляторных электромобилей при торможении может преобразовать энергию вращающихся колёс в электричество для тяговой батареи?",
+          "answer": "Тяговый электродвигатель",
+          "note": "Тяговый электродвигатель получает энергию от батареи, которую автомобиль заряжает через порт от внешнего источника.",
+          "tripleCanonicalSHA256": "92138cf68774ec14864d56d33604cf52031a786d6ba78223e30ee5107b48e739",
+          "grammar": "Лично прочитаны весь новый prompt, самостоятельная именная подпись «Тяговый электродвигатель» и неизменённая note. Согласованы «узел ... может преобразовать ... энергию ... в электричество» и qualifier «некоторых». Все подписи единообразны; источник кинетической энергии/получатель pack обозначены без actor/voltage/current смешения.",
+          "plausibility": "Обычное слово motor больше не повторяет в prompt очевидную forward-drive функцию. Чтобы выбрать его, нужно знать генераторный режим some motor-generators, то есть специфическую обратимость роли.",
+          "truthUniqueKey": "EV L65 some motor-generators плюс HEV L63 точная generation/return definition подтверждают motor key1. Some qualifier сохранён; не утверждается regeneration для каждого BEV/мотора.",
+          "noteTruthUsefulness": "EV L65 прямо задаёт energy supply from traction pack to motor, а L55/L62 — recharge pack через external source/charge port. Это дополнительный собственный факт правильного motor: источник его энергии и питание от externally charged pack, сверх запрошенного возврата энергии и wheel actuation. Main обратного braking flow не заменяет этот forward supply relation; подробности charge hardware привязаны к питающему motor pack, а не к случайному соседнему устройству.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79; L65 some BEV motor-generators perform drive and regeneration"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L55-L78; L63 generator makes electricity from rotating wheels while braking, returns energy to traction pack; L65 dual motor-generator role"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55/L62/L65: pack supplies motor and is charged via external connection"
+            }
+          ],
+          "retainedOwnNoteJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport63-initial/receipt.json",
+            "rawSHA256": "929bd65f3c8048252aca6357e14c8fa3c49de36067d6d26c550985378458eadf",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/3",
+            "unchangedLiteralCanonicalSHA256": "587bc15554cab29f825d9297fa666ef509b46f0b2293a9b52109aaf60de54a3d",
+            "applicability": "Собственное INITIAL-суждение о том же литерале/его source context. Удаление wheel-drive giveaway не меняет истинность unchanged explanation/notes или связь дополнительного power-supply факта с correct motor."
+          }
+        },
+        {
+          "slot": 2,
+          "prompt": "Какой узел некоторых аккумуляторных электромобилей при торможении может преобразовать энергию вращающихся колёс в электричество для тяговой батареи?",
+          "answer": "Силовой электронный контроллер",
+          "note": "Он управляет потоком энергии от тяговой батареи и регулирует скорость электродвигателя и его крутящий момент.",
+          "tripleCanonicalSHA256": "96ad26a37f7924d6ad8ea9d0f51aff9e2bdfcbb3d6824e5c78555412a78f8fe5",
+          "grammar": "Лично прочитаны весь новый prompt, самостоятельная именная подпись «Силовой электронный контроллер» и неизменённая note. Согласованы «узел ... может преобразовать ... энергию ... в электричество» и qualifier «некоторых». Все подписи единообразны; источник кинетической энергии/получатель pack обозначены без actor/voltage/current смешения.",
+          "plausibility": "Controller управляет energy flow и связан с возвращаемой энергией, поэтому теперь содержательно близок. Требуется отличить routing/control L68 от electromechanical generation L65/HEV L63.",
+          "truthUniqueKey": "Controller L68 flow/speed/torque regulation не механическое превращение wheel rotation в electricity; второй ключ не возникает.",
+          "noteTruthUsefulness": "EV L68 определяет controller managing flow delivered by battery and regulating motor speed/torque. Note точно сохраняет эти роли, без усиления до обязательного изменения обоих параметров. Совпадение с корректным source claim не является adoption terminal-HOLD62 целиком.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79; L65 some BEV motor-generators perform drive and regeneration"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L55-L78; L63 generator makes electricity from rotating wheels while braking, returns energy to traction pack; L65 dual motor-generator role"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L68 exact controller flow/speed/torque role"
+            }
+          ],
+          "retainedOwnNoteJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport63-initial/receipt.json",
+            "rawSHA256": "929bd65f3c8048252aca6357e14c8fa3c49de36067d6d26c550985378458eadf",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/4",
+            "unchangedLiteralCanonicalSHA256": "18c10bebe2051cefd50e949dab7c3dd1ff1d6054f345a812876a426dec0b8011",
+            "applicability": "Собственное INITIAL-суждение о том же литерале/его source context. Удаление wheel-drive giveaway не меняет истинность unchanged explanation/notes или связь дополнительного power-supply факта с correct motor."
+          }
+        },
+        {
+          "slot": 3,
+          "prompt": "Какой узел некоторых аккумуляторных электромобилей при торможении может преобразовать энергию вращающихся колёс в электричество для тяговой батареи?",
+          "answer": "Бортовое зарядное устройство",
+          "note": "Оно преобразует входящий через зарядный порт переменный ток в постоянный и контролирует параметры батареи во время зарядки.",
+          "tripleCanonicalSHA256": "8f3a61d81f06fd387d2046e5ed148b05fd7fd78a762c1c28bed3cc40949a8352",
+          "grammar": "Лично прочитаны весь новый prompt, самостоятельная именная подпись «Бортовое зарядное устройство» и неизменённая note. Согласованы «узел ... может преобразовать ... энергию ... в электричество» и qualifier «некоторых». Все подписи единообразны; источник кинетической энергии/получатель pack обозначены без actor/voltage/current смешения.",
+          "plausibility": "Onboard charger тоже преобразует электричество и пополняет pack, поэтому может быть спутан с regeneration; L66 ограничивает его incoming AC-to-DC зарядкой, а не механическим вращением колёс.",
+          "truthUniqueKey": "L66 conversion incoming AC from external port to DC не regeneration from mechanical wheel rotation; charger не второй ключ.",
+          "noteTruthUsefulness": "EV L66 содержит incoming AC via port converted to DC for battery charging и battery-characteristic monitoring while charging. Note передаёт оба собственных факта onboard charger; грамматическое «Оно» согласовано с названием «устройство». Это не motor-generator braking function.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79; L65 some BEV motor-generators perform drive and regeneration"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17870/source-cars-road-transport58/official-afdc-hybrid.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L55-L78; L63 generator makes electricity from rotating wheels while braking, returns energy to traction pack; L65 dual motor-generator role"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L66 complete onboard charger AC-to-DC and battery monitoring"
+            }
+          ],
+          "retainedOwnNoteJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport63-initial/receipt.json",
+            "rawSHA256": "929bd65f3c8048252aca6357e14c8fa3c49de36067d6d26c550985378458eadf",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/5",
+            "unchangedLiteralCanonicalSHA256": "39ce89794a967d794b97a16ad95c2ea16314735a754a7e2b6495e46517e617cc",
+            "applicability": "Собственное INITIAL-суждение о том же литерале/его source context. Удаление wheel-drive giveaway не меняет истинность unchanged explanation/notes или связь дополнительного power-supply факта с correct motor."
+          }
+        }
+      ],
+      "absoluteLevel": {
+        "frozen": "medium",
+        "judgment": "Теперь решающим знанием является генераторный режим тягового электромотора при торможении: неподготовленный взрослый не получает ответ из фразы о приводе колёс, а должен отличить generation от storage/control/AC charging. Знакомый с EV/reversible drive/regeneration скорее узнаёт функцию; узкопрофессионального расчёта не требуется. Это соответствует MEDIUM, INITIAL D1 resolved."
+      },
+      "correctNoteExtraFact": {
+        "fact": "Motor получает энергию от traction battery pack, который заряжается через external connection/charge port.",
+        "ground": "EV L65 прямо задаёт energy supply from traction pack to motor, а L55/L62 — recharge pack через external source/charge port. Это дополнительный собственный факт правильного motor: источник его энергии и питание от externally charged pack, сверх запрошенного возврата энергии и wheel actuation. Main обратного braking flow не заменяет этот forward supply relation; подробности charge hardware привязаны к питающему motor pack, а не к случайному соседнему устройству.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+            "completeOutputPointer": "/originalRecord/payload/output/1/text",
+            "locator": "L55/L62/L65: pack supplies motor and is charged via external connection"
+          }
+        ],
+        "retainedOwnJudgment": {
+          "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport63-initial/receipt.json",
+          "rawSHA256": "929bd65f3c8048252aca6357e14c8fa3c49de36067d6d26c550985378458eadf",
+          "pointer": "/entries/0/sixLiteralCanonicalGroups/3",
+          "unchangedLiteralCanonicalSHA256": "587bc15554cab29f825d9297fa666ef509b46f0b2293a9b52109aaf60de54a3d",
+          "applicability": "Собственное INITIAL-суждение о том же литерале/его source context. Удаление wheel-drive giveaway не меняет истинность unchanged explanation/notes или связь дополнительного power-supply факта с correct motor."
+        }
+      },
+      "defects": [],
+      "frozen": {
+        "id": "cars-road-transport-ev-motor",
+        "topicId": "cars-road-transport",
+        "sourceOrder": 63,
+        "difficulty": "medium",
+        "correctIndex": 1
+      },
+      "directedDefectResolution": [
+        {
+          "id": "INITIAL63-D1",
+          "status": "RESOLVED",
+          "initialPointer": "/entries/0/defects/0",
+          "ground": "D1 устранён: prompt больше не содержит независимую подсказку «также приводить колёса». Теперь требуется распознать преобразование механической энергии вращающихся колёс в электричество для батареи в braking mode. EV L65 прямо устанавливает some-BEV motor-generators with drive/regeneration; HEV L63-L65 раскрывает эту регенерацию как rotating wheels -> electricity -> traction pack. HEV используется только для определения функции, не для переноса ICE/non-plug-in правил. Батарея L71 хранит/принимает, controller L68 управляет потоком, onboard charger L66 преобразует входящий электрический AC в DC; только motor-generator выполняет механико-электрическое преобразование при торможении. Key1 уникален по физической роли независимо от frozen index. Нужен тематический EV/reversible motor knowledge, а не generic wheel-drive cue: absolute MEDIUM подтверждён."
+        }
+      ]
+    }
+  ],
+  "qualityCredit": 0,
+  "qualityCreditReason": "Content FINAL PASS is independent evidence only; coordinator exact binding and required procedural/source checks govern certification.",
+  "stop": "Sole directed cycle1 FINAL63 complete; no new INITIAL/ordinary cycle2/third review, no adjacent64/65 work. Terminal-HOLD61/62 unchanged."
+}
