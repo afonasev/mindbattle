@@ -1,0 +1,270 @@
+{
+  "readerNativeId": "01a17851-1874-78f1-921e-529a8e82b6a4",
+  "role": "independent reviewer37",
+  "processRevision": "2026-10-25",
+  "stage": "INITIAL",
+  "cycle": 0,
+  "entries": [
+    {
+      "id": "cars-road-transport-ev-inverter",
+      "topicId": "cars-road-transport",
+      "sourceOrder": 62,
+      "stage": "INITIAL",
+      "status": "FIX",
+      "currentCard": {
+        "id": "cars-road-transport-ev-inverter",
+        "difficulty": "medium",
+        "prompt": "Какой узел управляет потоком энергии от тяговой батареи и регулирует скорость электромотора и его крутящий момент?",
+        "answers": [
+          {
+            "text": "Силовой электронный контроллер",
+            "note": "Система охлаждения электромобиля поддерживает рабочий температурный диапазон его силовой электроники."
+          },
+          {
+            "text": "Тяговая батарея",
+            "note": "Тяговая батарея хранит электричество для использования тяговым электромотором."
+          },
+          {
+            "text": "Тяговый электродвигатель",
+            "note": "Тяговый электродвигатель использует энергию батареи, чтобы приводить в движение колёса автомобиля."
+          },
+          {
+            "text": "Бортовое зарядное устройство",
+            "note": "Бортовое зарядное устройство преобразует входящий переменный ток в постоянный для зарядки тяговой батареи."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Силовой электронный контроллер управляет потоком энергии от тяговой батареи и регулирует скорость электромотора и его крутящий момент. Батарея хранит электричество, электромотор приводит колёса, а бортовое зарядное устройство преобразует входящий переменный ток для зарядки батареи.",
+        "source": {
+          "title": "U.S. Department of Energy, Alternative Fuels Data Center",
+          "url": "https://afdc.energy.gov/vehicles/how-do-all-electric-cars-work",
+          "verifiedAt": "2026-10-26"
+        }
+      },
+      "currentCardCanonicalSHA256": "ff80346ac102bb5bcd8151565b21e7a64cd8a5469717b337cc69b131883dd6cd",
+      "sixLiteralCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какой узел управляет потоком энергии от тяговой батареи и регулирует скорость электромотора и его крутящий момент?",
+            "answers": [
+              "Силовой электронный контроллер",
+              "Тяговая батарея",
+              "Тяговый электродвигатель",
+              "Бортовое зарядное устройство"
+            ],
+            "correctIndex": 0
+          },
+          "canonicalSHA256": "2a2d1c71537f3a9ef5f6408d0ff7e34e8096c95b089620e91685e525002757fc",
+          "individualGround": "L68 прямо описывает Power electronics controller: manages flow of electrical energy delivered by traction battery, controls motor speed and torque. Key0 фактически подтверждён независимо от frozen index. L71 battery stores, L65 motor drives wheels, L66 onboard charger converts AC-to-DC, поэтому второй ключ в ряду не возникает. Однако единственное название controller выдаёт управляющую роль среди трёх иных функций; absolute MEDIUM при таком choice set не подтверждён, D1.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full component context L54-L79; power electronics controller L68, motor L65, battery L71, charger L66, thermal system L69"
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Силовой электронный контроллер управляет потоком энергии от тяговой батареи и регулирует скорость электромотора и его крутящий момент. Батарея хранит электричество, электромотор приводит колёса, а бортовое зарядное устройство преобразует входящий переменный ток для зарядки батареи.",
+          "canonicalSHA256": "27067a777c1095efb41d1819281f4607d28f6e2787556d9786bbe9365d68cd31",
+          "individualGround": "Два предложения: первое точно передаёт всю L68 управляющую функцию, второе различает L71 storage, L65 wheel drive и L66 AC-to-DC charging. Оно не смешивает эти роли с DC/DC accessories и не вводит уменьшение тока из HOLD61. Правильный ответ назван и объяснён; подтверждение explanation не является adoption/reopen61.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full component context L54-L79; power electronics controller L68, motor L65, battery L71, charger L66, thermal system L69"
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Система охлаждения электромобиля поддерживает рабочий температурный диапазон его силовой электроники.",
+          "canonicalSHA256": "5b4753b2811d000952dbd3d7ce76a66fc58d90d8ccfe1250327b8136ac0dffe0",
+          "individualGround": "L68 называет верный узел именно power electronics controller; L69 говорит, что cooling system maintains proper operating temperature range power electronics. Поэтому у правильного компонента есть дополнительная собственная характеристика — его силовая электроника входит в поддерживаемый охлаждением температурный контур. Это отдельный факт сверх MAIN о motor speed/torque regulation; связь с правильным вариантом следует из совпадающей component class, а не просто общего факта о другом приборе. Конкретные temperatures, liquid coolant или одинаковая конструкция всех авто не утверждаются.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L68 names power electronics controller; L69 cooling maintains operating temperature of power electronics"
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Тяговая батарея хранит электричество для использования тяговым электромотором.",
+          "canonicalSHA256": "81e5b9e52a05a1f48a392bf7c2432810f5906b99045d2a24e0d11ea4f73aa093",
+          "individualGround": "L71 напрямую задаёт storage of electricity for traction motor; note сообщает ровно собственную функцию traction battery, не приписывая ей controller regulation.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L71: traction battery pack stores electricity for electric traction motor"
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "Тяговый электродвигатель использует энергию батареи, чтобы приводить в движение колёса автомобиля.",
+          "canonicalSHA256": "f4e1f0563b87a944e3b43b3d4853678bfa66e40a5ef7bbe0189e903623ea9d86",
+          "individualGround": "L65 говорит, что traction motor using power from pack drives vehicle wheels. Note сохраняет source-energy и actuation, не приписывает мотору battery storage или AC conversion.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L65 complete traction motor: pack energy drives wheels; possible motor-generators"
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "Бортовое зарядное устройство преобразует входящий переменный ток в постоянный для зарядки тяговой батареи.",
+          "canonicalSHA256": "ddad8e4c4ff6aa31bfce7b9498fd2036d10b62009632896212b68e4f53b13f92",
+          "individualGround": "L66 прямо задаёт incoming AC supplied via port converted to DC charging traction battery. Note правильно сообщает charger function, не обобщая этот AC path на любой external DC charging.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L66 full onboard charger: AC via charge port -> DC charging traction battery"
+            }
+          ]
+        }
+      ],
+      "fourFullPromptAnswerNoteVariants": [
+        {
+          "slot": 0,
+          "prompt": "Какой узел управляет потоком энергии от тяговой батареи и регулирует скорость электромотора и его крутящий момент?",
+          "answer": "Силовой электронный контроллер",
+          "note": "Система охлаждения электромобиля поддерживает рабочий температурный диапазон его силовой электроники.",
+          "tripleCanonicalSHA256": "70040dfcc10ae21b1c2b52742f8d2689f93645a75d79915cf9bfbd86282b798b",
+          "grammar": "Лично прочитаны целый prompt, самостоятельная именная подпись «Силовой электронный контроллер» и вся note. Prompt согласует управление «потоком ... регулирует скорость ... и момент»; все четыре подписи оформлены единообразно. Note согласована с собственным компонентом; падеж/род/число не подсказывают ключ. D1 связан с выбором по общим ролям названий, а не грамматикой.",
+          "plausibility": "Правильный реальный EV unit, но единственный controller в ряду практически сообщает искомое «управляет/регулирует» своим названием, D1.",
+          "truthUniqueKey": "L68 буквально подтверждает все three functions и controller label; key0 не взят из metadata.",
+          "noteTruthUsefulness": "L68 называет верный узел именно power electronics controller; L69 говорит, что cooling system maintains proper operating temperature range power electronics. Поэтому у правильного компонента есть дополнительная собственная характеристика — его силовая электроника входит в поддерживаемый охлаждением температурный контур. Это отдельный факт сверх MAIN о motor speed/torque regulation; связь с правильным вариантом следует из совпадающей component class, а не просто общего факта о другом приборе. Конкретные temperatures, liquid coolant или одинаковая конструкция всех авто не утверждаются.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full component context L54-L79; power electronics controller L68, motor L65, battery L71, charger L66, thermal system L69"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L68 names power electronics controller; L69 cooling maintains operating temperature of power electronics"
+            }
+          ]
+        },
+        {
+          "slot": 1,
+          "prompt": "Какой узел управляет потоком энергии от тяговой батареи и регулирует скорость электромотора и его крутящий момент?",
+          "answer": "Тяговая батарея",
+          "note": "Тяговая батарея хранит электричество для использования тяговым электромотором.",
+          "tripleCanonicalSHA256": "dcdf9e0f21ef18dc3cbc5c07d5042f5d642c6ddfe2122e0f9514dbca537cb3c4",
+          "grammar": "Лично прочитаны целый prompt, самостоятельная именная подпись «Тяговая батарея» и вся note. Prompt согласует управление «потоком ... регулирует скорость ... и момент»; все четыре подписи оформлены единообразно. Note согласована с собственным компонентом; падеж/род/число не подсказывают ключ. D1 связан с выбором по общим ролям названий, а не грамматикой.",
+          "plausibility": "Реальный EV unit, тесно связанный с энергией motor, но общая функция батареи — накопление; рядом с единственным controller легко исключается без конкретного EV знания (D1).",
+          "truthUniqueKey": "L71 storage relation не control flow/speed/torque; battery не второй ключ.",
+          "noteTruthUsefulness": "L71 напрямую задаёт storage of electricity for traction motor; note сообщает ровно собственную функцию traction battery, не приписывая ей controller regulation.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full component context L54-L79; power electronics controller L68, motor L65, battery L71, charger L66, thermal system L69"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L71: traction battery pack stores electricity for electric traction motor"
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "prompt": "Какой узел управляет потоком энергии от тяговой батареи и регулирует скорость электромотора и его крутящий момент?",
+          "answer": "Тяговый электродвигатель",
+          "note": "Тяговый электродвигатель использует энергию батареи, чтобы приводить в движение колёса автомобиля.",
+          "tripleCanonicalSHA256": "f0e44cc12dd555dca8f04538802adacaa21e409d7a0f8c7077ec6acfbe9a5eb1",
+          "grammar": "Лично прочитаны целый prompt, самостоятельная именная подпись «Тяговый электродвигатель» и вся note. Prompt согласует управление «потоком ... регулирует скорость ... и момент»; все четыре подписи оформлены единообразно. Note согласована с собственным компонентом; падеж/род/число не подсказывают ключ. D1 связан с выбором по общим ролям названий, а не грамматикой.",
+          "plausibility": "Реальный EV motor, связанный со скоростью и моментом. Однако prompt явно спрашивает управляющий узел, а название motor обозначает исполнительный привод; ряд позволяет выбрать controller общей ролью, D1.",
+          "truthUniqueKey": "L65 motion actuation не определяет отдельную управляющую электронику L68; motor не второй ключ.",
+          "noteTruthUsefulness": "L65 говорит, что traction motor using power from pack drives vehicle wheels. Note сохраняет source-energy и actuation, не приписывает мотору battery storage или AC conversion.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full component context L54-L79; power electronics controller L68, motor L65, battery L71, charger L66, thermal system L69"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L65 complete traction motor: pack energy drives wheels; possible motor-generators"
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "prompt": "Какой узел управляет потоком энергии от тяговой батареи и регулирует скорость электромотора и его крутящий момент?",
+          "answer": "Бортовое зарядное устройство",
+          "note": "Бортовое зарядное устройство преобразует входящий переменный ток в постоянный для зарядки тяговой батареи.",
+          "tripleCanonicalSHA256": "9a62461fc833da10dea2abc6da90f40d3a0386e08ba6d094423c722b8cc4ee5b",
+          "grammar": "Лично прочитаны целый prompt, самостоятельная именная подпись «Бортовое зарядное устройство» и вся note. Prompt согласует управление «потоком ... регулирует скорость ... и момент»; все четыре подписи оформлены единообразно. Note согласована с собственным компонентом; падеж/род/число не подсказывают ключ. D1 связан с выбором по общим ролям названий, а не грамматикой.",
+          "plausibility": "Реальное EV charging device, но само название ограничивает его зарядкой; по сравнению с явно названным controller оно не создаёт необходимого medium-различения управляющих функций, D1.",
+          "truthUniqueKey": "L66 charging conversion не L68 motor-control function; onboard charger не второй ключ.",
+          "noteTruthUsefulness": "L66 прямо задаёт incoming AC supplied via port converted to DC charging traction battery. Note правильно сообщает charger function, не обобщая этот AC path на любой external DC charging.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full component context L54-L79; power electronics controller L68, motor L65, battery L71, charger L66, thermal system L69"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L66 full onboard charger: AC via charge port -> DC charging traction battery"
+            }
+          ]
+        }
+      ],
+      "absoluteLevel": {
+        "frozen": "medium",
+        "judgment": "Узнать конкретную EV функцию controller могло бы быть MEDIUM при содержательных соседних альтернативах. В этом exact ряду внешний к теме взрослый может сопоставить управляющую роль с единственным controller, не зная energy-flow/speed/torque architecture. Поэтому absolute MEDIUM не подтверждён; техническая формулировка prompt и уверенный авторский level не заменяют требуемое знание. Frozen level сохраняется для направленного ремонта."
+      },
+      "correctNoteExtraFact": {
+        "fact": "Силовая электроника контроллера поддерживается системой охлаждения в рабочем температурном диапазоне.",
+        "ground": "L68 называет верный узел именно power electronics controller; L69 говорит, что cooling system maintains proper operating temperature range power electronics. Поэтому у правильного компонента есть дополнительная собственная характеристика — его силовая электроника входит в поддерживаемый охлаждением температурный контур. Это отдельный факт сверх MAIN о motor speed/torque regulation; связь с правильным вариантом следует из совпадающей component class, а не просто общего факта о другом приборе. Конкретные temperatures, liquid coolant или одинаковая конструкция всех авто не утверждаются.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+            "completeOutputPointer": "/originalRecord/payload/output/1/text",
+            "locator": "L68 names power electronics controller; L69 cooling maintains operating temperature of power electronics"
+          }
+        ]
+      },
+      "defects": [
+        {
+          "id": "INITIAL62-D1",
+          "severity": "substantive",
+          "kind": "absolute_medium_not_supported_by_choice_set",
+          "fields": [
+            "prompt",
+            "answers",
+            "prompt_ordered_answers_key"
+          ],
+          "evidence": "Prompt просит узел, который «управляет ... и регулирует»; ряд предлагает контроллер, батарею, электродвигатель и зарядное устройство. Только «Силовой электронный контроллер» по общему смыслу названия относится к управлению; остальные названия очевидно обозначают накопление, привод и зарядку. Для выбора не требуется знать конкретную EV-связь energy-flow/speed/torque: достаточно сопоставить управляет/регулирует с controller. Технические слова о крутящем моменте не делают саму операцию выбора medium.",
+          "requiredDirectedFix": "Сохранить frozen medium/key0/id/topic/order и фактический source-backed key. Содержательно переработать проверяемое различение/ряд так, чтобы узнавание конкретной EV функции или осмысленный вывод был необходим, а единственное общеконтролирующее название не выбиралось среди явно иных функциональных классов. Не ограничиваться косметической заменой слова или удлинением prompt; сохранить уникальность ключа, comparable alternatives и MAIN independence. Не менять frozen difficulty ради PASS.",
+          "sourceBoundary": "AFDC L68 точно подтверждает функцию controller; это фактологическая опора, а не доказательство аудитории/сложности. Содержательный MEDIUM gate оценивается отдельно."
+        }
+      ],
+      "frozen": {
+        "id": "cars-road-transport-ev-inverter",
+        "topicId": "cars-road-transport",
+        "sourceOrder": 62,
+        "difficulty": "medium",
+        "correctIndex": 0
+      }
+    }
+  ],
+  "qualityCredit": 0,
+  "nextStep": "One directed author cycle1 for absolute-medium choice-set D1, then same-reader FINAL on exact revised applied CURRENT and affected dependencies.",
+  "stop": "One assigned INITIAL62 completed. Applied61 terminal HOLD remains unchanged and is not adopted/reopened."
+}
