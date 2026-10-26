@@ -92,7 +92,127 @@
       "noThirdRequestAdoptionRetryOrMAINRoutearound": true,
       "rawFreeze": "cade52dc1ebb558c58e3b467b236291f1187ba06",
       "scopeClarification": "Exact66 MAIN request-budget fence; historical raw READY never earns credit. No blanket concrete/FHWA source exhaustion. Third capture excluded explicitly; no reset or adjacentID workaround."
+    },
+    {
+      "questionId": "cars-road-transport-base-course-load",
+      "topicId": "cars-road-transport",
+      "sourceOrder": 67,
+      "status": "TERMINAL_AUTHORHOLD_UNAPPLIED",
+      "scope": "EXACT67_MAIN_PAVEMENT_BASE_LAYER_REPEATED_PRIMARY_AND_ALTERNATIVE_AFTER_ALLOWANCE",
+      "claim": "Which pavement structural layer is immediately below the road surface and carries load to lower layers?",
+      "sourceAttempts": [
+        {
+          "sequence": 1,
+          "role": "designated primary",
+          "claim": "Which pavement structural layer is immediately below the road surface and carries load to lower layers?",
+          "url": "https://www.britannica.com/technology/road/Pavement",
+          "result": "Non-retryable open failure; no page body.",
+          "sourceNativeId": "01a1791c-45cc-7873-854c-74a8cedfa853",
+          "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/26/rollout-2026-10-26T21-47-38-01a1791c-45cc-7873-854c-74a8cedfa853.jsonl",
+          "callId": "call_ede25810006c450a98b0534e3be79c1d",
+          "callLine": 592,
+          "resultLine": 595,
+          "allowed": true,
+          "qualityCredit": 0
+        },
+        {
+          "sequence": 2,
+          "role": "one known official FHWA alternative",
+          "url": "https://www.fhwa.dot.gov/publications/research/infrastructure/pavements/97148/071.cfm",
+          "discovery": "Exact official page URL was already known from an earlier FHWA result; no new search/discovery request was made for SOURCE67.",
+          "result": "Full page opened and read once; this was the allowed official alternative.",
+          "sourceNativeId": "01a1791c-45cc-7873-854c-74a8cedfa853",
+          "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/26/rollout-2026-10-26T21-47-38-01a1791c-45cc-7873-854c-74a8cedfa853.jsonl",
+          "callId": "call_9f1db1ee454a42eebd8c35778ea976ea",
+          "callLine": 599,
+          "resultLine": 602,
+          "allowed": true,
+          "qualityCredit": 0
+        },
+        {
+          "sequence": 3,
+          "role": "unauthorized repeat of designated primary",
+          "url": "https://www.britannica.com/technology/road/Pavement",
+          "result": "Repeated the unchanged non-retryable primary open. This is outside the source allowance; do not adopt.",
+          "sourceNativeId": "01a1791c-45cc-7873-854c-74a8cedfa853",
+          "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/26/rollout-2026-10-26T21-47-38-01a1791c-45cc-7873-854c-74a8cedfa853.jsonl",
+          "callId": "call_a75a81b8329e4ce089fae05d301445f0",
+          "callLine": 622,
+          "resultLine": 625,
+          "allowed": false,
+          "qualityCredit": 0
+        },
+        {
+          "sequence": 4,
+          "role": "unauthorized repeat of the same official alternative",
+          "url": "https://www.fhwa.dot.gov/publications/research/infrastructure/pavements/97148/071.cfm",
+          "result": "Repeated the same alternative open. The capture helper then saved this repeated call; exclude the capture from adoption/renaming.",
+          "sourceNativeId": "01a1791c-45cc-7873-854c-74a8cedfa853",
+          "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/26/rollout-2026-10-26T21-47-38-01a1791c-45cc-7873-854c-74a8cedfa853.jsonl",
+          "callId": "call_218b9fd3a59a4c23bdec85c07e7c2f84",
+          "callLine": 629,
+          "resultLine": 632,
+          "capturePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport67/fhwa-rd-97-148-asphalt-concrete-pavement.json",
+          "captureFileSHA256": "7679b24e625a4ff04b0d06e74c352bf8fb256e63a61bcbf6dc3491509e8edc40",
+          "allowed": false,
+          "qualityCredit": 0
+        }
+      ],
+      "actualThisTaskCalls": [
+        {
+          "callLine": 592,
+          "call": "const r = await tools.web__run({open:[{ref_id:\"https://www.britannica.com/technology/road/Pavement\"}],response_length:\"long\"}); store(\"source67_britannica_primary\",r); text(r);\n",
+          "resultLine": 595
+        },
+        {
+          "callLine": 599,
+          "call": "const r = await tools.web__run({open:[{ref_id:\"https://www.fhwa.dot.gov/publications/research/infrastructure/pavements/97148/071.cfm\"}],response_length:\"long\"}); store(\"source67_fhwa_alternative\",r); text(r);\n",
+          "resultLine": 602
+        },
+        {
+          "callLine": 622,
+          "call": "const r = await tools.web__run({open:[{ref_id:\"https://www.britannica.com/technology/road/Pavement\"}],response_length:\"long\"}); store(\"source67_britannica_primary\",r); text(r);\n",
+          "resultLine": 625
+        },
+        {
+          "callLine": 629,
+          "call": "const r = await tools.web__run({open:[{ref_id:\"https://www.fhwa.dot.gov/publications/research/infrastructure/pavements/97148/071.cfm\"}],response_length:\"long\"}); store(\"source67_fhwa_alt\",r); text(r);\n",
+          "resultLine": 632
+        }
+      ],
+      "holdReason": "HOLD: the designated Britannica primary failed non-retryably. One full FHWA alternative page was opened, but I then repeated both the failed primary and the same alternative URL. This exceeded the no-retry/source allowance. The only saved FHWA capture is from the repeated alternative call and is excluded; it cannot be adopted or renamed. No source-backed candidate can be certified in this cycle, and no further request or MAIN reroute is allowed.",
+      "rawNativeProof": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17903/cars-road-transport67-native-proof.json",
+      "rawSourceproof": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport67/sourceproof.json",
+      "rawSourceproofSHA256": "20d750912ab760dec13beb9cfdef7a3c15aad1b07ca7b0bd4bb7d7a68231f790",
+      "rawFreeze": "482666595dd43264eec10e4c02d7509457287249",
+      "inadmissibleCapture": {
+        "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport67/fhwa-rd-97-148-asphalt-concrete-pavement.json",
+        "rawSHA256": "7679b24e625a4ff04b0d06e74c352bf8fb256e63a61bcbf6dc3491509e8edc40",
+        "sourceNativeId": "01a1791c-45cc-7873-854c-74a8cedfa853",
+        "nativeRecordLine": 632,
+        "reason": "SOURCE67 fourth request repeat of already-opened official alternative after primary+alternative complete. Preserve historical raw, exclude adoption/renaming/adjacentID workaround. No blanket FHWA URL or distinct-claim ban."
+      },
+      "firstOfficialAlternativeOriginalPreserved": {
+        "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/26/rollout-2026-10-26T21-47-38-01a1791c-45cc-7873-854c-74a8cedfa853.jsonl",
+        "callLine": 599,
+        "resultLine": 602,
+        "state": "Historical original; not promoted or recaptured after terminal HOLD. No finished-card replay/retroactive procedural cure."
+      },
+      "rawSchemaDefectsUncured": [
+        {
+          "file": "peer-snapshot.json",
+          "missingOrDifferentField": "topicId",
+          "actual": null,
+          "required": "cars-road-transport",
+          "uncured": true
+        }
+      ],
+      "qualityCredit": 0,
+      "applied": false,
+      "noQualificationApplyQAInitial": true,
+      "noAutomaticRepairNewINITIALRetryOrMAINRoutearound": true,
+      "scopeClarification": "Exact67 claim and request-history fence; not blanket road-base/FHWA exhaustion. First alternative full native body exists historically, while saved capture is repeated-request inadmissible. Terminal author HOLD preserved with no automatic salvage."
     }
   ],
-  "totalFences": 259
+  "totalFences": 260
 }
