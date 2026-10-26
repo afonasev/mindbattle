@@ -4,6 +4,30 @@ C=pathlib.Path(__file__).resolve().parents[4]
 P=pathlib.Path('/Users/eaafonasev/Projects/mindbattle/planning')
 D=pathlib.Path(__file__).parent
 O='01a176d6-b811-76d2-9ba1-bec22746198a'
+def alias_source26_cycle1_canonical_readiness(candidate,sp,ps,R):
+ """Expose explicit same-author readiness/hash correction; exact body unchanged."""
+ R=pathlib.Path(R)
+ if R!=D/'source-cars-road-transport26-complete-cycle1':return
+ import copy
+ ap=D/'source26-cycle1-canonical-readiness-addendum/metadata.json';a=read(ap)
+ assert a['sourceNativeId']==candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']=='01a176e9-3c5c-71a3-9841-924de8974519'
+ assert a['cycle']==candidate['cycle']==sp['cycle']==ps['cycle']==1 and a['sourceOrder']==26
+ assert a['topicId']==candidate['topicId']==sp['topicId']==ps['topicId']=='cars-road-transport'
+ for b in a['originalRawFileSHA256BeforeAfter']:
+  p=D/b['path'];assert p.parent==R and raw(p)==b['before']==b['after']
+ e=candidate['entries'][0];old=read(D/'source-cars-road-transport26-cycle1/candidate.json')['entries'][0]
+ assert e['sourceOrder']==26 and e['proposedCard']==old['proposedCard'] and a['fullValueProposedCardUnchangedFromSoleCycle1'] is True
+ canonical=sha(e['proposedCard']);unsorted=hashlib.sha256(json.dumps(e['proposedCard'],ensure_ascii=False,separators=(',',':')).encode()).hexdigest()
+ assert e['afterHash']==old['afterHash']==unsorted==a['hashCorrection']['oldInsertionOrderCompactSHA256']
+ assert canonical==a['hashCorrection']['correctSortedCanonicalSHA256']
+ assert a['finalStatus']=='READY_FOR_SAME_READER_FINAL' and a['readinessJudgment']
+ expected=copy.deepcopy(e);assert expected['status']=='HOLD';expected.update(status=a['finalStatus'],afterHash=canonical)
+ assert a['amendedCandidateEntry']==expected
+ se=copy.deepcopy(sp['entries'][0]);assert se['status']=='HOLD';se['status']=a['finalStatus']
+ assert a['amendedSourceproofEntry']==se
+ candidate['entries'][0]=copy.deepcopy(expected);sp['entries'][0]=se
+ proof={'authorAddendum':str(ap),'addendumSHA256':raw(ap),'rawFreeze':a['originalRawFreeze'],'originalUnsortedHash':unsorted,'canonicalHash':canonical,'sameProposedCardValue':True,'originalTechnicalHOLDAndRootConstraintErrorUncured':True,'qualityCredit':0,'operation':'Only explicitly amended readiness and canonical card hash of identical body. All original raw, literal groups, variant judgments, source contexts and peers unchanged.'}
+ candidate['technicalSource26ReadinessCorrection']=proof;sp['technicalSource26ReadinessCorrection']=proof;ps['technicalSource26ReadinessCorrection']=proof
 def alias_source23_cycle1_self_preimage(candidate,sp,ps,R):
  """Exact same-author addendum for one redundant stale self row; raw untouched."""
  R=pathlib.Path(R)
