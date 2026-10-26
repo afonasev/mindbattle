@@ -1,0 +1,63 @@
+{
+  "owner": "01a177ff-70f4-7290-aab1-98ffe793463a",
+  "targetedKnownFailures": [
+    {
+      "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/26/rollout-2026-10-26T16-36-31-01a177ff-70f4-7290-aab1-98ffe793463a.jsonl",
+      "callLine": 488,
+      "originalCall": {
+        "timestamp": "2026-10-26T11:55:15.194Z",
+        "ordinal": 487,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_0a7910bd70621939016adf3f9f99b081919a0a55c292247c39",
+          "status": "completed",
+          "call_id": "call_a7e061d201b24c269fe6e582708c0501",
+          "name": "exec",
+          "input": "text((await tools.exec_command({cmd:\"sed -n '128,156p' /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a177ff/bind-current-receipt.py && rg --files /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a177db | rg '(cycle1.*task|prepare.*cycle|fix.*py)'\",\"max_output_tokens\":3000})).output);\ntext((await tools.exec_command({cmd:\"python3 -B /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a177ff/bind-current-receipt.py /Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a177ff/case-cars-road-transport40-initial-fix.json --audit-only\",\"max_output_tokens\":2500})).output);\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a17804-be0c-70f0-9b9f-a41d70f91f9c",
+            "create_time": 1793015711.622346
+          }
+        }
+      },
+      "resultLine": 492,
+      "originalResult": {
+        "timestamp": "2026-10-26T11:55:15.645Z",
+        "ordinal": 491,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call_output",
+          "id": "ctco_01a17810-973d-70b1-905d-38fd43296613",
+          "call_id": "call_a7e061d201b24c269fe6e582708c0501",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Script completed\nWall time 0.2 seconds\nOutput:\n"
+            },
+            {
+              "type": "input_text",
+              "text": " if e['sourceOrder'] in acceptedOrders:\n  assert e['status']=='PASS' and not e['defects'];author=authors[i];accepted.append({'questionId':i,'cardCanonicalSha256':sha(q),'authorNativeId':author['id'],'authorReceipt':author['packet']+'/sourceproof.json','authorFreeze':case['sourceFreeze'],'readerNativeId':case['readerNativeId'],'independentReceipt':str(rp.relative_to(C)),'readerReceiptRawSHA256':raw(rp),'coordinatorDecision':case['coordinatorDecision']})\nif '--verify-fix-only' in sys.argv:\n assert not acceptedOrders and not accepted and all(e['status']=='FIX' and e['defects'] for e in r['entries'])\nelif '--verify-hold-only' in sys.argv:\n assert not acceptedOrders and not accepted and all(e['status']=='HOLD' and e['defects'] for e in r['entries'])\nelse:\n assert len(accepted)==len(acceptedOrders)>0\naudit={'root':compacted(O),'SOURCE':{a['id']:compacted(a['id']) for a in authors.values()},'OTHER':compacted(case['readerNativeId'])};assert audit['root']<2\nreport={**case['reportBase'],'scope':case['scope'],'acceptedOrders':case['acceptedOrders'],'verified':{'currentCards':len(r['entries']),'literalGroups':6*len(r['entries']),'wholeVariants':4*len(r['entries']),'acceptedCards':len(accepted),'actualPeers':len(peers['actualCurrentPeers']),'bilateralMainPairs':len(pairEvidence)},'QA':{'path':case['qaPath'],'pass':19,'fail':0,'pending':0,'testedCatalogCommit':case['testedCatalogCommit'],'reportCommit':case['qaReportCommit']},'preleaseGuard':True,'sourceFreezeLineage':sourceLineage,'actualCompactionAudit':audit,'ownIntakeCURRENT':1132}\nif '--verify-only' in sys.argv or '--verify-fix-only' in sys.argv or '--verify-hold-only' in sys.argv:\n print(json.dumps({'verified':report['verified'],'acceptedOrders':case['acceptedOrders'],'audit':audit,'mutations':False}));raise SystemExit(0)\nm=load('certificate',D/'certification-common.py');m.O=O;m.P=P;guard=load('guard',D.parent/'coordinator-01a13f31/planning-certification-guard.py')\nm._preleasePlanningIndex=raw(pathlib.Path(m.h.git(P,'rev-parse','--path-format=absolute','--git-path','index')))\ncc=guard.certify_preleased(m,accepted,report,case['expectedCURRENT'],case['wave'],C/case['reportPath'],[p for p in R.rglob('*') if p.is_file()]+[pathlib.Path(__file__),casePath],case['testedCatalogCommit'])\nprojectionIndex=pathlib.Path(m.h.git(P,'rev-parse','--path-format=absolute','--git-path','index'));expectedProjectionIndex=raw(projectionIndex)\nwith m.flow.locked():m.flow.lease('acquire','planning',O)\ntry:\n assert raw(projectionIndex)==expectedProjectionIndex\n cp=rd(P/'openspec/changes/question-quality-future-waves/current-checkpoint.json');n=len(cp['currentEligibleCompletedIds']);waves=[w['currentSourceEditorialCards'] for w in cp['waves']]\n sp=P/'evidence/question-revision-process-v2/coordinator-state.json';st=rd(sp);st['waveCURRENT']=waves;wr(sp,st)\n gp=P/'evidence/question-revision-process-v2/active-full2000-goal-01a1593a.json';g=rd(gp);g.update(CURRENT=n,remaining=2000-n,newlyCertified=n-1132,waveCURRENT=waves,latestCodeCommit=cc,latestCertification=case['reportPath']);wr(gp,g)\n print('projection',m.h.save(P,'refs/heads/codex/question-revision-resume-20261014',[str(p.relative_to(P)) for p in [sp,gp]],f'Record fullgoal CURRENT{n} delta{n-1132} exact accepted subset',expectedProjectionIndex))\nfinally:\n with m.flow.locked():m.flow.lease('release','planning',O)\n/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a177db/prepare-directed-source-fix.py\n"
+            },
+            {
+              "type": "input_text",
+              "text": "Traceback (most recent call last):\n  File \"/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a177ff/bind-current-receipt.py\", line 135, in <module>\n    assert len(accepted)==len(acceptedOrders)>0\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+            }
+          ],
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a17804-be0c-70f0-9b9f-a41d70f91f9c",
+            "create_time": 1793015715.645216
+          }
+        },
+        "metadata": {
+          "client_authored": false,
+          "fallback_token_limit_override": 12000
+        }
+      },
+      "reason": "Coordinator used unsupported --audit-only option for FIX; assertion rejected empty accepted set. Correct --verify-fix-only subsequently PASS, no mutations.",
+      "uncured": true
+    }
+  ],
+  "noQualityCredit": true,
+  "fullOutputAudit": false
+}
