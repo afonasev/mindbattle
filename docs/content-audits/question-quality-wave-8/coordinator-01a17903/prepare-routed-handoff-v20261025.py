@@ -28,7 +28,8 @@ if '--inventory-only' in sys.argv:
   e=r['entries'][0];receipts[str(path)]={'rawSHA256':m.raw(path),'stage':e['stage'],'status':e['status'],'sourceOrder':e['sourceOrder'],'currentCardCanonicalSHA256':e['currentCardCanonicalSHA256']}
  assert len(receipts)>=reader.get('ownReceiptCount',0)
  reader['ownReceiptCount']=len(receipts)
- retired=list(m.read(D/'retained-reader-handoff.json').get('retiredReaderPointers',[]))
+ current_reader_handoff=D/'retained-reader-handoff.json'
+ retired=list((m.read(current_reader_handoff) if current_reader_handoff.exists() else seed).get('retiredReaderPointers',[]))
  for p in D.glob('reader*-retirement*.json'):
   if not any(v['path']==str(p) for v in retired):retired.append({'path':str(p),'rawSHA256':m.raw(p)})
  rp=D/'retained-reader-handoff.json';m.write(rp,{'owner':m.O,'retainedIdleReader':dict(reader),'readerOwnReceiptCount':len(receipts),'readerOwnReceipts':receipts,'inheritedImmutable':inherited_reader,'retiredReaderPointers':retired,'scope':'Current native reader exact receipt inventory only; closed retired histories stay pointers, no repeated content/bootstrap audit.'})
