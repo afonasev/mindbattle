@@ -30,7 +30,7 @@ if not unapplied_proposal:assert e['proposedCard']==q and e['afterHash']==e['bef
 assert ca['cycle']==sp['cycle']==cycle
 if cycle:assert initial['currentCard']==q and initial['currentCardCanonicalSHA256']==m.sha(q)
 entry=sp['entries'][0];assert entry['status']=='HOLD' and entry['id']==q['id']
-variants=entry['fourFullPromptAnswerNoteAssessments'];assert len(variants)==4
+variants=entry.get('fourFullPromptAnswerNoteAssessments',[])
 variant_target=e['proposedCard'] if unapplied_proposal else q
 variant_gaps=[]
 for v in variants:
@@ -39,6 +39,10 @@ for v in variants:
  if (unapplied_proposal or cycle) and not exact:variant_gaps.append(v['slot'])
  else:assert exact
 defects=[]
+if len(variants)!=4:
+ defects.append({'file':'sourceproof.json','missingOrDifferentField':'fourFullPromptAnswerNoteAssessments','actualCount':len(variants),'requiredForQualification':4,'uncured':True})
+if len(entry.get('literalGroups',[]))!=6:
+ defects.append({'file':'sourceproof.json','missingOrDifferentField':'literalGroups','actualCount':len(entry.get('literalGroups',[])),'requiredForQualification':6,'uncured':True})
 if unapplied_proposal:
  binding=ps.get('inventoryBinding',{})
  if isinstance(binding,dict) and 'sha256' not in binding and 'fileSHA256' not in binding:
