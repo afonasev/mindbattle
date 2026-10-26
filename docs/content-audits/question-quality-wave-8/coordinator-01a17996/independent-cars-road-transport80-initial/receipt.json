@@ -1,0 +1,293 @@
+{
+  "readerNativeId": "01a1796b-aa5a-7c12-9b58-0b8466532c78",
+  "sourceNativeId": "01a179bc-4270-7833-972f-6a5573b33b05",
+  "topicId": "cars-road-transport",
+  "cycle": 0,
+  "stage": "INITIAL",
+  "processRevision": "2026-10-25",
+  "entries": [
+    {
+      "id": "cars-road-transport-tire-valve-air",
+      "topicId": "cars-road-transport",
+      "sourceOrder": 80,
+      "stage": "INITIAL",
+      "currentCard": {
+        "id": "cars-road-transport-tire-valve-air",
+        "difficulty": "easy",
+        "prompt": "Что у шины нажимают, если давление оказалось выше рекомендованного?",
+        "answers": [
+          {
+            "text": "Протектор",
+            "note": "Протектор обеспечивает сцепление; NHTSA рекомендует заменить шину, когда его износ достигает 2/32 дюйма."
+          },
+          {
+            "text": "Шток вентиля",
+            "note": "К штоку мягко прижимают край манометра, чтобы медленно выпустить лишний воздух до рекомендованного давления."
+          },
+          {
+            "text": "Боковина шины",
+            "note": "На боковине легковых шин, продаваемых в США, размещают оценки износостойкости, сцепления и сопротивления нагреву."
+          },
+          {
+            "text": "Обод колеса",
+            "note": "NHTSA выпускает и применяет федеральные стандарты безопасности для ободов колёс и шин."
+          }
+        ],
+        "correctIndex": 1,
+        "explanation": "При слишком высоком давлении мягко прижимают край манометра к штоку вентиля и медленно выпускают воздух. Когда давление достигнет нормы производителя, выпуск прекращают.",
+        "source": {
+          "title": "Tire Safety Ratings and Awareness | TireWise | NHTSA",
+          "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+          "verifiedAt": "2026-10-27"
+        }
+      },
+      "currentCardCanonicalSHA256": "08b1e76f04f13420774007171cec1117ae04215334641139eeea8737892c9382",
+      "status": "FIX",
+      "sixLiteralCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Что у шины нажимают, если давление оказалось выше рекомендованного?",
+            "answers": [
+              "Протектор",
+              "Шток вентиля",
+              "Боковина шины",
+              "Обод колеса"
+            ],
+            "correctIndex": 1
+          },
+          "canonicalSHA256": "8502cb4c3e30cf2fecf06f6ebd84964770f424fe081294d3e96006a603a75eed",
+          "individualGround": "L236 прямо называет нажатие края манометра на valve stem для медленного выпуска избыточного воздуха. Четыре реальные детали шины/колеса сопоставимы; поверхность протектора, боковина и обод не являются названным клапаном выпуска. Фактический ключ1 подтверждён. Но ситуация завышенного давления не сохраняет квалификацию L239 холодное измерение или компенсация нагрева — COLD_PRESSURE_QUALIFIER_OMITTED.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+              "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+              "locator": "Maintaining Proper Tire Pressure L232-L241, especially L234/L236/L239",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text"
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "При слишком высоком давлении мягко прижимают край манометра к штоку вентиля и медленно выпускают воздух. Когда давление достигнет нормы производителя, выпуск прекращают.",
+          "canonicalSHA256": "2edec70b96d1130a1b4ceaaf2918efee9af09f423d378c7f47d0380fc89ccff1",
+          "individualGround": "Действие манометром и медленный выпуск из L236 переданы верно, целевая норма производителя из L234. Однако инструкция прекращать выпуск при норме без холодного условия/поправки теряет обязательный контекст L239, что требует FIX.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+              "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+              "locator": "Maintaining Proper Tire Pressure L232-L241, especially L234/L236/L239",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text"
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Протектор обеспечивает сцепление; NHTSA рекомендует заменить шину, когда его износ достигает 2/32 дюйма.",
+          "canonicalSHA256": "aa4c654b86a53ef8631c7433c4e4768909b2cb8c0f55f855d0430b6a3b39020b",
+          "individualGround": "L212 подтверждает сцепление и рекомендацию заменить именно шину при износе протектора до2/32дюйма. В справке объект шина указан явно, NHTSA атрибуция сохранена; полезный собственный факт протектора.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+              "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+              "locator": "Tire Tread complete L210-L215",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text"
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "К штоку мягко прижимают край манометра, чтобы медленно выпустить лишний воздух до рекомендованного давления.",
+          "canonicalSHA256": "20df9e4279c9d233276d03f65f488f00735ba717c3f046c3c413d5a46b907ae6",
+          "individualGround": "Инструмент край манометра и медленное действие прямо в L236, добавляют конкретный способ сверх вопроса что нажимают и ключа шток. Но до рекомендованного давления должно читаться в контексте L239, которого prompt не задаёт. Требуется согласование условия, не обнуление верного инструментального факта.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+              "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+              "locator": "Maintaining Proper Tire Pressure L232-L241, especially L234/L236/L239",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text"
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "На боковине легковых шин, продаваемых в США, размещают оценки износостойкости, сцепления и сопротивления нагреву.",
+          "canonicalSHA256": "49e6016cd03c42ed8487b8e0a4a47756dd0654638c45c49a565570942fe4fa84",
+          "individualGround": "L142 говорит оценки на боковине passenger vehicle tire sold in US, L145/L158/L168 различают их значения. Справка точно сохраняет рынок США и три вида оценок; полезное собственное содержание маркировки боковины.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+              "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+              "locator": "Buying L140-L168",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text"
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "NHTSA выпускает и применяет федеральные стандарты безопасности для ободов колёс и шин.",
+          "canonicalSHA256": "6ef53e0b832a416606af87507bbf1a17cef1267a9f1a21edaee5533147a26895",
+          "individualGround": "L329 прямо называет NHTSA issues and enforces federal safety standards for tires, rims and TPMS. Справка содержит конкретную проверяемую связь обод–федеральные стандарты–NHTSA; это собственный регуляторный факт обода, не пустой ярлык и не приписывание ему свойств вентиля. Не устанавливает всех подробностей или универсальную юрисдикцию.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+              "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+              "locator": "NHTSA In Action L326-L329",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text"
+            }
+          ]
+        }
+      ],
+      "fourFullPromptAnswerNoteVariants": [
+        {
+          "slot": 0,
+          "prompt": "Что у шины нажимают, если давление оказалось выше рекомендованного?",
+          "answer": "Протектор",
+          "note": "Протектор обеспечивает сцепление; NHTSA рекомендует заменить шину, когда его износ достигает 2/32 дюйма.",
+          "tripleCanonicalSHA256": "9edc3113c68b85a9eda573c4ba9e5c30f460eb535d05431e28a988e2dab9c8c3",
+          "grammar": "Протектор — самостоятельная именная подпись; вопрос что нажимают допускает такую форму без подсказки рода.",
+          "plausibility": "Реальная доступная поверхность шины, связанная с её работой; неспециалист может смешивать части. Нажатие протектора не открывает указанный источник выпуска.",
+          "truthUniqueKey": "L236 задаёт шток, L212 — сцепление протектора; второй ключ не возникает.",
+          "noteTruthUsefulness": "Сцепление и2/32 — собственные подтверждённые факты протектора, не описание правильного вентиля.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+              "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+              "locator": "Maintaining Proper Tire Pressure L232-L241, especially L234/L236/L239",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+              "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+              "locator": "Tire Tread complete L210-L215",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text"
+            }
+          ]
+        },
+        {
+          "slot": 1,
+          "prompt": "Что у шины нажимают, если давление оказалось выше рекомендованного?",
+          "answer": "Шток вентиля",
+          "note": "К штоку мягко прижимают край манометра, чтобы медленно выпустить лишний воздух до рекомендованного давления.",
+          "tripleCanonicalSHA256": "c1f8f7ccacf7a822c6bab39d315e9faad43d49ba1c358d321561512b5b425df8",
+          "grammar": "Шток вентиля — правильная именная подпись; к штоку прижимают край манометра согласовано и понятно.",
+          "plausibility": "Реальный малый элемент колеса для воздействия на воздух, сопоставленный с остальными частями; функциональное знание, не грамматическая подсказка.",
+          "truthUniqueKey": "L236 прямо подтверждает единственный ключ. Но полная конструкция должна включать условие холодного/скорректированного измерения изL239, поэтому пока FIX.",
+          "noteTruthUsefulness": "Край манометра и медленный выпуск добавляют собственный факт метода к названию элемента. Целевая норма требует уточнения температурного условия.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+              "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+              "locator": "Maintaining Proper Tire Pressure L232-L241, especially L234/L236/L239",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text"
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "prompt": "Что у шины нажимают, если давление оказалось выше рекомендованного?",
+          "answer": "Боковина шины",
+          "note": "На боковине легковых шин, продаваемых в США, размещают оценки износостойкости, сцепления и сопротивления нагреву.",
+          "tripleCanonicalSHA256": "66beb66059e72362b70dab4332e5269f9d46e7dc2ebc13b12da353e168ac070f",
+          "grammar": "Боковина шины — самостоятельная подпись; женский род допустим при вопросе что как названии детали.",
+          "plausibility": "Реальная гибкая часть шины; для незнающего давление может ассоциироваться с деформацией стенки, что делает вариант тематическим.",
+          "truthUniqueKey": "L142 определяет маркировку боковины, а L236 требует воздействовать на шток; боковина не указана как устройство выпуска.",
+          "noteTruthUsefulness": "Три оценки и рынок США — конкретные самостоятельные свойства маркировки этого варианта.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+              "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+              "locator": "Maintaining Proper Tire Pressure L232-L241, especially L234/L236/L239",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+              "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+              "locator": "Buying L140-L168",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text"
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "prompt": "Что у шины нажимают, если давление оказалось выше рекомендованного?",
+          "answer": "Обод колеса",
+          "note": "NHTSA выпускает и применяет федеральные стандарты безопасности для ободов колёс и шин.",
+          "tripleCanonicalSHA256": "ec0706703ca8ee7816a6343f4b16ab3af68ff5109762e1e24265db207b80f5ec",
+          "grammar": "Обод колеса — самостоятельная именная подпись того же уровня конкретности.",
+          "plausibility": "Реальная часть колёсного узла у посадки шины, а не выдуманная сущность. От вентиля отличается жёсткой конструкцией; это исключается знанием устройства.",
+          "truthUniqueKey": "Именно шток указан вL236; L329 касается стандартов обода и не создаёт второго способа регулировать воздух.",
+          "noteTruthUsefulness": "Справка сообщает собственный проверенный факт о нормативном регулировании обода конкретным ведомством NHTSA. Скромная познавательная ценность, но не пустой шаблон вида другой элемент.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+              "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+              "locator": "Maintaining Proper Tire Pressure L232-L241, especially L234/L236/L239",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+              "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+              "locator": "NHTSA In Action L326-L329",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text"
+            }
+          ]
+        }
+      ],
+      "absoluteLevel": {
+        "frozen": "easy",
+        "assessed": "easy",
+        "ground": "Опознание вентиля как места выпуска воздуха — бытовое знание широкой взрослой группы водителей и владельцев велосипедов/автомобилей; знание конструкции внутренних клапанов, норм NHTSA или технологии измерений не требуется. Уточнение холодного условия сохраняет простой вопрос о названии детали, не требует вычислений. Остальные названия — реальные части того же колеса, ключ не выделен грамматикой. Факт источника и EASY не устраняют дефект температурного условия."
+      },
+      "correctNoteExtraFact": {
+        "fact": "К штоку мягко прижимают край манометра, чтобы медленно выпускать воздух.",
+        "ground": "Prompt/key спрашивают что нажимают; note добавляет конкретный инструмент и способ/темп воздействия именно на шток из L236. Содержательная добавка подтверждена, но контекст нормы нуждается в уточнении L239.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+            "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+            "locator": "Maintaining Proper Tire Pressure L232-L241, especially L234/L236/L239",
+            "completeOutputPointer": "/originalRecord/payload/output/1/text"
+          }
+        ]
+      },
+      "defects": [
+        {
+          "id": "COLD_PRESSURE_QUALIFIER_OMITTED",
+          "field": "prompt / explanation / answers[1].note context",
+          "severity": "material_source_qualifier",
+          "finding": "Карточка предлагает выпускать воздух при давлении выше рекомендованного и прекратить на норме производителя без условия холодной шины или поправки на нагрев. Полный NHTSA L239 прямо говорит, что рекомендованное давление относится к холодной шине (не ездила минимум3часа); точное сравнение требует холодного измерения либо компенсации дополнительного давления тёплой шины. В текущем виде нагрев после поездки можно принять за превышение нормы и спустить до холодного значения.",
+          "requiredFix": "Ограничить ситуацию достоверным превышением давления в холодной шине либо явно сохранить поправку на нагрев. Согласовать prompt, correct note и explanation так, чтобы не предлагать спускать тёплую шину до холодной нормы. Достаточно адресного уточнения условия, без нового MAIN/новых источников/ослабления frozen EASY и key1.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17903/source-cars-road-transport78/primary-nhtsa-tires.json",
+              "url": "https://www.nhtsa.gov/vehicle-safety/tires",
+              "locator": "Maintaining Proper Tire Pressure L232-L241, especially L234/L236/L239",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text"
+            }
+          ],
+          "recheckScope": "Изменённые группы и все затронутые полные конструкции; точное значение нормы, холодное условие/нагрев, unique key/EASY и полезный дополнительный факт правильной справки. Один directed fix-cycle, FINAL того же reader."
+        }
+      ],
+      "frozen": {
+        "id": "cars-road-transport-tire-valve-air",
+        "topicId": "cars-road-transport",
+        "sourceOrder": 80,
+        "difficulty": "easy",
+        "correctIndex": 1
+      }
+    }
+  ],
+  "qualityCredit": 0,
+  "proceduralCaveat": {
+    "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17996/source80-read-scope-deviation.json",
+    "rawSHA256": "e28e1607d94b956acbb3d407768859fdb66a003eb8723ea5347ce5589f4d1b7b",
+    "status": "UNCURED",
+    "effect": "Раскрытый авторский широкий rg/усечённый вывод сохранён отдельно. Содержательный verdict и QA не исправляют его и не устанавливают procedural compliance."
+  },
+  "limitations": [
+    "Только exact80; исторические HOLD/FAIL/попытки и procedural caveats не сброшены.",
+    "Один направленный fix-cycle максимум, FINAL того же reader; новые INITIAL/cycle2 не разрешены.",
+    "Зачёт CURRENT и интеграция остаются за координатором."
+  ]
+}
