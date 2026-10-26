@@ -1,0 +1,271 @@
+{
+  "readerNativeId": "01a1767d-df16-78f0-8fbb-3e824a4f82d2",
+  "processRevision": "2026-10-25",
+  "entries": [
+    {
+      "id": "cars-road-transport-limited-slip-bias",
+      "topicId": "cars-road-transport",
+      "sourceOrder": 22,
+      "stage": "INITIAL",
+      "cycle": 0,
+      "currentCard": {
+        "id": "cars-road-transport-limited-slip-bias",
+        "difficulty": "hard",
+        "prompt": "Для колёс одной ведущей оси нужна схема, которая допускает разную скорость колёс в повороте, но при потере сцепления смещает часть момента к колесу с лучшим сцеплением, не обеспечивая жёсткую полную блокировку. Какой тип дифференциала соответствует этому принципу?",
+        "answers": [
+          {
+            "text": "Самоблокирующийся дифференциал",
+            "note": "К таким конструкциям относятся, например, фрикционный Eaton Posi и винтовой Detroit Truetrac."
+          },
+          {
+            "text": "Открытый дифференциал",
+            "note": "Открытый дифференциал, как и самоблокирующийся, допускает разную скорость колёс при повороте."
+          },
+          {
+            "text": "Блокируемый дифференциал",
+            "note": "При включении блокировки полуоси механически связываются и колёса принудительно вращаются с одинаковой скоростью."
+          },
+          {
+            "text": "Межосевой дифференциал",
+            "note": "На дороге с хорошим сцеплением дифференциал между осями помогает избежать закручивания трансмиссии."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "Это самоблокирующийся дифференциал (limited-slip differential): он ограничивает пробуксовку менее цепкого колеса и может смещать часть момента к колесу с большим сцеплением. В отличие от открытого дифференциала, момент между колёсами здесь может быть неравным; при этом самоблокирующийся дифференциал не обеспечивает полной жёсткой блокировки. Такое смещение момента называют torque bias.",
+        "source": {
+          "title": "Eaton — Limited Slip Differentials",
+          "url": "https://www.eaton.com/gb/en-gb/products/differentials-traction-control/limited-slip-differentials.html",
+          "verifiedAt": "2026-10-26"
+        }
+      },
+      "currentCardCanonicalSHA256": "9efcbe398c03cf0337ead8957c3f883ae90d2677ab79b84c72e8a9da4a8b757f",
+      "status": "FIX",
+      "sixLiteralCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Для колёс одной ведущей оси нужна схема, которая допускает разную скорость колёс в повороте, но при потере сцепления смещает часть момента к колесу с лучшим сцеплением, не обеспечивая жёсткую полную блокировку. Какой тип дифференциала соответствует этому принципу?",
+            "answers": [
+              "Самоблокирующийся дифференциал",
+              "Открытый дифференциал",
+              "Блокируемый дифференциал",
+              "Межосевой дифференциал"
+            ],
+            "correctIndex": 0
+          },
+          "canonicalSHA256": "183ed7463fd10abe3626d0ab026c72e926092210905df6a5d54abc94ee610d0f",
+          "individualGround": "Eaton LSD L82–83 поддерживает смещение части момента к более цепкому колесу и разные скорости; L87/L102 — отсутствие полной жёсткой блокировки. Указание одной ведущей оси отличает межосевой тип; полная блокировка в Eaton locker L86 отличается от описанного ограничения slip. Поэтому ключ0 единственен среди четырёх по совокупности условий.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-limited-slip-capture.json",
+              "locator": "L79–102"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-locking-diff-capture.json",
+              "locator": "L85–91"
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "Это самоблокирующийся дифференциал (limited-slip differential): он ограничивает пробуксовку менее цепкого колеса и может смещать часть момента к колесу с большим сцеплением. В отличие от открытого дифференциала, момент между колёсами здесь может быть неравным; при этом самоблокирующийся дифференциал не обеспечивает полной жёсткой блокировки. Такое смещение момента называют torque bias.",
+          "canonicalSHA256": "7b389eec395518679ff923e1b402be2c1bacba5385b10519747477a63817977c",
+          "individualGround": "Три предложения прямо называют LSD и torque bias, а Eaton L82–83/L102 поддерживает его собственную работу и неполную блокировку. Но вставка в отличие от открытого дифференциала возвращает закрытый equal-torque claim21 (D1). Это ограничение допустимости retained claim, а не новое утверждение о ложности Eaton или переоценка21.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-limited-slip-capture.json",
+              "locator": "L82–102"
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "К таким конструкциям относятся, например, фрикционный Eaton Posi и винтовой Detroit Truetrac.",
+          "canonicalSHA256": "af537ff0f896697cde61182e410b7a70daf33461bcb32c9e40656ddbcd34af3b",
+          "individualGround": "Eaton L84/L94–98 именует Eaton Posi как clutch-pack и Detroit Truetrac как helical-gear. Фрикционный/винтовой — корректное описание двух примеров собственно LSD. Это дополнительный конкретный факт за пределами prompt/key.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-limited-slip-capture.json",
+              "locator": "L84; L94–98"
+            }
+          ]
+        },
+        {
+          "group": "note1",
+          "literal": "Открытый дифференциал, как и самоблокирующийся, допускает разную скорость колёс при повороте.",
+          "canonicalSHA256": "3b3885e648f274d5d0e20a97bf2cca5fe6652a60aecbc7afd2f6f16005749542",
+          "individualGround": "Eaton L83 отдельно говорит, что LSD, подобно открытому, допускает разные скорости колёс. В note нет равного момента, льда, холостого вращения одного колеса или нового вывода об исчерпанном claim21. Сходство по повороту — отдельное допустимое отношение.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-limited-slip-capture.json",
+              "locator": "L83"
+            }
+          ]
+        },
+        {
+          "group": "note2",
+          "literal": "При включении блокировки полуоси механически связываются и колёса принудительно вращаются с одинаковой скоростью.",
+          "canonicalSHA256": "ed18d4b6ba20e1ca1f27e37e7a84fe8c5725504c1aeb59f4db22101a28bc5e46",
+          "individualGround": "Eaton locking L86 описывает механическую связь полуосей и одинаковую скорость колёс при включённой блокировке. Ограничение при включении не приписывает постоянный lock всем locker-режимам; note относится к своему варианту.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-locking-diff-capture.json",
+              "locator": "L86–96"
+            }
+          ]
+        },
+        {
+          "group": "note3",
+          "literal": "На дороге с хорошим сцеплением дифференциал между осями помогает избежать закручивания трансмиссии.",
+          "canonicalSHA256": "7322252a24eb51b9f7531c8654b2fe89208f87a065d63f7523e76dd422a7fcdd",
+          "individualGround": "Сохранённая AWD статья L160 объясняет применение дифференциала между осями на хорошем сцеплении для предотвращения windup. Справка самостоятельна и относится к межосевому устройству, а не удержанному vectoring/yaw claim.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport13/all-wheel-drive-capture.json",
+              "locator": "L159–163"
+            }
+          ]
+        }
+      ],
+      "fourFullPromptAnswerNoteVariants": [
+        {
+          "slot": 0,
+          "prompt": "Для колёс одной ведущей оси нужна схема, которая допускает разную скорость колёс в повороте, но при потере сцепления смещает часть момента к колесу с лучшим сцеплением, не обеспечивая жёсткую полную блокировку. Какой тип дифференциала соответствует этому принципу?",
+          "answer": "Самоблокирующийся дифференциал",
+          "note": "К таким конструкциям относятся, например, фрикционный Eaton Posi и винтовой Detroit Truetrac.",
+          "tripleCanonicalSHA256": "7a379dfa9efbd4f19b0a289dfcc1316bf460a4ff3c7b0ef37ac5874263be7331",
+          "grammar": "Тип дифференциала последовательно представлен самостоятельным именительным названием; prompt и note читаются как законченная конструкция, падеж/род не подсказывают ключ.",
+          "plausibility": "Настоящий межколёсный тип, удовлетворяющий и разной скорости, и torque bias без 100% lock.",
+          "truthUniqueKey": "Единственный ключ по собственному LSD описанию Eaton L82–83/L102.",
+          "noteTruthUsefulness": "Eaton L84/L94–98 именует Eaton Posi как clutch-pack и Detroit Truetrac как helical-gear. Фрикционный/винтовой — корректное описание двух примеров собственно LSD. Это дополнительный конкретный факт за пределами prompt/key.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-limited-slip-capture.json",
+              "locator": "L84; L94–98"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-limited-slip-capture.json",
+              "locator": "L79–102"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-locking-diff-capture.json",
+              "locator": "L85–91"
+            }
+          ]
+        },
+        {
+          "slot": 1,
+          "prompt": "Для колёс одной ведущей оси нужна схема, которая допускает разную скорость колёс в повороте, но при потере сцепления смещает часть момента к колесу с лучшим сцеплением, не обеспечивая жёсткую полную блокировку. Какой тип дифференциала соответствует этому принципу?",
+          "answer": "Открытый дифференциал",
+          "note": "Открытый дифференциал, как и самоблокирующийся, допускает разную скорость колёс при повороте.",
+          "tripleCanonicalSHA256": "f5ce7f4f3429fbf136f72d8807ea5ad3ca99036ec7ba4788049c9aebe56953ad",
+          "grammar": "Тип дифференциала последовательно представлен самостоятельным именительным названием; prompt и note читаются как законченная конструкция, падеж/род не подсказывают ключ.",
+          "plausibility": "Правдоподобен по свободному повороту; его отличие от LSD по перераспределению — содержательное знание. При этом closed21 claim не квалифицируется заново.",
+          "truthUniqueKey": "Не выбирается как описанная LSD torque-bias схема. Не добавляю доказательство равного момента открытого или поведения на льду: exhausted21 остаётся HOLD.",
+          "noteTruthUsefulness": "Eaton L83 отдельно говорит, что LSD, подобно открытому, допускает разные скорости колёс. В note нет равного момента, льда, холостого вращения одного колеса или нового вывода об исчерпанном claim21. Сходство по повороту — отдельное допустимое отношение.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-limited-slip-capture.json",
+              "locator": "L83"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-limited-slip-capture.json",
+              "locator": "L79–102"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-locking-diff-capture.json",
+              "locator": "L85–91"
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "prompt": "Для колёс одной ведущей оси нужна схема, которая допускает разную скорость колёс в повороте, но при потере сцепления смещает часть момента к колесу с лучшим сцеплением, не обеспечивая жёсткую полную блокировку. Какой тип дифференциала соответствует этому принципу?",
+          "answer": "Блокируемый дифференциал",
+          "note": "При включении блокировки полуоси механически связываются и колёса принудительно вращаются с одинаковой скоростью.",
+          "tripleCanonicalSHA256": "4c2611ad7b87302fd77b3173497ff4b8449767e184e5da992ee02c4c16cb2f45",
+          "grammar": "Тип дифференциала последовательно представлен самостоятельным именительным названием; prompt и note читаются как законченная конструкция, падеж/род не подсказывают ключ.",
+          "plausibility": "Правдоподобен по улучшению проходимости и возможной автоматике, но полная механическая блокировка исключена условием.",
+          "truthUniqueKey": "Не ключ по запрету полной жёсткой блокировки: Eaton locker L86/L91.",
+          "noteTruthUsefulness": "Eaton locking L86 описывает механическую связь полуосей и одинаковую скорость колёс при включённой блокировке. Ограничение при включении не приписывает постоянный lock всем locker-режимам; note относится к своему варианту.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-locking-diff-capture.json",
+              "locator": "L86–96"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-limited-slip-capture.json",
+              "locator": "L79–102"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-locking-diff-capture.json",
+              "locator": "L85–91"
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "prompt": "Для колёс одной ведущей оси нужна схема, которая допускает разную скорость колёс в повороте, но при потере сцепления смещает часть момента к колесу с лучшим сцеплением, не обеспечивая жёсткую полную блокировку. Какой тип дифференциала соответствует этому принципу?",
+          "answer": "Межосевой дифференциал",
+          "note": "На дороге с хорошим сцеплением дифференциал между осями помогает избежать закручивания трансмиссии.",
+          "tripleCanonicalSHA256": "f91412837ca0d414e7eaa33fee2d5d86f67d923cede8a6db4e8d5f061cdaf047",
+          "grammar": "Тип дифференциала последовательно представлен самостоятельным именительным названием; prompt и note читаются как законченная конструкция, падеж/род не подсказывают ключ.",
+          "plausibility": "Реальный дифференциал с допустимыми разными скоростями, но он связывает оси, а не колёса одной оси.",
+          "truthUniqueKey": "Не ключ по месту действия: условие явно об одной оси, а межосевой работает между осями.",
+          "noteTruthUsefulness": "Сохранённая AWD статья L160 объясняет применение дифференциала между осями на хорошем сцеплении для предотвращения windup. Справка самостоятельна и относится к межосевому устройству, а не удержанному vectoring/yaw claim.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport13/all-wheel-drive-capture.json",
+              "locator": "L159–163"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-limited-slip-capture.json",
+              "locator": "L79–102"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-locking-diff-capture.json",
+              "locator": "L85–91"
+            }
+          ]
+        }
+      ],
+      "absoluteLevel": {
+        "frozen": "hard",
+        "assessment": "Нужно различить torque-bias LSD, полную блокировку, свободные скорости в повороте и межосевое размещение. Это точное устройство дифференциалов, требующее специфического знания; неспециалист может исключить межосевой по одной оси и locker по полной блокировке, но остаётся существенное различие открытого и LSD. Такой hard допускает разумное сужение и не опирается на четыре случайных названия."
+      },
+      "correctNoteExtraFact": {
+        "assessment": "Eaton L84/L94–98 именует Eaton Posi как clutch-pack и Detroit Truetrac как helical-gear. Фрикционный/винтовой — корректное описание двух примеров собственно LSD. Это дополнительный конкретный факт за пределами prompt/key.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport22/eaton-limited-slip-capture.json",
+            "locator": "L84; L94–98"
+          }
+        ]
+      },
+      "defects": [
+        {
+          "id": "D1",
+          "severity": "major",
+          "category": "retained_closed_claim_boundary",
+          "fields": [
+            "explanation"
+          ],
+          "finding": "Фраза «В отличие от открытого дифференциала, момент между колёсами здесь может быть неравным» не ограничивается LSD: она прямо утверждает по противопоставлению, что открытый дифференциал не даёт неравного момента. Это возвращает equal-torque часть закрытого exactclaim21. Отсутствие утверждения про лёд/одну пробуксовывающую сторону не удаляет часть про равенство момента. Сохранённый Eaton-контекст для отличного LSDclaim не даёт разрешения переоткрыть или заново квалифицировать исчерпанный claim21.",
+          "boundaryEvidence": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a17653/source-cars-road-transport21/sourceproof.json",
+            "rawSHA256": "98a1facacde3e42f5850fd36b6aa14d0ce77f906e2776d698de57ebafc53c3ef",
+            "pointer": "/rawAttempts; /entries/0/literalGroups (open differential equal-torque/one-wheel-spin HOLD)"
+          },
+          "requiredAction": "В sole directed fix-cycle удалить противопоставление открытому дифференциалу и любые эквивалентные утверждения о его равном моменте/поведении на льду. Описать возможность неравного распределения только для LSD по существующему Eaton. Остальные поддержанные отношения сохранить; без новых запросов, переноса claim21 и нового source budget."
+        }
+      ],
+      "frozen": {
+        "id": "cars-road-transport-limited-slip-bias",
+        "topicId": "cars-road-transport",
+        "sourceOrder": 22,
+        "difficulty": "hard",
+        "correctIndex": 0
+      }
+    }
+  ]
+}
