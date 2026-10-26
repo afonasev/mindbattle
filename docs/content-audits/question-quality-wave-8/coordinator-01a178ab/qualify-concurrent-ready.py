@@ -26,9 +26,9 @@ nativeproof=m.read(D/f'{topic}{order}-native-proof.json')
 for name,digest in nativeproof['rawFileSHA256'].items():
  p=R/name;assert m.raw(p)==digest and at(freeze,p)==p.read_bytes()
 clar_name=sys.argv[5] if len(sys.argv)>5 else f'concurrent{changed}-clarification.json'
-assert pathlib.Path(clar_name).name==clar_name
+assert clar_name
 pending=x.get('pendingCarsRoadTransport'+str(order),{})
-clarpath=(pathlib.Path(pending['readinessAmendment']).parent if pending.get('readinessAmendment') else R)/clar_name;clar=m.read(clarpath)
+clarpath=pathlib.Path(clar_name);clarpath=clarpath if clarpath.is_absolute() else (pathlib.Path(pending['readinessAmendment']).parent if pending.get('readinessAmendment') else R)/clarpath;assert clarpath.is_relative_to(D) and clarpath.is_file();clar=m.read(clarpath)
 assert clar['protectedOriginalFiles']['unchanged']
 for name in ['candidate.json','sourceproof.json','peer-snapshot.json']:
  assert clar['protectedOriginalFiles']['sha256BeforeClarificationWrite'][name]==clar['protectedOriginalFiles']['sha256AfterClarificationWrite'][name]==m.raw(R/name)
