@@ -25,6 +25,12 @@ assert count==2000 and len(cp['completedCardHashes'])==n
 assert {v['questionId'] for v in cp['completedCardHashes']}==done
 assert all(m.sha(cat[v['questionId']])==v['cardCanonicalSha256'] for v in cp['completedCardHashes'])
 raw=[]
+raw_proofs={}
+for proof_path in D.glob('*-native-proof.json'):
+ proof=m.read(proof_path)
+ if 'packet' in proof and 'rawFileSHA256' in proof:
+  assert proof['packet'] not in raw_proofs
+  raw_proofs[proof['packet']]={'path':str(proof_path),'data':proof}
 for order in x['ownedSourceOrders']:
  p=x[f'pendingVideoGameHistory{order}']
  if p['qualityCredit']==1:assert p['status'].startswith('CERTIFIED_') and p['id'] in done
@@ -42,7 +48,12 @@ for order in x['ownedSourceOrders']:
   names=['hold.json'] if (packet/'hold.json').exists() and not (packet/'candidate.json').exists() else ['candidate.json','sourceproof.json','peer-snapshot.json']
   for name in names:
    f=packet/name;assert subprocess.check_output(['git','-C',str(m.C),'show',freeze+':'+str(f.relative_to(m.C))])==f.read_bytes()
-  raw.append({'sourceOrder':order,'packet':str(packet),'freeze':freeze})
+  bound=raw_proofs.get(str(packet));assert bound, ('Missing original raw snapshot proof',str(packet))
+  originals=bound['data']['rawFileSHA256']
+  for name,digest in originals.items():
+   f=packet/name;assert f.resolve().is_relative_to(packet.resolve()) and m.raw(f)==digest
+   assert subprocess.check_output(['git','-C',str(m.C),'show',freeze+':'+str(f.relative_to(m.C))])==f.read_bytes()
+  raw.append({'sourceOrder':order,'packet':str(packet),'freeze':freeze,'originalRawFilesByteExact':len(originals),'originalRawProof':bound['path']})
 qa=x['ownAffectedRuns'];assert qa
 for r in qa:
  q=m.read(r['path']);assert m.raw(r['path'])==r['rawSHA256']
