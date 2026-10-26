@@ -4,6 +4,21 @@ C=pathlib.Path(__file__).resolve().parents[4]
 P=pathlib.Path('/Users/eaafonasev/Projects/mindbattle/planning')
 D=pathlib.Path(__file__).parent
 O='01a17996-2967-7592-93e1-11376dc0ec11'
+def alias_source80_cycle1_single_peer_entry(candidate,sp,ps,R):
+ """Expose identical containers from one SHA-bound own80 sole-cycle1 entry."""
+ import copy
+ R=pathlib.Path(R)
+ if R!=D/'source-cars-road-transport80-cycle1':return
+ ap=D/'source80-cycle1-single-peer-container-alias.json';a=read(ap)
+ for name,digest in a['criticalRawSHA256'].items():assert raw(R/name)==digest
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']==a['sourceNativeId']
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==a['cycle']==1
+ assert len(ps['entries'])==1 and sha(ps['entries'][0])==a['entryCanonicalSHA256']
+ e=ps['entries'][0];q=candidate['entries'][0]
+ assert e['id']==q['id'] and e['sourceOrder']==q['sourceOrder']==80
+ for key in a['exposedIdenticalContainers']:
+  assert key in e and key not in ps;ps[key]=copy.deepcopy(e[key])
+ ps['technicalOwn80Cycle1SingleEntryAlias']={'binding':str(ap),'bindingSHA256':raw(ap),'originalPointer':'/entries/0','originalKeyErrorUncured':True,'noSourceGroundLiteralOrJudgmentChange':True}
 def alias_source26_cycle1_canonical_readiness(candidate,sp,ps,R):
  """Expose explicit same-author readiness/hash correction; exact body unchanged."""
  R=pathlib.Path(R)
