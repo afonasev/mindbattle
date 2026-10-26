@@ -73,7 +73,11 @@ for ordinal,(line,call) in enumerate(calls,1):
    continue
  network.append({'ordinalOneBased':ordinal,'call_id':call['call_id'],'callLine':line,'resultLine':resultline,'call':call['input'],'originalResult':str(p),'fileSHA256':m.raw(p),'nativeExact':True,'identicalOriginalResultAliases':identical_aliases})
 report={'owner':m.O,'sourceNativeId':uid,'nativeJournalActual':str(native),'sourceOrder':order,'actualWebCalls':len(network),'candidateExecModules':len(calls),'preDispatchCompilationFailures':pre_dispatch,'includePriorTasks':include_prior,'proof':str(proof_path),'taskStartLine':start,'taskCompleteLine':end,'calls':network,'exactStoredRecoveryNetworkCalls':0,'missingAuthorResultLinesRecovered':missing,'rawPacketUnchanged':True,'qualityCredit':0}
-report_name=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--report-name=')),f'cars-road-transport{order}-network-accounting.json');assert pathlib.Path(report_name).name==report_name
-rp=D/report_name;m.write(rp,report)
+assert proof_path.name.endswith('-native-proof.json')
+default_report_name=proof_path.name.removesuffix('-native-proof.json')+'-network-accounting.json'
+report_name=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--report-name=')),default_report_name);assert pathlib.Path(report_name).name==report_name
+rp=D/report_name
+assert not rp.exists(), 'Existing stage report is immutable; use an explicit new report name for revised evidence'
+m.write(rp,report)
 print(m.savecode([rp,pathlib.Path(__file__),*owned],f'Account SOURCE{order} exact stored native network results without quality credit'))
 print(json.dumps({'actualWebCalls':len(network),'preDispatchCompilationFailures':len(pre_dispatch),'recoveredMissingOriginals':missing,'qualityCredit':0}))
