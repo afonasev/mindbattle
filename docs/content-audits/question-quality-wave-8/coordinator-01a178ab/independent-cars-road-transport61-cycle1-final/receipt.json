@@ -1,0 +1,341 @@
+{
+  "readerNativeId": "01a17851-1874-78f1-921e-529a8e82b6a4",
+  "role": "same independent reviewer37 directed FINAL61",
+  "processRevision": "2026-10-25",
+  "stage": "FINAL",
+  "cycle": 1,
+  "previousIndependentInitial": {
+    "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport61-initial/receipt.json",
+    "rawSHA256": "fe84cd570482cd0dbbedf33014f6d4a9e66f7a2c96a6ffb1236e2fddd76b4836"
+  },
+  "entries": [
+    {
+      "id": "cars-road-transport-ev-traction-battery",
+      "topicId": "cars-road-transport",
+      "sourceOrder": 61,
+      "stage": "FINAL",
+      "status": "HOLD",
+      "currentCard": {
+        "id": "cars-road-transport-ev-traction-battery",
+        "difficulty": "medium",
+        "prompt": "В аккумуляторном электромобиле DC/DC-преобразователь даёт низковольтное питание аксессуарам и вспомогательной батарее. Какой компонент находится на его входе в силовой цепи?",
+        "answers": [
+          {
+            "text": "Тяговый батарейный блок",
+            "note": "Автомобиль подключают через порт к розетке или зарядному оборудованию; при зарядке бортовое устройство отслеживает напряжение, ток, температуру и уровень заряда."
+          },
+          {
+            "text": "Вспомогательная батарея",
+            "note": "Вспомогательная батарея электромобиля подаёт электричество на его аксессуары."
+          },
+          {
+            "text": "Порт зарядки",
+            "note": "Порт зарядки соединяет автомобиль с внешним источником питания, чтобы заряжать тяговый батарейный блок."
+          },
+          {
+            "text": "Бортовое зарядное устройство",
+            "note": "Бортовое зарядное устройство преобразует входящий переменный ток в постоянный для зарядки тяговой батареи."
+          }
+        ],
+        "correctIndex": 0,
+        "explanation": "У DC/DC-преобразователя вход подключён к тяговому батарейному блоку: он отдаёт ток большего напряжения, который преобразователь снижает для аксессуаров и вспомогательной батареи. Тот же блок также питает электромотор, а бортовое зарядное устройство отдельно преобразует входящий переменный ток для зарядки.",
+        "source": {
+          "title": "U.S. Department of Energy, Alternative Fuels Data Center",
+          "url": "https://afdc.energy.gov/vehicles/how-do-all-electric-cars-work",
+          "verifiedAt": "2026-10-26"
+        }
+      },
+      "currentCardCanonicalSHA256": "0b79e83b9154eed8dd424b7cc6fe1cc99913500fc345c5d053b1620db2b212e9",
+      "sixLiteralCanonicalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "В аккумуляторном электромобиле DC/DC-преобразователь даёт низковольтное питание аксессуарам и вспомогательной батарее. Какой компонент находится на его входе в силовой цепи?",
+            "answers": [
+              "Тяговый батарейный блок",
+              "Вспомогательная батарея",
+              "Порт зарядки",
+              "Бортовое зарядное устройство"
+            ],
+            "correctIndex": 0
+          },
+          "canonicalSHA256": "073827b21fb40cf3c87763df442ec0529f1a46a990a089d56f0395c36a6af042",
+          "individualGround": "D1 устранён содержательно: новый prompt задаёт low-voltage output DC/DC и спрашивает upstream component. L64 прямо именует higher-voltage DC from traction battery pack; это key0. Auxiliary battery названа получателем, port L62 — внешний connection, onboard charger L66 — AC-to-DC charging stage. Для выбора нужно знать/восстановить EV voltage-conversion path, а не сопоставить тяговой в prompt/key или общую storage function. Реальные neighbouring components дают содержательные альтернативы; абсолютный MEDIUM допустим. Вопрос читается как functional power-flow model AFDC, не как универсальная схема всех возможных vehicle wiring modes.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79 component context; L64 DC/DC higher-voltage DC from traction pack -> lower-voltage accessories/auxiliary; L60/L62/L65/L66/L68/L71"
+            }
+          ]
+        },
+        {
+          "group": "explanation",
+          "literal": "У DC/DC-преобразователя вход подключён к тяговому батарейному блоку: он отдаёт ток большего напряжения, который преобразователь снижает для аксессуаров и вспомогательной батареи. Тот же блок также питает электромотор, а бортовое зарядное устройство отдельно преобразует входящий переменный ток для зарядки.",
+          "canonicalSHA256": "aefd1e5cbd906501012993c707928e423ecc114bc21f14159ca7e5ba487ebf4b",
+          "individualGround": "Первая часть об upstream traction battery согласуется с L64, второе предложение о motor L65/L71 и separate AC-to-DC charger L66 также подтверждено. Однако «ток большего напряжения, который преобразователь снижает» грамматически утверждает снижение тока, тогда как источник подтверждает снижение напряжения. Новый affected explanation не проходит truth/grammar gate: FINAL61-D2. Остальная правильность не снимает этот дефект.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79 component context; L64 DC/DC higher-voltage DC from traction pack -> lower-voltage accessories/auxiliary; L60/L62/L65/L66/L68/L71"
+            }
+          ]
+        },
+        {
+          "group": "note0",
+          "literal": "Автомобиль подключают через порт к розетке или зарядному оборудованию; при зарядке бортовое устройство отслеживает напряжение, ток, температуру и уровень заряда.",
+          "canonicalSHA256": "f469aa471e0667e134cba245667fbbd9f18cceb2d740b289d8bd8b251721427e",
+          "individualGround": "L55/L62 подтверждают подключение к external supply для заряда traction pack; L66 указывает, что onboard charger при charging pack monitors battery voltage/current/temperature/state of charge. Это дополнительный собственный факт о процессе заряда и контролируемых параметрах тяговой батареи сверх MAIN о хранении для motor. Хотя действующим контролирующим узлом является charger, отношение прямо включает именно заряжаемую traction battery, поэтому это не просто посторонний факт о порте. Note не называет хранение повторно как единственное дополнение.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55/L62 charging vehicle/traction pack; L66 full onboard charger paragraph, including battery characteristics voltage/current/temperature/state of charge"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport61-initial/receipt.json",
+            "rawSHA256": "fe84cd570482cd0dbbedf33014f6d4a9e66f7a2c96a6ffb1236e2fddd76b4836",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/2",
+            "unchangedLiteralCanonicalSHA256": "f469aa471e0667e134cba245667fbbd9f18cceb2d740b289d8bd8b251721427e",
+            "applicability": "Собственное INITIAL-суждение о неизменённой note остаётся применимым к тому же собственному компоненту. Новый input power-path MAIN не меняет её фактологию; note0 charging/monitoring продолжает быть дополнительным фактом о traction pack."
+          }
+        },
+        {
+          "group": "note1",
+          "literal": "Вспомогательная батарея электромобиля подаёт электричество на его аксессуары.",
+          "canonicalSHA256": "d693cfbe940a73fee4937e1ab9d13e7f3fbb4ea578fc4b43327a427b33bf21cd",
+          "individualGround": "L60 определяет all-electric auxiliary battery: electricity to power vehicle accessories. Note точно сообщает собственную функцию этого battery option, без подстановки main traction role и без неподтверждённых starter/chemistry деталей.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L60: auxiliary battery powers vehicle accessories"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport61-initial/receipt.json",
+            "rawSHA256": "fe84cd570482cd0dbbedf33014f6d4a9e66f7a2c96a6ffb1236e2fddd76b4836",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/3",
+            "unchangedLiteralCanonicalSHA256": "d693cfbe940a73fee4937e1ab9d13e7f3fbb4ea578fc4b43327a427b33bf21cd",
+            "applicability": "Собственное INITIAL-суждение о неизменённой note остаётся применимым к тому же собственному компоненту. Новый input power-path MAIN не меняет её фактологию; note0 charging/monitoring продолжает быть дополнительным фактом о traction pack."
+          }
+        },
+        {
+          "group": "note2",
+          "literal": "Порт зарядки соединяет автомобиль с внешним источником питания, чтобы заряжать тяговый батарейный блок.",
+          "canonicalSHA256": "925fca11f2ac77259fe5f1f7ba3f7498535dd45722b9dc49575fb59000846364",
+          "individualGround": "L62 прямо связывает charge port с внешним power supply для charge traction pack. Note содержит собственную проверенную функцию интерфейса; это не storage function и не путаница с onboard charger conversion.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L62: external connection via charge port charges traction battery pack"
+            }
+          ],
+          "retainedOwnJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport61-initial/receipt.json",
+            "rawSHA256": "fe84cd570482cd0dbbedf33014f6d4a9e66f7a2c96a6ffb1236e2fddd76b4836",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/4",
+            "unchangedLiteralCanonicalSHA256": "925fca11f2ac77259fe5f1f7ba3f7498535dd45722b9dc49575fb59000846364",
+            "applicability": "Собственное INITIAL-суждение о неизменённой note остаётся применимым к тому же собственному компоненту. Новый input power-path MAIN не меняет её фактологию; note0 charging/monitoring продолжает быть дополнительным фактом о traction pack."
+          }
+        },
+        {
+          "group": "note3",
+          "literal": "Бортовое зарядное устройство преобразует входящий переменный ток в постоянный для зарядки тяговой батареи.",
+          "canonicalSHA256": "ddad8e4c4ff6aa31bfce7b9498fd2036d10b62009632896212b68e4f53b13f92",
+          "individualGround": "L66 прямо говорит, что onboard charger takes incoming AC supplied via charge port and converts to DC for charging traction battery. Новая note3 точно передаёт собственную функцию этого дистрактора. Она не приписывает ему DC/DC accessory conversion и не утверждает, что любой DC fast charging идёт через AC stage.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L66 complete onboard charger definition; L62 charge-port context"
+            }
+          ]
+        }
+      ],
+      "fourFullPromptAnswerNoteVariants": [
+        {
+          "slot": 0,
+          "prompt": "В аккумуляторном электромобиле DC/DC-преобразователь даёт низковольтное питание аксессуарам и вспомогательной батарее. Какой компонент находится на его входе в силовой цепи?",
+          "answer": "Тяговый батарейный блок",
+          "note": "Автомобиль подключают через порт к розетке или зарядному оборудованию; при зарядке бортовое устройство отслеживает напряжение, ток, температуру и уровень заряда.",
+          "tripleCanonicalSHA256": "4991872a3926b021b4961e07e7247a8a0380a5ac7e6cf0e27ee02bbd46579f6e",
+          "grammar": "Лично прочитана полная пара двухпредложенного prompt, ответа «Тяговый батарейный блок» и всей note. Самостоятельные именные названия согласованы; «на его входе» однозначно относится к DC/DC-преобразователю. Note собственного варианта грамматична. Ошибка relative pronoun в отдельном explanation фиксируется независимо как FINAL61-D2.",
+          "plausibility": "Правильный upstream traction pack теперь выбирается через DC/DC topology; его label не повторён в prompt. Общая фраза «батарея хранит» больше не решает вопрос.",
+          "truthUniqueKey": "L64 прямо говорит from traction battery pack, поэтому key0 подтверждён независимо от frozen key.",
+          "noteTruthUsefulness": "L55/L62 подтверждают подключение к external supply для заряда traction pack; L66 указывает, что onboard charger при charging pack monitors battery voltage/current/temperature/state of charge. Это дополнительный собственный факт о процессе заряда и контролируемых параметрах тяговой батареи сверх MAIN о хранении для motor. Хотя действующим контролирующим узлом является charger, отношение прямо включает именно заряжаемую traction battery, поэтому это не просто посторонний факт о порте. Note не называет хранение повторно как единственное дополнение.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79 component context; L64 DC/DC higher-voltage DC from traction pack -> lower-voltage accessories/auxiliary; L60/L62/L65/L66/L68/L71"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L55/L62 charging vehicle/traction pack; L66 full onboard charger paragraph, including battery characteristics voltage/current/temperature/state of charge"
+            }
+          ],
+          "retainedOwnNoteJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport61-initial/receipt.json",
+            "rawSHA256": "fe84cd570482cd0dbbedf33014f6d4a9e66f7a2c96a6ffb1236e2fddd76b4836",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/2",
+            "unchangedLiteralCanonicalSHA256": "f469aa471e0667e134cba245667fbbd9f18cceb2d740b289d8bd8b251721427e",
+            "applicability": "Собственное INITIAL-суждение о неизменённой note остаётся применимым к тому же собственному компоненту. Новый input power-path MAIN не меняет её фактологию; note0 charging/monitoring продолжает быть дополнительным фактом о traction pack."
+          }
+        },
+        {
+          "slot": 1,
+          "prompt": "В аккумуляторном электромобиле DC/DC-преобразователь даёт низковольтное питание аксессуарам и вспомогательной батарее. Какой компонент находится на его входе в силовой цепи?",
+          "answer": "Вспомогательная батарея",
+          "note": "Вспомогательная батарея электромобиля подаёт электричество на его аксессуары.",
+          "tripleCanonicalSHA256": "bcdffd376821323a5cb36264519e1e34e64ca957123db35cfa102fe55ac699b4",
+          "grammar": "Лично прочитана полная пара двухпредложенного prompt, ответа «Вспомогательная батарея» и всей note. Самостоятельные именные названия согласованы; «на его входе» однозначно относится к DC/DC-преобразователю. Note собственного варианта грамматична. Ошибка relative pronoun в отдельном explanation фиксируется независимо как FINAL61-D2.",
+          "plausibility": "Auxiliary battery — близкий электрический узел, но prompt помещает её на low-voltage receiving side, поэтому нужно различить input/output и main/auxiliary levels.",
+          "truthUniqueKey": "L64 помещает auxiliary recharge на receiving side lower-voltage output; slot1 не upstream source в заданной functional chain.",
+          "noteTruthUsefulness": "L60 определяет all-electric auxiliary battery: electricity to power vehicle accessories. Note точно сообщает собственную функцию этого battery option, без подстановки main traction role и без неподтверждённых starter/chemistry деталей.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79 component context; L64 DC/DC higher-voltage DC from traction pack -> lower-voltage accessories/auxiliary; L60/L62/L65/L66/L68/L71"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L60: auxiliary battery powers vehicle accessories"
+            }
+          ],
+          "retainedOwnNoteJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport61-initial/receipt.json",
+            "rawSHA256": "fe84cd570482cd0dbbedf33014f6d4a9e66f7a2c96a6ffb1236e2fddd76b4836",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/3",
+            "unchangedLiteralCanonicalSHA256": "d693cfbe940a73fee4937e1ab9d13e7f3fbb4ea578fc4b43327a427b33bf21cd",
+            "applicability": "Собственное INITIAL-суждение о неизменённой note остаётся применимым к тому же собственному компоненту. Новый input power-path MAIN не меняет её фактологию; note0 charging/monitoring продолжает быть дополнительным фактом о traction pack."
+          }
+        },
+        {
+          "slot": 2,
+          "prompt": "В аккумуляторном электромобиле DC/DC-преобразователь даёт низковольтное питание аксессуарам и вспомогательной батарее. Какой компонент находится на его входе в силовой цепи?",
+          "answer": "Порт зарядки",
+          "note": "Порт зарядки соединяет автомобиль с внешним источником питания, чтобы заряжать тяговый батарейный блок.",
+          "tripleCanonicalSHA256": "e6b0a77ac99f8a569f5b524aaa3376f3b99c61718b0d8ba3f9e29d38be925ef0",
+          "grammar": "Лично прочитана полная пара двухпредложенного prompt, ответа «Порт зарядки» и всей note. Самостоятельные именные названия согласованы; «на его входе» однозначно относится к DC/DC-преобразователю. Note собственного варианта грамматична. Ошибка relative pronoun в отдельном explanation фиксируется независимо как FINAL61-D2.",
+          "plausibility": "Charge port — реальная точка входа внешней энергии в автомобиль, поэтому незнающий может принять её за upstream source DC/DC. L62/L64 различают charging connection и vehicle internal DC supply.",
+          "truthUniqueKey": "L62 определяет external connection to charge traction pack; L64 именует сам traction pack источником DC/DC. Port не второй ключ.",
+          "noteTruthUsefulness": "L62 прямо связывает charge port с внешним power supply для charge traction pack. Note содержит собственную проверенную функцию интерфейса; это не storage function и не путаница с onboard charger conversion.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79 component context; L64 DC/DC higher-voltage DC from traction pack -> lower-voltage accessories/auxiliary; L60/L62/L65/L66/L68/L71"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L62: external connection via charge port charges traction battery pack"
+            }
+          ],
+          "retainedOwnNoteJudgment": {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport61-initial/receipt.json",
+            "rawSHA256": "fe84cd570482cd0dbbedf33014f6d4a9e66f7a2c96a6ffb1236e2fddd76b4836",
+            "pointer": "/entries/0/sixLiteralCanonicalGroups/4",
+            "unchangedLiteralCanonicalSHA256": "925fca11f2ac77259fe5f1f7ba3f7498535dd45722b9dc49575fb59000846364",
+            "applicability": "Собственное INITIAL-суждение о неизменённой note остаётся применимым к тому же собственному компоненту. Новый input power-path MAIN не меняет её фактологию; note0 charging/monitoring продолжает быть дополнительным фактом о traction pack."
+          }
+        },
+        {
+          "slot": 3,
+          "prompt": "В аккумуляторном электромобиле DC/DC-преобразователь даёт низковольтное питание аксессуарам и вспомогательной батарее. Какой компонент находится на его входе в силовой цепи?",
+          "answer": "Бортовое зарядное устройство",
+          "note": "Бортовое зарядное устройство преобразует входящий переменный ток в постоянный для зарядки тяговой батареи.",
+          "tripleCanonicalSHA256": "252411304d716c62fcdab41c1a8a325bba946ccf5ac8b4f98dce32f3aed0e0b8",
+          "grammar": "Лично прочитана полная пара двухпредложенного prompt, ответа «Бортовое зарядное устройство» и всей note. Самостоятельные именные названия согласованы; «на его входе» однозначно относится к DC/DC-преобразователю. Note собственного варианта грамматична. Ошибка relative pronoun в отдельном explanation фиксируется независимо как FINAL61-D2.",
+          "plausibility": "Onboard charger — содержательно близкий power converter, может быть принят за input stage. L66 даёт AC-to-DC recharge traction pack, L64 отдельно задаёт pack-to-low-voltage DC/DC path.",
+          "truthUniqueKey": "L66 определяет AC-to-DC battery charging, а L64 — higher-voltage DC from traction pack. В данной AFDC functional chain onboard charger не назван источником input DC/DC; slot3 не второй ключ.",
+          "noteTruthUsefulness": "L66 прямо говорит, что onboard charger takes incoming AC supplied via charge port and converts to DC for charging traction battery. Новая note3 точно передаёт собственную функцию этого дистрактора. Она не приписывает ему DC/DC accessory conversion и не утверждает, что любой DC fast charging идёт через AC stage.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "Full L54-L79 component context; L64 DC/DC higher-voltage DC from traction pack -> lower-voltage accessories/auxiliary; L60/L62/L65/L66/L68/L71"
+            },
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L66 complete onboard charger definition; L62 charge-port context"
+            }
+          ]
+        }
+      ],
+      "absoluteLevel": {
+        "frozen": "medium",
+        "judgment": "Новый DC/DC power-path вопрос требует знания EV components/voltage domains или содержательного вывода по upstream/downstream role; простой storage cue и повтор тяговой устранены. Знакомый с EV architecture взрослый скорее ответит, а незнакомый не получает ключ общей бытовой функцией батареи. Это MEDIUM без требования узкопрофессионального расчёта. INITIAL D1 resolved; HOLD вызван новым объяснением, не сложностью."
+      },
+      "correctNoteExtraFact": {
+        "fact": "При зарядке traction pack onboard charger контролирует параметры батареи: напряжение, ток, температуру и уровень заряда; её заряжают внешним подключением.",
+        "ground": "L55/L62 подтверждают подключение к external supply для заряда traction pack; L66 указывает, что onboard charger при charging pack monitors battery voltage/current/temperature/state of charge. Это дополнительный собственный факт о процессе заряда и контролируемых параметрах тяговой батареи сверх MAIN о хранении для motor. Хотя действующим контролирующим узлом является charger, отношение прямо включает именно заряжаемую traction battery, поэтому это не просто посторонний факт о порте. Note не называет хранение повторно как единственное дополнение.",
+        "sourcesLocators": [
+          {
+            "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+            "completeOutputPointer": "/originalRecord/payload/output/1/text",
+            "locator": "L55/L62 charging vehicle/traction pack; L66 full onboard charger paragraph, including battery characteristics voltage/current/temperature/state of charge"
+          }
+        ],
+        "retainedOwnJudgment": {
+          "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/independent-cars-road-transport61-initial/receipt.json",
+          "rawSHA256": "fe84cd570482cd0dbbedf33014f6d4a9e66f7a2c96a6ffb1236e2fddd76b4836",
+          "pointer": "/entries/0/sixLiteralCanonicalGroups/2",
+          "unchangedLiteralCanonicalSHA256": "f469aa471e0667e134cba245667fbbd9f18cceb2d740b289d8bd8b251721427e",
+          "applicability": "Собственное INITIAL-суждение о неизменённой note остаётся применимым к тому же собственному компоненту. Новый input power-path MAIN не меняет её фактологию; note0 charging/monitoring продолжает быть дополнительным фактом о traction pack."
+        }
+      },
+      "defects": [
+        {
+          "id": "FINAL61-D2",
+          "severity": "substantive",
+          "kind": "changed_explanation_current_voltage_confusion",
+          "fields": [
+            "explanation"
+          ],
+          "introducedDuring": "sole directed cycle1",
+          "evidence": "Новое explanation: «он отдаёт ток большего напряжения, который преобразователь снижает». Относительное «который» мужского рода относится к «ток», а не к «напряжение» среднего рода. В буквальном русском утверждении преобразователь снижает ток. Полный AFDC L64 говорит о переходе от higher-voltage DC power к lower-voltage DC power: подтверждено снижение напряжения, а не силы тока. Это не просто терминологическое предпочтение: неверно назван/согласован изменяемый параметр.",
+          "sourceBoundary": "L64 подтверждает источник энергии и изменение уровня постоянного напряжения. Источник не даёт универсального утверждения о снижении тока, поэтому такое прочтение нельзя сертифицировать.",
+          "neededSolutionIfSeparatelyAuthorized": "Сделать напряжение явным объектом снижения, например «блок подаёт постоянное напряжение, которое преобразователь понижает». Это конкретная точка возможного будущего решения, не разрешение на ordinary cycle2.",
+          "sourcesLocators": [
+            {
+              "path": "docs/content-audits/question-quality-wave-8/coordinator-01a178ab/source-cars-road-transport61/afdc-how-all-electric-cars-work.json",
+              "completeOutputPointer": "/originalRecord/payload/output/1/text",
+              "locator": "L64 full DC/DC definition"
+            }
+          ],
+          "ordinaryCycleExhausted": true,
+          "terminalHOLD": true
+        }
+      ],
+      "frozen": {
+        "id": "cars-road-transport-ev-traction-battery",
+        "topicId": "cars-road-transport",
+        "sourceOrder": 61,
+        "difficulty": "medium",
+        "correctIndex": 0
+      },
+      "directedDefectResolution": [
+        {
+          "id": "INITIAL61-D1",
+          "status": "RESOLVED",
+          "initialPointer": "/entries/0/defects/0",
+          "ground": "D1 устранён содержательно: новый prompt задаёт low-voltage output DC/DC и спрашивает upstream component. L64 прямо именует higher-voltage DC from traction battery pack; это key0. Auxiliary battery названа получателем, port L62 — внешний connection, onboard charger L66 — AC-to-DC charging stage. Для выбора нужно знать/восстановить EV voltage-conversion path, а не сопоставить тяговой в prompt/key или общую storage function. Реальные neighbouring components дают содержательные альтернативы; абсолютный MEDIUM допустим. Вопрос читается как functional power-flow model AFDC, не как универсальная схема всех возможных vehicle wiring modes."
+        }
+      ],
+      "terminalHOLD": true,
+      "ordinaryCycleExhausted": true
+    }
+  ],
+  "qualityCredit": 0,
+  "nextStep": "Terminal HOLD for exact CURRENT: INITIAL medium defect resolved, new changed-explanation current/voltage defect remains. No ordinary cycle2 or third review; any future concrete solution/reopening needs separate existing authority transition.",
+  "stop": "Sole directed cycle1 FINAL complete; preserve result and stop."
+}
