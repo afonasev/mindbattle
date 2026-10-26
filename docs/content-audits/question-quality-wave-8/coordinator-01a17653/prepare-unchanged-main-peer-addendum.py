@@ -9,7 +9,7 @@ x=m.read(D/'manifest.json');topic=x['activeRoute']['topicId'];R=D/f'source-{topi
 assert x['owner']==m.O and all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and m.read(m.P/'.flow-leases.json')=={}
 ca=m.read(B/'candidate.json');e=ca['entries'][0];ps=m.read(B/'peer-snapshot.json');native=m.read(D/f'{topic}{order}-native-proof.json')
 assert ca['cycle']==0 and e['status']=='READY_FOR_INDEPENDENT_REVIEW' and e['sourceOrder']==order and e['topicId']==topic
-assert ca['sourceNativeId']==native['sourceNativeId']==x['actors'][f'author{order}']['threadId']
+assert ca['sourceNativeId']==native['sourceNativeId']==x['actors'][x[f'pendingCarsRoadTransport{order}']['actorKey']]['threadId']
 def at(ref,p):return subprocess.check_output(['git','-C',str(m.C),'show',ref+':'+str(p.relative_to(m.C))])
 for name in ['candidate.json','sourceproof.json','peer-snapshot.json']:assert (B/name).read_bytes()==at(qualified_freeze,B/name)
 for name,digest in native['rawFileSHA256'].items():assert m.raw(R/name)==digest and (R/name).read_bytes()==at(raw_freeze,R/name)
