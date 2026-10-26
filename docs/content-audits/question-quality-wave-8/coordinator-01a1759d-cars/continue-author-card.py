@@ -21,6 +21,11 @@ t.update(card);t.update(authorNativeId=a['threadId'],authorNativeJournal=a['nati
 t['inadmissibleRetainedSources']=x.get('inadmissibleRetainedSources',[])
 t['editorialClarification']='Perform editorial corrections, not only audit the original. Prompt/answer TEXTS (including correct answer text), explanation, notes and source can change when necessary; frozen fields are ONLY ID/topic/order/difficulty/integer correctIndex. Resolve ordinary repairable draft defects before spending sources. Use already available source context to choose a supported unique MAIN and comparable row; do not keep an unsupported or wrong-level original merely because it existed. Never change MAIN to evade an already exhausted claim or historical terminal HOLD.'
 t.update(owner=m.O,manifest=str(D/'manifest.json'),sourceIndex=x['sourceIndex'],freshInventoryHelper=str(D/'current-inventory.py'),captureHelper=str(D/'capture-native.py'),captureMethod=str(D/'capture-method.md'))
+t['sourceBudget']=x.get('canonicalSourceBudgetClarification',t['sourceBudget'])
+t['sourceBudgetClarification']=x.get('canonicalSourceBudgetClarificationEvidence')
+t['knownExhaustedClaims']=x.get('knownExhaustedClaimsCurrentRoute',[])
+t['knownRetainedCaptureCaveats']=x.get('knownRetainedCaptureCaveats',[])
+t['attemptFences']={'path':str(D/'manifest.json'),'pointer':'/ownConsumedSourceFences','count':len(x['newAttemptFences'])}
 files=[]
 task=D/(f'source{n}-initial-completion-task.json' if completion else f'source-cars-road-transport{n}-task.json')
 if completion:
