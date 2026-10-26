@@ -18,6 +18,7 @@ for R in packet_paths:
     assert R.parent==D and R.name.startswith("source-cars-road-transport"), "Only owned cars-road-transport packet"
     name = R.name; B = D/('qualified-'+name)
     candidate, sp, ps = [m.read(R/n) for n in ['candidate.json','sourceproof.json','peer-snapshot.json']]
+    m.alias_source23_cycle1_self_preimage(candidate,sp,ps,R)
     m.alias_source22_peer_header(candidate,sp,ps,R)
     m.alias_source9_global_field_names(candidate,sp,ps,R)
     m.alias_source86_single_peer_entry(candidate,sp,ps,R)

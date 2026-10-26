@@ -4,6 +4,41 @@ C=pathlib.Path(__file__).resolve().parents[4]
 P=pathlib.Path('/Users/eaafonasev/Projects/mindbattle/planning')
 D=pathlib.Path(__file__).parent
 O='01a176d6-b811-76d2-9ba1-bec22746198a'
+def alias_source23_cycle1_self_preimage(candidate,sp,ps,R):
+ """Exact same-author addendum for one redundant stale self row; raw untouched."""
+ R=pathlib.Path(R)
+ if R!=D/'source-cars-road-transport23-cycle1':return
+ import copy
+ ap=D/'source23-cycle1-self-binding-addendum/metadata.json';a=read(ap)
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']==a['authorNativeId']=='01a176ac-c316-7733-991a-96988f6c4673'
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==a['cycle']==1
+ for name,b in a['originalRawPacketFiles'].items():assert b['unchanged'] and raw(R/name)==b['sha256Before']==b['sha256After']
+ e=candidate['entries'][0];uid=e['id'];old=a['authorizedSnapshotInterpretation']['substitution']['fromSnapshotCard'];new=e['beforeCard']
+ assert e['sourceOrder']==a['sourceOrder']==23 and uid==a['id']==old['id']==new['id']
+ assert a['exactCurrentBinding']['beforeCard']==new and a['exactCurrentBinding']['beforeCardCanonicalSHA256']==e['beforeHash']==sha(new)
+ assert a['exactRevisedBinding']['afterCard']==e['proposedCard'] and a['exactRevisedBinding']['afterCardCanonicalSHA256']==e['afterHash']==sha(e['proposedCard'])
+ assert a['authorizedSnapshotInterpretation']['substitution']['toAppliedINITIALBeforeCard']==new
+ current=read(C/'src/content/topics/cars-road-transport.json');assert current['questions'][22]==new
+ assert len(ps['sameTopicMAIN']['questions'])==len(ps['actualCurrentPeers'])==100
+ assert ps['sameTopicMAIN']['questions'][22]==ps['actualCurrentPeers'][22]['card']==old
+ assert ps['sameTopicMAIN']['questions'][:22]+ps['sameTopicMAIN']['questions'][23:]==current['questions'][:22]+current['questions'][23:]
+ assert [p['card'] for p in ps['actualCurrentPeers']]==ps['sameTopicMAIN']['questions']
+ g=ps['globalMAIN'];assert len(g['rows'])==11000 and sha(g['rows'])==g['rowsCanonicalSHA256']
+ rows=[]
+ for f in sorted((C/'src/content/topics').glob('*.json')):
+  t=read(f);rows.extend({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[v['text'] for v in q['answers']],'correctIndex':q['correctIndex']} for q in t['questions'])
+ delta=[i for i,(before,after) in enumerate(zip(g['rows'],rows)) if before!=after]
+ assert len(delta)==1 and g['rows'][delta[0]]['id']==uid==rows[delta[0]]['id']
+ bindings=g['allCurrentFileByteBindings'];assert len(bindings)==110
+ tp=C/'src/content/topics/cars-road-transport.json'
+ for b in bindings:
+  if C/b['path']!=tp:assert raw(C/b['path'])==b['sha256']
+ ps['sameTopicMAIN']['questions']=copy.deepcopy(current['questions']);ps['sameTopicMAIN']['fileSHA256']=raw(tp)
+ ps['actualCurrentPeers'][22].update(card=copy.deepcopy(new),sha256=sha(new))
+ g['rows']=rows;g['rowsCanonicalSHA256']=sha(rows)
+ next(b for b in bindings if C/b['path']==tp)['sha256']=raw(tp)
+ proof={'authorAddendum':str(ap),'addendumSHA256':raw(ap),'rawFreeze':a['rawCycle1FreezeSHA1'],'selfOnly':uid,'allOther10999RowsExact':True,'originalFailureUncured':True,'qualityCredit':0,'operation':'Same-author explicit self-preimage binding. Only stale self23 replaced by exact applied INITIAL beforeCard; no raw, literal, source or semantic judgment changed.'}
+ ps['technicalSource23Cycle1SelfPreimageAlias']=proof;sp['technicalSource23Cycle1SelfPreimageAlias']=proof
 def mod(name,path):
  s=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 h=mod('private_save',P/'evidence/question-revision-process-v2/private-save-helper-01a13cb1.py')
