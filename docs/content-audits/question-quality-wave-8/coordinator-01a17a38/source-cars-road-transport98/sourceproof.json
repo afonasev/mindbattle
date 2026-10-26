@@ -1,0 +1,216 @@
+{
+  "sourceNativeId": "01a17a81-268c-7082-8c63-a2c102f94659",
+  "topicId": "cars-road-transport",
+  "cycle": 0,
+  "entries": [
+    {
+      "id": "cars-road-transport-lin-low-cost",
+      "topicId": "cars-road-transport",
+      "sourceOrder": 98,
+      "cycle": 0,
+      "status": "HOLD",
+      "beforeHash": "f721a75ca1d5fd8be2cb6f15b6003d281fca369d332e3dba91b3137a3337d6dc",
+      "afterHash": "f721a75ca1d5fd8be2cb6f15b6003d281fca369d332e3dba91b3137a3337d6dc",
+      "literalGroups": [
+        {
+          "group": "prompt_ordered_answers_key",
+          "literal": {
+            "prompt": "Какая шина подходит для стеклоподъёмника или зеркала?",
+            "answers": [
+              "CAN",
+              "FlexRay",
+              "LIN",
+              "OBD-II"
+            ],
+            "correctIndex": 2
+          },
+          "literalSHA256": "cbb8b60aeb97dfd04cc04a56565b81b0b6099a434c1fe70682030ffce8bd1f19",
+          "primaryGround": "HOLD: no admissible retained full body establishes LIN as the bus for either named device. TI and NXP bodies support some distractor context only; they do not prove the frozen key.",
+          "sourcePaths": [],
+          "locator": "Exact LIN application relation remains unsupported; inherited SOURCE97 LIN note fence remains terminal."
+        },
+        {
+          "group": "explanation",
+          "literal": "LIN — дешёвая однопроводная сеть с одним планировщиком для простых устройств кузова. Её скорость ниже CAN.",
+          "literalSHA256": "7550c0622666780681be2bd83e5df90d44fdf2501597bd9c2c694f601e647967",
+          "primaryGround": "HOLD: the explanation repeats the exhausted LIN low-cost/single-wire/scheduler/body-electronics claim and adds an unsupported LIN-versus-CAN speed comparison.",
+          "sourcePaths": [],
+          "locator": "Exact repeated claim is recorded in SOURCE97 sourceproof.json /entries/0/holdReason; no history reset."
+        },
+        {
+          "group": "note0",
+          "literal": "Шина CAN — приоритетная многомастерная сеть без отдельного центрального адресата сообщения.",
+          "literalSHA256": "e401574126733181fe95956890218e80f15ffa521710bddef4be61fcaa75c698",
+          "primaryGround": "TI explains CAN broadcast messages, content-oriented identifiers and priority/arbitration; it supports the note’s network behavior, but not the key.",
+          "sourcePaths": [
+            "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/ti-can-physical-layer.json"
+          ],
+          "locator": "TI L177-L195 and L215-L227."
+        },
+        {
+          "group": "note1",
+          "literal": "FlexRay — высокоскоростная детерминированная автомобильная сеть с временными слотами и двумя каналами.",
+          "literalSHA256": "5187dc44df70d61cbbf2ebccf3894e2946fc3b0dba53b7bee4739708a21d15b3",
+          "primaryGround": "NXP supports FlexRay automotive networking, time/event-triggered communication, fault-tolerant systems, and a 10 Mbit/s rate; the saved body does not establish the note’s dual-channel assertion.",
+          "sourcePaths": [
+            "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/flexray-protocol-nxp.json"
+          ],
+          "locator": "NXP L21-L40, L53-L70, L81-L90; dual-channel clause unresolved."
+        },
+        {
+          "group": "note2",
+          "literal": "LIN — дешёвая однопроводная сеть с одним планировщиком для простых устройств кузова.",
+          "literalSHA256": "bd6dd8eaca9d2ca32d56d9dad63dca7018961c7fa15dc962fd0900bb7e4223a9",
+          "primaryGround": "HOLD: all substantive LIN attributes in this note are within the exact claim exhausted by SOURCE97; no admissible full source body is available to assert them.",
+          "sourcePaths": [],
+          "locator": "SOURCE97 sourceproof.json /entries/0/holdReason and source-attempts.json; exact claim: one-wire, low-cost, one scheduler, simple body devices."
+        },
+        {
+          "group": "note3",
+          "literal": "OBD-II стандартизирует диагностический разъём, коды неисправностей и доступ к данным системы выбросов.",
+          "literalSHA256": "79a0a3713fcb9220ddd07b4b090e02d4c164bbfa90080cdb146a3d63fb2a14ad",
+          "primaryGround": "HOLD: OBD-II note is not supported by a personally read admissible full source body in this packet; the search/open attempt was not adopted as proof.",
+          "sourcePaths": [],
+          "locator": "Current task notes OBD-II had zero inherited requests; this author’s source-attempt record is in sourceAttempts below."
+        }
+      ],
+      "fourFullPromptAnswerNoteAssessments": [
+        {
+          "slot": 0,
+          "fullPrompt": "Какая шина подходит для стеклоподъёмника или зеркала?",
+          "answer": "CAN",
+          "note": "Шина CAN — приоритетная многомастерная сеть без отдельного центрального адресата сообщения.",
+          "grammar": "Каждый вариант — название или аббревиатура автомобильной коммуникационной системы; в конструкцию «Какая шина подходит…?» варианты CAN, FlexRay и LIN подставляются без изменения формы. OBD-II грамматически подставляется, но нарушает категорию «шина».",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "The Russian prompt accepts the short protocol name as a bus label. CAN is a credible vehicle-network distractor; TI supports the note’s broadcast/content-oriented priority context. It does not satisfy the LIN actuator claim.",
+          "sourcePaths": [
+            "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/ti-can-physical-layer.json"
+          ],
+          "locator": "TI L177-L195, L215-L227.",
+          "tripleSHA256": "bd44138dafc143c00757d39ef0d4b320f7e75c8207ca5da7b2d678ff0e229a97"
+        },
+        {
+          "slot": 1,
+          "fullPrompt": "Какая шина подходит для стеклоподъёмника или зеркала?",
+          "answer": "FlexRay",
+          "note": "FlexRay — высокоскоростная детерминированная автомобильная сеть с временными слотами и двумя каналами.",
+          "grammar": "Каждый вариант — название или аббревиатура автомобильной коммуникационной системы; в конструкцию «Какая шина подходит…?» варианты CAN, FlexRay и LIN подставляются без изменения формы. OBD-II грамматически подставляется, но нарушает категорию «шина».",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "The protocol name fits grammatically and is a plausible in-vehicle network distractor. NXP supports time/event-triggered and fault-tolerant behavior, but not the note’s dual-channel wording in the retained body.",
+          "sourcePaths": [
+            "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/flexray-protocol-nxp.json"
+          ],
+          "locator": "NXP L21-L40, L53-L70, L81-L90; dual-channel detail unverified.",
+          "tripleSHA256": "2c66c2e9cd1a92d6f202a3b81410e3fe216e49114f441950e590ad638beb7b2c"
+        },
+        {
+          "slot": 2,
+          "fullPrompt": "Какая шина подходит для стеклоподъёмника или зеркала?",
+          "answer": "LIN",
+          "note": "LIN — дешёвая однопроводная сеть с одним планировщиком для простых устройств кузова.",
+          "grammar": "Каждый вариант — название или аббревиатура автомобильной коммуникационной системы; в конструкцию «Какая шина подходит…?» варианты CAN, FlexRay и LIN подставляются без изменения формы. OBD-II грамматически подставляется, но нарушает категорию «шина».",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "The protocol label fits grammatically and is intended as the key. Neither the prior exhausted LIN note nor the failed new discovery/alternative attempt supplies admissible proof for the named window-lifter/mirror relation. The note repeats the exhausted exact claim.",
+          "sourcePaths": [],
+          "locator": "No admissible current body; inherited SOURCE97 terminal claim fence.",
+          "tripleSHA256": "bfb2b74cd999737c564631859c68a784ed7d3b8d22dc37dde1c526e114cdc32a"
+        },
+        {
+          "slot": 3,
+          "fullPrompt": "Какая шина подходит для стеклоподъёмника или зеркала?",
+          "answer": "OBD-II",
+          "note": "OBD-II стандартизирует диагностический разъём, коды неисправностей и доступ к данным системы выбросов.",
+          "grammar": "Каждый вариант — название или аббревиатура автомобильной коммуникационной системы; в конструкцию «Какая шина подходит…?» варианты CAN, FlexRay и LIN подставляются без изменения формы. OBD-II грамматически подставляется, но нарушает категорию «шина».",
+          "plausibilityUniqueKeyAndNoteTruthUsefulness": "The label is recognizable but is a diagnostic system/interface, not a bus. This makes it a category mismatch that can be eliminated from the wording alone. The note’s connector/codes/emissions claims lack an admissible full body here.",
+          "sourcePaths": [],
+          "locator": "No admissible full source body; current peer 100 is a separate OBD diagnostic-code question.",
+          "tripleSHA256": "ce6eec4e91b605057df9e3473f99de4a0c14bdbe8ff7eb450d9910199f5782b4"
+        }
+      ],
+      "correctNoteNewFact": {
+        "fact": "The intended extra fact is that LIN is described as inexpensive, single-wire and scheduled for simple body devices; this is the exact inherited SOURCE97 claim and cannot be reused or re-proven here.",
+        "sourcePaths": [],
+        "locator": "SOURCE97 sourceproof.json /entries/0/holdReason; no eligible new LIN source body."
+      },
+      "absoluteDifficulty": {
+        "frozenLevel": "hard",
+        "judgment": "HOLD / not qualified",
+        "grounds": "The proposed application relation requires specialized vehicle-network knowledge, but its source is absent. The OBD-II category mismatch is an obvious elimination cue, and the adjacent current rows use the same protocol family and repeated notes; therefore the hard-level gate is not established for this exact row."
+      },
+      "holdReason": [
+        "HOLD: the frozen correct answer LIN is asserted by a specific application claim (window lifter or mirror), but no admissible full source body supports it in this packet. The current note and explanation also repeat the exact LIN body-electronics/one-wire/low-cost/single-scheduler claim already exhausted in SOURCE97; its two attempts and terminal HOLD are inherited and were not reset.",
+        "The LIN source discovery and attempted official alternative for the separate ISO-number repair idea did not yield a relevant admissible full body: the search produced no qualifying LIN context and https://www.iso.org/standard/61271.html resolves to an unrelated hydraulic-cylinder amendment. No further request is authorized for the inherited exhausted LIN claim.",
+        "Ordinary row defects remain: OBD-II is presented as a bus although it is a diagnostic system/interface; the option set and notes repeat adjacent network questions; the FlexRay note contains an unsupported dual-channel detail; the OBD-II note and the LIN speed comparison lack admissible full source context. Do not apply this unchanged proposal or infer quality credit."
+      ],
+      "qualityCredit": 0
+    }
+  ],
+  "rawSources": [
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/ti-can-physical-layer.json",
+      "url": "https://www.ti.com/lit/an/slla270/slla270.pdf",
+      "sha256": "b744eb99231a1a13aad2d1737814b0c8ffe6b76f0618ec6895d2669af2fbeb8a",
+      "captureReadProvenance": {
+        "sourceNativeId": "01a17a72-63d0-7d02-afb9-db3621ad517f",
+        "nativeRecordLine": 515,
+        "completeOutputPointer": "/originalRecord/payload/output/1/text",
+        "completeOutputSHA256": "fa5912fe111a74455273b041acb780cc2d3bdd68b53bbd8c46b22d8e005100ce",
+        "personalRead": "Relevant complete source body personally read in this turn."
+      },
+      "locator": "TI application report: L177-L195 (broadcast/content-oriented identifiers and priority), L215-L227 (node arbitration and priority winner). Personally read in this turn."
+    },
+    {
+      "path": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/flexray-protocol-nxp.json",
+      "url": "https://www.nxp.com/docs/en/fact-sheet/FLEXRAYPROTOFS.pdf",
+      "sha256": "801f4c2e85aad29af2f17e15cd4de995c3eb0d0bbcd7ee1777067564e50707e5",
+      "captureReadProvenance": {
+        "sourceNativeId": "01a17a72-63d0-7d02-afb9-db3621ad517f",
+        "nativeRecordLine": 610,
+        "completeOutputPointer": "/originalRecord/payload/output/1/text",
+        "completeOutputSHA256": "4b9b7a6d1edc9538f8177d562ec89ad339f0896663be2cb03c17ee83bbd4a561",
+        "personalRead": "Relevant complete source body personally read in this turn."
+      },
+      "locator": "NXP/Freescale fact sheet: L21-L40 (automotive protocol context), L53-L70 (time/event-triggered and fault-tolerant features), L81-L90 (vehicle applications and 10 Mbit/s context). Personally read in this turn."
+    }
+  ],
+  "sourceAttempts": {
+    "sourceNativeId": "01a17a81-268c-7082-8c63-a2c102f94659",
+    "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/27/rollout-2026-10-27T04-17-26-01a17a81-268c-7082-8c63-a2c102f94659.jsonl",
+    "topicId": "cars-road-transport",
+    "id": "cars-road-transport-lin-low-cost",
+    "cycle": 0,
+    "inheritedLINFence": {
+      "claim": "LIN — дешёвая однопроводная сеть с одним планировщиком для простых устройств кузова.",
+      "actualRequests": 2,
+      "allowedRequests": 2,
+      "exhausted": true,
+      "sourceproof": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/sourceproof.json",
+      "attempts": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport97/source-attempts.json",
+      "noResetOrThirdAttempt": true
+    },
+    "thisTurnRequests": [
+      {
+        "kind": "search/discovery",
+        "queries": [
+          "LIN protocol ISO 17987 standard official automotive network site:nxp.com OR site:microchip.com OR site:renesas.com",
+          "FlexRay ISO 17458 standard official automotive network site:nxp.com OR site:infineon.com OR site:bosch.com",
+          "ISO 15031 OBD vehicle emissions diagnostics official site:epa.gov OR site:nhtsa.gov OR site:iso.org"
+        ],
+        "result": "No qualifying LIN source body returned; results included Infineon FlexRay product data and OBD/ISO material. Discovery output is not itself adopted as proof.",
+        "claimDisposition": "No claim reopened; no further discovery."
+      },
+      {
+        "kind": "official alternative open batch",
+        "urls": [
+          "https://www.iso.org/standard/61271.html",
+          "https://www.infineon.com/part/TLE9222PX",
+          "https://www.iso.org/standard/66368.html"
+        ],
+        "capturePath": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17a38/source-cars-road-transport98/infineon-flexray-transceiver.json",
+        "captureFileSHA256": "289d18bbefd932cf3b94ccb64f38c6e687149d994d86938dc7b88c35b59e8aa3",
+        "capturePointer": "/originalRecord/payload/output/1/text",
+        "result": "The first URL resolves to unrelated ISO 10100 hydraulic-cylinder material. Infineon result as returned does not include its relevant product-detail body in the captured text. ISO 15031 page text was not adopted. No retries or additional requests.",
+        "claimDisposition": "LIN standard-number repair remains unsupported; original LIN body-device claim remains terminal from SOURCE97."
+      }
+    ],
+    "requestAccounting": "The open batch is preserved exactly in the capture file above. Source search/open results are not automatically source proof; no additional requests were made."
+  },
+  "qualityCredit": 0
+}
