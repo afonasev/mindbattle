@@ -1,0 +1,108 @@
+{
+  "owner": "01a17996-2967-7592-93e1-11376dc0ec11",
+  "sourceOrder": 83,
+  "sourceNativeId": "01a179d6-17af-7143-9c79-a1ce50498ab1",
+  "uncured": true,
+  "exactPriorFence": {
+    "questionId": "cars-road-transport-speedometer-speed",
+    "topicId": "cars-road-transport",
+    "sourceOrder": 82,
+    "status": "TERMINAL_AUTHORHOLD_UNAPPLIED",
+    "scope": "EXACT82_MAIN_SPEEDOMETER_VEHICLE_SPEED_KMH_SOURCE_ALLOWANCE_EXHAUSTED",
+    "sourceAttempts": [
+      {
+        "callLine": 750,
+        "call": "const r = await tools.web__run({open:[{ref_id:\"https://www.britannica.com/technology/speedometer\"}],response_length:\"long\"}); store(\"source82_britannica_primary\",r); text(r);\n",
+        "resultLine": 753
+      },
+      {
+        "callLine": 759,
+        "call": "const r = await tools.web__run({open:[{ref_id:\"https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-571/subpart-B/section-571.101\"}],response_length:\"long\"}); store(\"source82_ecfr_official_alternative\",r); text(r);\n",
+        "resultLine": 762
+      }
+    ],
+    "holdReason": "The designated Britannica primary URL returned a non-retryable open failure. The one direct official alternative, eCFR 49 CFR 571.101, was captured in full but defines indicators generically and does not name a speedometer or establish that it displays km/h. Primary plus official alternative budget is exhausted; no third request or source reroute is allowed.",
+    "rawFreeze": "2dde14fc7acdf5a2691b6104dfe2f95e9c6f100f",
+    "rawNativeProof": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17996/cars-road-transport82-native-proof.json",
+    "sourceNetworkAccounting": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17996/cars-road-transport82-network-accounting.json",
+    "qualityCredit": 0,
+    "applied": false,
+    "uncured": true,
+    "scopeClarification": "Exact82 speedometer-speed claim only. Primary nonretryable error; one direct official eCFR101 context insufficient for MAIN. No third request or MAIN reroute; not blanket eCFR/Britannica/instrument/domain exhaustion."
+  },
+  "unchangedOwnOptionLiteral": {
+    "slot": 0,
+    "fullPrompt": "Какой прибор сообщает, пора ли на заправку?",
+    "answer": "Спидометр",
+    "note": "Спидометр показывает текущую скорость движения автомобиля.",
+    "grammar": "The instrument name is a grammatically suitable answer to «Какой прибор...».",
+    "plausibilityUniqueKeyAndNoteTruthUsefulness": "The label is a plausible automotive-instrument distractor and grammatically fits the prompt. Its note truth and usefulness were not verified from a full retained source.",
+    "sourcePaths": [],
+    "locator": "no admissible full-context locator",
+    "tripleSHA256": "35df0ebf339e2c89788660a3d631dbc9df0938971d0c86c8f7835c8bca4b6f6f"
+  },
+  "repeatedCallLine": 262,
+  "exactRepeatedCall": {
+    "timestamp": "2026-10-26T20:15:10.917Z",
+    "ordinal": 261,
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call",
+      "id": "ctc_03317d6b90c33775016adfb4cea9b481918ca2bf046195a4f5",
+      "status": "completed",
+      "call_id": "call_9894072bb73b4e4d9aa37dcc43089c54",
+      "name": "exec",
+      "input": "const r = await tools.web__run({open:[{ref_id:\"https://www.britannica.com/technology/speedometer\"}],response_length:\"long\"}); store(\"s83_speedometer_source\",r); text(r);\n",
+      "internal_chat_message_metadata_passthrough": {
+        "turn_id": "01a179d7-3b0a-7a30-aca9-3215923fce41",
+        "create_time": 1793045710.6643915
+      }
+    }
+  },
+  "exactRepeatedResult": {
+    "timestamp": "2026-10-26T20:15:13.065Z",
+    "ordinal": 264,
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call_output",
+      "id": "ctco_01a179da-50a9-79d1-ae04-397463568d72",
+      "call_id": "call_9894072bb73b4e4d9aa37dcc43089c54",
+      "output": [
+        {
+          "type": "input_text",
+          "text": "Script completed\nWall time 2.1 seconds\nOutput:\n"
+        },
+        {
+          "type": "input_text",
+          "text": "Internal Error ()\nciteturn2view0 [wordlim: 200] Source: open({\"ref_id\":\"https://www.britannica.com/technology/speedometer\",\"lineno\":null}); Total lines: 1\nL0: URL https://www.britannica.com/technology/speedometer cannot be opened (non-retryable error)\n"
+        }
+      ],
+      "internal_chat_message_metadata_passthrough": {
+        "turn_id": "01a179d7-3b0a-7a30-aca9-3215923fce41",
+        "create_time": 1793045713.065454
+      }
+    },
+    "metadata": {
+      "client_authored": false,
+      "fallback_token_limit_override": 12000
+    }
+  },
+  "exactAuthorCompletion": {
+    "timestamp": "2026-10-26T20:16:41.198Z",
+    "ordinal": 323,
+    "type": "event_msg",
+    "payload": {
+      "type": "task_complete",
+      "root_turn_id": "01a1781e-6c1e-7201-acc4-db40b51de7a5",
+      "turn_id": "01a179d7-3b0a-7a30-aca9-3215923fce41",
+      "last_agent_message": "**SOURCE83 — HOLD; остановился на этой карточке.** Полная страница Wikipedia подтверждает основной факт, но предупреждает, что ей нужны дополнительные ссылки. Официальный результат NHTSA найден только в поисковой выдержке; открыть его означало бы превысить лимит запросов по этому утверждению. Полные источники для справок трёх неверных вариантов не найдены, а справка правильного варианта повторяет ответ вместо нового факта.\n\nПакет и полные peer-снимки сохранены в назначенной папке:\n\n- [candidate.json](/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17996/source-cars-road-transport83/candidate.json)\n- [sourceproof.json](/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17996/source-cars-road-transport83/sourceproof.json)\n- [peer-snapshot.json](/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17996/source-cars-road-transport83/peer-snapshot.json)\n\nКаталог не менял; QA и Git-проверки не выполнял — задание запрещает их. Ветка/SHA и интеграция не проверены. Статус READY и зачёт карточки не заявляю.",
+      "started_at": 1793045510,
+      "completed_at": 1793045801,
+      "duration_ms": 290270,
+      "time_to_first_token_ms": 3573
+    }
+  },
+  "meaning": "Speedometer/current vehicle speed note repeats exact82 relation after primary+official allowance spent. New adjacent card is not a new budget. Failed request is not source proof; no retry or automatic salvage.",
+  "notBlanketSourceOrInstrumentBan": true,
+  "noRetroactiveCure": true
+}
