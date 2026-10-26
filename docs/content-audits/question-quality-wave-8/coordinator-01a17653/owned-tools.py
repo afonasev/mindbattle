@@ -917,3 +917,20 @@ def alias_source86_single_peer_entry(candidate,sp,ps,R):
  for key in ['globalMAIN','sameTopicMAIN','actualCurrentPeers','relevantProposedPairs','crossCatalogDirectReverseSearch','sourceInventory']:
   assert key in e and key not in ps;ps[key]=copy.deepcopy(e[key])
  ps['technicalSingleOwnPeerEntryContainerAlias']={'rawFreeze':'859b464044b09a32c3e26f26aa7c98962c2774cd','originalPointer':'/entries/0','originalEntrySHA256':sha(e),'originalKeyErrorUncured':True,'operation':'Exact same author/cycle/ID single peer entry already contains all data. Expose identical original containers at root; preserve raw, original entry, semantic assessments and all normal full100/110/11000 assertions.'}
+
+
+def alias_source9_global_field_names(candidate,sp,ps,R):
+ """Exact own9 global field-name alias; never mutate the frozen author packet."""
+ R=pathlib.Path(R)
+ if R!=D/'source-cars-road-transport9':return
+ frozen=read(D/'source9-raw-freeze.json')
+ for name,digest in frozen['files'].items():assert raw(R/name)==digest
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']=='01a17644-1369-7d63-858a-f3a32f8e8a92'
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==0
+ g=ps['globalMAIN'];assert g['topicFiles']==110 and g['rowCount']==11000
+ assert len(g['fileBindings'])==110 and all(raw(C/b['path'])==b['sha256'] for b in g['fileBindings'])
+ ip=pathlib.Path(ps['inventoryPath']);assert ip.is_relative_to(R) and raw(ip)==ps['inventorySHA256']
+ inv=read(ip);assert inv['globalMAIN']['allCurrentFileByteBindings']==g['fileBindings'] and inv['globalMAIN']['rowsCanonicalSHA256']==g['rowsCanonicalSHA256']
+ assert inv['globalMAIN']['topicFileCount']==g['topicFiles'] and inv['globalMAIN']['questionCount']==g['rowCount']
+ g.update(allCurrentFileByteBindings=g['fileBindings'],topicFileCount=g['topicFiles'],questionCount=g['rowCount'])
+ ps['technicalOwn9GlobalFieldNamesAlias']={'rawPeer':str(R/'peer-snapshot.json'),'rawSHA256':raw(R/'peer-snapshot.json'),'originalFields':['fileBindings','topicFiles','rowCount'],'inventory':str(ip),'inventorySHA256':raw(ip),'operation':'Only exact immutable author field names exposed under standard names; all110 live file bindings and existing inventory digest/counts match. Raw, source bodies and semantic judgments unchanged; original helper failures uncured.'}
