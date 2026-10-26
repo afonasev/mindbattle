@@ -80,19 +80,23 @@ assert not x['pendingReviews'] and not x['pendingBoundedWork'] and not x['readyQ
 r=read(D/'retained-reader-handoff.json');a=x['actors']['reviewer']
 assert a['threadId']==r['retainedIdleReader']['threadId']==G
 assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])==a['ownReceiptCount']==expected_reader_count
-identity=read(x['currentReaderNativeIdentity']);assert identity['verifiedSessionMetaId']==identity['decodedResult']['threadId']==G and identity['nativeJournal']==a['nativeJournal']
-seed=read(r['inheritedImmutable']);assert seed['retainedIdleReader']['threadId']==G and seed['readerOwnReceiptCount']==len(seed['readerOwnReceipts'])
-retired=read(r['retiredReader33']);assert retired['readerOwnReceiptCount']==len(retired['readerOwnReceipts'])==18 and retired['readerNativeId']!=G
-retired34=read(r['retiredReader34']);assert retired34['readerOwnReceiptCount']==len(retired34['readerOwnReceipts'])==18 and retired34['readerNativeId'] not in [G,retired['readerNativeId']]
-for path,binding in retired34['readerOwnReceipts'].items():assert raw(path)==binding['rawSHA256']
+identity=read(x['currentReaderNativeIdentity'])
+returned=identity.get('decodedResult',identity.get('supportedCreateResult'))
+assert identity.get('verifiedSessionMetaId',identity.get('nativeSessionMetaId'))==returned['threadId']==G and identity['nativeJournal']==a['nativeJournal']
+if r.get('inheritedImmutable'):
+ seed=read(r['inheritedImmutable']);assert seed['retainedIdleReader']['threadId']==G and seed['readerOwnReceiptCount']==len(seed['readerOwnReceipts'])
+else:
+ assert inherited_handoff['actors']['reviewer']['threadId']!=G, 'Same retained reader cannot lose prior receipt seed'
+for pointer in r.get('retiredReaderPointers',[]):assert raw(pointer['path'])==pointer['rawSHA256']
 for path,binding in r['readerOwnReceipts'].items():
  assert raw(path)==binding['rawSHA256']
  receipt=read(path);entry=receipt['entries'][0]
  assert receipt.get('reviewerNativeId',receipt.get('readerNativeId'))==G
  assert entry['stage']==binding['stage'] and entry['status']==binding['status'] and entry['sourceOrder']==binding['sourceOrder']
  assert entry['currentCardCanonicalSHA256']==binding['currentCardCanonicalSHA256']
-inherited=read(r['inheritedImmutable'])
-assert all(path in r['readerOwnReceipts'] and r['readerOwnReceipts'][path]['rawSHA256']==binding['rawSHA256'] for path,binding in inherited['readerOwnReceipts'].items())
+if r.get('inheritedImmutable'):
+ inherited=read(r['inheritedImmutable'])
+ assert all(path in r['readerOwnReceipts'] and r['readerOwnReceipts'][path]['rawSHA256']==binding['rawSHA256'] for path,binding in inherited['readerOwnReceipts'].items())
 for path in D.glob('independent-*/receipt.json'):
  receipt=read(path)
  if receipt.get('reviewerNativeId',receipt.get('readerNativeId'))==G:assert str(path) in r['readerOwnReceipts']
@@ -102,17 +106,18 @@ assert sum(row.get('type')=='compacted' for row in rows)==a['actualCompactions']
 assert next(row['payload']['type'] for row in reversed(rows) if row.get('payload',{}).get('type') in ['task_started','task_complete'])=='task_complete'
 info=next(row['payload']['info'] for row in reversed(rows) if row.get('payload',{}).get('type')=='token_count')
 assert info['last_token_usage']['input_tokens']==a['lastInput'] and info['model_context_window']==a['modelWindow']
-qa=x['ownAffectedRuns'];assert qa and len(qa)==len(v['ownQAReports'])
+qa=x['ownAffectedRuns'];assert len(qa)==len(v['ownQAReports'])
+last_applicable=v.get('lastApplicableQA',qa[-1] if qa else None);assert last_applicable
 for run in qa:
  report=read(run['path']);assert raw(run['path'])==run['rawSHA256']
  assert report['success'] and report['numPassedTests']==19 and report['numFailedTests']==report['numPendingTests']==0
 files=list((C/'src/content/topics').glob('*.json'));assert len(files)==110
 for path in files:
- assert subprocess.check_output(['git','-C',str(C),'show',qa[-1]['testedCatalogCommit']+':'+str(path.relative_to(C))])==path.read_bytes()
+ assert subprocess.check_output(['git','-C',str(C),'show',last_applicable['testedCatalogCommit']+':'+str(path.relative_to(C))])==path.read_bytes()
 next_card=x['nextUntouched'];order=next_card['sourceOrder'];topic=next_card['topicId']
 assert order==min(x.get('unfinishedAuthorBatchOrders') or [max(x['ownedSourceOrders'])+1]) and topic==x['activeRoute']['topicId']
 assert read(C/f'src/content/topics/{topic}.json')['questions'][order-1]['id']==next_card['id']
 assert next_card['id'] in remaining and current[next_card['id']]==base[next_card['id']]
 assert sha(current[next_card['id']])==next_card['hash']
 assert current[next_card['id']]['correctIndex']==next_card['correctIndex'] and current[next_card['id']]['difficulty']==next_card['difficulty']
-print(json.dumps({'READONLY_BARRIER':'PASS','CURRENT':n,'remaining':left,'owners':O,'exactClaims':4,'leaseEmpty':True,'all2000Frozen':True,'allAcceptedHashesExact':True,'canonicalHistoricalWriter':reg['ownerNativeId'],'canonicalCards':len(reg['cards']),'canonicalFields':reg['sourceEditorialCompletedFields'],'ownedFilesExactCurrentHEAD':count,'HEAD':head,'freshOriginFeature':refs['refs/heads/'+x['codeBranch']],'allFourRemotePushIdentical':True,'foreignIndexesExact':True,'actualQAReports':len(qa),'lastActualQA':qa[-1]['testedCatalogCommit'],'all110TopicFilesSameAsLastQA':True,'retainedReader':G,'readerOwnReceipts':r['readerOwnReceiptCount'],'readerActualCompactions':a['actualCompactions'],'readerRemaining':info['model_context_window']-info['last_token_usage']['input_tokens'],'fences':fences['totalFences'],'nextUntouched':next_card,'successorRegistered':x['successorThreadId'],'allDiagnosticsUncured':True,'noWritesOrQARerun':True},ensure_ascii=False))
+print(json.dumps({'READONLY_BARRIER':'PASS','CURRENT':n,'remaining':left,'owners':O,'exactClaims':4,'leaseEmpty':True,'all2000Frozen':True,'allAcceptedHashesExact':True,'canonicalHistoricalWriter':reg['ownerNativeId'],'canonicalCards':len(reg['cards']),'canonicalFields':reg['sourceEditorialCompletedFields'],'ownedFilesExactCurrentHEAD':count,'HEAD':head,'freshOriginFeature':refs['refs/heads/'+x['codeBranch']],'allFourRemotePushIdentical':True,'foreignIndexesExact':True,'actualQAReports':len(qa),'lastActualQA':last_applicable['testedCatalogCommit'],'all110TopicFilesSameAsLastQA':True,'retainedReader':G,'readerOwnReceipts':r['readerOwnReceiptCount'],'readerActualCompactions':a['actualCompactions'],'readerRemaining':info['model_context_window']-info['last_token_usage']['input_tokens'],'fences':fences['totalFences'],'nextUntouched':next_card,'successorRegistered':x['successorThreadId'],'allDiagnosticsUncured':True,'noWritesOrQARerun':True},ensure_ascii=False))

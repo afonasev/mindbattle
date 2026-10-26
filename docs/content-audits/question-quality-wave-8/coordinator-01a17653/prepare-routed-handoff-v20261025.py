@@ -1,8 +1,49 @@
 """Closed active cars-road-transport SOURCE slice only: prepare one readonly successor barrier, keep ownership."""
-import pathlib,json,re,datetime,importlib.util
+import pathlib,json,re,datetime,importlib.util,sys
 D=pathlib.Path(__file__).parent
 s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
 x=m.read(D/'manifest.json');cp_path=pathlib.Path(x['canonicalCheckpoint']);cp=m.read(cp_path);n=len(cp['currentEligibleCompletedIds'])
+if '--inventory-only' in sys.argv:
+ assert cp['owner']==cp['activeCoordinator']==m.O and all(m.flow.get(c)[1]['owner']==m.O for c in x['claims']) and m.read(m.P/'.flow-leases.json')=={}
+ assert not any(a['stage'].startswith('START') for a in x['actors'].values()) and not x.get('readyQueue')
+ parent=m.read(pathlib.Path(x['predecessorHandoff']));base=parent['newAttemptFences'];assert x['newAttemptFences'][:len(base)]==base
+ inherited=pathlib.Path(parent['ownConsumedSourceFences']);assert m.raw(inherited)
+ fp=D/'own-consumed-source-fences.json';m.write(fp,{'owner':m.O,'inheritedPointer':str(inherited),'inheritedRawSHA256':m.raw(inherited),'inheritedFenceCount':len(base),'ownClosedRecords':x['newAttemptFences'][len(base):],'totalFences':len(x['newAttemptFences']),'allUncured':True,'qualityCredit':0})
+ x['ownConsumedSourceFences']=str(fp)
+ def snapshot(a):
+  p=pathlib.Path(a['nativeJournal'])
+  if not p.exists():
+   paths=list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').glob('*'+a['threadId']+'.jsonl'));assert len(paths)==1;p=paths[0]
+  rows=[json.loads(l) for l in p.open()];assert [r['payload']['id'] for r in rows if r.get('type')=='session_meta']==[a['threadId']]
+  event=next(r['payload']['type'] for r in reversed(rows) if r.get('payload',{}).get('type') in ['task_started','task_complete']);assert event=='task_complete'
+  info=next(r['payload']['info'] for r in reversed(rows) if r.get('payload',{}).get('type')=='token_count')
+  a.update(nativeJournal=str(p),actualCompactions=sum(r['type']=='compacted' for r in rows),lastTaskEvent=event,lastInput=info['last_token_usage']['input_tokens'],modelWindow=info['model_context_window'])
+  return a
+ reader=snapshot(x['actors']['reviewer']);assert not reader.get('archived') and reader['actualCompactions']==0
+ G=reader['threadId'];seedpath=pathlib.Path(x['predecessorHandoff']).parent/'retained-reader-handoff.json';seed=m.read(seedpath);receipts={};inherited_reader=None
+ if seed['retainedIdleReader']['threadId']==G:receipts.update(seed['readerOwnReceipts']);inherited_reader=str(seedpath)
+ for path in D.glob('independent-*/receipt.json'):
+  r=m.read(path)
+  if r.get('reviewerNativeId',r.get('readerNativeId'))!=G:continue
+  e=r['entries'][0];receipts[str(path)]={'rawSHA256':m.raw(path),'stage':e['stage'],'status':e['status'],'sourceOrder':e['sourceOrder'],'currentCardCanonicalSHA256':e['currentCardCanonicalSHA256']}
+ assert len(receipts)>=reader.get('ownReceiptCount',0)
+ reader['ownReceiptCount']=len(receipts)
+ retired=[{'path':str(p),'rawSHA256':m.raw(p)} for p in D.glob('reader*-retirement*.json')]
+ rp=D/'retained-reader-handoff.json';m.write(rp,{'owner':m.O,'retainedIdleReader':dict(reader),'readerOwnReceiptCount':len(receipts),'readerOwnReceipts':receipts,'inheritedImmutable':inherited_reader,'retiredReaderPointers':retired,'scope':'Current native reader exact receipt inventory only; closed retired histories stay pointers, no repeated content/bootstrap audit.'})
+ x['currentReaderNativeIdentity']=reader.get('identityProof',x.get('currentReaderNativeIdentity'));assert x['currentReaderNativeIdentity']
+ retained=[];unspent=[]
+ for key,a in x['actors'].items():
+  if not key.startswith('author') or a.get('archived'):continue
+  snapshot(a);assert a['stage'].startswith('IDLE_') and (a['actualCompactions']==0 or key=='author60'), 'Archive completed saturated author; preserve protected60'
+  batch=x.get('activeAuthorBatches',{}).get(key,{})
+  orders=[v for v in batch.get('orders',[]) if not x.get('pendingCarsRoadTransport'+str(v))]
+  if a['actualCompactions']==0:unspent+=orders
+  retained.append({'actorKey':key,'actor':dict(a),'scope':'Protected inherited actual1 idle; no new card/reset/archive.' if key=='author60' else 'Retained actual0 authorized bounded author; continue unspent or next batch only after real budget check, no rebootstrap/newhumanGO.'})
+ x.update(retainedIdleAuthorsForSuccessor=retained,retainedIdleReviewer=dict(reader),unfinishedAuthorBatchOrders=sorted(set(unspent)),fullUserGoal={'target':2000,'CURRENT':n,'remaining':2000-n,'complete':False,'scope':'Full exact2000 remainder; not batch completion'},pendingBoundedWork=[],pendingReviews=[],readyQueue=[])
+ x['helpers'][pathlib.Path(__file__).name]=str(pathlib.Path(__file__));m.write(D/'manifest.json',x)
+ print(m.savecode([fp,rp,D/'manifest.json',pathlib.Path(__file__)],'Prepare current closed-slice fences, retained native roles and fullgoal handoff inventory'))
+ print({'inventoryPrepared':True,'CURRENT':n,'remaining':2000-n,'reader':G,'readerOwn':len(receipts),'fences':len(x['newAttemptFences']),'unspent':x['unfinishedAuthorBatchOrders']})
+ raise SystemExit(0)
 assert n==x['CURRENT'] and x['remaining']==2000-n and cp['owner']==cp['activeCoordinator']==m.O
 assert all(m.flow.get(cid)[1]['owner']==m.O for cid in x['claims']) and len(x['claims'])==4
 assert m.read(m.P/'.flow-leases.json')=={} and not any(a['stage'].startswith('START') for a in x['actors'].values())
@@ -12,7 +53,9 @@ assert all(v['actor']['stage'].startswith('IDLE_') and v['actor']['lastTaskEvent
 own={int(k.removeprefix('pendingCarsRoadTransport')):v for k,v in x.items() if re.fullmatch('pendingCarsRoadTransport[0-9]+',k) and int(k.removeprefix('pendingCarsRoadTransport')) in x['ownedSourceOrders']}
 assert own
 for order,p in own.items():
- if p['qualityCredit']==1:assert p['status'].startswith('CERTIFIED_')
+ if p['qualityCredit']==1:
+  assert p['id'] in cp['currentEligibleCompletedIds']
+  certificate=m.read(p['certification']);assert certificate['newQualityCredit']==1 and any(e['questionId']==p['id'] for e in certificate['accepted'])
  else:assert 'HOLD' in p['status'] and not any(t in p['status'] for t in ['PENDING','START','READY'])
 verification=m.read(D/'handoff-verification.json');assert verification['CURRENT']==n and verification['allCurrentAcceptedHashesExact'] and verification['all2000FrozenIdTopicOrderDifficultyNumericKey']
 rows=[json.loads(l) for l in pathlib.Path(x['rootNativeAudit']['nativeJournal']).open()]

@@ -32,16 +32,18 @@ for proof_path in D.glob('*-native-proof.json'):
   assert proof['packet'] not in raw_proofs
   raw_proofs[proof['packet']]={'path':str(proof_path),'data':proof}
 for order in x['ownedSourceOrders']:
- p=x[f'pendingVideoGameHistory{order}']
- if p['qualityCredit']==1:assert p['status'].startswith('CERTIFIED_') and p['id'] in done
+ p=x[f'pendingCarsRoadTransport{order}']
+ if p['qualityCredit']==1:
+  assert p['id'] in done
+  certificate=m.read(p['certification']);assert certificate['newQualityCredit']==1 and any(e['questionId']==p['id'] and e['cardCanonicalSha256']==m.sha(cat[p['id']]) for e in certificate['accepted'])
  else:
   assert 'HOLD' in p['status'] and p['id'] in left
   if p.get('applied'):assert m.sha(cat[p['id']])==p['appliedCurrentHash']
   else:assert m.sha(cat[p['id']])==p['beforeHash']
- pairs=[(Path(p.get('rawPacket',str(D/f'source-video-game-history{order}'))),p['rawFreeze'])]
- if p.get('cycle1RawFreeze'):pairs.append((Path(p.get('cycle1RawPacket',str(D/f'source-video-game-history{order}-cycle1'))),p['cycle1RawFreeze']))
- if p.get('originalRawFreeze'):pairs.append((D/f'source-video-game-history{order}',p['originalRawFreeze']))
- if p.get('originalUnsafeRawFreeze'):pairs.append((D/f'source-video-game-history{order}',p['originalUnsafeRawFreeze']))
+ pairs=[(Path(p.get('rawPacket',str(D/f'source-cars-road-transport{order}'))),p['rawFreeze'])]
+ if p.get('cycle1RawFreeze'):pairs.append((Path(p.get('cycle1RawPacket',str(D/f'source-cars-road-transport{order}-cycle1'))),p['cycle1RawFreeze']))
+ if p.get('originalRawFreeze'):pairs.append((D/f'source-cars-road-transport{order}',p['originalRawFreeze']))
+ if p.get('originalUnsafeRawFreeze'):pairs.append((D/f'source-cars-road-transport{order}',p['originalUnsafeRawFreeze']))
  if p.get('cycle1RawSchemaFailure'):
   failed=p['cycle1RawSchemaFailure'];pairs.append((Path(failed['rawPacket']),failed['rawFreeze']))
  for packet,freeze in pairs:
@@ -54,11 +56,14 @@ for order in x['ownedSourceOrders']:
    f=packet/name;assert f.resolve().is_relative_to(packet.resolve()) and m.raw(f)==digest
    assert subprocess.check_output(['git','-C',str(m.C),'show',freeze+':'+str(f.relative_to(m.C))])==f.read_bytes()
   raw.append({'sourceOrder':order,'packet':str(packet),'freeze':freeze,'originalRawFilesByteExact':len(originals),'originalRawProof':bound['path']})
-qa=x['ownAffectedRuns'];assert qa
+qa=x['ownAffectedRuns']
+previous=m.read(Path(x['predecessorHandoff']).parent/'handoff-verification.json')
+last_applicable=qa[-1] if qa else previous.get('lastApplicableQA',previous['ownQAReports'][-1] if previous.get('ownQAReports') else None)
+assert last_applicable, 'No applicable exact catalog QA evidence'
 for r in qa:
  q=m.read(r['path']);assert m.raw(r['path'])==r['rawSHA256']
  assert q['success'] and q['numPassedTests']==19 and q['numFailedTests']==q['numPendingTests']==0
-last=qa[-1]['testedCatalogCommit'];topics=list((m.C/'src/content/topics').glob('*.json'));assert len(topics)==110
+last=last_applicable['testedCatalogCommit'];topics=list((m.C/'src/content/topics').glob('*.json'));assert len(topics)==110
 for f in topics:assert subprocess.check_output(['git','-C',str(m.C),'show',last+':'+str(f.relative_to(m.C))])==f.read_bytes()
 f=m.read(D/'own-consumed-source-fences.json');assert f['totalFences']==len(x['newAttemptFences'])==f['inheritedFenceCount']+len(f['ownClosedRecords'])
 assert m.raw(f['inheritedPointer'])==f['inheritedRawSHA256']
@@ -67,7 +72,7 @@ r=m.read(D/'retained-reader-handoff.json');reader=x['actors']['reviewer']
 assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])==reader['ownReceiptCount']
 for p,b in r['readerOwnReceipts'].items():assert m.raw(p)==b['rawSHA256']
 for root,key in [(m.C,'code'),(m.P,'planning')]:assert m.raw(Path(m.h.git(root,'rev-parse','--path-format=absolute','--git-path','index')))==x['foreignIndexes'][key]
-report={'owner':m.O,'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'CURRENT':n,'remaining':2000-n,'fullGoal':2000,'allCurrentAcceptedHashesExact':True,'all2000FrozenIdTopicOrderDifficultyNumericKey':True,'inheritedFencesByteExact':True,'totalFences':f['totalFences'],'ownRawFreezes':raw,'ownQAReports':qa,'all110TopicsSameAsLastQA':True,'retainedReaderNativeId':reader['threadId'],'retainedReaderOwnReceiptCount':r['readerOwnReceiptCount'],'noSemanticRereviewOrQARerun':True,'leaseEmpty':True,'foreignIndexesExact':True,'mainIntegrationPerformed':False,'fullUserGoal':x['fullUserGoal'],'unfinishedAuthorBatchOrders':x['unfinishedAuthorBatchOrders']}
+report={'owner':m.O,'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'CURRENT':n,'remaining':2000-n,'fullGoal':2000,'allCurrentAcceptedHashesExact':True,'all2000FrozenIdTopicOrderDifficultyNumericKey':True,'inheritedFencesByteExact':True,'totalFences':f['totalFences'],'ownRawFreezes':raw,'ownQAReports':qa,'lastApplicableQA':last_applicable,'all110TopicsSameAsLastQA':True,'retainedReaderNativeId':reader['threadId'],'retainedReaderOwnReceiptCount':r['readerOwnReceiptCount'],'noSemanticRereviewOrQARerun':True,'leaseEmpty':True,'foreignIndexesExact':True,'mainIntegrationPerformed':False,'fullUserGoal':x['fullUserGoal'],'unfinishedAuthorBatchOrders':x['unfinishedAuthorBatchOrders']}
 out=D/'handoff-verification.json';m.write(out,report)
 x['helpers'][Path(__file__).name]=str(Path(__file__));m.write(D/'manifest.json',x)
 print(m.savecode([out,D/'manifest.json',Path(__file__)],'Verify exact closed SOURCE slice and full2000 handoff invariants once'))
