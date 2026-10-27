@@ -48,7 +48,7 @@ m.alias_full_body_wrapper_digests(ps,R)
 assert order==31 and R==D/'source-fashion31'
 frozen=m.read(D/'fashion31-raw-freeze-unqualified.json')
 assert frozen['sourceNativeId']==uid
-for name,digest in frozen['rawFileSHA256'].items():assert m.raw(R/name)==digest
+for raw_name,raw_digest in frozen['rawFileSHA256'].items():assert m.raw(R/raw_name)==raw_digest
 ce=a['entries'][0]
 def exact_groups(c):return {'prompt_ordered_answers_key':{'prompt':c['prompt'],'answers':[z['text'] for z in c['answers']],'correctIndex':c['correctIndex']},'explanation':c['explanation'],**{'note'+str(k):z['note'] for k,z in enumerate(c['answers'])}}
 old_groups,new_groups=exact_groups(ce['beforeCard']),exact_groups(ce['proposedCard']);literal_hash_aliases=[]
