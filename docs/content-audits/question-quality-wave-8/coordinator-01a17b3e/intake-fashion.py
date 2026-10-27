@@ -21,6 +21,7 @@ for R in packet_paths:
     m.alias_source80_cycle1_single_peer_entry(candidate,sp,ps,R)
     m.alias_source26_cycle1_canonical_readiness(candidate,sp,ps,R)
     m.alias_source23_cycle1_self_preimage(candidate,sp,ps,R)
+    m.alias_fashion7_cycle1_redundant_global(candidate,sp,ps,R)
     m.alias_source22_peer_header(candidate,sp,ps,R)
     m.alias_source9_global_field_names(candidate,sp,ps,R)
     m.alias_source86_single_peer_entry(candidate,sp,ps,R)
