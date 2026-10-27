@@ -12,7 +12,7 @@ Keep detailed logs outside conversation. Save compact handoff at context pressur
 
 Use GPT-6 Luna/medium for clear bounded development tasks. Explicit model/effort choices win; never use Luna below medium. Default subagent preferences are not a session-wide model pin.
 
-For multi-chat coordination wait for completion/required-action events with wait_threads timeoutMs 120000 and saved afterCursor for each target. Unchanged timeout is not a reason for read_thread or a status message. Respect tool yielding and current interaction limits. After the second compaction finish only the current verifiable slice, required checks and handoff; do not start the next slice in the saturated session. New chats and messages still require the existing user authorization.
+Use [coordination.md](../coordination.md) for event waits, saved cursors and asynchronous resume intervals; use [context-efficiency.md](../context-efficiency.md) for compaction, manifest projection and replacement ownership. These do not authorize new scope or unrelated messages.
 
 
 ## ACK → START только для опасных переходов (решение 2026-10-19)
