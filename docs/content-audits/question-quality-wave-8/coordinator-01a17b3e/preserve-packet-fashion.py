@@ -15,6 +15,7 @@ a,sp,ps=[m.read(R/f) for f in ['candidate.json','sourceproof.json','peer-snapsho
 m.alias_source80_cycle1_single_peer_entry(a,sp,ps,R)
 m.alias_source26_cycle1_canonical_readiness(a,sp,ps,R)
 m.alias_source23_cycle1_self_preimage(a,sp,ps,R)
+m.alias_fashion7_cycle1_redundant_global(a,sp,ps,R)
 m.alias_source22_peer_header(a,sp,ps,R)
 m.alias_source9_global_field_names(a,sp,ps,R)
 m.alias_source86_single_peer_entry(a,sp,ps,R)
