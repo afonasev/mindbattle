@@ -15,6 +15,7 @@ assert q['id'] not in x['ownProgress']['accepted']
 x['ownProgress']['accepted'].append(q['id']);x['ownProgress']['certificates'].append(str(certificatePath));x['ownProgress']['newlyCertified']=delta
 assert len(x['ownProgress']['accepted'])==len(set(x['ownProgress']['accepted']))==delta
 x.update(CURRENT=n,remaining=2000-n,newlyCertified=delta,phase=f'ACTIVE_FULL2000_CURRENT{n}')
+x['fullUserGoal'].update(CURRENT=n,remaining=2000-n,complete=False)
 x[f'pendingFashion{order}'].update(status=status,qualityCredit=1,certification=str(certificatePath),certificationCodeCommit=certificateCommit)
 retain='--retain-author' in sys.argv[5:]
 keep_active='--keep-active-author' in sys.argv[5:]
