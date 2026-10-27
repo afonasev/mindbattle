@@ -60,15 +60,17 @@ for order in x['ownedSourceOrders']:
    f=packet/name;assert f.resolve().is_relative_to(packet.resolve()) and m.raw(f)==digest
    assert subprocess.check_output(['git','-C',str(m.C),'show',freeze+':'+str(f.relative_to(m.C))])==f.read_bytes()
   raw.append({'sourceOrder':order,'packet':str(packet),'freeze':freeze,'originalRawFilesByteExact':len(originals),'originalRawProof':bound['path']})
-# The coordinator closed SOURCE100 before binding fashion; preserve that own raw too.
-closed100=D/'source-cars-road-transport100';f100=m.read(D/'source100-raw-freeze.json')
-assert set(f100['files'])=={str(p.relative_to(closed100)) for p in closed100.rglob('*') if p.is_file()}
-for name,digest in f100['files'].items():
- p=closed100/name;assert m.raw(p)==digest
- assert subprocess.check_output(['git','-C',str(m.C),'show','a7586df46261f5968406bfaedfcd20279cc773b2:'+str(p.relative_to(m.C))])==p.read_bytes()
-closed_manifest=m.read(D/'closed-cars-route-manifest.json');assert closed_manifest['pendingCarsRoadTransport100']['qualityCredit']==0
-assert m.sha(m.read(m.C/'src/content/topics/cars-road-transport.json')['questions'][99])==closed_manifest['pendingCarsRoadTransport100']['beforeHash']
-raw.append({'sourceOrder':100,'topicId':'cars-road-transport','packet':str(closed100),'freeze':'a7586df46261f5968406bfaedfcd20279cc773b2','originalRawFilesByteExact':len(f100['files']),'closedBeforeFashionRoute':True})
+# Own pre-fashion raw is checked by its owning coordinator; successors inherit the frozen pointer.
+closed_pre=x.get('ownPreFashionClosedSource100')
+if closed_pre and closed_pre['owner']==m.O:
+ closed100=Path(closed_pre['rawPacket']);f100=m.read(closed_pre['freezeArtifact'])
+ assert set(f100['files'])=={str(p.relative_to(closed100)) for p in closed100.rglob('*') if p.is_file()}
+ for name,digest in f100['files'].items():
+  p=closed100/name;assert m.raw(p)==digest
+  assert subprocess.check_output(['git','-C',str(m.C),'show',closed_pre['freezeCommit']+':'+str(p.relative_to(m.C))])==p.read_bytes()
+ closed_manifest=m.read(closed_pre['closedManifest']);assert closed_manifest['pendingCarsRoadTransport100']['qualityCredit']==0
+ assert m.sha(m.read(m.C/'src/content/topics/cars-road-transport.json')['questions'][99])==closed_manifest['pendingCarsRoadTransport100']['beforeHash']
+ raw.append({'sourceOrder':100,'topicId':'cars-road-transport','packet':str(closed100),'freeze':closed_pre['freezeCommit'],'originalRawFilesByteExact':len(f100['files']),'closedBeforeFashionRoute':True})
 qa=x['ownAffectedRuns']
 previous=m.read(Path(x['predecessorHandoff']).parent/'handoff-verification.json')
 last_applicable=qa[-1] if qa else previous.get('lastApplicableQA',previous['ownQAReports'][-1] if previous.get('ownQAReports') else None)
