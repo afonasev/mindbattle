@@ -1027,3 +1027,40 @@ def alias_source22_peer_header(candidate,sp,ps,R):
   else:missing.append(key);ps[key]=a[key]
  assert missing==a['originalMissingHeaderFields']
  ps['technicalOwn22HeaderAddendum']={'authorAddendum':str(ap),'addendumSHA256':raw(ap),'rawPeer':str(R/'peer-snapshot.json'),'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalMissingHeaderFields':missing,'originalFailureUncured':True,'operation':'Expose exact same-author explicit UID/topic/cycle declaration and SHA-bound immutable peer packet at standard header names. No raw, body, source, ground or identity invention.'}
+
+
+def alias_fashion7_cycle1_redundant_global(candidate,sp,ps,R):
+ """Exact frozen own7 current full bodies bind its redundant stale self MAIN row."""
+ R=pathlib.Path(R)
+ if R!=D/'source-fashion7-cycle1':return
+ import copy,subprocess
+ frozen=read(D/'fashion7-cycle1-raw-freeze-unqualified.json')
+ for name,digest in frozen['rawFileSHA256'].items():
+  assert raw(R/name)==digest
+  assert (R/name).read_bytes()==subprocess.check_output(['git','-C',str(C),'show','17c6678fd4c6b3034782a86de0e8bac7823c2bc7:'+str((R/name).relative_to(C))])
+ uid='01a17b43-34b1-74b3-af1f-19887807fe35'
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']==uid
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==1
+ e=candidate['entries'][0];assert e['id']=='fashion-raincoat-water' and e['sourceOrder']==7
+ live=read(C/'src/content/topics/fashion.json');full=ps['actualCurrentPeers']
+ assert len(full)==100 and [v['sourceOrder'] for v in full]==list(range(1,101))
+ assert [v['card'] for v in full]==ps['sameTopicMAIN']['questions']==live['questions']
+ assert all(v['id']==v['card']['id'] and v['sha256']==sha(v['card']) for v in full)
+ assert e['beforeCard']==live['questions'][6] and e['beforeHash']==sha(e['beforeCard'])
+ old=read(D/'source-fashion7/candidate.json')['entries'][0]['beforeCard']
+ g=ps['globalMAIN'];assert len(g['rows'])==11000 and sha(g['rows'])==g['rowsCanonicalSHA256']
+ rows=[];bindings=[]
+ for p in sorted((C/'src/content/topics').glob('*.json')):
+  t=read(p);bindings.append({'path':str(p.relative_to(C)),'sha256':raw(p)})
+  rows.extend({'topicId':t['id'],'id':q['id'],'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']} for q in t['questions'])
+ differences=[i for i,(a,b) in enumerate(zip(g['rows'],rows)) if a!=b]
+ assert len(differences)==1 and rows[differences[0]]['id']==e['id']
+ oldrow={'topicId':'fashion','id':old['id'],'prompt':old['prompt'],'answers':[a['text'] for a in old['answers']],'correctIndex':old['correctIndex']}
+ assert g['rows'][differences[0]]==oldrow
+ prior=copy.deepcopy(g);assert len(g['allCurrentFileByteBindings'])==110
+ for before,now in zip(g['allCurrentFileByteBindings'],bindings):
+  assert before['path']==now['path']
+  if now['path']!='src/content/topics/fashion.json':assert before['sha256']==now['sha256']
+ g.update(rows=rows,rowsCanonicalSHA256=sha(rows),allCurrentFileByteBindings=bindings)
+ proof={'rawFreeze':'17c6678fd4c6b3034782a86de0e8bac7823c2bc7','rawFileSHA256':frozen['rawFileSHA256'],'originalGlobalMAIN':prior,'full100CurrentBodiesAlreadyExact':True,'onlyChangedMAINRow':e['id'],'originalFailuresUncured':['7c8a66','6e3046','7e4932'],'qualityCredit':0,'operation':'Expose identical already-saved full CURRENT own self body in redundant global projection only. All other10999 rows and109files exact. No raw, literal, source, ground, peer judgment or cycle change.'}
+ ps['technicalFashion7Cycle1RedundantGlobalAlias']=proof;sp['technicalFashion7Cycle1RedundantGlobalAlias']=proof
