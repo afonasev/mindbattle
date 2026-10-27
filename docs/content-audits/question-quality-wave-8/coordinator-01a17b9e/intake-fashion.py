@@ -77,6 +77,7 @@ for R in packet_paths:
     m.alias_explicit_complete_inventory_paths(candidate,sp,ps,R)
     m.alias_explicit_cross_topic_peers(candidate,sp,ps,R)
     m.alias_same_topic_current_peer_container(candidate,sp,ps,R)
+    m.alias_explicit_body_peer_fields(candidate,sp,ps,R)
     m.alias_explicit_root_candidate(candidate,sp,ps,R)
     m.alias_source77_own_prior_application(candidate,sp,ps,R)
     m.alias_source31_root_entry_identity(candidate,sp,R)

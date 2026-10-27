@@ -4,6 +4,23 @@ C=pathlib.Path(__file__).resolve().parents[4]
 P=pathlib.Path('/Users/eaafonasev/Projects/mindbattle/planning')
 D=pathlib.Path(__file__).parent
 O='01a17b9e-f725-7421-a651-61846e5475fa'
+def alias_explicit_body_peer_fields(candidate,sp,ps,R):
+ """Expose already saved body/digest fields as standard peer bindings."""
+ peers=ps.get('actualCurrentPeers',[])
+ if not isinstance(peers,list) or not peers or 'card' in peers[0]:return
+ if not all('body' in p and 'bodyCanonicalSHA256' in p for p in peers):return
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
+ assert candidate['cycle']==sp['cycle']==ps['cycle']
+ topic=read(C/ps['sameTopicMAIN']['path']);same=ps['sameTopicMAIN']
+ assert len(peers)==same['questionCount']==len(topic['questions'])==100
+ assert raw(C/same['path'])==same['fileSHA256']
+ assert [p['body'] for p in peers]==same['questions']==topic['questions']
+ for order,p in enumerate(peers,1):
+  assert p['id']==p['body']['id'] and p['topicId']==topic['id']
+  assert sha(p['body'])==p['bodyCanonicalSHA256']
+  if 'sourceOrder' in p:assert p['sourceOrder']==order
+  p.update(card=p['body'],sha256=p['bodyCanonicalSHA256'],sourceOrder=order)
+ ps['technicalExplicitBodyPeerFieldAlias']={'rawPeerPath':str(pathlib.Path(R)/'peer-snapshot.json'),'rawPeerSHA256':raw(pathlib.Path(R)/'peer-snapshot.json'),'originalFields':['body','bodyCanonicalSHA256'],'orderedCurrentBodiesExact':100,'operation':'Identical full original bodies/digests exposed at standard card/sha256 keys; order from verified full ordered100. No raw or source/peer judgment change. Original checker KeyError c7aba1 remains uncured.'}
 def alias_source80_cycle1_single_peer_entry(candidate,sp,ps,R):
  """Expose identical containers from one SHA-bound own80 sole-cycle1 entry."""
  import copy
