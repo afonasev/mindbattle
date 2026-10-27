@@ -4,6 +4,30 @@ C=pathlib.Path(__file__).resolve().parents[4]
 P=pathlib.Path('/Users/eaafonasev/Projects/mindbattle/planning')
 D=pathlib.Path(__file__).parent
 O='01a17b9e-f725-7421-a651-61846e5475fa'
+def alias_source25_cycle1_stale_before_groups(candidate,sp,ps,R):
+ """Exact explicit CURRENT body overrides redundant six hashes copied from raw HOLD."""
+ R=pathlib.Path(R)
+ if R!=D/'source-fashion25-cycle1':return
+ frozen=read(D/'fashion25-cycle1-raw-freeze-unqualified.json')
+ for name,digest in frozen['rawFileSHA256'].items():assert raw(R/name)==digest
+ oldpacket=read(D/'source-fashion25/candidate.json')
+ initial=read(D/'source-fashion25-initial-complete/candidate.json')
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']==oldpacket['sourceNativeId']==initial['sourceNativeId']
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==1
+ e=candidate['entries'][0];old=oldpacket['entries'][0]['beforeCard']
+ current=read(C/'src/content/topics/fashion.json')['questions'][24]
+ assert e['sourceOrder']==25 and e['beforeCard']==current==initial['entries'][0]['proposedCard']
+ assert e['beforeHash']==sha(current) and e['afterHash']==sha(e['proposedCard'])
+ def groups(q):return {'prompt_ordered_answers_key':{'prompt':q['prompt'],'answers':[a['text'] for a in q['answers']],'correctIndex':q['correctIndex']},'explanation':q['explanation'],**{'note'+str(k):a['note'] for k,a in enumerate(q['answers'])}}
+ bg,stale,after=groups(current),groups(old),groups(e['proposedCard'])
+ assert set(e['fieldGroups'])==set(bg) and len(bg)==6
+ original={k:v['beforeCanonicalSHA256'] for k,v in e['fieldGroups'].items()}
+ assert all(original[k]==sha(stale[k]) and v['afterCanonicalSHA256']==sha(after[k]) for k,v in e['fieldGroups'].items())
+ for k,v in e['fieldGroups'].items():
+  v['originalStaleHOLDPreimageGroupSHA256']=v['beforeCanonicalSHA256']
+  v['beforeCanonicalSHA256']=sha(bg[k])
+ proof={'rawPacket':str(R),'rawSHA256':raw(R/'candidate.json'),'originalFailure':'648984','originalDeclaredBeforeGroupSHA256':original,'oldRawHOLDBodySHA256':sha(old),'explicitActualBeforeCardSHA256':e['beforeHash'],'initialCompletedProposalSHA256':initial['entries'][0]['afterHash'],'operation':'Only redundant before-group hashes derived from explicit full beforeCard, exact current catalog and applied INITIAL proposal. Stale original values exactly match preserved original HOLD preimage. All raw, before/after bodies, source grounds and judgments unchanged; original failure uncured, no content fix or quality credit.'}
+ candidate['technicalStaleHOLDPreimageGroupHashAlias']=proof;sp['technicalStaleHOLDPreimageGroupHashAlias']=proof
 def alias_explicit_body_peer_fields(candidate,sp,ps,R):
  """Expose already saved body/digest fields as standard peer bindings."""
  peers=ps.get('actualCurrentPeers',[])
