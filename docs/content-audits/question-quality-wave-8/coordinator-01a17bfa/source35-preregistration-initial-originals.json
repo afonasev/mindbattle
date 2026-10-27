@@ -1,0 +1,113 @@
+{
+  "owner": "01a17bfa-9ef0-7290-88c4-2de8c41f56d8",
+  "sourceNativeId": "01a17c60-79fa-7262-b5da-ade0d85c6202",
+  "nativeJournal": "/Users/eaafonasev/.codex/sessions/2026/10/27/rollout-2026-10-27T13-00-59-01a17c60-79fa-7262-b5da-ade0d85c6202.jsonl",
+  "originalWrongSTARTTurn": "01a17c67-fe42-73d2-aa72-0567cc3052f1",
+  "firstTaskStartLine": 73,
+  "originalFirstTaskStarted": {
+    "timestamp": "2026-10-27T08:09:12.526Z",
+    "ordinal": 72,
+    "type": "event_msg",
+    "payload": {
+      "type": "task_started",
+      "turn_attribution": {
+        "turn_id": "01a17c67-fe42-73d2-aa72-0567cc3052f1",
+        "turn_trigger": "app_tool_send_message",
+        "parent_turn_id": "01a17c0c-46d2-71c3-ab87-43593377452b",
+        "initiating_agent_path": null,
+        "root_turn_id": "01a1781e-6c1e-7201-acc4-db40b51de7a5"
+      },
+      "turn_id": "01a17c67-fe42-73d2-aa72-0567cc3052f1",
+      "root_turn_id": "01a1781e-6c1e-7201-acc4-db40b51de7a5",
+      "started_at": 1793088552,
+      "model_context_window": 258400,
+      "collaboration_mode_kind": "default"
+    }
+  },
+  "exactSTOPNativeTaskComplete": {
+    "timestamp": "2026-10-27T08:11:02.803Z",
+    "ordinal": 215,
+    "type": "event_msg",
+    "payload": {
+      "type": "task_complete",
+      "root_turn_id": "01a1781e-6c1e-7201-acc4-db40b51de7a5",
+      "turn_id": "01a17c67-fe42-73d2-aa72-0567cc3052f1",
+      "last_agent_message": "STOP: новый START отозван координатором до регистрации автора. SOURCE35 не продолжал.\n\nДо получения отзыва я открыл назначенную ссылку Britannica; запрос завершился неповторяемой ошибкой. Единственная официальная альтернатива, Merriam‑Webster, открылась. Попытка сохранить её ответ в `source-fashion35/polyester-context.json` завершилась `FileNotFoundError`, поскольку подкаталога не было. Файл не создан, повторного сохранения и других записей не выполнял. Также указанный `source-fashion35-task.json` отсутствовал; пакетное задание `author35-batch-task.json` существует.",
+      "started_at": 1793088552,
+      "completed_at": 1793088662,
+      "duration_ms": 110276,
+      "time_to_first_token_ms": 2900
+    }
+  },
+  "supportedSTOPOriginal": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"timedOut\":false,\"wake\":{\"reason\":\"turnCompleted\",\"turnId\":\"01a17c67-fe42-73d2-aa72-0567cc3052f1\",\"threadId\":\"01a17c60-79fa-7262-b5da-ade0d85c6202\",\"hostId\":\"local\"},\"polls\":[{\"schemaVersion\":1,\"cursor\":\"ca1a8ab3-dd5e-4906-bc01-4594faa83f28:4\",\"revision\":4,\"changed\":true,\"thread\":{\"id\":\"01a17c60-79fa-7262-b5da-ade0d85c6202\",\"hostId\":\"local\",\"status\":{\"type\":\"idle\"}},\"latestTurn\":{\"id\":\"01a17c67-fe42-73d2-aa72-0567cc3052f1\",\"status\":\"completed\",\"error\":null,\"startedAt\":1793088552,\"completedAt\":1793088662,\"durationMs\":110276},\"latestAssistantMessageId\":\"msg_0bf2e48d9e728f41016ae05c95632c819196ce9314ac0c1d58\",\"latestAssistantMessage\":{\"id\":\"msg_0bf2e48d9e728f41016ae05c95632c819196ce9314ac0c1d58\",\"turnId\":\"01a17c67-fe42-73d2-aa72-0567cc3052f1\",\"phase\":\"final_answer\",\"text\":\"STOP: новый START отозван координатором до регистрации автора. SOURCE35 не продолжал. До получения отзыва я открыл назначенную ссылку Britannica; запрос завершился неповторяемой ошибкой. Единственная официальная альтернатива, Merriam‑Webster, открылась. Попытка сохранить её ответ в source-fashion35/polyester-context.json завершилась FileNotFoundError, поскольку подкаталога не было. Файл не создан, повторного сохранения и других записей не выполнял. Также указанный source-fashion35-task.json отсутствовал; пакетное задание author35-batch-task.json существует.\"},\"latestToolMarkerId\":\"exec-81ca7c45-6da5-4944-82c0-99670cf55e0f\",\"latestToolMarker\":{\"id\":\"exec-81ca7c45-6da5-4944-82c0-99670cf55e0f\",\"turnId\":\"01a17c67-fe42-73d2-aa72-0567cc3052f1\",\"type\":\"commandExecution\",\"name\":\"commandExecution\",\"status\":\"completed\"}}]}"
+      }
+    ],
+    "isError": false
+  },
+  "actualRequests": [
+    {
+      "url": "https://www.britannica.com/science/polyester",
+      "originalCall": {
+        "timestamp": "2026-10-27T08:09:48.993Z",
+        "ordinal": 123,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_0bf2e48d9e728f41016ae05c4c5ea88191b494af9f381b1406",
+          "status": "completed",
+          "call_id": "call_2499d8f33ca443a9a69a2e28d03c73cd",
+          "name": "exec",
+          "input": "const r = await tools.web__run({open:[{ref_id:\"https://www.britannica.com/science/polyester\"}],response_length:\"long\"}); store(\"source35_primary_result\",r); text(r);\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a17c67-fe42-73d2-aa72-0567cc3052f1",
+            "create_time": 1793088588.9602118
+          }
+        }
+      },
+      "callLine": 124,
+      "callId": "call_2499d8f33ca443a9a69a2e28d03c73cd",
+      "resultLine": 127,
+      "storedNativeOriginal": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17bfa/source35-preregistration-native-result-127.json",
+      "storedNativeOriginalSHA256": "3d636c57f2b2da77471e48cba9489a55091d421457788d65d2638c3b51b7e330"
+    },
+    {
+      "url": "https://www.merriam-webster.com/dictionary/polyester",
+      "originalCall": {
+        "timestamp": "2026-10-27T08:10:14.026Z",
+        "ordinal": 172,
+        "type": "response_item",
+        "payload": {
+          "type": "custom_tool_call",
+          "id": "ctc_0bf2e48d9e728f41016ae05c65ca88819185785adbd902bee5",
+          "status": "completed",
+          "call_id": "call_9d76bc4502664af796678482eb34c20a",
+          "name": "exec",
+          "input": "const r = await tools.web__run({open:[{ref_id:\"https://www.merriam-webster.com/dictionary/polyester\"}],response_length:\"long\"}); store(\"source35_official_alt\",r); text(r);\n",
+          "internal_chat_message_metadata_passthrough": {
+            "turn_id": "01a17c67-fe42-73d2-aa72-0567cc3052f1",
+            "create_time": 1793088613.8561327
+          }
+        }
+      },
+      "callLine": 173,
+      "callId": "call_9d76bc4502664af796678482eb34c20a",
+      "resultLine": 176,
+      "storedNativeOriginal": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17bfa/source35-preregistration-native-result-176.json",
+      "storedNativeOriginalSHA256": "c076e0f2f7c8a09d03d8e774b92d6c0deaf7264335c5ceb32008c0e73f10f001"
+    }
+  ],
+  "actualWebCalls": 2,
+  "captureFailedNoFiles": true,
+  "sameInitialNoReset": true,
+  "originalWrongSTARTAndCaptureFailureUncured": true,
+  "rootRegistrationOriginalFailure": "6480ed",
+  "rootDependentFailures": [
+    "e4a75d"
+  ],
+  "rootDependentStageSync": "861b70",
+  "rootWrongSTARTCause": "Continued dependent actions after failed registration output instead of halting"
+}
