@@ -270,6 +270,10 @@ def alias_explicit_cross_topic_peers(candidate,sp,ps,R):
  assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
  peers=copy.deepcopy(ps[container]);position_aliases=[]
  for peer in peers:
+  if 'sha256' not in peer:
+   assert peer['canonicalSHA256']==sha(peer['card'])
+   peer['sha256']=peer['canonicalSHA256']
+   peer['technicalExplicitCanonicalDigestNameAlias']='Identical declared full-card canonical digest exposed under redundant sha256 name; original raw/ground unchanged. Original KeyError bf45bf uncured.'
   t=read(C/('src/content/topics/'+peer['topicId']+'.json'))
   if 'sourceOrder' not in peer:
    matches=[(i,q) for i,q in enumerate(t['questions'],1) if q['id']==peer['id']]
