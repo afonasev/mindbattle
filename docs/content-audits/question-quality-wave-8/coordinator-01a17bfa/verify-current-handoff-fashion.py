@@ -33,6 +33,14 @@ for proof_path in D.glob('*-native-proof.json'):
    binding=proof['originalNetworkScannerDiagnostic'];original=m.read(binding['path'])
    assert m.raw(binding['path'])==binding['rawSHA256'] and proof['packet']==original['packet'] and proof['rawFileSHA256']==original['rawFileSHA256']
    continue  # Accounting-only derived proof preserves the unique original raw snapshot.
+  if proof['packet'] in raw_proofs:
+   alias=m.read(D/'source31-preservation-technical-alias.json')
+   existing=Path(raw_proofs[proof['packet']]['path'])
+   assert proof['packet']==str(D/'source-fashion31')
+   assert {proof_path,existing}=={Path(alias['originalNativeProof']),Path(alias['standardNativeProofAlias'])}
+   assert m.raw(alias['originalNativeProof'])==alias['originalNativeProofSHA256']==alias['aliasSHA256']==m.raw(alias['standardNativeProofAlias'])
+   assert proof==raw_proofs[proof['packet']]['data'] and alias['exactByteCopy'] and alias['originalFailuresUncured']
+   continue  # Only this exact byte-identical original proof filename alias.
   assert proof['packet'] not in raw_proofs
   raw_proofs[proof['packet']]={'path':str(proof_path),'data':proof}
 for order in x['ownedSourceOrders']:
