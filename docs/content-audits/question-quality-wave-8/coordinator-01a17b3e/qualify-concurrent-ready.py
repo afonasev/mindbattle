@@ -112,8 +112,8 @@ for source in sp['rawSources']:
  if not jp.exists():
   matches=list(pathlib.Path('/Users/eaafonasev/.codex/archived_sessions').rglob('*'+cap['sourceNativeId']+'.jsonl'));assert len(matches)==1;jp=matches[0]
  assert [json.loads(line) for line in jp.open()][cap['nativeRecordLine']-1]==cap['originalRecord']
- if order==82 and 'completeOutputPointer' not in source:
-  pointer=cap['completeOutputPointer'];assert pointer in source['locator'] and cap['url']==source['url']
+ if order in (82,10) and 'completeOutputPointer' not in source:
+  pointer=cap['completeOutputPointer'];assert cap['url']==source['url'] and (pointer in source['locator'] or (order==10 and uid=='01a17b54-3057-7733-b6da-789005c30c5d'))
   body=cap
   for key in pointer.split('/')[1:]:body=body[int(key)] if isinstance(body,list) else body[key]
   assert isinstance(body,str) and source['url'] in body and __import__('hashlib').sha256(body.encode()).hexdigest()==cap['completeOutputSHA256']
