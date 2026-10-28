@@ -79,12 +79,19 @@ playtest, визуальной приёмки игры, сборки или де
 точной tooling revision остаётся отдельной. Никакой автоматический gate не
 означает human/device/platform acceptance.
 
-## Известный открытый gate на 2026-10-01
+## Исторический FAIL и текущий статус network gate
 
-`qa:network` обнаружил существующий runtime-дефект: `server/index.mjs`
-использует `mindbattle-questions-2026-09-02-r3`, а `src/content/catalog.ts` —
-`mindbattle-questions-2026-09-29-quality-wave-3`. `validateFeedbackEvent`
-отвергает сетевой feedback с актуальной revision; продолжение после него
-остаётся failed. Этот gate и зависящий full не считаются green. Исправление
-runtime — отдельный scope; QA tooling не подменяет feedback успешным mock.
+Исторический результат `qa:network` на 2026-10-01 — FAIL: `server/index.mjs`
+использовал `mindbattle-questions-2026-09-02-r3`, а `src/content/catalog.ts` —
+`mindbattle-questions-2026-09-29-quality-wave-3`. Из-за расхождения
+`validateFeedbackEvent` отвергал сетевой feedback с актуальной revision;
+проверка продолжения после него завершилась ошибкой. Этот FAIL сохраняется.
 Evidence: planning `evidence/focused-qa-routes/network/` и acceptance.md.
+
+На 2026-10-28 сервер и клиентский каталог читают revision из общего
+`src/content/revision.json`. Это подтверждено чтением кода, но не новым
+прогоном: текущий статус network gate — NotRun. Исторический FAIL не является
+результатом проверки текущей revision; общий источник revision сам по себе
+не доказывает PASS. Network gate и зависящий full не считаются green без
+соответствующего подтверждённого прогона. QA tooling не подменяет feedback
+успешным mock.
