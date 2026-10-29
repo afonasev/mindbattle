@@ -1,0 +1,62 @@
+{
+  "owner": "01a17c8c-3b71-7903-a331-e34f1759e640",
+  "originalExec": "3bac9d",
+  "originals": [
+    {
+      "timestamp": "2026-10-29T17:02:13.570Z",
+      "ordinal": 2793,
+      "type": "response_item",
+      "payload": {
+        "type": "custom_tool_call",
+        "id": "ctc_0a008228e6d2371c016ae37c07f56881918158cab6c8ead744",
+        "status": "completed",
+        "call_id": "call_a6a267bc8ace49798917f8962002f64b",
+        "name": "exec",
+        "input": "text(await tools.exec_command({cmd:\"python3 -B - <<'PY'\\nimport json,importlib.util\\nfrom pathlib import Path\\nD=Path('/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17c8c');s=importlib.util.spec_from_file_location('m',D/'owned-tools.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)\\nx=m.read(D/'manifest.json');S=x['successorThreadId'];native=Path(x['successorNativeJournal']);rows=[json.loads(l) for l in native.open()];assert rows[0]['payload']['id']==S and not any(r['type']=='compacted' for r in rows)\\ndef vals(v):\\n if isinstance(v,str):\\n  try:yield from vals(json.loads(v))\\n  except (ValueError,TypeError):pass\\n elif isinstance(v,dict):\\n  yield v\\n  for z in v.values():yield from vals(z)\\n elif isinstance(v,list):\\n  for z in v:yield from vals(z)\\nfound={}\\nfor r in rows:\\n a=r.get('payload',{})\\n if a.get('type')!='custom_tool_call_output':continue\\n for v in vals(a.get('output')):\\n  if v.get('chunk_id') in ['d46fcd','b8d515']:found[v['chunk_id']]=(r,v)\\nassert set(found)=={'d46fcd','b8d515'};assert found['d46fcd'][1]['session_id']==8794 and found['b8d515'][1]['exit_code']==0\\nstdout=found['b8d515'][1]['output'];guard=json.loads(stdout);assert guard['READONLY_BARRIER']=='PASS' and guard['CURRENT']==1183 and guard['remaining']==817 and guard['owners']==m.O and guard['readerOwnReceipts']==9 and guard['fences']==332 and guard['HEAD']=='d13b7629eb822d45c7708a6cc4cfaf37a45c4d70'\\nids={r['payload']['call_id'] for r,_ in found.values()};originals=[r for r in rows if r.get('payload',{}).get('call_id') in ids];assert len(originals)==4\\nactual=[r for r in rows if r.get('payload',{}).get('type')=='custom_tool_call' and 'python3 -B '+str(D/'successor-readonly-check-v20261025.py') in r['payload'].get('input','')];assert len(actual)==1\\nturn='01a1889a-86ae-7131-b2e2-90bcd7484793';complete=[r for r in rows if r.get('payload',{}).get('type')=='task_complete' and r['payload'].get('turn_id')==turn];assert len(complete)==1 and 'guard PASS' in complete[0]['payload']['last_agent_message']\\nparentRows=[json.loads(l) for l in Path(x['rootNativeAudit']['nativeJournal']).open()];supported=[]\\nfor r in parentRows:\\n if r.get('payload',{}).get('type') not in ['custom_tool_call_output','function_call_output']:continue\\n for v in vals(r['payload'].get('output')):\\n  if not isinstance(v.get('polls'),list):continue\\n  for p in v['polls']:\\n   if p.get('thread',{}).get('id')==S and p.get('latestTurn',{}).get('id')==turn and p['latestTurn']['status']=='completed':supported.append((r,v,p))\\nassert len(supported)==1,len(supported);record,response,poll=supported[0]\\np=D/'successor-guard-native-originals.json';ackp=D/'successor-ack.json';assert not p.exists() and not ackp.exists()\\nm.write(p,{'owner':S,'nativeJournal':str(native),'guardExec':'d46fcd','session':8794,'poll':'b8d515','exit':0,'stdout':stdout,'originals':originals,'nativeTaskComplete':complete[0],'supportedCompletionOriginal':record,'supportedCompletionResult':response})\\nm.write(ackp,{'owner':m.O,'successor':S,'processRevision':'2026-10-25','CURRENT':1183,'remaining':817,'readOnlyIntakeGuard':'PASS','rootPersonallyVerifiedExactNativeACK':True,'rootPersonallyVerifiedSupportedACK':True,'supportedCompletion':{'threadId':S,'status':poll['latestTurn']['status'],'turnId':poll['latestTurn']['id']},'originals':str(p),'originalsSHA256':m.raw(p),'actualExec':'d46fcd','actualPoll':'b8d515','actualExit':0,'noGuardOrQARerun':True})\\nprint(m.savecode([p,ackp],'Preserve sole successor readonly guard original call/result/poll and exact completion'));print('guardActualOnce',True,'nativeTurn',turn,'supportedCompletion','completed')\\nPY\",\"max_output_tokens\":1500}));\n",
+        "internal_chat_message_metadata_passthrough": {
+          "turn_id": "01a1888a-812e-70b2-b96d-8e386058e09e",
+          "create_time": 1793293319.9629064
+        }
+      }
+    },
+    {
+      "timestamp": "2026-10-29T17:02:13.836Z",
+      "ordinal": 2796,
+      "type": "response_item",
+      "payload": {
+        "type": "custom_tool_call_output",
+        "id": "ctco_01a1889c-b54b-7fd2-a06b-0eef37bf3d0e",
+        "call_id": "call_a6a267bc8ace49798917f8962002f64b",
+        "output": [
+          {
+            "type": "input_text",
+            "text": "Script completed\nWall time 0.1 seconds\nOutput:\n"
+          },
+          {
+            "type": "input_text",
+            "text": "{\"chunk_id\":\"3bac9d\",\"wall_time_seconds\":0.000011209,\"exit_code\":1,\"original_token_count\":23,\"output\":\"Traceback (most recent call last):\\n  File \\\"<stdin>\\\", line 24, in <module>\\nAssertionError\\n\"}"
+          }
+        ],
+        "internal_chat_message_metadata_passthrough": {
+          "turn_id": "01a1888a-812e-70b2-b96d-8e386058e09e",
+          "create_time": 1793293333.835953
+        }
+      },
+      "metadata": {
+        "client_authored": false,
+        "fallback_token_limit_override": 12000
+      }
+    }
+  ],
+  "failure": "Plain guard PASS selector did not accept Markdown guard **PASS** in actual native task_complete.",
+  "correctedCaptureExec": "1907a9",
+  "correctedCapture": "/Users/eaafonasev/.codex/worktrees/question-quality-wave6-01a12b0f/mindbattle/docs/content-audits/question-quality-wave-8/coordinator-01a17c8c/successor-guard-native-originals.json",
+  "unchangedGuardOriginals": {
+    "exec": "d46fcd",
+    "poll": "b8d515",
+    "exit": 0
+  },
+  "beforeWrites": true,
+  "uncured": true,
+  "noGuardOrQARerun": true
+}
