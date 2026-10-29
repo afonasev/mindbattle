@@ -533,6 +533,36 @@ def alias_full_prompt_answer_concatenation(candidate,sp):
 
 def alias_explicit_nested_inventory(candidate,sp,ps,R):
  """Lossless derived view of explicit SHA-bound inventory and original100 peers."""
+ if pathlib.Path(R)==D/'source-fashion48' and 'globalMAIN' not in ps:
+  import copy
+  ap=D/'source48-inventory-binding-addendum/metadata.json';a=read(ap)
+  frozen=read(D/'fashion48-raw-freeze-unqualified.json')
+  assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']==a['sourceNativeId']==frozen['sourceNativeId']
+  assert candidate['cycle']==sp['cycle']==ps['cycle']==a['cycle']==0
+  assert a['sourceOrder']==48 and a['id']==candidate['entries'][0]['id']
+  for name,digest in frozen['rawFileSHA256'].items():assert raw(pathlib.Path(R)/name)==digest
+  for b in a['unchangedFileBindings']:assert raw(b['path'])==b['sha256']
+  facts=a['inventoryFacts'];ip=pathlib.Path(facts['sourceInventoryPath'])
+  assert ip==pathlib.Path(ps['inventoryProvenance']['path']) and ip.is_relative_to(R)
+  assert raw(ip)==facts['sourceInventorySHA256']==frozen['rawFileSHA256']['fresh-inventory.json']
+  inv=read(ip);g=inv['globalMAIN'];same=inv['sameTopicMAIN'];peers=ps['actualCurrentPeers']
+  assert g['topicFileCount']==facts['globalMAIN']['topicFileCount']==110
+  assert g['questionCount']==facts['globalMAIN']['questionCount']==ps['inventoryProvenance']['MAINRows']==11000
+  assert g['rowsCanonicalSHA256']==facts['globalMAIN']['rowsCanonicalSHA256']==ps['inventoryProvenance']['rowsCanonicalSHA256']
+  assert len(g['allCurrentFileByteBindings'])==110
+  assert len(peers)==same['questionCount']==facts['sameTopicMAIN']['questionCount']==ps['inventoryProvenance']['topicFileCount']==100
+  assert [p['sourceOrder'] for p in peers]==list(range(1,101))
+  assert [p['card'] for p in peers]==same['questions']==read(C/same['path'])['questions']
+  assert raw(C/same['path'])==same['fileSHA256']==facts['sameTopicMAIN']['fullCurrentFileSHA256']
+  cross=ps['relevantCrossTopicCurrentPeers'];assert len(cross)==5
+  for p in peers+cross:
+   assert sha(p['card'])==p['sha256'] and p['card']==next(q for q in read(C/f"src/content/topics/{p['topicId']}.json")['questions'] if q['id']==p['id'])
+  ps['globalMAIN']=copy.deepcopy(g);ps['sameTopicMAIN']=copy.deepcopy(same)
+  ps['actualCurrentPeers']=peers+cross
+  sp.update(sourceInventoryPath=str(ip),sourceInventorySHA256=raw(ip))
+  ps['technicalSource48InventoryAddendum']={'authorAddendum':str(ap),'addendumSHA256':raw(ap),'rawPeerSHA256':raw(pathlib.Path(R)/'peer-snapshot.json'),'originalFailure':'ebae83','originalCountLabelErrorUncured':True,'operation':'Expose identical frozen author-SHA-bound inventory at standard roots; combine existing100 same-topic and5 cross-topic full current bodies. Original bilateral prose, raw, sources, grounds and judgments unchanged.'}
+  sp['technicalSource48InventoryAddendum']=copy.deepcopy(ps['technicalSource48InventoryAddendum'])
+  return
  if 'globalMAIN' in ps or 'globalMAINRetrieval' not in ps:return
  assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']
  assert candidate['cycle']==sp['cycle']==ps['cycle']
