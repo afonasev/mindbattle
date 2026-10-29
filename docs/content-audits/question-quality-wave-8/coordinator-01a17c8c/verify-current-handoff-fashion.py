@@ -43,7 +43,13 @@ for proof_path in D.glob('*-native-proof.json'):
    continue  # Only this exact byte-identical original proof filename alias.
   assert proof['packet'] not in raw_proofs
   raw_proofs[proof['packet']]={'path':str(proof_path),'data':proof}
-for order in x['ownedSourceOrders']:
+closed_orders=x.get('closedOwnedSourceOrders',x['ownedSourceOrders'])
+unstarted=x.get('preparedUnstartedOwnedSourceOrders',[])
+assert set(closed_orders)|set(unstarted)==set(x['ownedSourceOrders']) and not set(closed_orders)&set(unstarted)
+for order in unstarted:
+ assert order==43 and not x.get(f'pendingFashion{order}') and not (D/f'source-fashion{order}').exists()
+ evidence=m.read(x['source43PreparedUndispatched']);assert evidence['STARTNeverDispatched'] and evidence['sourceAttempts']==0
+for order in closed_orders:
  p=x[f'pendingFashion{order}']
  if p['qualityCredit']==1:
   assert p['id'] in done
