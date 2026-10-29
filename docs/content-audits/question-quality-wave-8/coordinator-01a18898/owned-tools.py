@@ -316,6 +316,13 @@ def alias_explicit_cross_topic_peers(candidate,sp,ps,R):
    peer['sha256']=peer['canonicalSHA256']
    peer['technicalExplicitCanonicalDigestNameAlias']='Identical declared full-card canonical digest exposed under redundant sha256 name; original raw/ground unchanged. Original KeyError bf45bf uncured.'
   t=read(C/('src/content/topics/'+peer['topicId']+'.json'))
+  if pathlib.Path(R)==D/'source-fashion48' and not 1<=peer.get('sourceOrder',0)<=len(t['questions']):
+   frozen=read(D/'fashion48-raw-freeze-unqualified.json')
+   assert raw(pathlib.Path(R)/'peer-snapshot.json')==frozen['rawFileSHA256']['peer-snapshot.json']
+   matches=[(i,q) for i,q in enumerate(t['questions'],1) if q['id']==peer['id']]
+   assert len(matches)==1 and matches[0][1]==peer['card'] and sha(peer['card'])==peer['sha256']
+   original=peer['sourceOrder'];peer['originalGlobalInventoryOrdinal']=original;peer['sourceOrder']=matches[0][0]
+   position_aliases.append({'id':peer['id'],'topicId':peer['topicId'],'originalGlobalInventoryOrdinal':original,'sourceOrder':peer['sourceOrder'],'originalCardAndHashExact':True,'originalFailure':'eca2ab','uncured':True})
   if 'sourceOrder' not in peer:
    matches=[(i,q) for i,q in enumerate(t['questions'],1) if q['id']==peer['id']]
    assert len(matches)==1
@@ -326,6 +333,7 @@ def alias_explicit_cross_topic_peers(candidate,sp,ps,R):
   q=t['questions'][peer['sourceOrder']-1]
   assert peer['id']==q['id'] and peer['card']==q and peer['sha256']==sha(q)
  ps['crossCatalogClosestFullBodies']=peers
+ if pathlib.Path(R)==D/'source-fashion48':ps[container]=peers
  if position_aliases:ps['technicalExactCrossTopicPositionAlias']={'bindings':position_aliases,'operation':'Position derived only from unique exact original ID plus full body/hash in CURRENT. Original container/raw and semantic assessments unchanged; original root KeyError uncured.'}
  ps['technicalCrossTopicContainerAlias']={'rawPeerSnapshot':str(pathlib.Path(R)/'peer-snapshot.json'),'rawPeerSHA256':raw(pathlib.Path(R)/'peer-snapshot.json'),'originalPointer':'/'+container,'operation':'Exact original explicit foreign-topic full bodies and hashes verified against CURRENT, redundant container name only; raw and bilateral assessments unchanged.'}
 def alias_explicit_inventory_binding(candidate,sp,ps,R):
