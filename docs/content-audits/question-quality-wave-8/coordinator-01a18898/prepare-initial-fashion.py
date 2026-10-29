@@ -26,6 +26,8 @@ x = m.read(D/'manifest.json')
 cp = m.read(m.P/'openspec/changes/question-quality-future-waves/current-checkpoint.json')
 assert cp['owner'] == m.O and len(cp['currentEligibleCompletedIds']) == x['CURRENT']
 t = m.read(x['readerInitialTaskTemplate'])
+t['processRevision'] = x['processRevision']
+t['canonicalProcess'] = x['processRevision']['canonicalPolicy']
 t.update(topicId='fashion', owner=m.O, manifest=str(D/'manifest.json'),
          binderSchemaReference=str(D/'bind-current-receipt.py'), role='independent reviewer one exact INITIAL '+label,
          phase='START_INITIAL_'+label.upper(), id=q['id'], sourceOrder=order,
