@@ -49,6 +49,10 @@ clones.append(snapshot)
 clones.append(bootstrap_snapshot)
 for key in ['currentOwnedHandoffHelper','closingVerificationCode','controlPlaneTakeoverTemplate','successorReadonlyChecker']:
  if isinstance(x.get(key),str) and pathlib.Path(x[key]).parent==S:x[key]=str(D/pathlib.Path(x[key]).name)
+x['inheritedClosedOwnerBookkeeping']['customClosedOwnerPointers']={key:{'manifest':str(S/'manifest.json'),'pointer':'/'+key} for key in ['closedOwnedSourceOrders','preparedUnstartedOwnedSourceOrders','source43PreparedUndispatched','ownQACommandBindings','ownQARegistryExplicitBindingAlias'] if key in x}
+x['inheritedPreparedSource43']=h.get('source43PreparedUndispatched')
+for key in ['closedOwnedSourceOrders','preparedUnstartedOwnedSourceOrders','source43PreparedUndispatched','ownQARegistryExplicitBindingAlias']:x.pop(key,None)
+x['ownQACommandBindings']=[]
 x['readScope']={**h['readScope'],'ownD':str(D)};assert x['sourceIndex']==h['sourceIndex'] and x['additionalRetainedSourceIndexes']==h['additionalRetainedSourceIndexes'];write(D/'manifest.json',x)
 report={'owner':O,'predecessor':OLD,'phase':'SUPPORTED_EXACT4_DURABLE_TAKEOVER','CURRENT':n,'remaining':2000-n,'fullGoal':2000,'intakeCURRENT':n,'newlyCertified':0,'predecessorRemotePush':remote,'foreignIndexes':h['foreignIndexes'],'handoffSHA256':raw(hp),'canonicalCheckpointBeforeSHA256':raw(cp_path),'claims':h['claims'],'coordinatorSlicesToPreserve':h['coordinatorSlicesToPreserve'],'helperClones':{p.name:raw(p) for p in clones},'identityReplacementOnly':{'oldOwner':OLD,'newOwner':O,'oldOwnIntake':oldIntake,'newOwnIntake':n},'noSemanticRereviewOrTest':True,'actualCompactions':0};write(D/'takeover.json',report)
 cc=sv.save(C,'refs/heads/'+h['codeBranch'],[str(p.relative_to(C)) for p in [*clones,D/'manifest.json',D/'takeover.json',pathlib.Path(__file__)]],f'Preserve CURRENT{n} native successor and bounded helpers',expected[C]);print('code',cc)
