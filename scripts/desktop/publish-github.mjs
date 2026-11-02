@@ -34,4 +34,5 @@ if (release.draft) {
   gh("release", "edit", tag, "--repo", repo, "--target", commit);
 }
 gh("release", "edit", tag, "--repo", repo, "--draft=false", "--latest");
+gh('workflow','run','installer-downloads.yml','--repo',repo,'--ref','main','-f','apply=true');
 console.log(`Verified GitHub assets: https://github.com/${repo}/releases/tag/${tag}`);

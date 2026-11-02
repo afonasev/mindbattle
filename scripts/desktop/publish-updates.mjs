@@ -153,7 +153,7 @@ export async function publishUpdates(kind, { cwd = process.cwd(), run = execute,
           if (!response.ok || await response.text() !== await readFile(m.source, 'utf8')) visible = false;
         } catch { visible = false; }
       }
-      if (visible) { console.log(`Verified public ${kind} feed: ${tag}; source ${commit}; Pages ${tip}`); return; }
+      if (visible) { gh('workflow','run','installer-downloads.yml','--repo',repo,'--ref','main','-f','apply=true'); console.log(`Verified public ${kind} feed: ${tag}; source ${commit}; Pages ${tip}`); return; }
       await new Promise(resolve => setTimeout(resolve, 5000));
     }
     throw Error('GitHub assets/branch preserved, but public Pages readback is pending. Retry these exact files.');
