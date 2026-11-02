@@ -44,6 +44,12 @@ t.update(topicId='fashion', owner=m.O, manifest=str(D/'manifest.json'),
          currentContext='CURRENT'+str(x['CURRENT'])+'/2000 remaining'+str(x['remaining'])+'. Exact applied '+label+' QA19PASS. All prior HOLDs and exhausted attempts preserved. Catalog frozen until verdict; no third full revision.',
          contextPreflight='Verify own native session_meta and actual compacted events; never use coordinator env identity. Reviewer '+x['actors']['reviewer']['threadId']+'. First actual compaction finish this card only; second preservationSTOP. Compact task only, no whole checkpoint/history/catalog dump.',
          history='No independent INITIAL for this ID exists. SOURCE READY/QA19 do not grant credit. Only this exact applied CURRENT is assigned.')
+pending=x.get('pendingFashion'+str(order),{})
+if pending.get('actualPeerDelta'):
+    t.update(actualPeerDependencyAddendum=pending['actualPeerDependencyAddendum'],
+             actualPeerDependencyBinding=pending['actualPeerDependencyBinding'],
+             actualPeerDelta=pending['actualPeerDelta'],
+             peerCurrentRule='Original qualified author peer/global snapshot is explicitly historical. Only the exact already-applied peer delta in actualPeerDelta is overlaid by standard apply; same author separately judged both directions at actualPeerDependencyAddendum. Personally read whole actual CURRENT peers and evaluate this dependency yourself; do not inherit author verdict. Original raw and qualified remain immutable.')
 task_path = D/('reader-'+label+'-initial-task.json')
 m.write(task_path, t)
 x['actors']['reviewer'].update(stage='START_INITIAL_'+label.upper(), task=str(task_path),
