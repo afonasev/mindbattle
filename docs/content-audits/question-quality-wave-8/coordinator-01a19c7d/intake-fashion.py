@@ -722,6 +722,17 @@ for R in packet_paths:
             assert v['tripleSHA256']==original['tripleSHA256']==b['tripleSHA256'] and 'plausibilityUniqueKeyAndNoteTruthUsefulness' not in v
             v['plausibilityUniqueKeyAndNoteTruthUsefulness']=v['grammar']
             v['technicalOriginalCombinedAssessmentFieldAlias']={'binding':str(D/'source28-intake-variant-container-alias.json'),'originalPointer':b['originalPointer'],'operation':'Identical full existing combined author assessment string; standard container name only. Original grammar and raw retained.'}
+    if R.name=='source-fashion76':
+        frozen=m.read(D/'fashion76-native-proof.json')
+        assert candidate['sourceNativeId']==sp['sourceNativeId']=='01a19ca2-6138-7dd0-b2ed-762a25813d5a'
+        assert m.raw(R/'sourceproof.json')==frozen['rawFileSHA256']['sourceproof.json']
+        original=m.read(R/'sourceproof.json')['entries'][0]['fourFullPromptAnswerNoteAssessments']
+        for slot in [2,3]:
+            v=sp['entries'][0]['fourFullPromptAnswerNoteAssessments'][slot];o=original[slot]
+            assert v['slot']==o['slot']==slot and 'plausibilityUniqueKeyAndNoteTruthUsefulness' not in v
+            assert v['plausibilityUniqueKeyAndNoteUsefulness']==o['plausibilityUniqueKeyAndNoteUsefulness']
+            v['plausibilityUniqueKeyAndNoteTruthUsefulness']=v['plausibilityUniqueKeyAndNoteUsefulness']
+            v['technicalOriginalCombinedAssessmentFieldAlias']={'rawFreeze':'b3ead8920b47620b479a4464f4d9e2a753bf1228','originalPointer':f'/entries/0/fourFullPromptAnswerNoteAssessments/{slot}/plausibilityUniqueKeyAndNoteUsefulness','originalLiteralSHA256':m.sha(o['plausibilityUniqueKeyAndNoteUsefulness']),'originalFailureUncured':True,'operation':'Expose identical existing author combined assessment string under canonical key. No raw, literal, source or judgment change.'}
     for v in sp['entries'][0]['fourFullPromptAnswerNoteAssessments']:
         triple = {'prompt':v['fullPrompt'],'answer':v['answer'],'note':v['note']}
         if 'tripleSHA256' in v and v['tripleSHA256'] != m.sha(triple):
