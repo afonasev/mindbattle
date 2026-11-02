@@ -97,7 +97,7 @@ for f in topics:assert subprocess.check_output(['git','-C',str(m.C),'show',last+
 f=m.read(D/'own-consumed-source-fences.json');assert f['totalFences']==len(x['newAttemptFences'])==f['inheritedFenceCount']+len(f['ownClosedRecords'])
 assert m.raw(f['inheritedPointer'])==f['inheritedRawSHA256']
 assert x['newAttemptFences']==m.read(Path(x['predecessorHandoff']))['newAttemptFences']+f['ownClosedRecords']
-r=m.read(D/'retained-reader-handoff.json');reader=x['actors']['reviewer']
+r=m.read(Path(x.get('retainedReaderHandoff') or D/'retained-reader-handoff.json'));reader=x['actors']['reviewer']
 assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])==reader['ownReceiptCount']
 for p,b in r['readerOwnReceipts'].items():assert m.raw(p)==b['rawSHA256']
 for root,key in [(m.C,'code'),(m.P,'planning')]:assert m.raw(Path(m.h.git(root,'rev-parse','--path-format=absolute','--git-path','index')))==x['foreignIndexes'][key]

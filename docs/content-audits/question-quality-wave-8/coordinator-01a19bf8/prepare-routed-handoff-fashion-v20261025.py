@@ -20,7 +20,7 @@ if '--inventory-only' in sys.argv:
   a.update(nativeJournal=str(p),actualCompactions=sum(r['type']=='compacted' for r in rows),lastTaskEvent=event,lastInput=info['last_token_usage']['input_tokens'],modelWindow=info['model_context_window'])
   return a
  reader=snapshot(x['actors']['reviewer']);assert not reader.get('archived') and reader['actualCompactions']==0
- G=reader['threadId'];seedpath=pathlib.Path(x['predecessorHandoff']).parent/'retained-reader-handoff.json';seed=m.read(seedpath);receipts={};inherited_reader=None
+ G=reader['threadId'];seedpath=pathlib.Path(parent.get('retainedReaderHandoff') or pathlib.Path(x['predecessorHandoff']).parent/'retained-reader-handoff.json');seed=m.read(seedpath);receipts={};inherited_reader=None
  if seed['retainedIdleReader']['threadId']==G:receipts.update(seed['readerOwnReceipts']);inherited_reader=str(seedpath)
  for path in D.glob('independent-*/receipt.json'):
   r=m.read(path)
@@ -28,11 +28,13 @@ if '--inventory-only' in sys.argv:
   e=r['entries'][0];receipts[str(path)]={'rawSHA256':m.raw(path),'stage':e['stage'],'status':e['status'],'sourceOrder':e['sourceOrder'],'currentCardCanonicalSHA256':e['currentCardCanonicalSHA256']}
  assert len(receipts)>=reader.get('ownReceiptCount',0)
  reader['ownReceiptCount']=len(receipts)
- current_reader_handoff=D/'retained-reader-handoff.json'
+ current_reader_handoff=pathlib.Path(x.get('retainedReaderHandoff') or D/'retained-reader-handoff.json')
+ if current_reader_handoff.parent!=D or (current_reader_handoff.exists() and m.read(current_reader_handoff)['retainedIdleReader']['threadId']!=G):current_reader_handoff=D/('retained-reader-'+G[:8]+'-handoff.json')
  retired=list((m.read(current_reader_handoff) if current_reader_handoff.exists() else seed).get('retiredReaderPointers',[]))
  for p in D.glob('reader*-retirement*.json'):
   if not any(v['path']==str(p) for v in retired):retired.append({'path':str(p),'rawSHA256':m.raw(p)})
- rp=D/'retained-reader-handoff.json';m.write(rp,{'owner':m.O,'retainedIdleReader':dict(reader),'readerOwnReceiptCount':len(receipts),'readerOwnReceipts':receipts,'inheritedImmutable':inherited_reader,'retiredReaderPointers':retired,'scope':'Current native reader exact receipt inventory only; closed retired histories stay pointers, no repeated content/bootstrap audit.'})
+ rp=current_reader_handoff;m.write(rp,{'owner':m.O,'retainedIdleReader':dict(reader),'readerOwnReceiptCount':len(receipts),'readerOwnReceipts':receipts,'inheritedImmutable':inherited_reader,'retiredReaderPointers':retired,'scope':'Current native reader exact receipt inventory only; closed retired histories stay pointers, no repeated content/bootstrap audit.'})
+ x['retainedReaderHandoff']=str(rp)
  x['currentReaderNativeIdentity']=reader.get('identityProof',x.get('currentReaderNativeIdentity'));assert x['currentReaderNativeIdentity']
  retained=[];unspent=[]
  for key,a in x['actors'].items():

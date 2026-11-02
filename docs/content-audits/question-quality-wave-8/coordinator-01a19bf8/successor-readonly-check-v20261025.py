@@ -77,7 +77,7 @@ retained_authors=x.get('retainedIdleAuthorsForSuccessor',[])
 assert all(a.get('archived') or any(v['actor']['threadId']==a['threadId'] for v in retained_authors) for key,a in x['actors'].items() if key.startswith('author'))
 assert all(v['actor']['stage'].startswith('IDLE_') and v['actor']['lastTaskEvent']=='task_complete' for v in retained_authors)
 assert not x['pendingReviews'] and not x['pendingBoundedWork'] and not x['readyQueue'] and not x.get('pendingBootstrapActors')
-r=read(D/'retained-reader-handoff.json');a=x['actors']['reviewer']
+r=read(pathlib.Path(x.get('retainedReaderHandoff') or D/'retained-reader-handoff.json'));a=x['actors']['reviewer']
 assert a['threadId']==r['retainedIdleReader']['threadId']==G
 assert r['readerOwnReceiptCount']==len(r['readerOwnReceipts'])==a['ownReceiptCount']==expected_reader_count
 identity=read(x['currentReaderNativeIdentity'])
