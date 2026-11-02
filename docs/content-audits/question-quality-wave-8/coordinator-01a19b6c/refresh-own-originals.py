@@ -10,7 +10,7 @@ assert [r['payload']['id'] for r in rows if r['type']=='session_meta']==[m.O]
 last=a['journalLinesThrough']
 a['actualOriginals'] += [{'journalLine':i,'original':r} for i,r in enumerate(rows,1)
     if i>last and r['type']=='response_item' and r.get('payload',{}).get('type')
-    in ['custom_tool_call','custom_tool_call_output']]
+    in ['custom_tool_call','custom_tool_call_output','function_call','function_call_output']]
 a['journalLinesThrough']=len(rows)
 a['actualCompactions']=sum(r['type']=='compacted' for r in rows)
 calls={r['payload']['call_id']:(i,r) for i,r in enumerate(rows,1)
