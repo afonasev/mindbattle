@@ -1,5 +1,17 @@
 # Mindbattle
 
+<!-- desktop-downloads:start -->
+**Скачать / Download**
+
+| Windows | macOS |
+| --- | --- |
+| **[Download EXE](https://github.com/afonasev/mindbattle/releases/download/v1.0.6/Mindbattle-1.0.6-win-x64.exe)** | **[Download DMG](https://github.com/afonasev/mindbattle/releases/download/v1.0.6/Mindbattle-1.0.6-mac-universal.dmg)** |
+
+[Только установщики / Installer releases](https://github.com/afonasev/mindbattle/releases?q=tag%3Av1%20prerelease%3Afalse)
+
+Installer version: **1.0.6**.
+<!-- desktop-downloads:end -->
+
 [English](README.md) · [Русский](README.ru.md)
 
 Mindbattle is a browser quiz game for playing together on one screen, on your own, or with phones connected to a shared display. It uses a local Node.js server for the game and feedback API. The interface is currently in Russian.
