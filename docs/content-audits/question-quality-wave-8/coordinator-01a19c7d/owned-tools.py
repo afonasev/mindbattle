@@ -259,6 +259,35 @@ def alias_explicit_inventory_file_digest(candidate,sp,ps,R):
  ps['sameTopicMAIN']={**same,'sourceInventoryPath':str(p),'sourceInventorySHA256':raw(p)}
  sp.update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
  ps['technicalExplicitInventoryFileDigestAlias']=proof
+def alias_source74_explicit_fresh_inventory_file(candidate,sp,ps,R):
+ """Read SOURCE74's original SHA-bound inventory; preserve assessed peers and raw."""
+ if pathlib.Path(R)!=D/'source-fashion74':return
+ import copy,subprocess
+ R=pathlib.Path(R);freeze='93de583444119fda0563246416efec9805ca8b22'
+ for p in R.rglob('*'):
+  if p.is_file():assert p.read_bytes()==subprocess.check_output(['git','-C',str(C),'show',freeze+':'+str(p.relative_to(C))])
+ assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']=='01a19c89-f467-7890-9f59-eface283ed93'
+ assert candidate['cycle']==sp['cycle']==ps['cycle']==0
+ p=pathlib.Path(ps['freshInventoryFile']);assert p.is_relative_to(R) and raw(p)==ps['freshInventoryFileSHA256']
+ inv=read(p);g=inv['globalMAIN'];same=inv['sameTopicMAIN'];full=inv['actualCurrentPeers']
+ assert g['topicFileCount']==ps['globalMAIN']['topicFileCount']==110 and g['questionCount']==ps['globalMAIN']['questionCount']==11000
+ assert g['rowsCanonicalSHA256']==ps['globalMAIN']['rowsCanonicalSHA256']==sha(g['rows']) and len(g['rows'])==11000
+ assert len(g['allCurrentFileByteBindings'])==110 and all(raw(C/b['path'])==b['sha256'] for b in g['allCurrentFileByteBindings'])
+ assert same['topicId']=='fashion' and same['questionCount']==ps['sameTopicMAIN']['questionCount']==len(full)==100
+ assert same['fileSHA256']==ps['sameTopicMAIN']['currentTopicFileSHA256']==raw(C/same['path'])
+ assert same['questions']==read(C/same['path'])['questions']==[v['card'] for v in full]
+ assert [v['sourceOrder'] for v in full]==list(range(1,101)) and all(v['sha256']==sha(v['card']) for v in full)
+ assessed=copy.deepcopy(ps['actualCurrentPeers'])
+ for v in assessed:
+  topic=read(C/f"src/content/topics/{v['topicId']}.json");q=topic['questions'][v['sourceOrder']-1]
+  assert v['id']==q['id'] and v['card']==q and v['sha256']==sha(q)
+ ps['originalRelevantCurrentPeers']=assessed
+ ps['originalSameTopicMAIN']=copy.deepcopy(ps['sameTopicMAIN'])
+ ps['sameTopicMAIN']=copy.deepcopy(same);ps['globalMAIN']=copy.deepcopy(g)
+ sp.update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
+ binding={'rawFreeze':freeze,'rawPeerSHA256':raw(R/'peer-snapshot.json'),'originalPathPointer':'/freshInventoryFile','originalSHA256Pointer':'/freshInventoryFileSHA256','inventoryPath':str(p),'inventorySHA256':raw(p),'assessedPeerCountUnchanged':len(assessed),'originalFailureUncured':True,'operation':'Expose identical original SHA-bound machine containers. Assessed peer bodies and judgments remain unchanged; no raw edit or semantic judgment.'}
+ ps['technicalSource74ExplicitInventoryFileAlias']=binding;sp['technicalSource74ExplicitInventoryFileAlias']=copy.deepcopy(binding)
+
 def alias_explicit_fresh_inventory_context(candidate,sp,ps,R):
  """Expose an explicit SHA/pointer-bound full snapshot; keep assessed peers distinct."""
  if 'sameTopicMAIN' in ps or 'freshInventory' not in ps:return
