@@ -39,7 +39,10 @@ if '--inventory-only' in sys.argv:
  retained=[];unspent=[]
  for key,a in x['actors'].items():
   if not key.startswith('author') or a.get('archived'):continue
-  snapshot(a);assert a['stage'].startswith('IDLE_') and (a['actualCompactions']==0 or key=='author60'), 'Archive completed saturated author; preserve protected60'
+  if key=='author60':
+   observed=snapshot(dict(a));assert observed['threadId']==a['threadId'] and observed['actualCompactions']==a['actualCompactions']==1, 'Protected source60 observer only; no cached role mutation'
+  else:snapshot(a)
+  assert a['stage'].startswith('IDLE_') and (a['actualCompactions']==0 or key=='author60'), 'Archive completed saturated author; preserve protected60'
   batch=x.get('activeAuthorBatches',{}).get(key,{})
   orders=[v for v in batch.get('orders',[]) if not x.get('pendingFashion'+str(v))]
   if a['actualCompactions']==0:unspent+=orders
