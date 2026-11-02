@@ -16,6 +16,14 @@ authors = [a for a in source_actors if a['stage'].startswith('START')]
 readers = [reviewer] if reviewer['stage'].startswith('START') else []
 idle_authors = [a for a in source_actors if not a['stage'].startswith(('START', 'ARCHIVED', 'RETIRED'))]
 assert len(authors) <= 2 and len(readers) <= 1
+active_projection = {'currentSourceActors': authors,
+                     'currentIndependentActors': readers,
+                     'currentSourceActorsCount': len(authors)}
+if any(x.get(key) != value for key, value in active_projection.items()):
+    x.update(active_projection)
+    m.write(D / 'manifest.json', x)
+    print('code', m.savecode([D / 'manifest.json', pathlib.Path(__file__)],
+                            'Synchronize owned active actor projections'))
 index_path = pathlib.Path(m.h.git(m.P, 'rev-parse', '--path-format=absolute', '--git-path', 'index'))
 expected_index = m.raw(index_path)
 with m.flow.locked():
