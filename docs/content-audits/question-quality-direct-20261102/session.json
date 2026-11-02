@@ -45,7 +45,7 @@
   "typecheck": {
     "status": "PASS",
     "exitCode": 0,
-    "log": "docs/content-audits/question-quality-direct-20261102/typecheck.txt"
+    "log": "docs/content-audits/question-quality-direct-20261102/typecheck-original.json"
   },
   "catalogFull": {
     "status": "FAIL",
@@ -62,5 +62,13 @@
     "retainedWorktree": "Owned continuing author branch; clean after commit, no servers/builds launched.",
     "temporaryDependencies": "251MiB own node_modules may be removed after final checks; can restore with npm ci.",
     "foreignResources": "Preserved unchanged; no foreign index cleanup or claim takeover."
-  }
+  },
+  "proceduralDiagnostics": [
+    {
+      "check": "First staged git diff --check",
+      "status": "FAIL",
+      "reason": "Raw typecheck stdout ended in a blank line. Commit command proceeded after this whitespace warning.",
+      "resolution": "Original stdout preserved byte-for-byte inside JSON; file representation changed. Final diff check rerun. No content test or assertion changed."
+    }
+  ]
 }

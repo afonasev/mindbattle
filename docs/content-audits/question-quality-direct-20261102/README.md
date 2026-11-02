@@ -15,7 +15,7 @@
 
 ## Проверки и доказательства
 
-- `typecheck.txt`: `npm run typecheck`, exit0.
+- `typecheck-original.json`: `npm run typecheck`, exit0.
 - `affected-final.json`: catalog-topics, content, content-answer-notes — 19 PASS,0 FAIL,0 skipped.
 - `checks.json`: первоначальное расширение на catalog-full — 19 PASS,1 FAIL. FAIL сохраняется: review-хеш history-russia не соответствует файлу. baseline-review-mismatches.json показывает, что несовпадения review-хешей14 тем, включая fashion, уже существовали в baseline. Продление общего review без независимой проверки не выполнялось.
 - `mechanical-checks.json`, `cards.json`: полные before/after семи карточек, канонические хеши карточек и шести групп, frozen-поля и лимиты длины.
