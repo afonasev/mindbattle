@@ -74,6 +74,17 @@ for order in closed_orders:
    f=packet/name;assert f.resolve().is_relative_to(packet.resolve()) and m.raw(f)==digest
    assert subprocess.check_output(['git','-C',str(m.C),'show',freeze+':'+str(f.relative_to(m.C))])==f.read_bytes()
   raw.append({'sourceOrder':order,'packet':str(packet),'freeze':freeze,'originalRawFilesByteExact':len(originals),'originalRawProof':bound['path']})
+ if p.get('cycle1IncompleteRawFreeze'):
+  packet=Path(p['cycle1IncompleteRawPacket']);freeze=p['cycle1IncompleteRawFreeze'];proof_path=Path(p['cycle1IncompleteRawProof']);incomplete=m.read(proof_path)
+  assert p['rawCycle1PacketMissing'] and p['noIndependentFinal'] and p['cycle1NoQualificationApplyQAIndependentFINAL']
+  assert incomplete['candidateSourceproofPeerMissing'] and incomplete['originalAuthorReportMismatchUncured']
+  assert not any((packet/name).exists() for name in ['candidate.json','sourceproof.json','peer-snapshot.json'])
+  originals=incomplete['observedFiles'];assert set(originals)=={str(f.relative_to(packet)) for f in packet.rglob('*') if f.is_file()}
+  assert originals and Path(p['cycle1NativeOriginals']).is_file()
+  for name,digest in originals.items():
+   f=packet/name;assert f.resolve().is_relative_to(packet.resolve()) and m.raw(f)==digest
+   assert subprocess.check_output(['git','-C',str(m.C),'show',freeze+':'+str(f.relative_to(m.C))])==f.read_bytes()
+  raw.append({'sourceOrder':order,'packet':str(packet),'freeze':freeze,'originalRawFilesByteExact':len(originals),'originalRawProof':str(proof_path),'nativeOriginals':p['cycle1NativeOriginals'],'rawPacketIncomplete':True,'qualificationApplyQAIndependentFINAL':'NotRun','qualityCredit':0})
 # Own pre-fashion raw is checked by its owning coordinator; successors inherit the frozen pointer.
 closed_pre=x.get('ownPreFashionClosedSource100')
 if closed_pre and closed_pre['owner']==m.O:
