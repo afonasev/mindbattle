@@ -260,10 +260,11 @@ def alias_explicit_inventory_file_digest(candidate,sp,ps,R):
  sp.update(sourceInventoryPath=str(p),sourceInventorySHA256=raw(p))
  ps['technicalExplicitInventoryFileDigestAlias']=proof
 def alias_source74_explicit_fresh_inventory_file(candidate,sp,ps,R):
- """Read SOURCE74's original SHA-bound inventory; preserve assessed peers and raw."""
- if pathlib.Path(R)!=D/'source-fashion74':return
+ """Read exact SOURCE74/75 SHA-bound inventories; preserve assessed peers and raw."""
+ freezes={'source-fashion74':'93de583444119fda0563246416efec9805ca8b22','source-fashion75':'d51e52aa8baee9e40c039e0c1f06ccbe74b6f024'}
+ if pathlib.Path(R).parent!=D or pathlib.Path(R).name not in freezes:return
  import copy,subprocess
- R=pathlib.Path(R);freeze='93de583444119fda0563246416efec9805ca8b22'
+ R=pathlib.Path(R);freeze=freezes[R.name]
  for p in R.rglob('*'):
   if p.is_file():assert p.read_bytes()==subprocess.check_output(['git','-C',str(C),'show',freeze+':'+str(p.relative_to(C))])
  assert candidate['sourceNativeId']==sp['sourceNativeId']==ps['sourceNativeId']=='01a19c89-f467-7890-9f59-eface283ed93'
