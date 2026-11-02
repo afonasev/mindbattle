@@ -41,6 +41,11 @@ decl=clar[f'changedCurrent{changed}'];assert decl['cardFromAuthoritativeApplyRep
 assessment=clar['bilateralSemanticAssessment']
 for direction in [f'source{order}ToCurrent{changed}',f'current{changed}ToSource{order}']:
  assert all(assessment[direction][k] for k in ['entity','relation','value','context','finding'])
+if order==63 and changed==62 and 'dependencyConclusion' not in assessment:
+ assert clar['sourceNativeId']==uid and clar['cycle']==0
+ assert isinstance(clar['dependencyConclusion'],str) and clar['dependencyConclusion']
+ assessment['dependencyConclusion']=clar['dependencyConclusion']
+ assessment['technicalConclusionContainerAlias']={'originalPointer':'/dependencyConclusion','derivedPointer':'/bilateralSemanticAssessment/dependencyConclusion','originalFailure':'470c32','uncured':True,'operation':'Same author explicit conclusion reused at redundant nested key only; original addendum/raw and all judgments unchanged.'}
 assert assessment['directReverseCheck'] and assessment['dependencyConclusion']
 nr=[json.loads(l) for l in pathlib.Path(nativeproof['nativeJournal']).open()]
 assert [r['payload']['id'] for r in nr if r['type']=='session_meta']==[uid] and sum(r['type']=='compacted' for r in nr)<2
