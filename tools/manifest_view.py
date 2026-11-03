@@ -24,7 +24,7 @@ def select(document, pointer):
     return value
 
 
-def project(path, pointers, max_bytes=16000):
+def project(path, pointers, max_bytes=16000, compact=False):
     if not pointers or max_bytes <= 0:
         raise ValueError('Select at least one field and a positive output byte limit')
     path = Path(path).resolve(strict=True)
@@ -35,7 +35,7 @@ def project(path, pointers, max_bytes=16000):
         'projectionOnly': True,
         'fields': {pointer: select(document, pointer) for pointer in pointers},
     }
-    output = json.dumps(result, ensure_ascii=False, indent=2) + '\n'
+    output = json.dumps(result, ensure_ascii=False, **({'separators': (',', ':')} if compact else {'indent': 2})) + '\n'
     if len(output.encode('utf-8')) > max_bytes:
         raise ValueError('Projection exceeds output byte limit; select narrower pointers. Nothing was truncated.')
     return output
@@ -46,9 +46,10 @@ def main():
     parser.add_argument('manifest', type=Path)
     parser.add_argument('pointers', nargs='+', help='Exact JSON pointers, e.g. /CURRENT /claimsOwner /currentWork')
     parser.add_argument('--max-bytes', type=int, default=16000)
+    parser.add_argument('--compact', action='store_true', help='Emit the same projection without indentation for an active handoff; never truncate fields')
     args = parser.parse_args()
     try:
-        output = project(args.manifest, args.pointers, args.max_bytes)
+        output = project(args.manifest, args.pointers, args.max_bytes, compact=args.compact)
     except (OSError, ValueError) as error:
         parser.exit(2, str(error) + '\n')
     print(output, end='')

@@ -5,8 +5,8 @@
 - При многоэтапном игровом срезе читай `.agents/references/initiative-execution.md`: один ответственный за цельный результат, автономный причинный ремонт и проверки по diff/зависимостям; явные человеческие ограничения сохраняются.
 
 - Preserve scope, product contracts and others' files/processes. Questions/reviews are read-only; create an owned code worktree only before authorized edits when isolation is needed.
-- Select minimal affected checks from recorded baseline/diff/dependencies. In game projects, full tests need separate human approval for this run, even at merge/release. In non-game applications and tooling, full tests are allowed within the authorized task under project rules without separate approval. Preserve test contracts and FAIL/NotRun; never infer human/device acceptance from QA.
-- Explicit model/effort wins. Authorized new chats: Sol 6.1/medium; bounded work/subagents: Luna/medium or higher. Astra needs a specific complex decision or explicit choice. No implied delegation/message permission.
+- QA и границы автоматической/человеческой приёмки: [execution-policy.md](.agents/references/execution-policy.md); выбор affected-команд: [qa-scope.md](.agents/references/qa-scope.md).
+- Модели и разрешённое делегирование: [model-routing.md](.agents/references/model-routing.md); явный выбор пользователя приоритетен.
 - Show real visual alternatives before implementation; concepts do not authorize publication.
 - Before QA, delivery or finalization read `.agents/references/execution-policy.md`; it includes preservation/cleanup and reporting. Report branch + SHA and integration separately. Read `.agents/references/portability.md` on a new device or missing dependency. Other references below load only on their stated trigger.
 - Autonomous games start silent: `-muted`, Unity `-noaudio -muted`, web `?muted=1` before autoplay. Never change system volume; missing support remains an open gate.
@@ -33,11 +33,9 @@
 
 ## Уточнения workflow по аудиту (решение 2026-10-19)
 
-- Техническую работу можно финализировать с отдельным commit-bound pending deploy. Публикация требует отдельной команды человека; pending deploy остаётся видимым после приёмки и не заменяет поставку зависимости. Контракт helper: `.agents/references/flow/lifecycle.md`.
-- READONLY ACK → START обязателен для опасных переходов; обычные поручения внутри действующего разрешённого ownership/scope не требуют двухфазного запуска. Действующие явные session fences сохраняются до отдельного разрешённого перехода. Детали: `.agents/references/flow/efficiency.md`.
-- Начинай с компактного актуального manifest и одного проверяемого среза; историю читай по конкретному расхождению. Остановка после второго compaction сохраняется. Детали: `.agents/references/context-efficiency.md`.
-
-- Координатор выполняет детерминированную сверку evidence; содержательные правки возвращаются текущему reviewer для направленного FINAL. Дополнительный эксперт — только для оставшегося конкретного содержательного спора. Третья полная ревизия запрещена; детали и ограничения pinned process: `.agents/references/flow/efficiency.md`.
+- Commit-bound pending deploy и отдельная публикация: [.agents/references/flow/lifecycle.md](.agents/references/flow/lifecycle.md).
+- READONLY ACK → START, сохранение session fences, детерминированная сверка, направленный FINAL и запрет третьей полной ревизии: [.agents/references/flow/efficiency.md](.agents/references/flow/efficiency.md).
+- Компактный manifest, активный handoff и остановка после второго compaction: [.agents/references/context-efficiency.md](.agents/references/context-efficiency.md).
 
 ## Ревизия вопросов: обновление процесса 2026-10-25
 

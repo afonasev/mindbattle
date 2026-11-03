@@ -56,6 +56,29 @@ class ManifestViewTests(unittest.TestCase):
         self.assertIn('Nothing was truncated', result.stderr)
         self.assertEqual(self.path.read_bytes(), self.raw)
 
+    def test_compact_cli_preserves_all_selected_fields_and_source_identity(self):
+        pointers = ['/CURRENT', '/owner', '/leaseHeld', '/fences', '/a~1b/~0key']
+        pretty = VIEW.project(self.path, pointers)
+        result = subprocess.run([sys.executable, '-B', str(SCRIPT), str(self.path),
+                                 *pointers, '--compact'], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout), json.loads(pretty))
+        self.assertEqual(len(result.stdout.splitlines()), 1)
+        self.assertLess(len(result.stdout.encode('utf-8')), len(pretty.encode('utf-8')))
+        self.assertEqual(self.path.read_bytes(), self.raw)
+
+    def test_compact_limit_still_rejects_oversize_without_partial_output(self):
+        output = VIEW.project(self.path, ['/fences'], compact=True)
+        limit = len(output.encode('utf-8'))
+        self.assertEqual(VIEW.project(self.path, ['/fences'], limit, compact=True), output)
+        result = subprocess.run([sys.executable, '-B', str(SCRIPT), str(self.path),
+                                 '/fences', '--compact', '--max-bytes', str(limit - 1)],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.stdout, '')
+        self.assertIn('Nothing was truncated', result.stderr)
+        self.assertEqual(self.path.read_bytes(), self.raw)
+
     def test_limit_counts_utf8_output_bytes_and_accepts_exact_boundary(self):
         output = VIEW.project(self.path, ['/a~1b/~0key'])
         self.assertEqual(VIEW.project(self.path, ['/a~1b/~0key'], len(output.encode('utf-8'))), output)
