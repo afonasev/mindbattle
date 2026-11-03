@@ -1,3 +1,4 @@
+import { withInstallerDownloads } from './download-presentation.mjs';
 import { releaseNotes } from "./release-notes.mjs";
 // Explicit publication only. Build and web-deploy never invoke this script.
 import { execFileSync } from 'node:child_process';
@@ -101,7 +102,7 @@ export async function publishUpdates(kind, { cwd = process.cwd(), run = execute,
     const releases = JSON.parse(gh('api', '--paginate', '--slurp', `repos/${repo}/releases?per_page=100`)).flat();
     let release = releases.find(r => r.tag_name === tag);
     if (!release) {
-      gh('release', 'create', tag, '--repo', repo, '--target', commit, '--draft', '--title', `Mindbattle ${kind} ${manifests[0].manifest.version}`, '--notes', releaseNotes({ cwd, channel: kind, revision: commit, run: args => git(...args) }));
+      gh('release', 'create', tag, '--repo', repo, '--target', commit, '--draft', '--title', `Mindbattle ${kind} ${manifests[0].manifest.version}`, '--notes', withInstallerDownloads(releaseNotes({ cwd, channel: kind, revision: commit, run: args => git(...args) }), config.shellVersion));
       release = JSON.parse(gh('api', '--paginate', '--slurp', `repos/${repo}/releases?per_page=100`)).flat().find(r => r.tag_name === tag);
     }
     if (!release) throw Error('Release missing after creation');
@@ -152,7 +153,7 @@ export async function publishUpdates(kind, { cwd = process.cwd(), run = execute,
           if (!response.ok || await response.text() !== await readFile(m.source, 'utf8')) visible = false;
         } catch { visible = false; }
       }
-      if (visible) { console.log(`Verified public ${kind} feed: ${tag}; source ${commit}; Pages ${tip}`); return; }
+      if (visible) { gh('workflow','run','installer-downloads.yml','--repo',repo,'--ref','main','-f','apply=true'); console.log(`Verified public ${kind} feed: ${tag}; source ${commit}; Pages ${tip}`); return; }
       await new Promise(resolve => setTimeout(resolve, 5000));
     }
     throw Error('GitHub assets/branch preserved, but public Pages readback is pending. Retry these exact files.');

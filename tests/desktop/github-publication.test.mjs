@@ -16,9 +16,10 @@ for (const corrupt of [false, true]) {
     await writeFile(path.join(root, "desktop-release/installers/downloads.json"), JSON.stringify(catalog));
     const release = { tag_name: "v1.0.4", draft: true, assets: Object.values(catalog).map((item, i) => ({ name: item.url.split("/").at(-1), browser_download_url: item.url.replace("v1.0.4", "untagged-draft"), size: item.size, digest: `sha256:${corrupt && i === 1 ? "b".repeat(64) : item.sha256}` })) };
     await writeFile(path.join(root, "gh"), `#!/usr/bin/env node
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, readFileSync } from 'node:fs';
 if (process.argv[2] === 'api') console.log(${JSON.stringify(JSON.stringify([release]))});
 else if (process.argv[2] === 'release' && process.argv[3] === 'edit') writeFileSync('published', 'yes');
+else if (process.argv.slice(2).join(' ') === 'workflow run installer-downloads.yml --repo afonasev/mindbattle --ref main -f apply=true' && readFileSync('published','utf8') === 'yes') writeFileSync('dispatched','yes');
 else process.exit(2);
 `, { mode: 0o755 });
     await writeFile(path.join(root, "git"), "#!/bin/sh\necho f2fbb85a88d39d5d2d5e47ccab7c872006079253\n", { mode: 0o755 });
@@ -26,9 +27,11 @@ else process.exit(2);
     if (corrupt) {
       assert.notEqual(result.status, 0);
       await assert.rejects(readFile(path.join(root, "published")), { code: "ENOENT" });
+      await assert.rejects(readFile(path.join(root, "dispatched")), { code: "ENOENT" });
     } else {
       assert.equal(result.status, 0, result.stderr);
       assert.equal(await readFile(path.join(root, "published"), "utf8"), "yes");
+      assert.equal(await readFile(path.join(root, "dispatched"), "utf8"), "yes");
     }
   });
 }

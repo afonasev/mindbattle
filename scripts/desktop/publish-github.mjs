@@ -1,3 +1,4 @@
+import { withInstallerDownloads } from './download-presentation.mjs';
 import { releaseNotes } from "./release-notes.mjs";
 // Explicit release operation. Upload binaries before switching the VPS catalog.
 import { execFileSync } from "node:child_process";
@@ -11,7 +12,7 @@ const releases = JSON.parse(gh("api", `repos/${repo}/releases?per_page=100`));
 let release = releases.find(r => r.tag_name === tag);
 if (!release) {
   const commit = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
-  gh("release", "create", tag, "--repo", repo, "--target", commit, "--draft", "--title", `Mindbattle ${config.shellVersion}`, "--notes", releaseNotes({ channel: "installer" }));
+  gh("release", "create", tag, "--repo", repo, "--target", commit, "--draft", "--title", `Mindbattle ${config.shellVersion}`, "--notes", withInstallerDownloads(releaseNotes({ channel: "installer" }), config.shellVersion));
   release = JSON.parse(gh("api", `repos/${repo}/releases?per_page=100`)).find(r => r.tag_name === tag);
 }
 if (!release) throw new Error(`Release ${tag} missing after creation`);
@@ -33,4 +34,5 @@ if (release.draft) {
   gh("release", "edit", tag, "--repo", repo, "--target", commit);
 }
 gh("release", "edit", tag, "--repo", repo, "--draft=false", "--latest");
+gh('workflow','run','installer-downloads.yml','--repo',repo,'--ref','main','-f','apply=true');
 console.log(`Verified GitHub assets: https://github.com/${repo}/releases/tag/${tag}`);
