@@ -1,0 +1,139 @@
+{
+  "primary": [
+    {
+      "name": "naruto",
+      "url": "https://www.viz.com/manga-books/manga/naruto-volume-1/product/91/digital",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1020)>"
+    },
+    {
+      "name": "onepiece",
+      "url": "https://www.viz.com/one-piece",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1020)>"
+    },
+    {
+      "name": "goku",
+      "url": "https://www.viz.com/manga-books/manga/dragon-ball-vizbig-edition-volume-1-0/product/1553",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1020)>"
+    },
+    {
+      "name": "sailormoon",
+      "url": "https://www.viz.com/sailor-moon",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1020)>"
+    }
+  ],
+  "other": [
+    {
+      "claim": "Ash main character",
+      "url": "https://www.pokemon.com/us/animation/ash-ketchum",
+      "result": "web tool inaccessible",
+      "attempt": 1,
+      "alternativeUsed": true,
+      "usedInPilot": false,
+      "alternative": {
+        "url": "https://www.pokemon.com/us/animation/seasons/25/episode-54-distant-blue-sky",
+        "result": "iframe only; no fact context"
+      },
+      "status": "HOLD_SOURCE: primary+official alternative exhausted; no Ash claim accepted"
+    }
+  ],
+  "note": "Web preflight followed by archival fetch of the same available pages; no new claim source attempt.",
+  "preflight11to20": [
+    {
+      "ids": [
+        11
+      ],
+      "claim": "Pikachu yellow electric partner and cheek electricity",
+      "primary": "https://www.pokemon.com/us/animation/seasons/25/episode-54-distant-blue-sky",
+      "primaryResult": "iframe only, previously saved",
+      "officialAlternative": "https://www.pokemon.com/us/pokedex/pikachu",
+      "alternativeResult": "iframe only",
+      "status": "HOLD_SOURCE primary+alternative exhausted; no third source for this claim"
+    },
+    {
+      "ids": [
+        12
+      ],
+      "claim": "Totoro forest spirit and sisters; original camphor-tree detail",
+      "primary": "https://gkids.com/films/my-neighbor-totoro/",
+      "result": "Full synopsis available; supports forest spirit/sisters, NOT camphor tree or logo. Do not use productionDate1993 as Japanese production date.",
+      "status": "source available for supported claims; not yet authored"
+    },
+    {
+      "ids": [
+        13
+      ],
+      "claim": "Doraemon future gadget pocket",
+      "primary": "https://www.tv-asahi.co.jp/doraemon/character/",
+      "primaryResult": "image-only; no text fact context",
+      "officialAlternative": "https://dora-world.com/contents/2712",
+      "alternativeResult": "Available; confirms 22nd-century child-care robot cat, not gadget-pocket premise",
+      "status": "pocket claim HOLD_SOURCE; preserve attempts. 22nd-century/nanny robot is separately directly supported text, no further retrieval needed."
+    },
+    {
+      "ids": [
+        15
+      ],
+      "claim": "Japanese origin/English use of anime",
+      "primary": "https://www.britannica.com/art/anime-Japanese-animation",
+      "primaryResult": "nonretryable unavailable",
+      "officialAlternative": "https://www.uk.emb-japan.go.jp/en/creativejapan/manga/index.html",
+      "alternativeResult": "Available full context, supports definition and 2007 historical essay, do not use stale statistics as current",
+      "status": "MAIN supported; old distractor notes on animation traditions remain unverified"
+    },
+    {
+      "ids": [
+        18
+      ],
+      "claim": "usual Japanese manga artist role from concept to drawings",
+      "primary": "https://www.gov-online.go.jp/hlj/en/august_2024/august_2024-00.html",
+      "primaryResult": "403 Forbidden on open; search returned parts but not full needed opening context",
+      "officialAlternative": "https://www.gov-online.go.jp/en/assets/HIGHLIGHTING%20Japan%20August%202024%20PDF.pdf",
+      "alternativeResult": "403 Forbidden on open",
+      "status": "HOLD_SOURCE primary+alternative exhausted. Do not use another language as third source."
+    },
+    {
+      "ids": [
+        14,
+        20
+      ],
+      "primary": "https://www.japanesewithanime.com/2016/08/anime.html?m=0",
+      "result": "Available specialist terminology full required glossary contexts in terminology-glossary-context.json",
+      "status": "Main14/20 same inverse opening fact; no candidate yet. Can use glossary for independent terms, personally review authority and contexts."
+    },
+    {
+      "claims": [
+        "France capital/tradition note",
+        "India capital/tradition note",
+        "Brazil capital/tradition note"
+      ],
+      "primaryUrls": [
+        "https://data.un.org/en/iso/fr.html",
+        "https://data.un.org/en/iso/in.html",
+        "https://data.un.org/en/iso/br.html"
+      ],
+      "primaryResult": "all404; no official alternative used",
+      "status": "notes pending; do not reset attempts"
+    }
+  ],
+  "availablePools": {
+    "VIZ": [
+      "naruto",
+      "onepiece",
+      "goku",
+      "sailormoon",
+      "aot kodansha",
+      "deathnote",
+      "demon slayer",
+      "my hero academia",
+      "fullmetal"
+    ],
+    "GKIDS": [
+      "howl",
+      "totoro",
+      "kiki",
+      "spirited away",
+      "laputa"
+    ],
+    "caution": "Full necessary synopses are saved; avoid unsupported details and GKIDS productionDates (Totoro1993/Laputa1989 are US dates/mislabeled). Saved web artifacts hold full available relevant passages, local partial HTML is NOT evidence full source."
+  }
+}
