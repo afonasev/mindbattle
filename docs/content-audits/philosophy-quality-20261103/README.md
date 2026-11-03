@@ -1,26 +1,32 @@
 # Философия: последовательная редактура 100 вопросов
 
-Статус: **НЕ ЗАВЕРШЕНО**. Автор: 01a1a0ab-d534-7c20-9f61-19af1a54287c. Единственный независимый reviewer: /root/independent_philosophy, Luna/medium. Process revision2026-10-25. Основной актуальный статус — manifest.json; этот README описывает checkpoint первых25.
+**НЕ ЗАВЕРШЕНО: 50 из100 получили независимый FINAL.** Активное состояние и ownership — manifest.json. Process revision2026-10-25. Единственный reviewer — /root/independent_philosophy, Luna/medium; он продолжает ту же роль через manifest.reviewRequest, без второго reviewer и координатора.
 
-Ветка `codex/philosophy-quality-20261103`, baseline `1c049c04e0dfcd4cd7f8fe4bfb134bb55b43238c`. Собственный изолированный worktree. Philosophy **не интегрирована в main**. Merge/deploy/build/full suite/browser не разрешены и не выполнялись. Planning и чужие checkout/worktrees не изменялись.
+Ветка codex/philosophy-quality-20261103, исходный baseline1c049c04e0dfcd4cd7f8fe4bfb134bb55b43238c. Philosophy **не интегрирована в main**. Merge/deploy/build/full suite/browser не разрешены и не выполнялись. Чужие architecture/winter-sports, untrackedwave6/8, чужие процессы и planning/index не трогались.
 
-## Проверенный объём checkpoint
+## Checkpoint50
 
-- №1–25 применены, имеются независимые immutable INITIAL/FINAL receipts точных CURRENT/hash. Это25 из100, а не завершённая тема.
-- Четыре изменения easy→medium (2,3,5,6) компенсированы независимыми easy15,16,19,20. Счёт40/40/20; ключи10/10/10/10 в easy/medium и5/5/5/5 в hard.
-- frozen ID/topic/order/integercorrectIndex, preimages, точные candidate/current hashes, source body hashes и25 reviewer/current связок: PASS в mechanical-01.json.
-- Typecheck и19 affected content tests: PASS в validation-02.json/affected-02.json после фактического diff1–25.
-- Исходный catalog-full **FAIL** из validation-01.json сохранён: historical review sha не соответствует изменённой теме. src/content/reviews/philosophy.json не переписан для имитации свежей проверки100; этот gate открыт до легитимного завершения темы. Certified delta пока0; независимых FINAL25.
-- Никакая автоматическая проверка не означает человеческую/устройственную приёмку.
+- №1–50 применены; immutable INITIAL/FINAL receipts в reviewer/ связаны с точными CURRENT/hash. №51–100 пока полностью исходные.
+- Квота40/40/20 и ключи10/10/10/10 в easy/medium,5/5/5/5 в hard восстановлены содержательными компенсациями. Это подтверждено mechanical-02.json; не выводить из отдельных reviewer statements, где долг ещё был открыт на момент пакета.
+- frozen ID/topic/order/integercorrectIndex всех100, preimage/candidate/current/receipt hashes50, body hashes55 сохранённых источников: PASS в mechanical-02.json.
+- Typecheck и19 affected content tests после diff1–50: PASS в validation-03.json/affected-03.json. Metadata коммита не требует повторять неизменившиеся проверки.
+- Исходный catalog-full **FAIL** в validation-01.json сохранён: historical review sha не соответствует изменённой теме. src/content/reviews/philosophy.json не переписан для имитации свежей проверки100. Этот gate открыт до легитимного завершения темы; certified delta0, fresh independent FINAL50, wholeTopicComplete=false.
+- Human/device/visual/audio acceptance и production — NotRun; автоматические проверки их не заменяют.
 
-## История и источники
+## История и доказательства
 
-Полные сохранённые numbered source bodies — sources/*-body.json, bodySHA256 внутри; исходные web outputs также сохранены. Не подменять их поисковыми snippets. Индекс источников растёт только добавлением; exact historical index states, упомянутые в immutable receipts, сохранены sources/index-{sha}.json и source-index-history.json. Source-attempt-ledger.json сохраняет неудачи и доступные альтернативы; третьих источников для исчерпанного claim не было.
+Полные numbered source bodies — sources/*-body.json, bodySHA256 внутри. Исходные web outputs сохранены отдельно. Не заменять чтение нужных полных контекстов поисковыми snippets. Индекс источников растёт добавлением; immutable snapshots sources/index-{sha}.json закреплены в receipts. Source-index-history.json сохраняет ранние индексы. Source-attempt-ledger.json сохраняет первичные неудачи/альтернативы; общий cap2sources/1fix не отменён.
 
-У4–6 исходный HOLD_IDENTITY сохранён в final-04-10-v1.json. Сам reviewer признал ошибочную применимость контракта: правило прежних1500 не замораживает fact/key этих новых philosophy slots. Его отдельные immutable applicability clarification и effective disposition дают PASS_FINAL точным v2, не стирая HOLD и не выполняя третью полную ревизию. Автор не редактирует reviewer receipts.
+У4–6 исходный HOLD_IDENTITY сохранён в final-04-10-v1.json. Сам reviewer признал ошибочную применимость правила о прежних1500; его immutable clarification и effective disposition дают PASS_FINAL тем жеv2, без стирания HOLD и без третьей полной ревизии. Автор не редактирует reviewer receipts.
+
+Первый checkpoint25:3eee5e3f56b1b94f19ba708b30d857c677ca5788, remote ref тогда подтверждён. Ошибка cached whitespace check в первом коммите не скрыта: raw-output-formatting.json фиксирует корректировку, исходные точные raw transcripts остаются в f8921824173a230ebb2dda5ab24d3cefa926eff4; source bodyJSON и receipts не менялись.
 
 ## Продолжение
 
-№26–35 готовы: INITIAL на все10 выполнен; только source binding27 потребовал один directed fix, подготовлен bindings-26-35-v2.json с прочитанным полным контекстом metaphysics87–95. Каталог пока содержит исходные26–100. Следующий шаг — сверить preimages, применить26–35, получить FINAL того же reviewer и двигаться36–45. Если26/27/32/33/35 остаются medium, нужно5 содержательных easy-компенсаций того же key1; не менять уровни ради квоты.
+Передача авторской роли по насыщению контекста — HANDOFF.md и manifest.json. Тот же reviewer подтвердил протокол в queue-protocol-ready-v1.json. Backend403 прервал idle wait, но reviewer возобновлён тем же handle, protocol-resume-v1.json; попытки/вердикты не обнулены.
 
-Общие ограничения: первичный источник плюс одна официальная альтернатива при недоступности; затем HOLD. Один адресный fix-cycle и FINAL того же reviewer. Никакие исключения Q1 прошлой темы не перенесены. При настоящем исчерпании после доступной работы поставить один общий конкретный вопрос, сохранив HOLD/FAIL. Цель — все100, не объявлять checkpoint итогом.
+Следующие №51–60 полностью прочитать и подготовить: сохранены новые полные bodies original-position, marcus-aurelius, hobbes-moral, locke-political, liberty-positive-negative, justice, equality, rights. Это preflight, не авторская/независимая проверка карточек. Первыми использовать savedsources. Plato/Kant уже в библиотеке; проверить, содержат ли они точные нужные контексты, прежде сети.
+
+Origin/main во время работы продвинулся до d5ab5ef0f7442c7dcfef0543052ff7f4a913161b: изменены card-games/geology-earth/middle-ages, philosophy bytes совпадают с исходным baseline. Никакого merge не делали. Latest-main-peer-snapshot.json содержит точные новые3темы; для последующих глобальных peer checks накладывать их на каталог worktree. Направленная независимая сверка пересечений1–50 с этими новыми данными: PASS, reviewer/dependency-latest-main-d5ab-v1.json.
+
+Лимиты: одна primary source attempt и одна official alternative при недоступности, потом HOLD; один directed fix-cycle и FINAL того же reviewer. Не переносить government-politicsQ1. После доступной разрешённой работы, если реально нужен общий exception, задать один общий конкретный вопрос. Продолжать до всех100; checkpoint50 не является итогом.
