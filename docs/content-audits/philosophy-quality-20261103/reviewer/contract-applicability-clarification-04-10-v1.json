@@ -1,0 +1,34 @@
+{
+  "recordType": "immutable-contract-applicability-clarification",
+  "recordId": "philosophy-quality-20261103-contract-applicability-04-10-v1",
+  "finalReceipt": "docs/content-audits/philosophy-quality-20261103/reviewer/final-04-10-v1.json",
+  "finalReceiptSHA256": "f5454d6e3ccdfe069aec81d3a4d0b36f23a5a7b14be68f02c805f5e21e53cfb8",
+  "question": "Which exact applicable sentence prohibits changing the fact or answer text under these frozen philosophy question IDs?",
+  "finding": "No applicable sentence located. The previous identity HOLDs for Q4–Q6 were based on over-reading the ID contract and are not supported by the cited rule.",
+  "contractScope": [
+    {
+      "file": "/Users/eaafonasev/Projects/mindbattle/planning/openspec/specs/question-catalog/spec.md",
+      "lines": "78-79",
+      "scope": "Requirement concerns preserving IDs of the previous 1500 questions. Its operative final clause says a question must not receive a new ID while the fact and correct answer remain the same. It does not state that a frozen ID may not retain a unique slot when the question fact or answer text changes."
+    },
+    {
+      "file": "docs/content-audits/question-authoring-guide-2026-09-02.md",
+      "line": 39,
+      "scope": "Says the prior 1500 IDs do not change; it does not extend the identity restriction to the later philosophy topic."
+    },
+    {
+      "file": "src/content/validator.ts",
+      "lines": "169-173, 253-267",
+      "scope": "Enforces ID syntax, topic prefix, and global uniqueness; it does not bind an ID to a particular fact or answer entity."
+    }
+  ],
+  "authorizedTaskBoundary": "The user task freezes ID, topic, order, and integer correctIndex. The v2 cards preserve these fields. It does not freeze answer text or the fact being asked. These philosophy slots are outside the former 1500-question set.",
+  "cardImpact": {
+    "Q4": "v2 changes the question from Descartes/methodical doubt to attribution of Cogito. The ID remains frozen and globally unique; no identified contract forbids the change.",
+    "Q5": "v2 changes from defining rationalism to classifying a pair of rationalists; ID and integer correctIndex remain frozen and unique.",
+    "Q6": "v2 changes from defining empiricism to asking Locke’s account of idea origins; ID and integer correctIndex remain frozen and unique."
+  },
+  "historicalReceipts": "INITIAL and FINAL receipts are preserved unchanged. Their HOLD_IDENTITY verdicts remain in the audit history as reviewer error; this addendum does not overwrite them.",
+  "reviewDisposition": "Contract applicability correction only; no third content review. The v2 card checks and one-fix-cycle assessments already recorded in FINAL stand. Based on the task boundaries and located contract, the three identity HOLDs should not block the v2 content verdicts. Any coordinator status reconciliation must retain the original receipts and cite this addendum.",
+  "integrity": "No catalog or author files modified."
+}
