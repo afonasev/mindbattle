@@ -1,0 +1,42 @@
+{
+  "baseline": "1c049c04e0dfcd4cd7f8fe4bfb134bb55b43238c",
+  "branch": "codex/philosophy-quality-20261103",
+  "testedHEAD": "838dba4c85e3bc5f8224980074bc13fce5f1ec8d",
+  "scope": "Content-only100-card rewrite plus legitimate current review binding. Typecheck and catalog-topics/catalog-full/content/content-answer-notes. Historical catalog-full FAIL remains in validation-01; this is a new exact-current run after real100 independentFINAL.",
+  "runtimeChanged": false,
+  "topicSHA256": "37589b728470089a06e77141a9475bda7ed4768663fb749f421e1bb4a691a7cf",
+  "reviewSHA256": "758857c6dd009c695e95ad953a020e0b9fcb37d74464e637ef7d8a5e27611d41",
+  "runtimeDiffSHA256": "dfac0c430b3db2afb0580db6b15da61519bf160e3ae26e284dac3ad0539822a7",
+  "runs": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "seconds": 3.22,
+      "stdout": "\n> mindbattle@0.1.0 typecheck\n> tsc --noEmit\n\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/unit/catalog-topics.test.ts",
+        "tests/unit/catalog-full.test.ts",
+        "tests/unit/content.test.ts",
+        "tests/unit/content-answer-notes.test.ts",
+        "--reporter=json",
+        "--outputFile=docs/content-audits/philosophy-quality-20261103/affected-final.json"
+      ],
+      "exitCode": 0,
+      "seconds": 5.12,
+      "stdout": "JSON report written to /Users/eaafonasev/.codex/worktrees/philosophy-quality-20261103/mindbattle/docs/content-audits/philosophy-quality-20261103/affected-final.json\n",
+      "stderr": ""
+    }
+  ],
+  "fullBuildGameBrowserDeployMerge": "NotRun; not authorized",
+  "humanAcceptance": "NotRun; automated checks and independenteditorialreview do not constitute human acceptance"
+}
