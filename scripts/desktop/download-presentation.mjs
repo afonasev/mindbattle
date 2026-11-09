@@ -15,7 +15,7 @@ export function installerDownloadSection(version) {
 | --- | --- |
 | **[Download EXE](${base}-win-x64.exe)** | **[Download DMG](${base}-mac-universal.dmg)** |
 
-[Installer releases / Только установщики](${installerReleases(version)}) · [Play in browser / Играть в браузере](https://bricks.afonasev.tech/)
+[Installer releases / Только установщики](${installerReleases(version)}) · [Play in browser / Играть в браузере](https://mindbattle.afonasev.tech/)
 
 Installer version: **${version}**. The installed game receives newer game content through its updater.
 

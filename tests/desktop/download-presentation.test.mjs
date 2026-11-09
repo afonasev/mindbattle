@@ -8,6 +8,7 @@ test('installer links survive repeated rendering and exclude technical releases'
  assert.ok(body.includes('/afonasev/mindbattle/releases/download/v1.0.6/Mindbattle-1.0.6-win-x64.exe'));
  assert.ok(body.includes('Mindbattle-1.0.6-mac-universal.dmg'));
  assert.ok(body.includes('tag%3Av1%20prerelease%3Afalse'));
+ assert.ok(body.includes('[Play in browser / Играть в браузере](https://mindbattle.afonasev.tech/)'));
  assert.ok(body.endsWith(notes));
  assert.throws(()=>withInstallerDownloads(notes,'content-42'));
 });

@@ -106,6 +106,11 @@ test('publication uploads and verifies before switching Pages, resumes safely an
       }
       return JSON.stringify([releases]);
     }
+    if (args[0] === 'workflow') {
+      assert.deepEqual(args, ['workflow', 'run', 'installer-downloads.yml', '--repo', 'afonasev/mindbattle', '--ref', 'main', '-f', 'apply=true']);
+      assert.equal(releases.at(-1)?.draft, false);
+      return '';
+    }
     const tag = args[2]; mutations.push(args[1]);
     if (args[1] === 'create') { releases.push({ id: releases.length + 1, tag_name: tag, target_commitish: git('rev-parse', 'HEAD'), draft: true, assets: [] }); return ''; }
     const r = releases.find(r => r.tag_name === tag);
