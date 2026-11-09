@@ -9,30 +9,41 @@
   "remoteMainAtStart": "e56c866098655f4bc1bc44d971c7cda33f24b6d8",
   "sharedPlanningRevision": "70634f8ffecc06f747ea6826b9df0a8c16dfa169",
   "ownershipCheck": "No board-games flow lease, existing board-games branch/worktree or active exact review assignment found in checked manifests. This branch owns only the direct editorial pilot.",
-  "currentTopicSha256": "5a1261a6b7cc600ae44d6c7247e1e3a75de25c6cfd492a6f6007a1bad0ee32c2",
+  "currentTopicSha256": "25232f0dc33473ef7a575e8a0e95ec3be0a15273bbbfdba870abf03e3694de96",
   "sourceIndex": "source-index.json",
-  "ready": [
+  "ready": [],
+  "accepted": [],
+  "holds": [
+    {
+      "id": "board-games-clue-mystery",
+      "stage": "INITIAL HOLD",
+      "receipt": "reviewer/initial-pilot-v1.json",
+      "reason": "Absolute easy rating lacks broad-audience evidence. Reviewer recommends medium.",
+      "proposedDifficulty": "medium",
+      "next": "Find an independently reviewable, genuinely easy compensating card at correctIndex 0 before changing the level; otherwise retain HOLD.",
+      "fixCyclesUsed": 0
+    }
+  ],
+  "applied": [
     {
       "id": "board-games-monopoly-property",
-      "candidateSha256": "5404357073ea89629e9697e2f9e25b70d5f27249b9845849e2529ad098c65f99"
+      "sha256": "5404357073ea89629e9697e2f9e25b70d5f27249b9845849e2529ad098c65f99"
     },
     {
       "id": "board-games-scrabble-words",
-      "candidateSha256": "c341d32598e0ed776b50ef420535018b3e588dfbcd778d5bdd3f876e408fe37f"
-    },
-    {
-      "id": "board-games-clue-mystery",
-      "candidateSha256": "ee8253d7abb1ff570822bcbefd987351f759d82d1dd8baca4460c11df917ebfb"
+      "sha256": "c341d32598e0ed776b50ef420535018b3e588dfbcd778d5bdd3f876e408fe37f"
     }
   ],
-  "accepted": [],
-  "holds": [],
-  "applied": [],
   "evidence": {
     "preimages": "pilot-preimages.json",
     "candidates": "pilot-candidates-v1.json",
     "bindings": "pilot-bindings-v1.json",
-    "mechanical": "pilot-mechanical-v1.json"
+    "mechanical": "pilot-mechanical-v1.json",
+    "current": "pilot-current-v1.json",
+    "initial": "reviewer/initial-pilot-v1.json",
+    "final": "reviewer/final-pilot-current-v1.json",
+    "baselineTests": "affected-pilot-baseline.json",
+    "currentTests": "affected-pilot-current-v1.json"
   },
   "pilotMetrics": {
     "elapsedFromChatCreationSeconds": 314,
@@ -40,17 +51,64 @@
     "authorStageAfterIsolationSeconds": 204,
     "independentReviewSeconds": null,
     "independentWaitSeconds": 0,
-    "substantiveReturns": 0,
+    "substantiveReturns": 1,
     "proceduralReturns": 0,
     "acceptedDelta": 0,
-    "holdCount": 0,
-    "tokens": null
+    "holdCount": 1,
+    "tokens": null,
+    "editorialCurrentPass": 2,
+    "initialFinalTimings": "Not recorded separately; original author timing retained."
   },
   "independentGate": {
-    "status": "NotRun",
-    "reviewer": null,
-    "next": "Authorized independent reviewer reads each full v1 candidate and all cited primary contexts and returns per-ID INITIAL verdict bound to its candidate SHA. Compare the live preimage before applying. Accept only reviewed exact CURRENT with minimal affected checks. One repair cycle and FINAL by the same reviewer if required."
+    "status": "Pilot FINAL for 2; 1 INITIAL HOLD",
+    "reviewer": "/root/board_reviewer",
+    "authorizedScope": [
+      "board-games-monopoly-property",
+      "board-games-scrabble-words",
+      "board-games-clue-mystery"
+    ],
+    "next": "Continue topic authoring from nextUntouched. The next independent packet needs reviewer scope beyond the pilot."
   },
   "nextUntouched": "board-games-risk-map",
-  "nextBatch": "Start after pilot quality and independent gate are resolved."
+  "nextBatch": "Continue from #4 in a 5–10 ID packet. Handle Cluedo as an independent, balanced difficulty repair when a real same-key compensator is established.",
+  "qaPlan": {
+    "baselineCommit": "ea50282d6921ed01f54f5b2d6fbd239cef0e5e23",
+    "baselineTopicSha256": "5a1261a6b7cc600ae44d6c7247e1e3a75de25c6cfd492a6f6007a1bad0ee32c2",
+    "plannedDiff": "Only approved pilot question text, answers, explanations and sources in board-games.json, with evidence under the owned audit directory.",
+    "dependencies": "Topic validation, catalog-wide ID and prompt integrity, editorial receipt binding and answer-note consumers.",
+    "typecheck": "npm run typecheck",
+    "content": "npm run test -- tests/unit/catalog-topics.test.ts tests/unit/catalog-full.test.ts tests/unit/content.test.ts tests/unit/content-answer-notes.test.ts --reporter=json --outputFile=<report>",
+    "editorial": "Compare exact preimage and reviewer-bound candidate hashes. Verify topic identity and position, other cards byte-for-byte, 40/40/20 and key distribution. Check board-games ID intersection with legacy1500.",
+    "knownOpenGate": "The 2026-09-04 topic review binds the baseline bytes. catalog-full must retain its equality assertion. Any new topic bytes leave the topic-level gate open until full independent 100/100."
+  },
+  "editorialCurrentPass": [
+    {
+      "id": "board-games-monopoly-property",
+      "currentSha256": "5404357073ea89629e9697e2f9e25b70d5f27249b9845849e2529ad098c65f99",
+      "receipt": "reviewer/final-pilot-current-v1.json"
+    },
+    {
+      "id": "board-games-scrabble-words",
+      "currentSha256": "c341d32598e0ed776b50ef420535018b3e588dfbcd778d5bdd3f876e408fe37f",
+      "receipt": "reviewer/final-pilot-current-v1.json"
+    }
+  ],
+  "creditGate": "Two independently approved exact CURRENT cards. Whole-topic accepted remains 0/100 until full independent 100/100 certification and matching topic review digest.",
+  "qa": {
+    "baseline": {
+      "typecheck": "PASS",
+      "content": "PASS 20/20"
+    },
+    "current": {
+      "typecheck": "PASS",
+      "content": "FAIL 19/20",
+      "failure": "catalog-full requires topic review hash for exact topic bytes; historic review retained until 100/100",
+      "focusedAssertions": "19 PASS, no skips or todos"
+    },
+    "legacy": "Baseline FAIL 262, zero board-games IDs. Topic legacy1500 gate inapplicable.",
+    "fullSuite": "NotRun",
+    "build": "NotRun",
+    "game": "NotRun",
+    "publication": "NotRun"
+  }
 }
