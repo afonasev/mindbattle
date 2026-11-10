@@ -9,7 +9,7 @@
   "remoteMainAtStart": "e56c866098655f4bc1bc44d971c7cda33f24b6d8",
   "sharedPlanningRevision": "70634f8ffecc06f747ea6826b9df0a8c16dfa169",
   "ownershipCheck": "No board-games flow lease, existing board-games branch/worktree or active exact review assignment found in checked manifests. This branch owns only the direct editorial pilot.",
-  "currentTopicSha256": "25232f0dc33473ef7a575e8a0e95ec3be0a15273bbbfdba870abf03e3694de96",
+  "currentTopicSha256": "d667289e6d6d8b3761f750d2c4a4affc272075a6d426e6c419da3ce25d473c9e",
   "sourceIndex": "source-index.json",
   "ready": [],
   "accepted": [],
@@ -22,6 +22,15 @@
       "proposedDifficulty": "medium",
       "next": "Find an independently reviewable, genuinely easy compensating card at correctIndex 0 before changing the level; otherwise retain HOLD.",
       "fixCyclesUsed": 0
+    },
+    {
+      "id": "board-games-risk-map",
+      "stage": "INITIAL HOLD",
+      "receipt": "reviewer/initial-04-08-v1.json",
+      "reason": "Точный классический режим Risk требует знакомства с игрой. Рекомендован medium.",
+      "proposedDifficulty": "medium",
+      "next": "Нужен обоснованный компенсатор medium → easy с correctIndex 1.",
+      "fixCyclesUsed": 0
     }
   ],
   "applied": [
@@ -32,6 +41,22 @@
     {
       "id": "board-games-scrabble-words",
       "sha256": "c341d32598e0ed776b50ef420535018b3e588dfbcd778d5bdd3f876e408fe37f"
+    },
+    {
+      "id": "board-games-catan-resources",
+      "sha256": "168ef00dc3e057284250c818c119630a6e8c836dd2636e9c7df1030b692c46b6"
+    },
+    {
+      "id": "board-games-ticket-routes",
+      "sha256": "f71396f9bf94b8d5f6b6f9f658502970c73fc20b8df2cf6a40b52794e73de20a"
+    },
+    {
+      "id": "board-games-carcassonne-tiles",
+      "sha256": "81ef57a9d16707319d76b12c737e7f3767f5a4c773215325b378e94a9c55335b"
+    },
+    {
+      "id": "board-games-pandemic-diseases",
+      "sha256": "934d7ae37c2ef029d30332fcceba7a56209c86892fe682057982801137bfe934"
     }
   ],
   "evidence": {
@@ -43,7 +68,13 @@
     "initial": "reviewer/initial-pilot-v1.json",
     "final": "reviewer/final-pilot-current-v1.json",
     "baselineTests": "affected-pilot-baseline.json",
-    "currentTests": "affected-pilot-current-v1.json"
+    "currentTests": "affected-pilot-current-v1.json",
+    "batch04to08": {
+      "initial": "reviewer/initial-04-08-v1.json",
+      "current": "current-04-08-v1.json",
+      "affected": "affected-04-08-v1.json",
+      "final": "reviewer/final-04-08-v1.json"
+    }
   },
   "pilotMetrics": {
     "elapsedFromChatCreationSeconds": 314,
@@ -60,16 +91,11 @@
     "initialFinalTimings": "Not recorded separately; original author timing retained."
   },
   "independentGate": {
-    "status": "Pilot FINAL for 2; 1 INITIAL HOLD",
+    "status": "6 exact CURRENT FINAL PASS; 2 difficulty INITIAL HOLD; #9–13 INITIAL assigned",
     "reviewer": "/root/board_reviewer",
-    "authorizedScope": [
-      "board-games-monopoly-property",
-      "board-games-scrabble-words",
-      "board-games-clue-mystery"
-    ],
-    "next": "Continue topic authoring from nextUntouched. The next independent packet needs reviewer scope beyond the pilot."
+    "authorizedScope": "all 100 as per user continuation 2026-11-10, one reviewer, packets per policy"
   },
-  "nextUntouched": "board-games-risk-map",
+  "nextUntouched": "board-games-operation-tweezers",
   "nextBatch": "Continue from #4 in a 5–10 ID packet. Handle Cluedo as an independent, balanced difficulty repair when a real same-key compensator is established.",
   "qaPlan": {
     "baselineCommit": "ea50282d6921ed01f54f5b2d6fbd239cef0e5e23",
@@ -91,9 +117,29 @@
       "id": "board-games-scrabble-words",
       "currentSha256": "c341d32598e0ed776b50ef420535018b3e588dfbcd778d5bdd3f876e408fe37f",
       "receipt": "reviewer/final-pilot-current-v1.json"
+    },
+    {
+      "id": "board-games-catan-resources",
+      "currentSha256": "168ef00dc3e057284250c818c119630a6e8c836dd2636e9c7df1030b692c46b6",
+      "receipt": "reviewer/final-04-08-v1.json"
+    },
+    {
+      "id": "board-games-ticket-routes",
+      "currentSha256": "f71396f9bf94b8d5f6b6f9f658502970c73fc20b8df2cf6a40b52794e73de20a",
+      "receipt": "reviewer/final-04-08-v1.json"
+    },
+    {
+      "id": "board-games-carcassonne-tiles",
+      "currentSha256": "81ef57a9d16707319d76b12c737e7f3767f5a4c773215325b378e94a9c55335b",
+      "receipt": "reviewer/final-04-08-v1.json"
+    },
+    {
+      "id": "board-games-pandemic-diseases",
+      "currentSha256": "934d7ae37c2ef029d30332fcceba7a56209c86892fe682057982801137bfe934",
+      "receipt": "reviewer/final-04-08-v1.json"
     }
   ],
-  "creditGate": "Two independently approved exact CURRENT cards. Whole-topic accepted remains 0/100 until full independent 100/100 certification and matching topic review digest.",
+  "creditGate": "6 independently approved exact CURRENT cards. Whole-topic accepted stays 0/100 until 100/100 and matching topic review digest.",
   "qa": {
     "baseline": {
       "typecheck": "PASS",
@@ -103,12 +149,73 @@
       "typecheck": "PASS",
       "content": "FAIL 19/20",
       "failure": "catalog-full requires topic review hash for exact topic bytes; historic review retained until 100/100",
-      "focusedAssertions": "19 PASS, no skips or todos"
+      "focusedAssertions": "19 PASS, no skips or todos",
+      "affected": "affected-04-08-v1.json"
     },
     "legacy": "Baseline FAIL 262, zero board-games IDs. Topic legacy1500 gate inapplicable.",
     "fullSuite": "NotRun",
     "build": "NotRun",
     "game": "NotRun",
     "publication": "NotRun"
-  }
+  },
+  "readyPackets": [
+    {
+      "range": [
+        9,
+        13
+      ],
+      "cards": [
+        {
+          "id": "board-games-connectfour-line",
+          "candidateSha256": "56ed9da2bc5920398788300c23e042bad06a927632e006b9c7af4e785299d147"
+        },
+        {
+          "id": "board-games-battleship-grid",
+          "candidateSha256": "94a9f389f3ebc3e86be26fda5b414ace7620fca2b5f8b46648e188969e16c6b9"
+        },
+        {
+          "id": "board-games-codenames-clue",
+          "candidateSha256": "d6fc27637286a785062a516a4c179212e6934cce2cbec4e69d8f9795d73b0d05"
+        },
+        {
+          "id": "board-games-dixit-image",
+          "candidateSha256": "769f72bbd77a7d76749a4eb7770fda21b434dfebc077881851a358659796df50"
+        },
+        {
+          "id": "board-games-azul-tiles",
+          "candidateSha256": "edb4d19aa7542b5f64b1f9bda6248af11768513b80710ac008a24901f226f8e0"
+        }
+      ],
+      "bindings": "bindings-09-13-v1.json"
+    },
+    {
+      "range": [
+        14,
+        18
+      ],
+      "cards": [
+        {
+          "id": "board-games-splendor-gems",
+          "candidateSha256": "db23c82db09839923e1fad0339b71564d1f622c76ce58146b6b383ca0f12f412"
+        },
+        {
+          "id": "board-games-dominion-deckbuild",
+          "candidateSha256": "64023a696f31c51f711af7fb7470143f4fdd2dac819acbc17c3514ec58cb1b0e"
+        },
+        {
+          "id": "board-games-sevenwonders-cards",
+          "candidateSha256": "079a6130455066fa878acd53fb933507bd373d19b76bdd19459572bc7344061a"
+        },
+        {
+          "id": "board-games-agricola-farm",
+          "candidateSha256": "c5b12fb0e0aea0d9ba36e9ce35d94c537955f0852845ff061711304d9172b877"
+        },
+        {
+          "id": "board-games-wingspan-birds",
+          "candidateSha256": "5004acefc74f4a227a8e8f37e5378464506ff3dfcadd9f6c87ce7aa3e50a435e"
+        }
+      ],
+      "bindings": "bindings-14-18-v1.json"
+    }
+  ]
 }
