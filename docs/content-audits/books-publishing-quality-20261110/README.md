@@ -10,8 +10,12 @@
 - №39–40 уже прошли один цикл после FIX в `coordinator-01a14018/independent-first5-fresh-source-initial/receipt.json`. Сохранены замечания к X в контрольном знаке и однозначности относительно DOI и ISBN. №69 сохраняет FINAL HOLD старой версии в `coordinator-01a14103/independent-editions4-sourcefb-final/receipt.json`. Сертификация нового факта и источника в `coordinator-01a142a3/certification-book69-final-pass.json` закрывает только точную версию «Алмазной сутры». Оба пути относительны к историческому `docs/content-audits/question-quality-wave-8/`.
 - Итог пилота за 253 с от открытия чата до READY. CURRENT 0, новых HOLD и возвратов пока нет, время независимой проверки и токены неизвестны.
 
-## Проверки и продолжение
+## Baseline
 
 - Baseline PASS. `npm run typecheck` и [20 проверок содержимого](affected-baseline.json) для catalog-topics, catalog-full, content и content-answer-notes. Сверены порядок ID, integer correctIndex, 40/40/20, по 10/10/5 на позицию внутри уровня и отсутствие пересечений с legacy1500.
-- Affected после применения — NotRun. При изменении темы старый topic review закономерно перестанет соответствовать новым байтам. Assertion остаётся в силе, review можно обновить только после независимого FINAL 100/100.
-- Следующий шаг — отдельный независимый reviewer с полномочиями на эту тему. Проверить пилот относительно текущей базы и соседей, затем применить только допущенные exact preimages, прогнать затронутые проверки и получить FINAL на фактический CURRENT. Далее пакеты по 5–10 с применимостью evidence по каждому ID. Тема и topic review на точной базе.
+## CURRENT
+
+- Независимый reviewer — `/root/books_reviewer`, автор — `/root`. Разрешение получено для этой темы.
+- [Пилот](pilot-current.json) и [пакет №32–38](batch-32-38-current.json) получили независимый FINAL PASS на точных применённых хэшах. Также закрыт [пакет №1–10](batch-01-10-current.json). Всего 20/100 редакторских FINAL CURRENT. Для №35 израсходован один адресный цикл из-за двусмысленности «штрихкод / читательский билет».
+- Typecheck PASS. Affected по текущему пакету 19 PASS и 1 FAIL. Сохранён assertion совпадения topic review с точными байтами. Gate темы открыт до полного независимого покрытия и новой привязки digest.
+- В работе INITIAL №11–20. №21–30 READY. Следующие пакеты по 5–10, с проверкой применимости доказательств по каждому ID.
