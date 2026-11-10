@@ -7,7 +7,7 @@
 
 | Влияние | Обязательный локальный маршрут | Дополнительные gates |
 | --- | --- | --- |
-| QA tooling/docs без runtime/visible изменений | `npm run qa:tooling` | Маршрут включает Node и Python flow-контракты; реально выполнить каждый изменённый маршрут. Для flow helper дополнительно `python3 tools/test_flow.py` и `python3 -m unittest discover -s tests -p 'test_flow*.py'`. |
+| QA tooling/docs без runtime/visible изменений | `npm run qa:tooling` | Маршрут уже запускает Node tooling, `python3 tools/test_flow.py` и discovery `test_flow*.py`, включая `test_flow_manifest_view.py`. Для адресной диагностики запускай нужный набор отдельно. На одном snapshot выполняй каждый набор один раз при отсутствии причины для повтора по execution-policy. |
 | Изолированное представление/текст/layout без изменения правил, state, permissions, timers или input | `npm run qa:ui` | Затронутые browser сценарии вне smoke и screenshots; реальный in-app Browser для visible изменений. |
 | Phone/display presentation | `npm run qa:ui` | Snapshot checks не доказывают SSE/privacy. Если меняются роль, snapshot mapping, права/синхронизация — также `qa:network`; физические телефоны при изменении device interaction. |
 | Изолированное сетевое взаимодействие с известной границей | `npm run qa:network` + UI при visible изменении | network-domain/room/status, реальные SSE и 12 browser клиентов, restore/departure/privacy. При изменении протокола/authority/timers/full shared state — расширь affected-проверки по зависимостям; full только с отдельным разрешением. |
