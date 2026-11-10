@@ -1,0 +1,145 @@
+{
+  "typecheck": {
+    "status": "PASS",
+    "exitCode": 0,
+    "command": "npm run typecheck"
+  },
+  "vitest": {
+    "status": "FAIL",
+    "command": "npm exec --offline -- vitest run tests/unit/catalog-topics.test.ts tests/unit/catalog-full.test.ts tests/unit/content.test.ts tests/unit/content-answer-notes.test.ts --reporter=json --outputFile=<temporary path>",
+    "exitCode": 1,
+    "numTotalTests": 20,
+    "numPassedTests": 19,
+    "numFailedTests": 1,
+    "numPendingTests": 0,
+    "files": [
+      {
+        "file": "catalog-full.test.ts",
+        "assertions": [
+          {
+            "name": "contains every approved topic, its target question count and a review of the current bytes",
+            "status": "failed",
+            "errors": [
+              "AssertionError: world-cities: review должен соответствовать файлу: expected '2d076bd17f569a4943a9d9e89f97c647fa16f…' to be '8206661b3028b21e8455adb6c88ff32ac7917…' // Object.is equality\n    at /Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/tests/unit/catalog-full.test.ts:27:88\n    at file:///Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "catalog-topics.test.ts",
+        "assertions": [
+          {
+            "name": "keeps every present package valid and globally unique",
+            "status": "passed",
+            "errors": []
+          }
+        ]
+      },
+      {
+        "file": "content-answer-notes.test.ts",
+        "assertions": [
+          {
+            "name": "keeps stable answer ids, correctIndex and notes through JSON round-trip",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "loads legacy string answers without inventing a note",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "reports empty, oversized and HTML notes with answer paths",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "rejects generic placeholder notes",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "rejects a distractor-prefixed negative placeholder",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "rejects a broad category label that does not describe the distractor",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "rejects search, home and chapter-introduction sources",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "rejects answer-prefixed copies of one common explanation",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "requires four distinct notes in final packs but permits legacy migration strings",
+            "status": "passed",
+            "errors": []
+          }
+        ]
+      },
+      {
+        "file": "content.test.ts",
+        "assertions": [
+          {
+            "name": "accepts the exact manifest catalog",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "reports a path for invalid answers and quotas",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "rejects duplicate prompt text across different topics",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "moves compact history with a question when its difficulty changes",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "draws a complete unique cycle and changes the next cycle boundary",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "keeps excluded questions in the remaining bag",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "is reproducible for the same seed and avoids a fixed order for another seed",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "maximizes distinct domains for normal, bonus, and final topic sets",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "name": "diagnoses too few groups instead of repeating one in a normal set",
+            "status": "passed",
+            "errors": []
+          }
+        ]
+      }
+    ]
+  },
+  "knownOpenGate": "Exact topic report binding. Updating the topic report requires independent 100/100. Test ran without changes or skips.",
+  "topicSha256": "8206661b3028b21e8455adb6c88ff32ac79174819946bcaea6ad9b94e2da0693",
+  "checkedHead": "39765baec8e375614168d8674db0eb1737531b64",
+  "topicDiffSha256": "1e0e43a9138f36f839d54275a127042cc73e4b068515ada52d3b3ca555ea4f6c",
+  "priorTopicReviewSha256": "2d076bd17f569a4943a9d9e89f97c647fa16f0b90d9e55bd96659ae2d3725fd9"
+}
