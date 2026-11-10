@@ -1,0 +1,140 @@
+{
+  "checkedHead": "7a32790f80002d09dda047d69eed3837f87ba33c",
+  "topicSha256": "65aee2ff1b7ee67e2939c958f248a8591570952191eefc5619da1631347a8aee",
+  "typecheck": {
+    "command": "npm run typecheck",
+    "exitCode": 0
+  },
+  "vitest": {
+    "command": "npm exec --offline -- vitest run tests/unit/catalog-topics.test.ts tests/unit/catalog-full.test.ts tests/unit/content.test.ts tests/unit/content-answer-notes.test.ts --reporter=json",
+    "exitCode": 1,
+    "numTotalTests": 20,
+    "numPassedTests": 19,
+    "numFailedTests": 1,
+    "numPendingTests": 0,
+    "files": [
+      {
+        "file": "catalog-full.test.ts",
+        "assertions": [
+          {
+            "title": "contains every approved topic, its target question count and a review of the current bytes",
+            "status": "failed",
+            "errors": [
+              "AssertionError: world-cities: review должен соответствовать файлу: expected '2d076bd17f569a4943a9d9e89f97c647fa16f…' to be '65aee2ff1b7ee67e2939c958f248a85915709…' // Object.is equality\n    at /Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/tests/unit/catalog-full.test.ts:27:88\n    at file:///Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///Users/eaafonasev/.codex/worktrees/world-cities-quality-20261111/mindbattle/node_modules/@vitest/runner/dist/chunk-artifact.js:2956:64"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "catalog-topics.test.ts",
+        "assertions": [
+          {
+            "title": "keeps every present package valid and globally unique",
+            "status": "passed",
+            "errors": []
+          }
+        ]
+      },
+      {
+        "file": "content-answer-notes.test.ts",
+        "assertions": [
+          {
+            "title": "keeps stable answer ids, correctIndex and notes through JSON round-trip",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "loads legacy string answers without inventing a note",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "reports empty, oversized and HTML notes with answer paths",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "rejects generic placeholder notes",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "rejects a distractor-prefixed negative placeholder",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "rejects a broad category label that does not describe the distractor",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "rejects search, home and chapter-introduction sources",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "rejects answer-prefixed copies of one common explanation",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "requires four distinct notes in final packs but permits legacy migration strings",
+            "status": "passed",
+            "errors": []
+          }
+        ]
+      },
+      {
+        "file": "content.test.ts",
+        "assertions": [
+          {
+            "title": "accepts the exact manifest catalog",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "reports a path for invalid answers and quotas",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "rejects duplicate prompt text across different topics",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "moves compact history with a question when its difficulty changes",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "draws a complete unique cycle and changes the next cycle boundary",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "keeps excluded questions in the remaining bag",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "is reproducible for the same seed and avoids a fixed order for another seed",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "maximizes distinct domains for normal, bonus, and final topic sets",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "diagnoses too few groups instead of repeating one in a normal set",
+            "status": "passed",
+            "errors": []
+          }
+        ]
+      }
+    ]
+  }
+}
