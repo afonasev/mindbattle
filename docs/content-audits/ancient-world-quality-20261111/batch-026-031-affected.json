@@ -1,0 +1,142 @@
+{
+  "stage": "AFFECTED_CHECKS",
+  "checkedHead": "b9e6d6f1dd624151610860952efd4199c8726c5e",
+  "topicSha256": "7aa5df2be891aaa269ddee754ec148203d238825033853c69023376179d91e38",
+  "typecheck": {
+    "command": "npm run typecheck",
+    "exitCode": 0
+  },
+  "vitest": {
+    "command": "npm exec --offline -- vitest run tests/unit/catalog-topics.test.ts tests/unit/content.test.ts tests/unit/content-answer-notes.test.ts tests/unit/catalog-full.test.ts --reporter=json",
+    "exitCode": 1,
+    "numTotalTests": 20,
+    "numPassedTests": 19,
+    "numFailedTests": 1,
+    "files": [
+      {
+        "file": "catalog-full.test.ts",
+        "assertions": [
+          {
+            "title": "contains every approved topic, its target question count and a review of the current bytes",
+            "status": "failed"
+          }
+        ]
+      },
+      {
+        "file": "catalog-topics.test.ts",
+        "assertions": [
+          {
+            "title": "keeps every present package valid and globally unique",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "content-answer-notes.test.ts",
+        "assertions": [
+          {
+            "title": "keeps stable answer ids, correctIndex and notes through JSON round-trip",
+            "status": "passed"
+          },
+          {
+            "title": "loads legacy string answers without inventing a note",
+            "status": "passed"
+          },
+          {
+            "title": "reports empty, oversized and HTML notes with answer paths",
+            "status": "passed"
+          },
+          {
+            "title": "rejects generic placeholder notes",
+            "status": "passed"
+          },
+          {
+            "title": "rejects a distractor-prefixed negative placeholder",
+            "status": "passed"
+          },
+          {
+            "title": "rejects a broad category label that does not describe the distractor",
+            "status": "passed"
+          },
+          {
+            "title": "rejects search, home and chapter-introduction sources",
+            "status": "passed"
+          },
+          {
+            "title": "rejects answer-prefixed copies of one common explanation",
+            "status": "passed"
+          },
+          {
+            "title": "requires four distinct notes in final packs but permits legacy migration strings",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "content.test.ts",
+        "assertions": [
+          {
+            "title": "accepts the exact manifest catalog",
+            "status": "passed"
+          },
+          {
+            "title": "reports a path for invalid answers and quotas",
+            "status": "passed"
+          },
+          {
+            "title": "rejects duplicate prompt text across different topics",
+            "status": "passed"
+          },
+          {
+            "title": "moves compact history with a question when its difficulty changes",
+            "status": "passed"
+          },
+          {
+            "title": "draws a complete unique cycle and changes the next cycle boundary",
+            "status": "passed"
+          },
+          {
+            "title": "keeps excluded questions in the remaining bag",
+            "status": "passed"
+          },
+          {
+            "title": "is reproducible for the same seed and avoids a fixed order for another seed",
+            "status": "passed"
+          },
+          {
+            "title": "maximizes distinct domains for normal, bonus, and final topic sets",
+            "status": "passed"
+          },
+          {
+            "title": "diagnoses too few groups instead of repeating one in a normal set",
+            "status": "passed"
+          }
+        ]
+      }
+    ],
+    "failed": [
+      {
+        "file": "catalog-full.test.ts",
+        "title": "contains every approved topic, its target question count and a review of the current bytes",
+        "message": "AssertionError: ancient-world: review должен соответствовать файлу: expected '3c026c576a9bac17d7696bfb723b741840991…' to be '7aa5df2be891aaa269ddee754ec148203d238…' // Object.is equality"
+      }
+    ]
+  },
+  "pending": {
+    "gate": "current whole-topic report binding",
+    "previousReportSha256": "3c026c576a9bac17d7696bfb723b7418409913a0c9ac96b9bc5fedc0b0074dba",
+    "reason": "The existing full review refers to the baseline bytes. New whole-topic evidence is pending."
+  },
+  "fullSuite": "NOT_RUN",
+  "outcome": {
+    "independentPassThisBatch": 6,
+    "independentPassTotal": 30,
+    "holds": [],
+    "carriedHolds": [
+      "ancient-world-democracy"
+    ],
+    "wholeTopicCredit": 0,
+    "readyToFinalSeconds": 790,
+    "nextQuestionOrder": 32
+  }
+}
