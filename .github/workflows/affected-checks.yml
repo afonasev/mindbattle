@@ -1,0 +1,58 @@
+name: Affected checks
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  affected:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Select affected contracts
+        id: scope
+        shell: bash
+        run: |
+          content=$(git diff --name-only HEAD^1 HEAD -- src/content server/feedbackCatalog.mjs server/feedbackCatalogs.json server/feedbackStore.mjs server/index.mjs server/feedbackReport.mjs scripts/checkFeedbackCatalog.mjs scripts/generateProductionFeedbackReport.mjs scripts/deploy.sh tests/tooling/feedback-catalog.test.mjs 'tests/unit/catalog-*.test.ts' 'tests/unit/content*.test.ts' 'tests/unit/feedback-*.test.ts' package.json package-lock.json tsconfig.json vitest.config.ts .github/workflows/affected-checks.yml)
+          installers=$(git diff --name-only HEAD^1 HEAD -- .github/scripts/installer_downloads.py .github/scripts/test_installer_downloads.py .github/workflows/installer-downloads.yml scripts/desktop tests/desktop/download-presentation.test.mjs tests/desktop/github-publication.test.mjs tests/desktop/github-updates.test.mjs .github/workflows/affected-checks.yml)
+          if [[ -n "$content" ]]; then echo 'content=true' >> "$GITHUB_OUTPUT"; fi
+          if [[ -n "$installers" ]]; then echo 'installers=true' >> "$GITHUB_OUTPUT"; fi
+
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        if: steps.scope.outputs.content == 'true' || steps.scope.outputs.installers == 'true'
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: Check feedback catalog against the PR base
+        if: steps.scope.outputs.content == 'true'
+        shell: bash
+        run: |
+          baseline=$(mktemp -d)
+          trap 'rm -rf "$baseline"' EXIT
+          git archive HEAD^1 src/content/revision.json src/content/topics | tar -xf - -C "$baseline"
+          node scripts/checkFeedbackCatalog.mjs --baseline "$baseline"
+          node --test tests/tooling/feedback-catalog.test.mjs
+
+      - name: Check affected content contracts
+        if: steps.scope.outputs.content == 'true'
+        env:
+          ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+        run: |
+          npm ci --no-audit --no-fund
+          npm run typecheck
+          npm run test -- tests/unit/catalog-topics.test.ts tests/unit/catalog-full.test.ts tests/unit/content.test.ts tests/unit/content-answer-notes.test.ts tests/unit/feedback-history.test.ts tests/unit/feedback-server.test.ts tests/unit/feedback-report.test.ts
+
+      - name: Check installer links and publishers
+        if: steps.scope.outputs.installers == 'true'
+        run: |
+          python3 -B -m unittest discover -s .github/scripts -p test_installer_downloads.py
+          node --test tests/desktop/download-presentation.test.mjs tests/desktop/github-publication.test.mjs tests/desktop/github-updates.test.mjs
