@@ -1,0 +1,76 @@
+{
+  "stage": "INITIAL",
+  "processRevision": "2026-10-25",
+  "reviewer": "/root/cities_reviewer",
+  "reviewedHead": "4142ae8a15e9f3f1e1d6da86e56cca000df3974c",
+  "reviewedTopicSha256": "0468c6492f6331ae02fd6701be69a71ddadf792809db42f5a7c49a456e1fbb22",
+  "readyReceipt": "docs/content-audits/animation-quality-20261112/pilot-ready.json",
+  "cards": [
+    {
+      "id": "animation-woody-toy-story",
+      "order": 1,
+      "preimageSha256": "5121978134c89a2b1f28d2ed39e03e6d73b16fe7d9a6000dab5dd5e401c0e61a",
+      "candidateSha256": "c1f84051c7508361dd7abb14384ccdbe9600471da957af7bd7c4ad6c5528ad12",
+      "verdict": "FIX",
+      "rationale": "Кандидат проверяет голосовой механизм Вуди, но независимая карточка world-cinema-toy-story-cowboy в notes прямо называет механизм на шнурке; world-cinema-lion-king-hero повторяет тот же clue. Это раскрывает точный ответ до этой карточки. Направленная замена сохраняет фильм, ключ Вуди, индекс и лёгкий уровень, но переключает проверяемую деталь на шашки, связанную со Слинки. Pixar подтверждает, что Слинки — друг Вуди и партнёр по шашкам (раздел Slinky); там же сказано, что Мистер Картофельная Голова ставит под сомнение авторитет Вуди. Все варианты остаются персонажами того же фильма. Остальные факты кандидата о руководстве Вуди, Рексе и Хэмме подтверждены профилями Pixar.",
+      "directedFix": {
+        "fields": {
+          "prompt": "С кем пёс Слинки играет в шашки в «Истории игрушек»?",
+          "answers[3].text": "Мистер Картофельная Голова",
+          "answers[3].note": "Мистер Картофельная Голова своим циничным взглядом на жизнь чаще всех ставит под сомнение авторитет Вуди.",
+          "explanation": "Слинки — верный друг Вуди и его партнёр по игре в шашки."
+        },
+        "preserve": ["correctIndex=0", "difficulty=easy", "answers[0..2]", "source=https://www.pixar.com/toy-story"],
+        "sourceContext": "Pixar Toy Story, Slinky section (checkers with Woody) and Mr. Potato Head section (questions Woody's authority)."
+      }
+    },
+    {
+      "id": "animation-marlin-nemo",
+      "order": 2,
+      "preimageSha256": "f3318011a158bd386b7f21c0dc03b99d777d84679ff197be60e0fa44c2b1f6a8",
+      "candidateSha256": "3a3eeb3e71334644b16beb44d6314d937fbbe4cad321a6408fa7a53cf712c595",
+      "verdict": "PASS",
+      "rationale": "Pixar подтверждает дом Марлина в актинии на Большом Барьерном рифе, исчезновение Немо и путь Марлина к гавани Сиднея; профили подтверждают персонажей и роль Краша с Прыском в Восточно-Австралийском течении. Варианты Жабр, Краш и Немо относятся к тому же фильму, но не подходят к действию в prompt. Связь 004 («Марлин — осторожный отец Немо; в пути его сопровождает Дори») и заметка world-cinema-finding-nemo-fish о поиске сына дают общий контекст персонажа, но не раскрывают отличительные обстоятельства кандидата — дом в актинии/риф и Сидней. Уровень easy оправдан прямой привязкой к фильму и маршруту. Имена соответствуют используемым русским названиям персонажей; англоязычные имена/роли сверены с официальной страницей Pixar.",
+      "sourceEvidence": [
+        "https://www.pixar.com/finding-nemo — фильм и профили Marlin, Nemo, Gill, Crush; контекст дома в актинии, Большого Барьерного рифа и гавани Сиднея.",
+        "https://www.pixar.com/finding-nemo — профиль Crush: он и Squirt плывут по Восточно-Австралийскому течению."
+      ]
+    },
+    {
+      "id": "animation-remy-ratatouille",
+      "order": 3,
+      "preimageSha256": "2173c4f1b1df577d7a1216e8fb79d0163d36c22cb2c12adb819ef5665729e454",
+      "candidateSha256": "fd195791dfb56ecd56a19e38180d008e5ac9a252d07bfdec3c96cd19eb467709",
+      "verdict": "PASS",
+      "rationale": "Pixar прямо описывает выдающееся обоняние Реми и его роль в распознавании безопасной еды для семьи; профиль связывает Лингвини с работой мусорщиком ресторана, а Эмиля и Джанго — с семьёй Реми. Prompt ясно проверяет отдельную семейную обязанность Реми, а не помощь Лингвини на кухне. Варианты все из того же фильма, каждый note поддержан страницей Pixar; единственность и уровень easy соответствуют прямому указанию фильма и роли.",
+      "sourceEvidence": [
+        "https://www.pixar.com/ratatouille — Remy section (sense of smell and safe food for family).",
+        "https://www.pixar.com/ratatouille — Linguini, Emile, Django sections."
+      ]
+    }
+  ],
+  "catalogDependencies": [
+    {
+      "id": "world-cinema-toy-story-cowboy",
+      "currentSha256": "b2cfbc755e910bdd8d8fb4f904925c204e99ea2be6b30ed96f050ed690f45fae",
+      "rationale": "Its Woody distractor note explicitly says he has a pull-string mechanism, a direct leak for candidate 001; candidate 001 is therefore FIX with a directed change of fact."
+    },
+    {
+      "id": "world-cinema-lion-king-hero",
+      "currentSha256": "c31b98d9989774aa488a8c9366a1adc452af170b99c3450bfb82763639e6b16d",
+      "rationale": "Its Woody distractor note repeats the pull-string mechanism and independently confirms the same direct leak for candidate 001."
+    },
+    {
+      "id": "animation-wall-e-robot",
+      "currentSha256": "f51742eaca2c745cd28506686aa37210d2167c1254595643df2a3f6ba9997482",
+      "rationale": "Its Marlin note identifies him as Nemo's father and says Dory accompanies him on the journey, but does not give the anemone-home/Great Barrier Reef origin or Sydney destination tested in candidate 002."
+    },
+    {
+      "id": "world-cinema-finding-nemo-fish",
+      "currentSha256": "833f75f35c61e67763f682468fbbc91ac526cb7d9a29d129b7663f5d03dc17fd",
+      "rationale": "Its fish-clown note says Nemo's father searches for him, which is related context but does not provide candidate 002's origin/destination details."
+    }
+  ],
+  "sourceAttempts": [],
+  "notes": "Candidate hashes were independently recalculated from canonical sorted compact JSON and match READY. Current preimage hashes match READY and the live topic cards. Source contexts were personally read on official Pixar pages. No product, topic, or Git files were changed."
+}
