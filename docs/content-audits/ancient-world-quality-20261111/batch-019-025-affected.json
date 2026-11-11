@@ -1,0 +1,146 @@
+{
+  "stage": "AFFECTED_CHECKS",
+  "checkedHead": "5bcf19c0b5f0afe76f8d2f022525e8d90f76ea86",
+  "topicSha256": "b764cccaf8bbf015a60da167d6de5cc133ca011247d59307b5691d99203069d6",
+  "typecheck": {
+    "command": "npm run typecheck",
+    "exitCode": 0
+  },
+  "vitest": {
+    "command": "npm exec --offline -- vitest run tests/unit/catalog-topics.test.ts tests/unit/content.test.ts tests/unit/content-answer-notes.test.ts tests/unit/catalog-full.test.ts --reporter=json",
+    "exitCode": 1,
+    "numTotalTests": 20,
+    "numPassedTests": 19,
+    "numFailedTests": 1,
+    "files": [
+      {
+        "file": "catalog-full.test.ts",
+        "assertions": [
+          {
+            "title": "contains every approved topic, its target question count and a review of the current bytes",
+            "status": "failed"
+          }
+        ]
+      },
+      {
+        "file": "catalog-topics.test.ts",
+        "assertions": [
+          {
+            "title": "keeps every present package valid and globally unique",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "content-answer-notes.test.ts",
+        "assertions": [
+          {
+            "title": "keeps stable answer ids, correctIndex and notes through JSON round-trip",
+            "status": "passed"
+          },
+          {
+            "title": "loads legacy string answers without inventing a note",
+            "status": "passed"
+          },
+          {
+            "title": "reports empty, oversized and HTML notes with answer paths",
+            "status": "passed"
+          },
+          {
+            "title": "rejects generic placeholder notes",
+            "status": "passed"
+          },
+          {
+            "title": "rejects a distractor-prefixed negative placeholder",
+            "status": "passed"
+          },
+          {
+            "title": "rejects a broad category label that does not describe the distractor",
+            "status": "passed"
+          },
+          {
+            "title": "rejects search, home and chapter-introduction sources",
+            "status": "passed"
+          },
+          {
+            "title": "rejects answer-prefixed copies of one common explanation",
+            "status": "passed"
+          },
+          {
+            "title": "requires four distinct notes in final packs but permits legacy migration strings",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "content.test.ts",
+        "assertions": [
+          {
+            "title": "accepts the exact manifest catalog",
+            "status": "passed"
+          },
+          {
+            "title": "reports a path for invalid answers and quotas",
+            "status": "passed"
+          },
+          {
+            "title": "rejects duplicate prompt text across different topics",
+            "status": "passed"
+          },
+          {
+            "title": "moves compact history with a question when its difficulty changes",
+            "status": "passed"
+          },
+          {
+            "title": "draws a complete unique cycle and changes the next cycle boundary",
+            "status": "passed"
+          },
+          {
+            "title": "keeps excluded questions in the remaining bag",
+            "status": "passed"
+          },
+          {
+            "title": "is reproducible for the same seed and avoids a fixed order for another seed",
+            "status": "passed"
+          },
+          {
+            "title": "maximizes distinct domains for normal, bonus, and final topic sets",
+            "status": "passed"
+          },
+          {
+            "title": "diagnoses too few groups instead of repeating one in a normal set",
+            "status": "passed"
+          }
+        ]
+      }
+    ],
+    "failed": [
+      {
+        "file": "catalog-full.test.ts",
+        "title": "contains every approved topic, its target question count and a review of the current bytes",
+        "message": "AssertionError: ancient-world: review должен соответствовать файлу: expected '3c026c576a9bac17d7696bfb723b741840991…' to be 'b764cccaf8bbf015a60da167d6de5cc133ca0…' // Object.is equality"
+      }
+    ]
+  },
+  "pending": {
+    "gate": "current whole-topic report binding",
+    "previousReportSha256": "3c026c576a9bac17d7696bfb723b7418409913a0c9ac96b9bc5fedc0b0074dba",
+    "reason": "The existing full review refers to the baseline bytes. New whole-topic evidence is pending."
+  },
+  "fullSuite": "NOT_RUN",
+  "outcome": {
+    "independentPassThisBatch": 6,
+    "independentPassTotal": 24,
+    "holds": [
+      {
+        "id": "ancient-world-democracy",
+        "fixCyclesUsed": 1,
+        "reason": "Exact CURRENT hash matches CURRENT and the reviewed repaired card. The prompt and explanation remove the Assembly label and the direct participation-in-decisions claim, so the direct overlap with 081 (hash 9ff7613e2fa1df05bcae7a4cd85e68a6fe16d6072df96a21761dda0042c6fcfa) is resolved. Aristotle, Constitution of the Athenians 41.3 supports the payment clue. However, world-history-democracy-athens has a correct-answer note that says «Перикл укреплял афинскую демократию» (exact card hash f6d7345afe23c76cace43194dbf39ba970b10c9b2c3879da49ff2f90d32f5837), directly identifying the answer «Демократия» to this question. This remaining catalog clue is material; mark HOLD with the already-consumed single fix cycle. The applied card itself remains accurate and has four regime options.",
+        "dependency": "world-history-democracy-athens"
+      }
+    ],
+    "wholeTopicCredit": 0,
+    "readyToFinalSeconds": 486,
+    "nextQuestionOrder": 26
+  }
+}
