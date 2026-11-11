@@ -1,0 +1,34 @@
+{
+  "stage": "AFFECTED_CHECKS_BEFORE_FORMAT_REPAIR",
+  "checkedHead": "9bb8e2dcda473ecc45566b27559f318dc109d01f",
+  "topicSha256": "47b30a76f2aec99651459fae1ab54a43be55d51affc66cf3b4dc263c05d4c356",
+  "typecheck": {
+    "command": "npm run typecheck",
+    "exitCode": 0
+  },
+  "vitest": {
+    "command": "npm exec --offline -- vitest run tests/unit/catalog-topics.test.ts tests/unit/content.test.ts tests/unit/content-answer-notes.test.ts tests/unit/catalog-full.test.ts --reporter=json",
+    "exitCode": 1,
+    "numTotalTests": 20,
+    "numPassedTests": 18,
+    "numFailedTests": 2,
+    "failures": [
+      {
+        "file": "catalog-full.test.ts",
+        "title": "contains every approved topic, its target question count and a review of the current bytes",
+        "message": [
+          "CatalogValidationError: ancient-world/ancient-world-plebeian: explanation должен содержать 2–4 предложения",
+          "ancient-world/ancient-world-freedman: explanation должен содержать 2–4 предложения"
+        ]
+      },
+      {
+        "file": "catalog-topics.test.ts",
+        "title": "keeps every present package valid and globally unique",
+        "message": [
+          "AssertionError: ancient-world: expected [ …(2) ] to deeply equal []"
+        ]
+      }
+    ]
+  },
+  "rootCause": "The validator counts every dot followed by whitespace or end of string. Intra-sentence abbreviation periods made two three-sentence explanations appear to have five sentences."
+}
