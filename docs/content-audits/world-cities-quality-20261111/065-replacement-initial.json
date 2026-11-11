@@ -1,0 +1,57 @@
+{
+  "stage": "INITIAL",
+  "processRevision": "2026-10-25",
+  "reviewer": "/root/cities_reviewer",
+  "reviewedHead": "fe6176cf7c84eae19684f467b1a298af08ccdd1f",
+  "reviewedTopicSha256": "529f3a1bace9f0214b7658aebdc9d39eb3af4c25e5af3a74e472077473507fce",
+  "cards": {
+    "world-cities-065": [
+      "d3b18f3d09e5f179fc0cd97a05f559654a39486f1d1ec27c8028e98f53ddf7b7",
+      "ea17644e387cef8233ce6de5e748736c5e19b93be880f99cbec76385da69ab89",
+      "PASS"
+    ]
+  },
+  "candidateChecks": {
+    "exactPreimageVerified": true,
+    "exactCandidateHashVerified": true,
+    "answerAndPrimarySourceVerified": true,
+    "allFourOptionsSameCategoryAndPlausible": true,
+    "allFourNotesFactSpecificAndSourceBacked": true,
+    "explanationAccurateAndWithinLimit": true,
+    "difficulty": "MEDIUM retained; exact historical fact, but Strøget and Nordic capital options leave some narrowing context",
+    "noDuplicateCoreFactFound": true,
+    "catalogAnswerLeak": false
+  },
+  "dependencyReviews": {
+    "world-cities-082": {
+      "currentSha256": "6ced7bc33fd0728e7e04ca649e535cbd9ae0fde6f7fe4f3e1beaf40051299308",
+      "status": "NO MATERIAL ANSWER LEAK",
+      "finding": "The complete live card is about Fingerplan green wedges: its prompt names Copenhagen as geographic context, but neither prompt, options, notes nor explanation mentions Strøget, the year 1962, pedestrianization, or any identifying feature of the tested fact. The shared city name alone is not a factual association or clue identifying this distinct street-history answer; no governing review rule was found requiring HOLD for a place-name occurrence unconnected to the tested fact."
+    },
+    "world-cities-098": {
+      "currentSha256": "72865409ce597c7263dca8b437162870b4f11dccf4afc4073fa9e6ca209511bd",
+      "status": "No longer a city-answer dependency for this candidate",
+      "finding": "The live option «Старый Лион» and its note still contain Lyon, but candidate 065 now asks for Copenhagen. This is no longer a cue to the changed key."
+    },
+    "architecture-notre-dame-city": {
+      "currentSha256": "9bd2fddf23edcf0cb5b0e32c79cf9e4e62a7fb013f52f2829ae088ec6fba20a2",
+      "status": "No longer a city-answer dependency for this candidate",
+      "finding": "The live wrong option is «Лион» with the new Fourvière / odeon note. It does not disclose Copenhagen."
+    }
+  },
+  "findings": [
+    "Точный live preimage SHA-256 d3b18f3d09e5f179fc0cd97a05f559654a39486f1d1ec27c8028e98f53ddf7b7 и candidate SHA-256 ea17644e387cef8233ce6de5e748736c5e19b93be880f99cbec76385da69ab89 совпадают с READY; живой topic byte SHA и HEAD также точны.",
+    "Кøbenhavns Kommune, Strøgets historie (официальный PDF, relevant page 4 excerpt) подтверждает, что Strøget — маршрут от Rådhuspladsen до Kongens Nytorv, объявленный пешеходной улицей в 1962 году, до того двустороннее движение; длина около 1,1 км. VisitCopenhagen подтверждает статую Кристиана V на Kongens Nytorv с 1688 года; VisitOSLO — дворец в верхней части Karl Johans gate; Visit Stockholm — обсерваторию XVIII века в Observatorielunden у Drottninggatan; City of Helsinki — Government Palace, проект Энгеля и часть у Senate Square, завершённую в 1822 году. Prompt, ключ, объяснение и notes корректны; все четыре варианта — близкие по категории столицы Северной Европы.",
+    "Основной overlap 082/065 — не дубликат факта: Fingerplan green wedges и пешеходизация Strøget различны. Однако 082 явно называет Копенгаген, поэтому его prompt является прямой межкарточной подсказкой к новому ключу 065. Другие проверенные каталожные hits не дают тот же прямой city-key сигнал. Зависимости architecture и 098 с Lyon больше не связаны с новым ключом.",
+    "HOLD: при запрете дополнительного fix-cycle сверх текущего разрешённого среза кандидат не проходит answer-leak gate, несмотря на фактологически качественную карточку. Изменения 082, architecture или 098 не проводились.",
+    "Clarification / corrected disposition for the same exact candidate (no new candidate or cycle): the earlier HOLD treated the bare Copenhagen occurrence in 082 as a material answer leak. Re-reading the entire exact 082 card shows no connection to Strøget, 1962, or pedestrianization. The fact is distinct, and mere co-occurrence of a city name has no cited rule requiring HOLD. The prior HOLD finding remains above as history; active INITIAL verdict is PASS."
+  ],
+  "reviewSeconds": null,
+  "reassessment": {
+    "previousVerdict": "HOLD, retained in findings as historical conclusion",
+    "activeVerdict": "PASS",
+    "sameCandidateSha256": "ea17644e387cef8233ce6de5e748736c5e19b93be880f99cbec76385da69ab89",
+    "reason": "082 names Copenhagen only as context for a different planning fact; no tested-fact link or identifying clue appears in its full card.",
+    "noNewCandidateOrCycle": true
+  }
+}
