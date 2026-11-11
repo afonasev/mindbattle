@@ -1,0 +1,121 @@
+{
+  "stage": "FINAL_TOPIC_AFFECTED_CHECKS",
+  "checkedHead": "20546f1b01439528cc3d35f46ff39ce141b20606",
+  "topicSha256": "357fbc3ca8f636886c6e7beedd4d1f66ce6e554ce49d7809997a3dc3e43aeb31",
+  "reportSha256": "b23eda5637e74705eb95720afdd9738e0d9eaf97ac967973452d9e3538653119",
+  "typecheck": {
+    "command": "npm run typecheck",
+    "exitCode": 0
+  },
+  "vitest": {
+    "command": "npm exec --offline -- vitest run tests/unit/catalog-topics.test.ts tests/unit/content.test.ts tests/unit/content-answer-notes.test.ts tests/unit/catalog-full.test.ts --reporter=json",
+    "exitCode": 0,
+    "numTotalTests": 20,
+    "numPassedTests": 20,
+    "numFailedTests": 0,
+    "files": [
+      {
+        "file": "catalog-full.test.ts",
+        "assertions": [
+          {
+            "title": "contains every approved topic, its target question count and a review of the current bytes",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "catalog-topics.test.ts",
+        "assertions": [
+          {
+            "title": "keeps every present package valid and globally unique",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "content-answer-notes.test.ts",
+        "assertions": [
+          {
+            "title": "keeps stable answer ids, correctIndex and notes through JSON round-trip",
+            "status": "passed"
+          },
+          {
+            "title": "loads legacy string answers without inventing a note",
+            "status": "passed"
+          },
+          {
+            "title": "reports empty, oversized and HTML notes with answer paths",
+            "status": "passed"
+          },
+          {
+            "title": "rejects generic placeholder notes",
+            "status": "passed"
+          },
+          {
+            "title": "rejects a distractor-prefixed negative placeholder",
+            "status": "passed"
+          },
+          {
+            "title": "rejects a broad category label that does not describe the distractor",
+            "status": "passed"
+          },
+          {
+            "title": "rejects search, home and chapter-introduction sources",
+            "status": "passed"
+          },
+          {
+            "title": "rejects answer-prefixed copies of one common explanation",
+            "status": "passed"
+          },
+          {
+            "title": "requires four distinct notes in final packs but permits legacy migration strings",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "content.test.ts",
+        "assertions": [
+          {
+            "title": "accepts the exact manifest catalog",
+            "status": "passed"
+          },
+          {
+            "title": "reports a path for invalid answers and quotas",
+            "status": "passed"
+          },
+          {
+            "title": "rejects duplicate prompt text across different topics",
+            "status": "passed"
+          },
+          {
+            "title": "moves compact history with a question when its difficulty changes",
+            "status": "passed"
+          },
+          {
+            "title": "draws a complete unique cycle and changes the next cycle boundary",
+            "status": "passed"
+          },
+          {
+            "title": "keeps excluded questions in the remaining bag",
+            "status": "passed"
+          },
+          {
+            "title": "is reproducible for the same seed and avoids a fixed order for another seed",
+            "status": "passed"
+          },
+          {
+            "title": "maximizes distinct domains for normal, bonus, and final topic sets",
+            "status": "passed"
+          },
+          {
+            "title": "diagnoses too few groups instead of repeating one in a normal set",
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  },
+  "previousHashBindingFailure": "The pre-report receipts retain the baseline report hash mismatch. The bound final report passes catalog-full on the final topic bytes.",
+  "fullSuite": "NOT_RUN"
+}
