@@ -8,6 +8,20 @@ APP_DIR="${APP_DIR:-/opt/mindbattle}"
 DATA_DIR="/var/lib/mindbattle"
 SERVICE="mindbattle.service"
 
+echo "==> Checking feedback catalog against the server registry"
+registry="${DATA_DIR}/difficulty-feedback.ndjson.catalogs.json"
+ssh -n -o BatchMode=yes "${SSH_HOST}" "
+  set -eu
+  if [ -f '${registry}' ]; then
+    cat '${registry}'
+  elif [ -e '${registry}' ] || [ -L '${registry}' ]; then
+    echo 'Feedback catalog registry is not a regular file' >&2
+    exit 1
+  else
+    printf '%s\n' '{}'
+  fi
+" | node scripts/checkFeedbackCatalog.mjs --registry-stdin
+
 echo "==> Building production bundle"
 # This release timestamp is embedded in HTML and the offline bundle.
 MINDBATTLE_PUBLISHED_AT="${MINDBATTLE_PUBLISHED_AT:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}" npm run build

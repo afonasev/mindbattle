@@ -1,11 +1,9 @@
-import { gunzipSync } from 'node:zlib';
-import feedbackCatalogs from './feedbackCatalogs.json' with { type: 'json' };
 import { readResults, interruptedNetworkCheckpoints } from './resultReport.mjs';
 import { createResultStore, createServerResultQueue, validateResult } from './resultStore.mjs';
-import { readFile, readdir } from "node:fs/promises";
 import { createServer } from "node:http";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { historicalFeedbackCatalogs, readFeedbackCatalog } from "./feedbackCatalog.mjs";
 import { createFeedbackStore } from "./feedbackStore.mjs";
 import { serveStatic } from "./static.mjs";
 
@@ -14,21 +12,11 @@ const dev = process.argv.includes("--dev");
 const host = process.env.MINDBATTLE_HOST ?? "127.0.0.1";
 const port = Number(process.env.MINDBATTLE_PORT ?? 4173);
 const dataPath = resolve(projectRoot, process.env.MINDBATTLE_FEEDBACK_PATH ?? "data/difficulty-feedback.ndjson");
-const { revision: catalogRevision } = JSON.parse(await readFile(new URL("../src/content/revision.json", import.meta.url), "utf8"));
-
-async function loadQuestions() {
-  const dir = join(projectRoot, "src/content/topics");
-  const map = new Map();
-  for (const name of await readdir(dir)) {
-    if (!name.endsWith(".json")) continue;
-    const topic = JSON.parse(await readFile(join(dir, name), "utf8"));
-    for (const question of topic.questions) map.set(question.id, question.difficulty);
-  }
-  return map;
-}
-
-const feedbackManifests = JSON.parse(gunzipSync(Buffer.from(feedbackCatalogs.mapsGzip, 'base64')).toString('utf8'));
-const store = await createFeedbackStore({ filePath: dataPath, questions: await loadQuestions(), catalogRevision, historicalCatalogs: Object.fromEntries(Object.entries(feedbackCatalogs.revisions).map(([revision,key]) => [revision,feedbackManifests[key]])) });
+const store = await createFeedbackStore({
+  filePath: dataPath,
+  ...await readFeedbackCatalog(),
+  historicalCatalogs: historicalFeedbackCatalogs()
+});
 const resultPath = resolve(projectRoot, process.env.MINDBATTLE_RESULTS_PATH ?? 'data/match-results.ndjson');
 let resultsPromise;
 let resultWrites = Promise.resolve();

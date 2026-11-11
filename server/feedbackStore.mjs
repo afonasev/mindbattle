@@ -1,5 +1,6 @@
 import { mkdir, open, readFile, stat, writeFile, rename } from "node:fs/promises";
 import { dirname } from "node:path";
+import { assertCompatibleFeedbackCatalogs } from "./feedbackCatalog.mjs";
 
 const LEVELS = ["easy", "medium", "hard"];
 const levelIndex = new Map(LEVELS.map((level, index) => [level, index]));
@@ -82,11 +83,8 @@ export async function createFeedbackStore({ filePath, questions, catalogRevision
   try { registry = JSON.parse(await readFile(registryPath, 'utf8')); }
   catch (error) { if (error?.code !== 'ENOENT') throw error; }
   const incoming = { ...historicalCatalogs, [catalogRevision]: Object.fromEntries(questions) };
-  const canonical = map => JSON.stringify(Object.entries(map).sort(([a], [b]) => a.localeCompare(b)));
-  for (const [revision, manifest] of Object.entries(incoming)) {
-    if (registry[revision] && canonical(registry[revision]) !== canonical(manifest)) throw new Error(`Conflicting feedback catalog manifest: ${revision}`);
-    registry[revision] = manifest;
-  }
+  assertCompatibleFeedbackCatalogs(registry, incoming);
+  Object.assign(registry, incoming);
   const temporary = `${registryPath}.${process.pid}.tmp`;
   await writeFile(temporary, JSON.stringify(registry));
   await rename(temporary, registryPath);
