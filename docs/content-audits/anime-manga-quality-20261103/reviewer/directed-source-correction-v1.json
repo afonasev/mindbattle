@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "phase": "DIRECTED_SOURCE_CORRECTION",
+  "reviewer": "anime-manga-independent-reviewer",
+  "reviewedAt": "2026-11-03",
+  "supersedesOnly": "source-applicability statements for cards 9 and 10 in initial-04-10-v1.json",
+  "preservation": "The immutable INITIAL receipt was not edited. This correction evaluates the exact candidates and URLs in cards-04-10-v1.json, not source URLs from the preimage or author notes.",
+  "candidateFileSha256": "497d96be7b3c82ada35c5155b37ad6f59b5239d1bfbe003eabc07468fbdd8b9e",
+  "cards": [
+    {
+      "id": "anime-manga-mha-school",
+      "candidateSha256": "1f32d7a564ad4fe91fa7b73d3493e49e0029b6b930b2dd6ec5d003a992c4ecf9",
+      "sourceUrl": "https://www.viz.com/my-hero-academia",
+      "sourceContext": "../sources/web-04-10-contexts.json, VIZ My Hero Academia page, lines 20–26",
+      "sourceAssessment": "The VIZ page gives the title and Horikoshi credit (L20–24), and says Midoriya inherits the world's greatest hero's power (L22). It describes the Hero Academy and the 20% born Quirkless generally (L25), but does not explicitly say that Midoriya was born Quirkless, state his first name Izuku, or directly say he personally aspires to become a professional hero. Those details in the current prompt/explanation cannot be bound to this exact page as written.",
+      "verdict": "HOLD_SOURCE",
+      "finding": "The current explanation's born-Quirkless claim and the prompt's full first name/professional-hero aspiration are not directly confirmed for Midoriya by the cited VIZ page.",
+      "singleAddressedFix": {
+        "prompt": "В каком произведении Мидория наследует силу величайшего героя?",
+        "explanation": "Это «Моя геройская академия» Кохэя Хорикоси. VIZ описывает Мидорию как наследника силы величайшего героя.",
+        "why": "Both clauses align directly with VIZ lines 20–24; the unsupported first-name and born-Quirkless statements are removed."
+      },
+      "sourceVerdictAfterSuggestedFix": "The cited VIZ page directly supports the main fact and creator attribution. This is a suggested repair, not a new candidate or a PASS; the same reviewer must perform FINAL on the applied exact CURRENT hash."
+    },
+    {
+      "id": "anime-manga-fullmetal-brothers",
+      "candidateSha256": "39ca1ed6f7ad82319340b93d9f76829a51eeca43e8217c5118bd7de558bc6917",
+      "sourceUrl": "https://www.viz.com/fullmetal-alchemist",
+      "sourceContext": "../sources/web-04-10-contexts.json, VIZ Fullmetal Alchemist page, lines 26–33",
+      "sourceAssessment": "The VIZ page names Fullmetal Alchemist and Hiromu Arakawa (L26–30), then directly describes the brothers' failed alchemical ritual, Edward's lost limbs, Alphonse as a soul in armor, and their effort to restore their bodies (L32). It also supports the automail detail in the explanation (L32). It calls the ritual a failure, but does not characterize it as forbidden.",
+      "verdict": "HOLD_SOURCE_PRECISION",
+      "finding": "The cited page strongly supports the plot and answer, but does not support the prompt's specific modifier «запретного».",
+      "singleAddressedFix": {
+        "prompt": "Какое произведение следует за братьями, пытающимися вернуть тела после неудачного алхимического ритуала?",
+        "why": "Replace only the unsupported description with the wording directly supported by VIZ; keep the keyed answer, explanation, and other fields unchanged."
+      },
+      "sourceVerdictAfterSuggestedFix": "The VIZ page directly supports the revised main relation and the explanation. This is a suggested repair, not a new candidate or a PASS; the same reviewer must perform FINAL on the applied exact CURRENT hash."
+    }
+  ],
+  "pilotAcceptance": {
+    "contentFinal": "3/3 cards from the first pilot received directed FINAL card-level PASS.",
+    "accepted": 0,
+    "reason": "The affected result remains 19/20, with the full production catalog test FAIL because the historical whole-topic anime-manga review hash does not match current bytes. The card-level FINAL does not clear this catalog-wide dependency, so accepted remains 0.",
+    "wholeTopicGate": "Open and preserved; it may be addressed only when the separately authorized 100-question whole-topic review is performed. This reviewer did not reissue or alter the historical whole-topic review.",
+    "metrics": "Pilot timing and accepted/HOLD metrics remain in the existing manifest. Token usage is null/unknown; no estimate added."
+  },
+  "statusLimit": "Only a directed source correction for cards 9 and 10; no card was edited, no candidate accepted, and no full topic review repeated."
+}
