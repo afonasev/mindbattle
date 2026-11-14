@@ -1,0 +1,578 @@
+{
+  "processRevision": "2026-10-25",
+  "reviewer": "/root/aviation_reviewer",
+  "stage": "CURRENT",
+  "topicSha256": "fdf5a20f81cb14cf5e376370cb2d174f166f259026ab7b0e1ca98305267ce416",
+  "initialReceipt": "batch-024-033-initial.json",
+  "sources": {
+    "airbus-underwing": {
+      "url": "https://www.airbus.com/sites/g/files/jlcbta136/files/2023-05/Airbus-techdata-AC-A320_0523.pdf",
+      "title": "Airbus — A320 Aircraft Characteristics",
+      "locator": "Power Plant, Nacelle",
+      "passage": "Реактивные двигатели A320 установлены в мотогондолах на пилонах под крыльями."
+    },
+    "ardupilot-tri": {
+      "url": "https://ardupilot.org/copter/docs/tricopter.html",
+      "title": "ArduPilot — Tricopter Configuration",
+      "locator": "Tail servo",
+      "passage": "У одной из схем трикоптера направление тяги заднего винта можно менять наклоном его мотора."
+    },
+    "faa-airship": {
+      "url": "https://www.faa.gov/sites/faa.gov/files/aircraft/air_cert/design_approvals/airships/aceAirshipDesignCriteria.pdf",
+      "title": "FAA — Airship Design Criteria",
+      "locator": "§1.2 Definitions",
+      "passage": "Дирижабль оснащён двигателем и управляется в полёте. У мягкого дирижабля форму оболочки поддерживает давление газа внутри."
+    },
+    "faa-altitude": {
+      "url": "https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_61-107B_CHG_1_FAA.pdf",
+      "title": "FAA — AC 61-107B, Aircraft Operations at High Altitude",
+      "locator": "Mach Tuck; Q-Corner or Coffin Corner; buffet boundaries",
+      "passage": "На большой высоте между низко- и высокоскоростным бафтингом может остаться малая разница. Высота и перегрузка меняют запас. Mach tuck означает появление момента на опускание носа при смещении центра давления назад."
+    },
+    "faa-balloon": {
+      "url": "https://www.faa.gov/aircraft/air_cert/design_approvals/balloons",
+      "title": "FAA — Piloted Balloons",
+      "locator": "What is a balloon?",
+      "passage": "Свободный шар держится за счёт плавучести газа или нагрева воздуха. Двигателя для движения у него нет."
+    },
+    "faa-balloon-heat": {
+      "url": "https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/Balloon_Flying_Handbook_FAA-H-8083-11B/bfh_chapter_2.pdf",
+      "title": "FAA — Balloon Flying Handbook, гл. 2",
+      "locator": "The Propane Fuel System",
+      "passage": "Для нагрева воздуха горелка теплового аэростата использует пропан."
+    },
+    "faa-components-drag": {
+      "url": "https://www.faa.gov/sites/faa.gov/files/pilots/pilot_handbook.pdf",
+      "title": "FAA — Pilot’s Handbook of Aeronautical Knowledge, гл. 5",
+      "locator": "Parasite Drag",
+      "passage": "К паразитному сопротивлению относятся сопротивление формы, трение и интерференционное сопротивление. Плавные обтекатели помогают уменьшить сопротивление в местах стыка поверхностей."
+    },
+    "faa-glider": {
+      "url": "https://www.faa.gov/media/28556",
+      "title": "FAA — Gliders",
+      "locator": "GLIDERS",
+      "passage": "Немоторный планёр запускают с помощью самолёта-буксировщика или лебёдки. Он набирает высоту в восходящих потоках, в том числе над склоном."
+    },
+    "faa-hangar": {
+      "url": "https://www.faa.gov/airports/airport_compliance/hangar_use",
+      "title": "FAA — Policy on Use of Hangars at Obligated Airports",
+      "locator": "Uses of aircraft hangars",
+      "passage": "Ангары предназначены для хранения самолётов и могут служить местом ремонта или сборки самолёта из комплекта."
+    },
+    "faa-helicopter": {
+      "url": "https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/helicopter_flying_handbook/hfh_ch02.pdf",
+      "title": "FAA — Helicopter Flying Handbook, гл. 2",
+      "locator": "Powered Flight; Hovering Flight; Translational Lift",
+      "passage": "Несущий винт обеспечивает подъёмную силу при зависании. В поступательном полёте его эффективность возрастает."
+    },
+    "faa-mach-auto": {
+      "url": "https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/17_afh_ch16.pdf",
+      "title": "FAA — Airplane Flying Handbook, гл. 16",
+      "locator": "High-Speed Flight, Mach Tuck",
+      "passage": "На многих скоростных реактивных самолётах предусмотрена автоматическая компенсация затягивания в пикирование."
+    },
+    "faa-markings": {
+      "url": "https://www.faa.gov/air_traffic/publications/aim_html/chap2_section_3.html",
+      "title": "FAA — Aeronautical Information Manual",
+      "locator": "§2-3-4 Taxiway Markings",
+      "passage": "Обычная осевая маркировка рулёжной дорожки — сплошная жёлтая линия."
+    },
+    "faa-piston": {
+      "url": "https://www.faa.gov/sites/faa.gov/files/pilots/pilot_handbook.pdf",
+      "title": "FAA — Pilot’s Handbook of Aeronautical Knowledge, гл. 7",
+      "locator": "Reciprocating Engines",
+      "passage": "В горизонтально-оппозитной схеме цилиндры лежат по обе стороны картера. Такой двигатель широко используется на лёгких самолётах."
+    },
+    "faa-runway": {
+      "url": "https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/glossary-r.html",
+      "title": "FAA — Pilot/Controller Glossary",
+      "locator": "RUNWAY",
+      "passage": "ВПП подготовлена для посадки и взлётного разбега вдоль её длины. Номера обычно отражают магнитное направление."
+    },
+    "faa-stability": {
+      "url": "https://www.faa.gov/sites/faa.gov/files/pilots/pilot_handbook.pdf",
+      "title": "FAA — Pilot’s Handbook of Aeronautical Knowledge, гл. 5",
+      "locator": "Lateral Stability; Free Directional Oscillations (Dutch Roll)",
+      "passage": "Поперечное V влияет на реакцию креном на скольжение. При голландском шаге связаны колебания по крену и рысканию, которые обычно идут не в одной фазе. На самолётах применяют демпферы рыскания."
+    },
+    "heathrow": {
+      "url": "https://www.heathrow.com/at-the-airport/airport-maps",
+      "title": "Heathrow — Airport maps",
+      "locator": "Interactive maps",
+      "passage": "Карты терминалов помогают найти выходы на посадку."
+    },
+    "heathrow-check-in": {
+      "url": "https://www.heathrow.com/departures/checking-in",
+      "title": "Heathrow — Checking in",
+      "locator": "Check-in desks; Terminal finder",
+      "passage": "Пассажирам указывают зоны регистрации и сдачи багажа в терминале. Схемы помогают найти нужное место."
+    },
+    "nasa-copters": {
+      "url": "https://www.nasa.gov/aeronautics/2024-dream-with-us-design-challenge/",
+      "title": "NASA — Dream with Us Design Challenge",
+      "locator": "Multicopters",
+      "passage": "Название обозначает число винтов. У квадрокоптера четыре винта, у гексакоптера шесть."
+    },
+    "nasa-dji": {
+      "url": "https://www.nasa.gov/aeronautics/exploring-drone-aerodynamics-with-computers/",
+      "title": "NASA — Exploring Drone Aerodynamics with Computers",
+      "locator": "DJI Phantom 3; computer simulation",
+      "passage": "NASA моделировало обтекание серийного квадрокоптера DJI Phantom 3."
+    },
+    "nasa-drag-polar": {
+      "url": "https://ntrs.nasa.gov/api/citations/20220012046/downloads/RAES-2022sept15_v1-Wahls%28final220ppi-final%29.pdf",
+      "title": "NASA — Aerodynamic Efficiency",
+      "locator": "Aerodynamic Efficiency (L/D & ML/D)",
+      "passage": "В трансзвуковом расчёте отдельно учитывают паразитную, индуктивную и волновую составляющие сопротивления. Уравнение и график показывают влияние относительной толщины и стреловидности крыла."
+    },
+    "nasa-dragonfly": {
+      "url": "https://www.nasa.gov/podcasts/small-steps-giant-leaps/episode-168-dragonfly-mission-to-titan/",
+      "title": "NASA — Dragonfly Mission to Titan",
+      "locator": "Interview, rotorcraft configuration",
+      "passage": "Dragonfly, аппарат для исследования Титана, будет октокоптером, у которого винты установлены парами."
+    },
+    "nasa-induced": {
+      "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/induced-drag-coefficient/",
+      "title": "NASA Glenn Research Center — Induced Drag Coefficient",
+      "locator": "Induced Drag Coefficient",
+      "passage": "При прочих равных коэффициент индуктивного сопротивления пропорционален квадрату коэффициента подъёмной силы и обратно пропорционален удлинению крыла."
+    },
+    "nasa-mars-hex": {
+      "url": "https://ntrs.nasa.gov/citations/20260000508",
+      "title": "NASA NTRS — Mars Hexacopter Concept",
+      "locator": "Abstract",
+      "passage": "В работе моделируют влияние потоков от соседних винтов опытного концепта марсианского гексакоптера."
+    },
+    "nasa-prop": {
+      "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/propellers/",
+      "title": "NASA Glenn Research Center — Propellers",
+      "locator": "Motion",
+      "passage": "Лопасть винта имеет аэродинамический профиль. Когда винт вращается, он ускоряет воздух и создаёт тягу."
+    },
+    "nasa-turbine": {
+      "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/turbine-engines/",
+      "title": "NASA Glenn Research Center — Gas Turbine Propulsion",
+      "locator": "Gas turbine engine",
+      "passage": "В газотурбинном двигателе для сгорания используется кислород из окружающего воздуха."
+    },
+    "nasa-x57": {
+      "url": "https://www.nasa.gov/centers-and-facilities/armstrong/x-57-maxwell/",
+      "title": "NASA — X-57 Maxwell Overview",
+      "locator": "Electrical Motors; Battery Redesign and Validation",
+      "passage": "В проекте X-57 поршневые моторы заменили электрическими. Их питание предусматривалось от литий-ионных батарей."
+    },
+    "navy-phugoid": {
+      "url": "https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/00-80T-80.pdf",
+      "title": "U.S. Navy — Aerodynamics for Naval Aviators",
+      "locator": "Longitudinal Dynamic Stability, pp. 279–281",
+      "passage": "Фугоида — длительное продольное колебание скорости и высоты с почти неизменным углом атаки."
+    }
+  },
+  "cards": [
+    {
+      "order": 24,
+      "id": "aviation-phugoid",
+      "preimageSha256": "d0d6f80910db662028e4582417eced9962e9028dcbdc9420e41863f2c8a9c5e7",
+      "sha256": "1894ea50a55766e0594b785d99ee08aeeeeb329212d015f60f78cef98b952188",
+      "fieldEvidence": {
+        "key": [
+          "navy-phugoid"
+        ],
+        "explanation": [
+          "navy-phugoid"
+        ],
+        "notes": [
+          {
+            "index": 0,
+            "sourceIds": [
+              "faa-altitude"
+            ]
+          },
+          {
+            "index": 1,
+            "sourceIds": [
+              "faa-mach-auto"
+            ]
+          },
+          {
+            "index": 2,
+            "sourceIds": [
+              "navy-phugoid"
+            ]
+          },
+          {
+            "index": 3,
+            "sourceIds": [
+              "faa-stability"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "order": 25,
+      "id": "aviation-vortex-induced-drag",
+      "preimageSha256": "1498deaf07a036eb4fee17d3c18345d763645bb4178794a614ec6d277606339c",
+      "sha256": "981eac77dda8f52a63c50150d9cdaa4a4f511bf97cadcad0e4d268a5b793d3c3",
+      "fieldEvidence": {
+        "key": [
+          "nasa-induced"
+        ],
+        "explanation": [
+          "nasa-induced"
+        ],
+        "notes": [
+          {
+            "index": 0,
+            "sourceIds": [
+              "nasa-drag-polar"
+            ]
+          },
+          {
+            "index": 1,
+            "sourceIds": [
+              "faa-components-drag"
+            ]
+          },
+          {
+            "index": 2,
+            "sourceIds": [
+              "faa-components-drag"
+            ]
+          },
+          {
+            "index": 3,
+            "sourceIds": [
+              "nasa-induced"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "order": 26,
+      "id": "aviation-terminal-passengers",
+      "preimageSha256": "8ea341324e96dccd6d616947b4ebc75a59e016f8142626e1314ea6c2f6323c08",
+      "sha256": "ef305635dde6855c8796ad470894d3d2591b06dcbe82debd3b06c66c9ec37ed7",
+      "fieldEvidence": {
+        "key": [
+          "heathrow-check-in"
+        ],
+        "explanation": [
+          "heathrow-check-in"
+        ],
+        "notes": [
+          {
+            "index": 0,
+            "sourceIds": [
+              "heathrow"
+            ]
+          },
+          {
+            "index": 1,
+            "sourceIds": [
+              "faa-runway"
+            ]
+          },
+          {
+            "index": 2,
+            "sourceIds": [
+              "faa-markings"
+            ]
+          },
+          {
+            "index": 3,
+            "sourceIds": [
+              "faa-hangar"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "order": 27,
+      "id": "aviation-hangar-storage",
+      "preimageSha256": "8353ed01abb24ae049c1740721c55ab1bd5f1b7ed0ae97e9473a005df13ace3b",
+      "sha256": "7752af0656a094969e92dc10ce701311637d812e54d3e716d557f9de0dc284ea",
+      "fieldEvidence": {
+        "key": [
+          "faa-hangar"
+        ],
+        "explanation": [
+          "faa-hangar"
+        ],
+        "notes": [
+          {
+            "index": 0,
+            "sourceIds": [
+              "faa-hangar"
+            ]
+          },
+          {
+            "index": 1,
+            "sourceIds": [
+              "faa-runway"
+            ]
+          },
+          {
+            "index": 2,
+            "sourceIds": [
+              "faa-markings"
+            ]
+          },
+          {
+            "index": 3,
+            "sourceIds": [
+              "heathrow"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "order": 28,
+      "id": "aviation-helicopter-hover",
+      "preimageSha256": "a16e909ee4a63be688587631a2eca66c9015f2ba42d694de539018fec527fae2",
+      "sha256": "1f4031151fa62707ab641376638c1cfa22725867f0cd5a7eaf822cda2b27743d",
+      "fieldEvidence": {
+        "key": [
+          "faa-helicopter"
+        ],
+        "explanation": [
+          "faa-helicopter"
+        ],
+        "notes": [
+          {
+            "index": 0,
+            "sourceIds": [
+              "faa-glider"
+            ]
+          },
+          {
+            "index": 1,
+            "sourceIds": [
+              "faa-helicopter"
+            ]
+          },
+          {
+            "index": 2,
+            "sourceIds": [
+              "faa-balloon-heat"
+            ]
+          },
+          {
+            "index": 3,
+            "sourceIds": [
+              "faa-airship"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "order": 29,
+      "id": "aviation-glider-no-engine",
+      "preimageSha256": "8c340ab1a4a267762e320a02ec1fd15c987b3a127518a984832741b983c48772",
+      "sha256": "1ce31abcc1ebb3058b4f306a7787f45842c83a95657fa9dec75896f63b850552",
+      "fieldEvidence": {
+        "key": [
+          "faa-glider"
+        ],
+        "explanation": [
+          "faa-glider"
+        ],
+        "notes": [
+          {
+            "index": 0,
+            "sourceIds": [
+              "faa-helicopter"
+            ]
+          },
+          {
+            "index": 1,
+            "sourceIds": [
+              "faa-glider"
+            ]
+          },
+          {
+            "index": 2,
+            "sourceIds": [
+              "faa-balloon-heat"
+            ]
+          },
+          {
+            "index": 3,
+            "sourceIds": [
+              "faa-airship"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "order": 30,
+      "id": "aviation-balloon-buoyancy",
+      "preimageSha256": "e5fb30719bc5f67d720488c2a91e9b15c90dd96119773d59a317cb2109afb961",
+      "sha256": "eeb3364d3bb562c774be55d6d37be56c1c423dc4fd85f205ec55009034591810",
+      "fieldEvidence": {
+        "key": [
+          "faa-balloon"
+        ],
+        "explanation": [
+          "faa-balloon",
+          "faa-balloon-heat"
+        ],
+        "notes": [
+          {
+            "index": 0,
+            "sourceIds": [
+              "faa-helicopter"
+            ]
+          },
+          {
+            "index": 1,
+            "sourceIds": [
+              "faa-balloon-heat"
+            ]
+          },
+          {
+            "index": 2,
+            "sourceIds": [
+              "faa-glider"
+            ]
+          },
+          {
+            "index": 3,
+            "sourceIds": [
+              "faa-airship"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "order": 31,
+      "id": "aviation-quadcopter-four-rotors",
+      "preimageSha256": "c24a416efb8475b4c98f89c17cfa65b489bb657f5404a8839f245db710775f18",
+      "sha256": "81d0f9003857127d2c5698883f21ce35597ae68bebfa72df3c3369c19f573230",
+      "fieldEvidence": {
+        "key": [
+          "nasa-copters"
+        ],
+        "explanation": [
+          "nasa-copters"
+        ],
+        "notes": [
+          {
+            "index": 0,
+            "sourceIds": [
+              "ardupilot-tri"
+            ]
+          },
+          {
+            "index": 1,
+            "sourceIds": [
+              "nasa-mars-hex"
+            ]
+          },
+          {
+            "index": 2,
+            "sourceIds": [
+              "nasa-dji"
+            ]
+          },
+          {
+            "index": 3,
+            "sourceIds": [
+              "nasa-dragonfly"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "order": 32,
+      "id": "aviation-propeller-pulls",
+      "preimageSha256": "f74a873937ba36cad79c27ddf60cf2f86915a6b2a79b0173a7a089d1f070963c",
+      "sha256": "8ac28b6fb9c56e308682daea3057148dc02770362b9f2453c0729278c6f804c7",
+      "fieldEvidence": {
+        "key": [
+          "nasa-prop"
+        ],
+        "explanation": [
+          "nasa-prop"
+        ],
+        "notes": [
+          {
+            "index": 0,
+            "sourceIds": [
+              "nasa-turbine"
+            ]
+          },
+          {
+            "index": 1,
+            "sourceIds": [
+              "faa-piston"
+            ]
+          },
+          {
+            "index": 2,
+            "sourceIds": [
+              "nasa-prop"
+            ]
+          },
+          {
+            "index": 3,
+            "sourceIds": [
+              "nasa-x57"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "order": 33,
+      "id": "aviation-jet-engine-thrust",
+      "preimageSha256": "1472d299a182d08fca5b9649dfbf430591bc00c9a6f2f63b213b6c9edb1c8fce",
+      "sha256": "ac4f6294c54e83eb9a2cb087c339cd19a10caa3d4a7284cbe190e686561acd3a",
+      "fieldEvidence": {
+        "key": [
+          "airbus-underwing"
+        ],
+        "explanation": [
+          "airbus-underwing"
+        ],
+        "notes": [
+          {
+            "index": 0,
+            "sourceIds": [
+              "nasa-prop"
+            ]
+          },
+          {
+            "index": 1,
+            "sourceIds": [
+              "faa-piston"
+            ]
+          },
+          {
+            "index": 2,
+            "sourceIds": [
+              "nasa-turbine"
+            ]
+          },
+          {
+            "index": 3,
+            "sourceIds": [
+              "nasa-x57"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "dependencyChecks": [
+    "024 → 021, 022, 023",
+    "026, 027 → 009, 010"
+  ]
+}
