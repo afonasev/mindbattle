@@ -10,12 +10,14 @@ export function releaseNotes({ cwd = process.cwd(), channel = 'installer', revis
   const range = previous ? `${previous}..${revision}` : revision;
   const commits = run(['log','--format=%H',range]).split('\n').filter(Boolean);
   const entries = [], seen = new Set();
+  let previousVersion;
   for (const commit of commits) {
     const files = run(['diff-tree','--root','--no-commit-id','--name-only','--diff-filter=A','-r',commit,'--','docs/desktop/release-changes']).split('\n').filter(file => file.endsWith('.json'));
     for (const file of files) {
       const fragment = JSON.parse(run(['show',`${commit}:${file}`]));
       if (seen.has(fragment.id)) continue;
       seen.add(fragment.id);
+      previousVersion ??= fragment.previousVersion;
       for (const entry of fragment.changes ?? []) {
         if (!labels.ru[entry.category] || typeof entry.ru !== 'string' || typeof entry.en !== 'string' || !entry.ru.trim() || !entry.en.trim()) throw Error('Release notes require matching RU/EN changes.');
         entries.push(entry);
@@ -23,9 +25,13 @@ export function releaseNotes({ cwd = process.cwd(), channel = 'installer', revis
     }
   }
   if (!entries.length) throw Error('No reviewed bilingual release notes in the selected Git history. Add a release-changes fragment before publishing.');
-  return ['ru','en'].map(lang => `## ${lang === 'ru' ? 'Русский' : 'English'}\n\n` + Object.entries(labels[lang]).map(([category,label]) => {
-    const changes = entries.filter(entry => entry.category === category);
-    return changes.length ? `### ${label}\n${changes.map(entry=>`- ${entry[lang]}`).join('\n')}\n` : '';
+  const highlights = entries.filter(entry => entry.highlight);
+  return ['ru','en'].map(lang => `## ${lang === 'ru' ? 'Русский' : 'English'}\n\n` +
+    (previousVersion ? (lang === 'ru' ? `Предыдущая версия этого канала — ${previousVersion}.\n\n` : `Previous version in this channel was ${previousVersion}.\n\n`) : '') +
+    (highlights.length ? `### ${lang === 'ru' ? 'Главное для игроков' : 'Highlights'}\n${highlights.map(entry => `- ${entry[lang]}`).join('\n')}\n\n### ${lang === 'ru' ? 'Всё остальное' : 'Other changes'}\n\n` : '') +
+    Object.entries(labels[lang]).map(([category,label]) => {
+    const changes = entries.filter(entry => entry.category === category && !entry.highlight);
+    return changes.length ? `${highlights.length ? '####' : '###'} ${label}\n${changes.map(entry=>`- ${entry[lang]}`).join('\n')}\n` : '';
   }).filter(Boolean).join('\n') + (lang === 'ru' ? '\nТестовая поставка без платформенной подписи. Реальная приёмка macOS/Windows записывается отдельно. Не отключайте системную защиту. Если доверяете этому GitHub-релизу: Windows — «Подробнее → Выполнить в любом случае»; macOS — скопируйте игру в Applications и используйте штатное «Всё равно открыть» в настройках безопасности.\n' : '\nUnsigned test distribution. macOS/Windows acceptance is recorded separately. Keep system protection enabled. If you trust this GitHub release: Windows — More info → Run anyway; macOS — copy to Applications and use the standard Open Anyway security action.\n')).join('\n');
 }
 if (process.argv[1] === fileURLToPath(import.meta.url)) process.stdout.write(releaseNotes({channel:process.argv[2] ?? 'installer'})+'\n');
