@@ -1,0 +1,86 @@
+{
+  "checkedHead": "c79a82558c1f456dfc86799d018bf97ac5ec8634",
+  "architectureTopicSha256": "cb70fe0ddace3f531f25f56a36bd3d5b59c6be146a9fade4a95773f487fee8b1",
+  "typecheck": {
+    "command": "npm run typecheck",
+    "exitCode": 0
+  },
+  "vitest": {
+    "command": "npm exec --offline -- vitest run tests/unit/catalog-topics.test.ts tests/unit/content.test.ts tests/unit/content-answer-notes.test.ts --reporter=json",
+    "exitCode": 0,
+    "numTotalTests": 19,
+    "numPassedTests": 19,
+    "numFailedTests": 0
+  },
+  "legacy": [
+    {
+      "command": "npm run content:legacy-prefix",
+      "baselineExitCode": 1,
+      "exitCode": 1,
+      "baselineCount": 1,
+      "currentCount": 1,
+      "sameDiagnostics": false,
+      "baselineDiagnostics": [
+        "Error: Legacy reviewed prefix changed: astronomy-space, biology, chemistry, computers-internet, geography-russia, human-medicine, math-logic, russian-music, sports, world-cinema, world-geography, world-history, world-pop-music"
+      ],
+      "currentDiagnostics": [
+        "Error: Legacy reviewed prefix changed: architecture, astronomy-space, biology, chemistry, computers-internet, geography-russia, human-medicine, math-logic, russian-music, sports, world-cinema, world-geography, world-history, world-pop-music"
+      ]
+    },
+    {
+      "command": "npm run content:baseline-wrong-notes",
+      "baselineExitCode": 1,
+      "exitCode": 1,
+      "baselineCount": 1,
+      "currentCount": 1,
+      "sameDiagnostics": true,
+      "baselineDiagnostics": [
+        "Error: 01-10: отсутствует baseline question astronomy-space-hubble-launch-year"
+      ],
+      "currentDiagnostics": [
+        "Error: 01-10: отсутствует baseline question astronomy-space-hubble-launch-year"
+      ]
+    },
+    {
+      "command": "npm run content:legacy-integrity",
+      "baselineRevision": "d3e16161ff1a51a236ede93f844430b81d632733",
+      "baseline": {
+        "exitCode": 1,
+        "count": 262,
+        "sha256": "a2ce87be29e483ca7344f3396a209c43dbb20807dba6d3ab679d612fff6b8c00",
+        "firstDiagnostic": "astronomy-space-hubble-launch-year: legacy question missing"
+      },
+      "current": {
+        "exitCode": 1,
+        "count": 262,
+        "sha256": "a2ce87be29e483ca7344f3396a209c43dbb20807dba6d3ab679d612fff6b8c00",
+        "firstDiagnostic": "astronomy-space-hubble-launch-year: legacy question missing"
+      },
+      "sameDiagnostics": true
+    }
+  ],
+  "afterReportUpdate": {
+    "reportSha256": {
+      "src/content/reviews/architecture.json": "a3060f551b903baa3745d395add38567f3f211129ec3698f2d72894e7415284f",
+      "docs/content-audits/baseline-wrong-answer-notes-audit-01-10-2026-09-04.json": "ddbc40faca5dfee5fb2888ab9b2e33b7851208345cf9cc87575fe0d55df3ab74",
+      "docs/content-audits/baseline-wrong-answer-notes-audit-summary-2026-09-04.json": "9a291d276f668878af51d4a2d7e6a1772ec966e88322374a475a1c7792aeb5ad"
+    },
+    "architectureReportBinding": "PASS",
+    "architectureLegacyWrongNotesMatched": 150,
+    "expectedArchitectureLegacyWrongNotes": 150,
+    "summaryReportDigests": "PASS",
+    "typecheck": "PASS",
+    "focusedTests": {
+      "passed": 19,
+      "total": 19
+    },
+    "globalLegacyWrongNotes": {
+      "status": "FAIL",
+      "diagnostic": "01-10: отсутствует baseline question astronomy-space-hubble-launch-year"
+    },
+    "architectureLegacyPrefix": {
+      "status": "FAIL",
+      "reason": "Замороженный префикс сохраняет хеш последней полной независимой вычитки. Полная повторная вычитка architecture NotRun."
+    }
+  }
+}

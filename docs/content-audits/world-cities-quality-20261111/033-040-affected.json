@@ -1,0 +1,133 @@
+{
+  "topicBinding": {
+    "status": "FAIL carried forward",
+    "latestRun": "017-024-affected.json",
+    "rerunCondition": "Exact topic report updated after independent 100/100"
+  },
+  "checkedHead": "c09a8ac28d972bd8c738f3af14e2d8fb3eeba0e6",
+  "topicSha256": "cd7110ecc80e83c30a69e3ab9289245359eec0834c03b858a90cc1ec5627770d",
+  "typecheck": {
+    "command": "npm run typecheck",
+    "exitCode": 0
+  },
+  "vitest": {
+    "command": "npm exec --offline -- vitest run tests/unit/catalog-topics.test.ts tests/unit/content.test.ts tests/unit/content-answer-notes.test.ts --reporter=json",
+    "exitCode": 0,
+    "numTotalTests": 19,
+    "numPassedTests": 19,
+    "numFailedTests": 0,
+    "numPendingTests": 0,
+    "files": [
+      {
+        "file": "catalog-topics.test.ts",
+        "assertions": [
+          {
+            "title": "keeps every present package valid and globally unique",
+            "status": "passed",
+            "errors": []
+          }
+        ]
+      },
+      {
+        "file": "content-answer-notes.test.ts",
+        "assertions": [
+          {
+            "title": "keeps stable answer ids, correctIndex and notes through JSON round-trip",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "loads legacy string answers without inventing a note",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "reports empty, oversized and HTML notes with answer paths",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "rejects generic placeholder notes",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "rejects a distractor-prefixed negative placeholder",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "rejects a broad category label that does not describe the distractor",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "rejects search, home and chapter-introduction sources",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "rejects answer-prefixed copies of one common explanation",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "requires four distinct notes in final packs but permits legacy migration strings",
+            "status": "passed",
+            "errors": []
+          }
+        ]
+      },
+      {
+        "file": "content.test.ts",
+        "assertions": [
+          {
+            "title": "accepts the exact manifest catalog",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "reports a path for invalid answers and quotas",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "rejects duplicate prompt text across different topics",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "moves compact history with a question when its difficulty changes",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "draws a complete unique cycle and changes the next cycle boundary",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "keeps excluded questions in the remaining bag",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "is reproducible for the same seed and avoids a fixed order for another seed",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "maximizes distinct domains for normal, bonus, and final topic sets",
+            "status": "passed",
+            "errors": []
+          },
+          {
+            "title": "diagnoses too few groups instead of repeating one in a normal set",
+            "status": "passed",
+            "errors": []
+          }
+        ]
+      }
+    ]
+  }
+}
