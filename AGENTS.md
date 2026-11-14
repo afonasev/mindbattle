@@ -2,6 +2,8 @@
 
 ## Working boundaries
 
+- После публикации удаляй локальные копии релиза, как только проверишь скачивание тех же артефактов из канала поставки. Когда новая локальная тестовая сборка готова к проверке, удали предыдущие версии для той же платформы и сценария. Подробности в [правилах хранения сборок](.agents/references/execution-policy.md#хранение-игровых-сборок).
+
 - При многоэтапном игровом срезе читай `.agents/references/initiative-execution.md`: один ответственный за цельный результат, автономный причинный ремонт и проверки по diff/зависимостям; явные человеческие ограничения сохраняются.
 
 - Preserve scope, product contracts and others' files/processes. Questions/reviews are read-only; create an owned code worktree only before authorized edits when isolation is needed.
