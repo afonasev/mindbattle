@@ -1,0 +1,145 @@
+{
+  "stage": "INITIAL",
+  "processRevision": "2026-10-25",
+  "reviewer": "/root/cities_reviewer",
+  "reviewedHead": "fb7a65f2d1d3d94cdea632e03d9bb372282fddf2",
+  "reviewedTopicSha256": "7aa5df2be891aaa269ddee754ec148203d238825033853c69023376179d91e38",
+  "readyReceipt": "docs/content-audits/ancient-world-quality-20261111/batch-032-037-ready.json",
+  "cards": [
+    {
+      "id": "ancient-world-hieroglyphs",
+      "preimageSha256": "5faeac0cd731f9d5bebdfc1cf8edc66d42588b7e005b49d02b041bf415526002",
+      "candidateSha256": "6f69d2ef33436d9cdd346145fec7c72ac3e89f93a8dbd03fdb26374b453928cf",
+      "verdict": "PASS",
+      "rationale": "Хеши preimage и candidate пересчитаны по canonical JSON; live preimage совпадает, SHA темы сверена. В оригинальном PDF Британского музея раздел о Розеттском камне называет царя Птолемея V и три текста; далее руководство описывает овальные картуши с царскими именами и сопоставление Птолемея с Клеопатрой (печатные с. 42–43, 48–49, 66–67). Категория ответа однозначна. Три альтернативы действительно представлены на камне или как древнеегипетские письма; notes о демотике, ориентации знаков и папирусе Ринда содержательно различны и не раскрывают ключ. Easy соответствует картушу как узнаваемой подсказке; объяснение достаточно, хотя сопоставление надписей сформулировано общо."
+    },
+    {
+      "id": "ancient-world-cuneiform",
+      "preimageSha256": "5aa225abf375a5c491f59e8a1b9005482e91615f268d6d2951c203fc4fb3fb42",
+      "candidateSha256": "7a178b118c39b1c836fd83a66af021a8e0321d6e06e474fe115aeaa5bbcf60c2",
+      "verdict": "FIX",
+      "rationale": "Хеши exact, источник Метрополитен-музея подтверждает клиновидные оттиски тростниковым стилом на глине. Однако это прямо дублирует подсказку sibling books-publishing-tablet-form, где prompt спрашивает носитель для клинописных знаков и сам называет клинопись; ancient-world-clay также связывает клинопись с глиной. Поэтому кандидат подсказывает проверяемый ответ в каталоге. По источнику и набору вариантов ключ корректен, но каталоговая утечка требует направленного ремонта.",
+      "directedFix": {
+        "cycle": "one directed cycle",
+        "fields": [
+          "prompt",
+          "answers",
+          "explanation",
+          "source"
+        ],
+        "preserve": [
+          "id",
+          "difficulty=easy",
+          "correctIndex=2"
+        ],
+        "replacement": {
+          "prompt": "Какой материал указан в каталоге Лувра для стелы с законами Хаммурапи?",
+          "answers": [
+            {
+              "text": "Диорит",
+              "note": "В каталоге Лувра статуя Гудеа указана как выполненная из диорита.",
+              "source": "https://collections.louvre.fr/ark:/53355/cl010119540"
+            },
+            {
+              "text": "Известняк",
+              "note": "Метрополитен-музей указывает известняк как материал этой древней стелы.",
+              "source": "https://www.metmuseum.org/art/collection/search/554785"
+            },
+            {
+              "text": "Базальт",
+              "note": "В каталоге Лувра для стелы Хаммурапи указан базальт.",
+              "source": "https://collections.louvre.fr/en/ark%3A/53355/cl010174436"
+            },
+            {
+              "text": "Гранит",
+              "note": "Каталог Лувра указывает розовый гранит для скульптуры Рамсеса II и богини Анат.",
+              "source": "https://collections.louvre.fr/en/ark%3A/53355/cl010028854"
+            }
+          ],
+          "explanation": "Каталог Лувра указывает базальт как материал стелы Хаммурапи. Более ранние публикации иногда называли материал диоритом; формулировка вопроса проверяет именно атрибуцию каталога.",
+          "source": {
+            "title": "Louvre Collections — Code de Hammurabi",
+            "url": "https://collections.louvre.fr/en/ark%3A/53355/cl010174436",
+            "verifiedAt": "2026-11-11"
+          }
+        },
+        "reason": "Подмена общего вопроса о клинописи фактом о материале конкретной стелы устраняет прямую подсказку из books-publishing-tablet-form и ancient-world-clay. Louvre catalog explicitly calls object a stele and records basalt; naming the catalog avoids the known older diorite attribution. All four options are stones/materials, with the key at the preserved index."
+      }
+    },
+    {
+      "id": "ancient-world-oracle",
+      "preimageSha256": "f7784bc171afd6ab745851a2d4953f93f9318fb240fdf60ebbdc4336161c8ec0",
+      "candidateSha256": "c0f83ba57a4293dfe96008cc90ac11957ebf8edb3b52f4e55dd1056ca6504f80",
+      "verdict": "PASS",
+      "rationale": "Хеши exact, Smithsonian source independently confirms underside rows of burned depressions, cracks on the opposite side, and inscription group recording twenty deer. Prompt distinguishes the preparation marks and the answer category; explanation accurately describes heating and interpretation. Distractors are separate writing systems, one answer is well supported. Note on the deer is distinct from the tested divination method. Medium is justified by combining physical clues."
+    },
+    {
+      "id": "ancient-world-alphabet",
+      "preimageSha256": "560410b8f1d93d22f01a498f0e7edc39c0ad33bbed3a688e5c35cea52968d0ff",
+      "candidateSha256": "81adb660f4cc9b0a461784c6aef746853c24df334a0e2e4c620624f2f5eb5a99",
+      "verdict": "PASS",
+      "rationale": "Хеши exact, OSU DEAPS source identifies the Ahiram sarcophagus inscription as Phoenician and supports its provenance and the Ittobaal dedication. All options are writing systems; the find-place clue is relevant but does not state the script. Notes about Greek directionality, student exercise, oracle-bone content and Greek adaptation of Phoenician signs are individually on-topic and do not give away the key. Medium suits identification of a specific inscription."
+    },
+    {
+      "id": "ancient-world-tyranny",
+      "preimageSha256": "ff19ae1e39114bc70f1d35031525c3d7956cc36a7f40e0021aff10ed0891856f",
+      "candidateSha256": "d91e131b7ab7f8e9bdea8227c4ef8c5fbc6d111d22c3a515db115a02ea247b77",
+      "verdict": "PASS",
+      "rationale": "Хеши exact, Aristotle Athenian Constitution §§14–16 confirms Pisistratus secured a bodyguard, seized the Acropolis and took sole power. The system is correctly identified as tyranny. Each option is a political form, and notes accurately distinguish episodes/examples; overlaps with cards 019–020 are definitions, while those cards do not identify Pisistratus’s seizure. Easy matches direct recognition from a classic episode."
+    },
+    {
+      "id": "ancient-world-monarchy",
+      "preimageSha256": "a5b0ac02b03c1a24d3da86813825685c2343c42e6febcae9c9feb67e56081f98",
+      "candidateSha256": "1172d8203dd2136a233eb8057bbe25078305e794d966796597afded023e21f7a",
+      "verdict": "PASS",
+      "rationale": "Хеши exact, UT Austin translation of the Edict of Telipinu supports succession priority for a first-rank son and the fallback involving a first-rank daughter’s husband. This supports dynastic monarchy; prompt and explanation preserve the rule’s qualification. Notes identify distinct examples of monarchy, democracy, oligarchy and tyranny. Cards 019–020 do not duplicate Telipinu’s succession rule. Easy is suitable for classification from a clear inheritance rule."
+    }
+  ],
+  "catalogDependencies": [
+    {
+      "id": "ancient-world-hieroglyphs",
+      "dependency": "ancient-world writing systems in this batch; BM guide primary PDF",
+      "verdict": "PASS",
+      "rationale": "The source differentiates the Rosetta Stone scripts and cartouches. The other scripts are plausible alternatives; their notes do not identify the signs in Ptolemy’s cartouche."
+    },
+    {
+      "id": "ancient-world-cuneiform",
+      "dependency": "books-publishing-tablet-form (50239a1ede688c7f0353003c6078f1316ae1a3a4226d942f2f619098ddf5cd82); ancient-world-clay (da38ffb4ffd2993baa907afc9e6688dd32a5d90cc84367625d80c3aa4057887f); ancient-world-written-code (96a4c4ef166779553805d247b795125b1d16fbebae3d1caa5c068f4e256f15de); world-history-hammurabi-kingdom (5e99b968206cb986a0630bdd637dff270a75c275d6dd2327aa8747ee6ed51079)",
+      "verdict": "FIX",
+      "rationale": "The first two cards directly name cuneiform and connect it with clay/reed stylus, which gives away the current key. Written-code and Hammurabi-kingdom cards mention the stele/laws or kingdom but not its material; proposed material question is independent of those tested claims."
+    },
+    {
+      "id": "ancient-world-oracle",
+      "dependency": "Smithsonian oracle bone object; writing-systems cards",
+      "verdict": "PASS",
+      "rationale": "No catalog question repeats the specific combination of burned hollows, opposite-side cracks, and divination."
+    },
+    {
+      "id": "ancient-world-alphabet",
+      "dependency": "ancient-world writing-systems cards",
+      "verdict": "PASS",
+      "rationale": "No catalog card asks the script of the Ahiram sarcophagus or names it as Phoenician."
+    },
+    {
+      "id": "ancient-world-tyranny",
+      "dependency": "ancient-world 019–020 political forms",
+      "verdict": "PASS",
+      "rationale": "Shared definitions of political forms do not disclose the historical episode of Pisistratus’s seizure."
+    },
+    {
+      "id": "ancient-world-monarchy",
+      "dependency": "ancient-world 019–020 political forms",
+      "verdict": "PASS",
+      "rationale": "Shared broad classification is distinct from the specific Hittite succession rule."
+    }
+  ],
+  "sourceAttempts": [
+    {
+      "claim": "032 Rosetta Stone, Ptolemy and cartouches",
+      "initial": "British Museum PDF URL returned 403 from browser web reader",
+      "alternative": "Fetched the same official British Museum PDF URL directly and extracted the matching pages; no alternate source used",
+      "result": "Pages 42–43 identify Ptolemy V and three scripts on the stone; pages 48–49 mention oval cartouches enclosing royal names; pages 66–67 compare Ptolemy and Cleopatra cartouche signs."
+    }
+  ],
+  "reviewSeconds": null
+}

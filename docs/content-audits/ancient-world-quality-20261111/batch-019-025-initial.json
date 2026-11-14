@@ -1,0 +1,93 @@
+{
+  "stage": "INITIAL",
+  "processRevision": "2026-10-25",
+  "reviewer": "/root/cities_reviewer",
+  "reviewedHead": "a150722703775bdde93519fdd38fb9a88f0ff558",
+  "reviewedTopicSha256": "fd2832c4bbf36ada5d6f00e5228220d0166ab2deae01bf1848e573c244f14ae9",
+  "readyReceipt": "docs/content-audits/ancient-world-quality-20261111/batch-019-025-ready.json",
+  "cards": [
+    {
+      "id": "ancient-world-democracy",
+      "preimageSha256": "95d8dd62c27eb7ebda0771e4a262caac8fc175ae3e67be00196203065572be4c",
+      "candidateSha256": "6369e9425bd38507d3740ef3450d47ba40515b85899058ad87e2761aa26c1e0e",
+      "verdict": "FIX",
+      "rationale": "Точные live preimage и candidate из READY сверены, хеш темы совпадает. Aristotle, Constitution of the Athenians 41.3 подтверждает, что афиняне ввели плату, сначала один обол, чтобы побуждать граждан приходить. Но prompt повторяет фактическое ядро карточки 081 — граждане лично решают на народном собрании — и тем самым раскрывает там ответ «собрание» до уникального признака платы. Explanation тоже называет собрание, так что утечка остаётся. Сложность easy, ключ на индексе 3, а четыре ответа одной категории; направленная правка должна оставить плату главным фактом и убрать оба упоминания института/участия в принятии решений.",
+      "directedFix": "Один directed cycle: сохранить difficulty easy, correctIndex 3, все варианты/notes/source. Заменить только prompt и explanation, оставив ключевым фактом плату для привлечения граждан. Например prompt: «При каком афинском строе гражданам стали платить, чтобы привлечь их к участию в общественной жизни?» Explanation: «Это демократия. В Афинах плату для участия в общественных делах ввели, чтобы привлечь граждан. Сначала она составляла один обол.» Не упоминать народное собрание и не повторять формулу о личном принятии решений, чтобы не раскрывать карточку 081."
+    },
+    {
+      "id": "ancient-world-oligarchy",
+      "preimageSha256": "26e8f7b66b497f0f384f437d05317cedfa72fe7ed87fa017e63eeeb3f29c9a7c",
+      "candidateSha256": "7c93f5d2d02de7a5b184bb0f4499554cb305067612c196b4f18b3d052afdd6fa",
+      "verdict": "PASS",
+      "rationale": "Точные preimage/candidate и хеш темы сверены. Thucydides VIII.69 сообщает о вводе Четырёхсот в советскую палату и удалении прежних советников; Cambridge датирует их олигархическое правление 411–410 годами до нашей эры. Aristotle, Politics IV, описывает олигархические ограничения по имущественному цензу, что поддерживает distractor note. Это известный афинский переворот при узком совете; четвёрка вариантов — типы строя, difficulty easy уместен. В каталоге дубликата не выявлено."
+    },
+    {
+      "id": "ancient-world-ostracism",
+      "preimageSha256": "6a7e06258c20f56f7256f356e0c60ad42e5b6d98c9fa9686b7a8cb712e2a9821",
+      "candidateSha256": "1e5e75b71244b9260e6933a46dc3ba57120be50fc2d7afd6be87d45206c74d5a",
+      "verdict": "PASS",
+      "rationale": "Точные preimage/candidate и хеш темы сверены. Plutarch, Life of Aristides 7.4–5, описывает подсчёт острака архонтами и аннулирование процедуры, если участников было меньше 6 000, что непосредственно подтверждает уточнённое ограничение «по описанию Плутарха». Официальная запись раскопок Agora P 19615 идентифицирует черепок с именем Фемистокла, сына Неокла. Aristotle, Constitution 51.2 подтверждает выбор должностных лиц для мер и весов; Constitution 55.3 и Oxford Classical Dictionary подтверждают докимасию архонтов и отдельно осмотр лошадей; Hyperides §§7–8 подтверждает иск eisangelia против подкупленного оратора. Четыре процедурных понятия сопоставимы, точный порог делает hard уместным. Каталожного дубля порога нет; ostraka из Egyptian-writing вопросов — иная практика."
+    },
+    {
+      "id": "ancient-world-sortition",
+      "preimageSha256": "50191cf9860baae6cbde0bb50b77e8d5750d54e8818093a5f97360bb0c79bd3b",
+      "candidateSha256": "f0f69bdfc70bbd786e409ac4d6aad0bcd8e8ef14e310e3c8cd3c9faeaff69b1f",
+      "verdict": "PASS",
+      "rationale": "Точные preimage/candidate и хеш темы сверены. Исходный ASCSA том слишком велик для веб-чтения; выбранная официальная альтернатива — материал Ure Museum, University of Reading, который говорит, что афинский jury-ticket/pinakion был выгравирован именем, именем отца и домашней общиной, а pinakia укладывали рядами в kleroterion; по шарам отбирали ряд. Это поддерживает prompt и explanation. Записанная альтернатива не требует HOLD. Прочие заметки по остальным процедурам проверены; hard уместен для конкретной технологии отбора, дубликата нет."
+    },
+    {
+      "id": "ancient-world-dokimasia",
+      "preimageSha256": "72030b0167fe7a7d45c1f6d9a8fcc47bbd1ab57dac59bc86930a9fc684ad9444",
+      "candidateSha256": "238ec93a186c91ac16518ec46c31a38e4ca82161a95d232be912561818fe2da9",
+      "verdict": "PASS",
+      "rationale": "Точные preimage/candidate и хеш темы сверены. Доступ к Oxford Classical Dictionary не сработал; вместо него сверил один первичный альтернативный источник, Aristotle, Constitution of the Athenians 55.3: архонтов спрашивали о родителях, семейном культе, гробнице, отношении к родителям, налогах и военной службе и вызывали свидетелей. Oxford source snippet также различает scrutiny лошадей, что поддерживает note; Aristotle, Constitution 51.2 описывает проверку должностных лиц, отвечавших за весы и меры. Prompt точно указывает претендента на архонтство и две конкретные части докимасии, не утверждая, что это единственная разновидность. Варианты — афинские процедуры, hard подходит."
+    },
+    {
+      "id": "ancient-world-eisangelia",
+      "preimageSha256": "3bad809aab7f28f880e06d70d62aca0f6d44ace0975fa26282618f3a581a8dc2",
+      "candidateSha256": "21a01cf9a1e21ee72ba530fa801b6d0a10c80aee4ed503257bf1d7375cde3c71",
+      "verdict": "PASS",
+      "rationale": "Точные preimage/candidate и хеш темы сверены. В Hyperides, In Defence of Euxenippus §§7–8 закон прямо описан как основание для impeachment оратора, говорившего против интересов народа за взятку; §3 идентифицирует обвинение против Эвксениппа, а §§39 поддерживают note о применимости. Это совпадает с prompt/explanation. Отвлекающие варианты — уместные афинские процедуры и проверены отдельно. Точное различие закона/процедуры делает hard вопрос решаемым; он не повторяет факты соседних карточек об остракизме, жребии или проверке архонтов."
+    },
+    {
+      "id": "ancient-world-sui-iuris",
+      "preimageSha256": "d5fe436e7eb30ac5f9f688a856b5d54645f5229252ca7592a33bb3336105f868",
+      "candidateSha256": "cf0699d8aee54331d467eb2dff25cd8ad5f475e97453c5bab1bdd30f9123a53f",
+      "verdict": "FIX",
+      "rationale": "Точные preimage/candidate и хеш темы сверены. Gaius, Institutes I.132 говорит, что после третьей манципации сын выходил из-под отцовской власти, но мог оставаться в положении проданного; после окончательного освобождения он становился sui iuris. Explanation сохраняет это различие, и ключ однозначен. Однако «Alieni iuris» — надкатегория, включающая лиц in potestate, in manu и in mancipio, поэтому варианты различаются по уровню и один охватывает два других. Gaius I.49 предлагает точную замену для первого distractor: «In potestate». Сохранить hard и correctIndex 3; достаточно одного directed change answer 0/note. Карточка 046 проверяет зависимого сына, а эта — завершённое освобождение, поэтому дубликата нет.",
+      "directedFix": "Один directed cycle: сохранить difficulty hard, correctIndex 3, prompt, explanation, source и ответы 1–3. Заменить только answer 0 text «Alieni iuris» на «In potestate» и его note на «Под patria potestas сын оставался под властью отца-домовладыки.» Это делает варианты сопоставимыми отдельными правовыми статусами по Gaius I.49, оставляя правильный ответ на прежнем индексе."
+    }
+  ],
+  "catalogDependencies": [
+    {
+      "id": "ancient-world-democracy",
+      "dependency": "ancient-world-assembly (081)",
+      "verdict": "FIX",
+      "rationale": "019 prompt and explanation repeat the fact that citizens decided matters in the Assembly, which 081 tests directly; the directed prompt/explanation repair keeps paid participation as the clue and omits the institution."
+    },
+    {
+      "id": "ancient-world-sui-iuris",
+      "dependency": "ancient-world-alieni (046)",
+      "dependencyCurrentSha256": "e57336551bbb2d0eeb53945c3bc1afc499bd84917d7883894bc5999ac7b15df5",
+      "verdict": "PASS",
+      "rationale": "046 asks for the status while the son remains under patria potestas; 025 asks for the status after final emancipation. Explanation correctly distinguishes the third sale from final manumission; no duplicate."
+    }
+  ],
+  "sourceAttempts": [
+    {
+      "claim": "ancient-world-sortition kleroterion and pinakia details",
+      "originalUrl": "https://www.ascsa.edu.gr/uploads/media/oa_ebooks/oa_agora/Agora_XXVIII.pdf",
+      "result": "web tool rejected 52.8MB PDF; not claiming it was read",
+      "officialAlternative": "https://collections.reading.ac.uk/ure-musuem/wp-content/uploads/sites/4/2020/06/Government_Ure_UoR.pdf",
+      "resultAlternative": "University of Reading Ure Museum text directly verifies name, father name, deme/home, kleroterion rows, and colored balls."
+    },
+    {
+      "claim": "ancient-world-dokimasia archon screening",
+      "originalUrl": "https://academic.oup.com/edited-volume/61673/chapter-abstract/548724621",
+      "result": "Oxford page redirected to inaccessible endpoint; not claiming it was read",
+      "officialAlternative": "https://classics.mit.edu/Aristotle/athenian_const.3.3.html",
+      "resultAlternative": "Aristotle Constitution of the Athenians 55.3 directly lists archon scrutiny questions and witness requirement."
+    }
+  ],
+  "reviewSeconds": null
+}

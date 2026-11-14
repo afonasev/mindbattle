@@ -1,0 +1,56 @@
+{
+  "stage": "FINAL_CURRENT",
+  "processRevision": "2026-10-25",
+  "reviewer": "/root/cities_reviewer",
+  "reviewedHead": "398be371c5c81196237a134d4facfa78c721ead8",
+  "reviewedTopicSha256": "aeccf8e0958429daf3f48bd1572debbdaa088ad1ca4c0f4459d27929ea3598af",
+  "initialReceipt": "docs/content-audits/ancient-world-quality-20261111/pilot-initial.json",
+  "currentReceipt": "docs/content-audits/ancient-world-quality-20261111/pilot-current.json",
+  "cards": [
+    {
+      "id": "ancient-world-egypt",
+      "currentSha256": "5d20a8f8e9f57e356a2787c1c830f901991260e61fe254295681b365a73ad817",
+      "initialVerdict": "PASS",
+      "fixCyclesUsed": 0,
+      "verdict": "PASS",
+      "rationale": "Applied card hash matches exact current. Prompt is clear and easy; the key is unambiguous. The Met confirms per-aa means Big House, originally royal estate and later the king. The notes provide distinct short facts and the source-backed explanation adds the name history without giving away a competing answer."
+    },
+    {
+      "id": "ancient-world-mesopotamia",
+      "currentSha256": "4d7b6caf38782d7d2cac758bcb251521df67f5214660c2888eaa5916ffd8b203",
+      "initialVerdict": "FIX",
+      "fixCyclesUsed": 1,
+      "changedFields": ["prompt"],
+      "verdict": "PASS",
+      "rationale": "Applied prompt-only repair hash matches exact current; difficulty remains easy, correctIndex and answer-note pairs remain unchanged. The clue is accessible through Iraq and the familiar hour-minute relationship while testing the Babylonian sexagesimal connection. University of Chicago's They Wrote on Clay confirms Babylonian base sixty and the hour's sixty minutes (PDF p.154), and describes Iraq as the modern name for land approximately covering ancient Babylonia and Assyria (PDF p.22). EOS independently states that base-sixty arithmetic dates to Mesopotamia, became standard for Babylonian astronomers, was adopted by Greek astronomers, and underlies sixty minutes per hour. Wording, explanation, and key are consistent."
+    },
+    {
+      "id": "ancient-world-indus",
+      "currentSha256": "2ecf467935f76bdd7b3bd2311340d15fd3a6892aa83ae1cfb542e25f0ae19daa",
+      "initialVerdict": "FIX",
+      "fixCyclesUsed": 1,
+      "changedFields": ["prompt"],
+      "verdict": "PASS",
+      "rationale": "Applied prompt-only repair hash matches exact current; medium difficulty, correctIndex and answer-note pairs remain unchanged. UNESCO places Moenjodaro in Pakistan and identifies it with the Indus civilization. CSMVS identifies the weights as chert from Mohenjo-daro, Harappan, and says sets progressively doubled in mass. The geography contextualizes the object, while the doubling pattern remains the specific fact being tested. Explanation is consistent with the source."
+    }
+  ],
+  "affectedDependencies": [
+    {
+      "id": "history-india-indus-drains",
+      "topic": "history-india",
+      "currentSha256": "17113a42cede41f98160961f6d89fbace9dfb0e33cc660f2b9ecee78952ae4c5",
+      "verdict": "PASS",
+      "rationale": "The dependency asks about brick drains along Mohenjo-daro streets; the candidate asks about standardized weights and the doubling sequence. They share the archaeological site and city name, but not the tested fact or a player-readable answer clue. UNESCO itself describes both the drainage system and the site's Pakistan location, so the location does not link the new card to the drainage answer. This is contextual overlap, not a duplicate or leakage."
+    }
+  ],
+  "checkContext": {
+    "receipt": "docs/content-audits/ancient-world-quality-20261111/pilot-affected.json",
+    "typecheck": "PASS",
+    "focusedTests": "19/20 PASS; the sole failure is catalog-full.test.ts because the whole-topic review still binds baseline SHA 3c026c576a9bac17d7696bfb723b7418409913a0c9ac96b9bc5fedc0b0074dba rather than current SHA aeccf8e0958429daf3f48bd1572debbdaa088ad1ca4c0f4459d27929ea3598af. This is a report-binding gate, not a failed card assertion. Full suite was NOT_RUN."
+  },
+  "history": [
+    "The INITIAL receipt's first difficulty and answer-position suggestions for 002/003 were explicitly superseded after scope clarification. Final review preserves live difficulty, correctIndex, and all answer-note pairs; the only authorized repairs were the exact prompt changes recorded above.",
+    "Initial status FIX for 002 and 003 remains visible as history; each applied one directed prompt repair and no further cycle is requested."
+  ],
+  "reviewSeconds": null
+}
